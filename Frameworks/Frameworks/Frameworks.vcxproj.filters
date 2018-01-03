@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\00.Global">
+      <UniqueIdentifier>{2f1ee869-557b-4656-bddf-82812d3e1ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\00.Standard">
+      <UniqueIdentifier>{51e39692-d200-4378-8fe0-46e252c8044b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility">
+      <UniqueIdentifier>{86ce24c4-f3de-46dd-b27e-4c0a8ec59180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Main">
+      <UniqueIdentifier>{873318eb-f2e8-4c65-8b55-de576a6cd443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Framework">
+      <UniqueIdentifier>{db6b3c5f-7403-4e9f-90de-2d6e2e770611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Framework\00.Frame">
+      <UniqueIdentifier>{eb5e0ab6-6691-445c-a91e-949912f5348a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Framework\01.CreateMgr">
+      <UniqueIdentifier>{adb9a673-48ba-426c-848a-a7b4909947dc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>리소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>소스 파일\00.Global\00.Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일\00.Global\00.Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework01.h">
+      <Filter>소스 파일\01.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework.h">
+      <Filter>소스 파일\02.Framework\00.Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMgr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일\00.Global\00.Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework01.cpp">
+      <Filter>소스 파일\01.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework.cpp">
+      <Filter>소스 파일\02.Framework\00.Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Framework01.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Framework01.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
