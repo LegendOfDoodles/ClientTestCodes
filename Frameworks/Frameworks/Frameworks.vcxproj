@@ -147,6 +147,7 @@
     <ClInclude Include="CreateMgr.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Framework01.h" />
+    <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="CreateMgr.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Framework01.cpp" />
+    <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

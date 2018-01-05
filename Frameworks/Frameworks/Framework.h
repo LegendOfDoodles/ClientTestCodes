@@ -30,10 +30,8 @@ private: // 내부 함수
 	void AnimateObjects();
 	void RenderObjects();
 
-	// Synchronize
-	void WaitForGpuComplete();
-
 private: // 변수
 	CCreateMgr m_createMgr;
+	CRenderMgr *m_renderMgr;
 };
 

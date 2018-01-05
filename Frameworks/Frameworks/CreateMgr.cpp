@@ -11,14 +11,13 @@ CCreateMgr::CCreateMgr()
 
 	// Factory and Device
 	m_pFactory = NULL;
-	m_pSwapChain = NULL;
 	m_pDevice = NULL;
 
 	// Swap Chain
-	m_swapChainBufferIndex = 0;
+	m_pSwapChain = NULL;
 
 	// Render Target View
-	for (int i = 0; i < m_swapChainBuffers; i++)
+	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
 	{
 		m_ppRenderTargetBuffers[i] = NULL;
 	}
@@ -35,9 +34,7 @@ CCreateMgr::CCreateMgr()
 	m_pCommandList = NULL;
 
 	// Fence
-	m_hFenceEvent = NULL;
 	m_pFence = NULL;
-	m_fenceValue = 0;
 }
 
 CCreateMgr::~CCreateMgr()
@@ -58,18 +55,16 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hwnd)
 	CreateRenderTargetView();
 	CreateDepthStencilView();
 
-	m_hFenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+	m_renderMgr.Initialize(m_wndClientWidth, m_wndClientHeight);
 }
 
 void CCreateMgr::Release()
 {
-	::CloseHandle(m_hFenceEvent);
-
 #ifdef _DEBUG
 	if (m_pDebugController) { m_pDebugController->Release(); }
 #endif
 
-	for (int i = 0; i < m_swapChainBuffers; i++)
+	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
 	{
 		if (m_ppRenderTargetBuffers[i])
 		{
@@ -91,6 +86,8 @@ void CCreateMgr::Release()
 	if (m_pSwapChain) { m_pSwapChain->Release(); }
 	if (m_pDevice) { m_pDevice->Release(); }
 	if (m_pFactory) { m_pFactory->Release(); }
+
+	m_renderMgr.Release();
 }
 
 void CCreateMgr::Resize(int width, int height)
@@ -147,18 +144,7 @@ void CCreateMgr::CreateDirect3dDevice()
 	// Fence
 	m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE,
 		__uuidof(ID3D12Fence), (void**)&m_pFence);
-	m_fenceValue = 1;
-
-	// Viewport
-	m_viewport.TopLeftX = 0;
-	m_viewport.TopLeftY = 0;
-	m_viewport.Width = static_cast<float>(m_wndClientWidth);
-	m_viewport.Height = static_cast<float>(m_wndClientHeight);
-	m_viewport.MinDepth = 0.0f;
-	m_viewport.MaxDepth = 1.0f;
-
-	// Scissor Rect
-	m_scissorRect = { 0, 0, m_wndClientWidth, m_wndClientHeight };
+	m_renderMgr.SetFence(m_pFence);
 
 	if (pAdapter) pAdapter->Release();
 }
@@ -173,16 +159,19 @@ void CCreateMgr::CreateCommandQueueAndList()
 
 	HRESULT hResult = m_pDevice->CreateCommandQueue(&commandQueueDesc,
 		_uuidof(ID3D12CommandQueue), (void **)&m_pCommandQueue);
+	m_renderMgr.SetCommandQueue(m_pCommandQueue);
 
 	// Create Allocator
 	hResult = m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
 		__uuidof(ID3D12CommandAllocator), (void **)&m_pCommandAllocator);
+	m_renderMgr.SetCommandAllocator(m_pCommandAllocator);
 
 	// Create Command List
 	hResult = m_pDevice->CreateCommandList(
 		0, D3D12_COMMAND_LIST_TYPE_DIRECT,
 		m_pCommandAllocator, NULL,
 		__uuidof(ID3D12GraphicsCommandList), (void**)&m_pCommandList);
+	m_renderMgr.SetCommandList(m_pCommandList);
 
 	hResult = m_pCommandList->Close();
 }
@@ -204,7 +193,7 @@ void CCreateMgr::CreateSwapChain()
 	swapChainDesc.SampleDesc.Quality =
 		(m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = m_swapChainBuffers;
+	swapChainDesc.BufferCount = SWAP_CHAIN_BUFFER_CNT;
 	swapChainDesc.Scaling = DXGI_SCALING_NONE;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
@@ -221,12 +210,13 @@ void CCreateMgr::CreateSwapChain()
 	m_pFactory->CreateSwapChainForHwnd(m_pCommandQueue, m_hwnd,
 		&swapChainDesc, &swapChainFullScreenDesc, NULL,
 		(IDXGISwapChain1**)&m_pSwapChain);
+	m_renderMgr.SetSwapChain(m_pSwapChain);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
 	m_pFactory->MakeWindowAssociation(m_hwnd, DXGI_MWA_NO_ALT_ENTER);
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
-	m_swapChainBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
 }
 
 void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
@@ -234,22 +224,25 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	// Create Render Target View Descriptor Heap
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
 	::ZeroMemory(&d3dDescriptorHeapDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
-	d3dDescriptorHeapDesc.NumDescriptors = m_swapChainBuffers;
+	d3dDescriptorHeapDesc.NumDescriptors = SWAP_CHAIN_BUFFER_CNT;
 	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	d3dDescriptorHeapDesc.NodeMask = 0;
 
 	HRESULT hResult = m_pDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc,
 		__uuidof(ID3D12DescriptorHeap), (void **)&m_pRtvDescriptorHeap);
+	m_renderMgr.SetRtvDescriptorHeap(m_pRtvDescriptorHeap);
 
 	m_rtvDescriptorIncrementSize =
 		m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	m_renderMgr.SetRtvDescriptorIncrementSize(m_rtvDescriptorIncrementSize);
 
 	// Create Depth Stencil View Descriptor Heap
 	d3dDescriptorHeapDesc.NumDescriptors = 1;
 	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 	hResult = m_pDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc,
 		__uuidof(ID3D12DescriptorHeap), (void **)&m_pDsvDescriptorHeap);
+	m_renderMgr.SetDsvDescriptorHeap(m_pDsvDescriptorHeap);
 }
 
 void CCreateMgr::CreateDepthStencilView()
@@ -300,7 +293,7 @@ void CCreateMgr::CreateRenderTargetView()
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle =
 		m_pRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 
-	for (UINT i = 0; i < m_swapChainBuffers; i++)
+	for (UINT i = 0; i <SWAP_CHAIN_BUFFER_CNT; i++)
 	{
 		hResult = m_pSwapChain->GetBuffer(i, __uuidof(ID3D12Resource),
 			(void**)&m_ppRenderTargetBuffers[i]);
@@ -308,4 +301,5 @@ void CCreateMgr::CreateRenderTargetView()
 			d3dRtvCPUDescriptorHandle);
 		d3dRtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
+	m_renderMgr.SetRenderTargetBuffers(m_ppRenderTargetBuffers);
 }

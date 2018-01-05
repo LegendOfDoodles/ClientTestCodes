@@ -1,4 +1,6 @@
 #pragma once
+#include "RenderMgr.h"
+
 class CCreateMgr
 {
 public:	// 생성자, 소멸자
@@ -10,6 +12,8 @@ public:	// 공개 함수
 	void Release();
 
 	void Resize(int width, int height);
+
+	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
 
 private:	// 내부 함수
 	void CreateDirect3dDevice();
@@ -29,7 +33,6 @@ public:	// 변수
 
 	// Factory and Device
 	IDXGIFactory4 *m_pFactory;
-	IDXGISwapChain3 *m_pSwapChain;
 	ID3D12Device *m_pDevice;
 
 	// MSAA Set
@@ -37,11 +40,10 @@ public:	// 변수
 	UINT m_msaa4xQualityLevels = 0;
 
 	// Swap Chain
-	static const UINT m_swapChainBuffers = 2;
-	UINT m_swapChainBufferIndex;
+	IDXGISwapChain3 *m_pSwapChain;
 
 	// Render Target View
-	ID3D12Resource *m_ppRenderTargetBuffers[m_swapChainBuffers];
+	ID3D12Resource *m_ppRenderTargetBuffers[SWAP_CHAIN_BUFFER_CNT];
 	ID3D12DescriptorHeap *m_pRtvDescriptorHeap;
 	UINT m_rtvDescriptorIncrementSize;
 
@@ -56,15 +58,12 @@ public:	// 변수
 
 	// Fence
 	ID3D12Fence *m_pFence;
-	UINT64 m_fenceValue;
-	HANDLE m_hFenceEvent;
 
 #ifdef _DEBUG
 	ID3D12Debug *m_pDebugController;
 #endif
 
-	// Viewport and ScissorRect
-	D3D12_VIEWPORT m_viewport;
-	D3D12_RECT m_scissorRect;
+	// Render Manager
+	CRenderMgr m_renderMgr;
 };
 

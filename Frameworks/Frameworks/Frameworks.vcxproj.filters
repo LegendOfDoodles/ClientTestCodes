@@ -30,6 +30,9 @@
     <Filter Include="소스 파일\02.Framework\01.CreateMgr">
       <UniqueIdentifier>{adb9a673-48ba-426c-848a-a7b4909947dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\02.Framework\02.RenderMgr">
+      <UniqueIdentifier>{53ca70c9-ba22-4ebe-b68d-b6015630e14d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -47,7 +50,10 @@
     <ClInclude Include="Framework.h">
       <Filter>소스 파일\02.Framework\00.Frame</Filter>
     </ClInclude>
-    <ClInclude Include="CreateMgr.h" />
+    <ClInclude Include="CreateMgr.h">
+      <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +66,9 @@
       <Filter>소스 파일\02.Framework\00.Frame</Filter>
     </ClCompile>
     <ClCompile Include="CreateMgr.cpp">
+      <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
