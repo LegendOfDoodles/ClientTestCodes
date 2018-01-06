@@ -31,9 +31,10 @@ public:	// 공개 함수
 	// Set Fence
 	void SetFence(ID3D12Fence *pFence) { m_pFence = pFence; }
 
-private:	// 내부 함수
 	// Synchronize
 	void WaitForGpuComplete();
+
+private:	// 내부 함수
 
 private:	// 변수
 	// Swap Chain

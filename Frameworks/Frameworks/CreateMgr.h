@@ -13,6 +13,9 @@ public:	// 공개 함수
 
 	void Resize(int width, int height);
 
+	void OnResizeBackBuffers();
+	void ChangeScreenMode();
+
 	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
 
 private:	// 내부 함수

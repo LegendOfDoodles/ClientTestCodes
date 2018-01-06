@@ -69,7 +69,13 @@ void CFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 		case VK_F8:
 			break;
 		case VK_F9:
+		{
+			m_createMgr.ChangeScreenMode();
+			m_renderMgr->WaitForGpuComplete();
+			m_createMgr.OnResizeBackBuffers();
+			m_renderMgr->WaitForGpuComplete();
 			break;
+		}
 		default:
 			break;
 		}
@@ -87,6 +93,9 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	case WM_SIZE:
 	{
 		m_createMgr.Resize(LOWORD(lParam), HIWORD(lParam));
+		m_renderMgr->WaitForGpuComplete();
+		m_createMgr.OnResizeBackBuffers();
+		m_renderMgr->WaitForGpuComplete();
 		break;
 	}
 	case WM_LBUTTONDOWN:

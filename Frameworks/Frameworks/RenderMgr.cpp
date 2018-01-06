@@ -145,8 +145,6 @@ void CRenderMgr::SetRenderTargetBuffers(ID3D12Resource *ppRenderTargetBuffers[])
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
-// 내부 함수
 void CRenderMgr::WaitForGpuComplete()
 {
 	m_fenceValue++;
@@ -161,3 +159,6 @@ void CRenderMgr::WaitForGpuComplete()
 		::WaitForSingleObject(m_hFenceEvent, INFINITE);
 	}
 }
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수

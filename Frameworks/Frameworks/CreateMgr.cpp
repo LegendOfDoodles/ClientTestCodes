@@ -52,8 +52,8 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hwnd)
 	CreateCommandQueueAndList();
 	CreateSwapChain();
 	CreateRtvAndDsvDescriptorHeaps();
-	CreateRenderTargetView();
-	CreateDepthStencilView();
+	//CreateRenderTargetView();
+	//CreateDepthStencilView();
 
 	m_renderMgr.Initialize(m_wndClientWidth, m_wndClientHeight);
 }
@@ -94,6 +94,61 @@ void CCreateMgr::Resize(int width, int height)
 {
 	m_wndClientWidth = width;
 	m_wndClientHeight = height;
+}
+
+void CCreateMgr::OnResizeBackBuffers()
+{
+	m_pCommandList->Reset(m_pCommandAllocator, NULL);
+
+	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
+	{
+		if (m_ppRenderTargetBuffers[i])
+		{
+			m_ppRenderTargetBuffers[i]->Release();
+		}
+	}
+	if (m_pDepthStencilBuffer) { m_pDepthStencilBuffer->Release(); }
+
+#ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
+	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
+	m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	m_pdxgiSwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+	m_nSwapChainBufferIndex = 0;
+#else
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	m_pSwapChain->GetDesc(&swapChainDesc);
+	m_pSwapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_CNT, m_wndClientWidth,
+		m_wndClientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags);
+	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
+#endif
+
+	CreateRenderTargetView();
+	CreateDepthStencilView();
+
+	m_pCommandList->Close();
+
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
+	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
+}
+
+void CCreateMgr::ChangeScreenMode()
+{
+	BOOL fullScreenState = FALSE;
+	m_pSwapChain->GetFullscreenState(&fullScreenState, NULL);
+	if (!fullScreenState)
+	{
+		DXGI_MODE_DESC targetParameters;
+		targetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		targetParameters.Width = m_wndClientWidth;
+		targetParameters.Height = m_wndClientHeight;
+		targetParameters.RefreshRate.Numerator = 60;
+		targetParameters.RefreshRate.Denominator = 1;
+		targetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+		targetParameters.ScanlineOrdering =
+			DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		m_pSwapChain->ResizeTarget(&targetParameters);
+	}
+	m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -184,32 +239,37 @@ void CCreateMgr::CreateSwapChain()
 	m_wndClientHeight = rcClient.bottom - rcClient.top;
 
 	// Create Swap Chain
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
-	::ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC1));
-	swapChainDesc.Width = m_wndClientWidth;
-	swapChainDesc.Height = m_wndClientHeight;
-	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.SampleDesc.Count = (m_msaa4xEnable) ? 4 : 1;
-	swapChainDesc.SampleDesc.Quality =
-		(m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	::ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
+	swapChainDesc.BufferDesc.Width = m_wndClientWidth;
+	swapChainDesc.BufferDesc.Height = m_wndClientHeight;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = SWAP_CHAIN_BUFFER_CNT;
-	swapChainDesc.Scaling = DXGI_SCALING_NONE;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+	swapChainDesc.OutputWindow = m_hwnd;
+	swapChainDesc.SampleDesc.Count = (m_msaa4xEnable) ? 4 : 1;
+	swapChainDesc.SampleDesc.Quality = (m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
+	swapChainDesc.Windowed = TRUE;
+
+#ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
 	swapChainDesc.Flags = 0;
+#else
+	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+#endif
 
-	DXGI_SWAP_CHAIN_FULLSCREEN_DESC swapChainFullScreenDesc;
-	::ZeroMemory(&swapChainFullScreenDesc, sizeof(DXGI_SWAP_CHAIN_FULLSCREEN_DESC));
-	swapChainFullScreenDesc.RefreshRate.Numerator = 60;
-	swapChainFullScreenDesc.RefreshRate.Denominator = 1;
-	swapChainFullScreenDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	swapChainFullScreenDesc.Windowed = TRUE;
+	//DXGI_SWAP_CHAIN_FULLSCREEN_DESC swapChainFullScreenDesc;
+	//::ZeroMemory(&swapChainFullScreenDesc, sizeof(DXGI_SWAP_CHAIN_FULLSCREEN_DESC));
+	//swapChainFullScreenDesc.RefreshRate.Numerator = 60;
+	//swapChainFullScreenDesc.RefreshRate.Denominator = 1;
+	//swapChainFullScreenDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	//swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	//swapChainFullScreenDesc.Windowed = TRUE;
 
-	m_pFactory->CreateSwapChainForHwnd(m_pCommandQueue, m_hwnd,
-		&swapChainDesc, &swapChainFullScreenDesc, NULL,
-		(IDXGISwapChain1**)&m_pSwapChain);
+	HRESULT hResult = m_pFactory->CreateSwapChain(m_pCommandQueue,
+		&swapChainDesc, (IDXGISwapChain **)&m_pSwapChain);
 	m_renderMgr.SetSwapChain(m_pSwapChain);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
