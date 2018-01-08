@@ -1,4 +1,7 @@
 #pragma once
+
+class CScene;
+
 class CRenderMgr
 {
 public:	// 생성자, 소멸자
@@ -9,7 +12,7 @@ public:	// 공개 함수
 	void Initialize(int width, int height);
 	void Release();
 
-	void Render();
+	void Render(CScene* pScene = NULL);
 
 	// Set Swap Chain
 	void SetSwapChain(IDXGISwapChain3 *pSwapChain) { m_pSwapChain = pSwapChain; }
@@ -33,6 +36,7 @@ public:	// 공개 함수
 
 	// Synchronize
 	void WaitForGpuComplete();
+	void MoveToNextFrame();
 
 private:	// 내부 함수
 
@@ -56,7 +60,7 @@ private:	// 변수
 
 	// Fence
 	ID3D12Fence *m_pFence;
-	UINT64 m_fenceValue;
+	UINT64 m_fenceValues[SWAP_CHAIN_BUFFER_CNT];
 	HANDLE m_hFenceEvent;
 
 	// Viewport and ScissorRect

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "RenderMgr.h"
+#include "Scene.h"
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
@@ -26,9 +27,14 @@ CRenderMgr::CRenderMgr()
 	m_pCommandList = NULL;
 
 	// Fence
+	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
+	{
+		m_fenceValues[i] = 0;
+	}
 	m_hFenceEvent = NULL;
 	m_pFence = NULL;
-	m_fenceValue = 0;
+
+	// Scene
 }
 
 CRenderMgr::~CRenderMgr()
@@ -41,7 +47,7 @@ void CRenderMgr::Initialize(int width, int height)
 {
 	// Fence
 	m_hFenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
-	m_fenceValue = 1;
+	m_fenceValues[0] = 1;
 
 	// Viewport
 	m_viewport.TopLeftX = 0;
@@ -60,7 +66,7 @@ void CRenderMgr::Release()
 	::CloseHandle(m_hFenceEvent);
 }
 
-void CRenderMgr::Render()
+void CRenderMgr::Render(CScene* pScene)
 {
 	// Reset Command List
 	HRESULT hResult = m_pCommandAllocator->Reset();
@@ -108,6 +114,9 @@ void CRenderMgr::Render()
 	m_pCommandList->OMSetRenderTargets(1, &rtvCPUDescriptorHandle,
 		TRUE, &dsvCPUDescriptorHandle);
 
+	// Render Scene
+	if (pScene) pScene->Render();
+
 	// Set Barrier
 	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	resourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
@@ -125,16 +134,9 @@ void CRenderMgr::Render()
 	WaitForGpuComplete();
 
 	// Present
-	DXGI_PRESENT_PARAMETERS presentParameters;
-	presentParameters.DirtyRectsCount = 0;
-	presentParameters.pDirtyRects = NULL;
-	presentParameters.pScrollRect = NULL;
-	presentParameters.pScrollOffset = NULL;
+	m_pSwapChain->Present(0, 0);
 
-	m_pSwapChain->Present1(1, 0, &presentParameters);
-
-	// Get Next Back Buffer Index
-	m_swapChainBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+	MoveToNextFrame();
 }
 
 void CRenderMgr::SetRenderTargetBuffers(ID3D12Resource *ppRenderTargetBuffers[])
@@ -147,17 +149,22 @@ void CRenderMgr::SetRenderTargetBuffers(ID3D12Resource *ppRenderTargetBuffers[])
 
 void CRenderMgr::WaitForGpuComplete()
 {
-	m_fenceValue++;
-	//CPU 펜스의 값을 증가한다.
-	const UINT64 nFence = m_fenceValue;
-	HRESULT hResult = m_pCommandQueue->Signal(m_pFence, nFence);
+	UINT64 fenceValue = ++m_fenceValues[m_swapChainBufferIndex];
+	HRESULT hResult = m_pCommandQueue->Signal(m_pFence, fenceValue);
 	//GPU가 펜스의 값을 설정하는 명령을 명령 큐에 추가한다.
-	if (m_pFence->GetCompletedValue() < nFence)
+	if (m_pFence->GetCompletedValue() < fenceValue)
 	{
 		//펜스의 현재 값이 설정한 값보다 작으면 펜스의 현재 값이 설정한 값이 될 때까지 기다린다.
-		hResult = m_pFence->SetEventOnCompletion(nFence, m_hFenceEvent);
+		hResult = m_pFence->SetEventOnCompletion(fenceValue, m_hFenceEvent);
 		::WaitForSingleObject(m_hFenceEvent, INFINITE);
 	}
+}
+
+void CRenderMgr::MoveToNextFrame()
+{
+	// Get Next Back Buffer Index
+	m_swapChainBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+	WaitForGpuComplete();
 }
 
 ////////////////////////////////////////////////////////////////////////

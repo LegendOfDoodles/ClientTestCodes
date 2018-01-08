@@ -18,6 +18,9 @@ public:	// 공개 함수
 
 	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
 
+	ID3D12Device* GetDevice() { return m_pDevice; }
+	ID3D12GraphicsCommandList* GetCommandList() { return m_pCommandList; }
+
 private:	// 내부 함수
 	void CreateDirect3dDevice();
 	void CreateCommandQueueAndList();
@@ -26,7 +29,7 @@ private:	// 내부 함수
 	void CreateDepthStencilView();
 	void CreateRenderTargetView();
 
-public:	// 변수
+private:	// 변수
 	HINSTANCE m_hInstance;
 	HWND m_hwnd;
 

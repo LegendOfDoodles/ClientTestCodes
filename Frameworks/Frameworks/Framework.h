@@ -1,5 +1,6 @@
 #pragma once
 #include "CreateMgr.h"
+#include "Scene.h"
 
 class CFramework
 {
@@ -30,8 +31,13 @@ private: // 내부 함수
 	void AnimateObjects();
 	void RenderObjects();
 
+	void SwitchScreenMode();
+	void ResizeScreen(WPARAM wParam, LPARAM lParam);
+
 private: // 변수
 	CCreateMgr m_createMgr;
-	CRenderMgr *m_renderMgr;
+	CRenderMgr *m_pRenderMgr;
+
+	CScene *m_pScene;
 };
 

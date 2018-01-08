@@ -16,7 +16,8 @@ CFramework::~CFramework()
 bool CFramework::OnCreate(HINSTANCE hInstance, HWND hwnd)
 {
 	m_createMgr.Initialize(hInstance, hwnd);
-	m_renderMgr = m_createMgr.GetRenderMgr();
+	m_pRenderMgr = m_createMgr.GetRenderMgr();
+
 	BuildObjects();
 
 	return(true);
@@ -70,10 +71,7 @@ void CFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 			break;
 		case VK_F9:
 		{
-			m_createMgr.ChangeScreenMode();
-			m_renderMgr->WaitForGpuComplete();
-			m_createMgr.OnResizeBackBuffers();
-			m_renderMgr->WaitForGpuComplete();
+			SwitchScreenMode();
 			break;
 		}
 		default:
@@ -92,10 +90,7 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	{
 	case WM_SIZE:
 	{
-		m_createMgr.Resize(LOWORD(lParam), HIWORD(lParam));
-		m_renderMgr->WaitForGpuComplete();
-		m_createMgr.OnResizeBackBuffers();
-		m_renderMgr->WaitForGpuComplete();
+		ResizeScreen(wParam, lParam);
 		break;
 	}
 	case WM_LBUTTONDOWN:
@@ -117,10 +112,17 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 // 내부 함수
 void CFramework::BuildObjects()
 {
+	m_pScene = new CScene();
+	if (m_pScene) m_pScene->BuildObjects(&m_createMgr);
 }
 
 void CFramework::ReleaseObjects()
 {
+	if (m_pScene)
+	{
+		m_pScene->ReleaseObjects();
+		delete m_pScene;
+	}
 }
 
 void CFramework::ProcessInput()
@@ -129,9 +131,26 @@ void CFramework::ProcessInput()
 
 void CFramework::AnimateObjects()
 {
+	if (m_pScene) m_pScene->AnimateObjects();
 }
 
 void CFramework::RenderObjects()
 {
-	m_renderMgr->Render();
+	m_pRenderMgr->Render(m_pScene);
+}
+
+void CFramework::SwitchScreenMode()
+{
+	m_createMgr.ChangeScreenMode();
+	m_pRenderMgr->WaitForGpuComplete();
+	m_createMgr.OnResizeBackBuffers();
+	m_pRenderMgr->WaitForGpuComplete();
+}
+
+void CFramework::ResizeScreen(WPARAM wParam, LPARAM lParam)
+{
+	m_createMgr.Resize(LOWORD(lParam), HIWORD(lParam));
+	m_pRenderMgr->WaitForGpuComplete();
+	m_createMgr.OnResizeBackBuffers();
+	m_pRenderMgr->WaitForGpuComplete();
 }

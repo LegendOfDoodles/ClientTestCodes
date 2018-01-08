@@ -33,6 +33,18 @@
     <Filter Include="소스 파일\02.Framework\02.RenderMgr">
       <UniqueIdentifier>{53ca70c9-ba22-4ebe-b68d-b6015630e14d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\03.Scenes">
+      <UniqueIdentifier>{ea09b763-b196-4b68-bf13-067b25cf8762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders">
+      <UniqueIdentifier>{112a574b-b9a4-408c-b813-0d317a71e413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Scenes\00.BaseScene">
+      <UniqueIdentifier>{2064e235-5cd0-4019-b9bf-e17f8431e901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
+      <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -53,7 +65,12 @@
     <ClInclude Include="CreateMgr.h">
       <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
     </ClInclude>
-    <ClInclude Include="RenderMgr.h" />
+    <ClInclude Include="RenderMgr.h">
+      <Filter>소스 파일\02.Framework\02.RenderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,7 +86,10 @@
       <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
     </ClCompile>
     <ClCompile Include="RenderMgr.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\02.Framework\02.RenderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,5 +104,10 @@
     <ResourceCompile Include="Framework01.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders.hlsl">
+      <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
