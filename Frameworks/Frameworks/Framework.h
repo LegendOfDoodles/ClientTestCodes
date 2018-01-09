@@ -1,6 +1,7 @@
 #pragma once
 #include "CreateMgr.h"
 #include "Scene.h"
+#include "Camera.h"
 
 class CFramework
 {
@@ -39,5 +40,7 @@ private: // º¯¼ö
 	CRenderMgr *m_pRenderMgr;
 
 	CScene *m_pScene;
+
+	CCamera *m_pCamera = NULL;
 };
 

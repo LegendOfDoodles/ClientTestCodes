@@ -112,8 +112,17 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 // 내부 함수
 void CFramework::BuildObjects()
 {
+	m_pRenderMgr->ResetCommandList();
+
+	m_pCamera = new CCamera();
+	m_pCamera->Initialize(&m_createMgr);
+
 	m_pScene = new CScene();
 	if (m_pScene) m_pScene->BuildObjects(&m_createMgr);
+
+	m_pRenderMgr->ExecuteCommandList();
+
+	if (m_pScene) m_pScene->ReleaseUploadBuffers();
 }
 
 void CFramework::ReleaseObjects()
@@ -122,6 +131,11 @@ void CFramework::ReleaseObjects()
 	{
 		m_pScene->ReleaseObjects();
 		delete m_pScene;
+	}
+
+	if (m_pCamera)
+	{
+		delete m_pCamera;
 	}
 }
 
@@ -136,7 +150,7 @@ void CFramework::AnimateObjects()
 
 void CFramework::RenderObjects()
 {
-	m_pRenderMgr->Render(m_pScene);
+	m_pRenderMgr->Render(m_pScene, m_pCamera);
 }
 
 void CFramework::SwitchScreenMode()

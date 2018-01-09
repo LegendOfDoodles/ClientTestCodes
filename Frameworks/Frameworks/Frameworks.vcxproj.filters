@@ -42,8 +42,29 @@
     <Filter Include="소스 파일\03.Scenes\00.BaseScene">
       <UniqueIdentifier>{2064e235-5cd0-4019-b9bf-e17f8431e901}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects">
+      <UniqueIdentifier>{86d5dfca-2443-4950-bf06-ec0dbf02cc8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\00.BaseObject">
+      <UniqueIdentifier>{e167d144-c6a0-4a57-b182-e34c93d8b62b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06.Meshes">
+      <UniqueIdentifier>{9ca27172-de8c-430b-9149-fbfc612e0543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06.Meshes\00.Vertex">
+      <UniqueIdentifier>{50b442c6-96d9-43c2-bd52-1b2061ec5c7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06.Meshes\01.Mesh">
+      <UniqueIdentifier>{9de170c0-177b-4485-a15d-bc29fba9bf0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\00.BaseShader">
+      <UniqueIdentifier>{d7ced033-3a87-46f3-9b3e-a67c9676f501}</UniqueIdentifier>
+    </Filter>
     <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
       <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\01.Camera">
+      <UniqueIdentifier>{7adc2eda-1a6d-45ae-b773-7ff82bb59b1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +92,24 @@
     <ClInclude Include="Scene.h">
       <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
     </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Vectors.h">
+      <Filter>소스 파일\00.Global\01.Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\05.Objects\01.Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -90,6 +129,21 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

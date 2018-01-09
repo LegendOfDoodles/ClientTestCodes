@@ -52,8 +52,7 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hwnd)
 	CreateCommandQueueAndList();
 	CreateSwapChain();
 	CreateRtvAndDsvDescriptorHeaps();
-	//CreateRenderTargetView();
-	//CreateDepthStencilView();
+	CreateGraphicsRootSignature();
 
 	m_renderMgr.Initialize(m_wndClientWidth, m_wndClientHeight);
 }
@@ -86,6 +85,8 @@ void CCreateMgr::Release()
 	if (m_pSwapChain) { m_pSwapChain->Release(); }
 	if (m_pDevice) { m_pDevice->Release(); }
 	if (m_pFactory) { m_pFactory->Release(); }
+
+	if (m_pGraphicsRootSignature) m_pGraphicsRootSignature->Release();
 
 	m_renderMgr.Release();
 }
@@ -150,6 +151,102 @@ void CCreateMgr::ChangeScreenMode()
 	}
 	m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
 }
+
+ID3D12Resource* CCreateMgr::CreateBufferResource(
+	void *pData, UINT nBytes, D3D12_HEAP_TYPE heapType,
+	D3D12_RESOURCE_STATES resourceStates, ID3D12Resource **ppUploadBuffer)
+{
+	ID3D12Resource *pBuffer = NULL;
+
+	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
+	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
+	heapPropertiesDesc.Type = heapType;
+	heapPropertiesDesc.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapPropertiesDesc.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapPropertiesDesc.CreationNodeMask = 1;
+	heapPropertiesDesc.VisibleNodeMask = 1;
+
+	D3D12_RESOURCE_DESC resourceDesc;
+	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Alignment = 0;
+	resourceDesc.Width = nBytes;
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.SampleDesc.Quality = 0;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+	D3D12_RESOURCE_STATES resourceInitialStates = D3D12_RESOURCE_STATE_COPY_DEST;
+	if (heapType == D3D12_HEAP_TYPE_UPLOAD)
+		resourceInitialStates =	D3D12_RESOURCE_STATE_GENERIC_READ;
+	else if (heapType == D3D12_HEAP_TYPE_READBACK)
+		resourceInitialStates =	D3D12_RESOURCE_STATE_COPY_DEST;
+
+	HRESULT hResult = m_pDevice->CreateCommittedResource(
+		&heapPropertiesDesc,
+		D3D12_HEAP_FLAG_NONE, 
+		&resourceDesc,
+		resourceInitialStates, 
+		NULL,
+		__uuidof(ID3D12Resource), 
+		(void **)&pBuffer);
+
+	if (pData)
+	{
+		switch (heapType)
+		{
+		case D3D12_HEAP_TYPE_DEFAULT:
+		{
+			if (ppUploadBuffer)
+			{
+				//업로드 버퍼를 생성한다.
+				heapPropertiesDesc.Type = D3D12_HEAP_TYPE_UPLOAD;
+				m_pDevice->CreateCommittedResource(&heapPropertiesDesc,
+					D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
+					__uuidof(ID3D12Resource), (void **)ppUploadBuffer);
+
+				//업로드 버퍼를 매핑하여 초기화 데이터를 업로드 버퍼에 복사한다.
+				D3D12_RANGE readRange = { 0, 0 };
+				UINT8 *pBufferDataBegin = NULL;
+				(*ppUploadBuffer)->Map(0, &readRange, (void **)&pBufferDataBegin);
+				memcpy(pBufferDataBegin, pData, nBytes);
+				(*ppUploadBuffer)->Unmap(0, NULL);
+
+				//업로드 버퍼의 내용을 디폴트 버퍼에 복사한다.
+				m_pCommandList->CopyResource(pBuffer, *ppUploadBuffer);
+
+				D3D12_RESOURCE_BARRIER resourceBarrier;
+				::ZeroMemory(&resourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
+				resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+				resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+				resourceBarrier.Transition.pResource = pBuffer;
+				resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+				resourceBarrier.Transition.StateAfter = resourceStates;
+				resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+				m_pCommandList->ResourceBarrier(1, &resourceBarrier);
+			}
+			break;
+		}
+		case D3D12_HEAP_TYPE_UPLOAD:
+		{
+			D3D12_RANGE readRange = { 0, 0 };
+			UINT8 *pBufferDataBegin = NULL;
+			pBuffer->Map(0, &readRange, (void **)&pBufferDataBegin);
+			memcpy(pBufferDataBegin, pData, nBytes);
+			pBuffer->Unmap(0, NULL);
+			break;
+		}
+		case D3D12_HEAP_TYPE_READBACK:
+			break;
+		}
+	}
+	return(pBuffer);
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
@@ -260,14 +357,6 @@ void CCreateMgr::CreateSwapChain()
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 #endif
 
-	//DXGI_SWAP_CHAIN_FULLSCREEN_DESC swapChainFullScreenDesc;
-	//::ZeroMemory(&swapChainFullScreenDesc, sizeof(DXGI_SWAP_CHAIN_FULLSCREEN_DESC));
-	//swapChainFullScreenDesc.RefreshRate.Numerator = 60;
-	//swapChainFullScreenDesc.RefreshRate.Denominator = 1;
-	//swapChainFullScreenDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	//swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	//swapChainFullScreenDesc.Windowed = TRUE;
-
 	HRESULT hResult = m_pFactory->CreateSwapChain(m_pCommandQueue,
 		&swapChainDesc, (IDXGISwapChain **)&m_pSwapChain);
 	m_renderMgr.SetSwapChain(m_pSwapChain);
@@ -362,4 +451,35 @@ void CCreateMgr::CreateRenderTargetView()
 		d3dRtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
 	m_renderMgr.SetRenderTargetBuffers(m_ppRenderTargetBuffers);
+}
+
+void CCreateMgr::CreateGraphicsRootSignature()
+{
+	//매개변수가 없는 루트 시그너쳐를 생성한다.
+	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	::ZeroMemory(&rootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
+
+	rootSignatureDesc.NumParameters = 0;
+	rootSignatureDesc.pParameters = NULL;
+	rootSignatureDesc.NumStaticSamplers = 0;
+	rootSignatureDesc.pStaticSamplers = NULL;
+	rootSignatureDesc.Flags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	ID3DBlob *pSignatureBlob = NULL;		ID3DBlob *pErrorBlob = NULL;
+	::D3D12SerializeRootSignature(
+		&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1,
+		&pSignatureBlob,
+		&pErrorBlob);
+
+	m_pDevice->CreateRootSignature(
+		0,
+		pSignatureBlob->GetBufferPointer(),
+		pSignatureBlob->GetBufferSize(),
+		__uuidof(ID3D12RootSignature), 
+		(void**)&m_pGraphicsRootSignature);
+
+	if (pSignatureBlob) pSignatureBlob->Release();
+	if (pErrorBlob) pErrorBlob->Release();
 }

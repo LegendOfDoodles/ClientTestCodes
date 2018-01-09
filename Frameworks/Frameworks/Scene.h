@@ -1,4 +1,5 @@
 #pragma once
+#include "Shader.h"
 
 class CCreateMgr;
 
@@ -11,6 +12,8 @@ public:	// 생성자, 소멸자
 public: // 공개 함수
 	void BuildObjects(CCreateMgr *pCreateMgr);
 	void ReleaseObjects();
+
+	void ReleaseUploadBuffers();
 
 	void ProcessInput();
 	void AnimateObjects();
@@ -25,8 +28,10 @@ public: // 공개 함수
 private: // 내부 함수
 
 private: // 변수
-	ID3D12RootSignature *m_pGraphicsRootSignature;
-	ID3D12PipelineState *m_pPipelineState;
+	ID3D12RootSignature *m_pGraphicsRootSignature = NULL;
+
+	CShader **m_ppShaders = NULL;
+	int m_nShaders = 0;
 
 	ID3D12GraphicsCommandList *m_pCommandList;
 };

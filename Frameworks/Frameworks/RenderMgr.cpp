@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderMgr.h"
 #include "Scene.h"
+#include "Camera.h"
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
@@ -48,17 +49,6 @@ void CRenderMgr::Initialize(int width, int height)
 	// Fence
 	m_hFenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	m_fenceValues[0] = 1;
-
-	// Viewport
-	m_viewport.TopLeftX = 0;
-	m_viewport.TopLeftY = 0;
-	m_viewport.Width = static_cast<float>(width);
-	m_viewport.Height = static_cast<float>(height);
-	m_viewport.MinDepth = 0.0f;
-	m_viewport.MaxDepth = 1.0f;
-
-	// Scissor Rect
-	m_scissorRect = { 0, 0, width, height };
 }
 
 void CRenderMgr::Release()
@@ -66,7 +56,7 @@ void CRenderMgr::Release()
 	::CloseHandle(m_hFenceEvent);
 }
 
-void CRenderMgr::Render(CScene* pScene)
+void CRenderMgr::Render(CScene* pScene, CCamera* pCamera)
 {
 	// Reset Command List
 	HRESULT hResult = m_pCommandAllocator->Reset();
@@ -86,8 +76,7 @@ void CRenderMgr::Render(CScene* pScene)
 	m_pCommandList->ResourceBarrier(1, &resourceBarrier);
 
 	// Set Viewport and Scissor Rect
-	m_pCommandList->RSSetViewports(1, &m_viewport);
-	m_pCommandList->RSSetScissorRects(1, &m_scissorRect);
+	pCamera->SetViewportsAndScissorRects();
 
 	// Check Render Target
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUDescriptorHandle =
@@ -164,6 +153,20 @@ void CRenderMgr::MoveToNextFrame()
 {
 	// Get Next Back Buffer Index
 	m_swapChainBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+	WaitForGpuComplete();
+}
+
+void CRenderMgr::ResetCommandList()
+{
+	m_pCommandList->Reset(m_pCommandAllocator, NULL);
+}
+
+void CRenderMgr::ExecuteCommandList()
+{
+	m_pCommandList->Close();
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
+	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
+
 	WaitForGpuComplete();
 }
 
