@@ -147,6 +147,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CreateMgr.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Framework01.h" />
     <ClInclude Include="Mesh.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CreateMgr.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Framework01.cpp" />
     <ClCompile Include="Mesh.cpp" />

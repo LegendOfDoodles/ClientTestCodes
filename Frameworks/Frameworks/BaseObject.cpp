@@ -2,6 +2,14 @@
 #include "BaseObject.h"
 #include "Shader.h"
 
+/// <summary>
+/// 목적: 기본 오브젝트 클래스, 인터페이스 용
+/// 최종 수정자:  김나단
+/// 수정자 목록:  김나단
+/// 최종 수정 날짜: 2018-01-09
+/// </summary>
+
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CBaseObject::CBaseObject()
@@ -40,7 +48,7 @@ void CBaseObject::SetShader(CShader *pShader)
 	if (m_pShader) m_pShader->AddRef();
 }
 
-void CBaseObject::Animate(float fTimeElapsed)
+void CBaseObject::Animate(float timeElapsed)
 {
 }
 

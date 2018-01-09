@@ -16,13 +16,13 @@ public: // 공개 함수
 	void ReleaseUploadBuffers();
 
 	void ProcessInput();
-	void AnimateObjects();
+	void AnimateObjects(float timeElapsed);
 	void Render();
 
 	// Message Process
-	bool OnProcessingMouseMessage(HWND hwnd, UINT messageID,
+	bool OnProcessingMouseMessage(HWND hWnd, UINT messageID,
 		WPARAM wParam, LPARAM lParam);
-	bool OnProcessingKeyboardMessage(HWND hwnd, UINT messageID,
+	bool OnProcessingKeyboardMessage(HWND hWnd, UINT messageID,
 		WPARAM wParam, LPARAM lParam);
 
 private: // 내부 함수

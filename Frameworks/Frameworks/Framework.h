@@ -2,6 +2,7 @@
 #include "CreateMgr.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "Timer.h"
 
 class CFramework
 {
@@ -11,7 +12,7 @@ public:	// 생성자, 소멸자
 
 public: // 공개 함수
 	// Initialize and Release
-	bool OnCreate(HINSTANCE hInstance, HWND hwnd);
+	bool OnCreate(HINSTANCE hInstance, HWND hWnd);
 	void OnDestroy();
 
 	void FrameAdvance();
@@ -24,12 +25,15 @@ public: // 공개 함수
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, 
 		WPARAM wParam, LPARAM lParam);
 
+	// Register Timer
+	void RegisterTimer(CTimer* timer) { m_pTimer = timer; }
+
 private: // 내부 함수
 	void BuildObjects();
 	void ReleaseObjects();
 
 	void ProcessInput();
-	void AnimateObjects();
+	void AnimateObjects(float timeElapsed);
 	void RenderObjects();
 
 	void SwitchScreenMode();
@@ -41,6 +45,7 @@ private: // 변수
 
 	CScene *m_pScene;
 
-	CCamera *m_pCamera = NULL;
+	CCamera *m_pCamera{ NULL };
+	CTimer *m_pTimer{ NULL };
 };
 

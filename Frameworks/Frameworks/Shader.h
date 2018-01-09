@@ -29,7 +29,7 @@ public: // 공개 함수
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 	virtual void ReleaseObjects();
 
-	virtual void AnimateObjects(float fTimeElapsed);
+	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void OnPrepareRender();
 	virtual void Render();

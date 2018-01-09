@@ -66,6 +66,9 @@
     <Filter Include="소스 파일\05.Objects\01.Camera">
       <UniqueIdentifier>{7adc2eda-1a6d-45ae-b773-7ff82bb59b1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\00.Timer">
+      <UniqueIdentifier>{941e7b22-a475-49c5-9afc-b53f5867e479}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -110,6 +113,9 @@
     <ClInclude Include="Camera.h">
       <Filter>소스 파일\05.Objects\01.Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,6 +150,9 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

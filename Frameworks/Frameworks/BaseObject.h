@@ -15,7 +15,7 @@ public: // 공개 함수
 	virtual void SetMesh(CMesh *pMesh);
 	virtual void SetShader(CShader *pShader);
 
-	virtual void Animate(float fTimeElapsed);
+	virtual void Animate(float timeElapsed);
 
 	virtual void OnPrepareRender();
 	virtual void Render();

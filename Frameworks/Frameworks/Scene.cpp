@@ -2,6 +2,13 @@
 #include "Scene.h"
 #include "CreateMgr.h"
 
+/// <summary>
+/// 목적: 기본 씬, 인터페이스 용
+/// 최종 수정자:  김나단
+/// 수정자 목록:  김나단
+/// 최종 수정 날짜: 2018-01-09
+/// </summary>
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CScene::CScene()
@@ -66,11 +73,11 @@ void CScene::ProcessInput()
 {
 }
 
-void CScene::AnimateObjects()
+void CScene::AnimateObjects(float timeElapsed)
 {
 	for (int i = 0; i < m_nShaders; i++)
 	{
-		m_ppShaders[i]->AnimateObjects(0.2f);
+		m_ppShaders[i]->AnimateObjects(timeElapsed);
 	}
 }
 

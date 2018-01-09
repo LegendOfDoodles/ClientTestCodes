@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "CreateMgr.h"
 
+/// <summary>
+/// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
+/// 최종 수정자:  김나단
+/// 수정자 목록:  김나단
+/// 최종 수정 날짜: 2018-01-09
+/// </summary>
+
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CCreateMgr::CCreateMgr()
@@ -43,10 +51,10 @@ CCreateMgr::~CCreateMgr()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hwnd)
+void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
 	m_hInstance = hInstance;
-	m_hwnd = hwnd;
+	m_hWnd = hWnd;
 
 	CreateDirect3dDevice();
 	CreateCommandQueueAndList();
@@ -331,7 +339,7 @@ void CCreateMgr::CreateCommandQueueAndList()
 void CCreateMgr::CreateSwapChain()
 {
 	RECT rcClient;
-	::GetClientRect(m_hwnd, &rcClient);
+	::GetClientRect(m_hWnd, &rcClient);
 	m_wndClientWidth = rcClient.right - rcClient.left;
 	m_wndClientHeight = rcClient.bottom - rcClient.top;
 
@@ -346,7 +354,7 @@ void CCreateMgr::CreateSwapChain()
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = SWAP_CHAIN_BUFFER_CNT;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapChainDesc.OutputWindow = m_hwnd;
+	swapChainDesc.OutputWindow = m_hWnd;
 	swapChainDesc.SampleDesc.Count = (m_msaa4xEnable) ? 4 : 1;
 	swapChainDesc.SampleDesc.Quality = (m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
 	swapChainDesc.Windowed = TRUE;
@@ -362,7 +370,7 @@ void CCreateMgr::CreateSwapChain()
 	m_renderMgr.SetSwapChain(m_pSwapChain);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
-	m_pFactory->MakeWindowAssociation(m_hwnd, DXGI_MWA_NO_ALT_ENTER);
+	m_pFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
 	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());

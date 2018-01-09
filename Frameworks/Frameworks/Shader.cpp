@@ -2,6 +2,14 @@
 #include "Shader.h"
 #include "CreateMgr.h"
 
+/// <summary>
+/// 목적: 기본 쉐이터 코드, 인터페이스 용
+/// 최종 수정자:  김나단
+/// 수정자 목록:  김나단
+/// 최종 수정 날짜: 2018-01-09
+/// </summary>
+
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CShader::CShader(CCreateMgr *pCreateMgr)
@@ -206,11 +214,11 @@ void CShader::ReleaseObjects()
 	delete[] m_ppObjects;
 }
 
-void CShader::AnimateObjects(float fTimeElapsed)
+void CShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Animate(fTimeElapsed);
+		m_ppObjects[j]->Animate(timeElapsed);
 	}
 }
 

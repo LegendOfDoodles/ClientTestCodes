@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "Framework.h"
 
+/// <summary>
+/// 목적: 테
+/// 최종 수정자:  김나단
+/// 수정자 목록:  김나단
+/// 최종 수정 날짜: 2018-01-09
+/// </summary>
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CFramework::CFramework()
@@ -13,9 +20,9 @@ CFramework::~CFramework()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-bool CFramework::OnCreate(HINSTANCE hInstance, HWND hwnd)
+bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd)
 {
-	m_createMgr.Initialize(hInstance, hwnd);
+	m_createMgr.Initialize(hInstance, hWnd);
 	m_pRenderMgr = m_createMgr.GetRenderMgr();
 
 	BuildObjects();
@@ -32,7 +39,7 @@ void CFramework::OnDestroy()
 void CFramework::FrameAdvance()
 {
 	ProcessInput();
-	AnimateObjects();
+	AnimateObjects(m_pTimer->GetTimeElapsed());
 	RenderObjects();
 }
 
@@ -143,9 +150,9 @@ void CFramework::ProcessInput()
 {
 }
 
-void CFramework::AnimateObjects()
+void CFramework::AnimateObjects(float timeElapsed)
 {
-	if (m_pScene) m_pScene->AnimateObjects();
+	if (m_pScene) m_pScene->AnimateObjects(timeElapsed);
 }
 
 void CFramework::RenderObjects()

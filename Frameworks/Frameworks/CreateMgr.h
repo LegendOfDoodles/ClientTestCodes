@@ -8,7 +8,7 @@ public:	// 생성자, 소멸자
 	~CCreateMgr();
 
 public:	// 공개 함수
-	void Initialize(HINSTANCE hInstance, HWND hwnd);
+	void Initialize(HINSTANCE hInstance, HWND hWnd);
 	void Release();
 
 	void Resize(int width, int height);
@@ -43,7 +43,7 @@ private:	// 내부 함수
 
 private:	// 변수
 	HINSTANCE m_hInstance;
-	HWND m_hwnd;
+	HWND m_hWnd;
 
 	// Window Size
 	int m_wndClientWidth;
