@@ -41,9 +41,9 @@ private: // 내부 함수
 
 private: // 변수
 	CCreateMgr m_createMgr;
-	CRenderMgr *m_pRenderMgr;
+	CRenderMgr *m_pRenderMgr{ NULL };
 
-	CScene *m_pScene;
+	CScene *m_pScene{ NULL };
 
 	CCamera *m_pCamera{ NULL };
 	CTimer *m_pTimer{ NULL };

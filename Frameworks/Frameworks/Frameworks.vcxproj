@@ -147,6 +147,8 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CreateMgr.h" />
+    <ClInclude Include="DiffusedShader.h" />
+    <ClInclude Include="RotatingObject.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Framework01.h" />
@@ -164,6 +166,8 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CreateMgr.cpp" />
+    <ClCompile Include="DiffusedShader.cpp" />
+    <ClCompile Include="RotatingObject.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Framework01.cpp" />

@@ -35,6 +35,9 @@ public:	// 공개 함수
 	// Set Fence
 	void SetFence(ID3D12Fence *pFence) { m_pFence = pFence; }
 
+	// Set GraphicsRootSignature
+	void SetGraphicsRootSignature(ID3D12RootSignature *pGraphicsRootSignature) { m_pGraphicsRootSignature = pGraphicsRootSignature; }
+
 	// Synchronize
 	void WaitForGpuComplete();
 	void MoveToNextFrame();
@@ -46,25 +49,28 @@ private:	// 내부 함수
 
 private:	// 변수
 	// Swap Chain
-	IDXGISwapChain3 *m_pSwapChain;
-	UINT m_swapChainBufferIndex;
+	IDXGISwapChain3 *m_pSwapChain{ NULL };
+	UINT m_swapChainBufferIndex{ 0 };
 
 	// Render Target View
-	ID3D12Resource *m_ppRenderTargetBuffers[SWAP_CHAIN_BUFFER_CNT];
-	ID3D12DescriptorHeap *m_pRtvDescriptorHeap;
-	UINT m_rtvDescriptorIncrementSize;
+	ID3D12Resource *m_ppRenderTargetBuffers[SWAP_CHAIN_BUFFER_CNT]{ NULL };
+	ID3D12DescriptorHeap *m_pRtvDescriptorHeap{ NULL };
+	UINT m_rtvDescriptorIncrementSize{ 0 };
 
 	// Depth Stencil View
-	ID3D12DescriptorHeap *m_pDsvDescriptorHeap;
+	ID3D12DescriptorHeap *m_pDsvDescriptorHeap{ NULL };
 
 	// Command Queue
-	ID3D12CommandQueue *m_pCommandQueue;
-	ID3D12CommandAllocator *m_pCommandAllocator;
-	ID3D12GraphicsCommandList *m_pCommandList;
+	ID3D12CommandQueue *m_pCommandQueue{ NULL };
+	ID3D12CommandAllocator *m_pCommandAllocator{ NULL };
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 
 	// Fence
-	ID3D12Fence *m_pFence;
-	UINT64 m_fenceValues[SWAP_CHAIN_BUFFER_CNT];
-	HANDLE m_hFenceEvent;
+	ID3D12Fence *m_pFence{ NULL };
+	UINT64 m_fenceValues[SWAP_CHAIN_BUFFER_CNT]{ 0 };
+	HANDLE m_hFenceEvent{ NULL };
+
+	// Root Signature
+	ID3D12RootSignature *m_pGraphicsRootSignature{ NULL };
 };
 

@@ -60,14 +60,20 @@
     <Filter Include="소스 파일\04.Shaders\00.BaseShader">
       <UniqueIdentifier>{d7ced033-3a87-46f3-9b3e-a67c9676f501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
-      <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\05.Objects\01.Camera">
       <UniqueIdentifier>{7adc2eda-1a6d-45ae-b773-7ff82bb59b1a}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\00.Global\01.Utility\00.Timer">
       <UniqueIdentifier>{941e7b22-a475-49c5-9afc-b53f5867e479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\02.RotatingObject">
+      <UniqueIdentifier>{be3fc130-7dbf-4272-9abf-efccf81d9bf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\01.DiffusedShader">
+      <UniqueIdentifier>{539dd996-b49f-4b9d-bfe8-4321aad95ce3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
+      <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +122,12 @@
     <ClInclude Include="Timer.h">
       <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
     </ClInclude>
+    <ClInclude Include="RotatingObject.h">
+      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DiffusedShader.h">
+      <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="RotatingObject.cpp">
+      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DiffusedShader.cpp">
+      <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

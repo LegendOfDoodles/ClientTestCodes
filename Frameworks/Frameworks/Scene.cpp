@@ -1,19 +1,20 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "CreateMgr.h"
+#include "RotatingObject.h"
+#include "DiffusedShader.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-01-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CScene::CScene()
 {
-	m_pGraphicsRootSignature = NULL;
 }
 
 
@@ -28,18 +29,29 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	ID3D12Device *pDevice = pCreateMgr->GetDevice();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	//그래픽 루트 시그너쳐를 생성한다.
-	m_pGraphicsRootSignature = pCreateMgr->GetGraphicsRootSignature();
+	CTriangleMesh *pMesh = new CTriangleMesh(pCreateMgr);
 
-	//씬을 그리기 위한 셰이더 객체를 생성한다.
-	m_nShaders = 1;
-	m_ppShaders = new CShader*[m_nShaders];
+	//m_nShaders = 1;
+	//m_ppShaders = new CShader*[m_nShaders];
 
-	CShader *pShader = new CShader(pCreateMgr);
-	pShader->CreateShader(pCreateMgr);
-	pShader->BuildObjects(pCreateMgr, NULL);
+	//CShader *pShader = new CShader(pCreateMgr);
+	//pShader->CreateShader(pCreateMgr);
+	//pShader->BuildObjects(pCreateMgr, NULL);
 
-	m_ppShaders[0] = pShader;
+	//m_ppShaders[0] = pShader;
+
+	m_nObjects = 1;
+	m_ppObjects = new CBaseObject*[m_nObjects];
+
+	CRotatingObject *pRotatingObject = new CRotatingObject();
+	pRotatingObject->SetMesh(pMesh);
+
+	CDiffusedShader *pShader = new CDiffusedShader(pCreateMgr);
+	pShader->Initialize(pCreateMgr);
+
+	pRotatingObject->SetShader(pShader);
+
+	m_ppObjects[0] = pRotatingObject;
 }
 
 void CScene::ReleaseObjects()
@@ -48,23 +60,40 @@ void CScene::ReleaseObjects()
 	{
 		for (int i = 0; i < m_nShaders; i++)
 		{
-			m_ppShaders[i]->ReleaseShaderVariables();
-			m_ppShaders[i]->ReleaseObjects();
-			m_ppShaders[i]->Release();
+			m_ppShaders[i]->Finalize();
 		}
 		delete[] m_ppShaders;
+	}
+
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			if (m_ppObjects[j]) delete m_ppObjects[j];
+		}
+		delete[] m_ppObjects;
 	}
 }
 
 void CScene::ReleaseUploadBuffers()
 {
-	if (!m_ppShaders) return;
+	//if (!m_ppShaders) return;
 
-	for (int j = 0; j < m_nShaders; j++)
+	//for (int j = 0; j < m_nShaders; j++)
+	//{
+	//	if (m_ppShaders[j])
+	//	{
+	//		m_ppShaders[j]->ReleaseUploadBuffers();
+	//	}
+	//}
+
+	if (!m_ppObjects) return;
+
+	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppShaders[j])
+		if (m_ppObjects[j])
 		{
-			m_ppShaders[j]->ReleaseUploadBuffers();
+			m_ppObjects[j]->ReleaseUploadBuffers();
 		}
 	}
 }
@@ -75,19 +104,30 @@ void CScene::ProcessInput()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
-	for (int i = 0; i < m_nShaders; i++)
+	//for (int i = 0; i < m_nShaders; i++)
+	//{
+	//	m_ppShaders[i]->AnimateObjects(timeElapsed);
+	//}
+
+	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppShaders[i]->AnimateObjects(timeElapsed);
+		m_ppObjects[j]->Animate(timeElapsed);
 	}
 }
 
-void CScene::Render()
+void CScene::Render(CCamera *pCamera)
 {
-	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
+	//for (int i = 0; i < m_nShaders; i++)
+	//{
+	//	m_ppShaders[i]->Render();
+	//}
 
-	for (int i = 0; i < m_nShaders; i++)
+	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppShaders[i]->Render();
+		if (m_ppObjects[j])
+		{
+			m_ppObjects[j]->Render(pCamera);
+		}
 	}
 }
 

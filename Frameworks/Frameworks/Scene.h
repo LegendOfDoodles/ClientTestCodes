@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 class CCreateMgr;
+class CCamera;
 
 class CScene
 {
@@ -17,7 +18,7 @@ public: // 공개 함수
 
 	void ProcessInput();
 	void AnimateObjects(float timeElapsed);
-	void Render();
+	void Render(CCamera *pCamera);
 
 	// Message Process
 	bool OnProcessingMouseMessage(HWND hWnd, UINT messageID,
@@ -28,11 +29,12 @@ public: // 공개 함수
 private: // 내부 함수
 
 private: // 변수
-	ID3D12RootSignature *m_pGraphicsRootSignature = NULL;
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 
-	CShader **m_ppShaders = NULL;
-	int m_nShaders = 0;
+	CShader **m_ppShaders{ NULL };
+	int m_nShaders{ 0 };
 
-	ID3D12GraphicsCommandList *m_pCommandList;
+	CBaseObject ** m_ppObjects{ NULL };
+	int m_nObjects{ 0 };
 };
 

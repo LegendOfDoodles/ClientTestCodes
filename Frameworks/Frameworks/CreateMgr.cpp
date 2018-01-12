@@ -5,7 +5,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-01-12
 /// </summary>
 
 
@@ -463,16 +463,34 @@ void CCreateMgr::CreateRenderTargetView()
 
 void CCreateMgr::CreateGraphicsRootSignature()
 {
-	//매개변수가 없는 루트 시그너쳐를 생성한다.
+	D3D12_ROOT_PARAMETER pRootParameters[2];
+	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[0].Constants.Num32BitValues = 16;
+	pRootParameters[0].Constants.ShaderRegister = 0;
+	pRootParameters[0].Constants.RegisterSpace = 0;
+	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[1].Constants.Num32BitValues = 32;
+	pRootParameters[1].Constants.ShaderRegister = 1;
+	pRootParameters[1].Constants.RegisterSpace = 0;
+	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
+
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	::ZeroMemory(&rootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
 
-	rootSignatureDesc.NumParameters = 0;
-	rootSignatureDesc.pParameters = NULL;
+	rootSignatureDesc.NumParameters = _countof(pRootParameters);
+	rootSignatureDesc.pParameters = pRootParameters;
 	rootSignatureDesc.NumStaticSamplers = 0;
 	rootSignatureDesc.pStaticSamplers = NULL;
-	rootSignatureDesc.Flags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	rootSignatureDesc.Flags = rootSignatureFlags;
 
 	ID3DBlob *pSignatureBlob = NULL;		ID3DBlob *pErrorBlob = NULL;
 	::D3D12SerializeRootSignature(
@@ -490,4 +508,6 @@ void CCreateMgr::CreateGraphicsRootSignature()
 
 	if (pSignatureBlob) pSignatureBlob->Release();
 	if (pErrorBlob) pErrorBlob->Release();
+
+	m_renderMgr.SetGraphicsRootSignature(m_pGraphicsRootSignature);
 }

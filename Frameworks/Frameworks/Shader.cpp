@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "Shader.h"
 #include "CreateMgr.h"
+#include "Camera.h"
 
 /// <summary>
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-01-12
 /// </summary>
 
 
@@ -34,35 +35,67 @@ CShader::~CShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
+void CShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
+{
+	CreateShader(pCreateMgr);
+	CreateShaderVariables(pCreateMgr);
+	BuildObjects(pCreateMgr, pContext);
+}
+
+void CShader::Finalize()
+{
+	ReleaseShaderVariables();
+	ReleaseObjects();
+	Release();
+}
+
+void CShader::ReleaseUploadBuffers()
+{
+	if (!m_ppObjects) return;
+
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		if (m_ppObjects[j])
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
+	}
+}
+
+void CShader::UpdateShaderVariables()
+{
+}
+
+void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
+{
+	XMFLOAT4X4 xmf4x4World;
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(pxmf4x4World)));
+
+	m_pCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
+}
+
+void CShader::AnimateObjects(float timeElapsed)
+{
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		m_ppObjects[j]->Animate(timeElapsed);
+	}
+}
+
+void CShader::Render(CCamera *pCamera)
+{
+	OnPrepareRender();
+}
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
 D3D12_INPUT_LAYOUT_DESC CShader::CreateInputLayout()
 {
-	UINT nInputElementDescs = 2;
-	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs 
-		= new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = NULL;
+	d3dInputLayoutDesc.NumElements = 0;
 
-	pInputElementDescs[0] = { 
-		"POSITION", 
-		0, 
-		DXGI_FORMAT_R32G32B32_FLOAT, 
-		0, 
-		0,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
-		0 };
-
-	pInputElementDescs[1] = { 
-		"COLOR", 
-		0, 
-		DXGI_FORMAT_R32G32B32A32_FLOAT, 
-		0, 
-		12,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
-		0 };
-
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
-	inputLayoutDesc.pInputElementDescs = pInputElementDescs;
-	inputLayoutDesc.NumElements = nInputElementDescs;
-
-	return(inputLayoutDesc);
+	return(d3dInputLayoutDesc);
 }
 
 D3D12_RASTERIZER_DESC CShader::CreateRasterizerState()
@@ -131,20 +164,24 @@ D3D12_DEPTH_STENCIL_DESC CShader::CreateDepthStencilState()
 
 D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
 {
-	return(CompileShaderFromFile(L"Shaders.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
+	D3D12_SHADER_BYTECODE d3dShaderByteCode;
+	d3dShaderByteCode.BytecodeLength = 0;
+	d3dShaderByteCode.pShaderBytecode = NULL;
+
+	return(d3dShaderByteCode);
 }
 
 D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
 {
-	return(CompileShaderFromFile(L"Shaders.hlsl", "PSMain", "ps_5_1", ppd3dShaderBlob));
+	D3D12_SHADER_BYTECODE d3dShaderByteCode;
+	d3dShaderByteCode.BytecodeLength = 0;
+	d3dShaderByteCode.pShaderBytecode = NULL;
+
+	return(d3dShaderByteCode);
 }
 
 void CShader::CreateShader(CCreateMgr *pCreateMgr)
 {
-	//그래픽스 파이프라인 상태 객체 배열을 생성한다.
-	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
-
 	ID3DBlob *pVertexShaderBlob = NULL, *pPixelShaderBlob = NULL;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
@@ -176,17 +213,8 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr)
 	}
 }
 
-void CShader::ReleaseUploadBuffers()
+void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		if (m_ppObjects[j])
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
-	}
 }
 
 void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
@@ -200,13 +228,17 @@ void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_ppObjects[0]->SetMesh(pTriangleMesh);
 }
 
+void CShader::ReleaseShaderVariables()
+{
+}
+
 void CShader::ReleaseObjects()
 {
 	if (!m_ppObjects) return;
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppObjects[j]) 
+		if (m_ppObjects[j])
 		{
 			delete m_ppObjects[j];
 		}
@@ -214,28 +246,10 @@ void CShader::ReleaseObjects()
 	delete[] m_ppObjects;
 }
 
-void CShader::AnimateObjects(float timeElapsed)
-{
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(timeElapsed);
-	}
-}
-
 void CShader::OnPrepareRender()
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
 	m_pCommandList->SetPipelineState(m_ppPipelineStates[0]);
-}
-
-void CShader::Render()
-{
-	OnPrepareRender();
-
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		if (m_ppObjects[j]) m_ppObjects[j]->Render();
-	}
 }
 
 D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
@@ -257,6 +271,3 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 
 	return(shaderByteCode);
 }
-
-////////////////////////////////////////////////////////////////////////
-// 내부 함수

@@ -7,7 +7,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-01-12
 /// </summary>
 
 
@@ -15,35 +15,6 @@
 // 생성자, 소멸자
 CRenderMgr::CRenderMgr()
 {
-	// Swap Chain
-	m_pSwapChain = NULL;
-	m_swapChainBufferIndex = 0;
-
-	// Render Target View
-	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
-	{
-		m_ppRenderTargetBuffers[i] = NULL;
-	}
-	m_pRtvDescriptorHeap = NULL;
-	m_rtvDescriptorIncrementSize = 0;
-
-	// Depth Stencil View
-	m_pDsvDescriptorHeap = NULL;
-
-	// Command Queue
-	m_pCommandAllocator = NULL;
-	m_pCommandQueue = NULL;
-	m_pCommandList = NULL;
-
-	// Fence
-	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
-	{
-		m_fenceValues[i] = 0;
-	}
-	m_hFenceEvent = NULL;
-	m_pFence = NULL;
-
-	// Scene
 }
 
 CRenderMgr::~CRenderMgr()
@@ -111,8 +82,14 @@ void CRenderMgr::Render(CScene* pScene, CCamera* pCamera)
 	m_pCommandList->OMSetRenderTargets(1, &rtvCPUDescriptorHandle,
 		TRUE, &dsvCPUDescriptorHandle);
 
+	// Set Graphics Root Signature
+	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
+
+	// Update Camera
+	pCamera->UpdateShaderVariables();
+
 	// Render Scene
-	if (pScene) pScene->Render();
+	if (pScene) pScene->Render(pCamera);
 
 	// Set Barrier
 	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
