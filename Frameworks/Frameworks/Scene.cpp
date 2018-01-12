@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "CreateMgr.h"
 #include "RotatingObject.h"
-#include "DiffusedShader.h"
+#include "ObjectShader.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
@@ -35,23 +35,13 @@ void CScene::Finalize()
 
 void CScene::ReleaseUploadBuffers()
 {
-	//if (!m_ppShaders) return;
+	if (!m_ppShaders) return;
 
-	//for (int j = 0; j < m_nShaders; j++)
-	//{
-	//	if (m_ppShaders[j])
-	//	{
-	//		m_ppShaders[j]->ReleaseUploadBuffers();
-	//	}
-	//}
-
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	for (int j = 0; j < m_nShaders; j++)
 	{
-		if (m_ppObjects[j])
+		if (m_ppShaders[j])
 		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
+			m_ppShaders[j]->ReleaseUploadBuffers();
 		}
 	}
 }
@@ -62,30 +52,17 @@ void CScene::ProcessInput()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
-	//for (int i = 0; i < m_nShaders; i++)
-	//{
-	//	m_ppShaders[i]->AnimateObjects(timeElapsed);
-	//}
-
-	for (int j = 0; j < m_nObjects; j++)
+	for (int i = 0; i < m_nShaders; i++)
 	{
-		m_ppObjects[j]->Animate(timeElapsed);
+		m_ppShaders[i]->AnimateObjects(timeElapsed);
 	}
 }
 
 void CScene::Render(CCamera *pCamera)
 {
-	//for (int i = 0; i < m_nShaders; i++)
-	//{
-	//	m_ppShaders[i]->Render();
-	//}
-
-	for (int j = 0; j < m_nObjects; j++)
+	for (int i = 0; i < m_nShaders; i++)
 	{
-		if (m_ppObjects[j])
-		{
-			m_ppObjects[j]->Render(pCamera);
-		}
+		m_ppShaders[i]->Render(pCamera);
 	}
 }
 
@@ -110,46 +87,22 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	CCubeMeshDiffused *pCubeMesh = new CCubeMeshDiffused(pCreateMgr, 12.0f, 12.0f, 12.0f);
 
-	//m_nShaders = 1;
-	//m_ppShaders = new CShader*[m_nShaders];
+	m_nShaders = 1;
+	m_ppShaders = new CShader*[m_nShaders];
 
-	//CShader *pShader = new CShader(pCreateMgr);
-	//pShader->CreateShader(pCreateMgr);
-	//pShader->BuildObjects(pCreateMgr, NULL);
-
-	//m_ppShaders[0] = pShader;
-
-	m_nObjects = 1;
-	m_ppObjects = new CBaseObject*[m_nObjects];
-
-	CRotatingObject *pRotatingObject = new CRotatingObject();
-	pRotatingObject->SetMesh(pCubeMesh);
-
-	CDiffusedShader *pShader = new CDiffusedShader(pCreateMgr);
+	CObjectShader *pShader = new CObjectShader(pCreateMgr);
 	pShader->Initialize(pCreateMgr);
 
-	pRotatingObject->SetShader(pShader);
-
-	m_ppObjects[0] = pRotatingObject;
+	m_ppShaders[0] = pShader;
 }
 
 void CScene::ReleaseObjects()
 {
-	if (m_ppShaders)
-	{
-		for (int i = 0; i < m_nShaders; i++)
-		{
-			m_ppShaders[i]->Finalize();
-		}
-		Safe_Delete_Array(m_ppShaders);
-	}
+	if (!m_ppShaders) return;
 
-	if (m_ppObjects)
+	for (int i = 0; i < m_nShaders; i++)
 	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			Safe_Delete(m_ppObjects[j]);
-		}
-		Safe_Delete_Array(m_ppObjects);
+		m_ppShaders[i]->Finalize();
 	}
+	Safe_Delete_Array(m_ppShaders);
 }

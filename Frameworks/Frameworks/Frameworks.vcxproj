@@ -148,6 +148,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CreateMgr.h" />
     <ClInclude Include="DiffusedShader.h" />
+    <ClInclude Include="ObjectShader.h" />
     <ClInclude Include="RotatingObject.h" />
     <ClInclude Include="SafeFunc.h" />
     <ClInclude Include="Timer.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CreateMgr.cpp" />
     <ClCompile Include="DiffusedShader.cpp" />
+    <ClCompile Include="ObjectShader.cpp" />
     <ClCompile Include="RotatingObject.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Framework.cpp" />

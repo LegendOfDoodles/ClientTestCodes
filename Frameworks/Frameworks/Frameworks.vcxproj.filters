@@ -75,6 +75,9 @@
     <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
       <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\02.ObjectShader">
+      <UniqueIdentifier>{0be4d380-8be4-4236-b028-2164d465eeb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -131,6 +134,9 @@
     <ClInclude Include="SafeFunc.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectShader.h">
+      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -174,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="DiffusedShader.cpp">
       <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectShader.cpp">
+      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

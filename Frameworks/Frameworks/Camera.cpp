@@ -28,8 +28,8 @@ CCamera::~CCamera()
 // 공개 함수
 void CCamera::Initialize(CCreateMgr *pCreateMgr)
 {
-	float width = pCreateMgr->GetWindowWidth();
-	float height = pCreateMgr->GetWindowHeight();
+	int width = pCreateMgr->GetWindowWidth();
+	int height = pCreateMgr->GetWindowHeight();
 
 	m_pCommandList = pCreateMgr->GetCommandList();
 
@@ -37,7 +37,7 @@ void CCamera::Initialize(CCreateMgr *pCreateMgr)
 	SetScissorRect(0, 0, width, height);
 	GenerateProjectionMatrix(1.0f, 500.0f, float(width) / 	float(height), 90.0f);
 	GenerateViewMatrix(
-		XMFLOAT3(0.0f, 15.0f, -25.0f), 
+		XMFLOAT3(0.0f, 0.0f, -50.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
 		XMFLOAT3(0.0f, 1.0f, 0.0f));
 

@@ -8,7 +8,6 @@ public: // 생성자, 소멸자
 	~CDiffusedShader();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

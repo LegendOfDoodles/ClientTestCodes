@@ -22,6 +22,9 @@ CDiffusedShader::~CDiffusedShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
 D3D12_INPUT_LAYOUT_DESC CDiffusedShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
@@ -43,7 +46,7 @@ D3D12_INPUT_LAYOUT_DESC CDiffusedShader::CreateInputLayout()
 D3D12_SHADER_BYTECODE CDiffusedShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"Shaders.hlsl", 
+		L"Shaders.hlsl",
 		"VSDiffused",
 		"vs_5_1",
 		ppd3dShaderBlob));
@@ -52,20 +55,12 @@ D3D12_SHADER_BYTECODE CDiffusedShader::CreateVertexShader(ID3DBlob **ppd3dShader
 D3D12_SHADER_BYTECODE CDiffusedShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"Shaders.hlsl", 
-		"PSDiffused", 
+		L"Shaders.hlsl",
+		"PSDiffused",
 		"ps_5_1",
 		ppd3dShaderBlob));
 }
 
-void CDiffusedShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
-{
-	CreateShader(pCreateMgr);
-	CShader::CreateShaderVariables(pCreateMgr);
-}
-
-////////////////////////////////////////////////////////////////////////
-// 내부 함수
 void CDiffusedShader::CreateShader(CCreateMgr *pCreateMgr)
 {
 	m_nPipelineStates = 1;

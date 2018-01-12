@@ -56,9 +56,6 @@ protected: // 내부 함수
 protected: // 변수
 	int m_nReferences{ 0 };
 
-	CBaseObject **m_ppObjects{ NULL };
-	int m_nObjects{ 0 };
-
 	ID3D12PipelineState **m_ppPipelineStates{ NULL };
 	int m_nPipelineStates{ 0 };
 

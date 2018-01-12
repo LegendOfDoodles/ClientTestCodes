@@ -10,7 +10,6 @@
 /// 최종 수정 날짜: 2018-01-12
 /// </summary>
 
-
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CShader::CShader(CCreateMgr *pCreateMgr)
@@ -48,15 +47,6 @@ void CShader::Finalize()
 
 void CShader::ReleaseUploadBuffers()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		if (m_ppObjects[j])
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
-	}
 }
 
 void CShader::UpdateShaderVariables()
@@ -73,10 +63,6 @@ void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
 
 void CShader::AnimateObjects(float timeElapsed)
 {
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(timeElapsed);
-	}
 }
 
 void CShader::Render(CCamera *pCamera)
@@ -213,13 +199,6 @@ void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	CTriangleMesh *pTriangleMesh = new CTriangleMesh(pCreateMgr);
-
-	m_nObjects = 1;
-	m_ppObjects = new CBaseObject*[m_nObjects];
-
-	m_ppObjects[0] = new CBaseObject();
-	m_ppObjects[0]->SetMesh(pTriangleMesh);
 }
 
 void CShader::ReleaseShaderVariables()
@@ -228,13 +207,6 @@ void CShader::ReleaseShaderVariables()
 
 void CShader::ReleaseObjects()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		Safe_Delete(m_ppObjects[j]);
-	}
-	Safe_Delete_Array(m_ppObjects);
 }
 
 void CShader::OnPrepareRender()
