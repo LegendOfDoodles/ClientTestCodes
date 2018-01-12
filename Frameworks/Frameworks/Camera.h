@@ -18,9 +18,8 @@ public:	// 생성자, 소멸자
 
 public:	// 공개 함수
 	void Initialize(CCreateMgr *pCreateMgr);
+	void Finalize();
 
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
-	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables();
 
 	virtual void SetViewportsAndScissorRects();
@@ -33,6 +32,9 @@ protected:	// 내부 함수
 
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);
 	void SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom);
+
+	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	virtual void ReleaseShaderVariables();
 
 protected: // 변수
 	XMFLOAT4X4 m_xmf4x4View;

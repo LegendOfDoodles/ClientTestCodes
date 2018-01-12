@@ -11,8 +11,8 @@ public:	// 생성자, 소멸자
 	~CScene();
 
 public: // 공개 함수
-	void BuildObjects(CCreateMgr *pCreateMgr);
-	void ReleaseObjects();
+	virtual void Initialize(CCreateMgr *pCreateMgr);
+	virtual void Finalize();
 
 	void ReleaseUploadBuffers();
 
@@ -27,6 +27,8 @@ public: // 공개 함수
 		WPARAM wParam, LPARAM lParam);
 
 private: // 내부 함수
+	void BuildObjects(CCreateMgr *pCreateMgr);
+	void ReleaseObjects();
 
 private: // 변수
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };

@@ -20,7 +20,7 @@ CFramework::~CFramework()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd)
+bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
 	m_createMgr.Initialize(hInstance, hWnd);
 	m_pRenderMgr = m_createMgr.GetRenderMgr();
@@ -30,7 +30,7 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd)
 	return(true);
 }
 
-void CFramework::OnDestroy()
+void CFramework::Finalize()
 {
 	ReleaseObjects();
 	m_createMgr.Release();
@@ -125,7 +125,7 @@ void CFramework::BuildObjects()
 	m_pCamera->Initialize(&m_createMgr);
 
 	m_pScene = new CScene();
-	if (m_pScene) m_pScene->BuildObjects(&m_createMgr);
+	if (m_pScene) m_pScene->Initialize(&m_createMgr);
 
 	m_pRenderMgr->ExecuteCommandList();
 
@@ -136,13 +136,14 @@ void CFramework::ReleaseObjects()
 {
 	if (m_pScene)
 	{
-		m_pScene->ReleaseObjects();
-		delete m_pScene;
+		m_pScene->Finalize();
+		Safe_Delete(m_pScene);
 	}
 
 	if (m_pCamera)
 	{
-		delete m_pCamera;
+		m_pCamera->Finalize();
+		Safe_Delete(m_pCamera);
 	}
 }
 

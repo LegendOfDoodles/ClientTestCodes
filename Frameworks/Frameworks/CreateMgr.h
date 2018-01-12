@@ -46,43 +46,43 @@ private:	// º¯¼ö
 	HWND m_hWnd;
 
 	// Window Size
-	int m_wndClientWidth;
-	int m_wndClientHeight;
+	int m_wndClientWidth{ FRAME_BUFFER_WIDTH };
+	int m_wndClientHeight{ FRAME_BUFFER_HEIGHT };
 
 	// Factory and Device
-	IDXGIFactory4 *m_pFactory;
-	ID3D12Device *m_pDevice;
+	IDXGIFactory4 *m_pFactory{ NULL };
+	ID3D12Device *m_pDevice{ NULL };
 
 	// MSAA Set
-	bool m_msaa4xEnable = false;
-	UINT m_msaa4xQualityLevels = 0;
+	bool m_msaa4xEnable{ false };
+	UINT m_msaa4xQualityLevels{ 0 };
 
 	// Swap Chain
-	IDXGISwapChain3 *m_pSwapChain;
+	IDXGISwapChain3 *m_pSwapChain{ NULL };
 
 	// Render Target View
-	ID3D12Resource *m_ppRenderTargetBuffers[SWAP_CHAIN_BUFFER_CNT];
-	ID3D12DescriptorHeap *m_pRtvDescriptorHeap;
-	UINT m_rtvDescriptorIncrementSize;
+	ID3D12Resource *m_ppRenderTargetBuffers[SWAP_CHAIN_BUFFER_CNT]{ NULL };
+	ID3D12DescriptorHeap *m_pRtvDescriptorHeap{ NULL };
+	UINT m_rtvDescriptorIncrementSize{ 0 };
 
 	// Depth Stencil View
-	ID3D12Resource *m_pDepthStencilBuffer;
-	ID3D12DescriptorHeap *m_pDsvDescriptorHeap;
+	ID3D12Resource *m_pDepthStencilBuffer{ NULL };
+	ID3D12DescriptorHeap *m_pDsvDescriptorHeap{ NULL };
 
 	// Command Queue
-	ID3D12CommandQueue *m_pCommandQueue;
-	ID3D12CommandAllocator *m_pCommandAllocator;
-	ID3D12GraphicsCommandList *m_pCommandList;
+	ID3D12CommandQueue *m_pCommandQueue{ NULL };
+	ID3D12CommandAllocator *m_pCommandAllocator{ NULL };
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 
 	// Fence
-	ID3D12Fence *m_pFence;
+	ID3D12Fence *m_pFence{ NULL };
 
 #ifdef _DEBUG
-	ID3D12Debug *m_pDebugController;
+	ID3D12Debug *m_pDebugController{ NULL };
 #endif
 
 	// Root Signature
-	ID3D12RootSignature *m_pGraphicsRootSignature = NULL;
+	ID3D12RootSignature *m_pGraphicsRootSignature{ NULL };
 
 	// Render Manager
 	CRenderMgr m_renderMgr;

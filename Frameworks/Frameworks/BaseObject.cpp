@@ -19,11 +19,8 @@ CBaseObject::CBaseObject()
 
 CBaseObject::~CBaseObject()
 {
-	if (m_pMesh) m_pMesh->Release();
-	if (m_pShader)
-	{
-		m_pShader->Finalize();
-	}
+	Safe_Release(m_pMesh);
+	if (m_pShader){ m_pShader->Finalize(); }
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -21,21 +21,30 @@ public: // 공개 함수
 private: // 내부 함수
 
 protected: // 변수
-	int m_nReferences = 0;
+	int m_nReferences{ 0 };
 
-	ID3D12Resource *m_pVertexBuffer = NULL;
-	ID3D12Resource *m_pVertexUploadBuffer = NULL;
+	ID3D12Resource *m_pVertexBuffer{ NULL };
+	ID3D12Resource *m_pVertexUploadBuffer{ NULL };
+
+	ID3D12Resource *m_pIndexBuffer{ NULL };
+	ID3D12Resource *m_pIndexUploadBuffer{ NULL };
 
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
+	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
 
-	D3D12_PRIMITIVE_TOPOLOGY m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	D3D12_PRIMITIVE_TOPOLOGY m_primitiveTopology{ D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
 
-	UINT m_nSlot = 0;
-	UINT m_nVertices = 0;
-	UINT m_nStride = 0;
-	UINT m_nOffset = 0;
+	UINT m_nVertices{ 0 };
+	UINT m_nIndices{ 0 };
 
-	ID3D12GraphicsCommandList *m_pCommandList;
+	UINT m_nSlot{ 0 };
+	UINT m_nStride{ 0 };
+	UINT m_nOffset{ 0 };
+
+	UINT m_nStartIndex{ 0 };
+	UINT m_nBaseVertex{ 0 };
+
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -45,4 +54,14 @@ class CTriangleMesh : public CMesh
 public: // 생성자, 소멸자
 	CTriangleMesh(CCreateMgr *pCreateMgr);
 	virtual ~CTriangleMesh() { }
+};
+
+////////////////////////////////////////////////////////////////////////
+// 사각형 메쉬
+class CCubeMeshDiffused : public CMesh
+{
+public: // 생성자, 소멸자
+	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
+	CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMeshDiffused();
 };
