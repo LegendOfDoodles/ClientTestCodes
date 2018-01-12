@@ -20,17 +20,14 @@ CShader::CShader(CCreateMgr *pCreateMgr)
 
 CShader::~CShader()
 {
-	if (m_ppPipelineStates)
+	if (!m_ppPipelineStates) return;
+
+	for (int i = 0; i < m_nPipelineStates; i++)
 	{
-		for (int i = 0; i < m_nPipelineStates; i++)
-		{
-			if (m_ppPipelineStates[i])
-			{
-				m_ppPipelineStates[i]->Release();
-			}
-		}
-		delete[] m_ppPipelineStates;
+		Safe_Release(m_ppPipelineStates[i]);
 	}
+
+	Safe_Delete_Array(m_ppPipelineStates);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -204,13 +201,10 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr)
 	HRESULT hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(&pipelineStateDesc,
 		__uuidof(ID3D12PipelineState), (void **)&m_ppPipelineStates[0]);
 
-	if (pVertexShaderBlob) pVertexShaderBlob->Release();
-	if (pPixelShaderBlob) pPixelShaderBlob->Release();
+	Safe_Release(pVertexShaderBlob);
+	Safe_Release(pPixelShaderBlob);
 
-	if (pipelineStateDesc.InputLayout.pInputElementDescs)
-	{
-		delete[] pipelineStateDesc.InputLayout.pInputElementDescs;
-	}
+	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
 }
 
 void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
@@ -238,12 +232,9 @@ void CShader::ReleaseObjects()
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppObjects[j])
-		{
-			delete m_ppObjects[j];
-		}
+		Safe_Delete(m_ppObjects[j]);
 	}
-	delete[] m_ppObjects;
+	Safe_Delete_Array(m_ppObjects);
 }
 
 void CShader::OnPrepareRender()

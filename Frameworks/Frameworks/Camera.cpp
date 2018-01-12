@@ -37,13 +37,16 @@ void CCamera::Initialize(CCreateMgr *pCreateMgr)
 	SetScissorRect(0, 0, width, height);
 	GenerateProjectionMatrix(1.0f, 500.0f, float(width) / 	float(height), 90.0f);
 	GenerateViewMatrix(
-		XMFLOAT3(0.0f, 0.0f, -2.0f), 
+		XMFLOAT3(0.0f, 15.0f, -25.0f), 
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
 		XMFLOAT3(0.0f, 1.0f, 0.0f));
+
+	CreateShaderVariables(pCreateMgr);
 }
 
-void CCamera::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CCamera::Finalize()
 {
+	ReleaseShaderVariables();
 }
 
 void CCamera::UpdateShaderVariables()
@@ -59,10 +62,6 @@ void CCamera::UpdateShaderVariables()
 		&xmf4x4Projection, 
 		XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
 	m_pCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
-}
-
-void CCamera::ReleaseShaderVariables()
-{
 }
 
 void CCamera::SetViewportsAndScissorRects()
@@ -105,4 +104,12 @@ void CCamera::SetScissorRect(
 	m_scissorRect.top = yTop;
 	m_scissorRect.right = xRight;
 	m_scissorRect.bottom = yBottom;
+}
+
+void CCamera::CreateShaderVariables(CCreateMgr *pCreateMgr)
+{
+}
+
+void CCamera::ReleaseShaderVariables()
+{
 }

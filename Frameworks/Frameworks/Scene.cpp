@@ -17,62 +17,20 @@ CScene::CScene()
 {
 }
 
-
 CScene::~CScene()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CScene::BuildObjects(CCreateMgr *pCreateMgr)
+void CScene::Initialize(CCreateMgr *pCreateMgr)
 {
-	ID3D12Device *pDevice = pCreateMgr->GetDevice();
-	m_pCommandList = pCreateMgr->GetCommandList();
-
-	CTriangleMesh *pMesh = new CTriangleMesh(pCreateMgr);
-
-	//m_nShaders = 1;
-	//m_ppShaders = new CShader*[m_nShaders];
-
-	//CShader *pShader = new CShader(pCreateMgr);
-	//pShader->CreateShader(pCreateMgr);
-	//pShader->BuildObjects(pCreateMgr, NULL);
-
-	//m_ppShaders[0] = pShader;
-
-	m_nObjects = 1;
-	m_ppObjects = new CBaseObject*[m_nObjects];
-
-	CRotatingObject *pRotatingObject = new CRotatingObject();
-	pRotatingObject->SetMesh(pMesh);
-
-	CDiffusedShader *pShader = new CDiffusedShader(pCreateMgr);
-	pShader->Initialize(pCreateMgr);
-
-	pRotatingObject->SetShader(pShader);
-
-	m_ppObjects[0] = pRotatingObject;
+	BuildObjects(pCreateMgr);
 }
 
-void CScene::ReleaseObjects()
+void CScene::Finalize()
 {
-	if (m_ppShaders)
-	{
-		for (int i = 0; i < m_nShaders; i++)
-		{
-			m_ppShaders[i]->Finalize();
-		}
-		delete[] m_ppShaders;
-	}
-
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			if (m_ppObjects[j]) delete m_ppObjects[j];
-		}
-		delete[] m_ppObjects;
-	}
+	ReleaseObjects();
 }
 
 void CScene::ReleaseUploadBuffers()
@@ -145,3 +103,53 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
+void CScene::BuildObjects(CCreateMgr *pCreateMgr)
+{
+	ID3D12Device *pDevice = pCreateMgr->GetDevice();
+	m_pCommandList = pCreateMgr->GetCommandList();
+
+	CCubeMeshDiffused *pCubeMesh = new CCubeMeshDiffused(pCreateMgr, 12.0f, 12.0f, 12.0f);
+
+	//m_nShaders = 1;
+	//m_ppShaders = new CShader*[m_nShaders];
+
+	//CShader *pShader = new CShader(pCreateMgr);
+	//pShader->CreateShader(pCreateMgr);
+	//pShader->BuildObjects(pCreateMgr, NULL);
+
+	//m_ppShaders[0] = pShader;
+
+	m_nObjects = 1;
+	m_ppObjects = new CBaseObject*[m_nObjects];
+
+	CRotatingObject *pRotatingObject = new CRotatingObject();
+	pRotatingObject->SetMesh(pCubeMesh);
+
+	CDiffusedShader *pShader = new CDiffusedShader(pCreateMgr);
+	pShader->Initialize(pCreateMgr);
+
+	pRotatingObject->SetShader(pShader);
+
+	m_ppObjects[0] = pRotatingObject;
+}
+
+void CScene::ReleaseObjects()
+{
+	if (m_ppShaders)
+	{
+		for (int i = 0; i < m_nShaders; i++)
+		{
+			m_ppShaders[i]->Finalize();
+		}
+		Safe_Delete_Array(m_ppShaders);
+	}
+
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			Safe_Delete(m_ppObjects[j]);
+		}
+		Safe_Delete_Array(m_ppObjects);
+	}
+}

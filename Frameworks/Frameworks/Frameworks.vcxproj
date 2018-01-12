@@ -149,6 +149,7 @@
     <ClInclude Include="CreateMgr.h" />
     <ClInclude Include="DiffusedShader.h" />
     <ClInclude Include="RotatingObject.h" />
+    <ClInclude Include="SafeFunc.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Framework01.h" />

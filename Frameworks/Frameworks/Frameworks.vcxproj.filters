@@ -128,6 +128,9 @@
     <ClInclude Include="DiffusedShader.h">
       <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
     </ClInclude>
+    <ClInclude Include="SafeFunc.h">
+      <Filter>소스 파일\00.Global\01.Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -7,7 +7,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-01-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -21,26 +21,34 @@ CMesh::CMesh(CCreateMgr *pCreateMgr)
 
 CMesh::~CMesh()
 {
-	if (m_pVertexBuffer) m_pVertexBuffer->Release();
-	if (m_pVertexUploadBuffer) m_pVertexUploadBuffer->Release();
+	Safe_Release(m_pVertexBuffer);
+	Safe_Release(m_pVertexUploadBuffer);
+
+	Safe_Release(m_pIndexBuffer);
+	Safe_Release(m_pIndexUploadBuffer);
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
 void CMesh::ReleaseUploadBuffers()
 {
-	if (m_pVertexUploadBuffer) { m_pVertexUploadBuffer->Release(); }
-	m_pVertexUploadBuffer = NULL;
+	Safe_Release(m_pVertexUploadBuffer);
+	Safe_Release(m_pIndexUploadBuffer);
 };
 
 void CMesh::Render()
 {
-	//메쉬의 프리미티브 유형을 설정한다.
 	m_pCommandList->IASetPrimitiveTopology(m_primitiveTopology);
-	//메쉬의 정점 버퍼 뷰를 설정한다.
 	m_pCommandList->IASetVertexBuffers(m_nSlot, 1, &m_vertexBufferView);
-	//메쉬의 정점 버퍼 뷰를 렌더링한다(파이프라인(입력 조립기)을 작동하게 한다).
-	m_pCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
+	if (m_pIndexBuffer)
+	{
+		m_pCommandList->IASetIndexBuffer(&m_indexBufferView);
+		m_pCommandList->DrawIndexedInstanced(m_nIndices, 1, 0, 0, 0);
+	}
+	else
+	{
+		m_pCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -75,4 +83,85 @@ CTriangleMesh::CTriangleMesh(CCreateMgr *pCreateMgr) : CMesh(pCreateMgr)
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
 	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+}
+
+////////////////////////////////////////////////////////////////////////
+// 사각형 메쉬
+////////////////////////////////////////////////////////////////////////
+// 생성자, 소멸자
+CCubeMeshDiffused::CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth) 
+	: CMesh(pCreateMgr)
+{
+	//직육면체는 꼭지점(정점)이 8개이다.
+	m_nVertices = 8;
+	m_nStride = sizeof(CDiffusedVertex);
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+
+	//정점 버퍼는 직육면체의 꼭지점 8개에 대한 정점 데이터를 가진다.
+	CDiffusedVertex pVertices[8];
+	pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[6] = CDiffusedVertex(XMFLOAT3(+fx, -fy, +fz), RANDOM_COLOR);
+	pVertices[7] = CDiffusedVertex(XMFLOAT3(-fx, -fy, +fz), RANDOM_COLOR);
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices,
+		m_nStride * m_nVertices, 
+		D3D12_HEAP_TYPE_DEFAULT,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		&m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+
+	m_nIndices = 36;
+
+	UINT pnIndices[36];
+	//ⓐ 앞면(Front) 사각형의 위쪽 삼각형
+	pnIndices[0] = 3; pnIndices[1] = 1; pnIndices[2] = 0;
+	//ⓑ 앞면(Front) 사각형의 아래쪽 삼각형
+	pnIndices[3] = 2; pnIndices[4] = 1; pnIndices[5] = 3;
+	//ⓒ 윗면(Top) 사각형의 위쪽 삼각형
+	pnIndices[6] = 0; pnIndices[7] = 5; pnIndices[8] = 4;
+	//ⓓ 윗면(Top) 사각형의 아래쪽 삼각형
+	pnIndices[9] = 1; pnIndices[10] = 5; pnIndices[11] = 0;
+	//ⓔ 뒷면(Back) 사각형의 위쪽 삼각형
+	pnIndices[12] = 3; pnIndices[13] = 4; pnIndices[14] = 7;
+	//ⓕ 뒷면(Back) 사각형의 아래쪽 삼각형
+	pnIndices[15] = 0; pnIndices[16] = 4; pnIndices[17] = 3;
+	//ⓖ 아래면(Bottom) 사각형의 위쪽 삼각형
+	pnIndices[18] = 1; pnIndices[19] = 6; pnIndices[20] = 5;
+	//ⓗ 아래면(Bottom) 사각형의 아래쪽 삼각형
+	pnIndices[21] = 2; pnIndices[22] = 6; pnIndices[23] = 1;
+	//ⓘ 옆면(Left) 사각형의 위쪽 삼각형
+	pnIndices[24] = 2; pnIndices[25] = 7; pnIndices[26] = 6;
+	//ⓙ 옆면(Left) 사각형의 아래쪽 삼각형
+	pnIndices[27] = 3; pnIndices[28] = 7; pnIndices[29] = 2;
+	//ⓚ 옆면(Right) 사각형의 위쪽 삼각형
+	pnIndices[30] = 6; pnIndices[31] = 4; pnIndices[32] = 5;
+	//ⓛ 옆면(Right) 사각형의 아래쪽 삼각형
+	pnIndices[33] = 7; pnIndices[34] = 4; pnIndices[35] = 6;
+
+	//인덱스 버퍼를 생성한다.
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
+		pnIndices,
+		sizeof(UINT) * m_nIndices,
+		D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER,
+		&m_pIndexUploadBuffer);
+
+	//인덱스 버퍼 뷰를 생성한다.
+	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+}
+
+CCubeMeshDiffused::~CCubeMeshDiffused()
+{
 }

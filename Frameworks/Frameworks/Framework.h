@@ -12,8 +12,8 @@ public:	// 생성자, 소멸자
 
 public: // 공개 함수
 	// Initialize and Release
-	bool OnCreate(HINSTANCE hInstance, HWND hWnd);
-	void OnDestroy();
+	bool Initialize(HINSTANCE hInstance, HWND hWnd);
+	void Finalize();
 
 	void FrameAdvance();
 

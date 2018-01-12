@@ -13,36 +13,6 @@
 // 持失切, 社瑚切
 CCreateMgr::CCreateMgr()
 {
-	// Window Size
-	m_wndClientWidth = FRAME_BUFFER_WIDTH;
-	m_wndClientHeight = FRAME_BUFFER_HEIGHT;
-
-	// Factory and Device
-	m_pFactory = NULL;
-	m_pDevice = NULL;
-
-	// Swap Chain
-	m_pSwapChain = NULL;
-
-	// Render Target View
-	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
-	{
-		m_ppRenderTargetBuffers[i] = NULL;
-	}
-	m_pRtvDescriptorHeap = NULL;
-	m_rtvDescriptorIncrementSize = 0;
-
-	// Depth Stencil View
-	m_pDepthStencilBuffer = NULL;
-	m_pDsvDescriptorHeap = NULL;
-
-	// Command Queue
-	m_pCommandAllocator = NULL;
-	m_pCommandQueue = NULL;
-	m_pCommandList = NULL;
-
-	// Fence
-	m_pFence = NULL;
 }
 
 CCreateMgr::~CCreateMgr()
@@ -68,33 +38,30 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 void CCreateMgr::Release()
 {
 #ifdef _DEBUG
-	if (m_pDebugController) { m_pDebugController->Release(); }
+	Safe_Release(m_pDebugController);
 #endif
 
 	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
 	{
-		if (m_ppRenderTargetBuffers[i])
-		{
-			m_ppRenderTargetBuffers[i]->Release();
-		}
+		Safe_Release(m_ppRenderTargetBuffers[i]);
 	}
-	if (m_pRtvDescriptorHeap) { m_pRtvDescriptorHeap->Release(); }
+	Safe_Release(m_pRtvDescriptorHeap);
 
-	if (m_pDepthStencilBuffer) { m_pDepthStencilBuffer->Release(); }
-	if (m_pDsvDescriptorHeap) { m_pDsvDescriptorHeap->Release(); }
+	Safe_Release(m_pDepthStencilBuffer);
+	Safe_Release(m_pDsvDescriptorHeap);
 
-	if (m_pCommandAllocator) { m_pCommandAllocator->Release(); }
-	if (m_pCommandQueue) { m_pCommandQueue->Release(); }
-	if (m_pCommandList) { m_pCommandList->Release(); }
+	Safe_Release(m_pCommandAllocator);
+	Safe_Release(m_pCommandQueue);
+	Safe_Release(m_pCommandList);
 
-	if (m_pFence) { m_pFence->Release(); }
+	Safe_Release(m_pFence);
 
 	m_pSwapChain->SetFullscreenState(FALSE, NULL);
-	if (m_pSwapChain) { m_pSwapChain->Release(); }
-	if (m_pDevice) { m_pDevice->Release(); }
-	if (m_pFactory) { m_pFactory->Release(); }
+	Safe_Release(m_pSwapChain);
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pFactory);
 
-	if (m_pGraphicsRootSignature) m_pGraphicsRootSignature->Release();
+	Safe_Release(m_pGraphicsRootSignature);
 
 	m_renderMgr.Release();
 }
