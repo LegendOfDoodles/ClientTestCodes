@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Timer.h"
+#include "Player.h"
 
 class CFramework
 {
@@ -18,11 +19,11 @@ public: // 공개 함수
 	void FrameAdvance();
 
 	// Message Process
-	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, 
+	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		WPARAM wParam, LPARAM lParam);
-	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, 
+	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 		WPARAM wParam, LPARAM lParam);
-	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, 
+	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
 		WPARAM wParam, LPARAM lParam);
 
 	// Register Timer
@@ -40,6 +41,8 @@ private: // 내부 함수
 	void ResizeScreen(WPARAM wParam, LPARAM lParam);
 
 private: // 변수
+	HWND m_hWnd{ NULL };
+
 	CCreateMgr m_createMgr;
 	CRenderMgr *m_pRenderMgr{ NULL };
 
@@ -47,5 +50,9 @@ private: // 변수
 
 	CCamera *m_pCamera{ NULL };
 	CTimer *m_pTimer{ NULL };
+
+	CPlayer *m_pPlayer{ NULL };
+
+	POINT m_ptOldCursorPos;
 };
 

@@ -78,6 +78,27 @@
     <Filter Include="소스 파일\04.Shaders\02.ObjectShader">
       <UniqueIdentifier>{0be4d380-8be4-4236-b028-2164d465eeb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\01.Camera\00.BaseCamera">
+      <UniqueIdentifier>{2672b61b-e577-45a5-9721-a91d432baf7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\01.Camera\01.Spaceship">
+      <UniqueIdentifier>{24a7c6a6-52f2-4010-8fb6-9a5d1427cc55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\01.Camera\02.FirstPerson">
+      <UniqueIdentifier>{208ea1bc-7f34-4570-9c88-3c7abc17f9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\01.Camera\03.ThirdPerson">
+      <UniqueIdentifier>{84dd299f-02be-49d5-a961-74c3afd8a46c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\03.Player">
+      <UniqueIdentifier>{8bff2946-fe91-4024-801a-7655549bd54a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\03.Player\00.BasePlayer">
+      <UniqueIdentifier>{36a29004-c4d7-4647-aa3d-a56442cd83c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\03.Player\01.Airplane">
+      <UniqueIdentifier>{5539e089-7e90-4235-8ce1-c13a58cb2d96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -119,9 +140,6 @@
     <ClInclude Include="Vectors.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>소스 파일\05.Objects\01.Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
     </ClInclude>
@@ -136,6 +154,24 @@
     </ClInclude>
     <ClInclude Include="ObjectShader.h">
       <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShipCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstPersonCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdPersonCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="AirplanePlayer.h">
+      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,9 +205,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
     </ClCompile>
@@ -183,6 +216,24 @@
     </ClCompile>
     <ClCompile Include="ObjectShader.cpp">
       <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShipCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdPersonCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="AirplanePlayer.cpp">
+      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

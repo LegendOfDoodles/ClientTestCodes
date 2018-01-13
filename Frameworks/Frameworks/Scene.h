@@ -1,5 +1,6 @@
 #pragma once
 #include "Shader.h"
+#include "Player.h"
 
 class CCreateMgr;
 class CCamera;
@@ -26,6 +27,8 @@ public: // 공개 함수
 	bool OnProcessingKeyboardMessage(HWND hWnd, UINT messageID,
 		WPARAM wParam, LPARAM lParam);
 
+	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
+
 private: // 내부 함수
 	void BuildObjects(CCreateMgr *pCreateMgr);
 	void ReleaseObjects();
@@ -38,5 +41,7 @@ private: // 변수
 
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
+
+	CPlayer *m_pPlayer{ NULL };
 };
 

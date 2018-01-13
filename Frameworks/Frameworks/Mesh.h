@@ -65,3 +65,14 @@ public: // 생성자, 소멸자
 	CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
 	virtual ~CCubeMeshDiffused();
 };
+
+////////////////////////////////////////////////////////////////////////
+// 비행기 메쉬
+class CAirplaneMeshDiffused : public CMesh
+{
+public:	// 생성자, 소멸자
+	CAirplaneMeshDiffused(CCreateMgr *pCreateMgr,
+		float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 4.0f,
+		XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f));
+	virtual ~CAirplaneMeshDiffused();
+};

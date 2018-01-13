@@ -64,6 +64,7 @@ void CScene::Render(CCamera *pCamera)
 	{
 		m_ppShaders[i]->Render(pCamera);
 	}
+	m_pPlayer->Render(pCamera);
 }
 
 bool CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,

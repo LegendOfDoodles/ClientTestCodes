@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Framework.h"
+#include "AirplanePlayer.h"
 
 /// <summary>
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-01-13
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -22,6 +23,8 @@ CFramework::~CFramework()
 // 공개 함수
 bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
+	m_hWnd = hWnd;
+
 	m_createMgr.Initialize(hInstance, hWnd);
 	m_pRenderMgr = m_createMgr.GetRenderMgr();
 
@@ -50,9 +53,12 @@ void CFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	{
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
+		::SetCapture(hWnd);
+		::GetCursorPos(&m_ptOldCursorPos);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
+		::ReleaseCapture();
 		break;
 	case WM_MOUSEMOVE:
 		break;
@@ -73,6 +79,11 @@ void CFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 			::PostQuitMessage(0);
 			break;
 		case VK_RETURN:
+			break;
+		case VK_F1:
+		case VK_F2:
+		case VK_F3:
+			m_pCamera = m_pPlayer->ChangeCamera(&m_createMgr, (DWORD)(wParam - VK_F1 + 1), m_pTimer->GetTimeElapsed());
 			break;
 		case VK_F8:
 			break;
@@ -121,15 +132,19 @@ void CFramework::BuildObjects()
 {
 	m_pRenderMgr->ResetCommandList();
 
-	m_pCamera = new CCamera();
-	m_pCamera->Initialize(&m_createMgr);
-
 	m_pScene = new CScene();
-	if (m_pScene) m_pScene->Initialize(&m_createMgr);
+	m_pScene->Initialize(&m_createMgr);
+
+	CAirplanePlayer *pAirplanePlayer = new CAirplanePlayer(&m_createMgr);
+	m_pPlayer = pAirplanePlayer;
+	m_pPlayer->Initialize(&m_createMgr);
+	m_pCamera = m_pPlayer->GetCamera();
+
+	m_pScene->SetPlayer(m_pPlayer);
 
 	m_pRenderMgr->ExecuteCommandList();
 
-	if (m_pScene) m_pScene->ReleaseUploadBuffers();
+	m_pScene->ReleaseUploadBuffers();
 }
 
 void CFramework::ReleaseObjects()
@@ -140,15 +155,48 @@ void CFramework::ReleaseObjects()
 		Safe_Delete(m_pScene);
 	}
 
-	if (m_pCamera)
+	if (m_pPlayer)
 	{
-		m_pCamera->Finalize();
-		Safe_Delete(m_pCamera);
+		m_pPlayer->Finalize();
+		Safe_Delete(m_pPlayer);
 	}
 }
 
 void CFramework::ProcessInput()
 {
+	static UCHAR pKeyBuffer[256];
+	DWORD dwDirection = 0;
+	if (::GetKeyboardState(pKeyBuffer))
+	{
+		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
+		if (pKeyBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
+		if (pKeyBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
+		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
+		if (pKeyBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
+		if (pKeyBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
+	}
+	float cxDelta = 0.0f, cyDelta = 0.0f;
+	POINT ptCursorPos;
+	if (::GetCapture() == m_hWnd)
+	{
+		::SetCursor(NULL);
+		::GetCursorPos(&ptCursorPos);
+		cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 3.0f;
+		cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 3.0f;
+		::SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
+	}
+	if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+	{
+		if (cxDelta || cyDelta)
+		{
+			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
+				m_pPlayer->Rotate(cyDelta, 0.0f, -cxDelta);
+			else
+				m_pPlayer->Rotate(cyDelta, cxDelta, 0.0f);
+		}
+			if (dwDirection) m_pPlayer->Move(dwDirection, 50.0f *  m_pTimer->GetTimeElapsed(), true);
+	}
+	m_pPlayer->Update(m_pTimer->GetTimeElapsed());
 }
 
 void CFramework::AnimateObjects(float timeElapsed)
