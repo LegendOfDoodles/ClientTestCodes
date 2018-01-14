@@ -1,0 +1,5 @@
+﻿  FBXexporter.cpp
+d:\새 폴더\새 폴더 (2)\fbxexporter\fbxexporter\fbxexporter.cpp(30): warning C4129: 'F': 문자 이스케이프 시퀀스를 인식할 수 없습니다.
+d:\새 폴더\새 폴더 (2)\fbxexporter\fbxexporter\fbxexporter.cpp(30): warning C4129: 'A': 문자 이스케이프 시퀀스를 인식할 수 없습니다.
+d:\새 폴더\새 폴더 (2)\fbxexporter\fbxexporter\fbxexporter.cpp(30): warning C4129: 'S': 문자 이스케이프 시퀀스를 인식할 수 없습니다.
+  FBXexporter.vcxproj -> D:\새 폴더\새 폴더 (2)\FBXexporter\x64\Debug\FBXexporter.exe
