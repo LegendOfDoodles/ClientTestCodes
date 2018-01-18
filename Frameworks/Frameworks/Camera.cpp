@@ -61,17 +61,11 @@ void CCamera::Finalize()
 
 void CCamera::UpdateShaderVariables()
 {
-	XMFLOAT4X4 xmf4x4View;
-	XMStoreFloat4x4(
-		&xmf4x4View, 
-		XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
-	m_pCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
+	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
 
-	XMFLOAT4X4 xmf4x4Projection;
-	XMStoreFloat4x4(
-		&xmf4x4Projection, 
-		XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
-	m_pCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
+	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = m_pConstBuffer->GetGPUVirtualAddress();
+	m_pCommandList->SetGraphicsRootConstantBufferView(1, gpuVirtualAddress);
 }
 
 void CCamera::SetViewportsAndScissorRects()
@@ -169,8 +163,21 @@ void CCamera::SetScissorRect(
 
 void CCamera::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
+	UINT ncbElementBytes = ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255); //256ÀÇ ¹è¼ö
+
+	m_pConstBuffer = pCreateMgr->CreateBufferResource(
+		NULL, 
+		ncbElementBytes, 
+		D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		NULL);
+
+	m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedCamera);
 }
 
 void CCamera::ReleaseShaderVariables()
 {
+	if (!m_pConstBuffer) return;
+
+	m_pConstBuffer->Unmap(0, NULL);
+	Safe_Release(m_pConstBuffer);
 }

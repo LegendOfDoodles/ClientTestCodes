@@ -107,8 +107,11 @@ protected: // º¯¼ö
 	D3D12_VIEWPORT m_viewport;
 	D3D12_RECT m_scissorRect;
 
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
-
 	CPlayer *m_pPlayer{ NULL };
+
+	ID3D12Resource *m_pConstBuffer{ NULL };
+	VS_CB_CAMERA_INFO	 *m_pMappedCamera{ NULL };
+
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };
 

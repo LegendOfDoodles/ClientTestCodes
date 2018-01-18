@@ -4,11 +4,6 @@
 class CCreateMgr;
 class CCamera;
 
-struct CB_GAMEOBJECT_INFO
-{
-	XMFLOAT4X4 m_xmf4x4World;
-};
-
 class CShader
 {
 public:	// 생성자, 소멸자
@@ -58,6 +53,12 @@ protected: // 변수
 
 	ID3D12PipelineState **m_ppPipelineStates{ NULL };
 	int m_nPipelineStates{ 0 };
+
+#if USE_INSTANCING
+	ID3D12Resource *m_pInstanceBuffer{ NULL };
+#else
+	ID3D12Resource *m_pConstBuffer{ NULL };
+#endif
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

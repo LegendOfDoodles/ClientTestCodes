@@ -14,7 +14,8 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CPlayer::CPlayer()
+CPlayer::CPlayer(CCreateMgr *pCreateMgr)
+	: CBaseObject(pCreateMgr)
 {
 }
 
@@ -234,17 +235,33 @@ CCamera *CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCurrentCameraMode)
 // 내부 함수
 void CPlayer::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
-	CBaseObject::CreateShaderVariables(pCreateMgr);
+	UINT elementBytes = ((sizeof(CB_PLAYER_INFO) + 255) & ~255); //256의 배수
+
+	m_pConstBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		elementBytes,
+		D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		NULL);
+
+	m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedPlayer);
 }
 
 void CPlayer::ReleaseShaderVariables()
 {
+	if (!m_pConstBuffer) return;
+
+	m_pConstBuffer->Unmap(0, NULL);
+	Safe_Release(m_pConstBuffer);
+
 	CBaseObject::ReleaseShaderVariables();
 }
 
 void CPlayer::UpdateShaderVariables()
 {
-	CBaseObject::UpdateShaderVariables();
+	XMStoreFloat4x4(&m_pMappedPlayer->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
+
+	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = m_pConstBuffer->GetGPUVirtualAddress();
+	m_pCommandList->SetGraphicsRootConstantBufferView(0, gpuVirtualAddress);
 }
 
 void CPlayer::OnPrepareRender()

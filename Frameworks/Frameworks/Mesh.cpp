@@ -36,18 +36,18 @@ void CMesh::ReleaseUploadBuffers()
 	Safe_Release(m_pIndexUploadBuffer);
 };
 
-void CMesh::Render()
+void CMesh::Render(UINT istanceCnt)
 {
 	m_pCommandList->IASetPrimitiveTopology(m_primitiveTopology);
 	m_pCommandList->IASetVertexBuffers(m_nSlot, 1, &m_vertexBufferView);
 	if (m_pIndexBuffer)
 	{
 		m_pCommandList->IASetIndexBuffer(&m_indexBufferView);
-		m_pCommandList->DrawIndexedInstanced(m_nIndices, 1, 0, 0, 0);
+		m_pCommandList->DrawIndexedInstanced(m_nIndices, istanceCnt, 0, 0, 0);
 	}
 	else
 	{
-		m_pCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
+		m_pCommandList->DrawInstanced(m_nVertices, istanceCnt, m_nOffset, 0);
 	}
 }
 

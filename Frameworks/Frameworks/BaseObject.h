@@ -8,7 +8,7 @@ class CCamera;
 class CBaseObject
 {
 public:	// 생성자, 소멸자
-	CBaseObject();
+	CBaseObject(CCreateMgr *pCreateMgr);
 	~CBaseObject();
 
 public: // 공개 함수
@@ -22,7 +22,7 @@ public: // 공개 함수
 
 	virtual void Animate(float timeElapsed);
 
-	virtual void Render(CCamera *pCamera);
+	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
 
 	void MoveStrafe(float fDistance = 1.0f);
 	void MoveUp(float fDistance = 1.0f);
@@ -42,6 +42,8 @@ public: // 공개 함수
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
+	XMFLOAT4X4* GetWorldMatrix() { return &m_xmf4x4World; }
+
 protected: // 내부 함수
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
 	virtual void ReleaseShaderVariables();
@@ -53,10 +55,10 @@ protected: // 변수
 	int m_nReferences = 0;
 
 	XMFLOAT4X4 m_xmf4x4World;
-	CMesh *m_pMesh = NULL;
+	CMesh *m_pMesh{ NULL };
 
-	CShader *m_pShader = NULL;
+	CShader *m_pShader{ NULL };
 
-	ID3D12GraphicsCommandList *m_pCommandList;
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };
 

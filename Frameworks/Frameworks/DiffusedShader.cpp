@@ -22,6 +22,12 @@ CDiffusedShader::~CDiffusedShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
+void CDiffusedShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
+{
+	CreateShader(pCreateMgr);
+	CreateShaderVariables(pCreateMgr);
+	BuildObjects(pCreateMgr, pContext);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수

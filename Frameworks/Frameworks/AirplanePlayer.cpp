@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CAirplanePlayer::CAirplanePlayer(CCreateMgr *pCreateMgr)
+	: CPlayer(pCreateMgr)
 {
 	CMesh *pAirplaneMesh = new CAirplaneMeshDiffused(pCreateMgr,
 		20.0f, 20.0f, 4.0f, XMFLOAT4(0.0f, 0.5f, 0.0f, 0.0f));

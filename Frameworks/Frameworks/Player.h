@@ -11,10 +11,15 @@
 
 class CCreateMgr;
 
+struct CB_PLAYER_INFO
+{
+	XMFLOAT4X4					m_xmf4x4World;
+};
+
 class CPlayer : public CBaseObject
 {
 public:	// 생성자, 소멸자
-	CPlayer();
+	CPlayer(CCreateMgr *pCreateMgr);
 	virtual ~CPlayer();
 
 public: // 공개 함수
@@ -86,5 +91,8 @@ protected: // 변수
 	LPVOID m_pCameraUpdatedContext{ NULL };
 
 	CCamera *m_pCamera{ NULL };
+
+	ID3D12Resource *m_pConstBuffer{ NULL };
+	CB_PLAYER_INFO	 *m_pMappedPlayer{ NULL };
 };
 

@@ -83,10 +83,7 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 // 내부 함수
 void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 {
-	ID3D12Device *pDevice = pCreateMgr->GetDevice();
 	m_pCommandList = pCreateMgr->GetCommandList();
-
-	CCubeMeshDiffused *pCubeMesh = new CCubeMeshDiffused(pCreateMgr, 12.0f, 12.0f, 12.0f);
 
 	m_nShaders = 1;
 	m_ppShaders = new CShader*[m_nShaders];

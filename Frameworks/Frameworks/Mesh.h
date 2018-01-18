@@ -11,7 +11,7 @@ public: // 생성자, 소멸자
 	virtual ~CMesh();
 
 public: // 공개 함수
-	virtual void Render();
+	virtual void Render(UINT istanceCnt = 1);
 
 	void ReleaseUploadBuffers();
 

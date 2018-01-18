@@ -13,8 +13,10 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CBaseObject::CBaseObject()
+CBaseObject::CBaseObject(CCreateMgr *pCreateMgr)
 {
+	m_pCommandList = pCreateMgr->GetCommandList();
+
 	XMStoreFloat4x4(&m_xmf4x4World, XMMatrixIdentity());
 }
 
@@ -59,13 +61,13 @@ void CBaseObject::Animate(float timeElapsed)
 {
 }
 
-void CBaseObject::Render(CCamera *pCamera)
+void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 {
 	OnPrepareRender();
 
 	if (m_pShader) { m_pShader->Render(pCamera); }
 
-	if (m_pMesh) m_pMesh->Render();
+	if (m_pMesh) m_pMesh->Render(istanceCnt);
 }
 
 void CBaseObject::MoveStrafe(float fDistance)
@@ -147,7 +149,6 @@ void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 // 내부 함수
 void CBaseObject::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
-	m_pCommandList = pCreateMgr->GetCommandList();
 }
 
 void CBaseObject::ReleaseShaderVariables()
@@ -156,10 +157,6 @@ void CBaseObject::ReleaseShaderVariables()
 
 void CBaseObject::UpdateShaderVariables()
 {
-	XMFLOAT4X4 xmf4x4World;
-	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
-
-	m_pCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
 }
 
 void CBaseObject::OnPrepareRender()

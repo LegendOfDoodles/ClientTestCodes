@@ -430,18 +430,28 @@ void CCreateMgr::CreateRenderTargetView()
 
 void CCreateMgr::CreateGraphicsRootSignature()
 {
-	D3D12_ROOT_PARAMETER pRootParameters[2];
-	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[0].Constants.Num32BitValues = 16;
-	pRootParameters[0].Constants.ShaderRegister = 0;
-	pRootParameters[0].Constants.RegisterSpace = 0;
+	D3D12_ROOT_PARAMETER pRootParameters[3];
+	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[0].Descriptor.ShaderRegister = 0; //Player
+	pRootParameters[0].Descriptor.RegisterSpace = 0;
 	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
-	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[1].Constants.Num32BitValues = 32;
-	pRootParameters[1].Constants.ShaderRegister = 1;
-	pRootParameters[1].Constants.RegisterSpace = 0;
-	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
+	pRootParameters[1].Descriptor.RegisterSpace = 0;
+	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+#if USE_INSTANCING
+	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	pRootParameters[2].Descriptor.ShaderRegister = 0; // t0 : Objects
+	pRootParameters[2].Descriptor.RegisterSpace = 0;
+	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+#else
+	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[2].Descriptor.ShaderRegister = 2; // Objects
+	pRootParameters[2].Descriptor.RegisterSpace = 0;
+	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+#endif
 
 	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |

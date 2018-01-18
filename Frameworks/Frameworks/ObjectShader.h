@@ -1,6 +1,12 @@
 #pragma once
 #include "Shader.h"
 
+struct CB_GAMEOBJECT_INFO
+{
+	XMFLOAT4X4 m_xmf4x4World;
+	XMFLOAT4 m_xmcColor;
+};
+
 class CObjectShader : public CShader
 {
 public: // 생성자, 소멸자
@@ -9,6 +15,8 @@ public: // 생성자, 소멸자
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
+
+	virtual void UpdateShaderVariables();
 
 	virtual void AnimateObjects(float timeElapsed);
 
@@ -21,13 +29,21 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppd3dShaderBlob);
 
 	virtual void CreateShader(CCreateMgr *pCreateMgr);
+	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
+	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
 protected: // 변수
 	CBaseObject **m_ppObjects = NULL;
 	int m_nObjects = 0;
+
+#if USE_INSTANCING
+	CB_GAMEOBJECT_INFO *m_pMappedObjects = NULL;
+#else
+	UINT8 *m_pMappedObjects = NULL;
+#endif
 };
 

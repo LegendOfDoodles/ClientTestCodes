@@ -34,7 +34,6 @@ CShader::~CShader()
 void CShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
 {
 	CreateShader(pCreateMgr);
-	CreateShaderVariables(pCreateMgr);
 	BuildObjects(pCreateMgr, pContext);
 }
 
@@ -55,10 +54,6 @@ void CShader::UpdateShaderVariables()
 
 void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
 {
-	XMFLOAT4X4 xmf4x4World;
-	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(pxmf4x4World)));
-
-	m_pCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
 }
 
 void CShader::AnimateObjects(float timeElapsed)

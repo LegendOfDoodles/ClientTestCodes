@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ObjectShader.h"
 #include "RotatingObject.h"
+#include "CreateMgr.h"
 
 /// <summary>
 /// 목적: 오브젝트 테스트 쉐이더
@@ -32,6 +33,33 @@ void CObjectShader::ReleaseUploadBuffers()
 	}
 }
 
+void CObjectShader::UpdateShaderVariables()
+{
+#if USE_INSTANCING
+	m_pCommandList->SetGraphicsRootShaderResourceView(2,
+		m_pInstanceBuffer->GetGPUVirtualAddress());
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		m_pMappedObjects[i].m_xmcColor =
+			(i % 2) ? XMFLOAT4(0.5f, 0.0f, 0.0f, 0.0f) : XMFLOAT4(0.0f, 0.0f, 0.5f, 0.0f);
+		XMStoreFloat4x4(&m_pMappedObjects[i].m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+	}
+#else
+	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, 
+			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+		pMappedObject->m_xmcColor =
+			(i % 2) ? XMFLOAT4(0.5f, 0.0f, 0.0f, 0.0f) : XMFLOAT4(0.0f, 0.0f, 0.5f, 0.0f);
+	}
+#endif
+}
+
 void CObjectShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
@@ -44,13 +72,23 @@ void CObjectShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 
-	for (int j = 0; j < m_nObjects; j++)
+	UpdateShaderVariables();
+
+#if USE_INSTANCING
+	m_ppObjects[0]->Render(pCamera, m_nObjects);
+#else
+	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static D3D12_GPU_VIRTUAL_ADDRESS gpuAddress = m_pConstBuffer->GetGPUVirtualAddress();
+
+	for (int i = 0; i < m_nObjects; i++)
 	{
-		if (m_ppObjects[j])
+		if (m_ppObjects[i])
 		{
-			m_ppObjects[j]->Render(pCamera);
+			m_pCommandList->SetGraphicsRootConstantBufferView(2, gpuAddress + (i * elementBytes));
+			m_ppObjects[i]->Render(pCamera);
 		}
 	}
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -88,7 +126,11 @@ D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 
 D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSDiffused", "vs_5_1", ppd3dShaderBlob));
+#if USE_INSTANCING
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSInstancing", "vs_5_1", ppd3dShaderBlob));
+#else
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSObject", "vs_5_1", ppd3dShaderBlob));
+#endif
 }
 
 D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
@@ -102,6 +144,33 @@ void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	CShader::CreateShader(pCreateMgr);
+}
+
+void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+{
+#if USE_INSTANCING
+	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects, 
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		NULL);
+
+	m_pInstanceBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
+#else
+	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	m_pConstBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		elementBytes * m_nObjects,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		NULL);
+
+	m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
+#endif
+
+	
 }
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
@@ -124,9 +193,10 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 		{
 			for (int z = -zObjects; z <= zObjects; z++)
 			{
-				pRotatingObject = new CRotatingObject();
-				pRotatingObject->Initialize(pCreateMgr);
+				pRotatingObject = new CRotatingObject(pCreateMgr);
+#if !USE_INSTANCING
 				pRotatingObject->SetMesh(pCubeMesh);
+#endif
 				pRotatingObject->SetPosition(fxPitch*x, fyPitch*y, fzPitch*z);
 				pRotatingObject->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 0.0f));
 				pRotatingObject->SetRotationSpeed(10.0f*(i % 10) + 3.0f);
@@ -136,7 +206,25 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 		}
 	}
 
+#if USE_INSTANCING
+	m_ppObjects[0]->SetMesh(pCubeMesh);
+#endif
 	CreateShaderVariables(pCreateMgr);
+}
+
+void CObjectShader::ReleaseShaderVariables()
+{
+#if USE_INSTANCING
+	if (!m_pInstanceBuffer) return;
+
+	m_pInstanceBuffer->Unmap(0, NULL);
+	Safe_Release(m_pInstanceBuffer);
+#else
+	if (!m_pConstBuffer) return;
+
+	m_pConstBuffer->Unmap(0, NULL);
+	Safe_Release(m_pConstBuffer);
+#endif
 }
 
 void CObjectShader::ReleaseObjects()

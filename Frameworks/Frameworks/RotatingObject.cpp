@@ -10,7 +10,8 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CRotatingObject::CRotatingObject()
+CRotatingObject::CRotatingObject(CCreateMgr *pCreateMgr)
+	: CBaseObject(pCreateMgr)
 {
 	m_rotationAxis = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	m_rotationSpeed = 90.0f;

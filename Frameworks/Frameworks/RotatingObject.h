@@ -4,7 +4,7 @@
 class CRotatingObject : public CBaseObject
 {
 public: // 생성자, 소멸자
-	CRotatingObject();
+	CRotatingObject(CCreateMgr *pCreateMgr);
 	virtual ~CRotatingObject();
 
 public: // 공개 함수
