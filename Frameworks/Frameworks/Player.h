@@ -25,6 +25,8 @@ public:	// 생성자, 소멸자
 public: // 공개 함수
 	virtual void Render(CCamera *pCamera = NULL);
 
+	virtual void ProcessInput(float timeElapsed);
+
 	void Move(DWORD direction, float distance, bool bVelocity = false);
 	void Move(XMFLOAT3& xmf3Shift, bool bVelocity = false);
 	void Rotate(float x, float y, float z);
@@ -60,6 +62,8 @@ public: // 공개 함수
 	void SetPlayerUpdatedContext(LPVOID pContext) { m_pPlayerUpdatedContext = pContext; }
 	void SetCameraUpdatedContext(LPVOID pContext) { m_pCameraUpdatedContext = pContext; }
 
+	void SetCursorPos(POINT *pOldCursorPos) { m_pOldCursorPos = pOldCursorPos; }
+
 	virtual CCamera *ChangeCamera(CCreateMgr *pCreateMgr, DWORD nNewCameraMode, float fTimeElapsed) { return(NULL); }
 
 protected: // 내부 함수
@@ -94,5 +98,9 @@ protected: // 변수
 
 	ID3D12Resource *m_pConstBuffer{ NULL };
 	CB_PLAYER_INFO	 *m_pMappedPlayer{ NULL };
+
+	HWND m_hWnd{ NULL };
+
+	POINT *m_pOldCursorPos{ NULL };
 };
 

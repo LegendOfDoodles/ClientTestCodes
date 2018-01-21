@@ -8,7 +8,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-12
+/// 최종 수정 날짜: 2018-01-21
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -46,8 +46,18 @@ void CScene::ReleaseUploadBuffers()
 	}
 }
 
-void CScene::ProcessInput()
+void CScene::ProcessInput(float timeElapsed)
 {
+	if (!m_ppShaders) return;
+
+	for (int j = 0; j < m_nShaders; j++)
+	{
+		if (m_ppShaders[j])
+		{
+			m_ppShaders[j]->ProcessInput(timeElapsed);
+		}
+	}
+	m_pPlayer->ProcessInput(timeElapsed);
 }
 
 void CScene::AnimateObjects(float timeElapsed)

@@ -6,7 +6,7 @@
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-13
+/// 최종 수정 날짜: 2018-01-21
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -39,10 +39,10 @@ void CFramework::Finalize()
 	m_createMgr.Release();
 }
 
-void CFramework::FrameAdvance()
+void CFramework::FrameAdvance(float timeElapsed)
 {
-	ProcessInput();
-	AnimateObjects(m_pTimer->GetTimeElapsed());
+	ProcessInput(timeElapsed);
+	AnimateObjects(timeElapsed);
 	RenderObjects();
 }
 
@@ -54,7 +54,7 @@ void CFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 		::SetCapture(hWnd);
-		::GetCursorPos(&m_ptOldCursorPos);
+		::GetCursorPos(&m_oldCursorPos);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
@@ -138,6 +138,7 @@ void CFramework::BuildObjects()
 	CAirplanePlayer *pAirplanePlayer = new CAirplanePlayer(&m_createMgr);
 	m_pPlayer = pAirplanePlayer;
 	m_pPlayer->Initialize(&m_createMgr);
+	m_pPlayer->SetCursorPos(&m_oldCursorPos);
 	m_pCamera = m_pPlayer->GetCamera();
 
 	m_pScene->SetPlayer(m_pPlayer);
@@ -162,41 +163,11 @@ void CFramework::ReleaseObjects()
 	}
 }
 
-void CFramework::ProcessInput()
+void CFramework::ProcessInput(float timeElapsed)
 {
-	static UCHAR pKeyBuffer[256];
-	DWORD dwDirection = 0;
-	if (::GetKeyboardState(pKeyBuffer))
-	{
-		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
-		if (pKeyBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
-		if (pKeyBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
-		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
-		if (pKeyBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
-		if (pKeyBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
-	}
-	float cxDelta = 0.0f, cyDelta = 0.0f;
-	POINT ptCursorPos;
-	if (::GetCapture() == m_hWnd)
-	{
-		::SetCursor(NULL);
-		::GetCursorPos(&ptCursorPos);
-		cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 3.0f;
-		cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 3.0f;
-		::SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
-	}
-	if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
-	{
-		if (cxDelta || cyDelta)
-		{
-			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
-				m_pPlayer->Rotate(cyDelta, 0.0f, -cxDelta);
-			else
-				m_pPlayer->Rotate(cyDelta, cxDelta, 0.0f);
-		}
-			if (dwDirection) m_pPlayer->Move(dwDirection, 50.0f *  m_pTimer->GetTimeElapsed(), true);
-	}
-	m_pPlayer->Update(m_pTimer->GetTimeElapsed());
+	if (!m_pScene) return;
+
+	m_pScene->ProcessInput(timeElapsed);
 }
 
 void CFramework::AnimateObjects(float timeElapsed)

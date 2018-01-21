@@ -17,7 +17,7 @@ public: // 공개 함수
 
 	void ReleaseUploadBuffers();
 
-	void ProcessInput();
+	virtual void ProcessInput(float timeElapsed);
 	void AnimateObjects(float timeElapsed);
 	void Render(CCamera *pCamera);
 

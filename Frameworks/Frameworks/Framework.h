@@ -16,7 +16,7 @@ public: // 공개 함수
 	bool Initialize(HINSTANCE hInstance, HWND hWnd);
 	void Finalize();
 
-	void FrameAdvance();
+	void FrameAdvance(float timeElapsed);
 
 	// Message Process
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
@@ -33,7 +33,7 @@ private: // 내부 함수
 	void BuildObjects();
 	void ReleaseObjects();
 
-	void ProcessInput();
+	void ProcessInput(float timeElapsed);
 	void AnimateObjects(float timeElapsed);
 	void RenderObjects();
 
@@ -53,6 +53,6 @@ private: // 변수
 
 	CPlayer *m_pPlayer{ NULL };
 
-	POINT m_ptOldCursorPos;
+	POINT m_oldCursorPos;
 };
 

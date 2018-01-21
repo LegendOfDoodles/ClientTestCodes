@@ -29,6 +29,8 @@ public:	// 공개 함수
 
 	ID3D12RootSignature* GetGraphicsRootSignature() { return m_pGraphicsRootSignature; }
 
+	HWND GetHwnd() { return m_hWnd; }
+
 	int GetWindowWidth() { return m_wndClientWidth; }
 	int GetWindowHeight() { return m_wndClientHeight; }
 
