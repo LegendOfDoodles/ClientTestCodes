@@ -6,7 +6,7 @@
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-21
+/// 최종 수정 날짜: 2018-01-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -41,64 +41,8 @@ void CFramework::Finalize()
 
 void CFramework::FrameAdvance(float timeElapsed)
 {
-	ProcessInput(timeElapsed);
 	AnimateObjects(timeElapsed);
 	RenderObjects();
-}
-
-void CFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, 
-	WPARAM wParam, LPARAM lParam)
-{
-	switch (nMessageID)
-	{
-	case WM_LBUTTONDOWN:
-	case WM_RBUTTONDOWN:
-		::SetCapture(hWnd);
-		::GetCursorPos(&m_oldCursorPos);
-		break;
-	case WM_LBUTTONUP:
-	case WM_RBUTTONUP:
-		::ReleaseCapture();
-		break;
-	case WM_MOUSEMOVE:
-		break;
-	default:
-		break;
-	}
-}
-
-void CFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, 
-	WPARAM wParam, LPARAM lParam)
-{
-	switch (nMessageID)
-	{
-	case WM_KEYUP:
-		switch (wParam)
-		{
-		case VK_ESCAPE:
-			::PostQuitMessage(0);
-			break;
-		case VK_RETURN:
-			break;
-		case VK_F1:
-		case VK_F2:
-		case VK_F3:
-			m_pCamera = m_pPlayer->ChangeCamera(&m_createMgr, (DWORD)(wParam - VK_F1 + 1), m_pTimer->GetTimeElapsed());
-			break;
-		case VK_F8:
-			break;
-		case VK_F9:
-		{
-			SwitchScreenMode();
-			break;
-		}
-		default:
-			break;
-		}
-		break;
-	default:
-		break;
-	}
 }
 
 LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
@@ -109,6 +53,7 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	case WM_SIZE:
 	{
 		ResizeScreen(wParam, lParam);
+		//SwitchScreenMode();
 		break;
 	}
 	case WM_LBUTTONDOWN:
@@ -116,11 +61,11 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 	case WM_MOUSEMOVE:
-		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 		break;
 	case WM_KEYDOWN:
 	case WM_KEYUP:
-		OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
+		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
 		break;
 	}
 	return(0);
@@ -135,14 +80,6 @@ void CFramework::BuildObjects()
 	m_pScene = new CScene();
 	m_pScene->Initialize(&m_createMgr);
 
-	CAirplanePlayer *pAirplanePlayer = new CAirplanePlayer(&m_createMgr);
-	m_pPlayer = pAirplanePlayer;
-	m_pPlayer->Initialize(&m_createMgr);
-	m_pPlayer->SetCursorPos(&m_oldCursorPos);
-	m_pCamera = m_pPlayer->GetCamera();
-
-	m_pScene->SetPlayer(m_pPlayer);
-
 	m_pRenderMgr->ExecuteCommandList();
 
 	m_pScene->ReleaseUploadBuffers();
@@ -150,34 +87,20 @@ void CFramework::BuildObjects()
 
 void CFramework::ReleaseObjects()
 {
-	if (m_pScene)
-	{
-		m_pScene->Finalize();
-		Safe_Delete(m_pScene);
-	}
-
-	if (m_pPlayer)
-	{
-		m_pPlayer->Finalize();
-		Safe_Delete(m_pPlayer);
-	}
-}
-
-void CFramework::ProcessInput(float timeElapsed)
-{
 	if (!m_pScene) return;
 
-	m_pScene->ProcessInput(timeElapsed);
+	m_pScene->Finalize();
+	Safe_Delete(m_pScene);
 }
 
 void CFramework::AnimateObjects(float timeElapsed)
 {
-	if (m_pScene) m_pScene->AnimateObjects(timeElapsed);
+	m_pScene->AnimateObjects(timeElapsed);
 }
 
 void CFramework::RenderObjects()
 {
-	m_pRenderMgr->Render(m_pScene, m_pCamera);
+	m_pRenderMgr->Render(m_pScene);
 }
 
 void CFramework::SwitchScreenMode()

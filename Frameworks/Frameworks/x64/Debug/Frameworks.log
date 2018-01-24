@@ -1,7 +1,17 @@
-﻿  Shader.cpp
-  Scene.cpp
-  Player.cpp
-  Framework.cpp
-  CreateMgr.cpp
+﻿  AirplanePlayer.cpp
   코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Scene.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(192): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(193): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  건너뛰고 있습니다... (관련된 변경 내용 없음)
+  ThirdPersonCamera.cpp
+  SpaceShipCamera.cpp
+  RenderMgr.cpp
+  Player.cpp
+  Framework01.cpp
+  Framework.cpp
+  FirstPersonCamera.cpp
+  Camera.cpp
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

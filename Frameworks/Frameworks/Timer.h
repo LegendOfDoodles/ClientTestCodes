@@ -14,6 +14,8 @@ public:	// 공개 함수
 
 	bool Update();
 
+	bool ReadyToUpdate();
+
 	float GetTimeElapsed() const { return m_timeElapsed; }
 
 private:	// 내부 함수
@@ -34,6 +36,7 @@ private:	// 변수
 
 	clock::time_point m_LastUpdate_time{ clock::now() };
 
+	std::chrono::duration<float> m_updateElapsed{ 0.f };
 
 	HWND		m_hWnd{ nullptr };
 	TCHAR		m_CaptionTitle[TITLE_MAX_LENGTH];

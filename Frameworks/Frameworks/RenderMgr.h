@@ -1,7 +1,6 @@
 #pragma once
 
 class CScene;
-class CCamera;
 
 class CRenderMgr
 {
@@ -13,7 +12,7 @@ public:	// 공개 함수
 	void Initialize(int width, int height);
 	void Release();
 
-	void Render(CScene* pScene = NULL, CCamera* pCamera = NULL);
+	void Render(CScene* pScene = NULL);
 
 	// Set Swap Chain
 	void SetSwapChain(IDXGISwapChain3 *pSwapChain) { m_pSwapChain = pSwapChain; }

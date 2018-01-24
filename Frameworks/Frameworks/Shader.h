@@ -19,7 +19,6 @@ public: // 공개 함수
 	virtual void UpdateShaderVariables();
 	virtual void UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World);
 
-	virtual void ProcessInput(float timeElapsed);
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);

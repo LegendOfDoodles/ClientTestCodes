@@ -1,15 +1,13 @@
 #include "stdafx.h"
 #include "RenderMgr.h"
 #include "Scene.h"
-#include "Camera.h"
 
 /// <summary>
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-12
+/// 최종 수정 날짜: 2018-01-24
 /// </summary>
-
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
@@ -35,7 +33,7 @@ void CRenderMgr::Release()
 	::CloseHandle(m_hFenceEvent);
 }
 
-void CRenderMgr::Render(CScene* pScene, CCamera* pCamera)
+void CRenderMgr::Render(CScene* pScene)
 {
 	// Reset Command List
 	HRESULT hResult = m_pCommandAllocator->Reset();
@@ -55,7 +53,7 @@ void CRenderMgr::Render(CScene* pScene, CCamera* pCamera)
 	m_pCommandList->ResourceBarrier(1, &resourceBarrier);
 
 	// Set Viewport and Scissor Rect
-	pCamera->SetViewportsAndScissorRects();
+	pScene->SetViewportsAndScissorRects();
 
 	// Check Render Target
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUDescriptorHandle =
@@ -84,12 +82,12 @@ void CRenderMgr::Render(CScene* pScene, CCamera* pCamera)
 
 	// Set Graphics Root Signature
 	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
-
+	
 	// Update Camera
-	pCamera->UpdateShaderVariables();
+	pScene->UpdateCamera();
 
 	// Render Scene
-	if (pScene) pScene->Render(pCamera);
+	pScene->Render();
 
 	// Set Barrier
 	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;

@@ -1,26 +1,9 @@
-﻿  stdafx.cpp
-  AirplanePlayer.cpp
-  BaseObject.cpp
-  Camera.cpp
-  CreateMgr.cpp
-  DiffusedShader.cpp
-  FirstPersonCamera.cpp
-  Framework.cpp
+﻿  Framework.cpp
   Framework01.cpp
-  Mesh.cpp
-  ObjectShader.cpp
-  Player.cpp
-  RenderMgr.cpp
-  RotatingObject.cpp
   Scene.cpp
-  Shader.cpp
-  SpaceShipCamera.cpp
-  ThirdPersonCamera.cpp
-  Timer.cpp
-  Vertex.cpp
   코드를 생성하고 있습니다.
-  49 of 370 functions (13.2%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
+  49 of 379 functions (12.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
     9 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Release\Framework01.exe

@@ -7,7 +7,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-21
+/// 최종 수정 날짜: 2018-01-23
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -53,10 +53,6 @@ void CShader::UpdateShaderVariables()
 }
 
 void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
-{
-}
-
-void CShader::ProcessInput(float timeElapsed)
 {
 }
 

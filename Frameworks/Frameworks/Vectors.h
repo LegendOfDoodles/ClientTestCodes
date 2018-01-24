@@ -15,6 +15,7 @@ using namespace DirectX;
 
 static bool IsZeroFloat(float val)
 {
+	if (val < 0) val *= (-1);
 	if (val < EPSILON)
 		return true;
 	return false;

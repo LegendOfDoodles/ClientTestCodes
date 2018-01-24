@@ -9,7 +9,7 @@
 /// 목적: 테스트용 플레이어 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-21
+/// 최종 수정 날짜: 2018-01-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,6 @@
 CPlayer::CPlayer(CCreateMgr *pCreateMgr)
 	: CBaseObject(pCreateMgr)
 {
-	m_hWnd = pCreateMgr->GetHwnd();
 }
 
 CPlayer::~CPlayer()
@@ -39,43 +38,6 @@ void CPlayer::Render(CCamera *pCamera)
 		UpdateShaderVariables();
 		CBaseObject::Render(pCamera);
 	}
-}
-
-void CPlayer::ProcessInput(float timeElapsed)
-{
-	static UCHAR pKeyBuffer[256];
-	DWORD dwDirection = 0;
-	if (::GetKeyboardState(pKeyBuffer))
-	{
-		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
-		if (pKeyBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
-		if (pKeyBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
-		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
-		if (pKeyBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
-		if (pKeyBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
-	}
-	float cxDelta = 0.0f, cyDelta = 0.0f;
-	POINT cursorPos;
-	if (::GetCapture() == m_hWnd)
-	{
-		::SetCursor(NULL);
-		::GetCursorPos(&cursorPos);
-		cxDelta = (float)(cursorPos.x - m_pOldCursorPos->x) / 3.0f;
-		cyDelta = (float)(cursorPos.y - m_pOldCursorPos->y) / 3.0f;
-		::SetCursorPos(m_pOldCursorPos->x, m_pOldCursorPos->y);
-	}
-	if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
-	{
-		if (cxDelta || cyDelta)
-		{
-			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
-				Rotate(cyDelta, 0.0f, -cxDelta);
-			else
-				Rotate(cyDelta, cxDelta, 0.0f);
-		}
-		if (dwDirection) Move(dwDirection, 50.0f *  timeElapsed, true);
-	}
-	Update(timeElapsed);
 }
 
 void CPlayer::Move(DWORD direction, float distance, bool bVelocity)
@@ -205,6 +167,13 @@ void CPlayer::Update(float timeElapsed)
 	if (fDeceleration > fLength) fDeceleration = fLength;
 
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
+
+	if (m_direction) { Move(m_direction, 50.0f *  timeElapsed, true); }
+	if (!Vector3::IsZero(m_rotation))
+	{
+		Rotate(m_rotation.x, m_rotation.y, m_rotation.z);
+		m_rotation.x = m_rotation.y = m_rotation.z = 0.0f;
+	}
 }
 
 void CPlayer::OnPlayerUpdateCallback(float timeElapsed)
