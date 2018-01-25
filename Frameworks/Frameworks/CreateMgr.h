@@ -35,6 +35,19 @@ public:	// 공개 함수
 	int GetWindowHeight() { return m_wndClientHeight; }
 
 private:	// 내부 함수
+	DXGI_MODE_DESC CreateTargetParameters();
+
+	D3D12_HEAP_PROPERTIES CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType);
+	D3D12_RESOURCE_DESC CreateBufferResourceDesc(UINT nBytes);
+	D3D12_RESOURCE_STATES CreateBufferInitialStates(D3D12_HEAP_TYPE heapType);
+	D3D12_RESOURCE_BARRIER CreateBufferResourceBarrier(ID3D12Resource *pBuffer, D3D12_RESOURCE_STATES resourceStates);
+
+	D3D12_HEAP_PROPERTIES CreateDepthStencilHeapProperties();
+	D3D12_RESOURCE_DESC CreateDepthStencilResourceDesc();
+	D3D12_CLEAR_VALUE CreateDepthStencilClearValue();
+
+	DXGI_SWAP_CHAIN_DESC CreateSwapChainDesc();
+
 	void CreateDirect3dDevice();
 	void CreateCommandQueueAndList();
 	void CreateSwapChain();

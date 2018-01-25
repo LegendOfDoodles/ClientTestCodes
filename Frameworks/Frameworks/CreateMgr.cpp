@@ -5,7 +5,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-21
+/// 최종 수정 날짜: 2018-01-25
 /// </summary>
 
 
@@ -37,6 +37,7 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 
 void CCreateMgr::Release()
 {
+	HRESULT hResult;
 #ifdef _DEBUG
 	Safe_Release(m_pDebugController);
 #endif
@@ -56,7 +57,9 @@ void CCreateMgr::Release()
 
 	Safe_Release(m_pFence);
 
-	m_pSwapChain->SetFullscreenState(FALSE, NULL);
+	hResult = m_pSwapChain->SetFullscreenState(FALSE, NULL);
+	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
+
 	Safe_Release(m_pSwapChain);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pFactory);
@@ -74,7 +77,10 @@ void CCreateMgr::Resize(int width, int height)
 
 void CCreateMgr::OnResizeBackBuffers()
 {
-	m_pCommandList->Reset(m_pCommandAllocator, NULL);
+	HRESULT hResult;
+
+	hResult = m_pCommandList->Reset(m_pCommandAllocator, NULL);
+	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
 
 	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
 	{
@@ -87,21 +93,30 @@ void CCreateMgr::OnResizeBackBuffers()
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
-	m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
-	m_pdxgiSwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+	hResult = m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	assert(SUCCEEDED(hResult) && "SwapChain->GetDesc Failed");
+
+	hResult = m_pdxgiSwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+	assert(SUCCEEDED(hResult) && "ResizeBuffers Failed");
+
 	m_nSwapChainBufferIndex = 0;
 #else
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	m_pSwapChain->GetDesc(&swapChainDesc);
-	m_pSwapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_CNT, m_wndClientWidth,
+	hResult = m_pSwapChain->GetDesc(&swapChainDesc);
+	assert(SUCCEEDED(hResult) && "SwapChain->GetDesc Failed");
+
+	hResult = m_pSwapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_CNT, m_wndClientWidth,
 		m_wndClientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags);
+	assert(SUCCEEDED(hResult) && "ResizeBuffers Failed");
+
 	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
 #endif
 
 	CreateRenderTargetView();
 	CreateDepthStencilView();
 
-	m_pCommandList->Close();
+	hResult = m_pCommandList->Close();
+	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
 
 	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
@@ -109,66 +124,37 @@ void CCreateMgr::OnResizeBackBuffers()
 
 void CCreateMgr::ChangeScreenMode()
 {
+	HRESULT hResult;
 	BOOL fullScreenState = FALSE;
-	m_pSwapChain->GetFullscreenState(&fullScreenState, NULL);
+
+	hResult = m_pSwapChain->GetFullscreenState(&fullScreenState, NULL);
+	assert(SUCCEEDED(hResult) && "GetFullscreenState Failed");
+
 	if (!fullScreenState)
 	{
-		DXGI_MODE_DESC targetParameters;
-		targetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		targetParameters.Width = m_wndClientWidth;
-		targetParameters.Height = m_wndClientHeight;
-		targetParameters.RefreshRate.Numerator = 60;
-		targetParameters.RefreshRate.Denominator = 1;
-		targetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-		targetParameters.ScanlineOrdering =
-			DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		m_pSwapChain->ResizeTarget(&targetParameters);
+		hResult = m_pSwapChain->ResizeTarget(&CreateTargetParameters());
+		assert(SUCCEEDED(hResult) && "ResizeTarget Failed");
 	}
-	m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
+	hResult = m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
+	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
 }
 
 ID3D12Resource* CCreateMgr::CreateBufferResource(
 	void *pData, UINT nBytes, D3D12_HEAP_TYPE heapType,
 	D3D12_RESOURCE_STATES resourceStates, ID3D12Resource **ppUploadBuffer)
 {
+	HRESULT hResult;
 	ID3D12Resource *pBuffer = NULL;
 
-	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
-	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
-	heapPropertiesDesc.Type = heapType;
-	heapPropertiesDesc.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapPropertiesDesc.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapPropertiesDesc.CreationNodeMask = 1;
-	heapPropertiesDesc.VisibleNodeMask = 1;
-
-	D3D12_RESOURCE_DESC resourceDesc;
-	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Alignment = 0;
-	resourceDesc.Width = nBytes;
-	resourceDesc.Height = 1;
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.MipLevels = 1;
-	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-	resourceDesc.SampleDesc.Count = 1;
-	resourceDesc.SampleDesc.Quality = 0;
-	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-	D3D12_RESOURCE_STATES resourceInitialStates = D3D12_RESOURCE_STATE_COPY_DEST;
-	if (heapType == D3D12_HEAP_TYPE_UPLOAD)
-		resourceInitialStates =	D3D12_RESOURCE_STATE_GENERIC_READ;
-	else if (heapType == D3D12_HEAP_TYPE_READBACK)
-		resourceInitialStates =	D3D12_RESOURCE_STATE_COPY_DEST;
-
-	HRESULT hResult = m_pDevice->CreateCommittedResource(
-		&heapPropertiesDesc,
+	hResult = m_pDevice->CreateCommittedResource(
+		&CreateBufferHeapProperties(heapType),
 		D3D12_HEAP_FLAG_NONE, 
-		&resourceDesc,
-		resourceInitialStates, 
+		&CreateBufferResourceDesc(nBytes),
+		CreateBufferInitialStates(heapType),
 		NULL,
 		__uuidof(ID3D12Resource), 
 		(void **)&pBuffer);
+	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
 	if (pData)
 	{
@@ -179,30 +165,24 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 			if (ppUploadBuffer)
 			{
 				//업로드 버퍼를 생성한다.
-				heapPropertiesDesc.Type = D3D12_HEAP_TYPE_UPLOAD;
-				m_pDevice->CreateCommittedResource(&heapPropertiesDesc,
-					D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
+				hResult = m_pDevice->CreateCommittedResource(&CreateBufferHeapProperties(D3D12_HEAP_TYPE_UPLOAD),
+					D3D12_HEAP_FLAG_NONE, &CreateBufferResourceDesc(nBytes), D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
 					__uuidof(ID3D12Resource), (void **)ppUploadBuffer);
+				assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
 				//업로드 버퍼를 매핑하여 초기화 데이터를 업로드 버퍼에 복사한다.
 				D3D12_RANGE readRange = { 0, 0 };
 				UINT8 *pBufferDataBegin = NULL;
-				(*ppUploadBuffer)->Map(0, &readRange, (void **)&pBufferDataBegin);
+				hResult = (*ppUploadBuffer)->Map(0, &readRange, (void **)&pBufferDataBegin);
+				assert(SUCCEEDED(hResult) && "(*ppUploadBuffer)->Map Failed");
+
 				memcpy(pBufferDataBegin, pData, nBytes);
 				(*ppUploadBuffer)->Unmap(0, NULL);
 
 				//업로드 버퍼의 내용을 디폴트 버퍼에 복사한다.
 				m_pCommandList->CopyResource(pBuffer, *ppUploadBuffer);
 
-				D3D12_RESOURCE_BARRIER resourceBarrier;
-				::ZeroMemory(&resourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
-				resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-				resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-				resourceBarrier.Transition.pResource = pBuffer;
-				resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-				resourceBarrier.Transition.StateAfter = resourceStates;
-				resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-				m_pCommandList->ResourceBarrier(1, &resourceBarrier);
+				m_pCommandList->ResourceBarrier(1, &CreateBufferResourceBarrier(pBuffer, resourceStates));
 			}
 			break;
 		}
@@ -210,7 +190,9 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 		{
 			D3D12_RANGE readRange = { 0, 0 };
 			UINT8 *pBufferDataBegin = NULL;
-			pBuffer->Map(0, &readRange, (void **)&pBufferDataBegin);
+			hResult = pBuffer->Map(0, &readRange, (void **)&pBufferDataBegin);
+			assert(SUCCEEDED(hResult) && "pBuffer->Map Failed");
+
 			memcpy(pBufferDataBegin, pData, nBytes);
 			pBuffer->Unmap(0, NULL);
 			break;
@@ -225,92 +207,123 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CCreateMgr::CreateDirect3dDevice()
+DXGI_MODE_DESC CCreateMgr::CreateTargetParameters()
 {
-#if defined(_DEBUG)
-	D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void **)&m_pDebugController);
-	m_pDebugController->EnableDebugLayer();
-#endif
+	DXGI_MODE_DESC targetParameters;
+	targetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	targetParameters.Width = m_wndClientWidth;
+	targetParameters.Height = m_wndClientHeight;
+	targetParameters.RefreshRate.Numerator = 60;
+	targetParameters.RefreshRate.Denominator = 1;
+	targetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	targetParameters.ScanlineOrdering =
+		DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 
-	::CreateDXGIFactory1(__uuidof(IDXGIFactory4), (void **)&m_pFactory);
-
-	//모든 하드웨어 어댑터 대하여 특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성한다.
-	IDXGIAdapter1 *pAdapter = NULL;
-	for (UINT i = 0;
-		DXGI_ERROR_NOT_FOUND != m_pFactory->EnumAdapters1(i, &pAdapter);
-		i++)
-	{
-		DXGI_ADAPTER_DESC1 adapterDesc;
-		pAdapter->GetDesc1(&adapterDesc);
-		if (adapterDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
-		if (SUCCEEDED(D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_12_0,
-			_uuidof(ID3D12Device), (void **)&m_pDevice))) break;
-	}
-
-	//특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성할 수 없으면 WARP 디바이스를 생성한다.
-	if (!pAdapter)
-	{
-		m_pFactory->EnumWarpAdapter(_uuidof(IDXGIFactory4), (void **)&pAdapter);
-		D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_11_0,
-			_uuidof(ID3D12Device), (void**)&m_pDevice);
-	}
-
-	// MSAA Check
-	D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS d3dMsaaQualityLevels;
-	d3dMsaaQualityLevels.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	d3dMsaaQualityLevels.SampleCount = 4; //Msaa4x 다중 샘플링
-	d3dMsaaQualityLevels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
-	d3dMsaaQualityLevels.NumQualityLevels = 0;
-	m_pDevice->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS,
-		&d3dMsaaQualityLevels, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
-	m_msaa4xQualityLevels = d3dMsaaQualityLevels.NumQualityLevels;
-
-	// MSAA 
-	m_msaa4xEnable = (m_msaa4xQualityLevels > 1) ? true : false;
-
-	// Fence
-	m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE,
-		__uuidof(ID3D12Fence), (void**)&m_pFence);
-	m_renderMgr.SetFence(m_pFence);
-
-	if (pAdapter) pAdapter->Release();
+	return(targetParameters);
 }
 
-void CCreateMgr::CreateCommandQueueAndList()
+D3D12_HEAP_PROPERTIES CCreateMgr::CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType)
 {
-	// Create Queue
-	D3D12_COMMAND_QUEUE_DESC commandQueueDesc;
-	::ZeroMemory(&commandQueueDesc, sizeof(D3D12_COMMAND_QUEUE_DESC));
-	commandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
+	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
+	heapPropertiesDesc.Type = heapType;
+	heapPropertiesDesc.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapPropertiesDesc.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapPropertiesDesc.CreationNodeMask = 1;
+	heapPropertiesDesc.VisibleNodeMask = 1;
 
-	HRESULT hResult = m_pDevice->CreateCommandQueue(&commandQueueDesc,
-		_uuidof(ID3D12CommandQueue), (void **)&m_pCommandQueue);
-	m_renderMgr.SetCommandQueue(m_pCommandQueue);
-
-	// Create Allocator
-	hResult = m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-		__uuidof(ID3D12CommandAllocator), (void **)&m_pCommandAllocator);
-	m_renderMgr.SetCommandAllocator(m_pCommandAllocator);
-
-	// Create Command List
-	hResult = m_pDevice->CreateCommandList(
-		0, D3D12_COMMAND_LIST_TYPE_DIRECT,
-		m_pCommandAllocator, NULL,
-		__uuidof(ID3D12GraphicsCommandList), (void**)&m_pCommandList);
-	m_renderMgr.SetCommandList(m_pCommandList);
-
-	hResult = m_pCommandList->Close();
+	return(heapPropertiesDesc);
 }
 
-void CCreateMgr::CreateSwapChain()
+D3D12_RESOURCE_DESC CCreateMgr::CreateBufferResourceDesc(UINT nBytes)
 {
-	RECT rcClient;
-	::GetClientRect(m_hWnd, &rcClient);
-	m_wndClientWidth = rcClient.right - rcClient.left;
-	m_wndClientHeight = rcClient.bottom - rcClient.top;
+	D3D12_RESOURCE_DESC resourceDesc;
+	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Alignment = 0;
+	resourceDesc.Width = nBytes;
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.SampleDesc.Quality = 0;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-	// Create Swap Chain
+	return(resourceDesc);
+}
+
+D3D12_RESOURCE_STATES CCreateMgr::CreateBufferInitialStates(D3D12_HEAP_TYPE heapType)
+{
+	if (heapType == D3D12_HEAP_TYPE_UPLOAD)
+		return D3D12_RESOURCE_STATE_GENERIC_READ;
+
+	if (heapType == D3D12_HEAP_TYPE_READBACK)
+		return D3D12_RESOURCE_STATE_COPY_DEST;
+
+	return D3D12_RESOURCE_STATE_COPY_DEST;
+}
+
+D3D12_RESOURCE_BARRIER CCreateMgr::CreateBufferResourceBarrier(
+	ID3D12Resource *pBuffer, D3D12_RESOURCE_STATES resourceStates)
+{
+	D3D12_RESOURCE_BARRIER resourceBarrier;
+	::ZeroMemory(&resourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
+	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	resourceBarrier.Transition.pResource = pBuffer;
+	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	resourceBarrier.Transition.StateAfter = resourceStates;
+	resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	return(resourceBarrier);
+}
+
+D3D12_HEAP_PROPERTIES CCreateMgr::CreateDepthStencilHeapProperties()
+{
+	D3D12_HEAP_PROPERTIES heapProperties;
+	::ZeroMemory(&heapProperties, sizeof(D3D12_HEAP_PROPERTIES));
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProperties.CreationNodeMask = 1;
+	heapProperties.VisibleNodeMask = 1;
+
+	return(heapProperties);
+}
+
+D3D12_RESOURCE_DESC CCreateMgr::CreateDepthStencilResourceDesc()
+{
+	D3D12_RESOURCE_DESC resourceDesc;
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	resourceDesc.Alignment = 0;
+	resourceDesc.Width = m_wndClientWidth;
+	resourceDesc.Height = m_wndClientHeight;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	resourceDesc.SampleDesc.Count = (m_msaa4xEnable) ? 4 : 1;
+	resourceDesc.SampleDesc.Quality =
+		(m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+	return(resourceDesc);
+}
+
+D3D12_CLEAR_VALUE CCreateMgr::CreateDepthStencilClearValue()
+{
+	D3D12_CLEAR_VALUE clearValue;
+	clearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	clearValue.DepthStencil.Depth = 1.0f;
+	clearValue.DepthStencil.Stencil = 0;
+
+	return(clearValue);
+}
+
+DXGI_SWAP_CHAIN_DESC CCreateMgr::CreateSwapChainDesc()
+{
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	::ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 	swapChainDesc.BufferDesc.Width = m_wndClientWidth;
@@ -332,12 +345,122 @@ void CCreateMgr::CreateSwapChain()
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 #endif
 
-	HRESULT hResult = m_pFactory->CreateSwapChain(m_pCommandQueue,
-		&swapChainDesc, (IDXGISwapChain **)&m_pSwapChain);
+	return(swapChainDesc);
+}
+
+void CCreateMgr::CreateDirect3dDevice()
+{
+	HRESULT hResult;
+#if defined(_DEBUG)
+	hResult = D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void **)&m_pDebugController);
+	assert(SUCCEEDED(hResult) && "D3D12GetDebugInterface Failed");
+
+	m_pDebugController->EnableDebugLayer();
+#endif
+
+	::CreateDXGIFactory1(__uuidof(IDXGIFactory4), (void **)&m_pFactory);
+
+	//모든 하드웨어 어댑터 대하여 특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성한다.
+	IDXGIAdapter1 *pAdapter = NULL;
+	for (UINT i = 0;
+		DXGI_ERROR_NOT_FOUND != m_pFactory->EnumAdapters1(i, &pAdapter);
+		i++)
+	{
+		DXGI_ADAPTER_DESC1 adapterDesc;
+		pAdapter->GetDesc1(&adapterDesc);
+
+		if (adapterDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
+		if (SUCCEEDED(D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_12_0,
+			_uuidof(ID3D12Device), (void **)&m_pDevice))) break;
+	}
+
+	//특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성할 수 없으면 WARP 디바이스를 생성한다.
+	if (!pAdapter)
+	{
+		hResult = m_pFactory->EnumWarpAdapter(_uuidof(IDXGIFactory4), (void **)&pAdapter);
+		D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_11_0,
+			_uuidof(ID3D12Device), (void**)&m_pDevice);
+		assert(SUCCEEDED(hResult) && "EnumWarpAdapter Failed");
+	}
+
+	// MSAA Check
+	D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS d3dMsaaQualityLevels;
+	d3dMsaaQualityLevels.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	d3dMsaaQualityLevels.SampleCount = 4; //Msaa4x 다중 샘플링
+	d3dMsaaQualityLevels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
+	d3dMsaaQualityLevels.NumQualityLevels = 0;
+	hResult = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS,
+		&d3dMsaaQualityLevels, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
+	assert(SUCCEEDED(hResult) && "CheckFeatureSupport Failed");
+
+	m_msaa4xQualityLevels = d3dMsaaQualityLevels.NumQualityLevels;
+
+	// MSAA 
+	m_msaa4xEnable = (m_msaa4xQualityLevels > 1) ? true : false;
+
+	// Fence
+	hResult = m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE,
+		__uuidof(ID3D12Fence), (void**)&m_pFence);
+	assert(SUCCEEDED(hResult) && "CreateFence Failed");
+
+	m_renderMgr.SetFence(m_pFence);
+
+	if (pAdapter) pAdapter->Release();
+}
+
+void CCreateMgr::CreateCommandQueueAndList()
+{
+	HRESULT hResult;
+
+	// Create Queue
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc;
+	::ZeroMemory(&commandQueueDesc, sizeof(D3D12_COMMAND_QUEUE_DESC));
+	commandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+
+	hResult = m_pDevice->CreateCommandQueue(&commandQueueDesc,
+		_uuidof(ID3D12CommandQueue), (void **)&m_pCommandQueue);
+	assert(SUCCEEDED(hResult) && "CreateCommandQueue Failed");
+
+	m_renderMgr.SetCommandQueue(m_pCommandQueue);
+
+	// Create Allocator
+	hResult = m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+		__uuidof(ID3D12CommandAllocator), (void **)&m_pCommandAllocator);
+	assert(SUCCEEDED(hResult) && "CreateCommandAllocator Failed");
+
+	m_renderMgr.SetCommandAllocator(m_pCommandAllocator);
+
+	// Create Command List
+	hResult = m_pDevice->CreateCommandList(
+		0, D3D12_COMMAND_LIST_TYPE_DIRECT,
+		m_pCommandAllocator, NULL,
+		__uuidof(ID3D12GraphicsCommandList), (void**)&m_pCommandList);
+	m_renderMgr.SetCommandList(m_pCommandList);
+	assert(SUCCEEDED(hResult) && "CreateCommandList Failed");
+
+	hResult = m_pCommandList->Close();
+	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+}
+
+void CCreateMgr::CreateSwapChain()
+{
+	HRESULT hResult;
+	RECT rcClient;
+	::GetClientRect(m_hWnd, &rcClient);
+	m_wndClientWidth = rcClient.right - rcClient.left;
+	m_wndClientHeight = rcClient.bottom - rcClient.top;
+
+	// Create Swap Chain
+	hResult = m_pFactory->CreateSwapChain(m_pCommandQueue,
+		&CreateSwapChainDesc(), (IDXGISwapChain **)&m_pSwapChain);
+	assert(SUCCEEDED(hResult) && "CreateSwapChain Failed");
+
 	m_renderMgr.SetSwapChain(m_pSwapChain);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
-	m_pFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
+	hResult = m_pFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
+	assert(SUCCEEDED(hResult) && "MakeWindowAssociation Failed");
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
 	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
@@ -345,16 +468,20 @@ void CCreateMgr::CreateSwapChain()
 
 void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 {
-	// Create Render Target View Descriptor Heap
-	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
-	::ZeroMemory(&d3dDescriptorHeapDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
-	d3dDescriptorHeapDesc.NumDescriptors = SWAP_CHAIN_BUFFER_CNT;
-	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	d3dDescriptorHeapDesc.NodeMask = 0;
+	HRESULT hResult;
 
-	HRESULT hResult = m_pDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc,
+	// Create Render Target View Descriptor Heap
+	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc;
+	::ZeroMemory(&descriptorHeapDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
+	descriptorHeapDesc.NumDescriptors = SWAP_CHAIN_BUFFER_CNT;
+	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	descriptorHeapDesc.NodeMask = 0;
+
+	hResult = m_pDevice->CreateDescriptorHeap(&descriptorHeapDesc,
 		__uuidof(ID3D12DescriptorHeap), (void **)&m_pRtvDescriptorHeap);
+	assert(SUCCEEDED(hResult) && "CreateDescriptorHeap Failed");
+
 	m_renderMgr.SetRtvDescriptorHeap(m_pRtvDescriptorHeap);
 
 	m_rtvDescriptorIncrementSize =
@@ -362,74 +489,56 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	m_renderMgr.SetRtvDescriptorIncrementSize(m_rtvDescriptorIncrementSize);
 
 	// Create Depth Stencil View Descriptor Heap
-	d3dDescriptorHeapDesc.NumDescriptors = 1;
-	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	hResult = m_pDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc,
+	descriptorHeapDesc.NumDescriptors = 1;
+	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	hResult = m_pDevice->CreateDescriptorHeap(&descriptorHeapDesc,
 		__uuidof(ID3D12DescriptorHeap), (void **)&m_pDsvDescriptorHeap);
+	assert(SUCCEEDED(hResult) && "CreateDescriptorHeap Failed");
+
 	m_renderMgr.SetDsvDescriptorHeap(m_pDsvDescriptorHeap);
 }
 
 void CCreateMgr::CreateDepthStencilView()
 {
+	HRESULT hResult;
+
 	// Create Depth Stencil Buffer
-	D3D12_RESOURCE_DESC d3dResourceDesc;
-	d3dResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	d3dResourceDesc.Alignment = 0;
-	d3dResourceDesc.Width = m_wndClientWidth;
-	d3dResourceDesc.Height = m_wndClientHeight;
-	d3dResourceDesc.DepthOrArraySize = 1;
-	d3dResourceDesc.MipLevels = 1;
-	d3dResourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	d3dResourceDesc.SampleDesc.Count = (m_msaa4xEnable) ? 4 : 1;
-	d3dResourceDesc.SampleDesc.Quality =
-		(m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
-	d3dResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	d3dResourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-
-	D3D12_HEAP_PROPERTIES d3dHeapProperties;
-	::ZeroMemory(&d3dHeapProperties, sizeof(D3D12_HEAP_PROPERTIES));
-	d3dHeapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-	d3dHeapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	d3dHeapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	d3dHeapProperties.CreationNodeMask = 1;
-	d3dHeapProperties.VisibleNodeMask = 1;
-
-	D3D12_CLEAR_VALUE d3dClearValue;
-	d3dClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	d3dClearValue.DepthStencil.Depth = 1.0f;
-	d3dClearValue.DepthStencil.Stencil = 0;
-
-	m_pDevice->CreateCommittedResource(&d3dHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&d3dResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &d3dClearValue,
+	hResult = m_pDevice->CreateCommittedResource(&CreateDepthStencilHeapProperties(), D3D12_HEAP_FLAG_NONE,
+		&CreateDepthStencilResourceDesc(), D3D12_RESOURCE_STATE_DEPTH_WRITE, &CreateDepthStencilClearValue(),
 		__uuidof(ID3D12Resource), (void **)&m_pDepthStencilBuffer);
+	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
 	// Create Depth Stencil View
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle =
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUDescriptorHandle =
 		m_pDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer, NULL,
-		d3dDsvCPUDescriptorHandle);
+		dsvCPUDescriptorHandle);
 }
 
 void CCreateMgr::CreateRenderTargetView()
 {
 	HRESULT hResult;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle =
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUDescriptorHandle =
 		m_pRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 
 	for (UINT i = 0; i <SWAP_CHAIN_BUFFER_CNT; i++)
 	{
 		hResult = m_pSwapChain->GetBuffer(i, __uuidof(ID3D12Resource),
 			(void**)&m_ppRenderTargetBuffers[i]);
+		assert(SUCCEEDED(hResult) && "SwapChain->GetBuffer Failed");
+
 		m_pDevice->CreateRenderTargetView(m_ppRenderTargetBuffers[i], NULL,
-			d3dRtvCPUDescriptorHandle);
-		d3dRtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
+			rtvCPUDescriptorHandle);
+		rtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
 	m_renderMgr.SetRenderTargetBuffers(m_ppRenderTargetBuffers);
 }
 
 void CCreateMgr::CreateGraphicsRootSignature()
 {
+	HRESULT hResult;
+
 	D3D12_ROOT_PARAMETER pRootParameters[3];
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[0].Descriptor.ShaderRegister = 0; //Player
@@ -476,12 +585,13 @@ void CCreateMgr::CreateGraphicsRootSignature()
 		&pSignatureBlob,
 		&pErrorBlob);
 
-	m_pDevice->CreateRootSignature(
+	hResult = m_pDevice->CreateRootSignature(
 		0,
 		pSignatureBlob->GetBufferPointer(),
 		pSignatureBlob->GetBufferSize(),
 		__uuidof(ID3D12RootSignature), 
 		(void**)&m_pGraphicsRootSignature);
+	assert(SUCCEEDED(hResult) && "CreateRootSignature Failed");
 
 	if (pSignatureBlob) pSignatureBlob->Release();
 	if (pErrorBlob) pErrorBlob->Release();

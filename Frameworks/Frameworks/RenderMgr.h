@@ -45,6 +45,9 @@ public:	// 공개 함수
 	void ExecuteCommandList();
 
 private:	// 내부 함수
+	D3D12_RESOURCE_BARRIER CreateResourceBarrier();
+	void CRenderMgr::SetResourceBarrier(D3D12_RESOURCE_BARRIER &resourceBarrier,
+		D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 
 private:	// 변수
 	// Swap Chain
