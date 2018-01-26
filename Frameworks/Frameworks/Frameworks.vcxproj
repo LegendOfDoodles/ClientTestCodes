@@ -147,6 +147,7 @@
     <ClInclude Include="AirplanePlayer.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ExptProcess.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="CreateMgr.h" />
     <ClInclude Include="DiffusedShader.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="AirplanePlayer.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ExptProcess.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="CreateMgr.cpp" />
     <ClCompile Include="DiffusedShader.cpp" />

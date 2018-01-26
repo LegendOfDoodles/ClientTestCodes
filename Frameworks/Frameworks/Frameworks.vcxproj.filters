@@ -99,6 +99,9 @@
     <Filter Include="소스 파일\05.Objects\03.Player\01.Airplane">
       <UniqueIdentifier>{5539e089-7e90-4235-8ce1-c13a58cb2d96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\01.Exception">
+      <UniqueIdentifier>{d15e1826-69cc-4b10-bc69-2791b15f4841}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -173,6 +176,9 @@
     <ClInclude Include="AirplanePlayer.h">
       <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
     </ClInclude>
+    <ClInclude Include="ExptProcess.h">
+      <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -234,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="AirplanePlayer.cpp">
       <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
+    </ClCompile>
+    <ClCompile Include="ExptProcess.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

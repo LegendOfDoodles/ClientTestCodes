@@ -5,7 +5,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-25
+/// 최종 수정 날짜: 2018-01-26
 /// </summary>
 
 
@@ -578,7 +578,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	rootSignatureDesc.pStaticSamplers = NULL;
 	rootSignatureDesc.Flags = rootSignatureFlags;
 
-	ID3DBlob *pSignatureBlob = NULL;		ID3DBlob *pErrorBlob = NULL;
+	ComPtr<ID3DBlob> pSignatureBlob{ NULL };		ComPtr<ID3DBlob> pErrorBlob{ NULL };
 	::D3D12SerializeRootSignature(
 		&rootSignatureDesc,
 		D3D_ROOT_SIGNATURE_VERSION_1,
@@ -592,9 +592,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 		__uuidof(ID3D12RootSignature), 
 		(void**)&m_pGraphicsRootSignature);
 	assert(SUCCEEDED(hResult) && "CreateRootSignature Failed");
-
-	if (pSignatureBlob) pSignatureBlob->Release();
-	if (pErrorBlob) pErrorBlob->Release();
+	// ExptProcess::PrintErrorBlob(pErrorBlob);
 
 	m_renderMgr.SetGraphicsRootSignature(m_pGraphicsRootSignature);
 }

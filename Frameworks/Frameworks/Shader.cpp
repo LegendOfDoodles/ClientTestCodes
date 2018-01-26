@@ -7,7 +7,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-23
+/// 최종 수정 날짜: 2018-01-26
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -214,14 +214,18 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 	WCHAR *pszFileName, LPCSTR pszShaderName,
 	LPCSTR pszShaderProfile, ID3DBlob **ppShaderBlob)
 {
-	UINT nCompileFlags = 0;
+	HRESULT hResult;
+	UINT nCompileFlags{ 0 };
 
 #if defined(_DEBUG)
 	nCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	::D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, pszShaderProfile,
-		nCompileFlags, 0, ppShaderBlob, NULL);
+	ComPtr<ID3DBlob> pErrorBlob{ NULL };
+	hResult = D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, pszShaderProfile,
+		nCompileFlags, 0, ppShaderBlob, &pErrorBlob);
+	assert(SUCCEEDED(hResult) && "CreateRootSignature Failed");
+	ExptProcess::PrintErrorBlob(pErrorBlob);
 
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = (*ppShaderBlob)->GetBufferSize();
