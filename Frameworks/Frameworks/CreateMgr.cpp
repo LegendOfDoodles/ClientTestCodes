@@ -5,7 +5,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-26
+/// 최종 수정 날짜: 2018-01-27
 /// </summary>
 
 
@@ -42,30 +42,39 @@ void CCreateMgr::Release()
 	Safe_Release(m_pDebugController);
 #endif
 
+	// Render Target View
 	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; i++)
 	{
 		Safe_Release(m_ppRenderTargetBuffers[i]);
 	}
 	Safe_Release(m_pRtvDescriptorHeap);
 
+	// Depth Stencil View
 	Safe_Release(m_pDepthStencilBuffer);
 	Safe_Release(m_pDsvDescriptorHeap);
 
+	// Command Queue
 	Safe_Release(m_pCommandAllocator);
 	Safe_Release(m_pCommandQueue);
 	Safe_Release(m_pCommandList);
 
+	// Fence
 	Safe_Release(m_pFence);
 
 	hResult = m_pSwapChain->SetFullscreenState(FALSE, NULL);
 	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
 
+	// Swap Chain
 	Safe_Release(m_pSwapChain);
+
+	// Factory and Device
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pFactory);
 
+	// Root Signature
 	Safe_Release(m_pGraphicsRootSignature);
 
+	// Render Manager
 	m_renderMgr.Release();
 }
 
@@ -152,8 +161,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 		&CreateBufferResourceDesc(nBytes),
 		CreateBufferInitialStates(heapType),
 		NULL,
-		__uuidof(ID3D12Resource), 
-		(void **)&pBuffer);
+		IID_PPV_ARGS(&pBuffer));
 	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
 	if (pData)
@@ -167,7 +175,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 				//업로드 버퍼를 생성한다.
 				hResult = m_pDevice->CreateCommittedResource(&CreateBufferHeapProperties(D3D12_HEAP_TYPE_UPLOAD),
 					D3D12_HEAP_FLAG_NONE, &CreateBufferResourceDesc(nBytes), D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
-					__uuidof(ID3D12Resource), (void **)ppUploadBuffer);
+					IID_PPV_ARGS(ppUploadBuffer));
 				assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
 				//업로드 버퍼를 매핑하여 초기화 데이터를 업로드 버퍼에 복사한다.
@@ -352,13 +360,13 @@ void CCreateMgr::CreateDirect3dDevice()
 {
 	HRESULT hResult;
 #if defined(_DEBUG)
-	hResult = D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void **)&m_pDebugController);
+	hResult = D3D12GetDebugInterface(IID_PPV_ARGS(&m_pDebugController));
 	assert(SUCCEEDED(hResult) && "D3D12GetDebugInterface Failed");
 
 	m_pDebugController->EnableDebugLayer();
 #endif
 
-	::CreateDXGIFactory1(__uuidof(IDXGIFactory4), (void **)&m_pFactory);
+	::CreateDXGIFactory1(IID_PPV_ARGS(&m_pFactory));
 
 	//모든 하드웨어 어댑터 대하여 특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성한다.
 	IDXGIAdapter1 *pAdapter = NULL;
@@ -371,15 +379,15 @@ void CCreateMgr::CreateDirect3dDevice()
 
 		if (adapterDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
 		if (SUCCEEDED(D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_12_0,
-			_uuidof(ID3D12Device), (void **)&m_pDevice))) break;
+			IID_PPV_ARGS(&m_pDevice)))) break;
 	}
 
 	//특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성할 수 없으면 WARP 디바이스를 생성한다.
 	if (!pAdapter)
 	{
-		hResult = m_pFactory->EnumWarpAdapter(_uuidof(IDXGIFactory4), (void **)&pAdapter);
+		hResult = m_pFactory->EnumWarpAdapter(IID_PPV_ARGS(&pAdapter));
 		D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_11_0,
-			_uuidof(ID3D12Device), (void**)&m_pDevice);
+			IID_PPV_ARGS(&m_pDevice));
 		assert(SUCCEEDED(hResult) && "EnumWarpAdapter Failed");
 	}
 
@@ -400,7 +408,7 @@ void CCreateMgr::CreateDirect3dDevice()
 
 	// Fence
 	hResult = m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE,
-		__uuidof(ID3D12Fence), (void**)&m_pFence);
+		IID_PPV_ARGS(&m_pFence));
 	assert(SUCCEEDED(hResult) && "CreateFence Failed");
 
 	m_renderMgr.SetFence(m_pFence);
@@ -418,24 +426,26 @@ void CCreateMgr::CreateCommandQueueAndList()
 	commandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
-	hResult = m_pDevice->CreateCommandQueue(&commandQueueDesc,
-		_uuidof(ID3D12CommandQueue), (void **)&m_pCommandQueue);
+	hResult = m_pDevice->CreateCommandQueue(
+		&commandQueueDesc,
+		IID_PPV_ARGS(&m_pCommandQueue));
 	assert(SUCCEEDED(hResult) && "CreateCommandQueue Failed");
 
 	m_renderMgr.SetCommandQueue(m_pCommandQueue);
 
 	// Create Allocator
-	hResult = m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-		__uuidof(ID3D12CommandAllocator), (void **)&m_pCommandAllocator);
+	hResult = m_pDevice->CreateCommandAllocator(
+		D3D12_COMMAND_LIST_TYPE_DIRECT,
+		IID_PPV_ARGS(&m_pCommandAllocator));
 	assert(SUCCEEDED(hResult) && "CreateCommandAllocator Failed");
-
+	
 	m_renderMgr.SetCommandAllocator(m_pCommandAllocator);
 
 	// Create Command List
 	hResult = m_pDevice->CreateCommandList(
 		0, D3D12_COMMAND_LIST_TYPE_DIRECT,
 		m_pCommandAllocator, NULL,
-		__uuidof(ID3D12GraphicsCommandList), (void**)&m_pCommandList);
+		IID_PPV_ARGS(&m_pCommandList));
 	m_renderMgr.SetCommandList(m_pCommandList);
 	assert(SUCCEEDED(hResult) && "CreateCommandList Failed");
 
@@ -479,7 +489,7 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	descriptorHeapDesc.NodeMask = 0;
 
 	hResult = m_pDevice->CreateDescriptorHeap(&descriptorHeapDesc,
-		__uuidof(ID3D12DescriptorHeap), (void **)&m_pRtvDescriptorHeap);
+		IID_PPV_ARGS(&m_pRtvDescriptorHeap));
 	assert(SUCCEEDED(hResult) && "CreateDescriptorHeap Failed");
 
 	m_renderMgr.SetRtvDescriptorHeap(m_pRtvDescriptorHeap);
@@ -492,7 +502,7 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	descriptorHeapDesc.NumDescriptors = 1;
 	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 	hResult = m_pDevice->CreateDescriptorHeap(&descriptorHeapDesc,
-		__uuidof(ID3D12DescriptorHeap), (void **)&m_pDsvDescriptorHeap);
+		IID_PPV_ARGS(&m_pDsvDescriptorHeap));
 	assert(SUCCEEDED(hResult) && "CreateDescriptorHeap Failed");
 
 	m_renderMgr.SetDsvDescriptorHeap(m_pDsvDescriptorHeap);
@@ -505,7 +515,7 @@ void CCreateMgr::CreateDepthStencilView()
 	// Create Depth Stencil Buffer
 	hResult = m_pDevice->CreateCommittedResource(&CreateDepthStencilHeapProperties(), D3D12_HEAP_FLAG_NONE,
 		&CreateDepthStencilResourceDesc(), D3D12_RESOURCE_STATE_DEPTH_WRITE, &CreateDepthStencilClearValue(),
-		__uuidof(ID3D12Resource), (void **)&m_pDepthStencilBuffer);
+		IID_PPV_ARGS(&m_pDepthStencilBuffer));
 	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
 	// Create Depth Stencil View
@@ -524,8 +534,7 @@ void CCreateMgr::CreateRenderTargetView()
 
 	for (UINT i = 0; i <SWAP_CHAIN_BUFFER_CNT; i++)
 	{
-		hResult = m_pSwapChain->GetBuffer(i, __uuidof(ID3D12Resource),
-			(void**)&m_ppRenderTargetBuffers[i]);
+		hResult = m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&m_ppRenderTargetBuffers[i]));
 		assert(SUCCEEDED(hResult) && "SwapChain->GetBuffer Failed");
 
 		m_pDevice->CreateRenderTargetView(m_ppRenderTargetBuffers[i], NULL,
@@ -589,8 +598,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 		0,
 		pSignatureBlob->GetBufferPointer(),
 		pSignatureBlob->GetBufferSize(),
-		__uuidof(ID3D12RootSignature), 
-		(void**)&m_pGraphicsRootSignature);
+		IID_PPV_ARGS(&m_pGraphicsRootSignature));
 	assert(SUCCEEDED(hResult) && "CreateRootSignature Failed");
 	// ExptProcess::PrintErrorBlob(pErrorBlob);
 

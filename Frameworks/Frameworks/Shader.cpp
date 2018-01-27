@@ -7,7 +7,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-26
+/// 최종 수정 날짜: 2018-01-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -142,14 +142,14 @@ D3D12_DEPTH_STENCIL_DESC CShader::CreateDepthStencilState()
 
 D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
 {
-	D3D12_SHADER_BYTECODE d3dShaderByteCode;
-	d3dShaderByteCode.BytecodeLength = 0;
-	d3dShaderByteCode.pShaderBytecode = NULL;
+	D3D12_SHADER_BYTECODE shaderByteCode;
+	shaderByteCode.BytecodeLength = 0;
+	shaderByteCode.pShaderBytecode = NULL;
 
-	return(d3dShaderByteCode);
+	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = 0;
@@ -160,7 +160,7 @@ D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
 
 void CShader::CreateShader(CCreateMgr *pCreateMgr)
 {
-	ID3DBlob *pVertexShaderBlob = NULL, *pPixelShaderBlob = NULL;
+	ComPtr<ID3DBlob> pVertexShaderBlob{ NULL }, pPixelShaderBlob{ NULL };
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
 	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
@@ -179,11 +179,9 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr)
 	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	pipelineStateDesc.SampleDesc.Count = 1;
 
-	HRESULT hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(&pipelineStateDesc,
-		__uuidof(ID3D12PipelineState), (void **)&m_ppPipelineStates[0]);
-
-	Safe_Release(pVertexShaderBlob);
-	Safe_Release(pPixelShaderBlob);
+	HRESULT hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&pipelineStateDesc,
+		IID_PPV_ARGS(&m_ppPipelineStates[0]));
 
 	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
 }

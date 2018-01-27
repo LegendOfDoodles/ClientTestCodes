@@ -6,7 +6,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-25
+/// 최종 수정 날짜: 2018-01-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ void CRenderMgr::WaitForGpuComplete()
 {
 	HRESULT hResult;
 	UINT64 fenceValue = ++m_fenceValues[m_swapChainBufferIndex];
-
+	
 	hResult = m_pCommandQueue->Signal(m_pFence, fenceValue);
 	assert(SUCCEEDED(hResult) && "CommandQueue->Signal Failed");
 

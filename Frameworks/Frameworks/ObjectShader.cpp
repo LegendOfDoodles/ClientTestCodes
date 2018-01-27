@@ -7,7 +7,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-12
+/// 최종 수정 날짜: 2018-01-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -96,10 +96,10 @@ void CObjectShader::Render(CCamera *pCamera)
 D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
-	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new
+	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new
 		D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
-	pd3dInputElementDescs[0] = {
+	pInputElementDescs[0] = {
 		"POSITION",
 		0, 
 		DXGI_FORMAT_R32G32B32_FLOAT, 
@@ -108,7 +108,7 @@ D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
 		0 };
 
-	pd3dInputElementDescs[1] = { 
+	pInputElementDescs[1] = { 
 		"COLOR",
 		0, 
 		DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -117,25 +117,25 @@ D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
 		0 };
 
-	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
+	inputLayoutDesc.pInputElementDescs = pInputElementDescs;
+	inputLayoutDesc.NumElements = nInputElementDescs;
 
-	return(d3dInputLayoutDesc);
+	return(inputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
 #if USE_INSTANCING
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSInstancing", "vs_5_1", ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSInstancing", "vs_5_1", ppShaderBlob));
 #else
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSObject", "vs_5_1", ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSObject", "vs_5_1", ppShaderBlob));
 #endif
 }
 
-D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSDiffused", "ps_5_1",	ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSDiffused", "ps_5_1",	ppShaderBlob));
 }
 
 void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)

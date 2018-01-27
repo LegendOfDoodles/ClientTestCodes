@@ -6,7 +6,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-12
+/// 최종 수정 날짜: 2018-01-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -49,22 +49,14 @@ D3D12_INPUT_LAYOUT_DESC CDiffusedShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CDiffusedShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CDiffusedShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(
-		L"Shaders.hlsl",
-		"VSDiffused",
-		"vs_5_1",
-		ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSDiffused", "vs_5_1", ppShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CDiffusedShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CDiffusedShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(
-		L"Shaders.hlsl",
-		"PSDiffused",
-		"ps_5_1",
-		ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSDiffused", "ps_5_1", ppShaderBlob));
 }
 
 void CDiffusedShader::CreateShader(CCreateMgr *pCreateMgr)
