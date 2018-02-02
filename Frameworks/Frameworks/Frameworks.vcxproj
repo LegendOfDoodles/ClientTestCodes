@@ -147,7 +147,10 @@
     <ClInclude Include="AirplanePlayer.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="ExptProcess.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="CreateMgr.h" />
     <ClInclude Include="DiffusedShader.h" />
@@ -156,6 +159,7 @@
     <ClInclude Include="RotatingObject.h" />
     <ClInclude Include="SafeFunc.h" />
     <ClInclude Include="SpaceShipCamera.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="ThirdPersonCamera.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Framework.h" />
@@ -174,14 +178,18 @@
     <ClCompile Include="AirplanePlayer.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="ExptProcess.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="CreateMgr.cpp" />
     <ClCompile Include="DiffusedShader.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="ObjectShader.cpp" />
     <ClCompile Include="RotatingObject.cpp" />
+    <ClCompile Include="SafeFunc.cpp" />
     <ClCompile Include="SpaceShipCamera.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ThirdPersonCamera.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Framework.cpp" />

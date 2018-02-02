@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "CreateMgr.h"
+#include "DDSTextureLoader12.h"
 
 /// <summary>
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-27
+/// 최종 수정 날짜: 2018-02-02
 /// </summary>
-
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
@@ -131,6 +131,21 @@ void CCreateMgr::OnResizeBackBuffers()
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 }
 
+DXGI_MODE_DESC CreateTargetParameters(int width, int height)
+{
+	DXGI_MODE_DESC targetParameters;
+	targetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	targetParameters.Width = width;
+	targetParameters.Height = height;
+	targetParameters.RefreshRate.Numerator = 60;
+	targetParameters.RefreshRate.Denominator = 1;
+	targetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	targetParameters.ScanlineOrdering =
+		DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+
+	return(targetParameters);
+}
+
 void CCreateMgr::ChangeScreenMode()
 {
 	HRESULT hResult;
@@ -141,11 +156,54 @@ void CCreateMgr::ChangeScreenMode()
 
 	if (!fullScreenState)
 	{
-		hResult = m_pSwapChain->ResizeTarget(&CreateTargetParameters());
+		hResult = m_pSwapChain->ResizeTarget(&CreateTargetParameters(m_wndClientWidth, m_wndClientHeight));
 		assert(SUCCEEDED(hResult) && "ResizeTarget Failed");
 	}
 	hResult = m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
 	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
+}
+
+D3D12_HEAP_PROPERTIES CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType)
+{
+	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
+	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
+	heapPropertiesDesc.Type = heapType;
+	heapPropertiesDesc.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapPropertiesDesc.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapPropertiesDesc.CreationNodeMask = 1;
+	heapPropertiesDesc.VisibleNodeMask = 1;
+
+	return(heapPropertiesDesc);
+}
+
+D3D12_RESOURCE_DESC CreateBufferResourceDesc(UINT nBytes)
+{
+	D3D12_RESOURCE_DESC resourceDesc;
+	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Alignment = 0;
+	resourceDesc.Width = nBytes;
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.SampleDesc.Quality = 0;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+	return(resourceDesc);
+}
+
+D3D12_RESOURCE_STATES CreateBufferInitialStates(D3D12_HEAP_TYPE heapType)
+{
+	if (heapType == D3D12_HEAP_TYPE_UPLOAD)
+		return D3D12_RESOURCE_STATE_GENERIC_READ;
+
+	if (heapType == D3D12_HEAP_TYPE_READBACK)
+		return D3D12_RESOURCE_STATE_COPY_DEST;
+
+	return D3D12_RESOURCE_STATE_COPY_DEST;
 }
 
 ID3D12Resource* CCreateMgr::CreateBufferResource(
@@ -190,7 +248,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 				//업로드 버퍼의 내용을 디폴트 버퍼에 복사한다.
 				m_pCommandList->CopyResource(pBuffer, *ppUploadBuffer);
 
-				m_pCommandList->ResourceBarrier(1, &CreateBufferResourceBarrier(pBuffer, resourceStates));
+				m_pCommandList->ResourceBarrier(1, &CreateResourceBarrier(pBuffer, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates));
 			}
 			break;
 		}
@@ -212,42 +270,48 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 	return(pBuffer);
 }
 
-
-////////////////////////////////////////////////////////////////////////
-// 내부 함수
-DXGI_MODE_DESC CCreateMgr::CreateTargetParameters()
+ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
+	wchar_t *pszFileName, 
+	ID3D12Resource **ppUploadBuffer,
+	D3D12_RESOURCE_STATES resourceStates)
 {
-	DXGI_MODE_DESC targetParameters;
-	targetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	targetParameters.Width = m_wndClientWidth;
-	targetParameters.Height = m_wndClientHeight;
-	targetParameters.RefreshRate.Numerator = 60;
-	targetParameters.RefreshRate.Denominator = 1;
-	targetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	targetParameters.ScanlineOrdering =
-		DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	ID3D12Resource *pTexture{ NULL };
+	std::unique_ptr<uint8_t[]> ddsData;
+	std::vector<D3D12_SUBRESOURCE_DATA> vSubresources;
+	DDS_ALPHA_MODE ddsAlphaMode = DDS_ALPHA_MODE_UNKNOWN;
+	bool bIsCubeMap = false;
 
-	return(targetParameters);
-}
+	HRESULT hResult = DirectX::LoadDDSTextureFromFileEx(
+		m_pDevice, 
+		pszFileName, 
+		0, 
+		D3D12_RESOURCE_FLAG_NONE,
+		DDS_LOADER_DEFAULT, 
+		&pTexture, 
+		ddsData, 
+		vSubresources, 
+		&ddsAlphaMode, 
+		&bIsCubeMap);
+	assert(SUCCEEDED(hResult) && "LoadDDSTextureFromFileEx Failed");
 
-D3D12_HEAP_PROPERTIES CCreateMgr::CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType)
-{
 	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
 	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
-	heapPropertiesDesc.Type = heapType;
+	heapPropertiesDesc.Type = D3D12_HEAP_TYPE_UPLOAD;
 	heapPropertiesDesc.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 	heapPropertiesDesc.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 	heapPropertiesDesc.CreationNodeMask = 1;
 	heapPropertiesDesc.VisibleNodeMask = 1;
 
-	return(heapPropertiesDesc);
-}
+	//	D3D12_RESOURCE_DESC d3dResourceDesc = pd3dTexture->GetDesc();
+	//	UINT nSubResources = d3dResourceDesc.DepthOrArraySize * d3dResourceDesc.MipLevels;
+	UINT nSubResources = (UINT)vSubresources.size();
+	//	UINT64 nBytes = 0;
+	//	pd3dDevice->GetCopyableFootprints(&d3dResourceDesc, 0, nSubResources, 0, NULL, NULL, NULL, &nBytes);
+	UINT64 nBytes = GetRequiredIntermediateSize(pTexture, 0, nSubResources);
 
-D3D12_RESOURCE_DESC CCreateMgr::CreateBufferResourceDesc(UINT nBytes)
-{
 	D3D12_RESOURCE_DESC resourceDesc;
 	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER; //Upload Heap에는 텍스쳐를 생성할 수 없음
 	resourceDesc.Alignment = 0;
 	resourceDesc.Width = nBytes;
 	resourceDesc.Height = 1;
@@ -259,77 +323,32 @@ D3D12_RESOURCE_DESC CCreateMgr::CreateBufferResourceDesc(UINT nBytes)
 	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-	return(resourceDesc);
+	hResult = m_pDevice->CreateCommittedResource(
+		&heapPropertiesDesc,
+		D3D12_HEAP_FLAG_NONE, 
+		&resourceDesc, 
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		NULL, 
+		IID_PPV_ARGS(ppUploadBuffer));
+	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
+
+	//UINT nSubResources = (UINT)vSubresources.size();
+	//D3D12_SUBRESOURCE_DATA *pd3dSubResourceData = new D3D12_SUBRESOURCE_DATA[nSubResources];
+	//for (UINT i = 0; i < nSubResources; i++) pd3dSubResourceData[i] = vSubresources.at(i);
+
+	//	std::vector<D3D12_SUBRESOURCE_DATA>::pointer ptr = &vSubresources[0];
+	::UpdateSubresources(m_pCommandList, pTexture, *ppUploadBuffer, 0, 0, nSubResources, &vSubresources[0]);
+
+	m_pCommandList->ResourceBarrier(1, &CreateResourceBarrier(pTexture, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates));
+
+	//	delete[] pd3dSubResourceData;
+
+	return(pTexture);
 }
 
-D3D12_RESOURCE_STATES CCreateMgr::CreateBufferInitialStates(D3D12_HEAP_TYPE heapType)
-{
-	if (heapType == D3D12_HEAP_TYPE_UPLOAD)
-		return D3D12_RESOURCE_STATE_GENERIC_READ;
 
-	if (heapType == D3D12_HEAP_TYPE_READBACK)
-		return D3D12_RESOURCE_STATE_COPY_DEST;
-
-	return D3D12_RESOURCE_STATE_COPY_DEST;
-}
-
-D3D12_RESOURCE_BARRIER CCreateMgr::CreateBufferResourceBarrier(
-	ID3D12Resource *pBuffer, D3D12_RESOURCE_STATES resourceStates)
-{
-	D3D12_RESOURCE_BARRIER resourceBarrier;
-	::ZeroMemory(&resourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
-	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	resourceBarrier.Transition.pResource = pBuffer;
-	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	resourceBarrier.Transition.StateAfter = resourceStates;
-	resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-	return(resourceBarrier);
-}
-
-D3D12_HEAP_PROPERTIES CCreateMgr::CreateDepthStencilHeapProperties()
-{
-	D3D12_HEAP_PROPERTIES heapProperties;
-	::ZeroMemory(&heapProperties, sizeof(D3D12_HEAP_PROPERTIES));
-	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProperties.CreationNodeMask = 1;
-	heapProperties.VisibleNodeMask = 1;
-
-	return(heapProperties);
-}
-
-D3D12_RESOURCE_DESC CCreateMgr::CreateDepthStencilResourceDesc()
-{
-	D3D12_RESOURCE_DESC resourceDesc;
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	resourceDesc.Alignment = 0;
-	resourceDesc.Width = m_wndClientWidth;
-	resourceDesc.Height = m_wndClientHeight;
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.MipLevels = 1;
-	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	resourceDesc.SampleDesc.Count = (m_msaa4xEnable) ? 4 : 1;
-	resourceDesc.SampleDesc.Quality =
-		(m_msaa4xEnable) ? (m_msaa4xQualityLevels - 1) : 0;
-	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-
-	return(resourceDesc);
-}
-
-D3D12_CLEAR_VALUE CCreateMgr::CreateDepthStencilClearValue()
-{
-	D3D12_CLEAR_VALUE clearValue;
-	clearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	clearValue.DepthStencil.Depth = 1.0f;
-	clearValue.DepthStencil.Stencil = 0;
-
-	return(clearValue);
-}
-
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
 DXGI_SWAP_CHAIN_DESC CCreateMgr::CreateSwapChainDesc()
 {
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -412,6 +431,9 @@ void CCreateMgr::CreateDirect3dDevice()
 	assert(SUCCEEDED(hResult) && "CreateFence Failed");
 
 	m_renderMgr.SetFence(m_pFence);
+
+	// Save CbvSrvDescriptorIncrementSize
+	m_cbvSrvDescriptorIncrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	if (pAdapter) pAdapter->Release();
 }
@@ -508,13 +530,59 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	m_renderMgr.SetDsvDescriptorHeap(m_pDsvDescriptorHeap);
 }
 
+D3D12_HEAP_PROPERTIES CreateDepthStencilHeapProperties()
+{
+	D3D12_HEAP_PROPERTIES heapProperties;
+	::ZeroMemory(&heapProperties, sizeof(D3D12_HEAP_PROPERTIES));
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProperties.CreationNodeMask = 1;
+	heapProperties.VisibleNodeMask = 1;
+
+	return(heapProperties);
+}
+
+D3D12_RESOURCE_DESC CreateDepthStencilResourceDesc(int width, int height, bool massEnable, UINT massLevel)
+{
+	D3D12_RESOURCE_DESC resourceDesc;
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	resourceDesc.Alignment = 0;
+	resourceDesc.Width = width;
+	resourceDesc.Height = height;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	resourceDesc.SampleDesc.Count = (massEnable) ? 4 : 1;
+	resourceDesc.SampleDesc.Quality =
+		(massEnable) ? (massLevel - 1) : 0;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+	return(resourceDesc);
+}
+
+D3D12_CLEAR_VALUE CreateDepthStencilClearValue()
+{
+	D3D12_CLEAR_VALUE clearValue;
+	clearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	clearValue.DepthStencil.Depth = 1.0f;
+	clearValue.DepthStencil.Stencil = 0;
+
+	return(clearValue);
+}
+
 void CCreateMgr::CreateDepthStencilView()
 {
 	HRESULT hResult;
 
 	// Create Depth Stencil Buffer
-	hResult = m_pDevice->CreateCommittedResource(&CreateDepthStencilHeapProperties(), D3D12_HEAP_FLAG_NONE,
-		&CreateDepthStencilResourceDesc(), D3D12_RESOURCE_STATE_DEPTH_WRITE, &CreateDepthStencilClearValue(),
+	hResult = m_pDevice->CreateCommittedResource(
+		&CreateDepthStencilHeapProperties(), 
+		D3D12_HEAP_FLAG_NONE,
+		&CreateDepthStencilResourceDesc(m_wndClientWidth, m_wndClientHeight, m_msaa4xEnable, m_msaa4xQualityLevels),
+		D3D12_RESOURCE_STATE_DEPTH_WRITE, 
+		&CreateDepthStencilClearValue(),
 		IID_PPV_ARGS(&m_pDepthStencilBuffer));
 	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
 
@@ -548,7 +616,15 @@ void CCreateMgr::CreateGraphicsRootSignature()
 {
 	HRESULT hResult;
 
-	D3D12_ROOT_PARAMETER pRootParameters[3];
+	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[1];
+
+	pDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pDescriptorRanges[0].NumDescriptors = 1;
+	pDescriptorRanges[0].BaseShaderRegister = 1; //Texture
+	pDescriptorRanges[0].RegisterSpace = 0;
+	pDescriptorRanges[0].OffsetInDescriptorsFromTableStart = 0;
+
+	D3D12_ROOT_PARAMETER pRootParameters[4];
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[0].Descriptor.ShaderRegister = 0; //Player
 	pRootParameters[0].Descriptor.RegisterSpace = 0;
@@ -571,6 +647,26 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 #endif
 
+	pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[3].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[0]; //Texture
+	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	D3D12_STATIC_SAMPLER_DESC samplerDesc;
+	::ZeroMemory(&samplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
+	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.MipLODBias = 0;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
+	samplerDesc.ShaderRegister = 0;
+	samplerDesc.RegisterSpace = 0;
+	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
 	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
@@ -583,8 +679,8 @@ void CCreateMgr::CreateGraphicsRootSignature()
 
 	rootSignatureDesc.NumParameters = _countof(pRootParameters);
 	rootSignatureDesc.pParameters = pRootParameters;
-	rootSignatureDesc.NumStaticSamplers = 0;
-	rootSignatureDesc.pStaticSamplers = NULL;
+	rootSignatureDesc.NumStaticSamplers = 1;
+	rootSignatureDesc.pStaticSamplers = &samplerDesc;
 	rootSignatureDesc.Flags = rootSignatureFlags;
 
 	ComPtr<ID3DBlob> pSignatureBlob{ NULL };		ComPtr<ID3DBlob> pErrorBlob{ NULL };

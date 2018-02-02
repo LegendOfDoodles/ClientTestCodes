@@ -2,12 +2,13 @@
 #include "ObjectShader.h"
 #include "RotatingObject.h"
 #include "CreateMgr.h"
+#include "Material.h"
 
 /// <summary>
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-27
+/// 최종 수정 날짜: 2018-02-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -31,6 +32,9 @@ void CObjectShader::ReleaseUploadBuffers()
 	{
 		m_ppObjects[j]->ReleaseUploadBuffers();
 	}
+#if USE_INSTANCING
+	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+#endif
 }
 
 void CObjectShader::UpdateShaderVariables()
@@ -75,6 +79,7 @@ void CObjectShader::Render(CCamera *pCamera)
 	UpdateShaderVariables();
 
 #if USE_INSTANCING
+	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
 	m_ppObjects[0]->Render(pCamera, m_nObjects);
 #else
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -182,6 +187,8 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
+	CreateShaderVariables(pCreateMgr);
+
 	float fxPitch = 12.0f * 2.5f;
 	float fyPitch = 12.0f * 2.5f;
 	float fzPitch = 12.0f * 2.5f;
@@ -209,7 +216,6 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if USE_INSTANCING
 	m_ppObjects[0]->SetMesh(pCubeMesh);
 #endif
-	CreateShaderVariables(pCreateMgr);
 }
 
 void CObjectShader::ReleaseShaderVariables()
@@ -236,4 +242,8 @@ void CObjectShader::ReleaseObjects()
 		Safe_Delete(m_ppObjects[j]);
 	}
 	Safe_Delete_Array(m_ppObjects);
+
+#if USE_INSTANCING
+	Safe_Delete(m_pMaterial);
+#endif
 }

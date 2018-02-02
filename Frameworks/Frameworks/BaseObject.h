@@ -4,6 +4,7 @@
 class CCreateMgr;
 class CShader;
 class CCamera;
+class CMaterial;
 
 class CBaseObject
 {
@@ -17,8 +18,9 @@ public: // 공개 함수
 
 	void ReleaseUploadBuffers();
 
-	virtual void SetMesh(CMesh *pMesh);
-	virtual void SetShader(CShader *pShader);
+	void SetMesh(CMesh *pMesh);
+	void SetShader(CShader *pShader);
+	void SetMaterial(CMaterial *pMaterial);
 
 	virtual void Animate(float timeElapsed);
 
@@ -58,6 +60,7 @@ protected: // 변수
 	CMesh *m_pMesh{ NULL };
 
 	CShader *m_pShader{ NULL };
+	CMaterial	 *m_pMaterial{ NULL };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

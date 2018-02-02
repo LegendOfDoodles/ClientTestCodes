@@ -35,3 +35,10 @@ inline void Safe_Release(T& p)
 	p->Release();
 	p = NULL;
 }
+
+////////////////////////////////////////////////////////////////////////
+// 전역 함수
+D3D12_RESOURCE_BARRIER CreateResourceBarrier(
+	ID3D12Resource *pBuffer,
+	D3D12_RESOURCE_STATES before,
+	D3D12_RESOURCE_STATES after);

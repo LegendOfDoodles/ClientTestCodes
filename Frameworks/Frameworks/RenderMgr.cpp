@@ -44,10 +44,10 @@ void CRenderMgr::Render(CScene* pScene)
 	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
 
 	// Set Barrier
-	D3D12_RESOURCE_BARRIER resourceBarrier{ CreateResourceBarrier() };
-	SetResourceBarrier(resourceBarrier, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	m_pCommandList->ResourceBarrier(1, &resourceBarrier);
+	m_pCommandList->ResourceBarrier(	1, 
+		&CreateResourceBarrier(m_ppRenderTargetBuffers[m_swapChainBufferIndex], 
+			D3D12_RESOURCE_STATE_PRESENT,
+			D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	// Set Viewport and Scissor Rect
 	pScene->SetViewportsAndScissorRects();
@@ -87,9 +87,10 @@ void CRenderMgr::Render(CScene* pScene)
 	pScene->Render();
 
 	// Set Barrier
-	SetResourceBarrier(resourceBarrier, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-
-	m_pCommandList->ResourceBarrier(1, &resourceBarrier);
+	m_pCommandList->ResourceBarrier(1, 
+		&CreateResourceBarrier(m_ppRenderTargetBuffers[m_swapChainBufferIndex],
+			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_PRESENT));
 
 	// Close Command List
 	hResult = m_pCommandList->Close();
@@ -162,25 +163,25 @@ void CRenderMgr::ExecuteCommandList()
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-D3D12_RESOURCE_BARRIER CRenderMgr::CreateResourceBarrier()
-{
-	D3D12_RESOURCE_BARRIER resourceBarrier;
-
-	::ZeroMemory(&resourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
-	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	resourceBarrier.Transition.pResource =
-		m_ppRenderTargetBuffers[m_swapChainBufferIndex];
-	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	resourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-	return(resourceBarrier);
-}
-
-void CRenderMgr::SetResourceBarrier(D3D12_RESOURCE_BARRIER &resourceBarrier,
-	D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
-{
-	resourceBarrier.Transition.StateBefore = before;
-	resourceBarrier.Transition.StateAfter = after;
-}
+//D3D12_RESOURCE_BARRIER CRenderMgr::CreateResourceBarrier()
+//{
+//	D3D12_RESOURCE_BARRIER resourceBarrier;
+//
+//	::ZeroMemory(&resourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
+//	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+//	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+//	resourceBarrier.Transition.pResource =
+//		m_ppRenderTargetBuffers[m_swapChainBufferIndex];
+//	resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+//	resourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+//	resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+//
+//	return(resourceBarrier);
+//}
+//
+//void CRenderMgr::SetResourceBarrier(D3D12_RESOURCE_BARRIER &resourceBarrier,
+//	D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+//{
+//	resourceBarrier.Transition.StateBefore = before;
+//	resourceBarrier.Transition.StateAfter = after;
+//}

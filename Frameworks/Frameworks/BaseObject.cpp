@@ -3,6 +3,7 @@
 #include "CreateMgr.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Material.h"
 
 /// <summary>
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
@@ -24,6 +25,7 @@ CBaseObject::~CBaseObject()
 {
 	Safe_Release(m_pMesh);
 	if (m_pShader){ m_pShader->Finalize(); }
+	if (m_pMaterial) m_pMaterial->Finalize();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -41,6 +43,7 @@ void CBaseObject::Finalize()
 void CBaseObject::ReleaseUploadBuffers()
 {
 	if (m_pMesh) { m_pMesh->ReleaseUploadBuffers(); }
+	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
 }
 
 void CBaseObject::SetMesh(CMesh *pMesh)
@@ -55,6 +58,19 @@ void CBaseObject::SetShader(CShader *pShader)
 	if (m_pShader) m_pShader->Release();
 	m_pShader = pShader;
 	if (m_pShader) m_pShader->AddRef();
+	//if (!m_pMaterial)
+	//{
+	//	CMaterial *pMaterial = new CMaterial();
+	//	SetMaterial(pMaterial);
+	//}
+	//if (m_pMaterial) m_pMaterial->SetShader(pShader);
+}
+
+void CBaseObject::SetMaterial(CMaterial *pMaterial)
+{
+	if (m_pMaterial) m_pMaterial->Release();
+	m_pMaterial = pMaterial;
+	if (m_pMaterial) m_pMaterial->AddRef();
 }
 
 void CBaseObject::Animate(float timeElapsed)

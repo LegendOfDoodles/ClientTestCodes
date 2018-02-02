@@ -1,4 +1,6 @@
 #define USE_INSTANCING 1
+Texture2D gtxtTexture : register(t1);
+SamplerState wrapSampler : register(s0);
 
 //게임 객체의 정보를 위한 상수 버퍼를 선언한다.
 cbuffer cbPlayerInfo : register(b0)
@@ -55,8 +57,7 @@ struct INSTANCEDGAMEOBJECTINFO
 
 StructuredBuffer<INSTANCEDGAMEOBJECTINFO> gGameObjectInfos : register(t0);
 
-VS_OUTPUT VSInstancing(VS_INPUT input, uint nInstanceID :
-SV_InstanceID)
+VS_OUTPUT VSInstancing(VS_INPUT input, uint nInstanceID : SV_InstanceID)
 {
 	VS_OUTPUT output;
 	output.position = mul(mul(mul(float4(input.position, 1.0f),
@@ -81,3 +82,6 @@ VS_OUTPUT VSObject(VS_INPUT input)
 }
 #endif
 
+///////////////////////////////////////////////////////////////////////////////////////////
+//
+//

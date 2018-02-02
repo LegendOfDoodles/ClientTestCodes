@@ -102,6 +102,18 @@
     <Filter Include="소스 파일\00.Global\01.Utility\01.Exception">
       <UniqueIdentifier>{d15e1826-69cc-4b10-bc69-2791b15f4841}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\02.TextureLoader">
+      <UniqueIdentifier>{23d983c5-7b2a-4629-a753-841d31bb9174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\99.Material">
+      <UniqueIdentifier>{125304f7-0a09-40e2-95ae-1c8261bfd91b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\99.Material\00.Texture">
+      <UniqueIdentifier>{f1e382fe-91e1-44f9-bb85-2970bef4a982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\03.SafeFunc">
+      <UniqueIdentifier>{eeb7ccce-7b48-4171-87a3-131c360d4cf9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -152,9 +164,6 @@
     <ClInclude Include="DiffusedShader.h">
       <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
     </ClInclude>
-    <ClInclude Include="SafeFunc.h">
-      <Filter>소스 파일\00.Global\01.Utility</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectShader.h">
       <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
     </ClInclude>
@@ -178,6 +187,21 @@
     </ClInclude>
     <ClInclude Include="ExptProcess.h">
       <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>소스 파일\05.Objects\99.Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SafeFunc.h">
+      <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +267,18 @@
     </ClCompile>
     <ClCompile Include="ExptProcess.cpp">
       <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>소스 파일\05.Objects\99.Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SafeFunc.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

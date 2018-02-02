@@ -76,3 +76,21 @@ public:	// 생성자, 소멸자
 		XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f));
 	virtual ~CAirplaneMeshDiffused();
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 텍스처 메쉬
+class CMeshTextured : public CMesh
+{
+public:
+	CMeshTextured(CCreateMgr *pCreateMgr);
+	virtual ~CMeshTextured();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 텍스처 상자 메쉬
+class CCubeMeshTextured : public CMeshTextured
+{
+public:
+	CCubeMeshTextured(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMeshTextured();
+};

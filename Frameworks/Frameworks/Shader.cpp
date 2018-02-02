@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "CreateMgr.h"
 #include "Camera.h"
+#include "Texture.h"
 
 /// <summary>
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
@@ -138,6 +139,107 @@ D3D12_DEPTH_STENCIL_DESC CShader::CreateDepthStencilState()
 	depthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
 
 	return(depthStencilDesc);
+}
+
+void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews)
+{
+	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
+	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc;
+	descriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
+	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	descriptorHeapDesc.NodeMask = 0;
+	pCreateMgr->GetDevice()->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&m_pCbvSrvDescriptorHeap));
+
+	m_cbvCPUDescriptorStartHandle = m_pCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	m_cbvGPUDescriptorStartHandle = m_pCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	m_srvCPUDescriptorStartHandle.ptr = m_cbvCPUDescriptorStartHandle.ptr + (incrementSize * nConstantBufferViews);
+	m_srvGPUDescriptorStartHandle.ptr = m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * nConstantBufferViews);
+}
+
+void CShader::CreateConstantBufferViews(
+	CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pd3dConstantBuffers, UINT nStride)
+{
+	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
+	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pd3dConstantBuffers->GetGPUVirtualAddress();
+	D3D12_CONSTANT_BUFFER_VIEW_DESC CBVDesc;
+	CBVDesc.SizeInBytes = nStride;
+	for (int j = 0; j < nConstantBufferViews; j++)
+	{
+		CBVDesc.BufferLocation = gpuVirtualAddress + (nStride * j);
+		D3D12_CPU_DESCRIPTOR_HANDLE cbvCPUDescriptorHandle;
+		cbvCPUDescriptorHandle.ptr = m_cbvCPUDescriptorStartHandle.ptr + (incrementSize * j);
+		pCreateMgr->GetDevice()->CreateConstantBufferView(&CBVDesc, cbvCPUDescriptorHandle);
+	}
+}
+
+void GetShaderResourceViewDesc(
+	D3D12_RESOURCE_DESC resourceDesc, 
+	UINT nTextureType, 
+	D3D12_SHADER_RESOURCE_VIEW_DESC *pShaderResourceViewDesc)
+{
+	pShaderResourceViewDesc->Format = resourceDesc.Format;
+	pShaderResourceViewDesc->Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	switch (nTextureType)
+	{
+	case RESOURCE_TEXTURE_2D: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize == 1)
+		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		pShaderResourceViewDesc->Texture2D.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2D.MostDetailedMip = 0;
+		pShaderResourceViewDesc->Texture2D.PlaneSlice = 0;
+		pShaderResourceViewDesc->Texture2D.ResourceMinLODClamp = 0.0f;
+		break;
+	case RESOURCE_TEXTURE_2D_ARRAY: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize != 1)
+		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+		pShaderResourceViewDesc->Texture2DArray.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2DArray.MostDetailedMip = 0;
+		pShaderResourceViewDesc->Texture2DArray.PlaneSlice = 0;
+		pShaderResourceViewDesc->Texture2DArray.ResourceMinLODClamp = 0.0f;
+
+		pShaderResourceViewDesc->Texture2DArray.MostDetailedMip = 0;
+		pShaderResourceViewDesc->Texture2DArray.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2DArray.FirstArraySlice = 0;
+		pShaderResourceViewDesc->Texture2DArray.ArraySize = resourceDesc.DepthOrArraySize;
+		pShaderResourceViewDesc->Texture2DArray.PlaneSlice = 1;
+		pShaderResourceViewDesc->Texture2DArray.ResourceMinLODClamp = 0.0f;
+		break;
+	case RESOURCE_TEXTURE_CUBE: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize == 6)
+		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+		pShaderResourceViewDesc->TextureCube.MipLevels = 1;
+		pShaderResourceViewDesc->TextureCube.MostDetailedMip = 0;
+		pShaderResourceViewDesc->TextureCube.ResourceMinLODClamp = 0.0f;
+		break;
+	case RESOURCE_BUFFER: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_BUFFER)
+		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		pShaderResourceViewDesc->Buffer.FirstElement = 0;
+		pShaderResourceViewDesc->Buffer.NumElements = 0;
+		pShaderResourceViewDesc->Buffer.StructureByteStride = 0;
+		pShaderResourceViewDesc->Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+		break;
+	}
+}
+
+void CShader::CreateShaderResourceViews(
+	CCreateMgr *pCreateMgr, CTexture *pTexture, 
+	UINT nRootParameterStartIndex, bool bAutoIncrement)
+{
+	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
+	D3D12_CPU_DESCRIPTOR_HANDLE srvCPUDescriptorHandle = m_srvCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle = m_srvGPUDescriptorStartHandle;
+	D3D12_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	int nTextures = pTexture->GetTextureCount();
+	int nTextureType = pTexture->GetTextureType();
+	for (int i = 0; i < nTextures; i++)
+	{
+		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		D3D12_RESOURCE_DESC resourceDesc = pShaderResource->GetDesc();
+		GetShaderResourceViewDesc(resourceDesc, nTextureType, &shaderResourceViewDesc);
+		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource, &shaderResourceViewDesc, srvCPUDescriptorHandle);
+		srvCPUDescriptorHandle.ptr += incrementSize;
+
+		pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, srvGPUDescriptorHandle);
+		srvGPUDescriptorHandle.ptr += incrementSize;
+	}
 }
 
 D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
