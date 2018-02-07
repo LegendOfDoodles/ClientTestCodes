@@ -8,7 +8,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-02
+/// 최종 수정 날짜: 2018-02-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -58,8 +58,6 @@ void CObjectShader::UpdateShaderVariables()
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, 
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-		pMappedObject->m_xmcColor =
-			(i % 2) ? XMFLOAT4(0.5f, 0.0f, 0.0f, 0.0f) : XMFLOAT4(0.0f, 0.0f, 0.5f, 0.0f);
 	}
 #endif
 }
@@ -76,22 +74,13 @@ void CObjectShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 
-	UpdateShaderVariables();
-
 #if USE_INSTANCING
 	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
 	m_ppObjects[0]->Render(pCamera, m_nObjects);
 #else
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-	static D3D12_GPU_VIRTUAL_ADDRESS gpuAddress = m_pConstBuffer->GetGPUVirtualAddress();
-
-	for (int i = 0; i < m_nObjects; i++)
+	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppObjects[i])
-		{
-			m_pCommandList->SetGraphicsRootConstantBufferView(2, gpuAddress + (i * elementBytes));
-			m_ppObjects[i]->Render(pCamera);
-		}
+		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 #endif
 }
@@ -113,13 +102,13 @@ D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
 		0 };
 
-	pInputElementDescs[1] = { 
-		"COLOR",
-		0, 
-		DXGI_FORMAT_R32G32B32A32_FLOAT,
-		0, 
+	pInputElementDescs[1] ={
+		"TEXCOORD", 
+		0,
+		DXGI_FORMAT_R32G32_FLOAT,
+		0,
 		12,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
 		0 };
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
@@ -134,13 +123,13 @@ D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 #if USE_INSTANCING
 	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSInstancing", "vs_5_1", ppShaderBlob));
 #else
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSObject", "vs_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSTextured", "vs_5_1", ppShaderBlob));
 #endif
 }
 
 D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSDiffused", "ps_5_1",	ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSTextured", "ps_5_1",	ppShaderBlob));
 }
 
 void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
@@ -153,6 +142,8 @@ void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 
 void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
+	HRESULT hResult;
+
 #if USE_INSTANCING
 	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
@@ -172,7 +163,8 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
 
-	m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
+	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
+	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
 #endif
 
 	
@@ -180,18 +172,31 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	CCubeMeshDiffused *pCubeMesh = new CCubeMeshDiffused(pCreateMgr, 12.0f, 12.0f, 12.0f);
-
 	int xObjects = 10, yObjects = 10, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
+	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D, 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Stones.dds", 0);
+
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
 	CreateShaderVariables(pCreateMgr);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);
+
+	CMaterial *pCubeMaterial = new CMaterial();
+	pCubeMaterial->SetTexture(pTexture);
+
+	CCubeMeshTextured *pCubeMesh = new CCubeMeshTextured(pCreateMgr, 12.0f, 12.0f, 12.0f);
 
 	float fxPitch = 12.0f * 2.5f;
 	float fyPitch = 12.0f * 2.5f;
 	float fzPitch = 12.0f * 2.5f;
+
+	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 
 	CRotatingObject *pRotatingObject = NULL;
 	for (int x = -xObjects; x <= xObjects; x++)
@@ -202,12 +207,13 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			{
 				pRotatingObject = new CRotatingObject(pCreateMgr);
 #if !USE_INSTANCING
-				pRotatingObject->SetMesh(pCubeMesh);
+				pRotatingObject->SetMesh(0, pCubeMesh);
+				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 				pRotatingObject->SetPosition(fxPitch*x, fyPitch*y, fzPitch*z);
 				pRotatingObject->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 0.0f));
 				pRotatingObject->SetRotationSpeed(10.0f*(i % 10) + 3.0f);
-
+				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 				m_ppObjects[i++] = pRotatingObject;
 			}
 		}
@@ -231,6 +237,8 @@ void CObjectShader::ReleaseShaderVariables()
 	m_pConstBuffer->Unmap(0, NULL);
 	Safe_Release(m_pConstBuffer);
 #endif
+
+	CShader::ReleaseShaderVariables();
 }
 
 void CObjectShader::ReleaseObjects()

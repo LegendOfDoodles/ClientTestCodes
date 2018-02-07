@@ -6,7 +6,7 @@
 /// 목적: 텍스처에 필요한 처리 담당하는 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-02
+/// 최종 수정 날짜: 2018-02-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,6 @@ CTexture::~CTexture()
 void CTexture::Finalize()
 {
 	ReleaseShaderVariables();
-	Release();
 }
 
 void CTexture::ReleaseUploadBuffers()
@@ -67,7 +66,7 @@ void CTexture::ReleaseUploadBuffers()
 void CTexture::SetRootArgument(int nIndex, UINT nRootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE srvGpuDescriptorHandle)
 {
 	m_pRootArgumentInfos[nIndex].m_nRootParameterIndex = nRootParameterIndex;
-	m_pRootArgumentInfos[nIndex].m_d3dSrvGpuDescriptorHandle = srvGpuDescriptorHandle;
+	m_pRootArgumentInfos[nIndex].m_srvGpuDescriptorHandle = srvGpuDescriptorHandle;
 }
 
 void CTexture::SetSampler(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE samplerGpuDescriptorHandle)
@@ -79,13 +78,13 @@ void CTexture::UpdateShaderVariables()
 {
 	for (int i = 0; i < m_nTextures; i++)
 	{
-		m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[i].m_nRootParameterIndex, m_pRootArgumentInfos[i].m_d3dSrvGpuDescriptorHandle);
+		m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[i].m_nRootParameterIndex, m_pRootArgumentInfos[i].m_srvGpuDescriptorHandle);
 	}
 }
 
 void CTexture::UpdateShaderVariable(int nIndex)
 {
-	m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[nIndex].m_nRootParameterIndex, m_pRootArgumentInfos[nIndex].m_d3dSrvGpuDescriptorHandle);
+	m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[nIndex].m_nRootParameterIndex, m_pRootArgumentInfos[nIndex].m_srvGpuDescriptorHandle);
 }
 
 void CTexture::LoadTextureFromFile(CCreateMgr *pCreateMgr, wchar_t *pszFileName, UINT nIndex)

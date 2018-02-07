@@ -15,14 +15,20 @@ public: // 공개 함수
 
 	void UpdateShaderVariables();
 
+	void Render(CCamera *pCamera);
+
 	void SetTexture(CTexture *pTexture);
 	void SetShader(CShader *pShader);
 
 	void SetAlbedo(XMFLOAT4 xmf4Albedo) { m_xmf4Albedo = xmf4Albedo; }
 	void SetReflection(UINT nReflection) { m_nReflection = nReflection; }
 
+	UINT GetReflectionNum() { return m_nReflection; }
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
+
+	bool HaveShader() { return m_pShader != NULL; }
 
 protected: // 내부 함수
 

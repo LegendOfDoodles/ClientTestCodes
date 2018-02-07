@@ -3,12 +3,6 @@
 
 class CMaterial;
 
-struct CB_GAMEOBJECT_INFO
-{
-	XMFLOAT4X4 m_xmf4x4World;
-	XMFLOAT4 m_xmcColor;
-};
-
 class CObjectShader : public CShader
 {
 public: // 持失切, 社瑚切

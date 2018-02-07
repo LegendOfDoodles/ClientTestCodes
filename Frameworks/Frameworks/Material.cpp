@@ -5,7 +5,7 @@
 /// 목적: 텍스처, 알베도, 재질 등 정리용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-02
+/// 최종 수정 날짜: 2018-02-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,13 @@ void CMaterial::ReleaseUploadBuffers()
 
 void CMaterial::UpdateShaderVariables()
 {
+	if (m_pShader) m_pShader->UpdateShaderVariables();
 	if (m_pTexture) m_pTexture->UpdateShaderVariables();
+}
+
+void CMaterial::Render(CCamera *pCamera)
+{
+	if(m_pShader) m_pShader->Render(pCamera);
 }
 
 void CMaterial::SetTexture(CTexture *pTexture)

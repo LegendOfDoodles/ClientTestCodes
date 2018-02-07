@@ -18,7 +18,7 @@ CAirplanePlayer::CAirplanePlayer(CCreateMgr *pCreateMgr)
 	CMesh *pAirplaneMesh = new CAirplaneMeshDiffused(pCreateMgr,
 		20.0f, 20.0f, 4.0f, XMFLOAT4(0.0f, 0.5f, 0.0f, 0.0f));
 
-	SetMesh(pAirplaneMesh);
+	SetMesh(0, pAirplaneMesh);
 	m_pCamera = ChangeCamera(pCreateMgr, SPACESHIP_CAMERA, 0.0f);
 
 	CreateShaderVariables(pCreateMgr);

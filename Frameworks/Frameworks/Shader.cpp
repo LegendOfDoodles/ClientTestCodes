@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-27
+/// 최종 수정 날짜: 2018-02-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -280,10 +280,12 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr)
 	pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	pipelineStateDesc.SampleDesc.Count = 1;
+	pipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
 	HRESULT hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
 		IID_PPV_ARGS(&m_ppPipelineStates[0]));
+	assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
 
 	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
 }
@@ -298,6 +300,8 @@ void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CShader::ReleaseShaderVariables()
 {
+	if (!m_pCbvSrvDescriptorHeap) return;
+	Safe_Release(m_pCbvSrvDescriptorHeap);
 }
 
 void CShader::ReleaseObjects()
@@ -308,6 +312,9 @@ void CShader::OnPrepareRender()
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
 	m_pCommandList->SetPipelineState(m_ppPipelineStates[0]);
+	m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeap);
+
+	UpdateShaderVariables();
 }
 
 D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
