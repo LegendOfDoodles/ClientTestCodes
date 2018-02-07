@@ -1,4 +1,4 @@
-#define USE_INSTANCING 0
+#define USE_INSTANCING 1
 Texture2D gtxtTexture : register(t0);
 SamplerState wrapSampler : register(s0);
 
@@ -15,11 +15,21 @@ cbuffer cbCameraInfo : register(b1)
 	matrix gmtxProjection : packoffset(c4);
 };
 
+#if USE_INSTANCING
+struct INSTANCE_INFO
+{
+	matrix m_mtxGameObject;
+	uint	  m_nMaterial;
+};
+
+StructuredBuffer<INSTANCE_INFO> gGameObjectInfos : register(t1);
+#else
 cbuffer cbGameObjectInfo : register(b2)
 {
 	matrix		gmtxGameObject : packoffset(c0);
 	uint		gnMaterial : packoffset(c4);
 };
+#endif
 
 //정점 셰이더의 입력을 위한 구조체를 선언한다.
 struct VS_INPUT
@@ -54,7 +64,6 @@ float4 PSDiffused(VS_OUTPUT input) : SV_TARGET
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 //
-//
 struct VS_TEXTURED_INPUT
 {
 	float3 position : POSITION;
@@ -67,6 +76,17 @@ struct VS_TEXTURED_OUTPUT
 	float2 uv : TEXCOORD;
 };
 
+#if USE_INSTANCING
+VS_TEXTURED_OUTPUT VSTxtInstancing(VS_TEXTURED_INPUT input, uint nInstanceID : SV_InstanceID)
+{
+	VS_TEXTURED_OUTPUT output;
+
+	output.position = mul(mul(mul(float4(input.position, 1.0f), gGameObjectInfos[nInstanceID].m_mtxGameObject), gmtxView), gmtxProjection);
+	output.uv = input.uv;
+
+	return(output);
+}
+#else
 VS_TEXTURED_OUTPUT VSTextured(VS_TEXTURED_INPUT input)
 {
 	VS_TEXTURED_OUTPUT output;
@@ -76,6 +96,7 @@ VS_TEXTURED_OUTPUT VSTextured(VS_TEXTURED_INPUT input)
 
 	return(output);
 }
+#endif
 
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 {
@@ -84,3 +105,5 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 	return(cColor);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+//

@@ -1,1 +1,29 @@
-﻿  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+﻿  stdafx.cpp
+  Vertex.cpp
+  Timer.cpp
+  ThirdPersonCamera.cpp
+  Texture.cpp
+  SpaceShipCamera.cpp
+  Shader.cpp
+  Scene.cpp
+  SafeFunc.cpp
+  RotatingObject.cpp
+  RenderMgr.cpp
+  Player.cpp
+  ObjectShader.cpp
+  Mesh.cpp
+  Material.cpp
+  Framework01.cpp
+  Framework.cpp
+  FirstPersonCamera.cpp
+  ExptProcess.cpp
+  DiffusedShader.cpp
+  DDSTextureLoader12.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  CreateMgr.cpp
+  Camera.cpp
+  BaseObject.cpp
+  AirplanePlayer.cpp
+  코드를 생성하고 있습니다...
+  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

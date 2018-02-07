@@ -65,6 +65,10 @@ protected: // º¯¼ö
 	ID3D12Resource *m_pConstBuffer{ NULL };
 #endif
 
+#if USE_BATCH_MATERIAL
+	CMaterial						*m_pMaterial{ NULL };
+#endif
+
 	ID3D12DescriptorHeap			*m_pCbvSrvDescriptorHeap{ NULL };
 
 	D3D12_CPU_DESCRIPTOR_HANDLE		m_cbvCPUDescriptorStartHandle;

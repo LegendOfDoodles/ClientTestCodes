@@ -119,7 +119,7 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 	{
 		for (int i = 0; i < m_nMeshes; i++)
 		{
-			if (m_ppMeshes[i]) m_ppMeshes[i]->Render();
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
 		}
 	}
 }
