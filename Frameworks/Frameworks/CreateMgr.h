@@ -22,6 +22,11 @@ public:	// 공개 함수
 		D3D12_RESOURCE_STATES d3dResourceStates = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		ID3D12Resource **ppd3dUploadBuffer = NULL);
 
+	ID3D12Resource *CreateTextureResourceFromFile(
+		wchar_t *pszFileName, 
+		ID3D12Resource **ppUploadBuffer, 
+		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
 	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
 
 	ID3D12Device* GetDevice() { return m_pDevice; }
@@ -34,18 +39,9 @@ public:	// 공개 함수
 	int GetWindowWidth() { return m_wndClientWidth; }
 	int GetWindowHeight() { return m_wndClientHeight; }
 
-private:	// 내부 함수
-	DXGI_MODE_DESC CreateTargetParameters();
+	UINT GetCbvSrvDescriptorIncrementSize() { return m_cbvSrvDescriptorIncrementSize; }
 
-	D3D12_HEAP_PROPERTIES CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType);
-	D3D12_RESOURCE_DESC CreateBufferResourceDesc(UINT nBytes);
-	D3D12_RESOURCE_STATES CreateBufferInitialStates(D3D12_HEAP_TYPE heapType);
-	D3D12_RESOURCE_BARRIER CreateBufferResourceBarrier(ID3D12Resource *pBuffer, D3D12_RESOURCE_STATES resourceStates);
-
-	D3D12_HEAP_PROPERTIES CreateDepthStencilHeapProperties();
-	D3D12_RESOURCE_DESC CreateDepthStencilResourceDesc();
-	D3D12_CLEAR_VALUE CreateDepthStencilClearValue();
-
+private:	
 	DXGI_SWAP_CHAIN_DESC CreateSwapChainDesc();
 
 	void CreateDirect3dDevice();
@@ -56,7 +52,7 @@ private:	// 내부 함수
 	void CreateRenderTargetView();
 	void CreateGraphicsRootSignature();
 
-private:	// 변수
+private:	 // 변수
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
 
@@ -96,10 +92,11 @@ private:	// 변수
 	ID3D12Debug *m_pDebugController{ NULL };
 #endif
 
+	UINT m_cbvSrvDescriptorIncrementSize{ 0 };
+
 	// Root Signature
 	ID3D12RootSignature *m_pGraphicsRootSignature{ NULL };
 
 	// Render Manager
 	CRenderMgr m_renderMgr;
 };
-

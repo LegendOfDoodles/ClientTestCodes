@@ -3,27 +3,43 @@
 #include "CreateMgr.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Material.h"
 
 /// <summary>
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-12
+/// 최종 수정 날짜: 2018-02-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CBaseObject::CBaseObject(CCreateMgr *pCreateMgr)
+CBaseObject::CBaseObject(CCreateMgr *pCreateMgr, int nMeshes)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 
 	XMStoreFloat4x4(&m_xmf4x4World, XMMatrixIdentity());
+
+	m_nMeshes = nMeshes;
+	if (m_nMeshes > 0)
+	{
+		m_ppMeshes = new CMesh*[m_nMeshes];
+		for (int i = 0; i < m_nMeshes; i++)	m_ppMeshes[i] = NULL;
+	}
 }
 
 CBaseObject::~CBaseObject()
 {
-	Safe_Release(m_pMesh);
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) Safe_Release(m_ppMeshes[i]);
+		}
+		Safe_Delete_Array(m_ppMeshes);
+	}
 	if (m_pShader){ m_pShader->Finalize(); }
+	if (m_pMaterial) m_pMaterial->Finalize();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -40,14 +56,25 @@ void CBaseObject::Finalize()
 
 void CBaseObject::ReleaseUploadBuffers()
 {
-	if (m_pMesh) { m_pMesh->ReleaseUploadBuffers(); }
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->ReleaseUploadBuffers();
+		}
+	}
+
+	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
 }
 
-void CBaseObject::SetMesh(CMesh *pMesh)
+void CBaseObject::SetMesh(int nIndex, CMesh *pMesh)
 {
-	if (m_pMesh) m_pMesh->Release();
-	m_pMesh = pMesh;
-	if (m_pMesh) m_pMesh->AddRef();
+	if (!m_ppMeshes) return;
+	if (nIndex >= m_nMeshes) return;
+
+	if (m_ppMeshes[nIndex]) m_ppMeshes[nIndex]->Release();
+	m_ppMeshes[nIndex] = pMesh;
+	if (pMesh) pMesh->AddRef();
 }
 
 void CBaseObject::SetShader(CShader *pShader)
@@ -55,6 +82,19 @@ void CBaseObject::SetShader(CShader *pShader)
 	if (m_pShader) m_pShader->Release();
 	m_pShader = pShader;
 	if (m_pShader) m_pShader->AddRef();
+	//if (!m_pMaterial)
+	//{
+	//	CMaterial *pMaterial = new CMaterial();
+	//	SetMaterial(pMaterial);
+	//}
+	//if (m_pMaterial) m_pMaterial->SetShader(pShader);
+}
+
+void CBaseObject::SetMaterial(CMaterial *pMaterial)
+{
+	if (m_pMaterial) m_pMaterial->Release();
+	m_pMaterial = pMaterial;
+	if (m_pMaterial) m_pMaterial->AddRef();
 }
 
 void CBaseObject::Animate(float timeElapsed)
@@ -65,9 +105,23 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 {
 	OnPrepareRender();
 
-	if (m_pShader) { m_pShader->Render(pCamera); }
+	if (m_pMaterial)
+	{
+		m_pMaterial->Render(pCamera);
+		m_pMaterial->UpdateShaderVariables();
+		if(m_pMaterial->HaveShader()) UpdateShaderVariables();
+	}
 
-	if (m_pMesh) m_pMesh->Render(istanceCnt);
+	if (m_d3dCbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
+
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
+		}
+	}
 }
 
 void CBaseObject::MoveStrafe(float fDistance)
@@ -149,6 +203,15 @@ void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 // 내부 함수
 void CBaseObject::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
+	m_pcbGameObject = pCreateMgr->CreateBufferResource(
+		NULL,
+		ncbElementBytes, 
+		D3D12_HEAP_TYPE_UPLOAD, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		NULL);
+
+	m_pcbGameObject->Map(0, NULL, (void **)&m_pMappedObject);
 }
 
 void CBaseObject::ReleaseShaderVariables()
@@ -157,9 +220,12 @@ void CBaseObject::ReleaseShaderVariables()
 
 void CBaseObject::UpdateShaderVariables()
 {
+	CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObject);
+
+	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
+	if (m_pMaterial) pMappedObject->m_nMaterial = m_pMaterial->GetReflectionNum();
 }
 
 void CBaseObject::OnPrepareRender()
 {
-	UpdateShaderVariables();
 }

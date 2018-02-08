@@ -1,11 +1,7 @@
 #pragma once
 #include "Shader.h"
 
-struct CB_GAMEOBJECT_INFO
-{
-	XMFLOAT4X4 m_xmf4x4World;
-	XMFLOAT4 m_xmcColor;
-};
+class CMaterial;
 
 class CObjectShader : public CShader
 {
@@ -37,11 +33,12 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBaseObject **m_ppObjects = NULL;
+	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
 #if USE_INSTANCING
-	CB_GAMEOBJECT_INFO *m_pMappedObjects = NULL;
+	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
+	CMaterial						*m_pMaterial{ NULL };
 #else
 	UINT8 *m_pMappedObjects = NULL;
 #endif

@@ -3,6 +3,7 @@
 
 class CCreateMgr;
 class CCamera;
+class CTexture;
 
 class CShader
 {
@@ -32,6 +33,10 @@ protected: // 내부 함수
 	virtual D3D12_BLEND_DESC CreateBlendState();
 	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
 
+	void CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews);
+	void CreateConstantBufferViews(CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pd3dConstantBuffers, UINT nStride);
+	void CreateShaderResourceViews(CCreateMgr *pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement);
+
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
 
@@ -59,6 +64,17 @@ protected: // 변수
 #else
 	ID3D12Resource *m_pConstBuffer{ NULL };
 #endif
+
+#if USE_BATCH_MATERIAL
+	CMaterial						*m_pMaterial{ NULL };
+#endif
+
+	ID3D12DescriptorHeap			*m_pCbvSrvDescriptorHeap{ NULL };
+
+	D3D12_CPU_DESCRIPTOR_HANDLE		m_cbvCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE		m_cbvGPUDescriptorStartHandle;
+	D3D12_CPU_DESCRIPTOR_HANDLE		m_srvCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE		m_srvGPUDescriptorStartHandle;
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

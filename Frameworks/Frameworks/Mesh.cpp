@@ -380,3 +380,147 @@ CAirplaneMeshDiffused::CAirplaneMeshDiffused(CCreateMgr *pCreateMgr
 CAirplaneMeshDiffused::~CAirplaneMeshDiffused()
 {
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 텍스처 메쉬
+CMeshTextured::CMeshTextured(CCreateMgr *pCreateMgr)
+	: CMesh(pCreateMgr)
+{
+}
+
+CMeshTextured::~CMeshTextured()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// 텍스처 상자 메쉬
+CCubeMeshTextured::CCubeMeshTextured(CCreateMgr *pCreateMgr,
+	float fWidth, float fHeight, float fDepth)
+	: CMeshTextured(pCreateMgr)
+{
+	m_nVertices = 36;
+	m_nStride = sizeof(CTexturedVertex);
+	m_nOffset = 0;
+	m_nSlot = 0;
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+
+	XMFLOAT3 pPositions[36];
+	int i = 0;
+	pPositions[i++] = XMFLOAT3(-fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, -fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, -fz);
+	pPositions[i++] = XMFLOAT3(-fx, -fy, -fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, -fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(-fx, +fy, -fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, -fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, +fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, -fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(-fx, +fy, +fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, -fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, +fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, -fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, +fz);
+	pPositions[i++] = XMFLOAT3(-fx, -fy, +fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(-fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(-fx, -fy, -fz);
+
+	pPositions[i++] = XMFLOAT3(-fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(-fx, -fy, -fz);
+	pPositions[i++] = XMFLOAT3(-fx, -fy, +fz);
+
+	pPositions[i++] = XMFLOAT3(+fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, +fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, +fz);
+
+	pPositions[i++] = XMFLOAT3(+fx, +fy, -fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, +fz);
+	pPositions[i++] = XMFLOAT3(+fx, -fy, -fz);
+
+	XMFLOAT2 pTexCoords[36];
+	i = 0;
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+
+	pTexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pTexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	CTexturedVertex pVertices[36];
+	for (int i = 0; i < 36; i++) pVertices[i] = CTexturedVertex(pPositions[i], pTexCoords[i]);
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices, 
+		m_nStride * m_nVertices, 
+		D3D12_HEAP_TYPE_DEFAULT, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		&m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+}
+
+CCubeMeshTextured::~CCubeMeshTextured()
+{
+}
