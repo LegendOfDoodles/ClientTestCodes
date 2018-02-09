@@ -156,6 +156,7 @@
     <ClInclude Include="DiffusedShader.h" />
     <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="ObjectShader.h" />
+    <ClInclude Include="Prefabs.h" />
     <ClInclude Include="RotatingObject.h" />
     <ClInclude Include="SafeFunc.h" />
     <ClInclude Include="SpaceShipCamera.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="DiffusedShader.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="ObjectShader.cpp" />
+    <ClCompile Include="Prefabs.cpp" />
     <ClCompile Include="RotatingObject.cpp" />
     <ClCompile Include="SafeFunc.cpp" />
     <ClCompile Include="SpaceShipCamera.cpp" />

@@ -114,6 +114,9 @@
     <Filter Include="소스 파일\00.Global\01.Utility\03.SafeFunc">
       <UniqueIdentifier>{eeb7ccce-7b48-4171-87a3-131c360d4cf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\98.Prefabs">
+      <UniqueIdentifier>{6f590415-f2c1-4130-b8d3-f5959dfaa3a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -203,6 +206,9 @@
     <ClInclude Include="SafeFunc.h">
       <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
     </ClInclude>
+    <ClInclude Include="Prefabs.h">
+      <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -279,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="SafeFunc.cpp">
       <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefabs.cpp">
+      <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

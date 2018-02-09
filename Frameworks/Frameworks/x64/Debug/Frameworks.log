@@ -9,6 +9,7 @@
   SafeFunc.cpp
   RotatingObject.cpp
   RenderMgr.cpp
+  Prefabs.cpp
   Player.cpp
   ObjectShader.cpp
   Mesh.cpp
@@ -18,9 +19,9 @@
   FirstPersonCamera.cpp
   ExptProcess.cpp
   DiffusedShader.cpp
-  DDSTextureLoader12.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  DDSTextureLoader12.cpp
   CreateMgr.cpp
   Camera.cpp
   BaseObject.cpp

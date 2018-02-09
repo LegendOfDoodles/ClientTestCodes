@@ -34,7 +34,7 @@ protected: // 내부 함수
 	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
 
 	void CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews);
-	void CreateConstantBufferViews(CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pd3dConstantBuffers, UINT nStride);
+	void CreateConstantBufferViews(CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride);
 	void CreateShaderResourceViews(CCreateMgr *pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement);
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);

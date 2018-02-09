@@ -158,10 +158,10 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConsta
 }
 
 void CShader::CreateConstantBufferViews(
-	CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pd3dConstantBuffers, UINT nStride)
+	CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
-	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pd3dConstantBuffers->GetGPUVirtualAddress();
+	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pConstantBuffers->GetGPUVirtualAddress();
 	D3D12_CONSTANT_BUFFER_VIEW_DESC CBVDesc;
 	CBVDesc.SizeInBytes = nStride;
 	for (int j = 0; j < nConstantBufferViews; j++)

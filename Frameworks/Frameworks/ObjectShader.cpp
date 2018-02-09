@@ -185,27 +185,21 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
-	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D, 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Stones.dds", 0);
-
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
 #if USE_INSTANCING
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 1);
 	CreateShaderVariables(pCreateMgr);
 #else
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 #endif
-	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);
 
 #if USE_BATCH_MATERIAL
-	m_pMaterial = new CMaterial();
-	m_pMaterial->SetTexture(pTexture);
+	m_pMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #else
-	CMaterial *pCubeMaterial = new CMaterial();
-	pCubeMaterial->SetTexture(pTexture);
+	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
 	CCubeMeshTextured *pCubeMesh = new CCubeMeshTextured(pCreateMgr, 12.0f, 12.0f, 12.0f);
