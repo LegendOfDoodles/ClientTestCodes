@@ -94,13 +94,13 @@ void FBXExporter::ExportFBX()
 
 	
 
-	std::string outputMeshName = mOutputFilePath + genericFileName + "mesh.txt";
+	std::string outputMeshName = mOutputFilePath + genericFileName + ".meshinfo";
 	std::ofstream meshOutput(outputMeshName);
 	WriteMeshToStream(meshOutput);
 
 	if(mHasAnimation)
 	{
-		std::string outputNnimName = mOutputFilePath + genericFileName + "ani.txt";
+		std::string outputNnimName = mOutputFilePath + genericFileName + ".aniinfo";
 		std::ofstream animOutput(outputNnimName);
 		WriteAnimationToStream(animOutput);
 	}
