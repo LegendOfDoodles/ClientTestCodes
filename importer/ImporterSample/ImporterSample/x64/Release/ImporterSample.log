@@ -1,0 +1,11 @@
+﻿  stdafx.cpp
+  ImporterSample.cpp
+ImporterSample.cpp(65): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+ImporterSample.cpp(99): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+ImporterSample.cpp(111): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+ImporterSample.cpp(122): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+ImporterSample.cpp(142): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다.
+  All 1035 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  ImporterSample.vcxproj -> D:\새 폴더\importer\ImporterSample\x64\Release\ImporterSample.exe
