@@ -6,7 +6,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-02
+/// 최종 수정 날짜: 2018-03-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -617,15 +617,21 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	HRESULT hResult;
 
 #if USE_INSTANCING
-	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[1];
+	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[2];
 
 	pDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pDescriptorRanges[0].NumDescriptors = 1;
 	pDescriptorRanges[0].BaseShaderRegister = 0; //Texture
 	pDescriptorRanges[0].RegisterSpace = 0;
 	pDescriptorRanges[0].OffsetInDescriptorsFromTableStart = 0;
+
+	pDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pDescriptorRanges[1].NumDescriptors = 1;
+	pDescriptorRanges[1].BaseShaderRegister = 1; //Normal
+	pDescriptorRanges[1].RegisterSpace = 0;
+	pDescriptorRanges[1].OffsetInDescriptorsFromTableStart = 0;
 #else
-	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[2];
+	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[3];
 
 	pDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	pDescriptorRanges[0].NumDescriptors = 1;
@@ -638,9 +644,15 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pDescriptorRanges[1].BaseShaderRegister = 0; //Texture
 	pDescriptorRanges[1].RegisterSpace = 0;
 	pDescriptorRanges[1].OffsetInDescriptorsFromTableStart = 0;
+
+	pDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pDescriptorRanges[2].NumDescriptors = 1;
+	pDescriptorRanges[2].BaseShaderRegister = 1; //Normal
+	pDescriptorRanges[2].RegisterSpace = 0;
+	pDescriptorRanges[2].OffsetInDescriptorsFromTableStart = 0;
 #endif
 
-	D3D12_ROOT_PARAMETER pRootParameters[4];
+	D3D12_ROOT_PARAMETER pRootParameters[7];
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[0].Descriptor.ShaderRegister = 0; //Player
 	pRootParameters[0].Descriptor.RegisterSpace = 0;
@@ -653,7 +665,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 
 #if USE_INSTANCING
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	pRootParameters[2].Descriptor.ShaderRegister = 1; // t1 : Objects
+	pRootParameters[2].Descriptor.ShaderRegister = 2; // t2 : Objects
 	pRootParameters[2].Descriptor.RegisterSpace = 0;
 	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
@@ -661,6 +673,11 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 	pRootParameters[3].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[0]; //Texture
 	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	pRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[1]; //Normal
+	pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 #else
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -673,7 +690,22 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[3].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[1]; //Texture
 	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+	pRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[2]; //Normal
+	pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
 #endif
+
+	pRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[5].Descriptor.ShaderRegister = 3; //Lights
+	pRootParameters[5].Descriptor.RegisterSpace = 0;
+	pRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[6].Descriptor.ShaderRegister = 4; //Materials
+	pRootParameters[6].Descriptor.RegisterSpace = 0;
+	pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	D3D12_STATIC_SAMPLER_DESC samplerDesc;
 	::ZeroMemory(&samplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));

@@ -223,7 +223,6 @@ void CBaseObject::UpdateShaderVariables()
 	CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObject);
 
 	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
-	if (m_pMaterial) pMappedObject->m_nMaterial = m_pMaterial->GetReflectionNum();
 }
 
 void CBaseObject::OnPrepareRender()

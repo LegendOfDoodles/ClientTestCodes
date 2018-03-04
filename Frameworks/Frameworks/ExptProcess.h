@@ -27,5 +27,5 @@ namespace ExptProcess
 		}
 	};
 
-	void PrintErrorBlob(ComPtr<ID3DBlob> pErrorBlob);
+	void PrintErrorBlob(ComPtr<ID3DBlob>& pErrorBlob);
 }

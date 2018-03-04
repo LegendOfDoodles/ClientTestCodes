@@ -8,7 +8,7 @@
 /// 최종 수정 날짜: 2018-01-26
 /// </summary>
 
-void ExptProcess::PrintErrorBlob(ComPtr<ID3DBlob> pErrorBlob)
+void ExptProcess::PrintErrorBlob(ComPtr<ID3DBlob>& pErrorBlob)
 {
 	if (!pErrorBlob) return;
 

@@ -7,7 +7,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-13
+/// 최종 수정 날짜: 2018-03-03
 /// </summary>
 
 
@@ -63,6 +63,8 @@ void CCamera::UpdateShaderVariables()
 {
 	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
 	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+
+	memcpy(&m_pMappedCamera->m_xmf3Position, &m_xmf3Position, sizeof(XMFLOAT3));
 
 	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = m_pConstBuffer->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(1, gpuVirtualAddress);

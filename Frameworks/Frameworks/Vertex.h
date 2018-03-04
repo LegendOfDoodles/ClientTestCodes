@@ -60,6 +60,7 @@ class CDiffusedTexturedVertex : public CDiffusedVertex
 {
 public:
 	XMFLOAT2						m_texCoord{ XMFLOAT2(0.0f, 0.0f) };
+	XMFLOAT3						m_xmf3Tangent;
 
 public:
 	CDiffusedTexturedVertex() {}
@@ -76,27 +77,30 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////
-// 2d 텍스처 정점
-class CDiffused2TexturedVertex : public CDiffusedVertex
+//
+class CIlluminatedVertex : public CVertex
 {
-public:
-	XMFLOAT2						m_texCoord0{ XMFLOAT2(0.0f, 0.0f) };
-	XMFLOAT2						m_texCoord1{ XMFLOAT2(0.0f, 0.0f) };
+protected:
+	XMFLOAT3						m_normal;
 
 public:
-	CDiffused2TexturedVertex() {}
-	CDiffused2TexturedVertex(float x, float y, float z, XMFLOAT4 xmf4Diffuse, XMFLOAT2 xmf2TexCoord0, XMFLOAT2 xmf2TexCoord1)
-		: CDiffusedVertex(x, y, z, xmf4Diffuse)
-	{
-		m_texCoord0 = xmf2TexCoord0; 
-		m_texCoord1 = xmf2TexCoord1; 
-	}
-	CDiffused2TexturedVertex(XMFLOAT3 xmf3Position, XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 
-		XMFLOAT2 xmf2TexCoord0 = XMFLOAT2(0.0f, 0.0f), XMFLOAT2 xmf2TexCoord1 = XMFLOAT2(0.0f, 0.0f)) 
-		: CDiffusedVertex(xmf3Position, xmf4Diffuse)
-	{
-		m_texCoord0 = xmf2TexCoord0; 
-		m_texCoord1 = xmf2TexCoord1; 
-	}
-	~CDiffused2TexturedVertex() { }
+	CIlluminatedVertex() { m_position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_normal = XMFLOAT3(0.0f, 0.0f, 0.0f); }
+	CIlluminatedVertex(float x, float y, float z, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f)) { m_position = XMFLOAT3(x, y, z); m_normal = xmf3Normal; }
+	CIlluminatedVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f)) { m_position = xmf3Position; m_normal = xmf3Normal; }
+	~CIlluminatedVertex() { }
+};
+
+////////////////////////////////////////////////////////////////////////
+//
+class CIlluminatedTexturedVertex : public CIlluminatedVertex
+{
+protected:
+	XMFLOAT2						m_xmf2TexCoord;
+	XMFLOAT3						m_xmf3Tangent;
+
+public:
+	CIlluminatedTexturedVertex() { m_position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2TexCoord = XMFLOAT2(0.0f, 0.0f); m_normal = XMFLOAT3(0.0f, 0.0f, 0.0f); }
+	CIlluminatedTexturedVertex(float x, float y, float z, XMFLOAT2 xmf2TexCoord, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3 xmf3Tangent = XMFLOAT3(0.0f, 0.0f, 0.0f)) { m_position = XMFLOAT3(x, y, z); m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord; }
+	CIlluminatedTexturedVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f), XMFLOAT3 xmf3Tangent = XMFLOAT3(0.0f, 0.0f, 0.0f)) { m_position = xmf3Position; m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord; m_xmf3Tangent = xmf3Tangent; }
+	~CIlluminatedTexturedVertex() { }
 };

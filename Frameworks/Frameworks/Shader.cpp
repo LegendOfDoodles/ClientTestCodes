@@ -329,10 +329,18 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 #endif
 
 	ComPtr<ID3DBlob> pErrorBlob{ NULL };
-	hResult = D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, pszShaderProfile,
-		nCompileFlags, 0, ppShaderBlob, &pErrorBlob);
+	hResult = D3DCompileFromFile(
+		  pszFileName
+		, NULL
+		, D3D_COMPILE_STANDARD_FILE_INCLUDE
+		, pszShaderName
+		, pszShaderProfile
+		, nCompileFlags
+		, 0
+		, ppShaderBlob
+		, &pErrorBlob);
 	assert(SUCCEEDED(hResult) && "D3DCompileFromFile Failed");
-	// ExptProcess::PrintErrorBlob(pErrorBlob);
+	//ExptProcess::PrintErrorBlob(pErrorBlob);
 
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = (*ppShaderBlob)->GetBufferSize();

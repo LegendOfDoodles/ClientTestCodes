@@ -184,7 +184,7 @@ void CPlayer::OnCameraUpdateCallback(float timeElapsed)
 {
 }
 
-void CPlayer::SetPosition(XMFLOAT3& xmf3Position)
+void CPlayer::SetPosition(const XMFLOAT3& xmf3Position)
 {
 	Move(XMFLOAT3(
 		xmf3Position.x - m_xmf3Position.x, 

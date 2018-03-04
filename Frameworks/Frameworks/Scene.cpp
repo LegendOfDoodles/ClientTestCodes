@@ -9,7 +9,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-24
+/// 최종 수정 날짜: 2018-03-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -27,11 +27,13 @@ CScene::~CScene()
 void CScene::Initialize(CCreateMgr *pCreateMgr)
 {
 	BuildObjects(pCreateMgr);
+	CreateShaderVariables(pCreateMgr);
 }
 
 void CScene::Finalize()
 {
 	ReleaseObjects();
+	ReleaseShaderVariables();
 }
 
 void CScene::ReleaseUploadBuffers()
@@ -49,6 +51,8 @@ void CScene::ReleaseUploadBuffers()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
+	UpdateShaderVariables();
+
 	for (int i = 0; i < m_nShaders; i++)
 	{
 		m_ppShaders[i]->AnimateObjects(timeElapsed);
@@ -58,6 +62,9 @@ void CScene::AnimateObjects(float timeElapsed)
 
 void CScene::Render()
 {
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	m_pCommandList->SetGraphicsRootConstantBufferView(5, d3dcbLightsGpuVirtualAddress); //Lights
+
 	for (int i = 0; i < m_nShaders; i++)
 	{
 		m_ppShaders[i]->Render(m_pCamera);
@@ -109,6 +116,49 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
+void CScene::BuildLights()
+{
+	m_pLights = new LIGHTS;
+	::ZeroMemory(m_pLights, sizeof(LIGHTS));
+
+	m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+
+	m_pLights->m_pLights[0].m_bEnable = true;
+	m_pLights->m_pLights[0].m_nType = POINT_LIGHT;
+	m_pLights->m_pLights[0].m_fRange = 100.0f;
+	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.8f, 0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[0].m_position = XMFLOAT3(130.0f, 30.0f, 30.0f);
+	m_pLights->m_pLights[0].m_direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_pLights->m_pLights[0].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
+
+	m_pLights->m_pLights[1].m_bEnable = true;
+	m_pLights->m_pLights[1].m_nType = SPOT_LIGHT;
+	m_pLights->m_pLights[1].m_fRange = 50.0f;
+	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	m_pLights->m_pLights[1].m_position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
+	m_pLights->m_pLights[1].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[1].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	m_pLights->m_pLights[1].m_fFalloff = 8.0f;
+	m_pLights->m_pLights[1].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
+	m_pLights->m_pLights[1].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
+
+	m_pLights->m_pLights[2].m_bEnable = true;
+	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
+	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	m_pLights->m_pLights[2].m_direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+	m_pLights->m_pLights[3].m_bEnable = true;
+	m_pLights->m_pLights[3].m_nType = SPOT_LIGHT;
+	m_pLights->m_pLights[3].m_fRange = 60.0f;
+	m_pLights->m_pLights[3].m_color = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[3].m_position = XMFLOAT3(-150.0f, 30.0f, 30.0f);
+	m_pLights->m_pLights[3].m_direction = XMFLOAT3(0.0f, 1.0f, 1.0f);
+	m_pLights->m_pLights[3].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	m_pLights->m_pLights[3].m_fFalloff = 8.0f;
+	m_pLights->m_pLights[3].m_fPhi = (float)cos(XMConvertToRadians(90.0f));
+	m_pLights->m_pLights[3].m_fTheta = (float)cos(XMConvertToRadians(30.0f));
+}
+
 void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 {
 	m_hWnd = pCreateMgr->GetHwnd();
@@ -130,6 +180,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_pPlayer->Initialize(pCreateMgr);
 
 	m_pCamera = m_pPlayer->GetCamera();
+
+	BuildLights();
 }
 
 void CScene::ReleaseObjects()
@@ -143,24 +195,46 @@ void CScene::ReleaseObjects()
 	Safe_Delete_Array(m_ppShaders);
 }
 
+void CScene::CreateShaderVariables(CCreateMgr *pCreateMgr)
+{
+	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	m_pd3dcbLights = pCreateMgr->CreateBufferResource(NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+}
+
+void CScene::ReleaseShaderVariables()
+{
+	if (m_pd3dcbLights)
+	{
+		m_pd3dcbLights->Unmap(0, NULL);
+		Safe_Release(m_pd3dcbLights);
+	}
+}
+
+void CScene::UpdateShaderVariables()
+{
+	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
+}
+
 // Process Mouse Input
 void CScene::OnProcessMouseMove()
 {
-	float cxDelta = 0.0f, cyDelta = 0.0f;
-	POINT cursorPos;
+	//float cxDelta = 0.0f, cyDelta = 0.0f;
+	//POINT cursorPos;
 
-	::GetCursorPos(&cursorPos);
-	cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
-	cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
-	::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
+	//::GetCursorPos(&cursorPos);
+	//cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
+	//cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
+	//::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
 
-	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
-	{
-		if (cxDelta || cyDelta)
-		{
-			m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
-		}
-	}
+	//if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
+	//{
+	//	if (cxDelta || cyDelta)
+	//	{
+	//		m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+	//	}
+	//}
 }
 
 // Process Keyboard Input

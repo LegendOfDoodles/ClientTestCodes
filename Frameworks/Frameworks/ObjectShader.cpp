@@ -8,7 +8,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-07
+/// 최종 수정 날짜: 2018-03-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -47,9 +47,6 @@ void CObjectShader::UpdateShaderVariables()
 	{
 		XMStoreFloat4x4(&m_pMappedObjects[i].m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	#if USE_BATCH_MATERIAL
-		if (m_pMaterial) m_pMappedObjects[i].m_nMaterial = m_pMaterial->GetReflectionNum();
-	#endif
 	}
 #else
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -59,9 +56,6 @@ void CObjectShader::UpdateShaderVariables()
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, 
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	#if USE_BATCH_MATERIAL
-		if (m_pMaterial) pMappedObject->m_nMaterial = m_pMaterial->GetReflectionNum();
-	#endif
 	}
 #endif
 }
@@ -96,47 +90,61 @@ void CObjectShader::Render(CCamera *pCamera)
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 {
-	UINT nInputElementDescs = 2;
-	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new
-		D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+	UINT nInputElementDescs = 4;
+	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
-	pInputElementDescs[0] = {
+	pd3dInputElementDescs[0] = { 
 		"POSITION",
 		0, 
 		DXGI_FORMAT_R32G32B32_FLOAT, 
 		0,
-		0,
+		0, 
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
 		0 };
-
-	pInputElementDescs[1] ={
-		"TEXCOORD", 
-		0,
-		DXGI_FORMAT_R32G32_FLOAT,
-		0,
+	pd3dInputElementDescs[1] = { 
+		"NORMAL", 
+		0, 
+		DXGI_FORMAT_R32G32B32_FLOAT, 
+		0, 
 		12,
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
 		0 };
+	pd3dInputElementDescs[2] = { 
+		"TEXCOORD", 
+		0, 
+		DXGI_FORMAT_R32G32_FLOAT, 
+		0, 
+		24,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
+		0 };
+	pd3dInputElementDescs[3] = { 
+		"TANGENT",
+		0,
+		DXGI_FORMAT_R32G32B32_FLOAT, 
+		0, 
+		32, 
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
+		0 };
 
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
-	inputLayoutDesc.pInputElementDescs = pInputElementDescs;
-	inputLayoutDesc.NumElements = nInputElementDescs;
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
 
-	return(inputLayoutDesc);
+	return(d3dInputLayoutDesc);
 }
 
 D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
 #if USE_INSTANCING
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSTxtInstancing", "vs_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSTexturedLightingInstancing", "vs_5_1", ppShaderBlob));
 #else
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSTextured", "vs_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSTexturedLighting", "vs_5_1", ppShaderBlob));
 #endif
 }
 
 D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSTextured", "ps_5_1",	ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSTexturedLighting", "ps_5_1",	ppShaderBlob));
 }
 
 void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
@@ -186,7 +194,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 #if USE_INSTANCING
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
 	CreateShaderVariables(pCreateMgr);
 #else
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -202,7 +210,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CCubeMeshTextured *pCubeMesh = new CCubeMeshTextured(pCreateMgr, 12.0f, 12.0f, 12.0f);
+	CCubeMeshIlluminatedTextured *pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr, 12.0f, 12.0f, 12.0f);
 
 	float fxPitch = 12.0f * 2.5f;
 	float fyPitch = 12.0f * 2.5f;

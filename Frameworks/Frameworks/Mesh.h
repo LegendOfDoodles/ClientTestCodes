@@ -18,7 +18,9 @@ public: // 공개 함수
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
-private: // 내부 함수
+protected: // 내부 함수
+	void CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, int nVertices, XMFLOAT2 *xmf2TexCoord);
+	void CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
 
 protected: // 변수
 	int m_nReferences{ 0 };
@@ -93,4 +95,52 @@ class CCubeMeshTextured : public CMeshTextured
 public:
 	CCubeMeshTextured(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
 	virtual ~CCubeMeshTextured();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CMeshIlluminated : public CMesh
+{
+public:
+	CMeshIlluminated(CCreateMgr *pCreateMgr);
+	virtual ~CMeshIlluminated();
+
+public:
+	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices);
+	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
+	void CalculateTriangleStripVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
+	void CalculateVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices, UINT *pnIndices, int nIndices);
+};
+
+class CCubeMeshIlluminated : public CMeshIlluminated
+{
+public:
+	CCubeMeshIlluminated(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMeshIlluminated();
+};
+
+class CSphereMeshIlluminated : public CMeshIlluminated
+{
+public:
+	CSphereMeshIlluminated(CCreateMgr *pCreateMgr, float fRadius = 2.0f, UINT nSlices = 20, UINT nStacks = 20);
+	virtual ~CSphereMeshIlluminated();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CMeshIlluminatedTextured : public CMeshIlluminated
+{
+public:
+	CMeshIlluminatedTextured(CCreateMgr *pCreateMgr);
+	CMeshIlluminatedTextured(CCreateMgr *pCreateMgr, UINT nVertices, XMFLOAT3 *pxmf3Positions, XMFLOAT3 *pxmf3Normals, XMFLOAT2 *pxmf2UVs, UINT nIndices, UINT *pnIndices);
+	virtual ~CMeshIlluminatedTextured();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CCubeMeshIlluminatedTextured : public CMeshIlluminatedTextured
+{
+public:
+	CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMeshIlluminatedTextured();
 };

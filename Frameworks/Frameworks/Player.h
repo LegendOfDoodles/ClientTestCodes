@@ -33,7 +33,7 @@ public: // 공개 함수
 	virtual void OnPlayerUpdateCallback(float timeElapsed);
 	virtual void OnCameraUpdateCallback(float timeElapsed);
 
-	void SetPosition(XMFLOAT3& xmf3Position);
+	void SetPosition(const XMFLOAT3& xmf3Position);
 
 	CCamera *OnChangeCamera(DWORD nNewCameraMode, DWORD nCurrentCameraMode);
 
@@ -43,7 +43,7 @@ public: // 공개 함수
 	XMFLOAT3 GetPosition() { return(m_xmf3Position); }
 
 	void SetFriction(float fFriction) { m_fFriction = fFriction; }
-	void SetGravity(XMFLOAT3& xmf3Gravity) { m_xmf3Gravity = xmf3Gravity; }
+	void SetGravity(const XMFLOAT3& xmf3Gravity) { m_xmf3Gravity = xmf3Gravity; }
 	void SetMaxVelocityXZ(float fMaxVelocity) { m_fMaxVelocityXZ = fMaxVelocity; }
 	void SetMaxVelocityY(float fMaxVelocity) { m_fMaxVelocityY = fMaxVelocity; }
 	void SetVelocity(XMFLOAT3& xmf3Velocity) { m_xmf3Velocity = xmf3Velocity; }

@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-09
+/// 최종 수정 날짜: 2018-03-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -15,17 +15,24 @@ CMaterial* Materials::CreateBrickMaterial(CCreateMgr *pCreateMgr,
 	D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 	D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle)
 {
-	CMaterial *pMaterial{ new CMaterial() };
-	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Stones.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/StonesNormal.dds", 1);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
-		3, false, 
+		3, true, 
 		pSrvCPUDescriptorStartHandle,
 		pSrvGPUDescriptorStartHandle);
 
+	pMaterial->Initialize(pCreateMgr);
+
 	pMaterial->SetTexture(pTexture);
+
+	pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	pMaterial->SetSmoothness(5.0f);
+	pMaterial->SetRoughness(0.0f);
 
 	return pMaterial;
 }

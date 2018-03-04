@@ -7,11 +7,20 @@ using namespace DirectX;
 /// 목적: 벡터 연산을 간략화 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-09
+/// 최종 수정 날짜: 2018-03-04
 /// </summary>
 
 #define	PI		3.141592
 #define	EPSILON		1.0e-10f
+
+#define CLAMP(x, low, high) max(low, min(high, x))
+
+static int Wrap(int x, int low, int high)
+{
+	assert(low < high);
+	const int n = (x - low) % (high - low);
+	return (n >= 0) ? (n + low) : (n + high);
+}
 
 static bool IsZeroFloat(float val)
 {
@@ -88,7 +97,7 @@ namespace Vector3
 		return(xmf3Result);
 	}
 
-	inline XMFLOAT3 Normalize(XMFLOAT3& xmf3Vector)
+	inline XMFLOAT3 Normalize(const XMFLOAT3& xmf3Vector)
 	{
 		XMFLOAT3 m_xmf3Normal;
 		XMStoreFloat3(&m_xmf3Normal, XMVector3Normalize(XMLoadFloat3(&xmf3Vector)));
@@ -148,7 +157,7 @@ namespace Vector3
 //4차원 벡터의 연산
 namespace Vector4
 {
-	inline XMFLOAT4 Add(XMFLOAT4& xmf4Vector1, XMFLOAT4& xmf4Vector2)
+	inline XMFLOAT4 Add(const XMFLOAT4& xmf4Vector1, const XMFLOAT4& xmf4Vector2)
 	{
 		XMFLOAT4 xmf4Result;
 		XMStoreFloat4(&xmf4Result, XMLoadFloat4(&xmf4Vector1) +
