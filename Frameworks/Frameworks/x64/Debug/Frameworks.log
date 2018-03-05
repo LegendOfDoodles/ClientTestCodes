@@ -1,130 +1,130 @@
 ﻿  stdafx.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\vectors.h(122): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMVECTOR'에서 'DirectX::XMVECTOR &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\vectors.h(122): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\vectors.h(143): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMMATRIX'에서 'DirectX::XMMATRIX &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\vectors.h(143): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  Vertex.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\vertex.h(103): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
-  Timer.cpp
-  ThirdPersonCamera.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\thirdpersoncamera.cpp(70): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\thirdpersoncamera.cpp(70): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  Texture.cpp
-  SpaceShipCamera.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\spaceshipcamera.cpp(39): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\spaceshipcamera.cpp(39): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\spaceshipcamera.cpp(51): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\spaceshipcamera.cpp(51): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\spaceshipcamera.cpp(63): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\spaceshipcamera.cpp(63): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  Shader.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(56): warning C4100: 'pxmf4x4World': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(60): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(64): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(187): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(194): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(200): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(245): warning C4100: 'ppd3dShaderBlob': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(254): warning C4100: 'ppShaderBlob': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(293): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(297): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\shader.cpp(297): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-  Scene.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(86): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(86): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(85): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(105): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\scene.cpp(104): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
-  SafeFunc.cpp
-  RotatingObject.cpp
-  RenderMgr.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\rendermgr.cpp(24): warning C4100: 'height': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\rendermgr.cpp(24): warning C4100: 'width': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\rendermgr.cpp(48): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\rendermgr.cpp(91): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-  Prefabs.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\prefabs.cpp(52): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\prefabs.cpp(59): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\prefabs.cpp(65): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-  Player.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.cpp(179): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.cpp(183): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.cpp(193): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.cpp(193): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.cpp(220): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.cpp(220): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  ObjectShader.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\objectshader.cpp(189): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\objectshader.cpp(219): warning C4189: 'incrementSize': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(122): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMVECTOR'에서 'DirectX::XMVECTOR &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(122): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(143): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMMATRIX'에서 'DirectX::XMMATRIX &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(143): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
   Mesh.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\vertex.h(103): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\mesh.cpp(593): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\mesh.cpp(493): note: 'i' 선언을 참조하십시오.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\mesh.cpp(1084): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\mesh.cpp(978): note: 'i' 선언을 참조하십시오.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(103): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(591): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(491): note: 'i' 선언을 참조하십시오.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1082): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(976): note: 'i' 선언을 참조하십시오.
+  Vertex.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(103): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
   Material.cpp
-  Framework01.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-  Framework.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\framework.cpp(114): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+  Texture.cpp
+  Prefabs.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(52): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(59): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(65): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+  AirplanePlayer.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+  Player.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.cpp(179): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.cpp(183): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.cpp(193): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.cpp(193): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.cpp(220): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.cpp(220): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  RotatingObject.cpp
+  ThirdPersonCamera.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\03.thirdperson\thirdpersoncamera.cpp(70): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\03.thirdperson\thirdpersoncamera.cpp(70): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
   FirstPersonCamera.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\firstpersoncamera.cpp(60): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\firstpersoncamera.cpp(60): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  ExptProcess.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\02.firstperson\firstpersoncamera.cpp(60): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\02.firstperson\firstpersoncamera.cpp(60): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  SpaceShipCamera.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.spaceship\spaceshipcamera.cpp(39): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.spaceship\spaceshipcamera.cpp(39): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.spaceship\spaceshipcamera.cpp(51): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.spaceship\spaceshipcamera.cpp(51): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.spaceship\spaceshipcamera.cpp(63): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.spaceship\spaceshipcamera.cpp(63): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  Camera.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(86): warning C4100: 'fRoll': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(86): warning C4100: 'fYaw': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(86): warning C4100: 'fPitch': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(90): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(90): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(94): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
+  BaseObject.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(100): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  ObjectShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.objectshader\objectshader.cpp(190): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.objectshader\objectshader.cpp(220): warning C4189: 'incrementSize': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   DiffusedShader.cpp
+  Shader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(56): warning C4100: 'pxmf4x4World': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(60): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(64): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(187): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(194): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(200): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(245): warning C4100: 'ppd3dShaderBlob': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(254): warning C4100: 'ppShaderBlob': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(293): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(297): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(297): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+  Scene.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(86): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(86): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(85): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(105): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(104): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+  RenderMgr.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(24): warning C4100: 'height': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(24): warning C4100: 'width': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(48): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(91): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+  CreateMgr.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(159): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(217): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(219): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(234): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(235): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(251): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(342): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(488): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(581): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(583): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(585): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+  Framework.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\00.frame\framework.cpp(114): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  Framework01.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+  SafeFunc.cpp
   DDSTextureLoader12.cpp
-  CreateMgr.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(159): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(217): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(219): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(234): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(235): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(251): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(342): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(488): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(581): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(583): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\createmgr.cpp(585): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
-  Camera.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\camera.cpp(86): warning C4100: 'fRoll': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\camera.cpp(86): warning C4100: 'fYaw': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\camera.cpp(86): warning C4100: 'fPitch': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\camera.cpp(90): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\camera.cpp(90): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\camera.cpp(94): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
-  BaseObject.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\baseobject.cpp(100): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-  AirplanePlayer.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+  ExptProcess.cpp
+  Timer.cpp
   코드를 생성하고 있습니다...
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

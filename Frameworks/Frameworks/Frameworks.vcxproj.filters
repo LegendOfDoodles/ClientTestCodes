@@ -119,199 +119,196 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>리소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
       <Filter>소스 파일\00.Global\00.Standard</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Code\00.Global\00.Standard\targetver.h">
       <Filter>소스 파일\00.Global\00.Standard</Filter>
     </ClInclude>
-    <ClInclude Include="Framework01.h">
-      <Filter>소스 파일\01.Main</Filter>
+    <ClInclude Include="Code\00.Global\01.Utility\01.Exception\ExptProcess.h">
+      <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
     </ClInclude>
-    <ClInclude Include="Framework.h">
-      <Filter>소스 파일\02.Framework\00.Frame</Filter>
+    <ClInclude Include="Code\00.Global\01.Utility\03.SafeFunc\SafeFunc.h">
+      <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
     </ClInclude>
-    <ClInclude Include="CreateMgr.h">
-      <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderMgr.h">
-      <Filter>소스 파일\02.Framework\02.RenderMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseObject.h">
-      <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
-    </ClInclude>
-    <ClInclude Include="Vectors.h">
+    <ClInclude Include="Code\00.Global\01.Utility\Vectors.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
+    <ClInclude Include="Code\00.Global\01.Utility\00.Timer\Timer.h">
       <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
     </ClInclude>
-    <ClInclude Include="RotatingObject.h">
-      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
+    <ClInclude Include="Code\00.Global\01.Utility\02.TextureLoader\d3dx12.h">
+      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
     </ClInclude>
-    <ClInclude Include="DiffusedShader.h">
+    <ClInclude Include="Code\00.Global\01.Utility\02.TextureLoader\DDSTextureLoader12.h">
+      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\01.Main\Framework01.h">
+      <Filter>소스 파일\01.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\resource.h">
+      <Filter>리소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\02.Framework\02.RenderMgr\RenderMgr.h">
+      <Filter>소스 파일\02.Framework\02.RenderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\03.Scenes\00.BaseScene\Scene.h">
+      <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\02.Framework\00.Frame\Framework.h">
+      <Filter>소스 파일\02.Framework\00.Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\02.Framework\01.CreateMgr\CreateMgr.h">
+      <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\00.BaseShader\Shader.h">
+      <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\01.DiffusedShader\DiffusedShader.h">
       <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectShader.h">
-      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
+    <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h">
+      <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
+    <ClInclude Include="Code\05.Objects\02.RotatingObject\RotatingObject.h">
+      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
     </ClInclude>
-    <ClInclude Include="SpaceShipCamera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
+    <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h">
+      <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
     </ClInclude>
-    <ClInclude Include="FirstPersonCamera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdPersonCamera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
-    </ClInclude>
-    <ClInclude Include="AirplanePlayer.h">
-      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
-    </ClInclude>
-    <ClInclude Include="ExptProcess.h">
-      <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
-    </ClInclude>
-    <ClInclude Include="DDSTextureLoader12.h">
-      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="Code\05.Objects\99.Material\Material.h">
       <Filter>소스 파일\05.Objects\99.Material</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Code\05.Objects\99.Material\00.Texture\Texture.h">
       <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
     </ClInclude>
-    <ClInclude Include="SafeFunc.h">
-      <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
+    <ClInclude Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.h">
+      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
     </ClInclude>
-    <ClInclude Include="Prefabs.h">
-      <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
+    <ClInclude Include="Code\05.Objects\03.Player\00.BasePlayer\Player.h">
+      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\01.Camera\02.FirstPerson\FirstPersonCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\02.ObjectShader\ObjectShader.h">
+      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h">
+      <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\06.Meshes\01.Mesh\Mesh.h">
+      <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
       <Filter>소스 파일\00.Global\00.Standard</Filter>
     </ClCompile>
-    <ClCompile Include="Framework01.cpp">
-      <Filter>소스 파일\01.Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework.cpp">
-      <Filter>소스 파일\02.Framework\00.Frame</Filter>
-    </ClCompile>
-    <ClCompile Include="CreateMgr.cpp">
-      <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderMgr.cpp">
-      <Filter>소스 파일\02.Framework\02.RenderMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
-    </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseObject.cpp">
-      <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="RotatingObject.cpp">
-      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
-    </ClCompile>
-    <ClCompile Include="DiffusedShader.cpp">
-      <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectShader.cpp">
-      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceShipCamera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
-    </ClCompile>
-    <ClCompile Include="FirstPersonCamera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdPersonCamera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
-    </ClCompile>
-    <ClCompile Include="AirplanePlayer.cpp">
-      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
-    </ClCompile>
-    <ClCompile Include="ExptProcess.cpp">
+    <ClCompile Include="Code\00.Global\01.Utility\01.Exception\ExptProcess.cpp">
       <Filter>소스 파일\00.Global\01.Utility\01.Exception</Filter>
     </ClCompile>
-    <ClCompile Include="DDSTextureLoader12.cpp">
-      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>소스 파일\05.Objects\99.Material</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="SafeFunc.cpp">
+    <ClCompile Include="Code\00.Global\01.Utility\03.SafeFunc\SafeFunc.cpp">
       <Filter>소스 파일\00.Global\01.Utility\03.SafeFunc</Filter>
     </ClCompile>
-    <ClCompile Include="Prefabs.cpp">
+    <ClCompile Include="Code\00.Global\01.Utility\00.Timer\Timer.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\00.Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\02.TextureLoader\DDSTextureLoader12.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\02.TextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\01.Main\Framework01.cpp">
+      <Filter>소스 파일\01.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\02.Framework\02.RenderMgr\RenderMgr.cpp">
+      <Filter>소스 파일\02.Framework\02.RenderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\03.Scenes\00.BaseScene\Scene.cpp">
+      <Filter>소스 파일\03.Scenes\00.BaseScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\02.Framework\00.Frame\Framework.cpp">
+      <Filter>소스 파일\02.Framework\00.Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\02.Framework\01.CreateMgr\CreateMgr.cpp">
+      <Filter>소스 파일\02.Framework\01.CreateMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\00.BaseShader\Shader.cpp">
+      <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\01.DiffusedShader\DiffusedShader.cpp">
+      <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp">
+      <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\02.RotatingObject\RotatingObject.cpp">
+      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp">
       <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\99.Material\Material.cpp">
+      <Filter>소스 파일\05.Objects\99.Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\99.Material\00.Texture\Texture.cpp">
+      <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.cpp">
+      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\03.Player\00.BasePlayer\Player.cpp">
+      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\01.Camera\02.FirstPerson\FirstPersonCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\02.ObjectShader\ObjectShader.cpp">
+      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp">
+      <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\06.Meshes\01.Mesh\Mesh.cpp">
+      <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
+    <Image Include="Resource\Framework01.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="Framework01.ico">
+    <Image Include="Resource\small.ico">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Framework01.rc">
+    <ResourceCompile Include="Resource\Framework01.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Light.hlsl">
+    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\Light.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders.hlsl">
+    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\Shaders.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

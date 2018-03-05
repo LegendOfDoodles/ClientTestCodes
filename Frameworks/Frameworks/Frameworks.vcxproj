@@ -76,12 +76,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>.\Code\00.Global\00.Standard;.\Code;.\Resource;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>.\Code\00.Global\00.Standard;.\Code;.\Resource;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,107 +152,85 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AirplanePlayer.h" />
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="DDSTextureLoader12.h" />
-    <ClInclude Include="ExptProcess.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="CreateMgr.h" />
-    <ClInclude Include="DiffusedShader.h" />
-    <ClInclude Include="FirstPersonCamera.h" />
-    <ClInclude Include="ObjectShader.h" />
-    <ClInclude Include="Prefabs.h" />
-    <ClInclude Include="RotatingObject.h" />
-    <ClInclude Include="SafeFunc.h" />
-    <ClInclude Include="SpaceShipCamera.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="ThirdPersonCamera.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="Framework.h" />
-    <ClInclude Include="Framework01.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="RenderMgr.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="Vectors.h" />
-    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Code\00.Global\00.Standard\stdafx.h" />
+    <ClInclude Include="Code\00.Global\00.Standard\targetver.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\00.Timer\Timer.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\01.Exception\ExptProcess.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\02.TextureLoader\d3dx12.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\02.TextureLoader\DDSTextureLoader12.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\03.SafeFunc\SafeFunc.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\Vectors.h" />
+    <ClInclude Include="Code\01.Main\Framework01.h" />
+    <ClInclude Include="Code\02.Framework\00.Frame\Framework.h" />
+    <ClInclude Include="Code\02.Framework\01.CreateMgr\CreateMgr.h" />
+    <ClInclude Include="Code\02.Framework\02.RenderMgr\RenderMgr.h" />
+    <ClInclude Include="Code\03.Scenes\00.BaseScene\Scene.h" />
+    <ClInclude Include="Code\04.Shaders\00.BaseShader\Shader.h" />
+    <ClInclude Include="Code\04.Shaders\01.DiffusedShader\DiffusedShader.h" />
+    <ClInclude Include="Code\04.Shaders\02.ObjectShader\ObjectShader.h" />
+    <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
+    <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h" />
+    <ClInclude Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.h" />
+    <ClInclude Include="Code\05.Objects\01.Camera\02.FirstPerson\FirstPersonCamera.h" />
+    <ClInclude Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.h" />
+    <ClInclude Include="Code\05.Objects\02.RotatingObject\RotatingObject.h" />
+    <ClInclude Include="Code\05.Objects\03.Player\00.BasePlayer\Player.h" />
+    <ClInclude Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.h" />
+    <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h" />
+    <ClInclude Include="Code\05.Objects\99.Material\00.Texture\Texture.h" />
+    <ClInclude Include="Code\05.Objects\99.Material\Material.h" />
+    <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h" />
+    <ClInclude Include="Code\06.Meshes\01.Mesh\Mesh.h" />
+    <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AirplanePlayer.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DDSTextureLoader12.cpp" />
-    <ClCompile Include="ExptProcess.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="CreateMgr.cpp" />
-    <ClCompile Include="DiffusedShader.cpp" />
-    <ClCompile Include="FirstPersonCamera.cpp" />
-    <ClCompile Include="ObjectShader.cpp" />
-    <ClCompile Include="Prefabs.cpp" />
-    <ClCompile Include="RotatingObject.cpp" />
-    <ClCompile Include="SafeFunc.cpp" />
-    <ClCompile Include="SpaceShipCamera.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="ThirdPersonCamera.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Framework.cpp" />
-    <ClCompile Include="Framework01.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="RenderMgr.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\00.Timer\Timer.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\01.Exception\ExptProcess.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\02.TextureLoader\DDSTextureLoader12.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\03.SafeFunc\SafeFunc.cpp" />
+    <ClCompile Include="Code\01.Main\Framework01.cpp" />
+    <ClCompile Include="Code\02.Framework\00.Frame\Framework.cpp" />
+    <ClCompile Include="Code\02.Framework\01.CreateMgr\CreateMgr.cpp" />
+    <ClCompile Include="Code\02.Framework\02.RenderMgr\RenderMgr.cpp" />
+    <ClCompile Include="Code\03.Scenes\00.BaseScene\Scene.cpp" />
+    <ClCompile Include="Code\04.Shaders\00.BaseShader\Shader.cpp" />
+    <ClCompile Include="Code\04.Shaders\01.DiffusedShader\DiffusedShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\02.ObjectShader\ObjectShader.cpp" />
+    <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
+    <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp" />
+    <ClCompile Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.cpp" />
+    <ClCompile Include="Code\05.Objects\01.Camera\02.FirstPerson\FirstPersonCamera.cpp" />
+    <ClCompile Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.cpp" />
+    <ClCompile Include="Code\05.Objects\02.RotatingObject\RotatingObject.cpp" />
+    <ClCompile Include="Code\05.Objects\03.Player\00.BasePlayer\Player.cpp" />
+    <ClCompile Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.cpp" />
+    <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp" />
+    <ClCompile Include="Code\05.Objects\99.Material\00.Texture\Texture.cpp" />
+    <ClCompile Include="Code\05.Objects\99.Material\Material.cpp" />
+    <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp" />
+    <ClCompile Include="Code\06.Meshes\01.Mesh\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Framework01.rc" />
+    <Image Include="Resource\Framework01.ico" />
+    <Image Include="Resource\small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Framework01.ico" />
-    <Image Include="small.ico" />
+    <ResourceCompile Include="Resource\Framework01.rc" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Light.hlsl">
+    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\Light.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <FileType>Document</FileType>
     </FxCompile>
-    <FxCompile Include="Shaders.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\Shaders.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.HLSL.CSharpVB.1.0.1\build\Microsoft.HLSL.CSharpVB.targets" Condition="Exists('..\packages\Microsoft.HLSL.CSharpVB.1.0.1\build\Microsoft.HLSL.CSharpVB.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>이 프로젝트는 이 컴퓨터에 없는 NuGet 패키지를 참조합니다. 해당 패키지를 다운로드하려면 NuGet 패키지 복원을 사용하십시오. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkID=322105를 참조하십시오. 누락된 파일은 {0}입니다.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.HLSL.CSharpVB.1.0.1\build\Microsoft.HLSL.CSharpVB.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.HLSL.CSharpVB.1.0.1\build\Microsoft.HLSL.CSharpVB.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
