@@ -917,7 +917,7 @@ void FBXExporter::WriteMeshToStream(std::ostream& inStream)
 	for (unsigned int i = 0; i < mTriangleCount; ++i)
 	{
 		// We need to change the culling order
-		inStream << "\t\t<tri>" << mTriangles[i].mIndices[0] << "," << mTriangles[i].mIndices[2] << "," << mTriangles[i].mIndices[1] << "</tri>" << std::endl;
+		inStream << "\t\t" << mTriangles[i].mIndices[0] << " " << mTriangles[i].mIndices[2] << " " << mTriangles[i].mIndices[1] << std::endl;
 	}
 	inStream << "\t</triangles>" << std::endl;
 
@@ -926,14 +926,14 @@ void FBXExporter::WriteMeshToStream(std::ostream& inStream)
 	for (unsigned int i = 0; i < mVertices.size(); ++i)
 	{
 		inStream << "\t\t<vtx>" << std::endl;
-		inStream << "\t\t\t<pos>" << mVertices[i].mPosition.x << "," << mVertices[i].mPosition.y << "," << -mVertices[i].mPosition.z << "</pos>" << std::endl;
-		inStream << "\t\t\t<norm>" << mVertices[i].mNormal.x << "," << mVertices[i].mNormal.y << "," << -mVertices[i].mNormal.z << "</norm>" << std::endl;
+		inStream << "\t\t\t"<< mVertices[i].mPosition.x << " " << mVertices[i].mPosition.y << " " << -mVertices[i].mPosition.z << std::endl;
+		inStream << "\t\t\t"<< mVertices[i].mNormal.x << " " << mVertices[i].mNormal.y << " " << -mVertices[i].mNormal.z<< std::endl;
 		if(mHasAnimation)
 		{
-			inStream << "\t\t\t<sw>" << static_cast<float>(mVertices[i].mVertexBlendingInfos[0].mBlendingWeight) << "," << static_cast<float>(mVertices[i].mVertexBlendingInfos[1].mBlendingWeight) << "," << static_cast<float>(mVertices[i].mVertexBlendingInfos[2].mBlendingWeight) << "," << static_cast<float>(mVertices[i].mVertexBlendingInfos[3].mBlendingWeight) << "</sw>" << std::endl;
-			inStream << "\t\t\t<si>" << mVertices[i].mVertexBlendingInfos[0].mBlendingIndex << "," << mVertices[i].mVertexBlendingInfos[1].mBlendingIndex << "," << mVertices[i].mVertexBlendingInfos[2].mBlendingIndex << "," << mVertices[i].mVertexBlendingInfos[3].mBlendingIndex << "</si>" << std::endl;
+			inStream << "\t\t\t"<< static_cast<float>(mVertices[i].mVertexBlendingInfos[0].mBlendingWeight) << " " << static_cast<float>(mVertices[i].mVertexBlendingInfos[1].mBlendingWeight) << " " << static_cast<float>(mVertices[i].mVertexBlendingInfos[2].mBlendingWeight) << " " << static_cast<float>(mVertices[i].mVertexBlendingInfos[3].mBlendingWeight) << std::endl;
+			inStream << "\t\t\t" << mVertices[i].mVertexBlendingInfos[0].mBlendingIndex << " " << mVertices[i].mVertexBlendingInfos[1].mBlendingIndex << " " << mVertices[i].mVertexBlendingInfos[2].mBlendingIndex << " " << mVertices[i].mVertexBlendingInfos[3].mBlendingIndex << std::endl;
 		}
-		inStream << "\t\t\t<tex>" << mVertices[i].mUV.x << "," << 1.0f - mVertices[i].mUV.y << "</tex>" << std::endl;
+		inStream << "\t\t\t" << mVertices[i].mUV.x << " " << 1.0f - mVertices[i].mUV.y << std::endl;
 		inStream << "\t\t</vtx>" << std::endl;
 	}
 	
@@ -952,13 +952,13 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 		inStream << "\t\t\t";
 		FbxVector4 translation = mSkeleton.mJoints[i].mGlobalBindposeInverse.GetT();
 		FbxVector4 rotation = mSkeleton.mJoints[i].mGlobalBindposeInverse.GetR();
-		translation.Set(translation.mData[0], translation.mData[1], -translation.mData[2]);
-		rotation.Set(-rotation.mData[0], -rotation.mData[1], rotation.mData[2]);
+		translation.Set(translation.mData[0]  ,translation.mData[1],  -translation.mData[2]);
+		rotation.Set(-rotation.mData[0] , -rotation.mData[1] , rotation.mData[2]);
 		mSkeleton.mJoints[i].mGlobalBindposeInverse.SetT(translation);
 		mSkeleton.mJoints[i].mGlobalBindposeInverse.SetR(rotation);
 		FbxMatrix out = mSkeleton.mJoints[i].mGlobalBindposeInverse;
 
-		Utilities::WriteMatrix(inStream, out.Transpose(), true);
+		Utilities::WriteMatrix(inStream , out.Transpose() , true);
 		inStream << "\t\t</joint>\n";
 	}
 	inStream << "\t</skeleton>\n";
@@ -974,7 +974,7 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 			inStream << "\t\t\t\t\t";
 			FbxVector4 translation = walker->mGlobalTransform.GetT();
 			FbxVector4 rotation = walker->mGlobalTransform.GetR();
-			translation.Set(translation.mData[0], translation.mData[1], -translation.mData[2]);
+			translation.Set(translation.mData[0] , translation.mData[1], -translation.mData[2]);
 			rotation.Set(-rotation.mData[0], -rotation.mData[1], rotation.mData[2]);
 			walker->mGlobalTransform.SetT(translation);
 			walker->mGlobalTransform.SetR(rotation);
