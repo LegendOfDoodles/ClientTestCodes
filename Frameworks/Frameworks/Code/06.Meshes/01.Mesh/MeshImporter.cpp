@@ -2,10 +2,15 @@
 #include "MeshImporter.h"
 
 
-CMeshImporter::CMeshImporter(char* in)
+CMeshImporter::CMeshImporter()
+{
+	
+}
+
+
+void CMeshImporter::LoadMeshData(char * in)
 {
 	std::ifstream ifs(in);
-
 	std::string line;
 	//삼각형 개수 확인
 	while (std::getline(ifs, line))
@@ -24,19 +29,14 @@ CMeshImporter::CMeshImporter(char* in)
 	//인덱스 추출
 	while (std::getline(ifs, line) && line.find("</triangles>", 0) == -1)
 	{
-		std::regex number("[0-9]+");
-		std::sregex_iterator it(line.begin(), line.end(), number);
-		std::sregex_iterator end;
-		float index[10];
+		float index[3];
 		int n = 0;
-		while (it != end)
-		{
-			std::smatch m = *it;
-			index[n] = atoi(m.str(0).c_str());
-			++it;
-			++n;
-		}
+		char *end = NULL;
+		index[0] = strtof(line.c_str(), &end);
+		index[1] = strtof(end, &end);
+		index[2] = strtof(end, NULL);
 		m_xmTriIndex.push_back(XMFLOAT3(index[0], index[1], index[2]));
+
 	}
 	while (std::getline(ifs, line))
 	{
@@ -47,7 +47,7 @@ CMeshImporter::CMeshImporter(char* in)
 
 			std::smatch m = *it;
 			m_iVerticesCnt = atoi(m.str(0).c_str());
-			m_Vertices.reserve(m_iVerticesCnt);
+			m_xmVertex.reserve(m_iVerticesCnt);
 			break;
 		}
 	}
@@ -55,72 +55,52 @@ CMeshImporter::CMeshImporter(char* in)
 	while (std::getline(ifs, line) && line.find("</vertices>", 0) == -1)
 	{
 		MyVertex vertex;
+		int LineNum = 0;
+		float index[3];
+
 		while (std::getline(ifs, line) && line.find("</vtx>", 0) == -1)
 		{
-			std::regex number("[0-9]+");
-			std::sregex_iterator it(line.begin(), line.end(), number);
-			std::sregex_iterator end;
+			char *end = NULL;
+			switch (LineNum)
+			{
+			case 0:
 
-			if (line.find("<pos>", 0) != -1) {
-				float index[10];
-				int n = 0;
-				while (it != end)
-				{
-					std::smatch m = *it;
-					index[n] = atof(m.str(0).c_str());
-					++it;
-					++n;
-				}
+				index[0] = strtof(line.c_str(), &end);
+				index[1] = strtof(end, &end);
+				index[2] = strtof(end, NULL);
 				vertex.pos = XMFLOAT3(index[0], index[1], index[2]);
+				break;
+
+			case 1:
+
+				index[0] = strtof(line.c_str(), &end);
+				index[1] = strtof(end, &end);
+				index[2] = strtof(end, NULL);
+				vertex.normal = XMFLOAT3(index[0], index[1], index[2]);
+				break;;
+			case 2:
+				vertex.skinweight[0] = strtof(line.c_str(), &end);
+				vertex.skinweight[1] = strtof(end, &end);
+				vertex.skinweight[2] = strtof(end, &end);
+				vertex.skinweight[3] = strtof(end, NULL);
+				break;
+
+			case 3:
+				vertex.skinindex[0] = strtof(line.c_str(), &end);
+				vertex.skinindex[1] = strtof(end, &end);
+				vertex.skinindex[2] = strtof(end, &end);
+				vertex.skinindex[3] = strtof(end, NULL);
+				break;
+			case 4:
+				vertex.uv[0] = strtof(line.c_str(), &end);
+				vertex.uv[1] = strtof(end, NULL);
+				break;
 			}
-			else if (line.find("<norm>", 0) != -1) {
-				float norm[10];
-				int n = 0;
-				while (it != end)
-				{
-					std::smatch m = *it;
-					norm[n] = atof(m.str(0).c_str());
-					if (n >= 3)break;
-					++it;
-					++n;
-				}
-				vertex.normal = XMFLOAT3(norm[0], norm[1], norm[2]);
-			}
-			else if (line.find("<sw>", 0) != -1) {
-				int n = 0;
-				while (it != end)
-				{
-					std::smatch m = *it;
-					vertex.skinweight[n] = atof(m.str(0).c_str());
-					++it;
-					++n;
-				}
-			}
-			else if (line.find("<si>", 0) != -1) {
-				int n = 0;
-				while (it != end)
-				{
-					std::smatch m = *it;
-					vertex.skinindex[n] = atoi(m.str(0).c_str());
-					++it;
-					++n;
-				}
-			}
-			else if (line.find("<tex>", 0) != -1) {
-				int n = 0;
-				while (it != end)
-				{
-					std::smatch m = *it;
-					vertex.uv[n] = atoi(m.str(0).c_str());
-					++it;
-					++n;
-				}
-			}
+			LineNum++;
 		}
-		m_Vertices.push_back(vertex);
+		m_xmVertex.push_back(vertex);
 	}
 }
-
 
 CMeshImporter::~CMeshImporter()
 {

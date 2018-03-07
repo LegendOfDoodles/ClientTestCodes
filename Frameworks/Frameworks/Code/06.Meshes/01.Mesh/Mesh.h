@@ -119,6 +119,14 @@ public:
 	virtual ~CCubeMeshIlluminated();
 };
 
+
+class CFBXMesh :public CMeshIlluminated
+{
+public :
+	CFBXMesh(CCreateMgr *pCreateMgr);
+	virtual ~CFBXMesh();
+};
+
 class CSphereMeshIlluminated : public CMeshIlluminated
 {
 public:

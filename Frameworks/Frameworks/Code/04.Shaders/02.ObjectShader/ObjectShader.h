@@ -29,6 +29,7 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
+
 	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 

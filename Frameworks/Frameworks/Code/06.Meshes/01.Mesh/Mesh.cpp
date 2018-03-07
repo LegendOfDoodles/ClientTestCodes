@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
+#include "MeshImporter.h"
 
 /// <summary>
 /// 목적: 테스트 용 메쉬 클래스 생성
@@ -74,9 +75,9 @@ void CMesh::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT
 			deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
 			deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
 
-			if (deltaU0 * deltaV1 == deltaU1 *  deltaV0) continue;
+			if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
 
-			float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 *  deltaV0);
+			float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
 
 			XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
 			XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
@@ -118,9 +119,9 @@ void CMesh::CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOA
 				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
 				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
 
-				if (deltaU0 * deltaV1 == deltaU1 *  deltaV0) continue;
+				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
 
-				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 *  deltaV0);
+				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
 
 				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
 				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
@@ -148,16 +149,16 @@ CTriangleMesh::CTriangleMesh(CCreateMgr *pCreateMgr) : CMesh(pCreateMgr)
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	CDiffusedVertex pVertices[3];
-	pVertices[0] = CDiffusedVertex(XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f,1.0f));
-	pVertices[1] = CDiffusedVertex(XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f,1.0f));
+	pVertices[0] = CDiffusedVertex(XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	pVertices[1] = CDiffusedVertex(XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	pVertices[2] = CDiffusedVertex(XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(Colors::Blue));
 
 	//삼각형 메쉬를 리소스(정점 버퍼)로 생성한다.
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,
-		m_nStride * m_nVertices, 
+		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pVertexUploadBuffer);
 
 	//정점 버퍼 뷰를 생성한다.
@@ -170,7 +171,7 @@ CTriangleMesh::CTriangleMesh(CCreateMgr *pCreateMgr) : CMesh(pCreateMgr)
 // 사각형 메쉬
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CCubeMeshDiffused::CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth) 
+CCubeMeshDiffused::CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth)
 	: CMesh(pCreateMgr)
 {
 	//직육면체는 꼭지점(정점)이 8개이다.
@@ -178,7 +179,7 @@ CCubeMeshDiffused::CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth, float
 	m_nStride = sizeof(CDiffusedVertex);
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
 
 	//정점 버퍼는 직육면체의 꼭지점 8개에 대한 정점 데이터를 가진다.
 	CDiffusedVertex pVertices[8];
@@ -193,9 +194,9 @@ CCubeMeshDiffused::CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth, float
 
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,
-		m_nStride * m_nVertices, 
+		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pVertexUploadBuffer);
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
@@ -261,15 +262,15 @@ CAirplaneMeshDiffused::CAirplaneMeshDiffused(CCreateMgr *pCreateMgr
 	m_nSlot = 0;
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
 
 	//위의 그림과 같은 비행기 메쉬를 표현하기 위한 정점 데이터이다.
 	CDiffusedVertex pVertices[24 * 3];
 	float x1 = fx * 0.2f,
-			y1 = fy * 0.2f, 
-			x2 = fx * 0.1f, 
-			y3 = fy * 0.3f, 
-			y2 = ((y1 - (fy - y3)) / x1) * x2 + (fy - y3);
+		y1 = fy * 0.2f,
+		x2 = fx * 0.1f,
+		y3 = fy * 0.3f,
+		y2 = ((y1 - (fy - y3)) / x1) * x2 + (fy - y3);
 	int i = 0;
 
 	//비행기 메쉬의 위쪽 면
@@ -448,9 +449,9 @@ CAirplaneMeshDiffused::CAirplaneMeshDiffused(CCreateMgr *pCreateMgr
 
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,
-		m_nStride * m_nVertices, 
+		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pVertexUploadBuffer);
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
@@ -485,7 +486,7 @@ CCubeMeshTextured::CCubeMeshTextured(CCreateMgr *pCreateMgr,
 	m_nSlot = 0;
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
 
 	XMFLOAT3 pPositions[36];
 	int i = 0;
@@ -591,9 +592,9 @@ CCubeMeshTextured::CCubeMeshTextured(CCreateMgr *pCreateMgr,
 	for (int i = 0; i < 36; i++) pVertices[i] = CTexturedVertex(pPositions[i], pTexCoords[i]);
 
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
-		pVertices, 
-		m_nStride * m_nVertices, 
-		D3D12_HEAP_TYPE_DEFAULT, 
+		pVertices,
+		m_nStride * m_nVertices,
+		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pVertexUploadBuffer);
 
@@ -735,7 +736,7 @@ CCubeMeshIlluminated::CCubeMeshIlluminated(CCreateMgr *pCreateMgr, float fWidth,
 
 	XMFLOAT3 pxmf3Positions[8];
 
-	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
 
 	pxmf3Positions[0] = XMFLOAT3(-fx, +fy, -fz);
 	pxmf3Positions[1] = XMFLOAT3(+fx, +fy, -fz);
@@ -970,7 +971,7 @@ CCubeMeshIlluminatedTextured::CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMg
 	m_nSlot = 0;
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	float fx = fWidth*0.5f, fy = fHeight*0.5f, fz = fDepth*0.5f;
+	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
 
 	XMFLOAT3 pxmf3Positions[36];
 	int i = 0;
@@ -1089,5 +1090,59 @@ CCubeMeshIlluminatedTextured::CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMg
 }
 
 CCubeMeshIlluminatedTextured::~CCubeMeshIlluminatedTextured()
+{
+}
+
+CFBXMesh::CFBXMesh(CCreateMgr * pCreateMgr) : CMeshIlluminated(pCreateMgr)
+{
+	CMeshImporter importer;
+	importer.LoadMeshData("FBXBinary//teapot2.meshinfo");
+	m_nVertices = importer.m_iVerticesCnt;
+	m_nStride = sizeof(CIlluminatedVertex);
+	m_nOffset = 0;
+	m_nSlot = 0;
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	m_nIndices = importer.m_iTriCnt * 3;
+	UINT* pnIndices = new UINT[m_nIndices];
+	int indicesCount = 0;
+	for (auto d : importer.m_xmTriIndex) {
+		pnIndices[indicesCount] = d.x;
+		pnIndices[indicesCount + 1] = d.y;
+		pnIndices[indicesCount + 2] = d.z;
+		indicesCount += 3;
+	}
+
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
+
+	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+
+	int nVertices = importer.m_iVerticesCnt;
+	XMFLOAT3* pxmf3Positions = new XMFLOAT3[nVertices];
+	XMFLOAT3* pxmf3Normals = new XMFLOAT3[nVertices];
+
+	int vecticesCount = 0;
+	for (auto d : importer.m_xmVertex) {
+		pxmf3Positions[vecticesCount] = XMFLOAT3(d.pos.x, d.pos.y, d.pos.z);
+		pxmf3Normals[vecticesCount] = XMFLOAT3(d.normal.x, d.normal.y, d.normal.z);
+		++vecticesCount;
+
+	}
+
+	CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_nVertices, pnIndices, m_nIndices);
+
+	CIlluminatedVertex* pVertices = new CIlluminatedVertex[nVertices];
+	for (int i = 0; i < nVertices; i++) pVertices[i] = CIlluminatedVertex(pxmf3Positions[i], pxmf3Normals[i]);
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+}
+
+CFBXMesh::~CFBXMesh()
 {
 }

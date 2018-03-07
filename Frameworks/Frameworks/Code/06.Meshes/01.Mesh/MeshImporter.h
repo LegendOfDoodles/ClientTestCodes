@@ -15,14 +15,14 @@ public:
 	int m_iTriCnt;
 	std::vector<XMFLOAT3> m_xmTriIndex;
 	int m_iVerticesCnt;
-	std::vector<MyVertex> m_Vertices;
+	std::vector<MyVertex> m_xmVertex;
 	char* m_FileRoute;
 public:
-	CMeshImporter(char* in);
+	CMeshImporter();
 
-
+	void LoadMeshData(char* in);
+	
 	~CMeshImporter();
 
-	int GetVerticesCount() { return m_iVerticesCnt; }
 };
 
