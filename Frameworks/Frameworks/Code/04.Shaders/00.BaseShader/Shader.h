@@ -24,6 +24,9 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
+	virtual void OnProcessKeyUp(WPARAM wParam);
+	virtual void OnProcessKeyDown(WPARAM wParam);
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 

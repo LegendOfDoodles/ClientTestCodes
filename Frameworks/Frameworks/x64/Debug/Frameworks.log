@@ -1,10 +1,5 @@
-﻿  Mesh.cpp
-d:\새 폴더\client\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(103): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(592): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
-  d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(492): note: 'i' 선언을 참조하십시오.
-d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1083): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
-  d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(977): note: 'i' 선언을 참조하십시오.
-d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1110): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1111): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1112): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+﻿  ObjectShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.objectshader\objectshader.cpp(110): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.objectshader\objectshader.cpp(214): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.objectshader\objectshader.cpp(244): warning C4189: 'incrementSize': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

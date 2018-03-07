@@ -9,7 +9,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-04
+/// 최종 수정 날짜: 2018-03-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -214,6 +214,7 @@ void CScene::ReleaseShaderVariables()
 
 void CScene::UpdateShaderVariables()
 {
+	m_pLights->m_pLights[1].m_position = m_pPlayer->GetCamera()->GetPosition();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 
@@ -266,6 +267,8 @@ void CScene::OnProcessKeyUp(WPARAM wParam)
 		break;
 
 	default:
+		for (int i = 0; i < m_nShaders; ++i)
+			m_ppShaders[i]->OnProcessKeyUp(wParam);
 		break;
 	}
 }
@@ -294,6 +297,8 @@ void CScene::OnProcessKeyDown(WPARAM wParam)
 		break;
 
 	default:
+		for (int i = 0; i < m_nShaders; ++i)
+			m_ppShaders[i]->OnProcessKeyDown(wParam);
 		break;
 	}
 }

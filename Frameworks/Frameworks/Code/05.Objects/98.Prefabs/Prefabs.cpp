@@ -16,23 +16,24 @@ CMaterial* Materials::CreateBrickMaterial(CCreateMgr *pCreateMgr,
 	D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Stones.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/StonesNormal.dds", 1);
+	//CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
+	//pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Stones.dds", 0);
+	//pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/StonesNormal.dds", 1);
 
-	CreateShaderResourceViews(
-		pCreateMgr, pTexture,
-		3, true, 
-		pSrvCPUDescriptorStartHandle,
-		pSrvGPUDescriptorStartHandle);
+	//CreateShaderResourceViews(
+	//	pCreateMgr, pTexture,
+	//	3, true, 
+	//	pSrvCPUDescriptorStartHandle,
+	//	pSrvGPUDescriptorStartHandle);
 
 	pMaterial->Initialize(pCreateMgr);
 
-	pMaterial->SetTexture(pTexture);
+	//pMaterial->SetTexture(pTexture);
 
 	pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 	pMaterial->SetSmoothness(5.0f);
-	pMaterial->SetRoughness(0.0f);
+	pMaterial->SetRoughness(0.45f);
+	pMaterial->SetRefractiveIndex(0.01f);
 
 	return pMaterial;
 }

@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-04
+/// 최종 수정 날짜: 2018-03-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -65,8 +65,8 @@ void CMesh::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT
 	{
 		for (int j = 0, k = 1, l = 2; j < 3; ++j, ++k, ++l)
 		{
-			k = Wrap(k, 0, 2);
-			l = Wrap(l, 0, 2);
+			k = Wrap(k, 0, 3);
+			l = Wrap(l, 0, 3);
 
 			nIndex0 = i * 3 + j;		nIndex1 = i * 3 + k;		nIndex2 = i * 3 + l;
 
