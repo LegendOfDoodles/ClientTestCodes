@@ -62,7 +62,7 @@ protected: // 내부 함수
 	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables();
 
-	virtual void OnProcessMouseMove();
+	virtual void OnProcessMouseMove(LPARAM lParam);
 
 	virtual void OnProcessKeyUp(WPARAM wParam);
 	virtual void OnProcessKeyDown(WPARAM wParam);

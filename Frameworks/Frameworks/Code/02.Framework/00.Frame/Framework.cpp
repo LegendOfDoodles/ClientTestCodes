@@ -6,7 +6,7 @@
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-24
+/// 최종 수정 날짜: 2018-03-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -52,8 +52,8 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	{
 	case WM_SIZE:
 	{
-		ResizeScreen(wParam, lParam);
-		//SwitchScreenMode();
+		m_createMgr.Resize(LOWORD(lParam), HIWORD(lParam));
+		// m_createMgr.ChangeScreenMode();
 		break;
 	}
 	case WM_LBUTTONDOWN:
@@ -101,20 +101,4 @@ void CFramework::AnimateObjects(float timeElapsed)
 void CFramework::RenderObjects()
 {
 	m_pRenderMgr->Render(m_pScene);
-}
-
-void CFramework::SwitchScreenMode()
-{
-	m_createMgr.ChangeScreenMode();
-	m_pRenderMgr->WaitForGpuComplete();
-	m_createMgr.OnResizeBackBuffers();
-	m_pRenderMgr->WaitForGpuComplete();
-}
-
-void CFramework::ResizeScreen(WPARAM wParam, LPARAM lParam)
-{
-	m_createMgr.Resize(LOWORD(lParam), HIWORD(lParam));
-	m_pRenderMgr->WaitForGpuComplete();
-	m_createMgr.OnResizeBackBuffers();
-	m_pRenderMgr->WaitForGpuComplete();
 }

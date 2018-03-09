@@ -94,7 +94,7 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEMOVE:
-		OnProcessMouseMove();
+		OnProcessMouseMove(lParam);
 		break;
 	default:
 		break;
@@ -145,7 +145,7 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[2].m_bEnable = true;
 	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLights->m_pLights[2].m_direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	m_pLights->m_pLights[2].m_direction = XMFLOAT3(0.0f, 0.0f,1.0f);
 
 	m_pLights->m_pLights[3].m_bEnable = true;
 	m_pLights->m_pLights[3].m_nType = SPOT_LIGHT;
@@ -219,8 +219,11 @@ void CScene::UpdateShaderVariables()
 }
 
 // Process Mouse Input
-void CScene::OnProcessMouseMove()
+void CScene::OnProcessMouseMove(LPARAM lParam)
 {
+	int mx{ LOWORD(lParam) };
+	int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
+	printf("%d %d\n", mx, my);
 	//float cxDelta = 0.0f, cyDelta = 0.0f;
 	//POINT cursorPos;
 

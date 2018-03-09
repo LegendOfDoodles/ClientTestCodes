@@ -82,6 +82,10 @@ void CCreateMgr::Resize(int width, int height)
 {
 	m_wndClientWidth = width;
 	m_wndClientHeight = height;
+
+	m_renderMgr.WaitForGpuComplete();
+	OnResizeBackBuffers();
+	m_renderMgr.WaitForGpuComplete();
 }
 
 void CCreateMgr::OnResizeBackBuffers()
@@ -161,6 +165,10 @@ void CCreateMgr::ChangeScreenMode()
 	}
 	hResult = m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
 	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
+
+	m_renderMgr.WaitForGpuComplete();
+	OnResizeBackBuffers();
+	m_renderMgr.WaitForGpuComplete();
 }
 
 D3D12_HEAP_PROPERTIES CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType)

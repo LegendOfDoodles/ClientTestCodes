@@ -31,8 +31,8 @@ CMaterial* Materials::CreateBrickMaterial(CCreateMgr *pCreateMgr,
 	//pMaterial->SetTexture(pTexture);
 
 	pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
-	pMaterial->SetSpecularPower(5.0f);
-	pMaterial->SetRoughness(1.0f);
+	pMaterial->SetRoughness(0.4f);
+	pMaterial->SetMetalic(1.0f);
 
 	return pMaterial;
 }
