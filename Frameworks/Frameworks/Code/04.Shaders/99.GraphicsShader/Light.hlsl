@@ -17,6 +17,7 @@ struct MATERIAL
     float4 m_cAlbedo;
     float m_cSepcularPower;
     float m_cRoughness;
+    float m_cMetalic;
     float m_cRefractiveIndex;
 };
 
@@ -70,11 +71,11 @@ float4 OrenNayarDiffuse(float3 vLight, float3 vNormal, float3 vToCamera)
 }
 
 // Cook-Torrance Specular Function
-float SpecularFactor(float3 vLight, float3 vNormal, float3 vToCamera)
+float CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vToCamera)
 {
     float3 vToLight = normalize(vLight);
     float3 vHalf = normalize(vToCamera + vToLight);
-    float roguh_sq = pow(gMaterials.m_cRoughness, 2);
+    float metal_sq = pow(gMaterials.m_cMetalic, 2);
 
 	// Geometrical Attenuation Factor
     float NE = dot(vNormal, vToCamera);
@@ -83,15 +84,17 @@ float SpecularFactor(float3 vLight, float3 vNormal, float3 vToCamera)
     float EH = dot(vToCamera, vHalf);
     float NL = dot(vNormal, vToLight);
 
-    float G = min(min((2 * NE * NH) / EH, (2 * NL * NH) / EH), 1);
+    float G = min(min((2 * NE * NH) / EH, (2 * NL * NH) / EH), 1.0f);
 
 	// Microfacet Distribution Function
-    float D = (1 / 4 * roguh_sq * NH2 * NH2) * exp(-1 / roguh_sq * ((1 - NH2) / NH2));
+    float D = (metal_sq * NH2 * NH2 / 4) * exp(-1 / metal_sq * ((1 - NH2) / NH2));
 
 	// Fresnel Reflection
     float fFri = gMaterials.m_cRefractiveIndex;
 
     float F = fFri + (1 - fFri) * pow((1 - NE), 5.0f);
+  //  if (D== 0)
+		//return 1;
 
     float result = (D * G * F) / (PI * NL * NE);
     return result;
@@ -100,27 +103,29 @@ float SpecularFactor(float3 vLight, float3 vNormal, float3 vToCamera)
 float4 DirectionalLight(int nIndex, float3 vNormal, float3 vToCamera)
 {
     float3 vToLight = -gLights[nIndex].m_vDirection;
-    float fDiffuseFactor = dot(vToLight, vNormal);
-    float fSpecularFactor = 0.0f;
-    if (fDiffuseFactor > 0.0f)
-    {
-        if (gMaterials.m_cSepcularPower != 0.0f)
-        {
-#ifdef _WITH_REFLECT
-		float3 vReflect = reflect(-vToLight, vNormal);
-		fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSepcularPower);
-#else
-#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
-            float3 vHalf = normalize(vToCamera + vToLight);
-#else
-		float3 vHalf = float3(0.0f, 1.0f, 0.0f);
-#endif
-            fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSepcularPower);
-#endif
-        }
-    }
 
-    return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * SpecularFactor(vToLight, vNormal, vToCamera)));
+	// Phong Specular
+//    float fDiffuseFactor = dot(vToLight, vNormal);
+//    float fSpecularFactor = 0.0f;
+//    if (fDiffuseFactor > 0.0f)
+//    {
+//        if (gMaterials.m_cSepcularPower != 0.0f)
+//        {
+//#ifdef _WITH_REFLECT
+//		float3 vReflect = reflect(-vToLight, vNormal);
+//		fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSepcularPower);
+//#else
+//#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
+//            float3 vHalf = normalize(vToCamera + vToLight);
+//#else
+//		float3 vHalf = float3(0.0f, 1.0f, 0.0f);
+//#endif
+//            fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSepcularPower);
+//#endif
+//        }
+//    }
+
+    return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, vToCamera)));
     //return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * fSpecularFactor));
     //return ((gLights[nIndex].m_cAlbedo * fDiffuseFactor * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor));
 }
@@ -131,29 +136,31 @@ float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vToCamera
     float fDistance = length(vToLight);
     if (fDistance <= gLights[nIndex].m_fRange)
     {
-        float fSpecularFactor = 0.0f;
         vToLight /= fDistance;
-        float fDiffuseFactor = dot(vToLight, vNormal);
-        if (fDiffuseFactor > 0.0f)
-        {
-            if (gMaterials.m_cSepcularPower != 0.0f)
-            {
-#ifdef _WITH_REFLECT
-			float3 vReflect = reflect(-vToLight, vNormal);
-			fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSepcularPower);
-#else
-#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
-                float3 vHalf = normalize(vToCamera + vToLight);
-#else
-			float3 vHalf = float3(0.0f, 1.0f, 0.0f);
-#endif
-                fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSepcularPower);
-#endif
-            }
-        }
+
+		// Phong Specular
+//        float fSpecularFactor = 0.0f;
+//        float fDiffuseFactor = dot(vToLight, vNormal);
+//        if (fDiffuseFactor > 0.0f)
+//        {
+//            if (gMaterials.m_cSepcularPower != 0.0f)
+//            {
+//#ifdef _WITH_REFLECT
+//			float3 vReflect = reflect(-vToLight, vNormal);
+//			fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSepcularPower);
+//#else
+//#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
+//                float3 vHalf = normalize(vToCamera + vToLight);
+//#else
+//			float3 vHalf = float3(0.0f, 1.0f, 0.0f);
+//#endif
+//                fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSepcularPower);
+//#endif
+//            }
+//        }
         float fAttenuationFactor = 1.0f / dot(gLights[nIndex].m_vAttenuation, float3(1.0f, fDistance, fDistance * fDistance));
 
-        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * SpecularFactor(vToLight, vNormal, vToCamera))) * fAttenuationFactor);
+        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, vToCamera))) * fAttenuationFactor);
         //return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor);
         //return (((gLights[nIndex].m_cAlbedo * fDiffuseFactor * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor);
     }
@@ -166,26 +173,28 @@ float4 SpotLight(int nIndex, float3 vPosition, float3 vNormal, float3 vToCamera)
     float fDistance = length(vToLight);
     if (fDistance <= gLights[nIndex].m_fRange)
     {
-        float fSpecularFactor = 0.0f;
         vToLight /= fDistance;
-        float fDiffuseFactor = dot(vToLight, vNormal);
-        if (fDiffuseFactor > 0.0f)
-        {
-            if (gMaterials.m_cSepcularPower != 0.0f)
-            {
-#ifdef _WITH_REFLECT
-			float3 vReflect = reflect(-vToLight, vNormal);
-			fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSepcularPower);
-#else
-#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
-                float3 vHalf = normalize(vToCamera + vToLight);
-#else
-			float3 vHalf = float3(0.0f, 1.0f, 0.0f);
-#endif
-                fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSepcularPower);
-#endif
-            }
-        }
+
+		// Phong Specular
+//        float fSpecularFactor = 0.0f;
+//        float fDiffuseFactor = dot(vToLight, vNormal);
+//        if (fDiffuseFactor > 0.0f)
+//        {
+//            if (gMaterials.m_cSepcularPower != 0.0f)
+//            {
+//#ifdef _WITH_REFLECT
+//			float3 vReflect = reflect(-vToLight, vNormal);
+//			fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSepcularPower);
+//#else
+//#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
+//                float3 vHalf = normalize(vToCamera + vToLight);
+//#else
+//			float3 vHalf = float3(0.0f, 1.0f, 0.0f);
+//#endif
+//                fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSepcularPower);
+//#endif
+//            }
+//        }
 #ifdef _WITH_THETA_PHI_CONES
         float fAlpha = max(dot(-vToLight, gLights[nIndex].m_vDirection), 0.0f);
         float fSpotFactor = pow(max(((fAlpha - gLights[nIndex].m_fPhi) / (gLights[nIndex].m_fTheta - gLights[nIndex].m_fPhi)), 0.0f), gLights[nIndex].m_fFalloff);
@@ -194,7 +203,7 @@ float4 SpotLight(int nIndex, float3 vPosition, float3 vNormal, float3 vToCamera)
 #endif
         float fAttenuationFactor = 1.0f / dot(gLights[nIndex].m_vAttenuation, float3(1.0f, fDistance, fDistance * fDistance));
 
-        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * SpecularFactor(vToLight, vNormal, vToCamera))) * fAttenuationFactor * fSpotFactor);
+        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, vToCamera))) * fAttenuationFactor * fSpotFactor);
         //return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor * fSpotFactor);
         //return (((gLights[nIndex].m_cAlbedo * fDiffuseFactor * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor * fSpotFactor);
     }

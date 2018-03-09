@@ -9,6 +9,7 @@ struct COLOR
 	XMFLOAT4						m_xmf4Diffuse{ 1.0f, 1.0f, 1.0f, 1.0f };
 	float									m_cSpecularPower{ 1.0f };
 	float									m_cRoughness{ 1.0f };
+	float									m_cMetalic{ 1.0f };
 	float									m_cRefractiveIndex{ 0.01f };
 };
 
@@ -32,8 +33,9 @@ public: // 공개 함수
 	void SetShader(CShader *pShader);
 
 	void SetAlbedo(XMFLOAT4 xmf4Albedo) { m_color.m_xmf4Diffuse = xmf4Albedo; }
-	void SetSmoothness(float SP) { m_color.m_cSpecularPower = SP; }
+	void SetSpecularPower(float SP) { m_color.m_cSpecularPower = SP; }
 	void SetRoughness(float R) { m_color.m_cRoughness = CLAMP(R, 0, 1); }
+	void SetMetalic(float M) { m_color.m_cMetalic = CLAMP(M, 0, 1); printf("%f\n", m_color.m_cMetalic); }
 	void SetRefractiveIndex(float RI) { m_color.m_cRefractiveIndex = CLAMP(RI, 0, 1); }
 	
 	void AddRef() { m_nReferences++; }

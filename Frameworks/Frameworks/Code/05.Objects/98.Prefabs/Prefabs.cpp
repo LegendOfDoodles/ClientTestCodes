@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-04
+/// 최종 수정 날짜: 2018-03-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -31,9 +31,8 @@ CMaterial* Materials::CreateBrickMaterial(CCreateMgr *pCreateMgr,
 	//pMaterial->SetTexture(pTexture);
 
 	pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
-	pMaterial->SetSmoothness(5.0f);
-	pMaterial->SetRoughness(0.45f);
-	pMaterial->SetRefractiveIndex(0.01f);
+	pMaterial->SetSpecularPower(5.0f);
+	pMaterial->SetRoughness(1.0f);
 
 	return pMaterial;
 }

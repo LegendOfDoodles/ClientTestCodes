@@ -96,6 +96,12 @@ void CObjectShader::OnProcessKeyUp(WPARAM wParam)
 	case 'I':
 		m_pMaterial->SetRoughness(1.0f);
 		break;
+	case 'O':
+		m_pMaterial->SetMetalic(0.0f);
+		break;
+	case 'P':
+		m_pMaterial->SetMetalic(1.0f);
+		break;
 	default:
 		break;
 	}
@@ -235,7 +241,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CCubeMeshIlluminatedTextured *pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr, 12.0f, 12.0f, 12.0f);
+	CSphereMeshIlluminated *pCubeMesh = new CSphereMeshIlluminated(pCreateMgr, 12.0f, 12.0f, 12.0f);
 
 	float fxPitch = 12.0f * 2.5f;
 	float fyPitch = 12.0f * 2.5f;
