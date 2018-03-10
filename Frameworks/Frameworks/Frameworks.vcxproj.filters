@@ -69,14 +69,8 @@
     <Filter Include="소스 파일\05.Objects\02.RotatingObject">
       <UniqueIdentifier>{be3fc130-7dbf-4272-9abf-efccf81d9bf4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\04.Shaders\01.DiffusedShader">
-      <UniqueIdentifier>{539dd996-b49f-4b9d-bfe8-4321aad95ce3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
       <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\04.Shaders\02.ObjectShader">
-      <UniqueIdentifier>{0be4d380-8be4-4236-b028-2164d465eeb9}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\05.Objects\01.Camera\00.BaseCamera">
       <UniqueIdentifier>{2672b61b-e577-45a5-9721-a91d432baf7e}</UniqueIdentifier>
@@ -116,6 +110,9 @@
     </Filter>
     <Filter Include="소스 파일\05.Objects\98.Prefabs">
       <UniqueIdentifier>{6f590415-f2c1-4130-b8d3-f5959dfaa3a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\01.ObjectShader">
+      <UniqueIdentifier>{0be4d380-8be4-4236-b028-2164d465eeb9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +161,6 @@
     <ClInclude Include="Code\04.Shaders\00.BaseShader\Shader.h">
       <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
     </ClInclude>
-    <ClInclude Include="Code\04.Shaders\01.DiffusedShader\DiffusedShader.h">
-      <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
-    </ClInclude>
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h">
       <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
     </ClInclude>
@@ -200,9 +194,6 @@
     <ClInclude Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.h">
       <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
     </ClInclude>
-    <ClInclude Include="Code\04.Shaders\02.ObjectShader\ObjectShader.h">
-      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
-    </ClInclude>
     <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h">
       <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
     </ClInclude>
@@ -211,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h">
       <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\01.ObjectShader\ObjectShader.h">
+      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -247,9 +241,6 @@
     <ClCompile Include="Code\04.Shaders\00.BaseShader\Shader.cpp">
       <Filter>소스 파일\04.Shaders\00.BaseShader</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\01.DiffusedShader\DiffusedShader.cpp">
-      <Filter>소스 파일\04.Shaders\01.DiffusedShader</Filter>
-    </ClCompile>
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp">
       <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
     </ClCompile>
@@ -283,9 +274,6 @@
     <ClCompile Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\02.ObjectShader\ObjectShader.cpp">
-      <Filter>소스 파일\04.Shaders\02.ObjectShader</Filter>
-    </ClCompile>
     <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp">
       <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
     </ClCompile>
@@ -294,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp">
       <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp">
+      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

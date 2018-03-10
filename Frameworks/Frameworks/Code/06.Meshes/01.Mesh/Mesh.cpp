@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-07
+/// 최종 수정 날짜: 2018-03-10
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -54,40 +54,88 @@ void CMesh::Render(UINT istanceCnt)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CMesh::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, int nVertices, XMFLOAT2 *xmf2TexCoord)
+void CMesh::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
+	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
 {
-	int nPrimitives = nVertices / 3;
+	int nPrimitives =(pnIndices) ? (nIndices / 3) : (nVertices / 3);
+	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
 	UINT nIndex0, nIndex1, nIndex2;
 	float deltaU0, deltaU1;
 	float deltaV0, deltaV1;
 
-	for (int i = 0; i < nPrimitives; i++)
+	if (pnIndices)
 	{
-		for (int j = 0, k = 1, l = 2; j < 3; ++j, ++k, ++l)
+		for (UINT v = 0; v < nVertices; v++)
 		{
-			k = Wrap(k, 0, 3);
-			l = Wrap(l, 0, 3);
+			xmf3SumOfTangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
+			for (UINT i = 0; i < nPrimitives; i++)
+			{
+				if (pnIndices[i * 3] == v)
+				{
+					nIndex0 = pnIndices[i * 3];		nIndex1 = pnIndices[i * 3 + 1];		nIndex2 = pnIndices[i * 3 + 2];
+				}
+				else if (pnIndices[i * 3 + 1] == v)
+				{
+					nIndex0 = pnIndices[i * 3 + 1];		nIndex1 = pnIndices[i * 3 + 2];		nIndex2 = pnIndices[i * 3];
+				}
+				else if (pnIndices[i * 3 + 2] == v)
+				{
+					nIndex0 = pnIndices[i * 3 + 2];		nIndex1 = pnIndices[i * 3];		nIndex2 = pnIndices[i * 3 + 1];
+				}
+				else { continue; }
 
-			nIndex0 = i * 3 + j;		nIndex1 = i * 3 + k;		nIndex2 = i * 3 + l;
+				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
+				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
+				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
+				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
 
-			deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
-			deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
-			deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
-			deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
+				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
 
-			if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
+				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
 
-			float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
+				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Tangent(
+					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
+					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
+					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
+				);
 
-			XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
-			XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
-			XMFLOAT3 xmf3Tangent(
-				proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
-				proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
-				proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
-			);
+				xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
+			}
+			pxmf3Tangents[v] = Vector3::Normalize(xmf3SumOfTangent);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < nPrimitives; i++)
+		{
+			for (int j = 0, k = 1, l = 2; j < 3; ++j, ++k, ++l)
+			{
+				k = Wrap(k, 0, 3);
+				l = Wrap(l, 0, 3);
 
-			pxmf3Tangents[nIndex0] = xmf3Tangent;
+				nIndex0 = i * 3 + j;		nIndex1 = i * 3 + k;		nIndex2 = i * 3 + l;
+
+				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
+				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
+				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
+				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
+
+				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
+
+				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
+
+				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Tangent(
+					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
+					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
+					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
+				);
+
+				pxmf3Tangents[nIndex0] = xmf3Tangent;
+			}
 		}
 	}
 }
@@ -112,355 +160,43 @@ void CMesh::CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOA
 			if (pnIndices) nIndex1 = pnIndices[nIndex1];
 			nIndex2 = (pnIndices) ? pnIndices[i + 2] : (i + 2);
 
-			if ((nIndex0 == j) || (nIndex1 == j) || (nIndex2 == j))
+			if (nIndex0 == j) { }
+			else if (nIndex1 == j)
 			{
-				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
-				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
-				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
-				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
-
-				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
-
-				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
-
-				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
-				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
-				XMFLOAT3 xmf3Tangent(
-					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
-					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
-					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
-				);
-				xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
+				int temp = nIndex0;
+				nIndex0 = nIndex1;
+				nIndex1 = nIndex2;
+				nIndex2 = temp;
 			}
+			else if (nIndex2 == j)
+			{
+				int temp = nIndex0;
+				nIndex0 = nIndex2;
+				nIndex2 = nIndex1;
+				nIndex1 = temp;
+			}
+			else { continue; }
+
+			deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
+			deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
+			deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
+			deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
+
+			if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
+
+			float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
+
+			XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
+			XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
+			XMFLOAT3 xmf3Tangent(
+				proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
+				proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
+				proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
+			);
+			xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
 		}
 		pxmf3Tangents[j] = Vector3::Normalize(xmf3SumOfTangent);
 	}
-}
-
-////////////////////////////////////////////////////////////////////////
-// 삼각형 메쉬
-////////////////////////////////////////////////////////////////////////
-// 생성자, 소멸자
-CTriangleMesh::CTriangleMesh(CCreateMgr *pCreateMgr) : CMesh(pCreateMgr)
-{
-	//삼각형 메쉬를 정의한다.
-	m_nVertices = 3;
-	m_nStride = sizeof(CDiffusedVertex);
-	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-
-	CDiffusedVertex pVertices[3];
-	pVertices[0] = CDiffusedVertex(XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
-	pVertices[1] = CDiffusedVertex(XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
-	pVertices[2] = CDiffusedVertex(XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(Colors::Blue));
-
-	//삼각형 메쉬를 리소스(정점 버퍼)로 생성한다.
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
-		pVertices,
-		m_nStride * m_nVertices,
-		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		&m_pVertexUploadBuffer);
-
-	//정점 버퍼 뷰를 생성한다.
-	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
-	m_vertexBufferView.StrideInBytes = m_nStride;
-	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
-}
-
-////////////////////////////////////////////////////////////////////////
-// 사각형 메쉬
-////////////////////////////////////////////////////////////////////////
-// 생성자, 소멸자
-CCubeMeshDiffused::CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth)
-	: CMesh(pCreateMgr)
-{
-	//직육면체는 꼭지점(정점)이 8개이다.
-	m_nVertices = 8;
-	m_nStride = sizeof(CDiffusedVertex);
-	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-
-	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
-
-	//정점 버퍼는 직육면체의 꼭지점 8개에 대한 정점 데이터를 가진다.
-	CDiffusedVertex pVertices[8];
-	pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx, +fy, -fz), RANDOM_COLOR);
-	pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, +fy, -fz), RANDOM_COLOR);
-	pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx, +fy, +fz), RANDOM_COLOR);
-	pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, +fy, +fz), RANDOM_COLOR);
-	pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, -fy, -fz), RANDOM_COLOR);
-	pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, -fy, -fz), RANDOM_COLOR);
-	pVertices[6] = CDiffusedVertex(XMFLOAT3(+fx, -fy, +fz), RANDOM_COLOR);
-	pVertices[7] = CDiffusedVertex(XMFLOAT3(-fx, -fy, +fz), RANDOM_COLOR);
-
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
-		pVertices,
-		m_nStride * m_nVertices,
-		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		&m_pVertexUploadBuffer);
-
-	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
-	m_vertexBufferView.StrideInBytes = m_nStride;
-	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
-
-	m_nIndices = 36;
-
-	UINT pnIndices[36];
-	//ⓐ 앞면(Front) 사각형의 위쪽 삼각형
-	pnIndices[0] = 3; pnIndices[1] = 1; pnIndices[2] = 0;
-	//ⓑ 앞면(Front) 사각형의 아래쪽 삼각형
-	pnIndices[3] = 2; pnIndices[4] = 1; pnIndices[5] = 3;
-	//ⓒ 윗면(Top) 사각형의 위쪽 삼각형
-	pnIndices[6] = 0; pnIndices[7] = 5; pnIndices[8] = 4;
-	//ⓓ 윗면(Top) 사각형의 아래쪽 삼각형
-	pnIndices[9] = 1; pnIndices[10] = 5; pnIndices[11] = 0;
-	//ⓔ 뒷면(Back) 사각형의 위쪽 삼각형
-	pnIndices[12] = 3; pnIndices[13] = 4; pnIndices[14] = 7;
-	//ⓕ 뒷면(Back) 사각형의 아래쪽 삼각형
-	pnIndices[15] = 0; pnIndices[16] = 4; pnIndices[17] = 3;
-	//ⓖ 아래면(Bottom) 사각형의 위쪽 삼각형
-	pnIndices[18] = 1; pnIndices[19] = 6; pnIndices[20] = 5;
-	//ⓗ 아래면(Bottom) 사각형의 아래쪽 삼각형
-	pnIndices[21] = 2; pnIndices[22] = 6; pnIndices[23] = 1;
-	//ⓘ 옆면(Left) 사각형의 위쪽 삼각형
-	pnIndices[24] = 2; pnIndices[25] = 7; pnIndices[26] = 6;
-	//ⓙ 옆면(Left) 사각형의 아래쪽 삼각형
-	pnIndices[27] = 3; pnIndices[28] = 7; pnIndices[29] = 2;
-	//ⓚ 옆면(Right) 사각형의 위쪽 삼각형
-	pnIndices[30] = 6; pnIndices[31] = 4; pnIndices[32] = 5;
-	//ⓛ 옆면(Right) 사각형의 아래쪽 삼각형
-	pnIndices[33] = 7; pnIndices[34] = 4; pnIndices[35] = 6;
-
-	//인덱스 버퍼를 생성한다.
-	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
-		pnIndices,
-		sizeof(UINT) * m_nIndices,
-		D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER,
-		&m_pIndexUploadBuffer);
-
-	//인덱스 버퍼 뷰를 생성한다.
-	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
-	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
-	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
-}
-
-CCubeMeshDiffused::~CCubeMeshDiffused()
-{
-}
-
-////////////////////////////////////////////////////////////////////////
-// 비행기 메쉬
-////////////////////////////////////////////////////////////////////////
-// 생성자, 소멸자
-CAirplaneMeshDiffused::CAirplaneMeshDiffused(CCreateMgr *pCreateMgr
-	, float fWidth, float fHeight, float fDepth, XMFLOAT4 xmf4Color)
-	: CMesh(pCreateMgr)
-{
-	m_nVertices = 24 * 3;
-	m_nStride = sizeof(CDiffusedVertex);
-	m_nOffset = 0;
-	m_nSlot = 0;
-	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-
-	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
-
-	//위의 그림과 같은 비행기 메쉬를 표현하기 위한 정점 데이터이다.
-	CDiffusedVertex pVertices[24 * 3];
-	float x1 = fx * 0.2f,
-		y1 = fy * 0.2f,
-		x2 = fx * 0.1f,
-		y3 = fy * 0.3f,
-		y2 = ((y1 - (fy - y3)) / x1) * x2 + (fy - y3);
-	int i = 0;
-
-	//비행기 메쉬의 위쪽 면
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), -fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), -fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	//비행기 메쉬의 아래쪽 면
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), +fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), +fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	//비행기 메쉬의 오른쪽 면
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), -fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), +fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), +fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	//비행기 메쉬의 뒤쪽/오른쪽 면
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(+x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	//비행기 메쉬의 왼쪽 면
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), +fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), -fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, +(fy + y3), +fz),
-		Vector4::Add(xmf4Color, RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x2, +y2, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	//비행기 메쉬의 뒤쪽/왼쪽 면
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(0.0f, 0.0f, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-x1, -y1, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, +fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-	pVertices[i++] = CDiffusedVertex(XMFLOAT3(-fx, -y3, -fz), Vector4::Add(xmf4Color,
-		RANDOM_COLOR));
-
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
-		pVertices,
-		m_nStride * m_nVertices,
-		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		&m_pVertexUploadBuffer);
-
-	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
-	m_vertexBufferView.StrideInBytes = m_nStride;
-	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
-}
-
-CAirplaneMeshDiffused::~CAirplaneMeshDiffused()
-{
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -589,7 +325,7 @@ CCubeMeshTextured::CCubeMeshTextured(CCreateMgr *pCreateMgr,
 	pTexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
 
 	CTexturedVertex pVertices[36];
-	for (int i = 0; i < 36; i++) pVertices[i] = CTexturedVertex(pPositions[i], pTexCoords[i]);
+	for (i = 0; i < 36; i++) pVertices[i] = CTexturedVertex(pPositions[i], pTexCoords[i]);
 
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,
@@ -975,50 +711,51 @@ CCubeMeshIlluminatedTextured::CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMg
 
 	XMFLOAT3 pxmf3Positions[36];
 	int i = 0;
+	//FU
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-
+	//FD
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-
+	//UU
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-
+	//UD
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
+	//BU
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
-
+	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
+	//BD
+	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
+	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
+	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
+	//DU
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-
+	//DD
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
+	//LU
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-
+	//LD
 	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
+	//RU
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-
+	//RD
 	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
 	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
@@ -1080,7 +817,7 @@ CCubeMeshIlluminatedTextured::CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMg
 	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords);
 
 	CIlluminatedTexturedVertex pVertices[36];
-	for (int i = 0; i < 36; i++) pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i]);
+	for (i = 0; i < 36; i++) pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i]);
 
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
 
@@ -1090,6 +827,88 @@ CCubeMeshIlluminatedTextured::CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMg
 }
 
 CCubeMeshIlluminatedTextured::~CCubeMeshIlluminatedTextured()
+{
+}
+
+CCubeWithIndices::CCubeWithIndices(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth) : CMeshIlluminatedTextured(pCreateMgr)
+{
+	m_nVertices = 8;
+	m_nStride = sizeof(CIlluminatedTexturedVertex);
+	m_nOffset = 0;
+	m_nSlot = 0;
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	m_nIndices = 36;
+
+	UINT pnIndices[36];
+	pnIndices[0] = 3; pnIndices[1] = 1; pnIndices[2] = 0;
+	pnIndices[3] = 2; pnIndices[4] = 1; pnIndices[5] = 3;
+	pnIndices[6] = 0; pnIndices[7] = 5; pnIndices[8] = 4;
+	pnIndices[9] = 1; pnIndices[10] = 5; pnIndices[11] = 0;
+	pnIndices[12] = 3; pnIndices[13] = 4; pnIndices[14] = 7;
+	pnIndices[15] = 0; pnIndices[16] = 4; pnIndices[17] = 3;
+	pnIndices[18] = 1; pnIndices[19] = 6; pnIndices[20] = 5;
+	pnIndices[21] = 2; pnIndices[22] = 6; pnIndices[23] = 1;
+	pnIndices[24] = 2; pnIndices[25] = 7; pnIndices[26] = 6;
+	pnIndices[27] = 3; pnIndices[28] = 7; pnIndices[29] = 2;
+	pnIndices[30] = 6; pnIndices[31] = 4; pnIndices[32] = 5;
+	pnIndices[33] = 7; pnIndices[34] = 4; pnIndices[35] = 6;
+
+	//인덱스 버퍼를 생성한다.
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
+		pnIndices,
+		sizeof(UINT) * m_nIndices,
+		D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER,
+		&m_pIndexUploadBuffer);
+
+	//인덱스 버퍼 뷰를 생성한다.
+	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+
+	float fx = fWidth * 0.5f, fy = fHeight * 0.5f, fz = fDepth * 0.5f;
+
+	XMFLOAT3 pxmf3Positions[8];
+	int i = 0;
+	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
+	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
+	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
+	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
+
+	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
+	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
+	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
+	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
+
+	XMFLOAT2 pxmf2TexCoords[8];
+	i = 0;
+	pxmf2TexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pxmf2TexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+	pxmf2TexCoords[i++] = XMFLOAT2(1.0f, 0.0f);
+	pxmf2TexCoords[i++] = XMFLOAT2(0.0f, 0.0f);
+
+	pxmf2TexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pxmf2TexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+	pxmf2TexCoords[i++] = XMFLOAT2(1.0f, 1.0f);
+	pxmf2TexCoords[i++] = XMFLOAT2(0.0f, 1.0f);
+
+	XMFLOAT3 pxmf3Normals[8];
+	CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_nVertices, pnIndices, m_nIndices);
+
+	XMFLOAT3 pxmf3Tangents[8];
+	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords, pnIndices, m_nIndices);
+
+	CIlluminatedTexturedVertex pVertices[8];
+	for (i = 0; i < 8; i++) pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i]);
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+}
+
+CCubeWithIndices::~CCubeWithIndices()
 {
 }
 

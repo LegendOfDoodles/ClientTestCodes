@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/02.RotatingObject/RotatingObject.h"
-#include "04.Shaders/02.ObjectShader/ObjectShader.h"
+#include "04.Shaders/01.ObjectShader/ObjectShader.h"
 #include "05.Objects/03.Player/01.Airplane/AirplanePlayer.h"
 
 /// <summary>
