@@ -26,3 +26,22 @@ public:
 
 };
 
+struct KeyFrame {
+	int m_iframe;
+	XMFLOAT4X4  m_m4x4Matrix;
+};
+
+struct MySkeleton {
+	int m_iID;
+	int m_iParentID;
+	XMFLOAT4X4  m_m4x4Matrix;
+	std::vector<KeyFrame> m_Keyframe;
+};
+class CAnimationImporter {
+
+public:
+	CAnimationImporter();
+	void LoadAnimationData(char* in);
+	~CAnimationImporter();
+};
+

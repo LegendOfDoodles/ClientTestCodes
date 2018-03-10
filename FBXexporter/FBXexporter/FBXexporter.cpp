@@ -100,7 +100,7 @@ void FBXExporter::ExportFBX()
 
 	if(mHasAnimation)
 	{
-		std::string outputNnimName = mOutputFilePath + genericFileName + ".aniinfo";
+		std::string outputNnimName = mOutputFilePath + genericFileName + ".txt";
 		std::ofstream animOutput(outputNnimName);
 		WriteAnimationToStream(animOutput);
 	}
@@ -945,11 +945,12 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 {
 	inStream << "<?xml version='1.0' encoding='UTF-8' ?>" << std::endl;
 	inStream << "<itpanim>" << std::endl;
-	inStream << "\t<skeleton count='" << mSkeleton.mJoints.size() << "'>" << std::endl;
+	inStream << "\t<skeleton count>" << std::endl;
+	inStream << "\t\t" << mSkeleton.mJoints.size() <<std::endl;
 	for (unsigned int i = 0; i < mSkeleton.mJoints.size(); ++i)
 	{
-		inStream << "\t\t<joint id='" << i << "' name='" << mSkeleton.mJoints[i].mName << "' parent='" << mSkeleton.mJoints[i].mParentIndex << "'>\n";
-		inStream << "\t\t\t";
+		inStream << "\t\t\t" << i << " " << mSkeleton.mJoints[i].mParentIndex << std::endl;
+
 		FbxVector4 translation = mSkeleton.mJoints[i].mGlobalBindposeInverse.GetT();
 		FbxVector4 rotation = mSkeleton.mJoints[i].mGlobalBindposeInverse.GetR();
 		translation.Set(translation.mData[0]  ,translation.mData[1],  -translation.mData[2]);
@@ -957,21 +958,28 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 		mSkeleton.mJoints[i].mGlobalBindposeInverse.SetT(translation);
 		mSkeleton.mJoints[i].mGlobalBindposeInverse.SetR(rotation);
 		FbxMatrix out = mSkeleton.mJoints[i].mGlobalBindposeInverse;
+		inStream << "\t\t\t";
+		//Utilities::WriteMatrix(inStream , out.Transpose().mData[0] , true);
+		for (int j = 0; j < 4; ++j) {
+			inStream << out.Transpose().mData[j].mData[0]<<" "
+				<< out.Transpose().mData[j].mData[1]<<" "
+				<< out.Transpose().mData[j].mData[2]<<" "
+				<< out.Transpose().mData[j].mData[3];
+		}
+		inStream <<  std::endl;
 
-		Utilities::WriteMatrix(inStream , out.Transpose() , true);
-		inStream << "\t\t</joint>\n";
 	}
 	inStream << "\t</skeleton>\n";
-	inStream << "\t<animations>\n";
-	inStream << "\t\t<animation name='" << mAnimationName << "' length='" << mAnimationLength << "'>\n";
+	inStream << "\t\t<animations>\n";
+	//inStream << "\t\t\t" << mAnimationLength << "\n";
 	for (unsigned int i = 0; i < mSkeleton.mJoints.size(); ++i)
 	{
-		inStream << "\t\t\t" << "<track id = '" << i << "' name='" << mSkeleton.mJoints[i].mName << "'>\n";
+		inStream << "\t\t\t" << i << "\n"; 
 		Keyframe* walker = mSkeleton.mJoints[i].mAnimation;
 		while(walker)
 		{
-			inStream << "\t\t\t\t" << "<frame num='" << walker->mFrameNum - 1 << "'>\n";
-			inStream << "\t\t\t\t\t";
+			inStream << "\t\t\t\t" << walker->mFrameNum - 1 << "\n";
+			inStream << "\t\t\t\t";
 			FbxVector4 translation = walker->mGlobalTransform.GetT();
 			FbxVector4 rotation = walker->mGlobalTransform.GetR();
 			translation.Set(translation.mData[0] , translation.mData[1], -translation.mData[2]);
@@ -979,11 +987,18 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 			walker->mGlobalTransform.SetT(translation);
 			walker->mGlobalTransform.SetR(rotation);
 			FbxMatrix out = walker->mGlobalTransform;
-			Utilities::WriteMatrix(inStream, out.Transpose(), true);
-			inStream << "\t\t\t\t" << "</frame>\n";
+			for (int j = 0; j < 4; ++j) {
+				inStream << out.Transpose().mData[j].mData[0] << " "
+					<< out.Transpose().mData[j].mData[1] << " "
+					<< out.Transpose().mData[j].mData[2] << " "
+					<< out.Transpose().mData[j].mData[3] << " ";
+			}
+		inStream <<  std::endl;
+
 			walker = walker->mNext;
 		}
-		inStream << "\t\t\t" << "</track>\n";
+		inStream << "\t\t</Joint>" << std::endl;
+
 	}
 	inStream << "\t\t</animation>\n";
 	inStream << "</animations>\n";
