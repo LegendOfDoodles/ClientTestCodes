@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "AirplanePlayer.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
-#include "04.Shaders/01.DiffusedShader/DiffusedShader.h"
 
 /// <summary>
 /// 목적: 테스트용 플레이어 클래스
@@ -15,20 +14,11 @@
 CAirplanePlayer::CAirplanePlayer(CCreateMgr *pCreateMgr)
 	: CPlayer(pCreateMgr)
 {
-	CMesh *pAirplaneMesh = new CAirplaneMeshDiffused(pCreateMgr,
-		20.0f, 20.0f, 4.0f, XMFLOAT4(0.0f, 0.5f, 0.0f, 0.0f));
-
-	SetMesh(0, pAirplaneMesh);
 	m_pCamera = ChangeCamera(pCreateMgr, SPACESHIP_CAMERA, 0.0f);
 
 	CreateShaderVariables(pCreateMgr);
 
 	SetPosition(XMFLOAT3(0.0f, 0.0f, -50.0f));
-
-	CDiffusedShader *pShader = new CDiffusedShader(pCreateMgr);
-	pShader->Initialize(pCreateMgr);
-
-	SetShader(pShader);
 }
 
 CAirplanePlayer::~CAirplanePlayer()

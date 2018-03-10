@@ -19,7 +19,7 @@ public: // 공개 함수
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 protected: // 내부 함수
-	void CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, int nVertices, XMFLOAT2 *xmf2TexCoord);
+	void CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
 	void CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
 
 protected: // 변수
@@ -47,36 +47,6 @@ protected: // 변수
 	UINT m_nBaseVertex{ 0 };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
-};
-
-////////////////////////////////////////////////////////////////////////
-// 삼각형 메쉬
-class CTriangleMesh : public CMesh
-{
-public: // 생성자, 소멸자
-	CTriangleMesh(CCreateMgr *pCreateMgr);
-	virtual ~CTriangleMesh() { }
-};
-
-////////////////////////////////////////////////////////////////////////
-// 사각형 메쉬
-class CCubeMeshDiffused : public CMesh
-{
-public: // 생성자, 소멸자
-	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
-	CCubeMeshDiffused(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
-	virtual ~CCubeMeshDiffused();
-};
-
-////////////////////////////////////////////////////////////////////////
-// 비행기 메쉬
-class CAirplaneMeshDiffused : public CMesh
-{
-public:	// 생성자, 소멸자
-	CAirplaneMeshDiffused(CCreateMgr *pCreateMgr,
-		float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 4.0f,
-		XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f));
-	virtual ~CAirplaneMeshDiffused();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,4 +121,13 @@ class CCubeMeshIlluminatedTextured : public CMeshIlluminatedTextured
 public:
 	CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
 	virtual ~CCubeMeshIlluminatedTextured();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CCubeWithIndices : public CMeshIlluminatedTextured
+{
+public:
+	CCubeWithIndices(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeWithIndices();
 };
