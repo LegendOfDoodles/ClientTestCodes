@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MeshImporter.h"
 
-
 CMeshImporter::CMeshImporter()
 {
 	
@@ -112,7 +111,6 @@ CAnimationImporter::CAnimationImporter()
 
 void CAnimationImporter::LoadAnimationData(char * in)
 {
-	std::vector<MySkeleton> skeletons;
 	std::ifstream ifs(in);
 	std::string line;
 

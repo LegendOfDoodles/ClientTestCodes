@@ -915,7 +915,7 @@ CCubeWithIndices::~CCubeWithIndices()
 CFBXMesh::CFBXMesh(CCreateMgr * pCreateMgr) : CMeshIlluminated(pCreateMgr)
 {
 	CMeshImporter importer;
-	importer.LoadMeshData("FBXBinary//teapot2.meshinfo");
+	importer.LoadMeshData("FBXBinary//teapot_test.meshinfo");
 	m_nVertices = importer.m_iVerticesCnt;
 	m_nStride = sizeof(CIlluminatedVertex);
 	m_nOffset = 0;
@@ -944,7 +944,7 @@ CFBXMesh::CFBXMesh(CCreateMgr * pCreateMgr) : CMeshIlluminated(pCreateMgr)
 
 	int vecticesCount = 0;
 	for (auto d : importer.m_xmVertex) {
-		pxmf3Positions[vecticesCount] = XMFLOAT3(d.pos.x, d.pos.y, d.pos.z);
+		pxmf3Positions[vecticesCount] = XMFLOAT3(d.pos.x*0.1f, d.pos.y*0.1f, d.pos.z*0.1f);
 		pxmf3Normals[vecticesCount] = XMFLOAT3(d.normal.x, d.normal.y, d.normal.z);
 		++vecticesCount;
 

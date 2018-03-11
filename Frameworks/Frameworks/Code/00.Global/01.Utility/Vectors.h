@@ -213,6 +213,33 @@ namespace Matrix4x4
 			XMLoadFloat4x4(&xmmtx4x4Matrix)));
 		return(xmmtx4x4Result);
 	}
+	inline XMFLOAT4X4 Lerp(XMFLOAT4X4& xmmtx4x4Matrix1, XMFLOAT4X4& xmmtx4x4Matrix2,float single)
+	{
+		XMFLOAT4X4 xmmtx4x4Result;
+
+		XMVECTOR x1 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix1._11));
+		XMVECTOR x2 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix1._21));
+		XMVECTOR x3 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix1._31));
+		XMVECTOR x4 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix1._41));
+
+		XMVECTOR y1 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix2._11));
+		XMVECTOR y2 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix2._21));
+		XMVECTOR y3 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix2._31));
+		XMVECTOR y4 = XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(&xmmtx4x4Matrix2._41));
+
+		x1 = XMVectorLerp(x1, y1, single);
+		x2 = XMVectorLerp(x2, y2, single);
+		x3 = XMVectorLerp(x3, y3, single);
+		x4 = XMVectorLerp(x4, y4, single);
+
+		XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(&xmmtx4x4Result._11), x1);
+		XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(&xmmtx4x4Result._21), x2);
+		XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(&xmmtx4x4Result._31), x3);
+		XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(&xmmtx4x4Result._41), x4);
+
+		return(xmmtx4x4Result);
+	}
+
 
 	inline XMFLOAT4X4 Transpose(XMFLOAT4X4& xmmtx4x4Matrix)
 	{

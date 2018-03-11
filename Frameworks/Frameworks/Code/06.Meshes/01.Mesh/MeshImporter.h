@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <Vector>
 struct MyVertex {
 	XMFLOAT3 pos;
 	XMFLOAT3 normal;
@@ -38,7 +39,7 @@ struct MySkeleton {
 	std::vector<KeyFrame> m_Keyframe;
 };
 class CAnimationImporter {
-
+	std::vector<MySkeleton> skeletons;
 public:
 	CAnimationImporter();
 	void LoadAnimationData(char* in);
