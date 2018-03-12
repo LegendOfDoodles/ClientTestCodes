@@ -76,3 +76,27 @@ public:
 	CIlluminatedTexturedVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f), XMFLOAT3 xmf3Tangent = XMFLOAT3(0.0f, 0.0f, 0.0f)) { m_position = xmf3Position; m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord; m_xmf3Tangent = xmf3Tangent; }
 	~CIlluminatedTexturedVertex() { }
 };
+
+////////////////////////////////////////////////////////////////////////////
+class CSkinnedVertex 
+{
+protected:
+	XMFLOAT3						m_position;
+	XMFLOAT3						m_normal;
+	XMFLOAT2						m_xmf2TexCoord;
+	XMFLOAT3						m_xmf3Tangent;
+
+	XMFLOAT4						m_xmf4SkinWeight;
+	XMFLOAT4						m_xmf4SkinIndex;
+
+public:
+	CSkinnedVertex() { m_position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2TexCoord = XMFLOAT2(0.0f, 0.0f); m_normal = XMFLOAT3(0.0f, 0.0f, 0.0f); }
+	CSkinnedVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f), XMFLOAT3 xmf3Tangent = XMFLOAT3(0.0f, 0.0f, 0.0f)
+		,XMFLOAT4 xmf4SkinWeight = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), XMFLOAT4 xmf4SkinIndex = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)) 
+	{
+		m_position = xmf3Position; m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord; m_xmf3Tangent = xmf3Tangent;
+		m_xmf4SkinWeight = xmf4SkinWeight; m_xmf4SkinIndex = xmf4SkinIndex;
+	}
+	~CSkinnedVertex() {}
+};
+////////////////////////////////////////////////////////////////////////////

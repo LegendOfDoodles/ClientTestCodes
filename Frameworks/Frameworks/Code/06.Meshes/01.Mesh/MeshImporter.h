@@ -4,9 +4,9 @@
 struct MyVertex {
 	XMFLOAT3 pos;
 	XMFLOAT3 normal;
-	double skinweight[10];
-	int skinindex[10];
-	double uv[10];
+	XMFLOAT4 skinweight;
+	XMFLOAT4 skinindex;
+	XMFLOAT2 uv;
 	~MyVertex() {}
 };
 
@@ -39,8 +39,8 @@ struct MySkeleton {
 	std::vector<KeyFrame> m_Keyframe;
 };
 class CAnimationImporter {
-	std::vector<MySkeleton> skeletons;
 public:
+	std::vector<MySkeleton> skeletons;
 	CAnimationImporter();
 	void LoadAnimationData(char* in);
 	~CAnimationImporter();

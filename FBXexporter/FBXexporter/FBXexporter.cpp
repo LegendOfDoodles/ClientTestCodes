@@ -964,7 +964,7 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 			inStream << out.Transpose().mData[j].mData[0]<<" "
 				<< out.Transpose().mData[j].mData[1]<<" "
 				<< out.Transpose().mData[j].mData[2]<<" "
-				<< out.Transpose().mData[j].mData[3];
+				<< out.Transpose().mData[j].mData[3]<<" ";
 		}
 		inStream <<  std::endl;
 

@@ -1,1 +1,5 @@
-﻿  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+﻿  ObjectShader.cpp
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(116): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(220): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(250): warning C4189: 'incrementSize': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe

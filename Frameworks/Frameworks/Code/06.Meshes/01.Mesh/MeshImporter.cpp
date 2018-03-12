@@ -78,21 +78,21 @@ void CMeshImporter::LoadMeshData(char * in)
 				vertex.normal = XMFLOAT3(index[0], index[1], index[2]);
 				break;;
 			case 2:
-				vertex.skinweight[0] = strtof(line.c_str(), &end);
-				vertex.skinweight[1] = strtof(end, &end);
-				vertex.skinweight[2] = strtof(end, &end);
-				vertex.skinweight[3] = strtof(end, NULL);
+				vertex.skinweight.x = strtof(line.c_str(), &end);
+				vertex.skinweight.y = strtof(end, &end);
+				vertex.skinweight.z = strtof(end, &end);
+				vertex.skinweight.w = strtof(end, NULL);
 				break;
 
 			case 3:
-				vertex.skinindex[0] = strtof(line.c_str(), &end);
-				vertex.skinindex[1] = strtof(end, &end);
-				vertex.skinindex[2] = strtof(end, &end);
-				vertex.skinindex[3] = strtof(end, NULL);
+				vertex.skinindex.x = strtof(line.c_str(), &end);
+				vertex.skinindex.y = strtof(end, &end);
+				vertex.skinindex.z = strtof(end, &end);
+				vertex.skinindex.w = strtof(end, NULL);
 				break;
 			case 4:
-				vertex.uv[0] = strtof(line.c_str(), &end);
-				vertex.uv[1] = strtof(end, NULL);
+				vertex.uv.x = strtof(line.c_str(), &end);
+				vertex.uv.y = strtof(end, NULL);
 				break;
 			}
 			LineNum++;

@@ -131,3 +131,10 @@ public:
 	CCubeWithIndices(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
 	virtual ~CCubeWithIndices();
 };
+
+class CSkinnedMesh : public CMeshIlluminatedTextured
+{
+public:
+	CSkinnedMesh(CCreateMgr* pCreateMgr,char* in);
+	virtual ~CSkinnedMesh();
+};

@@ -57,7 +57,7 @@ void CMesh::Render(UINT istanceCnt)
 void CMesh::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
 	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
 {
-	int nPrimitives =(pnIndices) ? (nIndices / 3) : (nVertices / 3);
+	int nPrimitives = (pnIndices) ? (nIndices / 3) : (nVertices / 3);
 	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
 	UINT nIndex0, nIndex1, nIndex2;
 	float deltaU0, deltaU1;
@@ -160,7 +160,7 @@ void CMesh::CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOA
 			if (pnIndices) nIndex1 = pnIndices[nIndex1];
 			nIndex2 = (pnIndices) ? pnIndices[i + 2] : (i + 2);
 
-			if (nIndex0 == j) { }
+			if (nIndex0 == j) {}
 			else if (nIndex1 == j)
 			{
 				int temp = nIndex0;
@@ -963,5 +963,99 @@ CFBXMesh::CFBXMesh(CCreateMgr * pCreateMgr) : CMeshIlluminated(pCreateMgr)
 }
 
 CFBXMesh::~CFBXMesh()
+{
+}
+
+CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminatedTextured(pCreateMgr)
+{
+	CMeshImporter importer;
+	importer.LoadMeshData(in);
+	m_nVertices = importer.m_iVerticesCnt;
+	m_nStride = sizeof(CSkinnedVertex);
+	m_nOffset = 0;
+	m_nSlot = 0;
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	m_nIndices = importer.m_iTriCnt * 3;
+	UINT* pnIndices = new UINT[m_nIndices];
+	int indicesCount = 0;
+	for (auto d : importer.m_xmTriIndex) {
+		pnIndices[indicesCount] = d.x;
+		pnIndices[indicesCount + 1] = d.y;
+		pnIndices[indicesCount + 2] = d.z;
+		indicesCount += 3;
+	}
+
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
+
+	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+
+	int nVertices = importer.m_iVerticesCnt;
+	XMFLOAT3* pxmf3Positions = new XMFLOAT3[nVertices];
+	XMFLOAT3* pxmf3Normals = new XMFLOAT3[nVertices];
+
+	XMFLOAT2* pxmf2TexCoords = new XMFLOAT2[nVertices];
+	XMFLOAT4* pxmf4SkinWeight = new XMFLOAT4[nVertices];
+	XMFLOAT4* pxmf4SkinIndex = new XMFLOAT4[nVertices];
+	
+	XMFLOAT4X4 mat00 = {
+		(float)7.54979e-08,(float)1.86532e-16,(float)1,(float)0
+		,(float)1,(float)-1.23184e-07,(float)-7.54979e-08,(float)0
+		,(float)1.23184e-07,(float)1,(float)-9.48669e-15,(float)0
+		,(float)80,(float)-6.03983e-06,(float)3.49691e-06,(float)1
+	};
+	XMFLOAT4X4 mat01 = {
+		(float)2.30673e-07,(float)1.67224e-16,(float)1,(float)0
+		,(float)1,(float)-1.23184e-07,(float)-2.30673e-07,(float)0
+		,(float)1.23184e-07,(float)1,(float)-2.85825e-14,(float)0
+		,(float)80,(float)-1.28807e-05,(float)1.31134e-06,(float)1
+	};
+	int vecticesCount = 0;
+	for (auto d : importer.m_xmVertex) {
+		pxmf3Normals[vecticesCount] = XMFLOAT3(d.normal.x, d.normal.y, d.normal.z);
+		pxmf2TexCoords[vecticesCount] = XMFLOAT2(d.uv.x, d.uv.y);
+		pxmf4SkinWeight[vecticesCount] = XMFLOAT4(d.skinweight.x, d.skinweight.y, d.skinweight.z, d.skinweight.w);
+		pxmf4SkinIndex[vecticesCount] = XMFLOAT4(d.skinindex.x, d.skinindex.y, d.skinindex.z, d.skinindex.w);
+		XMFLOAT3 xmf3position = XMFLOAT3(d.pos.x, d.pos.y, d.pos.z);			
+		if (pxmf4SkinIndex[vecticesCount].x == 0) {
+			XMStoreFloat3(&xmf3position, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position), XMLoadFloat4x4(&mat00)));
+		}
+		else if (pxmf4SkinIndex[vecticesCount].x == 1) {
+			XMStoreFloat3(&xmf3position, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position), XMLoadFloat4x4(&mat01)));
+		}
+		
+		pxmf3Positions[vecticesCount] = xmf3position;
+		++vecticesCount;
+	}
+
+	CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_nVertices, pnIndices, m_nIndices);
+	XMFLOAT3* pxmf3Tangents = new XMFLOAT3[nVertices];
+	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords, pnIndices, m_nIndices);
+
+
+	CSkinnedVertex* pVertices = new CSkinnedVertex[nVertices];
+	for (int i = 0; i < nVertices; i++) pVertices[i] = CSkinnedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i], pxmf4SkinWeight[i], pxmf4SkinIndex[i]);
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+
+
+
+	delete[](pxmf3Positions);
+	delete[](pnIndices);
+	delete[](pxmf3Normals);
+	delete[](pxmf2TexCoords);
+	delete[](pxmf4SkinWeight);
+	delete[](pxmf4SkinIndex);
+	delete[](pxmf3Tangents);
+	delete[](pVertices);
+}
+
+CSkinnedMesh::~CSkinnedMesh()
 {
 }
