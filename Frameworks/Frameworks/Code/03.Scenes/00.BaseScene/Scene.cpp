@@ -224,21 +224,21 @@ void CScene::OnProcessMouseMove(LPARAM lParam)
 	int mx{ LOWORD(lParam) };
 	int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
 	printf("%d %d\n", mx, my);
-	//float cxDelta = 0.0f, cyDelta = 0.0f;
-	//POINT cursorPos;
+	float cxDelta = 0.0f, cyDelta = 0.0f;
+	POINT cursorPos;
 
-	//::GetCursorPos(&cursorPos);
-	//cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
-	//cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
-	//::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
+	::GetCursorPos(&cursorPos);
+	cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
+	cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
+	::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
 
-	//if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
-	//{
-	//	if (cxDelta || cyDelta)
-	//	{
-	//		m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
-	//	}
-	//}
+	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
+	{
+		if (cxDelta || cyDelta)
+		{
+			m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+		}
+	}
 }
 
 // Process Keyboard Input

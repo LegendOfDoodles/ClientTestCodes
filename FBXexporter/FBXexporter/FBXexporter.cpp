@@ -971,7 +971,7 @@ void FBXExporter::WriteAnimationToStream(std::ostream& inStream)
 	}
 	inStream << "\t</skeleton>\n";
 	inStream << "\t\t<animations>\n";
-	//inStream << "\t\t\t" << mAnimationLength << "\n";
+	inStream << "\t\t\t" << mAnimationLength << "\n";
 	for (unsigned int i = 0; i < mSkeleton.mJoints.size(); ++i)
 	{
 		inStream << "\t\t\t" << i << "\n"; 

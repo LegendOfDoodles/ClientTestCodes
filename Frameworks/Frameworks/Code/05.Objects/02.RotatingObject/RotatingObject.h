@@ -1,6 +1,6 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
-
+#include "05.Objects/97.Skeleton/Skeleton.h"
 class CRotatingObject : public CBaseObject
 {
 public: // 생성자, 소멸자
@@ -18,4 +18,19 @@ protected: // 내부 함수
 private:	 // 변수
 	XMFLOAT3 m_rotationAxis;
 	float m_rotationSpeed;
+};
+
+class CAnimatedObject : public CBaseObject 
+{
+	CSkeleton*	m_pSkeleton;
+public:
+	CAnimatedObject(CCreateMgr *pCreateMgr);
+	void SetSkeleton(CSkeleton *skeleton) {
+		m_pSkeleton = skeleton;
+	}
+
+	virtual void Animate(float timeElapsed);
+
+	virtual ~CAnimatedObject();
+
 };

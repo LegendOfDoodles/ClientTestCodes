@@ -97,6 +97,10 @@ public:
 		m_position = xmf3Position; m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord; m_xmf3Tangent = xmf3Tangent;
 		m_xmf4SkinWeight = xmf4SkinWeight; m_xmf4SkinIndex = xmf4SkinIndex;
 	}
+	XMFLOAT3 GetPosition() { return m_position; }
+	XMFLOAT4 GetSkinWeight() { return m_xmf4SkinWeight; }
+	XMFLOAT4 GetSkinSkinIndex() { return m_xmf4SkinIndex; }
+
 	~CSkinnedVertex() {}
 };
 ////////////////////////////////////////////////////////////////////////////

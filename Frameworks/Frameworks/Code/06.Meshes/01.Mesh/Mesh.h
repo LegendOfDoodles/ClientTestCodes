@@ -1,7 +1,7 @@
 #pragma once
 
 class CCreateMgr;
-
+class CSkinnedVertex;
 ////////////////////////////////////////////////////////////////////////
 // 기본 메쉬
 class CMesh
@@ -135,6 +135,8 @@ public:
 class CSkinnedMesh : public CMeshIlluminatedTextured
 {
 public:
-	CSkinnedMesh(CCreateMgr* pCreateMgr,char* in);
+	CSkinnedVertex* m_pVertices;
+	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
+	CSkinnedMesh(CCreateMgr* pCreateMgr,char* in,int frame);
 	virtual ~CSkinnedMesh();
 };
