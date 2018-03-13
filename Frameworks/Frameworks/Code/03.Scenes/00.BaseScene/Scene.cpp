@@ -89,9 +89,12 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	{
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
+		::SetCapture(hWnd);
+		::GetCursorPos(&m_oldCursorPos);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
+		::ReleaseCapture();
 		break;
 	case WM_MOUSEMOVE:
 		OnProcessMouseMove(lParam);
@@ -164,8 +167,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
-	m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
+	//m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
+	//m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
 
 	m_nShaders = 1;
 	m_ppShaders = new CShader*[m_nShaders];
@@ -221,22 +224,29 @@ void CScene::UpdateShaderVariables()
 // Process Mouse Input
 void CScene::OnProcessMouseMove(LPARAM lParam)
 {
-	int mx{ LOWORD(lParam) };
-	int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
-	printf("%d %d\n", mx, my);
+	//int mx{ LOWORD(lParam) };
+	//int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
+	//printf("%d %d\n", mx, my);
+	static UCHAR pKeyBuffer[256];
 	float cxDelta = 0.0f, cyDelta = 0.0f;
 	POINT cursorPos;
-
-	::GetCursorPos(&cursorPos);
-	cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
-	cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
-	::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
-
+	if (::GetCapture() == m_hWnd)
+	{
+		::GetCursorPos(&cursorPos);
+		cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
+		cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
+		::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
+	}
 	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
 	{
 		if (cxDelta || cyDelta)
 		{
-			m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+			::GetKeyboardState(pKeyBuffer);
+			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
+				m_pPlayer->SetRotation(cyDelta, 0.0f, -cxDelta);
+			else
+				m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+			//m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
 		}
 	}
 }
