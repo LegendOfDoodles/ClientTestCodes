@@ -241,7 +241,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	//CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//ty.meshinfo");
+	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
 	
 	
 	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
@@ -260,7 +260,6 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	{
 		
 			
-				CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo",cnt);
 				cnt += 2;
 
 				pRotatingObject = new CAnimatedObject(pCreateMgr);

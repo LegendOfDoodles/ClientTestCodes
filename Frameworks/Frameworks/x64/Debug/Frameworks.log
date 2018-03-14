@@ -1,6 +1,1 @@
-﻿  ObjectShader.cpp
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(35): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(116): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(220): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
-  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+﻿  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe

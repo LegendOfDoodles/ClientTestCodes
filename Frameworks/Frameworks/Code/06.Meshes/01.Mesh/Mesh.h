@@ -15,6 +15,8 @@ public: // 공개 함수
 
 	void ReleaseUploadBuffers();
 
+	ID3D12Resource* GetVertexUploadBuffer() { return m_pVertexUploadBuffer; }
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
@@ -136,7 +138,10 @@ class CSkinnedMesh : public CMeshIlluminatedTextured
 {
 public:
 	CSkinnedVertex* m_pVertices;
+	int m_nVerticesCnt;
+
 	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
-	CSkinnedMesh(CCreateMgr* pCreateMgr,char* in,int frame);
+
+	virtual void ReleaseUploadBuffers();
 	virtual ~CSkinnedMesh();
 };

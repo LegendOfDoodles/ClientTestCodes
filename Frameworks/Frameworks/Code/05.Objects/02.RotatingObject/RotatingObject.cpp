@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "RotatingObject.h"
-
+#include "06.Meshes/00.Vertex/Vertex.h"
 /// <summary>
 /// 목적: Create 통합 중 테스트 용 클래스
 /// 최종 수정자:  김나단
@@ -39,8 +39,8 @@ void CAnimatedObject::Animate(float timeElapsed)
 {
 	
 	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
-	pMesh->m_pVertices;
-
+	
+	CSkinnedVertex* pVertices = pMesh->m_pVertices;
 	int Bcnt = m_pSkeleton->GetBoneCount();
 
 	XMFLOAT4X4* mat4x4 = new XMFLOAT4X4[Bcnt];
@@ -58,56 +58,56 @@ void CAnimatedObject::Animate(float timeElapsed)
 		mat[i] = XMMatrixMultiply(XMLoadFloat4x4(&ani4x4[i]), XMLoadFloat4x4(&mat4x4[i]));
 	}
 
-	int vecticesCount = 0;
+	int nVertices = pMesh->m_nVerticesCnt;
+	
+	int vecticesCount  = 0;
 	
 	
-	/*
-	
-	for (auto d : pVertices) {
+	for (int i = 0; i <nVertices;++i) {
 		
-		pxmf4SkinWeight[vecticesCount] = XMFLOAT4(d.skinweight.x, d.skinweight.y, d.skinweight.z, d.skinweight.w);
-		pxmf4SkinIndex[vecticesCount] = XMFLOAT4(d.skinindex.x, d.skinindex.y, d.skinindex.z, d.skinindex.w);
-		XMFLOAT3 xmf3position = XMFLOAT3(d.pos.x, d.pos.y, d.pos.z);
+		XMFLOAT4 pxmf4SkinWeight = pVertices[i].GetSkinWeight();
+		XMFLOAT4 pxmf4SkinIndex = pVertices[i].GetSkinSkinIndex();
+		XMFLOAT3 xmf3position = pVertices->GetPosition();
 		XMFLOAT3 pos;
 		XMFLOAT3 result = XMFLOAT3(0, 0, 0);
 
-		if (pxmf4SkinWeight[vecticesCount].x != 0) {
+		if (pxmf4SkinWeight.x != 0) {
 			XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-				XMMatrixTranspose(mat[(int)pxmf4SkinIndex[vecticesCount].x])));
-			result.x += pxmf4SkinWeight[vecticesCount].x*pos.x;
-			result.y += pxmf4SkinWeight[vecticesCount].x*pos.y;
-			result.z += pxmf4SkinWeight[vecticesCount].x*pos.z;
+				XMMatrixTranspose(mat[(int)pxmf4SkinIndex.x])));
+			result.x += pxmf4SkinWeight.x*pos.x;
+			result.y += pxmf4SkinWeight.x*pos.y;
+			result.z += pxmf4SkinWeight.x*pos.z;
 
-			if (pxmf4SkinWeight[vecticesCount].y != 0) {
+			if (pxmf4SkinWeight.y != 0) {
 				XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-					XMMatrixTranspose(mat[(int)pxmf4SkinIndex[vecticesCount].y])));
-				result.x += pxmf4SkinWeight[vecticesCount].y*pos.x;
-				result.y += pxmf4SkinWeight[vecticesCount].y*pos.y;
-				result.z += pxmf4SkinWeight[vecticesCount].y*pos.z;
+					XMMatrixTranspose(mat[(int)pxmf4SkinIndex.y])));
+				result.x += pxmf4SkinWeight.y*pos.x;
+				result.y += pxmf4SkinWeight.y*pos.y;
+				result.z += pxmf4SkinWeight.y*pos.z;
 
-				if (pxmf4SkinWeight[vecticesCount].z != 0) {
+				if (pxmf4SkinWeight.z != 0) {
 					XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-						XMMatrixTranspose(mat[(int)pxmf4SkinIndex[vecticesCount].z])));
-					result.x += pxmf4SkinWeight[vecticesCount].z*pos.x;
-					result.y += pxmf4SkinWeight[vecticesCount].z*pos.y;
-					result.z += pxmf4SkinWeight[vecticesCount].z*pos.z;
+						XMMatrixTranspose(mat[(int)pxmf4SkinIndex.z])));
+					result.x += pxmf4SkinWeight.z*pos.x;
+					result.y += pxmf4SkinWeight.z*pos.y;
+					result.z += pxmf4SkinWeight.z*pos.z;
 
-					if (pxmf4SkinWeight[vecticesCount].w != 0) {
+					if (pxmf4SkinWeight.w != 0) {
 						XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-							XMMatrixTranspose(mat[(int)pxmf4SkinIndex[vecticesCount].w])));
-						result.x += pxmf4SkinWeight[vecticesCount].w*pos.x;
-						result.y += pxmf4SkinWeight[vecticesCount].w*pos.y;
-						result.z += pxmf4SkinWeight[vecticesCount].w*pos.z;
+							XMMatrixTranspose(mat[(int)pxmf4SkinIndex.w])));
+						result.x += pxmf4SkinWeight.w*pos.x;
+						result.y += pxmf4SkinWeight.w*pos.y;
+						result.z += pxmf4SkinWeight.w*pos.z;
 					}
 				}
 			}
 		}
 		xmf3position = result;
-		pxmf3Positions[vecticesCount] = xmf3position;
+		pVertices[i].SetPosition(xmf3position);
 		++vecticesCount;
 	}
-	*/
-		
+
+
 }
 
 CAnimatedObject::~CAnimatedObject()

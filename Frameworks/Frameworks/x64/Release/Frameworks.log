@@ -106,10 +106,12 @@ Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.cpp(70): warning C423
   RotatingObject.cpp
 D:\새 폴더\client\Frameworks\Frameworks\Code\05.Objects/97.Skeleton/Skeleton.h(31): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\새 폴더\client\Frameworks\Frameworks\Code\05.Objects/97.Skeleton/Skeleton.h(35): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\새 폴더\client\Frameworks\Frameworks\Code\06.Meshes/00.Vertex/Vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
 Code\05.Objects\02.RotatingObject\RotatingObject.cpp(48): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 Code\05.Objects\02.RotatingObject\RotatingObject.cpp(53): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Code\05.Objects\02.RotatingObject\RotatingObject.cpp(38): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-Code\05.Objects\02.RotatingObject\RotatingObject.cpp(61): warning C4189: 'vecticesCount': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+Code\05.Objects\02.RotatingObject\RotatingObject.cpp(62): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Code\05.Objects\02.RotatingObject\RotatingObject.cpp(39): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+Code\05.Objects\02.RotatingObject\RotatingObject.cpp(62): warning C4189: 'vecticesCount': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   Player.cpp
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\Player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\Player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
@@ -164,8 +166,8 @@ Code\06.Meshes\01.Mesh\Mesh.cpp(1085): warning C4244: '인수': 'int'에서 'flo
   MeshImporter.cpp
 Code\06.Meshes\01.Mesh\MeshImporter.cpp(32): warning C4189: 'n': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   코드를 생성하고 있습니다.
-  9 of 1759 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+  5 of 1759 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Release\Framework01.exe
