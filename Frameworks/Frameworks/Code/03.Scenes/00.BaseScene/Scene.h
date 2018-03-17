@@ -2,6 +2,7 @@
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/03.Player/00.BasePlayer/Player.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
+#include "05.Objects/04.Terrain/HeightMapTerrain.h"
 
 class CCreateMgr;
 
@@ -51,6 +52,7 @@ public: // 공개 함수
 		WPARAM wParam, LPARAM lParam);
 
 	CCamera * GetCamera() { return m_pCamera; }
+	CHeightMapTerrain *GetTerrain() { return(m_pTerrain); }
 
 protected: // 내부 함수
 	void BuildLights();
@@ -87,5 +89,7 @@ protected: // 변수
 	int m_nObjects{ 0 };
 
 	CPlayer *m_pPlayer{ NULL };
+
+	CHeightMapTerrain *m_pTerrain{ NULL };
 };
 

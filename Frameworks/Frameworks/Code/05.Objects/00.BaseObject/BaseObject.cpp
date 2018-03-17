@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-07
+/// 최종 수정 날짜: 2018-03-17
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -115,6 +115,12 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 	if (m_d3dCbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
 
+	if (m_pShader)
+	{
+		UpdateShaderVariables();
+		m_pShader->Render(pCamera);
+	}
+
 	if (m_ppMeshes)
 	{
 		for (int i = 0; i < m_nMeshes; i++)
@@ -203,15 +209,6 @@ void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 // 내부 함수
 void CBaseObject::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
-	m_pcbGameObject = pCreateMgr->CreateBufferResource(
-		NULL,
-		ncbElementBytes, 
-		D3D12_HEAP_TYPE_UPLOAD, 
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	m_pcbGameObject->Map(0, NULL, (void **)&m_pMappedObject);
 }
 
 void CBaseObject::ReleaseShaderVariables()
@@ -220,9 +217,6 @@ void CBaseObject::ReleaseShaderVariables()
 
 void CBaseObject::UpdateShaderVariables()
 {
-	CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObject);
-
-	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
 }
 
 void CBaseObject::OnPrepareRender()

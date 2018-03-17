@@ -1,1 +1,11 @@
-﻿  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+﻿  Camera.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'nNewCameraMode': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.player\00.baseplayer\player.h(68): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(86): warning C4100: 'fRoll': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(86): warning C4100: 'fYaw': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(86): warning C4100: 'fPitch': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(90): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(90): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(94): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
+  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

@@ -38,6 +38,7 @@ void CScene::Finalize()
 
 void CScene::ReleaseUploadBuffers()
 {
+	if (m_pTerrain) m_pTerrain->ReleaseUploadBuffers();
 	if (!m_ppShaders) return;
 
 	for (int j = 0; j < m_nShaders; j++)
@@ -65,6 +66,7 @@ void CScene::Render()
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(5, d3dcbLightsGpuVirtualAddress); //Lights
 
+	if(m_pTerrain) m_pTerrain->Render(m_pCamera);
 	for (int i = 0; i < m_nShaders; i++)
 	{
 		m_ppShaders[i]->Render(m_pCamera);
@@ -89,9 +91,12 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	{
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
+		::SetCapture(hWnd);
+		::GetCursorPos(&m_oldCursorPos);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
+		::ReleaseCapture();
 		break;
 	case WM_MOUSEMOVE:
 		OnProcessMouseMove(lParam);
@@ -133,7 +138,7 @@ void CScene::BuildLights()
 
 	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = SPOT_LIGHT;
-	m_pLights->m_pLights[1].m_fRange = 50.0f;
+	m_pLights->m_pLights[1].m_fRange = 90.0f;
 	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights->m_pLights[1].m_position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
 	m_pLights->m_pLights[1].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
@@ -145,7 +150,7 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[2].m_bEnable = true;
 	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLights->m_pLights[2].m_direction = XMFLOAT3(0.0f, 0.0f,1.0f);
+	m_pLights->m_pLights[2].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	m_pLights->m_pLights[3].m_bEnable = true;
 	m_pLights->m_pLights[3].m_nType = SPOT_LIGHT;
@@ -164,8 +169,20 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
-	m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
+	//지형을 확대할 스케일 벡터이다. x-축과 z-축은 8배, y-축은 2배 확대한다.
+	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT4 xmf4Color(0.0f, 0.2f, 0.0f, 0.0f);
+	//지형을 높이 맵 이미지 파일(HeightMap.raw)을 사용하여 생성한다. 높이 맵의 크기는 가로x세로(257x257)이다.
+#ifdef _WITH_TERRAIN_PARTITION
+	/*하나의 격자 메쉬의 크기는 가로x세로(17x17)이다. 지형 전체는 가로 방향으로 16개, 세로 방향으로 16의 격자 메
+	쉬를 가진다. 지형을 구성하는 격자 메쉬의 개수는 총 256(16x16)개가 된다.*/
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("./Resource/Terrain/HeightMap.raw"),
+		257, 257, 17, 17, xmf3Scale, xmf4Color);
+#else
+	//지형을 하나의 격자 메쉬(257x257)로 생성한다.
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr,  _T("./Resource/Terrain/HeightMap.raw"), 
+		257, 257, 257, 257, xmf3Scale, xmf4Color);
+#endif
 
 	m_nShaders = 1;
 	m_ppShaders = new CShader*[m_nShaders];
@@ -186,6 +203,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 void CScene::ReleaseObjects()
 {
+	Safe_Delete(m_pTerrain);
+
 	if (!m_ppShaders) return;
 
 	for (int i = 0; i < m_nShaders; i++)
@@ -215,30 +234,38 @@ void CScene::ReleaseShaderVariables()
 void CScene::UpdateShaderVariables()
 {
 	m_pLights->m_pLights[1].m_position = m_pPlayer->GetCamera()->GetPosition();
+	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetCamera()->GetLookVector();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 
 // Process Mouse Input
 void CScene::OnProcessMouseMove(LPARAM lParam)
 {
-	int mx{ LOWORD(lParam) };
-	int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
-	printf("%d %d\n", mx, my);
-	//float cxDelta = 0.0f, cyDelta = 0.0f;
-	//POINT cursorPos;
-
-	//::GetCursorPos(&cursorPos);
-	//cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
-	//cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
-	//::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
-
-	//if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
-	//{
-	//	if (cxDelta || cyDelta)
-	//	{
-	//		m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
-	//	}
-	//}
+	//int mx{ LOWORD(lParam) };
+	//int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
+	//printf("%d %d\n", mx, my);
+	static UCHAR pKeyBuffer[256];
+	float cxDelta = 0.0f, cyDelta = 0.0f;
+	POINT cursorPos;
+	if (::GetCapture() == m_hWnd)
+	{
+		::GetCursorPos(&cursorPos);
+		cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
+		cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
+		::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
+	}
+	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
+	{
+		if (cxDelta || cyDelta)
+		{
+			::GetKeyboardState(pKeyBuffer);
+			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
+				m_pPlayer->SetRotation(cyDelta, 0.0f, -cxDelta);
+			else
+				m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+			//m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+		}
+	}
 }
 
 // Process Keyboard Input

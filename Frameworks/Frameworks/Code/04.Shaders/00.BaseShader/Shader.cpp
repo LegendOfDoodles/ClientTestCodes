@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-07
+/// 최종 수정 날짜: 2018-03-17
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -320,7 +320,11 @@ void CShader::OnPrepareRender()
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
 	m_pCommandList->SetPipelineState(m_ppPipelineStates[0]);
-	m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeap);
+
+	if (m_pCbvSrvDescriptorHeap)
+	{
+		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeap);
+	}
 
 	UpdateShaderVariables();
 }

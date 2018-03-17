@@ -74,9 +74,6 @@ protected: // º¯¼ö
 
 	D3D12_GPU_DESCRIPTOR_HANDLE m_d3dCbvGPUDescriptorHandle{ NULL };
 
-	ID3D12Resource					*m_pcbGameObject{ NULL };
-	UINT8				*m_pMappedObject{ NULL };
-
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };
 
