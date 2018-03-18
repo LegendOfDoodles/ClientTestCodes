@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-02-07
+/// 최종 수정 날짜: 2018-03-18
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -114,6 +114,12 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 
 	if (m_d3dCbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
+
+	if (m_pShader)
+	{
+		UpdateShaderVariables();
+		m_pShader->Render(pCamera);
+	}
 
 	if (m_ppMeshes)
 	{

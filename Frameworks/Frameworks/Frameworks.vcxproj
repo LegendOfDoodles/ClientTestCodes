@@ -167,6 +167,7 @@
     <ClInclude Include="Code\03.Scenes\00.BaseScene\Scene.h" />
     <ClInclude Include="Code\04.Shaders\00.BaseShader\Shader.h" />
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\ObjectShader.h" />
+    <ClInclude Include="Code\04.Shaders\02.TerrainShader\TerrainShader.h" />
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Code\05.Objects\02.RotatingObject\RotatingObject.h" />
     <ClInclude Include="Code\05.Objects\03.Player\00.BasePlayer\Player.h" />
     <ClInclude Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.h" />
+    <ClInclude Include="Code\05.Objects\04.Terrain\HeightMapTerrain.h" />
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h" />
     <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h" />
     <ClInclude Include="Code\05.Objects\99.Material\00.Texture\Texture.h" />
@@ -200,6 +202,7 @@
     <ClCompile Include="Code\03.Scenes\00.BaseScene\Scene.cpp" />
     <ClCompile Include="Code\04.Shaders\00.BaseShader\Shader.cpp" />
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\02.TerrainShader\TerrainShader.cpp" />
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.cpp" />
@@ -208,6 +211,7 @@
     <ClCompile Include="Code\05.Objects\02.RotatingObject\RotatingObject.cpp" />
     <ClCompile Include="Code\05.Objects\03.Player\00.BasePlayer\Player.cpp" />
     <ClCompile Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.cpp" />
+    <ClCompile Include="Code\05.Objects\04.Terrain\HeightMapTerrain.cpp" />
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp" />
     <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp" />
     <ClCompile Include="Code\05.Objects\99.Material\00.Texture\Texture.cpp" />

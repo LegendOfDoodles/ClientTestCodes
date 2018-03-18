@@ -7,7 +7,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-03
+/// 최종 수정 날짜: 2018-03-18
 /// </summary>
 
 
@@ -45,7 +45,7 @@ void CCamera::Initialize(CCreateMgr *pCreateMgr)
 
 	SetViewport(0, 0, width, height, 0.0f, 1.0f);
 	SetScissorRect(0, 0, width, height);
-	GenerateProjectionMatrix(1.0f, 500.0f, float(width) / 	float(height), 90.0f);
+	GenerateProjectionMatrix(1.0f, 5000.0f, float(width) / 	float(height), 90.0f);
 	GenerateViewMatrix(
 		XMFLOAT3(0.0f, 0.0f, -50.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f),

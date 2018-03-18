@@ -117,6 +117,12 @@
     <Filter Include="소스 파일\05.Objects\97.Skeleton">
       <UniqueIdentifier>{90cbe070-3299-47db-83d5-5e69b0c3f9b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\02.TerrainShader">
+      <UniqueIdentifier>{79321204-d74a-4387-bb76-2cdd717c8d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\04.Terrain">
+      <UniqueIdentifier>{7552b41b-1324-420e-a185-8d7e9ee0bcaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -212,6 +218,12 @@
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h">
       <Filter>소스 파일\05.Objects\97.Skeleton</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\02.TerrainShader\TerrainShader.h">
+      <Filter>소스 파일\04.Shaders\02.TerrainShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\04.Terrain\HeightMapTerrain.h">
+      <Filter>소스 파일\05.Objects\04.Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -294,6 +306,12 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp">
       <Filter>소스 파일\05.Objects\97.Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\02.TerrainShader\TerrainShader.cpp">
+      <Filter>소스 파일\04.Shaders\02.TerrainShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\04.Terrain\HeightMapTerrain.cpp">
+      <Filter>소스 파일\05.Objects\04.Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

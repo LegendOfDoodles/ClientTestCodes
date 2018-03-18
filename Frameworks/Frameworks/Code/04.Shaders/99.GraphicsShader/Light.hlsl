@@ -123,8 +123,8 @@ float4 DirectionalLight(int nIndex, float3 vNormal, float3 vToCamera)
 //        }
 //    }
 
-    return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, -vToCamera)));
-    //return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * fSpecularFactor));
+    return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera) * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, -vToCamera)));
+    //return ((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera) * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor));
     //return ((gLights[nIndex].m_cAlbedo * fDiffuseFactor * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor));
 }
 
@@ -158,8 +158,8 @@ float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vToCamera
 //        }
         float fAttenuationFactor = 1.0f / dot(gLights[nIndex].m_vAttenuation, float3(1.0f, fDistance, fDistance * fDistance));
 
-        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, -vToCamera))) * fAttenuationFactor);
-        //return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor);
+        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera) * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight, vNormal, -vToCamera))) * fAttenuationFactor);
+        //return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera) * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor);
         //return (((gLights[nIndex].m_cAlbedo * fDiffuseFactor * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor);
     }
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -201,8 +201,8 @@ float4 SpotLight(int nIndex, float3 vPosition, float3 vNormal, float3 vToCamera)
 #endif
         float fAttenuationFactor = 1.0f / dot(gLights[nIndex].m_vAttenuation, float3(1.0f, fDistance, fDistance * fDistance));
 
-        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) /*+ (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight4Specular, vNormal, -vToCamera))*/) * fAttenuationFactor * fSpotFactor);
-        //return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera)) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor * fSpotFactor);
+        return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera) * gMaterials.m_cAlbedo) /*+ (gLights[nIndex].m_cAlbedo * CookTorranceSpecular(vToLight4Specular, vNormal, -vToCamera))*/) * fAttenuationFactor * fSpotFactor);
+        //return (((gLights[nIndex].m_cAlbedo * OrenNayarDiffuse(vToLight, vNormal, vToCamera) * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor * fSpotFactor);
         //return (((gLights[nIndex].m_cAlbedo * fDiffuseFactor * gMaterials.m_cAlbedo) + (gLights[nIndex].m_cAlbedo * fSpecularFactor)) * fAttenuationFactor * fSpotFactor);
     }
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
