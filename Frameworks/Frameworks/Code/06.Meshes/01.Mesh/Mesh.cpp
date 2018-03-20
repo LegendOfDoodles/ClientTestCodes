@@ -1011,7 +1011,7 @@ CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminated
 		++vecticesCount;
 	}
 
-	CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_nVertices, pnIndices, m_nIndices);
+	//CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_nVertices, pnIndices, m_nIndices);
 	XMFLOAT3* pxmf3Tangents = new XMFLOAT3[nVertices];
 	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords, pnIndices, m_nIndices);
 

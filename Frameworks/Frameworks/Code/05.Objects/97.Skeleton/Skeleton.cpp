@@ -86,12 +86,17 @@ CSkeleton::CSkeleton(char * in)
 			aniMatrix.m_m4x4Matrix._42 = strtof(end, &end);
 			aniMatrix.m_m4x4Matrix._43 = strtof(end, &end);
 			aniMatrix.m_m4x4Matrix._44 = strtof(end, NULL);
+
+			aniMatrix.m_m4x4FinalMatrix = Matrix4x4::Transpose( Matrix4x4::Multiply(aniMatrix.m_m4x4Matrix, it->m_m4x4Matrix));
 			it->m_Keyframe.push_back(aniMatrix);
 
 		}
 
 		++it;
 	}
+
+
+
 }
 
 CSkeleton::~CSkeleton()
