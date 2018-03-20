@@ -100,7 +100,7 @@ void FBXExporter::ExportFBX()
 
 	if(mHasAnimation)
 	{
-		std::string outputNnimName = mOutputFilePath + genericFileName + ".txt";
+		std::string outputNnimName = mOutputFilePath + genericFileName + ".aniinfo";
 		std::ofstream animOutput(outputNnimName);
 		WriteAnimationToStream(animOutput);
 	}

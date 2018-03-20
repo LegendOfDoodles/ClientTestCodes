@@ -13,10 +13,18 @@ public: // 생성자, 소멸자
 public: // 공개 함수
 	virtual void Render(UINT istanceCnt = 1);
 
-	void ReleaseUploadBuffers();
-
-	ID3D12Resource* GetVertexUploadBuffer() { return m_pVertexUploadBuffer; }
-
+	virtual void ReleaseUploadBuffers();
+	
+	ID3D12Resource* GetVertexBuffer() { 
+		return m_pVertexBuffer; 
+	}
+	ID3D12Resource* GetVertexUploadBuffer() { 
+		return m_pVertexUploadBuffer;
+	}
+	void UploadVertexBuffer(
+		ID3D12GraphicsCommandList *pd3dCommandList,
+		void *pData,
+		UINT nBytes);
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
@@ -141,7 +149,7 @@ public:
 	int m_nVerticesCnt;
 
 	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
-
+	UINT GetStride() { return m_nStride; }
 	virtual void ReleaseUploadBuffers();
 	virtual ~CSkinnedMesh();
 };
@@ -204,3 +212,12 @@ public:
 	//격자의 좌표가 (x, z)일 때 교점(정점)의 색상을 반환하는 함수이다.
 	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
 };
+
+
+
+////////////////////////////////////////////////////////
+void UploadVertexBuffer(
+	ID3D12GraphicsCommandList *pd3dCommandList,
+	void *pData,
+	UINT nBytes,
+	CMesh *pMesh);

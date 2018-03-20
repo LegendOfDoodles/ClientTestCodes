@@ -54,7 +54,7 @@ void CObjectShader::UpdateShaderVariables()
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, 
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
 #endif
@@ -71,7 +71,6 @@ void CObjectShader::AnimateObjects(float timeElapsed)
 void CObjectShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
-
 #if USE_BATCH_MATERIAL
 	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
 #endif
@@ -111,6 +110,12 @@ void CObjectShader::OnProcessKeyDown(WPARAM wParam)
 {
 	switch (wParam)
 	{
+	case 'M':
+		for (int i = 0; i < m_nObjects; ++i) {
+			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
+			obj->AniStateSet();
+		}
+		break;
 	default:
 		break;
 	}
@@ -123,37 +128,37 @@ D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 	UINT nInputElementDescs = 4;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
-	pd3dInputElementDescs[0] = { 
+	pd3dInputElementDescs[0] = {
 		"POSITION",
-		0, 
-		DXGI_FORMAT_R32G32B32_FLOAT, 
 		0,
-		0, 
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
+		0,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
 		0 };
-	pd3dInputElementDescs[1] = { 
-		"NORMAL", 
-		0, 
-		DXGI_FORMAT_R32G32B32_FLOAT, 
-		0, 
+	pd3dInputElementDescs[1] = {
+		"NORMAL",
+		0,
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
 		12,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
 		0 };
-	pd3dInputElementDescs[2] = { 
-		"TEXCOORD", 
-		0, 
-		DXGI_FORMAT_R32G32_FLOAT, 
-		0, 
+	pd3dInputElementDescs[2] = {
+		"TEXCOORD",
+		0,
+		DXGI_FORMAT_R32G32_FLOAT,
+		0,
 		24,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
 		0 };
-	pd3dInputElementDescs[3] = { 
+	pd3dInputElementDescs[3] = {
 		"TANGENT",
 		0,
-		DXGI_FORMAT_R32G32B32_FLOAT, 
-		0, 
-		32, 
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
+		32,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
 		0 };
 
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
@@ -175,7 +180,7 @@ D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 
 D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLighting", "ps_5_1",	ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLighting", "ps_5_1", ppShaderBlob));
 }
 
 void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
@@ -193,7 +198,7 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 #if USE_INSTANCING
 	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects, 
+		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		NULL);
@@ -214,12 +219,12 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
 #endif
 
-	
+
 }
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects =5, yObjects =0, zObjects = 5, i = 0;
+	int xObjects = 3, yObjects = 0, zObjects =3, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -243,24 +248,22 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
 	//CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr,20,20,20);
-	
+
 	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
+	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
+	CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//minion2.aniinfo");
 	float fxPitch = 12.0f * 5.f;
 	float fyPitch = 12.0f * 5.f;
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	int cnt = 0;
 	CAnimatedObject *pRotatingObject = NULL;
 	for (int y = -yObjects; y <= yObjects; y++)
 	{
 		for (int z = -zObjects; z <= zObjects; z++)
 		{
-		for (int x = -xObjects; x <= xObjects; x++)
-	{
-		
-			
-				cnt += 2;
+			for (int x = -xObjects; x <= xObjects; x++)
+			{
 
 				pRotatingObject = new CAnimatedObject(pCreateMgr);
 #if !USE_INSTANCING
@@ -269,8 +272,10 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pRotatingObject->SetPosition(x*30, y*100+10, z*100);
+				pRotatingObject->SetPosition(x * 30+200, y * 100 + 100, z * 100+1000);
 				pRotatingObject->SetSkeleton(pSkeleton);
+				pRotatingObject->SetSkeleton1(pSkeleton1);
+				pRotatingObject->SetSkeleton2(pSkeleton2);
 				pRotatingObject->Rotate(90, 0, 0);
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));

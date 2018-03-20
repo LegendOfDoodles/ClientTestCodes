@@ -52,7 +52,7 @@ CSkeleton::CSkeleton(char * in)
 	while (getline(ifs, line) && line.find("<animations>", 0) == -1)
 	{
 	}
-	//getline(ifs, line);
+	getline(ifs, line);
 
 	end = NULL;
 	m_iAnimationLegth = strtof(line.c_str(), &end);

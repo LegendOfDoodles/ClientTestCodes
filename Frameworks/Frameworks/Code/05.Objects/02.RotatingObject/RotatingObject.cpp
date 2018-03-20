@@ -33,68 +33,81 @@ void CRotatingObject::Animate(float timeElapsed)
 
 CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
 {
+	m_fFrameTime = 0;
 }
 
 void CAnimatedObject::Animate(float timeElapsed)
 {
 	
-	/*CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
-	
-	CSkinnedVertex* pVertices = pMesh->m_pVertices;
+	m_fFrameTime += 30*timeElapsed;
+	if (aniState == 0&&m_fFrameTime > 33) {
+		m_fFrameTime -= 33;
+	}
+	else if (aniState == 1 && m_fFrameTime > 49) {
+		m_fFrameTime -= 49;
+	}
+	else if (aniState == 2 && m_fFrameTime > 33) {
+		m_fFrameTime -= 33;
+	}
+}
+
+void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
+{
+	CBaseObject::Render(pCamera, instanceCnt);
+	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
+
+	CSkinnedVertex* pVertices = new CSkinnedVertex[pMesh->m_nVerticesCnt];
+	int VerticesLength = pMesh->GetStride() * pMesh->m_nVerticesCnt;
+	memcpy(pVertices, pMesh->m_pVertices, VerticesLength);
 	int Bcnt = m_pSkeleton->GetBoneCount();
 
-	XMFLOAT4X4* mat4x4 = new XMFLOAT4X4[Bcnt];
+	XMFLOAT4X4*  mat = new XMFLOAT4X4[Bcnt];
 	for (int i = 0; i < Bcnt; ++i) {
-		mat4x4[i] = m_pSkeleton->GetBone(i).m_m4x4Matrix;
-	}
-
-	XMFLOAT4X4* ani4x4 = new XMFLOAT4X4[Bcnt];
-	for (int i = 0; i < Bcnt; ++i) {
-		ani4x4[i] = m_pSkeleton->GetBone(i).GetFrame(47);
-	}
-
-	XMMATRIX*  mat = new XMMATRIX[Bcnt];
-	for (int i = 0; i < Bcnt; ++i) {
-		mat[i] = XMMatrixMultiply(XMLoadFloat4x4(&ani4x4[i]), XMLoadFloat4x4(&mat4x4[i]));
+		if(aniState==0)
+			mat[i] = m_pSkeleton->GetBone(i).GetFrame((int)m_fFrameTime);
+		else if(aniState ==1 )
+			mat[i] = m_pSkeleton1->GetBone(i).GetFrame((int)m_fFrameTime);
+		else if (aniState == 2)
+			mat[i] = m_pSkeleton2->GetBone(i).GetFrame((int)m_fFrameTime);
 	}
 
 	int nVertices = pMesh->m_nVerticesCnt;
-	
-	int vecticesCount  = 0;
-	
-	
-	for (int i = 0; i <nVertices;++i) {
-		
-		XMFLOAT4 pxmf4SkinWeight = pVertices[i].GetSkinWeight();
-		XMFLOAT4 pxmf4SkinIndex = pVertices[i].GetSkinSkinIndex();
-		XMFLOAT3 xmf3position = pVertices->GetPosition();
-		XMFLOAT3 pos;
-		XMFLOAT3 result = XMFLOAT3(0, 0, 0);
+
+	XMFLOAT4 pxmf4SkinWeight;
+	XMFLOAT4 pxmf4SkinIndex;
+	XMFLOAT3 xmf3position;
+	XMFLOAT3 pos;
+	XMFLOAT3 result;
+	for (int i = 0; i <nVertices; ++i) {
+
+		pxmf4SkinWeight = pVertices[i].GetSkinWeight();
+		pxmf4SkinIndex = pVertices[i].GetSkinSkinIndex();
+		xmf3position = pVertices[i].GetPosition();
+		result = XMFLOAT3(0, 0, 0);
 
 		if (pxmf4SkinWeight.x != 0) {
-			XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-				XMMatrixTranspose(mat[(int)pxmf4SkinIndex.x])));
+			pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.x]);
 			result.x += pxmf4SkinWeight.x*pos.x;
 			result.y += pxmf4SkinWeight.x*pos.y;
 			result.z += pxmf4SkinWeight.x*pos.z;
 
 			if (pxmf4SkinWeight.y != 0) {
-				XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-					XMMatrixTranspose(mat[(int)pxmf4SkinIndex.y])));
+				pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.y]);
+
 				result.x += pxmf4SkinWeight.y*pos.x;
 				result.y += pxmf4SkinWeight.y*pos.y;
 				result.z += pxmf4SkinWeight.y*pos.z;
 
 				if (pxmf4SkinWeight.z != 0) {
-					XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-						XMMatrixTranspose(mat[(int)pxmf4SkinIndex.z])));
+					pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.z]);
+
 					result.x += pxmf4SkinWeight.z*pos.x;
 					result.y += pxmf4SkinWeight.z*pos.y;
 					result.z += pxmf4SkinWeight.z*pos.z;
 
 					if (pxmf4SkinWeight.w != 0) {
-						XMStoreFloat3(&pos, DirectX::XMVector3TransformCoord(XMLoadFloat3(&xmf3position),
-							XMMatrixTranspose(mat[(int)pxmf4SkinIndex.w])));
+						pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.w]);
+
 						result.x += pxmf4SkinWeight.w*pos.x;
 						result.y += pxmf4SkinWeight.w*pos.y;
 						result.z += pxmf4SkinWeight.w*pos.z;
@@ -104,10 +117,11 @@ void CAnimatedObject::Animate(float timeElapsed)
 		}
 		xmf3position = result;
 		pVertices[i].SetPosition(xmf3position);
-		++vecticesCount;
-	}
-*/
 
+	}
+	UploadVertexBuffer(m_pCommandList, pVertices, VerticesLength, m_ppMeshes[0]);
+
+	delete[] pVertices;
 }
 
 CAnimatedObject::~CAnimatedObject()
