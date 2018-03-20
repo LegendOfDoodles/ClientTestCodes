@@ -173,8 +173,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	//m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
 	//m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
 
-	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
-	XMFLOAT4 xmf4Color(0.0f, 0.2f, 0.0f, 0.0f);
+	XMFLOAT3 xmf3Scale(16.0f, 0.3f, 16.0f);
+	XMFLOAT4 xmf4Color(0.6f, 0.6f, 0.6f, 0.0f);
 	//지형을 높이 맵 이미지 파일(HeightMap.raw)을 사용하여 생성한다. 높이 맵의 크기는 가로x세로(257x257)이다.
 #ifdef _WITH_TERRAIN_PARTITION
 	/*하나의 격자 메쉬의 크기는 가로x세로(17x17)이다. 지형 전체는 가로 방향으로 16개, 세로 방향으로 16의 격자 메
@@ -183,8 +183,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		17, xmf3Scale, xmf4Color);
 #else
 	//지형을 하나의 격자 메쉬(257x257)로 생성한다.
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/HeightMap.raw"), 257, 257, 257,
-		257, xmf3Scale, xmf4Color);
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"), 500, 250, 500,
+		250, xmf3Scale, xmf4Color);
 #endif
 
 	m_nShaders = 1;

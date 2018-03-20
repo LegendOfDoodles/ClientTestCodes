@@ -168,7 +168,7 @@ void CPlayer::Update(float timeElapsed)
 
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
-	if (m_direction) { Move(m_direction, 50.0f *  timeElapsed, true); }
+	if (m_direction) { Move(m_direction, 100.0f *  timeElapsed, true); }
 	if (!Vector3::IsZero(m_rotation))
 	{
 		Rotate(m_rotation.x, m_rotation.y, m_rotation.z);

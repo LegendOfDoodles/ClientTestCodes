@@ -1270,7 +1270,7 @@ XMFLOAT4 CHeightMapGridMesh::OnGetColor(int x, int z, void *pContext)
 	CHeightMapImage *pHeightMapImage = (CHeightMapImage *)pContext;
 	XMFLOAT3 xmf3Scale = pHeightMapImage->GetScale();
 	//조명의 색상(세기, 밝기)이다.
-	XMFLOAT4 xmf4IncidentLightColor(0.9f, 0.8f, 0.4f, 1.0f);
+	XMFLOAT4 xmf4IncidentLightColor(0.3f, 0.3f, 0.3f, 1.0f);
 	float fScale = Vector3::DotProduct(pHeightMapImage->GetHeightMapNormal(x, z), xmf3LightDirection);
 	fScale += Vector3::DotProduct(pHeightMapImage->GetHeightMapNormal(x + 1, z), xmf3LightDirection);
 	fScale += Vector3::DotProduct(pHeightMapImage->GetHeightMapNormal(x + 1, z + 1), xmf3LightDirection);
