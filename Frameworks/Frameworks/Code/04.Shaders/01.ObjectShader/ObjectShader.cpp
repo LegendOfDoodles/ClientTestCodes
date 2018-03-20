@@ -219,7 +219,7 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects =2, yObjects =0, zObjects = 1, i = 0;
+	int xObjects =0, yObjects =0, zObjects = 0, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -241,8 +241,8 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
-	
+	//CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
+	CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr,2000,2000,20);
 	
 	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
 	float fxPitch = 12.0f * 5.f;
@@ -270,7 +270,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 				pRotatingObject->SetPosition(x*30, y*100+10, z*100);
-				pRotatingObject->SetSkeleton(pSkeleton);
+				//pRotatingObject->SetSkeleton(pSkeleton);
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 #endif

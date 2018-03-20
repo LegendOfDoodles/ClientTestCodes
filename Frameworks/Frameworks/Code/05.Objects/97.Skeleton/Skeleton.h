@@ -4,6 +4,7 @@
 struct KeyFrame {
 	int m_iframe;
 	XMFLOAT4X4  m_m4x4Matrix;
+	XMFLOAT4X4  m_m4x4FinalMatrix;
 };
 
 struct Bone {

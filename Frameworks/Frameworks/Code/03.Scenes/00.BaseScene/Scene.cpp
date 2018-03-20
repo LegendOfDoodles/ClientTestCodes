@@ -139,8 +139,8 @@ void CScene::BuildLights()
 
 	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = SPOT_LIGHT;
-	m_pLights->m_pLights[1].m_fRange = 50.0f;
-	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	m_pLights->m_pLights[1].m_fRange = 100.0f;
+	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.0f, 1.0f, 0.4f, 1.0f);
 	m_pLights->m_pLights[1].m_position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
 	m_pLights->m_pLights[1].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	m_pLights->m_pLights[1].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
@@ -153,7 +153,7 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 	m_pLights->m_pLights[2].m_direction = XMFLOAT3(0.0f, 0.0f,1.0f);
 
-	m_pLights->m_pLights[3].m_bEnable = true;
+	m_pLights->m_pLights[3].m_bEnable = false;
 	m_pLights->m_pLights[3].m_nType = SPOT_LIGHT;
 	m_pLights->m_pLights[3].m_fRange = 60.0f;
 	m_pLights->m_pLights[3].m_color = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
@@ -235,7 +235,8 @@ void CScene::ReleaseShaderVariables()
 
 void CScene::UpdateShaderVariables()
 {
-	m_pLights->m_pLights[1].m_position = m_pPlayer->GetCamera()->GetPosition();
+	m_pLights->m_pLights[1].m_position = m_pPlayer->GetPosition();
+	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetCamera()->GetLookVector();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 

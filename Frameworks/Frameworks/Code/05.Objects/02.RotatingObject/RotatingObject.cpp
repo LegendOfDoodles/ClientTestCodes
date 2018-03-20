@@ -38,7 +38,7 @@ CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr) : CBaseObject(pCreateM
 void CAnimatedObject::Animate(float timeElapsed)
 {
 	
-	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
+	/*CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
 	
 	CSkinnedVertex* pVertices = pMesh->m_pVertices;
 	int Bcnt = m_pSkeleton->GetBoneCount();
@@ -106,7 +106,7 @@ void CAnimatedObject::Animate(float timeElapsed)
 		pVertices[i].SetPosition(xmf3position);
 		++vecticesCount;
 	}
-
+*/
 
 }
 
