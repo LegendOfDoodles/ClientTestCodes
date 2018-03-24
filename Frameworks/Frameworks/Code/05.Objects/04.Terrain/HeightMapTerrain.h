@@ -36,9 +36,6 @@ public: // 공개 함수
 	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
 
 protected: // 내부 함수
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
-	virtual void ReleaseShaderVariables();
-	virtual void UpdateShaderVariables();
 
 private:	 // 변수
 	 //지형의 높이 맵으로 사용할 이미지이다.

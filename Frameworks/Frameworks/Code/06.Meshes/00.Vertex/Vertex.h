@@ -77,6 +77,22 @@ public:
 	~CIlluminatedTexturedVertex() { }
 };
 
+////////////////////////////////////////////////////////////////////////
+//
+class CDiffuseTexturedVertex
+{
+protected:
+	XMFLOAT3						m_position;
+	XMFLOAT2						m_xmf2TexCoord;
+	XMFLOAT4						m_diffuseColor;
+
+public:
+	CDiffuseTexturedVertex() { m_position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2TexCoord = XMFLOAT2(0.0f, 0.0f); m_diffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f); }
+	CDiffuseTexturedVertex(float x, float y, float z, XMFLOAT2 xmf2TexCoord, XMFLOAT3, XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)) { m_position = XMFLOAT3(x, y, z); m_xmf2TexCoord = xmf2TexCoord;  m_diffuseColor = xmf4Diffuse; }
+	CDiffuseTexturedVertex(XMFLOAT3 xmf3Position, XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f), XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)) { m_position = xmf3Position; m_xmf2TexCoord = xmf2TexCoord; m_diffuseColor = xmf4Diffuse; }
+	~CDiffuseTexturedVertex() { }
+};
+
 ////////////////////////////////////////////////////////////////////////////
 class CSkinnedVertex 
 {

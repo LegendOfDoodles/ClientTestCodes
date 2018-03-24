@@ -516,11 +516,10 @@ void CInstancingShader::UpdateShaderVariables(ID3D12GraphicsCommandList
 
 		UploadVertexBuffer(m_pCommandList, fakeVertex, test->m_nStride * test->m_nVertices, test);
 
-		memcpy(test->m_pVertices, fakeVertex, test->m_nStride * test->m_nVertices);
+		//memcpy(test->m_pVertices, fakeVertex, test->m_nStride * test->m_nVertices);
 
 		delete[] fakeVertex;
 
-		pressed = false;
 	}
 }
 

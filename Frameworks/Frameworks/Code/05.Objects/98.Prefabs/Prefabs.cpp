@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-09
+/// 최종 수정 날짜: 2018-03-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,32 @@ CMaterial* Materials::CreateBrickMaterial(CCreateMgr *pCreateMgr,
 
 	pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 	pMaterial->SetRoughness(0.4f);
-	pMaterial->SetMetalic(1.0f);
+	pMaterial->SetMetalic(0.01f);
+
+	return pMaterial;
+}
+
+CMaterial* Materials::CreateTerrainMaterial(CCreateMgr *pCreateMgr,
+	D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+	D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/paperTex.dds", 0);
+	
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, true, 
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+	
+	pMaterial->Initialize(pCreateMgr);
+
+	pMaterial->SetTexture(pTexture);
+
+	pMaterial->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f));
+	pMaterial->SetRoughness(0.98f);
+	pMaterial->SetMetalic(0.01f);
 
 	return pMaterial;
 }

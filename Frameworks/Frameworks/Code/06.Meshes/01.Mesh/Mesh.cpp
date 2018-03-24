@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-18
+/// 최종 수정 날짜: 2018-03-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -1068,8 +1068,7 @@ CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMF
 	{
 		for (int x = 0; x < m_nWidth; x++)
 		{
-			m_pHeightMapPixels[x + ((m_nLength - 1 - y)*m_nWidth)] = pHeightMapPixels[x +
-				(y*m_nWidth)];
+			m_pHeightMapPixels[x + ((m_nLength - 1 - y)*m_nWidth)] = pHeightMapPixels[x + (y*m_nWidth)];
 		}
 	}
 
@@ -1159,7 +1158,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 {
 	//격자의 교점(정점)의 개수는 (nWidth * nLength)이다.
 	m_nVertices = nWidth * nLength;
-	m_nStride = sizeof(CDiffusedVertex);
+	m_nStride = sizeof(CDiffuseTexturedVertex);
 
 	//격자는 삼각형 스트립으로 구성한다.
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
@@ -1168,30 +1167,24 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 	m_nLength = nLength;
 	m_xmf3Scale = xmf3Scale;
 
-	CDiffusedVertex *pVertices = new CDiffusedVertex[m_nVertices];
+	m_nIndices = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
 
-	/*xStart와 zStart는 격자의 시작 위치(x-좌표와 z-좌표)를 나타낸다. 커다란 지형은 격자들의 이차원 배열로 만들 필
-	요가 있기 때문에 전체 지형에서 각 격자의 시작 위치를 나타내는 정보가 필요하다.*/
-	float fHeight = 0.0f, fMinHeight = +FLT_MAX, fMaxHeight = -FLT_MAX;
+	CDiffuseTexturedVertex *pVertices = new CDiffuseTexturedVertex[m_nVertices];
+
 	for (int i = 0, z = zStart; z < (zStart + nLength); z++)
 	{
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
-			//정점의 높이와 색상을 높이 맵으로부터 구한다.
-			XMFLOAT3 xmf3Position = XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext),
-				(z*m_xmf3Scale.z));
-			XMFLOAT4 xmf3Color = Vector4::Add(OnGetColor(x, z, pContext), xmf4Color);
-			pVertices[i] = CDiffusedVertex(xmf3Position, xmf3Color);
-			if (fHeight < fMinHeight) fMinHeight = fHeight;
-			if (fHeight > fMaxHeight) fMaxHeight = fHeight;
+			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext), (z*m_xmf3Scale.z)),
+				XMFLOAT2(z * 0.25f, x * 0.25f), Vector4::Add(OnGetColor(x, z, pContext), xmf4Color));
 		}
 	}
-	//다음 그림은 격자의 교점(정점)을 나열하는 순서를 보여준다.
+
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,
-		m_nStride * m_nVertices, 
+		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pVertexUploadBuffer);
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
@@ -1200,7 +1193,6 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 
 	delete[] pVertices;
 
-	m_nIndices = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
 	UINT *pnIndices = new UINT[m_nIndices];
 	for (int j = 0, z = 0; z < nLength - 1; z++)
 	{
@@ -1232,7 +1224,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 
 	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
 		pnIndices,
-		sizeof(UINT) * m_nIndices, 
+		sizeof(UINT) * m_nIndices,
 		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_INDEX_BUFFER,
 		&m_pIndexUploadBuffer);

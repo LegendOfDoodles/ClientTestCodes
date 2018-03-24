@@ -31,38 +31,6 @@ cbuffer cbGameObjectInfo : register(b2)
 };
 #endif
 
-struct VS_INPUT
-{
-    float3 position : POSITION;
-    float4 color : COLOR;
-};
-
-
-//정점 셰이더의 출력(픽셀 셰이더의 입력)을 위한 구조체를 선언한다.
-struct VS_OUTPUT
-{
-    float4 position : SV_POSITION;
-    float4 color : COLOR;
-};
-
-
-//정점 셰이더를 정의한다.
-VS_OUTPUT VSDiffused(VS_INPUT input)
-{
-    VS_OUTPUT output;
-    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxWorld), gmtxView),
-		gmtxProjection);
-    output.color = input.color;
-    return (output);
-}
-
-
-//픽셀 셰이더를 정의한다.
-float4 PSDiffused(VS_OUTPUT input) : SV_TARGET
-{
-    return (input.color);
-}
-
 #include "./Light.hlsl"
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -247,4 +215,38 @@ float4 PSTexturedLighting(VS_TEXTURED_LIGHTING_OUTPUT input) : SV_TARGET
     float4 cIllumination = Lighting(input.positionW, N);
 #endif
     return (lerp(cColor, cIllumination, 0.5f));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+struct VS_DIFFUSE_TEXTURED_INPUT
+{
+    float3 position : POSITION;
+    float2 uv : TEXCOORD;
+    float4 color : BCOLOR;
+};
+
+struct VS_DIFFUSE_TEXTURED_OUTPUT
+{
+    float4 position : SV_POSITION;
+    float3 positionW : POSITION;
+	//	nointerpolation float3 normalW : NORMAL;
+    float2 uv : TEXCOORD;
+    float4 color : BCOLOR;
+};
+
+VS_DIFFUSE_TEXTURED_OUTPUT VSDiffuseTextured(VS_DIFFUSE_TEXTURED_INPUT input)
+{
+    VS_DIFFUSE_TEXTURED_OUTPUT output;
+
+    output.positionW = (float3) mul(float4(input.position, 1.0f), gmtxGameObject);
+    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+    output.uv = input.uv;
+    output.color = input.color;
+    return (output);
+}
+
+float4 PSDiffuseTextured(VS_DIFFUSE_TEXTURED_OUTPUT input) : SV_TARGET
+{
+    return lerp(input.color, gtxtTexture.Sample(wrapSampler, input.uv), 0.7f);
 }

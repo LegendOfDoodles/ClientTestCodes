@@ -32,7 +32,6 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
-
 	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
@@ -44,7 +43,7 @@ protected: // 변수
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial						*m_pMaterial{ NULL };
 #else
-	UINT8 *m_pMappedObjects = NULL;
+	UINT8 *m_pMappedObjects{ NULL };
 #endif
 };
 
