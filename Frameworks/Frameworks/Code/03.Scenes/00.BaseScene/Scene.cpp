@@ -4,13 +4,14 @@
 #include "05.Objects/02.RotatingObject/RotatingObject.h"
 #include "04.Shaders/01.ObjectShader/ObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
+#include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "05.Objects/03.Player/01.Airplane/AirplanePlayer.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-24
+/// 최종 수정 날짜: 2018-03-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -84,7 +85,7 @@ void CScene::UpdateCamera()
 }
 
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (nMessageID)
 	{
@@ -98,7 +99,7 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		::ReleaseCapture();
 		break;
 	case WM_MOUSEMOVE:
-		OnProcessMouseMove(lParam);
+		OnProcessMouseMove(lParam, timeElapsed);
 		break;
 	default:
 		break;
@@ -106,15 +107,15 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 }
 
 void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	if (nMessageID == WM_KEYUP)
 	{
-		OnProcessKeyUp(wParam);
+		OnProcessKeyUp(wParam, timeElapsed);
 	}
 	else if (nMessageID == WM_KEYDOWN)
 	{
-		OnProcessKeyDown(wParam);
+		OnProcessKeyDown(wParam, timeElapsed);
 	}
 }
 
@@ -171,10 +172,12 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	//m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
 	//m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
 
-	m_nShaders = 2;
+	m_nShaders = 3;
 	m_ppShaders = new CShader*[m_nShaders];
-	m_ppShaders[0] = new CObjectShader(pCreateMgr);
+	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
+	m_ppShaders[2] = new CObjectShader(pCreateMgr);
+	
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{
@@ -226,7 +229,7 @@ void CScene::UpdateShaderVariables()
 }
 
 // Process Mouse Input
-void CScene::OnProcessMouseMove(LPARAM lParam)
+void CScene::OnProcessMouseMove(LPARAM lParam, float timeElapsed)
 {
 	//int mx{ LOWORD(lParam) };
 	//int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
@@ -253,10 +256,11 @@ void CScene::OnProcessMouseMove(LPARAM lParam)
 			//m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
 		}
 	}
+	m_pPlayer->Update(timeElapsed);
 }
 
 // Process Keyboard Input
-void CScene::OnProcessKeyUp(WPARAM wParam)
+void CScene::OnProcessKeyUp(WPARAM wParam, float timeElapsed)
 {
 	switch (wParam)
 	{
@@ -290,7 +294,7 @@ void CScene::OnProcessKeyUp(WPARAM wParam)
 	}
 }
 
-void CScene::OnProcessKeyDown(WPARAM wParam)
+void CScene::OnProcessKeyDown(WPARAM wParam, float timeElapsed)
 {
 	switch (wParam)
 	{

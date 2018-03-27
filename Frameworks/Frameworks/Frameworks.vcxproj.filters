@@ -123,6 +123,12 @@
     <Filter Include="소스 파일\05.Objects\04.Terrain">
       <UniqueIdentifier>{7552b41b-1324-420e-a185-8d7e9ee0bcaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\03.SkyBoxShader">
+      <UniqueIdentifier>{5a5a5c89-38fa-4c7f-aeff-4975b572efd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\05.SkyBox">
+      <UniqueIdentifier>{8d2fec42-6af8-4586-a4c4-2f0d22b6604e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -224,6 +230,12 @@
     <ClInclude Include="Code\05.Objects\04.Terrain\HeightMapTerrain.h">
       <Filter>소스 파일\05.Objects\04.Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.h">
+      <Filter>소스 파일\04.Shaders\03.SkyBoxShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\05.Skybox\SkyBox.h">
+      <Filter>소스 파일\05.Objects\05.SkyBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -312,6 +324,12 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\04.Terrain\HeightMapTerrain.cpp">
       <Filter>소스 파일\05.Objects\04.Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.cpp">
+      <Filter>소스 파일\04.Shaders\03.SkyBoxShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\05.Skybox\SkyBox.cpp">
+      <Filter>소스 파일\05.Objects\05.SkyBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "HeightMapTerrain.h"
+#include "06.Meshes/01.Mesh/Mesh.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 
@@ -7,7 +8,7 @@
 /// 목적: 지형 출력용 오브젝트
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-24
+/// 최종 수정 날짜: 2018-03-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////

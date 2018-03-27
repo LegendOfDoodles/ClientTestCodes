@@ -26,6 +26,7 @@ public: // 공개 함수
 	void ReleaseUploadBuffers();
 
 	void UpdateShaderVariables();
+	void UpdateShaderVariable(int nIndex);
 
 	void Render(CCamera *pCamera);
 
@@ -40,8 +41,6 @@ public: // 공개 함수
 	
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
-
-	bool HaveShader() { return m_pShader != NULL; }
 
 protected: // 내부 함수
 	void CreateShaderVariables(CCreateMgr *pCreateMgr);

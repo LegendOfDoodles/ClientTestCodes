@@ -204,3 +204,12 @@ public:
 	//격자의 좌표가 (x, z)일 때 교점(정점)의 색상을 반환하는 함수이다.
 	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CTexturedRectMesh : public CMesh
+{
+public:
+	CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
+	virtual ~CTexturedRectMesh();
+};

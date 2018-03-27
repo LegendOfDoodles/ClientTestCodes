@@ -46,9 +46,9 @@ public: // 공개 함수
 
 	// Message Process
 	void OnProcessingMouseMessage(HWND hWnd, UINT messageID,
-		WPARAM wParam, LPARAM lParam);
+		WPARAM wParam, LPARAM lParam, float timeElapsed);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT messageID,
-		WPARAM wParam, LPARAM lParam);
+		WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 	CCamera * GetCamera() { return m_pCamera; }
 
@@ -62,10 +62,10 @@ protected: // 내부 함수
 	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables();
 
-	virtual void OnProcessMouseMove(LPARAM lParam);
+	virtual void OnProcessMouseMove(LPARAM lParam, float timeElapsed);
 
-	virtual void OnProcessKeyUp(WPARAM wParam);
-	virtual void OnProcessKeyDown(WPARAM wParam);
+	virtual void OnProcessKeyUp(WPARAM wParam, float timeElapsed);
+	virtual void OnProcessKeyDown(WPARAM wParam, float timeElapsed);
 
 protected: // 변수
 	HWND m_hWnd{ NULL };

@@ -50,6 +50,11 @@ void CMaterial::UpdateShaderVariables()
 	UpdateShaderVariable();
 }
 
+void CMaterial::UpdateShaderVariable(int nIndex)
+{
+	if (m_pTexture) m_pTexture->UpdateShaderVariable(nIndex);
+}
+
 void CMaterial::Render(CCamera *pCamera)
 {
 	if(m_pShader) m_pShader->Render(pCamera);
