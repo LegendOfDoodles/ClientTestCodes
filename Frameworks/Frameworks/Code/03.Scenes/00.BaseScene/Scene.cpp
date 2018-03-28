@@ -223,8 +223,8 @@ void CScene::ReleaseShaderVariables()
 
 void CScene::UpdateShaderVariables()
 {
-	m_pLights->m_pLights[1].m_position = m_pPlayer->GetCamera()->GetPosition();
-	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetCamera()->GetLookVector();
+	m_pLights->m_pLights[1].m_position = m_pPlayer->GetPosition();
+	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetLookVector();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 

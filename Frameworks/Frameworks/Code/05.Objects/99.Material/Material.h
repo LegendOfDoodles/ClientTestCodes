@@ -10,7 +10,6 @@ struct COLOR
 	float									m_cSpecularPower{ 1.0f };
 	float									m_cRoughness{ 1.0f };
 	float									m_cMetalic{ 1.0f };
-	float									m_cRefractiveIndex{ 0.01f };
 };
 
 class CMaterial
@@ -37,7 +36,6 @@ public: // 공개 함수
 	void SetSpecularPower(float SP) { m_color.m_cSpecularPower = SP; }
 	void SetRoughness(float R) { m_color.m_cRoughness = CLAMP(R, 0, 1); }
 	void SetMetalic(float M) { m_color.m_cMetalic = CLAMP(M, 0, 1); }
-	void SetRefractiveIndex(float RI) { m_color.m_cRefractiveIndex = CLAMP(RI, 0, 1); }
 	
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
