@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-09
+/// 최종 수정 날짜: 2018-03-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -30,9 +30,59 @@ CMaterial* Materials::CreateBrickMaterial(CCreateMgr *pCreateMgr,
 
 	//pMaterial->SetTexture(pTexture);
 
-	pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	pMaterial->SetAlbedo(XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
 	pMaterial->SetRoughness(0.4f);
-	pMaterial->SetMetalic(1.0f);
+	pMaterial->SetMetalic(0.01f);
+
+	return pMaterial;
+}
+
+CMaterial* Materials::CreateTerrainMaterial(CCreateMgr *pCreateMgr,
+	D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+	D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/paperTex.dds", 0);
+	
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, true, 
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+	
+	pMaterial->Initialize(pCreateMgr);
+
+	pMaterial->SetTexture(pTexture);
+
+	pMaterial->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f));
+	pMaterial->SetRoughness(0.98f);
+	pMaterial->SetMetalic(0.01f);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateSkyBoxMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(6, RESOURCE_TEXTURE_2D, 0) };
+
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/SkyBox/SkyBox_Front_0.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/SkyBox/SkyBox_Back_0.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/SkyBox/SkyBox_Left_0.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/SkyBox/SkyBox_Right_0.dds", 3);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/SkyBox/SkyBox_Top_0.dds", 4);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/SkyBox/SkyBox_Bottom_0.dds", 5);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+
+	pMaterial->SetTexture(pTexture);
 
 	return pMaterial;
 }

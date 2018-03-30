@@ -62,11 +62,8 @@ protected: // º¯¼ö
 	ID3D12PipelineState **m_ppPipelineStates{ NULL };
 	int m_nPipelineStates{ 0 };
 
-#if USE_INSTANCING
 	ID3D12Resource *m_pInstanceBuffer{ NULL };
-#else
 	ID3D12Resource *m_pConstBuffer{ NULL };
-#endif
 
 #if USE_BATCH_MATERIAL
 	CMaterial						*m_pMaterial{ NULL };

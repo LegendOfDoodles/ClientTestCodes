@@ -1,5 +1,4 @@
 #pragma once
-#include "06.Meshes/01.Mesh/Mesh.h"
 #include "05.Objects/00.BaseObject/BaseObject.h"
 
 struct CB_TERRAIN_INFO
@@ -36,9 +35,6 @@ public: // 공개 함수
 	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
 
 protected: // 내부 함수
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
-	virtual void ReleaseShaderVariables();
-	virtual void UpdateShaderVariables();
 
 private:	 // 변수
 	 //지형의 높이 맵으로 사용할 이미지이다.
@@ -48,7 +44,4 @@ private:	 // 변수
 	int m_nLength;
 	//지형을 실제로 몇 배 확대할 것인가를 나타내는 스케일 벡터이다.
 	XMFLOAT3 m_xmf3Scale;
-
-	ID3D12Resource *m_pConstBuffer{ NULL };
-	CB_TERRAIN_INFO	 *m_pMappedTerrain{ NULL };
 };

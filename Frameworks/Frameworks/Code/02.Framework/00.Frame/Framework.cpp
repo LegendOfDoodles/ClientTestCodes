@@ -6,7 +6,7 @@
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-09
+/// 최종 수정 날짜: 2018-03-28
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ void CFramework::FrameAdvance(float timeElapsed)
 }
 
 LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (nMessageID)
 	{
@@ -61,11 +61,11 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 	case WM_MOUSEMOVE:
-		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam, timeElapsed);
 		break;
 	case WM_KEYDOWN:
 	case WM_KEYUP:
-		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
+		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, timeElapsed);
 		break;
 	}
 	return(0);

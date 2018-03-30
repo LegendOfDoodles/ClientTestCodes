@@ -3,13 +3,15 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/02.RotatingObject/RotatingObject.h"
 #include "04.Shaders/01.ObjectShader/ObjectShader.h"
+#include "04.Shaders/02.TerrainShader/TerrainShader.h"
+#include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "05.Objects/03.Player/01.Airplane/AirplanePlayer.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-18
+/// 최종 수정 날짜: 2018-03-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -38,8 +40,6 @@ void CScene::Finalize()
 
 void CScene::ReleaseUploadBuffers()
 {
-	if (m_pTerrain) m_pTerrain->ReleaseUploadBuffers();
-
 	if (!m_ppShaders) return;
 
 	for (int j = 0; j < m_nShaders; j++)
@@ -67,7 +67,6 @@ void CScene::Render()
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(5, d3dcbLightsGpuVirtualAddress); //Lights
 
-	m_pTerrain->Render(m_pCamera);
 	for (int i = 0; i < m_nShaders; i++)
 	{
 		m_ppShaders[i]->Render(m_pCamera);
@@ -86,7 +85,7 @@ void CScene::UpdateCamera()
 }
 
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (nMessageID)
 	{
@@ -100,7 +99,7 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		::ReleaseCapture();
 		break;
 	case WM_MOUSEMOVE:
-		OnProcessMouseMove(lParam);
+		OnProcessMouseMove(lParam, timeElapsed);
 		break;
 	default:
 		break;
@@ -108,15 +107,15 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 }
 
 void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	if (nMessageID == WM_KEYUP)
 	{
-		OnProcessKeyUp(wParam);
+		OnProcessKeyUp(wParam, timeElapsed);
 	}
 	else if (nMessageID == WM_KEYDOWN)
 	{
-		OnProcessKeyDown(wParam);
+		OnProcessKeyDown(wParam, timeElapsed);
 	}
 }
 
@@ -173,27 +172,17 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	//m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
 	//m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
 
-	XMFLOAT3 xmf3Scale(16.0f, 0.3f, 16.0f);
-	XMFLOAT4 xmf4Color(0.6f, 0.6f, 0.6f, 0.0f);
-	//지형을 높이 맵 이미지 파일(HeightMap.raw)을 사용하여 생성한다. 높이 맵의 크기는 가로x세로(257x257)이다.
-#ifdef _WITH_TERRAIN_PARTITION
-	/*하나의 격자 메쉬의 크기는 가로x세로(17x17)이다. 지형 전체는 가로 방향으로 16개, 세로 방향으로 16의 격자 메
-	쉬를 가진다. 지형을 구성하는 격자 메쉬의 개수는 총 256(16x16)개가 된다.*/
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/HeightMap.raw"), 257, 257, 17,
-		17, xmf3Scale, xmf4Color);
-#else
-	//지형을 하나의 격자 메쉬(257x257)로 생성한다.
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"), 500, 250, 500,
-		250, xmf3Scale, xmf4Color);
-#endif
-
-	m_nShaders = 1;
+	m_nShaders = 3;
 	m_ppShaders = new CShader*[m_nShaders];
+	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
+	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
+	m_ppShaders[2] = new CObjectShader(pCreateMgr);
+	
 
-	CObjectShader *pShader = new CObjectShader(pCreateMgr);
-	pShader->Initialize(pCreateMgr);
-
-	m_ppShaders[0] = pShader;
+	for (int i = 0; i < m_nShaders; ++i)
+	{
+		m_ppShaders[i]->Initialize(pCreateMgr);
+	}
 
 	CAirplanePlayer *pAirplanePlayer = new CAirplanePlayer(pCreateMgr);
 	m_pPlayer = pAirplanePlayer;
@@ -213,7 +202,6 @@ void CScene::ReleaseObjects()
 		m_ppShaders[i]->Finalize();
 	}
 	Safe_Delete_Array(m_ppShaders);
-	Safe_Delete(m_pTerrain);
 }
 
 void CScene::CreateShaderVariables(CCreateMgr *pCreateMgr)
@@ -236,12 +224,12 @@ void CScene::ReleaseShaderVariables()
 void CScene::UpdateShaderVariables()
 {
 	m_pLights->m_pLights[1].m_position = m_pPlayer->GetPosition();
-	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetCamera()->GetLookVector();
+	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetLookVector();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 
 // Process Mouse Input
-void CScene::OnProcessMouseMove(LPARAM lParam)
+void CScene::OnProcessMouseMove(LPARAM lParam, float timeElapsed)
 {
 	//int mx{ LOWORD(lParam) };
 	//int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
@@ -268,10 +256,11 @@ void CScene::OnProcessMouseMove(LPARAM lParam)
 			//m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
 		}
 	}
+	m_pPlayer->Update(timeElapsed);
 }
 
 // Process Keyboard Input
-void CScene::OnProcessKeyUp(WPARAM wParam)
+void CScene::OnProcessKeyUp(WPARAM wParam, float timeElapsed)
 {
 	switch (wParam)
 	{
@@ -305,7 +294,7 @@ void CScene::OnProcessKeyUp(WPARAM wParam)
 	}
 }
 
-void CScene::OnProcessKeyDown(WPARAM wParam)
+void CScene::OnProcessKeyDown(WPARAM wParam, float timeElapsed)
 {
 	switch (wParam)
 	{

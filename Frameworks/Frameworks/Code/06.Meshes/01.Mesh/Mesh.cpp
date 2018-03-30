@@ -8,7 +8,7 @@
 /// ¸ñÀû: Å×½ºÆ® ¿ë ¸Þ½¬ Å¬·¡½º »ý¼º
 /// ÃÖÁ¾ ¼öÁ¤ÀÚ:  ±è³ª´Ü
 /// ¼öÁ¤ÀÚ ¸ñ·Ï:  ±è³ª´Ü
-/// ÃÖÁ¾ ¼öÁ¤ ³¯Â¥: 2018-03-18
+/// ÃÖÁ¾ ¼öÁ¤ ³¯Â¥: 2018-03-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -1125,8 +1125,7 @@ CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMF
 	{
 		for (int x = 0; x < m_nWidth; x++)
 		{
-			m_pHeightMapPixels[x + ((m_nLength - 1 - y)*m_nWidth)] = pHeightMapPixels[x +
-				(y*m_nWidth)];
+			m_pHeightMapPixels[x + ((m_nLength - 1 - y)*m_nWidth)] = pHeightMapPixels[x + (y*m_nWidth)];
 		}
 	}
 
@@ -1216,7 +1215,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 {
 	//°ÝÀÚÀÇ ±³Á¡(Á¤Á¡)ÀÇ °³¼ö´Â (nWidth * nLength)ÀÌ´Ù.
 	m_nVertices = nWidth * nLength;
-	m_nStride = sizeof(CDiffusedVertex);
+	m_nStride = sizeof(CDiffuseTexturedVertex);
 
 	//°ÝÀÚ´Â »ï°¢Çü ½ºÆ®¸³À¸·Î ±¸¼ºÇÑ´Ù.
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
@@ -1225,30 +1224,24 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 	m_nLength = nLength;
 	m_xmf3Scale = xmf3Scale;
 
-	CDiffusedVertex *pVertices = new CDiffusedVertex[m_nVertices];
+	m_nIndices = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
 
-	/*xStart¿Í zStart´Â °ÝÀÚÀÇ ½ÃÀÛ À§Ä¡(x-ÁÂÇ¥¿Í z-ÁÂÇ¥)¸¦ ³ªÅ¸³½´Ù. Ä¿´Ù¶õ ÁöÇüÀº °ÝÀÚµéÀÇ ÀÌÂ÷¿ø ¹è¿­·Î ¸¸µé ÇÊ
-	¿ä°¡ ÀÖ±â ¶§¹®¿¡ ÀüÃ¼ ÁöÇü¿¡¼­ °¢ °ÝÀÚÀÇ ½ÃÀÛ À§Ä¡¸¦ ³ªÅ¸³»´Â Á¤º¸°¡ ÇÊ¿äÇÏ´Ù.*/
-	float fHeight = 0.0f, fMinHeight = +FLT_MAX, fMaxHeight = -FLT_MAX;
+	CDiffuseTexturedVertex *pVertices = new CDiffuseTexturedVertex[m_nVertices];
+
 	for (int i = 0, z = zStart; z < (zStart + nLength); z++)
 	{
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
-			//Á¤Á¡ÀÇ ³ôÀÌ¿Í »ö»óÀ» ³ôÀÌ ¸ÊÀ¸·ÎºÎÅÍ ±¸ÇÑ´Ù.
-			XMFLOAT3 xmf3Position = XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext),
-				(z*m_xmf3Scale.z));
-			XMFLOAT4 xmf3Color = Vector4::Add(OnGetColor(x, z, pContext), xmf4Color);
-			pVertices[i] = CDiffusedVertex(xmf3Position, xmf3Color);
-			if (fHeight < fMinHeight) fMinHeight = fHeight;
-			if (fHeight > fMaxHeight) fMaxHeight = fHeight;
+			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext), (z*m_xmf3Scale.z)),
+				XMFLOAT2(z * 0.25f, x * 0.25f), Vector4::Add(OnGetColor(x, z, pContext), xmf4Color));
 		}
 	}
-	//´ÙÀ½ ±×¸²Àº °ÝÀÚÀÇ ±³Á¡(Á¤Á¡)À» ³ª¿­ÇÏ´Â ¼ø¼­¸¦ º¸¿©ÁØ´Ù.
+
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,
-		m_nStride * m_nVertices, 
+		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pVertexUploadBuffer);
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
@@ -1257,7 +1250,6 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 
 	delete[] pVertices;
 
-	m_nIndices = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
 	UINT *pnIndices = new UINT[m_nIndices];
 	for (int j = 0, z = 0; z < nLength - 1; z++)
 	{
@@ -1289,7 +1281,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 
 	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
 		pnIndices,
-		sizeof(UINT) * m_nIndices, 
+		sizeof(UINT) * m_nIndices,
 		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_INDEX_BUFFER,
 		&m_pIndexUploadBuffer);
@@ -1340,6 +1332,7 @@ XMFLOAT4 CHeightMapGridMesh::OnGetColor(int x, int z, void *pContext)
 	return(xmf4Color);
 }
 
+<<<<<<< HEAD
 void UploadVertexBuffer(ID3D12GraphicsCommandList * pd3dCommandList, void * pData, UINT nBytes, CMesh * pMesh)
 {
 	ID3D12Resource *pVertexBuffer{ pMesh->GetVertexBuffer() };
@@ -1372,3 +1365,92 @@ void UploadVertexBuffer(ID3D12GraphicsCommandList * pd3dCommandList, void * pDat
 	pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
 
 }
+=======
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+CTexturedRectMesh::CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition) : CMesh(pCreateMgr)
+{
+	m_nVertices = 6;
+	m_nStride = sizeof(CTexturedVertex);
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	CTexturedVertex pVertices[6];
+
+	float fx = (fWidth * 0.5f) + fxPosition, fy = (fHeight * 0.5f) + fyPosition, fz = (fDepth * 0.5f) + fzPosition;
+
+	if (fWidth == 0.0f)
+	{
+		if (fxPosition > 0.0f)
+		{
+			pVertices[0] = CTexturedVertex(XMFLOAT3(fx, +fy, -fz), XMFLOAT2(1.0f, 0.0f));
+			pVertices[1] = CTexturedVertex(XMFLOAT3(fx, -fy, -fz), XMFLOAT2(1.0f, 1.0f));
+			pVertices[2] = CTexturedVertex(XMFLOAT3(fx, -fy, +fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[3] = CTexturedVertex(XMFLOAT3(fx, -fy, +fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[4] = CTexturedVertex(XMFLOAT3(fx, +fy, +fz), XMFLOAT2(0.0f, 0.0f));
+			pVertices[5] = CTexturedVertex(XMFLOAT3(fx, +fy, -fz), XMFLOAT2(1.0f, 0.0f));
+		}
+		else
+		{
+			pVertices[0] = CTexturedVertex(XMFLOAT3(fx, +fy, +fz), XMFLOAT2(1.0f, 0.0f));
+			pVertices[1] = CTexturedVertex(XMFLOAT3(fx, -fy, +fz), XMFLOAT2(1.0f, 1.0f));
+			pVertices[2] = CTexturedVertex(XMFLOAT3(fx, -fy, -fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[3] = CTexturedVertex(XMFLOAT3(fx, -fy, -fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[4] = CTexturedVertex(XMFLOAT3(fx, +fy, -fz), XMFLOAT2(0.0f, 0.0f));
+			pVertices[5] = CTexturedVertex(XMFLOAT3(fx, +fy, +fz), XMFLOAT2(1.0f, 0.0f));
+		}
+	}
+	else if (fHeight == 0.0f)
+	{
+		if (fyPosition > 0.0f)
+		{
+			pVertices[0] = CTexturedVertex(XMFLOAT3(+fx, fy, -fz), XMFLOAT2(1.0f, 0.0f));
+			pVertices[1] = CTexturedVertex(XMFLOAT3(+fx, fy, +fz), XMFLOAT2(1.0f, 1.0f));
+			pVertices[2] = CTexturedVertex(XMFLOAT3(-fx, fy, +fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[3] = CTexturedVertex(XMFLOAT3(-fx, fy, +fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[4] = CTexturedVertex(XMFLOAT3(-fx, fy, -fz), XMFLOAT2(0.0f, 0.0f));
+			pVertices[5] = CTexturedVertex(XMFLOAT3(+fx, fy, -fz), XMFLOAT2(1.0f, 0.0f));
+		}
+		else
+		{
+			pVertices[0] = CTexturedVertex(XMFLOAT3(+fx, fy, +fz), XMFLOAT2(1.0f, 0.0f));
+			pVertices[1] = CTexturedVertex(XMFLOAT3(+fx, fy, -fz), XMFLOAT2(1.0f, 1.0f));
+			pVertices[2] = CTexturedVertex(XMFLOAT3(-fx, fy, -fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[3] = CTexturedVertex(XMFLOAT3(-fx, fy, -fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[4] = CTexturedVertex(XMFLOAT3(-fx, fy, +fz), XMFLOAT2(0.0f, 0.0f));
+			pVertices[5] = CTexturedVertex(XMFLOAT3(+fx, fy, +fz), XMFLOAT2(1.0f, 0.0f));
+		}
+	}
+	else if (fDepth == 0.0f)
+	{
+		if (fzPosition > 0.0f)
+		{
+			pVertices[0] = CTexturedVertex(XMFLOAT3(+fx, +fy, fz), XMFLOAT2(1.0f, 0.0f));
+			pVertices[1] = CTexturedVertex(XMFLOAT3(+fx, -fy, fz), XMFLOAT2(1.0f, 1.0f));
+			pVertices[2] = CTexturedVertex(XMFLOAT3(-fx, -fy, fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[3] = CTexturedVertex(XMFLOAT3(-fx, -fy, fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[4] = CTexturedVertex(XMFLOAT3(-fx, +fy, fz), XMFLOAT2(0.0f, 0.0f));
+			pVertices[5] = CTexturedVertex(XMFLOAT3(+fx, +fy, fz), XMFLOAT2(1.0f, 0.0f));
+		}
+		else
+		{
+			pVertices[0] = CTexturedVertex(XMFLOAT3(-fx, +fy, fz), XMFLOAT2(1.0f, 0.0f));
+			pVertices[1] = CTexturedVertex(XMFLOAT3(-fx, -fy, fz), XMFLOAT2(1.0f, 1.0f));
+			pVertices[2] = CTexturedVertex(XMFLOAT3(+fx, -fy, fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[3] = CTexturedVertex(XMFLOAT3(+fx, -fy, fz), XMFLOAT2(0.0f, 1.0f));
+			pVertices[4] = CTexturedVertex(XMFLOAT3(+fx, +fy, fz), XMFLOAT2(0.0f, 0.0f));
+			pVertices[5] = CTexturedVertex(XMFLOAT3(-fx, +fy, fz), XMFLOAT2(1.0f, 0.0f));
+		}
+	}
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+}
+
+CTexturedRectMesh::~CTexturedRectMesh()
+{
+}
+
+>>>>>>> ê¹€ë‚˜ë‹¨

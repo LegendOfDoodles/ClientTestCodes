@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "HeightMapTerrain.h"
+#include "06.Meshes/01.Mesh/Mesh.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 
@@ -7,7 +8,7 @@
 /// 목적: 지형 출력용 오브젝트
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-17
+/// 최종 수정 날짜: 2018-03-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -56,49 +57,11 @@ CHeightMapTerrain::CHeightMapTerrain(CCreateMgr *pCreateMgr, LPCTSTR pFileName,
 			SetMesh(x + (z*cxBlocks), pHeightMapGridMesh);
 		}
 	}
-	//지형을 렌더링하기 위한 셰이더를 생성한다.
-	CTerrainShader *pShader = new CTerrainShader(pCreateMgr);
-	pShader->CreateShader(pCreateMgr);
-
-	SetShader(pShader);
 
 	CreateShaderVariables(pCreateMgr);
 }
 
 CHeightMapTerrain::~CHeightMapTerrain(void)
 {
-	if (m_pHeightMapImage) delete m_pHeightMapImage;
-}
-
-////////////////////////////////////////////////////////////////////////
-// 공개 함수
-void CHeightMapTerrain::CreateShaderVariables(CCreateMgr *pCreateMgr)
-{
-	UINT elementBytes = ((sizeof(CB_TERRAIN_INFO) + 255) & ~255); //256의 배수
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes,
-		D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedTerrain);
-}
-
-void CHeightMapTerrain::ReleaseShaderVariables()
-{
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-
-	CBaseObject::ReleaseShaderVariables();
-}
-
-void CHeightMapTerrain::UpdateShaderVariables()
-{
-	XMStoreFloat4x4(&m_pMappedTerrain->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
-
-	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = m_pConstBuffer->GetGPUVirtualAddress();
-	m_pCommandList->SetGraphicsRootConstantBufferView(0, gpuVirtualAddress);
+	Safe_Delete(m_pHeightMapImage);
 }

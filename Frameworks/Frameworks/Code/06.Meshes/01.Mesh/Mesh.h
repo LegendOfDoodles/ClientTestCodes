@@ -213,6 +213,7 @@ public:
 	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
 };
 
+<<<<<<< HEAD
 
 
 ////////////////////////////////////////////////////////
@@ -221,3 +222,13 @@ void UploadVertexBuffer(
 	void *pData,
 	UINT nBytes,
 	CMesh *pMesh);
+=======
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CTexturedRectMesh : public CMesh
+{
+public:
+	CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
+	virtual ~CTexturedRectMesh();
+};
+>>>>>>> 김나단

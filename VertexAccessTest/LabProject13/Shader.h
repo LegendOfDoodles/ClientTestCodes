@@ -136,6 +136,6 @@ protected:
 	//인스턴스 데이터를 포함하는 버퍼와 포인터이다.
 	ID3D12Resource *m_pd3dcbGameObjects = NULL;
 	VS_VB_INSTANCE *m_pcbMappedGameObjects = NULL;
-
+	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 	bool pressed{ false };
 };

@@ -18,7 +18,7 @@ public: // 공개 함수
 
 	// Message Process
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
-		WPARAM wParam, LPARAM lParam);
+		WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 private: // 내부 함수
 	void BuildObjects();
@@ -26,9 +26,6 @@ private: // 내부 함수
 
 	void AnimateObjects(float timeElapsed);
 	void RenderObjects();
-
-	void SwitchScreenMode();
-	void ResizeScreen(WPARAM wParam, LPARAM lParam);
 
 private: // 변수
 	HWND m_hWnd{ NULL };
