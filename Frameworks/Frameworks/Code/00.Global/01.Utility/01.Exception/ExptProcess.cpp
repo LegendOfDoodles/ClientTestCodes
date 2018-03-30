@@ -5,7 +5,7 @@
 /// 목적: 예외 처리 관련 함수 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-26
+/// 최종 수정 날짜: 2018-03-30
 /// </summary>
 
 void ExptProcess::PrintErrorBlob(ComPtr<ID3DBlob>& pErrorBlob)
@@ -20,4 +20,12 @@ void ExptProcess::PrintErrorBlob(ComPtr<ID3DBlob>& pErrorBlob)
 	OutputDebugStringA(pData);
 
 	delete[] pData;
+}
+
+void ExptProcess::ThrowIfFailed(HRESULT hr)
+{
+	if (FAILED(hr))
+	{
+		throw std::exception();
+	}
 }

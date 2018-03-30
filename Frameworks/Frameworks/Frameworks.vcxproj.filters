@@ -346,11 +346,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\Light.hlsl">
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\Light.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\Shaders.hlsl">
+    </CustomBuild>
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\Shaders.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
+    </CustomBuild>
   </ItemGroup>
 </Project>
