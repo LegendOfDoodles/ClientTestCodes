@@ -5,13 +5,13 @@
 #include "04.Shaders/01.ObjectShader/ObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
-#include "05.Objects/03.Player/01.Airplane/AirplanePlayer.h"
+#include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-27
+/// 최종 수정 날짜: 2018-03-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ void CScene::AnimateObjects(float timeElapsed)
 	{
 		m_ppShaders[i]->AnimateObjects(timeElapsed);
 	}
-	m_pPlayer->Update(timeElapsed);
+	m_pCamera->Update(timeElapsed);
 }
 
 void CScene::Render()
@@ -71,7 +71,6 @@ void CScene::Render()
 	{
 		m_ppShaders[i]->Render(m_pCamera);
 	}
-	m_pPlayer->Render(m_pCamera);
 }
 
 void CScene::SetViewportsAndScissorRects()
@@ -184,11 +183,13 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	CAirplanePlayer *pAirplanePlayer = new CAirplanePlayer(pCreateMgr);
-	m_pPlayer = pAirplanePlayer;
-	m_pPlayer->Initialize(pCreateMgr);
+	m_pCamera = new  CCamera();
 
-	m_pCamera = m_pPlayer->GetCamera();
+	m_pCamera->SetOffset(XMFLOAT3(0.0f, 0.0f, 0.0f));
+	m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
+	m_pCamera->RegenerateViewMatrix();
+
+	m_pCamera->Initialize(pCreateMgr);
 
 	BuildLights();
 }
@@ -223,8 +224,8 @@ void CScene::ReleaseShaderVariables()
 
 void CScene::UpdateShaderVariables()
 {
-	m_pLights->m_pLights[1].m_position = m_pPlayer->GetPosition();
-	m_pLights->m_pLights[1].m_direction = m_pPlayer->GetLookVector();
+	m_pLights->m_pLights[1].m_position = m_pCamera->GetPosition();
+	m_pLights->m_pLights[1].m_direction = m_pCamera->GetLookVector();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 
@@ -250,13 +251,12 @@ void CScene::OnProcessMouseMove(LPARAM lParam, float timeElapsed)
 		{
 			::GetKeyboardState(pKeyBuffer);
 			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
-				m_pPlayer->SetRotation(cyDelta, 0.0f, -cxDelta);
+				m_pCamera->SetRotation(cyDelta, 0.0f, -cxDelta);
 			else
-				m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
-			//m_pPlayer->SetRotation(cyDelta, cxDelta, 0.0f);
+				m_pCamera->SetRotation(cyDelta, cxDelta, 0.0f);
 		}
 	}
-	m_pPlayer->Update(timeElapsed);
+	m_pCamera->Update(timeElapsed, false);
 }
 
 // Process Keyboard Input
@@ -269,22 +269,22 @@ void CScene::OnProcessKeyUp(WPARAM wParam, float timeElapsed)
 		break;
 
 	case 'W':
-		m_pPlayer->ResetDirection(DIR_FORWARD);
+		m_pCamera->ResetDirection(DIR_FORWARD);
 		break;
 	case 'S':
-		m_pPlayer->ResetDirection(DIR_BACKWARD);
+		m_pCamera->ResetDirection(DIR_BACKWARD);
 		break;
 	case 'A':
-		m_pPlayer->ResetDirection(DIR_LEFT);
+		m_pCamera->ResetDirection(DIR_LEFT);
 		break;
 	case 'D':
-		m_pPlayer->ResetDirection(DIR_RIGHT);
+		m_pCamera->ResetDirection(DIR_RIGHT);
 		break;
 	case 'Q':
-		m_pPlayer->ResetDirection(DIR_UP);
+		m_pCamera->ResetDirection(DIR_UP);
 		break;
 	case 'E':
-		m_pPlayer->ResetDirection(DIR_DOWN);
+		m_pCamera->ResetDirection(DIR_DOWN);
 		break;
 
 	default:
@@ -299,22 +299,22 @@ void CScene::OnProcessKeyDown(WPARAM wParam, float timeElapsed)
 	switch (wParam)
 	{
 	case 'W':
-		m_pPlayer->SetDirection(DIR_FORWARD);
+		m_pCamera->SetDirection(DIR_FORWARD);
 		break;
 	case 'S':
-		m_pPlayer->SetDirection(DIR_BACKWARD);
+		m_pCamera->SetDirection(DIR_BACKWARD);
 		break;
 	case 'A':
-		m_pPlayer->SetDirection(DIR_LEFT);
+		m_pCamera->SetDirection(DIR_LEFT);
 		break;
 	case 'D':
-		m_pPlayer->SetDirection(DIR_RIGHT);
+		m_pCamera->SetDirection(DIR_RIGHT);
 		break;
 	case 'Q':
-		m_pPlayer->SetDirection(DIR_UP);
+		m_pCamera->SetDirection(DIR_UP);
 		break;
 	case 'E':
-		m_pPlayer->SetDirection(DIR_DOWN);
+		m_pCamera->SetDirection(DIR_DOWN);
 		break;
 
 	default:

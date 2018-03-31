@@ -1,13 +1,12 @@
 #include "stdafx.h"
 #include "Camera.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
-#include "05.Objects/03.Player/00.BasePlayer/Player.h"
 
 /// <summary>
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-18
+/// 최종 수정 날짜: 2018-03-31
 /// </summary>
 
 
@@ -76,6 +75,25 @@ void CCamera::SetViewportsAndScissorRects()
 	m_pCommandList->RSSetScissorRects(1, &m_scissorRect);
 }
 
+void CCamera::Move(DWORD direction, float distance, bool bVelocity)
+{
+	if (direction)
+	{
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+
+		if (direction & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, distance);
+		if (direction & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -distance);
+
+		if (direction & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, distance);
+		if (direction & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -distance);
+
+		if (direction & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, distance);
+		if (direction & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -distance);
+
+		Move(xmf3Shift);
+	}
+}
+
 void CCamera::Move(XMFLOAT3& xmf3Shift)
 {
 	m_xmf3Position.x += xmf3Shift.x;
@@ -83,12 +101,44 @@ void CCamera::Move(XMFLOAT3& xmf3Shift)
 	m_xmf3Position.z += xmf3Shift.z;
 }
 
-void CCamera::Rotate(float fPitch, float fYaw, float fRoll)
+void CCamera::Rotate(float x, float y, float z)
 {
+	if (x != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Right),
+			XMConvertToRadians(x));
+		m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
+		m_xmf3Up = Vector3::TransformNormal(m_xmf3Up, xmmtxRotate);
+		m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
+	}
+	if (y != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up),
+			XMConvertToRadians(y));
+		m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
+		m_xmf3Up = Vector3::TransformNormal(m_xmf3Up, xmmtxRotate);
+		m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
+	}
+	if (z != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Look),
+			XMConvertToRadians(z));
+		m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
+		m_xmf3Up = Vector3::TransformNormal(m_xmf3Up, xmmtxRotate);
+		m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
+	}
 }
 
-void CCamera::Update(XMFLOAT3& xmf3LookAt, float fTimeElapsed)
+void CCamera::Update(float fTimeElapsed, bool bUpdateMove)
 {
+	if (bUpdateMove && m_direction) { Move(m_direction, 100.0f *  fTimeElapsed, true); }
+	if (!Vector3::IsZero(m_rotation))
+	{
+		Rotate(m_rotation.x, m_rotation.y, m_rotation.z);
+		m_rotation.x = m_rotation.y = m_rotation.z = 0.0f;
+	}
+
+	RegenerateViewMatrix();
 }
 
 void CCamera::SetLookAt(XMFLOAT3& xmf3LookAt)

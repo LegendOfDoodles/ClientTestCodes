@@ -75,24 +75,6 @@
     <Filter Include="소스 파일\05.Objects\01.Camera\00.BaseCamera">
       <UniqueIdentifier>{2672b61b-e577-45a5-9721-a91d432baf7e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\05.Objects\01.Camera\01.Spaceship">
-      <UniqueIdentifier>{24a7c6a6-52f2-4010-8fb6-9a5d1427cc55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\01.Camera\02.FirstPerson">
-      <UniqueIdentifier>{208ea1bc-7f34-4570-9c88-3c7abc17f9f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\01.Camera\03.ThirdPerson">
-      <UniqueIdentifier>{84dd299f-02be-49d5-a961-74c3afd8a46c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\03.Player">
-      <UniqueIdentifier>{8bff2946-fe91-4024-801a-7655549bd54a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\03.Player\00.BasePlayer">
-      <UniqueIdentifier>{36a29004-c4d7-4647-aa3d-a56442cd83c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\03.Player\01.Airplane">
-      <UniqueIdentifier>{5539e089-7e90-4235-8ce1-c13a58cb2d96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\00.Global\01.Utility\01.Exception">
       <UniqueIdentifier>{d15e1826-69cc-4b10-bc69-2791b15f4841}</UniqueIdentifier>
     </Filter>
@@ -120,13 +102,13 @@
     <Filter Include="소스 파일\04.Shaders\02.TerrainShader">
       <UniqueIdentifier>{79321204-d74a-4387-bb76-2cdd717c8d4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\05.Objects\04.Terrain">
-      <UniqueIdentifier>{7552b41b-1324-420e-a185-8d7e9ee0bcaf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\04.Shaders\03.SkyBoxShader">
       <UniqueIdentifier>{5a5a5c89-38fa-4c7f-aeff-4975b572efd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\05.Objects\05.SkyBox">
+    <Filter Include="소스 파일\05.Objects\03.Terrain">
+      <UniqueIdentifier>{7552b41b-1324-420e-a185-8d7e9ee0bcaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\04.SkyBox">
       <UniqueIdentifier>{8d2fec42-6af8-4586-a4c4-2f0d22b6604e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -191,23 +173,8 @@
     <ClInclude Include="Code\05.Objects\99.Material\00.Texture\Texture.h">
       <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.h">
-      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\03.Player\00.BasePlayer\Player.h">
-      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
-    </ClInclude>
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h">
       <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\01.Camera\02.FirstPerson\FirstPersonCamera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.h">
-      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
     </ClInclude>
     <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h">
       <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
@@ -227,14 +194,14 @@
     <ClInclude Include="Code\04.Shaders\02.TerrainShader\TerrainShader.h">
       <Filter>소스 파일\04.Shaders\02.TerrainShader</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\04.Terrain\HeightMapTerrain.h">
-      <Filter>소스 파일\05.Objects\04.Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.h">
       <Filter>소스 파일\04.Shaders\03.SkyBoxShader</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\05.Skybox\SkyBox.h">
-      <Filter>소스 파일\05.Objects\05.SkyBox</Filter>
+    <ClInclude Include="Code\05.Objects\03.Terrain\HeightMapTerrain.h">
+      <Filter>소스 파일\05.Objects\03.Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\04.Skybox\SkyBox.h">
+      <Filter>소스 파일\05.Objects\04.SkyBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -286,23 +253,8 @@
     <ClCompile Include="Code\05.Objects\99.Material\00.Texture\Texture.cpp">
       <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\03.Player\01.Airplane\AirplanePlayer.cpp">
-      <Filter>소스 파일\05.Objects\03.Player\01.Airplane</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\03.Player\00.BasePlayer\Player.cpp">
-      <Filter>소스 파일\05.Objects\03.Player\00.BasePlayer</Filter>
-    </ClCompile>
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\01.Camera\02.FirstPerson\FirstPersonCamera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\02.FirstPerson</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\01.Camera\01.Spaceship\SpaceShipCamera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\01.Spaceship</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\01.Camera\03.ThirdPerson\ThirdPersonCamera.cpp">
-      <Filter>소스 파일\05.Objects\01.Camera\03.ThirdPerson</Filter>
     </ClCompile>
     <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp">
       <Filter>소스 파일\06.Meshes\00.Vertex</Filter>
@@ -322,14 +274,14 @@
     <ClCompile Include="Code\04.Shaders\02.TerrainShader\TerrainShader.cpp">
       <Filter>소스 파일\04.Shaders\02.TerrainShader</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\04.Terrain\HeightMapTerrain.cpp">
-      <Filter>소스 파일\05.Objects\04.Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.cpp">
       <Filter>소스 파일\04.Shaders\03.SkyBoxShader</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\05.Skybox\SkyBox.cpp">
-      <Filter>소스 파일\05.Objects\05.SkyBox</Filter>
+    <ClCompile Include="Code\05.Objects\03.Terrain\HeightMapTerrain.cpp">
+      <Filter>소스 파일\05.Objects\03.Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\04.Skybox\SkyBox.cpp">
+      <Filter>소스 파일\05.Objects\04.SkyBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

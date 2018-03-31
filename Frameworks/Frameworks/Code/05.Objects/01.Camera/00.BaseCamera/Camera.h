@@ -1,11 +1,16 @@
 #pragma once
 
 //카메라의 종류(모드: Mode)를 나타내는 상수를 다음과 같이 선언한다.
-#define	FIRST_PERSON_CAMERA				0x01
 #define	SPACESHIP_CAMERA					0x02
-#define	THIRD_PERSON_CAMERA			0x03
 
 #define	ASPECT_RATIO							(float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT))
+
+#define DIR_FORWARD 0x01
+#define DIR_BACKWARD 0x02
+#define DIR_LEFT 0x04
+#define DIR_RIGHT 0x08
+#define DIR_UP 0x10
+#define DIR_DOWN 0x20
 
 class CCreateMgr;
 class CPlayer;
@@ -31,9 +36,10 @@ public:	// 공개 함수
 
 	virtual void SetViewportsAndScissorRects();
 
-	virtual void Move(XMFLOAT3& xmf3Shift);
-	virtual void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f);
-	virtual void Update(XMFLOAT3& xmf3LookAt, float fTimeElapsed);
+	void Move(DWORD direction, float distance, bool bVelocity);
+	void Move(XMFLOAT3& xmf3Shift);
+	void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	void Update(float fTimeElapsed, bool bUpdateMove = true);
 	virtual void SetLookAt(XMFLOAT3& xmf3LookAt);
 
 	void SetOffset(XMFLOAT3 xmf3Offset);
@@ -66,13 +72,15 @@ public:	// 공개 함수
 
 	XMFLOAT3& GetOffset() { return(m_xmf3Offset); }
 
-	void SetTimeLag(float fTimeLag) { m_fTimeLag = fTimeLag; }
-	float GetTimeLag() { return(m_fTimeLag); }
-
 	XMFLOAT4X4 GetViewMatrix() { return(m_xmf4x4View); }
 	XMFLOAT4X4 GetProjectionMatrix() { return(m_xmf4x4Projection); }
 	D3D12_VIEWPORT GetViewport() { return(m_viewport); }
 	D3D12_RECT GetScissorRect() { return(m_scissorRect); }
+
+	void SetDirection(DWORD direction) { m_direction |= direction; }
+	void ResetDirection(DWORD direction) { m_direction &= ~direction; }
+
+	void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y, m_rotation.z = z; }
 
 protected:	// 내부 함수
 	void GenerateViewMatrix();
@@ -100,13 +108,14 @@ protected: // 변수
 
 	XMFLOAT3 m_xmf3Offset{ 0.0f,0.0f,0.0f };
 
-	float m_fTimeLag{ 0.0f };
-
 	XMFLOAT4X4 m_xmf4x4View;
 	XMFLOAT4X4 m_xmf4x4Projection;
 
 	D3D12_VIEWPORT m_viewport;
 	D3D12_RECT m_scissorRect;
+
+	DWORD m_direction{ NULL };
+	XMFLOAT3 m_rotation{ 0.0f, 0.0f, 0.0f };
 
 	CPlayer *m_pPlayer{ NULL };
 

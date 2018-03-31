@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Framework.h"
-#include "05.Objects/03.Player/01.Airplane/AirplanePlayer.h"
 
 /// <summary>
 /// ¸ñÀû: Å×

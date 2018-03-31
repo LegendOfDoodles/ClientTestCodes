@@ -21,16 +21,10 @@ public: // °ø°³ ÇÔ¼ö
 	ID3D12Resource* GetVertexUploadBuffer() { 
 		return m_pVertexUploadBuffer;
 	}
-	void UploadVertexBuffer(
-		ID3D12GraphicsCommandList *pd3dCommandList,
-		void *pData,
-		UINT nBytes);
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 protected: // ³»ºÎ ÇÔ¼ö
-	void CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
-	void CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
 
 protected: // º¯¼ö
 	int m_nReferences{ 0 };
@@ -90,6 +84,9 @@ public:
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
 	void CalculateTriangleStripVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
 	void CalculateVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices, UINT *pnIndices, int nIndices);
+
+	void CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
+	void CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
 };
 
 class CCubeMeshIlluminated : public CMeshIlluminated
@@ -213,16 +210,6 @@ public:
 	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
 };
 
-<<<<<<< HEAD
-
-
-////////////////////////////////////////////////////////
-void UploadVertexBuffer(
-	ID3D12GraphicsCommandList *pd3dCommandList,
-	void *pData,
-	UINT nBytes,
-	CMesh *pMesh);
-=======
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CTexturedRectMesh : public CMesh
@@ -231,4 +218,3 @@ public:
 	CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
 	virtual ~CTexturedRectMesh();
 };
->>>>>>> ê¹€ë‚˜ë‹¨

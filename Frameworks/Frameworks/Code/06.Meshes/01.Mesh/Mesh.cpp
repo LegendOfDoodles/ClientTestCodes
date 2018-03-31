@@ -36,63 +36,6 @@ void CMesh::ReleaseUploadBuffers()
 	Safe_Release(m_pVertexUploadBuffer);
 	Safe_Release(m_pIndexUploadBuffer);
 }
-void CMesh::UploadVertexBuffer(ID3D12GraphicsCommandList * pd3dCommandList, void * pData, UINT nBytes)
-{
-	static bool isInitialized{ false };
-	static D3D12_HEAP_PROPERTIES heapPropertiesDesc;
-
-	ID3D12Resource *pVertexBuffer{ GetVertexBuffer() };
-	ID3D12Resource *pUploadBuffer{ GetVertexUploadBuffer() };
-
-	if (!isInitialized)
-	{
-		::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
-		heapPropertiesDesc.Type = D3D12_HEAP_TYPE_DEFAULT;
-		heapPropertiesDesc.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-		heapPropertiesDesc.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-		heapPropertiesDesc.CreationNodeMask = 1;
-		heapPropertiesDesc.VisibleNodeMask = 1;
-
-		isInitialized = true;
-	}
-
-	D3D12_RESOURCE_DESC resourceDesc;
-
-	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Alignment = 0;
-	resourceDesc.Width = nBytes;
-	resourceDesc.Height = 1;
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.MipLevels = 1;
-	resourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-	resourceDesc.SampleDesc.Count = 1;
-	resourceDesc.SampleDesc.Quality = 0;
-	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-	static D3D12_RANGE readRange{ 0, 0 };
-
-	UINT8 *pBufferDataBegin{ NULL };
-
-	pUploadBuffer->Map(0, &readRange, (void **)&pBufferDataBegin);
-	memcpy(pBufferDataBegin, pData, nBytes);
-	pUploadBuffer->Unmap(0, NULL);
-
-	//¾÷·Îµå ¹öÆÛÀÇ ³»¿ëÀ» µðÆúÆ® ¹öÆÛ¿¡ º¹»çÇÑ´Ù.
-	pd3dCommandList->CopyResource(pVertexBuffer, pUploadBuffer);
-
-	D3D12_RESOURCE_BARRIER d3dResourceBarrier;
-	::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
-	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	d3dResourceBarrier.Transition.pResource = pVertexBuffer;
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-	d3dResourceBarrier.Transition.Subresource =
-		D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
-};
 
 void CMesh::Render(UINT istanceCnt)
 {
@@ -111,150 +54,6 @@ void CMesh::Render(UINT istanceCnt)
 
 ////////////////////////////////////////////////////////////////////////
 // ³»ºÎ ÇÔ¼ö
-void CMesh::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
-	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
-{
-	int nPrimitives = (pnIndices) ? (nIndices / 3) : (nVertices / 3);
-	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
-	UINT nIndex0, nIndex1, nIndex2;
-	float deltaU0, deltaU1;
-	float deltaV0, deltaV1;
-
-	if (pnIndices)
-	{
-		for (UINT v = 0; v < nVertices; v++)
-		{
-			xmf3SumOfTangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
-			for (UINT i = 0; i < nPrimitives; i++)
-			{
-				if (pnIndices[i * 3] == v)
-				{
-					nIndex0 = pnIndices[i * 3];		nIndex1 = pnIndices[i * 3 + 1];		nIndex2 = pnIndices[i * 3 + 2];
-				}
-				else if (pnIndices[i * 3 + 1] == v)
-				{
-					nIndex0 = pnIndices[i * 3 + 1];		nIndex1 = pnIndices[i * 3 + 2];		nIndex2 = pnIndices[i * 3];
-				}
-				else if (pnIndices[i * 3 + 2] == v)
-				{
-					nIndex0 = pnIndices[i * 3 + 2];		nIndex1 = pnIndices[i * 3];		nIndex2 = pnIndices[i * 3 + 1];
-				}
-				else { continue; }
-
-				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
-				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
-				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
-				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
-
-				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
-
-				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
-
-				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
-				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
-				XMFLOAT3 xmf3Tangent(
-					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
-					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
-					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
-				);
-
-				xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
-			}
-			pxmf3Tangents[v] = Vector3::Normalize(xmf3SumOfTangent);
-		}
-	}
-	else
-	{
-		for (int i = 0; i < nPrimitives; i++)
-		{
-			for (int j = 0, k = 1, l = 2; j < 3; ++j, ++k, ++l)
-			{
-				k = Wrap(k, 0, 3);
-				l = Wrap(l, 0, 3);
-
-				nIndex0 = i * 3 + j;		nIndex1 = i * 3 + k;		nIndex2 = i * 3 + l;
-
-				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
-				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
-				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
-				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
-
-				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
-
-				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
-
-				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
-				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
-				XMFLOAT3 xmf3Tangent(
-					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
-					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
-					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
-				);
-
-				pxmf3Tangents[nIndex0] = xmf3Tangent;
-			}
-		}
-	}
-}
-
-void CMesh::CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
-	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
-{
-	UINT nPrimitives = (pnIndices) ? (nIndices - 2) : (nVertices - 2);
-	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
-	UINT nIndex0, nIndex1, nIndex2;
-	float deltaU0, deltaU1;
-	float deltaV0, deltaV1;
-
-	for (UINT j = 0; j < nVertices; j++)
-	{
-		xmf3SumOfTangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		for (UINT i = 0; i < nPrimitives; i++)
-		{
-			nIndex0 = ((i % 2) == 0) ? (i + 0) : (i + 1);
-			if (pnIndices) nIndex0 = pnIndices[nIndex0];
-			nIndex1 = ((i % 2) == 0) ? (i + 1) : (i + 0);
-			if (pnIndices) nIndex1 = pnIndices[nIndex1];
-			nIndex2 = (pnIndices) ? pnIndices[i + 2] : (i + 2);
-
-			if (nIndex0 == j) {}
-			else if (nIndex1 == j)
-			{
-				int temp = nIndex0;
-				nIndex0 = nIndex1;
-				nIndex1 = nIndex2;
-				nIndex2 = temp;
-			}
-			else if (nIndex2 == j)
-			{
-				int temp = nIndex0;
-				nIndex0 = nIndex2;
-				nIndex2 = nIndex1;
-				nIndex1 = temp;
-			}
-			else { continue; }
-
-			deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
-			deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
-			deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
-			deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
-
-			if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
-
-			float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
-
-			XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
-			XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
-			XMFLOAT3 xmf3Tangent(
-				proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
-				proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
-				proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
-			);
-			xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
-		}
-		pxmf3Tangents[j] = Vector3::Normalize(xmf3SumOfTangent);
-	}
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ÅØ½ºÃ³ ¸Þ½¬
@@ -494,6 +293,152 @@ void CMeshIlluminated::CalculateVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *
 		break;
 	}
 }
+
+void CMeshIlluminated::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
+	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
+{
+	int nPrimitives = (pnIndices) ? (nIndices / 3) : (nVertices / 3);
+	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
+	UINT nIndex0, nIndex1, nIndex2;
+	float deltaU0, deltaU1;
+	float deltaV0, deltaV1;
+
+	if (pnIndices)
+	{
+		for (UINT v = 0; v < nVertices; v++)
+		{
+			xmf3SumOfTangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
+			for (UINT i = 0; i < nPrimitives; i++)
+			{
+				if (pnIndices[i * 3] == v)
+				{
+					nIndex0 = pnIndices[i * 3];		nIndex1 = pnIndices[i * 3 + 1];		nIndex2 = pnIndices[i * 3 + 2];
+				}
+				else if (pnIndices[i * 3 + 1] == v)
+				{
+					nIndex0 = pnIndices[i * 3 + 1];		nIndex1 = pnIndices[i * 3 + 2];		nIndex2 = pnIndices[i * 3];
+				}
+				else if (pnIndices[i * 3 + 2] == v)
+				{
+					nIndex0 = pnIndices[i * 3 + 2];		nIndex1 = pnIndices[i * 3];		nIndex2 = pnIndices[i * 3 + 1];
+				}
+				else { continue; }
+
+				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
+				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
+				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
+				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
+
+				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
+
+				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
+
+				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Tangent(
+					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
+					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
+					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
+				);
+
+				xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
+			}
+			pxmf3Tangents[v] = Vector3::Normalize(xmf3SumOfTangent);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < nPrimitives; i++)
+		{
+			for (int j = 0, k = 1, l = 2; j < 3; ++j, ++k, ++l)
+			{
+				k = Wrap(k, 0, 3);
+				l = Wrap(l, 0, 3);
+
+				nIndex0 = i * 3 + j;		nIndex1 = i * 3 + k;		nIndex2 = i * 3 + l;
+
+				deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
+				deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
+				deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
+				deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
+
+				if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
+
+				float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
+
+				XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
+				XMFLOAT3 xmf3Tangent(
+					proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
+					proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
+					proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
+				);
+
+				pxmf3Tangents[nIndex0] = xmf3Tangent;
+			}
+		}
+	}
+}
+
+void CMeshIlluminated::CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
+	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
+{
+	UINT nPrimitives = (pnIndices) ? (nIndices - 2) : (nVertices - 2);
+	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
+	UINT nIndex0, nIndex1, nIndex2;
+	float deltaU0, deltaU1;
+	float deltaV0, deltaV1;
+
+	for (UINT j = 0; j < nVertices; j++)
+	{
+		xmf3SumOfTangent = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		for (UINT i = 0; i < nPrimitives; i++)
+		{
+			nIndex0 = ((i % 2) == 0) ? (i + 0) : (i + 1);
+			if (pnIndices) nIndex0 = pnIndices[nIndex0];
+			nIndex1 = ((i % 2) == 0) ? (i + 1) : (i + 0);
+			if (pnIndices) nIndex1 = pnIndices[nIndex1];
+			nIndex2 = (pnIndices) ? pnIndices[i + 2] : (i + 2);
+
+			if (nIndex0 == j) {}
+			else if (nIndex1 == j)
+			{
+				int temp = nIndex0;
+				nIndex0 = nIndex1;
+				nIndex1 = nIndex2;
+				nIndex2 = temp;
+			}
+			else if (nIndex2 == j)
+			{
+				int temp = nIndex0;
+				nIndex0 = nIndex2;
+				nIndex2 = nIndex1;
+				nIndex1 = temp;
+			}
+			else { continue; }
+
+			deltaU0 = xmf2TexCoord[nIndex1].x - xmf2TexCoord[nIndex0].x;
+			deltaU1 = xmf2TexCoord[nIndex2].x - xmf2TexCoord[nIndex0].x;
+			deltaV0 = xmf2TexCoord[nIndex1].y - xmf2TexCoord[nIndex0].y;
+			deltaV1 = xmf2TexCoord[nIndex2].y - xmf2TexCoord[nIndex0].y;
+
+			if (deltaU0 * deltaV1 == deltaU1 * deltaV0) continue;
+
+			float proVal = 1.0f / abs(deltaU0 * deltaV1 - deltaU1 * deltaV0);
+
+			XMFLOAT3 xmf3Edge01 = Vector3::Subtract(pxmf3Positions[nIndex1], pxmf3Positions[nIndex0]);
+			XMFLOAT3 xmf3Edge02 = Vector3::Subtract(pxmf3Positions[nIndex2], pxmf3Positions[nIndex0]);
+			XMFLOAT3 xmf3Tangent(
+				proVal * (deltaV1 * xmf3Edge01.x - deltaV0 * xmf3Edge02.x),
+				proVal * (deltaV1 * xmf3Edge01.y - deltaV0 * xmf3Edge02.y),
+				proVal * (deltaV1 * xmf3Edge01.z - deltaV0 * xmf3Edge02.z)
+			);
+			xmf3SumOfTangent = Vector3::Add(xmf3SumOfTangent, xmf3Tangent);
+		}
+		pxmf3Tangents[j] = Vector3::Normalize(xmf3SumOfTangent);
+	}
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1332,40 +1277,6 @@ XMFLOAT4 CHeightMapGridMesh::OnGetColor(int x, int z, void *pContext)
 	return(xmf4Color);
 }
 
-<<<<<<< HEAD
-void UploadVertexBuffer(ID3D12GraphicsCommandList * pd3dCommandList, void * pData, UINT nBytes, CMesh * pMesh)
-{
-	ID3D12Resource *pVertexBuffer{ pMesh->GetVertexBuffer() };
-	ID3D12Resource *pUploadBuffer{ pMesh->GetVertexUploadBuffer() };
-
-	D3D12_RANGE readRange{ 0, 0 };
-
-	UINT8 *pBufferDataBegin{ NULL };
-
-	pUploadBuffer->Map(0, &readRange, (void **)&pBufferDataBegin);
-	memcpy(pBufferDataBegin, pData, nBytes);
-	pUploadBuffer->Unmap(0, NULL);
-
-	D3D12_RESOURCE_BARRIER d3dResourceBarrier;
-	::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
-	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	d3dResourceBarrier.Transition.pResource = pVertexBuffer;
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
-	d3dResourceBarrier.Transition.Subresource =
-		D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
-
-	//¾÷·Îµå ¹öÆÛÀÇ ³»¿ëÀ» µðÆúÆ® ¹öÆÛ¿¡ º¹»çÇÑ´Ù.
-	pd3dCommandList->CopyResource(pVertexBuffer, pUploadBuffer);
-
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-	pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
-
-}
-=======
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CTexturedRectMesh::CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition) : CMesh(pCreateMgr)
@@ -1452,5 +1363,3 @@ CTexturedRectMesh::CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth, float
 CTexturedRectMesh::~CTexturedRectMesh()
 {
 }
-
->>>>>>> ê¹€ë‚˜ë‹¨

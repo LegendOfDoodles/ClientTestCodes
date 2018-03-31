@@ -1,6 +1,6 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
-#include "05.Objects/05.SkyBox/SkyBox.h"
+#include "05.Objects/04.SkyBox/SkyBox.h"
 
 class CSkyBoxShader : public CShader
 {

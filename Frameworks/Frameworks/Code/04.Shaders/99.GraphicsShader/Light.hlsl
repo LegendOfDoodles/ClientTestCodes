@@ -79,11 +79,11 @@ float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera)
     float NL = dot(N, L);
     float LH = dot(L, H);
 
-    float M2 = gMaterials.m_cMetalic * gMaterials.m_cMetalic;
+    float R2 = gMaterials.m_cRoughness * gMaterials.m_cRoughness;
     float NH2 = NH * NH;
     float D;
-    if (M2 != 0)
-        D = exp(-(1 - NH2) / (NH2 * M2)) / (4 * M2 * NH2 * NH2);
+    if (R2 != 0)
+        D = exp(-(1 - NH2) / (NH2 * R2)) / (4 * R2 * NH2 * NH2);
 	else
         return float4(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -97,7 +97,7 @@ float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera)
     float cgnc = LH * gnc + 1;
     float F = 0.5f * gnc * gnc * (1 + cgpc * cgnc / (cgnc * cgnc)) / (gpc * gpc);
 
-    float4 ks = { 2.0f * 0.486f, 2.0f * 0.486f, 2.0f * 0.185f, 1.0f };
+    float4 ks = { 2.0f * gMaterials.m_cMetalic, 2.0f * gMaterials.m_cMetalic, 2.0f * gMaterials.m_cMetalic, 1.0f };
 
     return gMaterials.m_cAlbedo + ks * max(0, F * D * G / NV);
 }

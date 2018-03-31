@@ -1,6 +1,5 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
-#include "05.Objects/03.Player/00.BasePlayer/Player.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
 
 class CCreateMgr;
@@ -85,7 +84,5 @@ protected: // º¯¼ö
 
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
-
-	CPlayer *m_pPlayer{ NULL };
 };
 

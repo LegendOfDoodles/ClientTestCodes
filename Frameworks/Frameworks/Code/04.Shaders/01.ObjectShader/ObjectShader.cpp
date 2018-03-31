@@ -224,7 +224,7 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 3, yObjects = 0, zObjects =3, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects =10, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -246,18 +246,18 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
-	//CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr,20,20,20);
+	//CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
+	CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr,20,20,20);
 
-	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
-	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
-	CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//minion2.aniinfo");
+	//CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
+	//CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
+	//CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//minion2.aniinfo");
 	float fxPitch = 12.0f * 5.f;
 	float fyPitch = 12.0f * 5.f;
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CAnimatedObject *pRotatingObject = NULL;
+	CRotatingObject *pRotatingObject = NULL;
 	for (int y = -yObjects; y <= yObjects; y++)
 	{
 		for (int z = -zObjects; z <= zObjects; z++)
@@ -265,7 +265,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			for (int x = -xObjects; x <= xObjects; x++)
 			{
 
-				pRotatingObject = new CAnimatedObject(pCreateMgr);
+				pRotatingObject = new CRotatingObject(pCreateMgr);
 #if !USE_INSTANCING
 				pRotatingObject->SetMesh(0, pCubeMesh);
 #endif
@@ -273,9 +273,9 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 				pRotatingObject->SetPosition(x * 30+200, y * 100 + 100, z * 100+1000);
-				pRotatingObject->SetSkeleton(pSkeleton);
-				pRotatingObject->SetSkeleton1(pSkeleton1);
-				pRotatingObject->SetSkeleton2(pSkeleton2);
+				//pRotatingObject->SetSkeleton(pSkeleton);
+				//pRotatingObject->SetSkeleton1(pSkeleton1);
+				//pRotatingObject->SetSkeleton2(pSkeleton2);
 				pRotatingObject->Rotate(90, 0, 0);
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));

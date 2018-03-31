@@ -1,6 +1,6 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
-#include "05.Objects/04.Terrain/HeightMapTerrain.h"
+#include "05.Objects/03.Terrain/HeightMapTerrain.h"
 
 class CTerrainShader : public CShader
 {

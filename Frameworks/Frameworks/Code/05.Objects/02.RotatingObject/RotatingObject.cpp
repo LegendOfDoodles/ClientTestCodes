@@ -5,7 +5,7 @@
 /// 목적: Create 통합 중 테스트 용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-12
+/// 최종 수정 날짜: 2018-03-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,6 @@ void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
 		pVertices[i].SetPosition(xmf3position);
 
 	}
-	UploadVertexBuffer(m_pCommandList, pVertices, VerticesLength, m_ppMeshes[0]);
 
 	delete[] pVertices;
 }
