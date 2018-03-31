@@ -111,6 +111,9 @@
     <Filter Include="소스 파일\05.Objects\04.SkyBox">
       <UniqueIdentifier>{8d2fec42-6af8-4586-a4c4-2f0d22b6604e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\01.Camera\01.AOSCamera">
+      <UniqueIdentifier>{7d070f59-60db-4a7b-a19d-086a99df7d5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -203,6 +206,9 @@
     <ClInclude Include="Code\05.Objects\04.Skybox\SkyBox.h">
       <Filter>소스 파일\05.Objects\04.SkyBox</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.h">
+      <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -282,6 +288,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\04.Skybox\SkyBox.cpp">
       <Filter>소스 파일\05.Objects\04.SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.cpp">
+      <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

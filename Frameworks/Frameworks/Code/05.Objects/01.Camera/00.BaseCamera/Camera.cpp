@@ -12,21 +12,12 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CCamera::CCamera(CCamera *pCamera)
+CCamera::CCamera()
 {
-	if (pCamera)
-	{
-		//카메라가 이미 있으면 기존 카메라의 정보를 새로운 카메라에 복사한다.
-		*this = *pCamera;
-	}
-	else
-	{
-		//카메라가 없으면 기본 정보를 설정한다.
-		m_xmf4x4View = Matrix4x4::Identity();
-		m_xmf4x4Projection = Matrix4x4::Identity();
-		m_viewport = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
-		m_scissorRect = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
-	}
+	m_xmf4x4View = Matrix4x4::Identity();
+	m_xmf4x4Projection = Matrix4x4::Identity();
+	m_viewport = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
+	m_scissorRect = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
 }
 
 CCamera::~CCamera()

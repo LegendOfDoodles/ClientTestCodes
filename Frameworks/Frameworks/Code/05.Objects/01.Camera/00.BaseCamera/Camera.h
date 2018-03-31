@@ -25,7 +25,7 @@ struct VS_CB_CAMERA_INFO
 class CCamera
 {
 public:	// 생성자, 소멸자
-	CCamera(CCamera *pCamera = NULL);
+	CCamera();
 	virtual ~CCamera();
 
 public:	// 공개 함수
@@ -82,7 +82,7 @@ public:	// 공개 함수
 
 	void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y, m_rotation.z = z; }
 
-protected:	// 내부 함수
+protected: // 내부 함수
 	void GenerateViewMatrix();
 	void GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up);
 
