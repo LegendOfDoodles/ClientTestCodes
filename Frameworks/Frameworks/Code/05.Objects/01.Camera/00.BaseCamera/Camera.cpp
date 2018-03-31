@@ -31,13 +31,14 @@ void CCamera::Initialize(CCreateMgr *pCreateMgr)
 	int width = pCreateMgr->GetWindowWidth();
 	int height = pCreateMgr->GetWindowHeight();
 
+	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
 	SetViewport(0, 0, width, height, 0.0f, 1.0f);
 	SetScissorRect(0, 0, width, height);
 	GenerateProjectionMatrix(1.0f, 50000.0f, float(width) / 	float(height), 90.0f);
 	GenerateViewMatrix(
-		XMFLOAT3(0.0f, 0.0f, -50.0f),
+		XMFLOAT3(0.0f, 70.0f, 0.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
 		XMFLOAT3(0.0f, 1.0f, 0.0f));
 
@@ -122,7 +123,7 @@ void CCamera::Rotate(float x, float y, float z)
 
 void CCamera::Update(float fTimeElapsed, bool bUpdateMove)
 {
-	if (bUpdateMove && m_direction) { Move(m_direction, 100.0f *  fTimeElapsed, true); }
+	if (bUpdateMove && m_direction) { Move(m_direction, 300.0f *  fTimeElapsed, true); }
 	if (!Vector3::IsZero(m_rotation))
 	{
 		Rotate(m_rotation.x, m_rotation.y, m_rotation.z);
@@ -167,6 +168,85 @@ void CCamera::GenerateProjectionMatrix(
 		fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
+void CCamera::OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	::GetCursorPos(&m_oldCursorPos);
+}
+
+void CCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	float cxDelta = 0.0f, cyDelta = 0.0f;
+	POINT cursorPos;
+	if (::GetCapture() == m_hWnd)
+	{
+		::GetCursorPos(&cursorPos);
+		cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
+		cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
+		::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
+	}
+	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
+	{
+		if (cxDelta || cyDelta)
+		{
+			if (wParam == VK_RBUTTON)
+				SetRotation(cyDelta, 0.0f, -cxDelta);
+			else
+				SetRotation(cyDelta, cxDelta, 0.0f);
+		}
+	}
+	Update(timeElapsed, false);
+}
+
+void CCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	switch (wParam)
+	{
+	case 'W':
+		m_direction &= ~DIR_FORWARD;
+		break;
+	case 'S':
+		m_direction &= ~DIR_BACKWARD;
+		break;
+	case 'A':
+		m_direction &= ~DIR_LEFT;
+		break;
+	case 'D':
+		m_direction &= ~DIR_RIGHT;
+		break;
+	case 'Q':
+		m_direction &= ~DIR_UP;
+		break;
+	case 'E':
+		m_direction &= ~DIR_DOWN;
+		break;
+	}
+}
+
+void CCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	switch (wParam)
+	{
+	case 'W':
+		m_direction |= DIR_FORWARD;
+		break;
+	case 'S':
+		m_direction |= DIR_BACKWARD;
+		break;
+	case 'A':
+		m_direction |= DIR_LEFT;
+		break;
+	case 'D':
+		m_direction |= DIR_RIGHT;
+		break;
+	case 'Q':
+		m_direction |= DIR_UP;
+		break;
+	case 'E':
+		m_direction |= DIR_DOWN;
+		break;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 void CCamera::GenerateViewMatrix()
@@ -174,18 +254,25 @@ void CCamera::GenerateViewMatrix()
 	m_xmf4x4View = Matrix4x4::LookAtLH(m_xmf3Position, m_xmf3LookAtWorld, m_xmf3Up);
 }
 
-void CCamera::GenerateViewMatrix(
-	XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
+void CCamera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
 {
 	m_xmf3Position = xmf3Position;
 	m_xmf3LookAtWorld = xmf3LookAt;
-	m_xmf3Up = xmf3Up;
 
+	if (Vector3::IsZero(xmf3Up))
+	{
+		m_xmf3Look = Vector3::Normalize(Vector3::Subtract(xmf3LookAt, xmf3Position));
+		m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
+	}
+	else
+	{
+		m_xmf3Up = xmf3Up;
+	}
+	
 	GenerateViewMatrix();
 }
 
-void CCamera::SetViewport(
-	int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ, float fMaxZ)
+void CCamera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ, float fMaxZ)
 {
 	m_viewport.TopLeftX = float(xTopLeft);
 	m_viewport.TopLeftY = float(yTopLeft);

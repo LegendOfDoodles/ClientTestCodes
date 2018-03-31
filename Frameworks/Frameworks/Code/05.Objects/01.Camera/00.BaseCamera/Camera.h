@@ -13,7 +13,6 @@
 #define DIR_DOWN 0x20
 
 class CCreateMgr;
-class CPlayer;
 
 struct VS_CB_CAMERA_INFO
 {
@@ -29,14 +28,14 @@ public:	// 생성자, 소멸자
 	virtual ~CCamera();
 
 public:	// 공개 함수
-	void Initialize(CCreateMgr *pCreateMgr);
+	virtual void Initialize(CCreateMgr *pCreateMgr);
 	void Finalize();
 
 	virtual void UpdateShaderVariables();
 
 	virtual void SetViewportsAndScissorRects();
 
-	void Move(DWORD direction, float distance, bool bVelocity);
+	virtual void Move(DWORD direction, float distance, bool bVelocity);
 	void Move(XMFLOAT3& xmf3Shift);
 	void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	void Update(float fTimeElapsed, bool bUpdateMove = true);
@@ -50,8 +49,11 @@ public:	// 공개 함수
 		float fNearPlaneDistance, float fFarPlaneDistance,
 		float fAspectRatio, float fFOVAngle);
 
-	void SetPlayer(CPlayer *pPlayer) { m_pPlayer = pPlayer; }
-	CPlayer *GetPlayer() { return(m_pPlayer); }
+	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
+
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 	void SetMode(DWORD nMode) { m_nMode = nMode; }
 	DWORD GetMode() { return(m_nMode); }
@@ -77,14 +79,11 @@ public:	// 공개 함수
 	D3D12_VIEWPORT GetViewport() { return(m_viewport); }
 	D3D12_RECT GetScissorRect() { return(m_scissorRect); }
 
-	void SetDirection(DWORD direction) { m_direction |= direction; }
-	void ResetDirection(DWORD direction) { m_direction &= ~direction; }
-
 	void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y, m_rotation.z = z; }
 
 protected: // 내부 함수
 	void GenerateViewMatrix();
-	void GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up);
+	void GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up = XMFLOAT3(0, 0, 0));
 
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);
 	void SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom);
@@ -117,11 +116,12 @@ protected: // 변수
 	DWORD m_direction{ NULL };
 	XMFLOAT3 m_rotation{ 0.0f, 0.0f, 0.0f };
 
-	CPlayer *m_pPlayer{ NULL };
+	POINT m_oldCursorPos{ 0, 0 };
 
 	ID3D12Resource *m_pConstBuffer{ NULL };
 	VS_CB_CAMERA_INFO	 *m_pMappedCamera{ NULL };
 
+	HWND m_hWnd{ NULL };
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };
 

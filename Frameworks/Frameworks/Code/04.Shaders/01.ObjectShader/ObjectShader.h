@@ -18,8 +18,8 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void OnProcessKeyUp(WPARAM wParam);
-	virtual void OnProcessKeyDown(WPARAM wParam);
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

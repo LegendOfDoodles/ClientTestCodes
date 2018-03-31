@@ -5,7 +5,7 @@
 #include "04.Shaders/01.ObjectShader/ObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
-#include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
+#include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
@@ -91,14 +91,14 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 		::SetCapture(hWnd);
-		::GetCursorPos(&m_oldCursorPos);
+		OnProcessMouseDown(wParam, lParam, timeElapsed);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 		::ReleaseCapture();
 		break;
 	case WM_MOUSEMOVE:
-		OnProcessMouseMove(lParam, timeElapsed);
+		OnProcessMouseMove(wParam, lParam, timeElapsed);
 		break;
 	default:
 		break;
@@ -110,11 +110,11 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 {
 	if (nMessageID == WM_KEYUP)
 	{
-		OnProcessKeyUp(wParam, timeElapsed);
+		OnProcessKeyUp(wParam, lParam, timeElapsed);
 	}
 	else if (nMessageID == WM_KEYDOWN)
 	{
-		OnProcessKeyDown(wParam, timeElapsed);
+		OnProcessKeyDown(wParam, lParam, timeElapsed);
 	}
 }
 
@@ -168,9 +168,6 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	//m_oldCursorPos.x = static_cast<long>(pCreateMgr->GetWindowWidth() / 2.0f);
-	//m_oldCursorPos.y = static_cast<long>(pCreateMgr->GetWindowHeight() / 2.0f);
-
 	m_nShaders = 3;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
@@ -183,9 +180,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	m_pCamera = new  CCamera();
+	m_pCamera = new  CAOSCamera();
 
-	m_pCamera->SetOffset(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 	m_pCamera->RegenerateViewMatrix();
 
@@ -229,97 +225,33 @@ void CScene::UpdateShaderVariables()
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 
-// Process Mouse Input
-void CScene::OnProcessMouseMove(LPARAM lParam, float timeElapsed)
+void CScene::OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
-	//int mx{ LOWORD(lParam) };
-	//int my{ FRAME_BUFFER_HEIGHT - HIWORD(lParam) };
-	//printf("%d %d\n", mx, my);
-	static UCHAR pKeyBuffer[256];
-	float cxDelta = 0.0f, cyDelta = 0.0f;
-	POINT cursorPos;
-	if (::GetCapture() == m_hWnd)
-	{
-		::GetCursorPos(&cursorPos);
-		cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
-		cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
-		::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
-	}
-	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
-	{
-		if (cxDelta || cyDelta)
-		{
-			::GetKeyboardState(pKeyBuffer);
-			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
-				m_pCamera->SetRotation(cyDelta, 0.0f, -cxDelta);
-			else
-				m_pCamera->SetRotation(cyDelta, cxDelta, 0.0f);
-		}
-	}
-	m_pCamera->Update(timeElapsed, false);
+	m_pCamera->OnProcessMouseDown(wParam, lParam, timeElapsed);
+}
+
+// Process Mouse Input
+void CScene::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	m_pCamera->OnProcessMouseMove(wParam, lParam, timeElapsed);
 }
 
 // Process Keyboard Input
-void CScene::OnProcessKeyUp(WPARAM wParam, float timeElapsed)
+void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
-	switch (wParam)
-	{
-	case VK_ESCAPE:
+	if(wParam == VK_ESCAPE)
 		::PostQuitMessage(0);
-		break;
 
-	case 'W':
-		m_pCamera->ResetDirection(DIR_FORWARD);
-		break;
-	case 'S':
-		m_pCamera->ResetDirection(DIR_BACKWARD);
-		break;
-	case 'A':
-		m_pCamera->ResetDirection(DIR_LEFT);
-		break;
-	case 'D':
-		m_pCamera->ResetDirection(DIR_RIGHT);
-		break;
-	case 'Q':
-		m_pCamera->ResetDirection(DIR_UP);
-		break;
-	case 'E':
-		m_pCamera->ResetDirection(DIR_DOWN);
-		break;
+	m_pCamera->OnProcessKeyUp(wParam, lParam, timeElapsed);
 
-	default:
-		for (int i = 0; i < m_nShaders; ++i)
-			m_ppShaders[i]->OnProcessKeyUp(wParam);
-		break;
-	}
+	for (int i = 0; i < m_nShaders; ++i)
+		m_ppShaders[i]->OnProcessKeyUp(wParam, lParam, timeElapsed);
 }
 
-void CScene::OnProcessKeyDown(WPARAM wParam, float timeElapsed)
+void CScene::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
-	switch (wParam)
-	{
-	case 'W':
-		m_pCamera->SetDirection(DIR_FORWARD);
-		break;
-	case 'S':
-		m_pCamera->SetDirection(DIR_BACKWARD);
-		break;
-	case 'A':
-		m_pCamera->SetDirection(DIR_LEFT);
-		break;
-	case 'D':
-		m_pCamera->SetDirection(DIR_RIGHT);
-		break;
-	case 'Q':
-		m_pCamera->SetDirection(DIR_UP);
-		break;
-	case 'E':
-		m_pCamera->SetDirection(DIR_DOWN);
-		break;
+	m_pCamera->OnProcessKeyDown(wParam, lParam, timeElapsed);
 
-	default:
-		for (int i = 0; i < m_nShaders; ++i)
-			m_ppShaders[i]->OnProcessKeyDown(wParam);
-		break;
-	}
+	for (int i = 0; i < m_nShaders; ++i)
+		m_ppShaders[i]->OnProcessKeyDown(wParam, lParam, timeElapsed);
 }

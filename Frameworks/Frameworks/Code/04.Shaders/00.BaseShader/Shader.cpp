@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-18
+/// 최종 수정 날짜: 2018-03-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -66,11 +66,11 @@ void CShader::Render(CCamera *pCamera)
 	OnPrepareRender();
 }
 
-void CShader::OnProcessKeyUp(WPARAM wParam)
+void CShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 }
 
-void CShader::OnProcessKeyDown(WPARAM wParam)
+void CShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 }
 

@@ -8,7 +8,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-10
+/// 최종 수정 날짜: 2018-03-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ void CObjectShader::Render(CCamera *pCamera)
 #endif
 }
 
-void CObjectShader::OnProcessKeyUp(WPARAM wParam)
+void CObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (wParam)
 	{
@@ -106,7 +106,7 @@ void CObjectShader::OnProcessKeyUp(WPARAM wParam)
 	}
 }
 
-void CObjectShader::OnProcessKeyDown(WPARAM wParam)
+void CObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (wParam)
 	{

@@ -61,16 +61,15 @@ protected: // 내부 함수
 	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables();
 
-	virtual void OnProcessMouseMove(LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, float timeElapsed);
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 protected: // 변수
 	HWND m_hWnd{ NULL };
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
-
-	POINT m_oldCursorPos;
 
 	CCamera *m_pCamera{ NULL };
 
