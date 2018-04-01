@@ -38,9 +38,9 @@ CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr) : CBaseObject(pCreateM
 
 void CAnimatedObject::Animate(float timeElapsed)
 {
-	
-	m_fFrameTime += 30*timeElapsed;
-	if (aniState == 0&&m_fFrameTime > 33) {
+
+	m_fFrameTime += 30 * timeElapsed;
+	if (aniState == 0 && m_fFrameTime >= 33) {
 		m_fFrameTime -= 33;
 	}
 	else if (aniState == 1 && m_fFrameTime > 49) {
@@ -49,78 +49,48 @@ void CAnimatedObject::Animate(float timeElapsed)
 	else if (aniState == 2 && m_fFrameTime > 33) {
 		m_fFrameTime -= 33;
 	}
+
+
+	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
+
+	int Bcnt = m_pSkeleton->GetBoneCount();
+
+	for (int i = 0; i < Bcnt; ++i) {
+		if (aniState == 0)
+			m_xmf4x4Frame[i] = m_pSkeleton->GetBone(i).GetFrame((int)m_fFrameTime);
+		else if (aniState == 1)
+			m_xmf4x4Frame[i] = m_pSkeleton1->GetBone(i).GetFrame((int)m_fFrameTime);
+		else if (aniState == 2)
+			m_xmf4x4Frame[i] = m_pSkeleton2->GetBone(i).GetFrame((int)m_fFrameTime);
+	}
 }
 
 void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
 {
-	CBaseObject::Render(pCamera, instanceCnt);
-	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
+	OnPrepareRender();
 
-	CSkinnedVertex* pVertices = new CSkinnedVertex[pMesh->m_nVerticesCnt];
-	int VerticesLength = pMesh->GetStride() * pMesh->m_nVerticesCnt;
-	memcpy(pVertices, pMesh->m_pVertices, VerticesLength);
-	int Bcnt = m_pSkeleton->GetBoneCount();
-
-	XMFLOAT4X4*  mat = new XMFLOAT4X4[Bcnt];
-	for (int i = 0; i < Bcnt; ++i) {
-		if(aniState==0)
-			mat[i] = m_pSkeleton->GetBone(i).GetFrame((int)m_fFrameTime);
-		else if(aniState ==1 )
-			mat[i] = m_pSkeleton1->GetBone(i).GetFrame((int)m_fFrameTime);
-		else if (aniState == 2)
-			mat[i] = m_pSkeleton2->GetBone(i).GetFrame((int)m_fFrameTime);
+	if (m_pMaterial)
+	{
+		m_pMaterial->Render(pCamera);
+		m_pMaterial->UpdateShaderVariables();
 	}
 
-	int nVertices = pMesh->m_nVerticesCnt;
+	if (m_d3dCbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_d3dCbvGPUDescriptorHandle);
 
-	XMFLOAT4 pxmf4SkinWeight;
-	XMFLOAT4 pxmf4SkinIndex;
-	XMFLOAT3 xmf3position;
-	XMFLOAT3 pos;
-	XMFLOAT3 result;
-	for (int i = 0; i <nVertices; ++i) {
+	if (m_pShader)
+	{
+		UpdateShaderVariables();
+		m_pShader->Render(pCamera);
+	}
 
-		pxmf4SkinWeight = pVertices[i].GetSkinWeight();
-		pxmf4SkinIndex = pVertices[i].GetSkinSkinIndex();
-		xmf3position = pVertices[i].GetPosition();
-		result = XMFLOAT3(0, 0, 0);
-
-		if (pxmf4SkinWeight.x != 0) {
-			pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.x]);
-			result.x += pxmf4SkinWeight.x*pos.x;
-			result.y += pxmf4SkinWeight.x*pos.y;
-			result.z += pxmf4SkinWeight.x*pos.z;
-
-			if (pxmf4SkinWeight.y != 0) {
-				pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.y]);
-
-				result.x += pxmf4SkinWeight.y*pos.x;
-				result.y += pxmf4SkinWeight.y*pos.y;
-				result.z += pxmf4SkinWeight.y*pos.z;
-
-				if (pxmf4SkinWeight.z != 0) {
-					pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.z]);
-
-					result.x += pxmf4SkinWeight.z*pos.x;
-					result.y += pxmf4SkinWeight.z*pos.y;
-					result.z += pxmf4SkinWeight.z*pos.z;
-
-					if (pxmf4SkinWeight.w != 0) {
-						pos = Vector3::TransformCoord(xmf3position, mat[(int)pxmf4SkinIndex.w]);
-
-						result.x += pxmf4SkinWeight.w*pos.x;
-						result.y += pxmf4SkinWeight.w*pos.y;
-						result.z += pxmf4SkinWeight.w*pos.z;
-					}
-				}
-			}
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(instanceCnt);
 		}
-		xmf3position = result;
-		pVertices[i].SetPosition(xmf3position);
-
 	}
-
-	delete[] pVertices;
 }
 
 CAnimatedObject::~CAnimatedObject()

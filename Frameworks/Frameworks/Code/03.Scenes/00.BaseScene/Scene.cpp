@@ -69,6 +69,7 @@ void CScene::Render()
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
+		if(i!=1)
 		m_ppShaders[i]->Render(m_pCamera);
 	}
 }
@@ -172,7 +173,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
-	m_ppShaders[2] = new CObjectShader(pCreateMgr);
+	m_ppShaders[2] = new CAniShader(pCreateMgr);
 	
 
 	for (int i = 0; i < m_nShaders; ++i)

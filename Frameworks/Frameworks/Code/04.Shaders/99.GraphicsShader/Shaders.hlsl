@@ -249,3 +249,90 @@ float4 PSDiffuseTextured(VS_DIFFUSE_TEXTURED_OUTPUT input) : SV_TARGET
 {
     return lerp(input.color, gtxtTexture.Sample(wrapSampler, input.uv), 0.7f);
 }
+
+
+struct VS_BONEINPUT {
+	float3 position : POSITION;
+	float3 normal: NORMAL;
+	float2 texcoord0 : TEXCOORD;
+	float3 boneWeights : WEIGHTS;
+	uint4 boneIndices : BONEINDICES;
+	float3 tangent : TANGENT;
+};
+
+struct VS_BONEOUTPUT {
+	float4 position : SV_POSITION;
+	float3 positionW : POSITION;
+	float3 normalW : NORMAL;
+	float2 uv : TEXCOORD0;
+	float3 tangentW : TANGENT;
+
+#ifdef _WITH_VERTEX_LIGHTING
+	float4 color : COLOR;
+#endif
+};
+
+cbuffer cbSkinnedInfo: register(b5)
+{
+	float4x4 gmtxBoneWorld: packoffset(c0);
+	float4x4 gmtxBoneTransforms[128]: packoffset(c4);
+};
+
+VS_BONEOUTPUT VSBone(VS_BONEINPUT input) {
+	VS_BONEOUTPUT output;
+
+	float fWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	fWeights[0] = input.boneWeights.x;
+	fWeights[1] = input.boneWeights.y;
+	fWeights[2] = input.boneWeights.z;
+	fWeights[3] = 1 - fWeights[0] - fWeights[1] - fWeights[2];
+	float3 position = float3(0.0f, 0.0f, 0.0f);
+	float3 normal = float3(0.0f, 0.0f, 0.0f);
+
+	for (int i = 0; i < 4; ++i) {
+		position += fWeights[i] * mul(float4(input.position, 1.0f), gmtxBoneTransforms[input.boneIndices[i]]).xyz;
+		normal += fWeights[i] * mul(input.normal, (float3x3)gmtxBoneTransforms[input.boneIndices[i]]);
+	}
+	/*
+	output.texcoord0 = input.texcoord0;
+	*/
+
+	output.normalW = mul(normal, (float3x3)gmtxBoneWorld);
+	output.uv = input.texcoord0;
+	output.tangentW = mul(input.tangent, (float3x3)gmtxBoneWorld);
+#ifdef _WITH_VERTEX_LIGHTING
+	output.normalW = normalize(output.normalW);
+	output.color = Lighting(output.positionW, output.normalW);
+#endif
+
+
+	output.positionW = mul(float4(position, 1.0f), gmtxBoneWorld).xyz;
+
+	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+
+	return(output);
+}
+
+
+float4 PSBone(VS_BONEOUTPUT input) : SV_TARGET
+{
+
+	float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
+#ifdef _WITH_VERTEX_LIGHTING
+	float4 cIllumination = input.color;
+#else
+	float3 N = normalize(input.normalW);
+	if (input.tangentW.x != 0 || input.tangentW.y != 0 || input.tangentW.z != 0)
+	{
+		float3 T = normalize(input.tangentW - dot(input.tangentW, N) * N);
+		float3 B = cross(N, T); // 노말과 탄젠트를 외적해서 바이 탄젠트(바이 노말)생성
+		float3x3 TBN = float3x3(T, B, N); // 이를 바탕으로 TBN행렬 생성
+		float3 normal = gtxtNormal.Sample(wrapSampler, input.uv); // 노말 맵에서 해당하는 uv에 해당하는 노말 읽기
+		normal = 2.0f * normal - 1.0f; // 노말을 -1에서 1사이의 값으로 변환
+		N = mul(normal, TBN); // 노말을 TBN행렬로 변환
+	}
+
+	float4 cIllumination = Lighting(input.positionW, N);
+#endif
+	return (lerp(cColor, cIllumination, 0.5f));
+}

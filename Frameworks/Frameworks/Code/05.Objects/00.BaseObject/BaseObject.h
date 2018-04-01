@@ -11,6 +11,12 @@ struct CB_GAMEOBJECT_INFO
 	XMFLOAT4X4 m_xmf4x4World;
 };
 
+struct CB_ANIOBJECT_INFO
+{
+	XMFLOAT4X4 m_xmf4x4World0;
+	XMFLOAT4X4 m_xmf4x4Frame[128];
+};
+
 class CBaseObject
 {
 public:	// 생성자, 소멸자
@@ -50,6 +56,8 @@ public: // 공개 함수
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 	XMFLOAT4X4* GetWorldMatrix() { return &m_xmf4x4World; }
+	XMFLOAT4X4* GetFrameMatrix() { return m_xmf4x4Frame; }
+
 
 	void SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) { m_d3dCbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle; }
 	void SetCbvGPUDescriptorHandlePtr(UINT64 nCbvGPUDescriptorHandlePtr) { m_d3dCbvGPUDescriptorHandle.ptr = nCbvGPUDescriptorHandlePtr; }
@@ -66,6 +74,8 @@ protected: // 변수
 	int m_nReferences = 0;
 
 	XMFLOAT4X4 m_xmf4x4World;
+	XMFLOAT4X4 m_xmf4x4Frame[128];
+
 	CMesh	**m_ppMeshes{ NULL };
 	int m_nMeshes{ 0 };
 

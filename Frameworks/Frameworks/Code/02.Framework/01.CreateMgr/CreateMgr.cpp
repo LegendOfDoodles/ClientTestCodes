@@ -639,7 +639,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pDescriptorRanges[1].RegisterSpace = 0;
 	pDescriptorRanges[1].OffsetInDescriptorsFromTableStart = 0;
 #else
-	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[3];
+	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[4];
 
 	pDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	pDescriptorRanges[0].NumDescriptors = 1;
@@ -658,9 +658,16 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pDescriptorRanges[2].BaseShaderRegister = 1; //Normal
 	pDescriptorRanges[2].RegisterSpace = 0;
 	pDescriptorRanges[2].OffsetInDescriptorsFromTableStart = 0;
+
+
+	pDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	pDescriptorRanges[3].NumDescriptors = 1;
+	pDescriptorRanges[3].BaseShaderRegister = 5; //Game Objects
+	pDescriptorRanges[3].RegisterSpace = 0;
+	pDescriptorRanges[3].OffsetInDescriptorsFromTableStart = 0;
 #endif
 
-	D3D12_ROOT_PARAMETER pRootParameters[7];
+	D3D12_ROOT_PARAMETER pRootParameters[8];
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[0].Descriptor.ShaderRegister = 0; //Player
 	pRootParameters[0].Descriptor.RegisterSpace = 0;
@@ -703,6 +710,10 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[2]; //Normal
 	pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[7].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[3]; //Game Objects
+	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 #endif
 
 	pRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;

@@ -100,25 +100,31 @@ protected:
 	XMFLOAT3						m_position;
 	XMFLOAT3						m_normal;
 	XMFLOAT2						m_xmf2TexCoord;
+
+	XMFLOAT3						m_xmf4SkinWeight;
+	BYTE							m_b4SkinIndex[4];
+
 	XMFLOAT3						m_xmf3Tangent;
-
-	XMFLOAT4						m_xmf4SkinWeight;
-	XMFLOAT4						m_xmf4SkinIndex;
-
 public:
 	CSkinnedVertex() { m_position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2TexCoord = XMFLOAT2(0.0f, 0.0f); m_normal = XMFLOAT3(0.0f, 0.0f, 0.0f); }
-	CSkinnedVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f), XMFLOAT3 xmf3Tangent = XMFLOAT3(0.0f, 0.0f, 0.0f)
-		,XMFLOAT4 xmf4SkinWeight = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), XMFLOAT4 xmf4SkinIndex = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)) 
+	CSkinnedVertex(XMFLOAT3 xmf3Position, BYTE b4SkinIndex[4], XMFLOAT3 xmf3Normal = XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3 xmf3Tangent = XMFLOAT3(0.0f, 0.0f, 0.0f),
+		XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f),
+		XMFLOAT3 xmf4SkinWeight = XMFLOAT3(0.0f, 0.0f, 0.0f))
 	{
-		m_position = xmf3Position; m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord; m_xmf3Tangent = xmf3Tangent;
-		m_xmf4SkinWeight = xmf4SkinWeight; m_xmf4SkinIndex = xmf4SkinIndex;
+		m_position = xmf3Position; m_normal = xmf3Normal; m_xmf2TexCoord = xmf2TexCoord;
+		m_xmf4SkinWeight = xmf4SkinWeight;
+		m_xmf3Tangent = xmf3Tangent;
+		m_b4SkinIndex[0] = b4SkinIndex[0];
+		m_b4SkinIndex[1] = b4SkinIndex[1];
+		m_b4SkinIndex[2] = b4SkinIndex[2];
+		m_b4SkinIndex[3] = b4SkinIndex[3];
 	}
 
 
-	void SetPosition(XMFLOAT3 position) {m_position = position; }
+	void SetPosition(XMFLOAT3 position) { m_position = position; }
 	XMFLOAT3 GetPosition() { return m_position; }
-	XMFLOAT4 GetSkinWeight() { return m_xmf4SkinWeight; }
-	XMFLOAT4 GetSkinSkinIndex() { return m_xmf4SkinIndex; }
+	XMFLOAT3 GetSkinWeight() { return m_xmf4SkinWeight; }
+	BYTE* GetSkinSkinIndex() { return m_b4SkinIndex; }
 
 	~CSkinnedVertex() {}
 };
