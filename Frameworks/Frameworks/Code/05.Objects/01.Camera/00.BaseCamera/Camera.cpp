@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-31
+/// 최종 수정 날짜: 2018-04-07
 /// </summary>
 
 
@@ -195,6 +195,10 @@ void CCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed
 		}
 	}
 	Update(timeElapsed, false);
+}
+
+void CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
 }
 
 void CCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)

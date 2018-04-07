@@ -51,6 +51,7 @@ public:	// 공개 함수
 
 	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
 	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
 	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);

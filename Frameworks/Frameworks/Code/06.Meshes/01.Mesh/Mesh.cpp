@@ -1184,7 +1184,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 	{
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
-			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext), (z*m_xmf3Scale.z)),
+			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext) - 90, (z*m_xmf3Scale.z)),
 				XMFLOAT2(z * 0.25f, x * 0.25f), Vector4::Add(OnGetColor(x, z, pContext), xmf4Color));
 		}
 	}

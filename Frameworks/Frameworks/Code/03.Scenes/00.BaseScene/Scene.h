@@ -63,6 +63,7 @@ protected: // 내부 함수
 
 	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
 	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed);
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
 	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
@@ -83,5 +84,9 @@ protected: // 변수
 
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
+
+	bool m_bCurCamIsAOS{ true };
+	bool m_bCamChanged{ false };
+	CCreateMgr* m_pCreateMgr{ NULL };
 };
 

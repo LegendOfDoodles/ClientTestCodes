@@ -6,7 +6,7 @@
 /// 목적: In Game 에서 사용할 카메라
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-31
+/// 최종 수정 날짜: 2018-04-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ void CAOSCamera::Initialize(CCreateMgr * pCreateMgr)
 
 	SetViewport(0, 0, width, height, 0.0f, 1.0f);
 	SetScissorRect(0, 0, width, height);
-	GenerateProjectionMatrix(1.0f, 50000.0f, float(width) / float(height), 90.0f);
+	GenerateProjectionMatrix(1.0f, 50000.0f, float(width) / float(height), m_angleDegree);
 	GenerateViewMatrix(
 		XMFLOAT3(0.0f, 300.0f, -100.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f));
@@ -103,6 +103,32 @@ void CAOSCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElap
 	{
 		m_direction &= ~DIR_BACKWARD;
 	}
+}
+
+void CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+
+	if (zDelta < 0)	// 휠 다운
+	{
+		if (m_angleDegree < Zoom_Out_Max)
+			m_angleDegree += Zoom_Change_Value;
+	}
+	else    // 휠 업
+	{
+		if (m_angleDegree > Zoom_In_Max)
+			m_angleDegree -= Zoom_Change_Value;
+	}
+
+	GenerateProjectionMatrix(1.0f, 50000.0f, float(m_scissorRect.right) / float(m_scissorRect.bottom), m_angleDegree);
+}
+
+void CAOSCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+}
+
+void CAOSCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
 }
 
 ////////////////////////////////////////////////////////////////////////

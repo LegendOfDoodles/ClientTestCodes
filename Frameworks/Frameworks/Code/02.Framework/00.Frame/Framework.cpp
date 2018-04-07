@@ -5,7 +5,7 @@
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-28
+/// 최종 수정 날짜: 2018-04-07
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -60,6 +60,7 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 	case WM_MOUSEMOVE:
+	case WM_MOUSEWHEEL:
 		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam, timeElapsed);
 		break;
 	case WM_KEYDOWN:

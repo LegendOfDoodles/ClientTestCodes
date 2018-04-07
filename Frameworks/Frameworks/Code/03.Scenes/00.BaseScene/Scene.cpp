@@ -69,7 +69,6 @@ void CScene::Render()
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
-		if(i!=1)
 		m_ppShaders[i]->Render(m_pCamera);
 	}
 }
@@ -81,6 +80,24 @@ void CScene::SetViewportsAndScissorRects()
 
 void CScene::UpdateCamera()
 {
+	if (m_bCamChanged)
+	{
+		m_pCamera->Finalize();
+		Safe_Delete(m_pCamera);
+
+		if (m_bCurCamIsAOS)
+		{
+			m_pCamera = new  CAOSCamera();
+		}
+		else
+		{
+			m_pCamera = new CCamera();
+		}
+
+		m_pCamera->Initialize(m_pCreateMgr);
+
+		m_bCamChanged = false;
+	}
 	m_pCamera->UpdateShaderVariables();
 }
 
@@ -100,6 +117,9 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		break;
 	case WM_MOUSEMOVE:
 		OnProcessMouseMove(wParam, lParam, timeElapsed);
+		break;
+	case WM_MOUSEWHEEL:
+		OnProcessMouseWheel(wParam, lParam, timeElapsed);
 		break;
 	default:
 		break;
@@ -166,6 +186,8 @@ void CScene::BuildLights()
 
 void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 {
+	m_pCreateMgr = pCreateMgr;
+
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
@@ -183,9 +205,6 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera = new  CAOSCamera();
 
-	m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
-	m_pCamera->RegenerateViewMatrix();
-
 	m_pCamera->Initialize(pCreateMgr);
 
 	BuildLights();
@@ -193,13 +212,19 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 void CScene::ReleaseObjects()
 {
-	if (!m_ppShaders) return;
-
-	for (int i = 0; i < m_nShaders; i++)
+	if (m_pCamera)
 	{
-		m_ppShaders[i]->Finalize();
+		m_pCamera->Finalize();
+		Safe_Delete(m_pCamera);
 	}
-	Safe_Delete_Array(m_ppShaders);
+	if (m_ppShaders)
+	{
+		for (int i = 0; i < m_nShaders; i++)
+		{
+			if(m_ppShaders[i]) m_ppShaders[i]->Finalize();
+		}
+		Safe_Delete_Array(m_ppShaders);
+	}
 }
 
 void CScene::CreateShaderVariables(CCreateMgr *pCreateMgr)
@@ -231,10 +256,14 @@ void CScene::OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 	m_pCamera->OnProcessMouseDown(wParam, lParam, timeElapsed);
 }
 
-// Process Mouse Input
 void CScene::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	m_pCamera->OnProcessMouseMove(wParam, lParam, timeElapsed);
+}
+
+void CScene::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed)
+{
+	m_pCamera->OnProcessMouseWheel(wParam, lParam, timeElapsed);
 }
 
 // Process Keyboard Input
@@ -251,6 +280,22 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 
 void CScene::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
+	if (wParam == VK_F1)
+	{
+		if (!m_bCurCamIsAOS)
+		{
+			m_bCurCamIsAOS = true;
+			m_bCamChanged = true;
+		}
+	}
+	else if (wParam == VK_F2)
+	{
+		if (m_bCurCamIsAOS)
+		{
+			m_bCurCamIsAOS = false;
+			m_bCamChanged = true;
+		}
+	}
 	m_pCamera->OnProcessKeyDown(wParam, lParam, timeElapsed);
 
 	for (int i = 0; i < m_nShaders; ++i)

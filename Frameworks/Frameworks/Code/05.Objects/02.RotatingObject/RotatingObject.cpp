@@ -53,7 +53,7 @@ void CAnimatedObject::Animate(float timeElapsed)
 
 	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
 
-	int Bcnt = m_pSkeleton->GetBoneCount();
+	int Bcnt = m_pSkeleton->GetBoneCount() - 1; // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
 
 	for (int i = 0; i < Bcnt; ++i) {
 		if (aniState == 0)
