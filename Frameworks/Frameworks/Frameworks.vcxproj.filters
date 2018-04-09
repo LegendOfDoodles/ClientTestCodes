@@ -114,6 +114,9 @@
     <Filter Include="소스 파일\05.Objects\01.Camera\01.AOSCamera">
       <UniqueIdentifier>{7d070f59-60db-4a7b-a19d-086a99df7d5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\05.Minion">
+      <UniqueIdentifier>{5babff02-8628-4ae6-a587-3d422108063e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -209,6 +212,9 @@
     <ClInclude Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.h">
       <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
+      <Filter>소스 파일\05.Objects\05.Minion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -291,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
+      <Filter>소스 파일\05.Objects\05.Minion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

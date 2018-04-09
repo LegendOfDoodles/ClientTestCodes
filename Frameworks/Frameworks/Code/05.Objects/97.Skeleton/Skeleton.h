@@ -27,6 +27,8 @@ private:
 	int m_iAnimationLegth;
 	std::vector<Bone> m_vBone;
 public:
+	CSkeleton() {}
+
 	CSkeleton(char* in);
 	int GetBoneCount() {
 		return m_vBone.size();

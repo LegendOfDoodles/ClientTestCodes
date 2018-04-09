@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ObjectShader.h"
 #include "05.Objects/02.RotatingObject/RotatingObject.h"
+#include "05.Objects/05.Minion/Minion.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 
@@ -401,7 +402,7 @@ void CAniShader::Render(CCamera *pCamera)
 #endif
 }
 
-void CAniShader::OnProcessKeyUp(WPARAM wParam)
+void CAniShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (wParam)
 	{
@@ -422,13 +423,13 @@ void CAniShader::OnProcessKeyUp(WPARAM wParam)
 	}
 }
 
-void CAniShader::OnProcessKeyDown(WPARAM wParam)
+void CAniShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (wParam)
 	{
 	case 'M':
 		for (int i = 0; i < m_nObjects; ++i) {
-			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
+			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
 			obj->AniStateSet();
 		}
 		break;
@@ -557,7 +558,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 5, yObjects = 0, zObjects = 3, i = 0;
+	int xObjects = 30, yObjects = 0, zObjects = 30, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -589,7 +590,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CAnimatedObject *pRotatingObject = NULL;
+	CMinion *pRotatingObject = NULL;
 	for (int y = 0; y <= yObjects; y++)
 	{
 		for (int z =0; z <= zObjects; z++)
@@ -597,7 +598,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			for (int x = 0; x <= xObjects; x++)
 			{
 
-				pRotatingObject = new CAnimatedObject(pCreateMgr);
+				pRotatingObject = new CMinion(pCreateMgr);
 #if !USE_INSTANCING
 				pRotatingObject->SetMesh(0, pCubeMesh);
 #endif
@@ -606,9 +607,16 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 				pRotatingObject->SetPosition(x * 30 , y * 100 , z * 100 );
 				pRotatingObject->SetSkeleton(pSkeleton);
-				pRotatingObject->SetSkeleton1(pSkeleton1);
-				pRotatingObject->SetSkeleton2(pSkeleton2);
+				pRotatingObject->SetSkeleton(pSkeleton1);
+				pRotatingObject->SetSkeleton(pSkeleton2);
 				pRotatingObject->Rotate(90, 0, 0);
+				if ((y+x+z )% 3 == 0) {
+					pRotatingObject->AniStateSet();
+				}
+				else if ((y + x + z) % 3 == 1) {
+					pRotatingObject->AniStateSet();
+					pRotatingObject->AniStateSet();
+				}
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 #endif

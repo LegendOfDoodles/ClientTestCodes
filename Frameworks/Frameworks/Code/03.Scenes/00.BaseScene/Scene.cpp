@@ -132,10 +132,15 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	if (nMessageID == WM_KEYUP)
 	{
 		OnProcessKeyUp(wParam, lParam, timeElapsed);
+		for (int i = 0; i < m_nObjects; ++i)
+			m_ppShaders[i]->OnProcessKeyUp(wParam, lParam, timeElapsed);
 	}
 	else if (nMessageID == WM_KEYDOWN)
 	{
 		OnProcessKeyDown(wParam, lParam, timeElapsed);
+
+		for (int i = 0; i < m_nObjects; ++i)
+			m_ppShaders[i]->OnProcessKeyDown(wParam, lParam, timeElapsed);
 	}
 }
 
