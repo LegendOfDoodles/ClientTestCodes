@@ -37,6 +37,10 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
 
+	void GenerateRayForPicking(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View,
+		XMFLOAT3 *pPickRayOrigin, XMFLOAT3 *pPickRayDirection);
+	bool PickObjectByRayIntersection(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pfHitDistance);
+
 	void MoveStrafe(float fDistance = 1.0f);
 	void MoveUp(float fDistance = 1.0f);
 	void MoveForward(float fDistance = 1.0f);

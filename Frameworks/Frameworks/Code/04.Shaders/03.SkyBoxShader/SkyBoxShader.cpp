@@ -158,16 +158,6 @@ void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	m_pSkyBox->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr);
 }
 
-void CSkyBoxShader::ReleaseShaderVariables()
-{
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-
-	CShader::ReleaseShaderVariables();
-}
-
 void CSkyBoxShader::ReleaseObjects()
 {
 	if (!m_pSkyBox) return;

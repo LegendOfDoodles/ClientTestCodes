@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ObjectShader.h"
 #include "05.Objects/02.RotatingObject/RotatingObject.h"
-#include "05.Objects/05.Minion/Minion.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 
@@ -9,7 +8,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-31
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -86,7 +85,29 @@ void CObjectShader::Render(CCamera *pCamera)
 #endif
 }
 
-void CObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+CBaseObject *CObjectShader::PickObjectByRayIntersection(
+	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pNearHitDistance)
+{
+	bool intersected = 0;
+
+	*pNearHitDistance = FLT_MAX;
+	float fHitDistance = FLT_MAX;
+	CBaseObject *pSelectedObject{ NULL };
+
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, &fHitDistance);
+		if (intersected && (fHitDistance < *pNearHitDistance))
+		{
+			*pNearHitDistance = fHitDistance;
+			pSelectedObject = m_ppObjects[j];
+		}
+	}
+
+	return(pSelectedObject);
+}
+
+void CObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
@@ -107,16 +128,10 @@ void CObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElaps
 	}
 }
 
-void CObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
-	case 'M':
-		for (int i = 0; i < m_nObjects; ++i) {
-			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
-			obj->AniStateSet();
-		}
-		break;
 	default:
 		break;
 	}
@@ -291,24 +306,6 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 }
 
-
-void CObjectShader::ReleaseShaderVariables()
-{
-#if USE_INSTANCING
-	if (!m_pInstanceBuffer) return;
-
-	m_pInstanceBuffer->Unmap(0, NULL);
-	Safe_Release(m_pInstanceBuffer);
-#else
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-#endif
-
-	CShader::ReleaseShaderVariables();
-}
-
 void CObjectShader::ReleaseObjects()
 {
 	if (!m_ppObjects) return;
@@ -402,7 +399,29 @@ void CAniShader::Render(CCamera *pCamera)
 #endif
 }
 
-void CAniShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+CBaseObject *CAniShader::PickObjectByRayIntersection(
+	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pNearHitDistance)
+{
+	bool intersected = 0;
+
+	*pNearHitDistance = FLT_MAX;
+	float fHitDistance = FLT_MAX;
+	CBaseObject *pSelectedObject{ NULL };
+
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, &fHitDistance);
+		if (intersected && (fHitDistance < *pNearHitDistance))
+		{
+			*pNearHitDistance = fHitDistance;
+			pSelectedObject = m_ppObjects[j];
+		}
+	}
+
+	return(pSelectedObject);
+}
+
+void CAniShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
@@ -423,13 +442,13 @@ void CAniShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 	}
 }
 
-void CAniShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CAniShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
 	case 'M':
 		for (int i = 0; i < m_nObjects; ++i) {
-			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
+			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
 			obj->AniStateSet();
 		}
 		break;
@@ -558,7 +577,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 30, yObjects = 0, zObjects = 30, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -569,7 +588,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #else
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 7);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 #endif
@@ -590,7 +609,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinion *pRotatingObject = NULL;
+	CAnimatedObject *pRotatingObject = NULL;
 	for (int y = 0; y <= yObjects; y++)
 	{
 		for (int z =0; z <= zObjects; z++)
@@ -598,7 +617,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			for (int x = 0; x <= xObjects; x++)
 			{
 
-				pRotatingObject = new CMinion(pCreateMgr);
+				pRotatingObject = new CAnimatedObject(pCreateMgr);
 #if !USE_INSTANCING
 				pRotatingObject->SetMesh(0, pCubeMesh);
 #endif
@@ -607,16 +626,9 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 				pRotatingObject->SetPosition(x * 30 , y * 100 , z * 100 );
 				pRotatingObject->SetSkeleton(pSkeleton);
-				pRotatingObject->SetSkeleton(pSkeleton1);
-				pRotatingObject->SetSkeleton(pSkeleton2);
+				pRotatingObject->SetSkeleton1(pSkeleton1);
+				pRotatingObject->SetSkeleton2(pSkeleton2);
 				pRotatingObject->Rotate(90, 0, 0);
-				if ((y+x+z )% 3 == 0) {
-					pRotatingObject->AniStateSet();
-				}
-				else if ((y + x + z) % 3 == 1) {
-					pRotatingObject->AniStateSet();
-					pRotatingObject->AniStateSet();
-				}
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 #endif
@@ -628,24 +640,6 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if USE_INSTANCING
 	m_ppObjects[0]->SetMesh(0, pCubeMesh);
 #endif
-}
-
-
-void CAniShader::ReleaseShaderVariables()
-{
-#if USE_INSTANCING
-	if (!m_pInstanceBuffer) return;
-
-	m_pInstanceBuffer->Unmap(0, NULL);
-	Safe_Release(m_pInstanceBuffer);
-#else
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-#endif
-
-	CShader::ReleaseShaderVariables();
 }
 
 void CAniShader::ReleaseObjects()

@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-28
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -127,6 +127,37 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
 		}
 	}
+}
+
+void CBaseObject::GenerateRayForPicking(XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&
+	xmf4x4View, XMFLOAT3 *pxmf3PickRayOrigin, XMFLOAT3 *pxmf3PickRayDirection)
+{
+	XMFLOAT4X4 xmf4x4WorldView{ Matrix4x4::Multiply(m_xmf4x4World, xmf4x4View) };
+	XMFLOAT4X4 xmf4x4Inverse{ Matrix4x4::Inverse(xmf4x4WorldView) };
+	XMFLOAT3 xmf3CameraOrigin(0.0f, 0.0f, 0.0f);
+
+	//카메라 좌표계의 원점을 모델 좌표계로 변환한다.
+	*pxmf3PickRayOrigin = Vector3::TransformCoord(xmf3CameraOrigin, xmf4x4Inverse);
+	//카메라 좌표계의 점(마우스 좌표를 역변환하여 구한 점)을 모델 좌표계로 변환한다.
+	*pxmf3PickRayDirection = Vector3::TransformCoord(xmf3PickPosition, xmf4x4Inverse);
+	//광선의 방향 벡터를 구한다.
+	*pxmf3PickRayDirection = Vector3::Normalize(Vector3::Subtract(*pxmf3PickRayDirection, *pxmf3PickRayOrigin));
+}
+
+bool CBaseObject::PickObjectByRayIntersection(XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&
+	xmf4x4View, float *pfHitDistance)
+{
+	if (!m_ppMeshes) return false;
+	if (!m_ppMeshes[0]) return false;
+	
+	bool intersected{ false };
+	XMFLOAT3 pickRayOrigin, pickRayDirection;
+
+	GenerateRayForPicking(xmf3PickPosition, xmf4x4View, &pickRayOrigin, &pickRayDirection);
+
+	intersected = m_ppMeshes[0]->CheckRayIntersection(pickRayOrigin,	pickRayDirection, pfHitDistance);
+
+	return(intersected);
 }
 
 void CBaseObject::MoveStrafe(float fDistance)

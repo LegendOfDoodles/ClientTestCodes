@@ -49,12 +49,12 @@ public:	// 공개 함수
 		float fNearPlaneDistance, float fFarPlaneDistance,
 		float fAspectRatio, float fFOVAngle);
 
-	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam);
 	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
 
 	void SetMode(DWORD nMode) { m_nMode = nMode; }
 	DWORD GetMode() { return(m_nMode); }

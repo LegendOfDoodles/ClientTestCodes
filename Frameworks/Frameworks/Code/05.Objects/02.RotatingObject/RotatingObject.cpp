@@ -5,7 +5,7 @@
 /// 목적: Create 통합 중 테스트 용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-31
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -31,9 +31,21 @@ void CRotatingObject::Animate(float timeElapsed)
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 
+
+
+
+
 CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
 {
 	m_fFrameTime = 0;
+	aniState = 0;
+}
+
+CAnimatedObject::~CAnimatedObject()
+{
+	Safe_Delete(m_pSkeleton);
+	Safe_Delete(m_pSkeleton1);
+	Safe_Delete(m_pSkeleton2);
 }
 
 void CAnimatedObject::Animate(float timeElapsed)
@@ -41,19 +53,21 @@ void CAnimatedObject::Animate(float timeElapsed)
 
 	m_fFrameTime += 30 * timeElapsed;
 	if (aniState == 0 && m_fFrameTime >= 33) {
-		m_fFrameTime -= 33;
+		while (m_fFrameTime > 33)
+			m_fFrameTime -= 33;
 	}
 	else if (aniState == 1 && m_fFrameTime > 49) {
-		m_fFrameTime -= 49;
+		while(m_fFrameTime > 49)
+			m_fFrameTime -= 49;
 	}
 	else if (aniState == 2 && m_fFrameTime > 33) {
-		m_fFrameTime -= 33;
+		while (m_fFrameTime > 33)
+			m_fFrameTime -= 33;
 	}
-
 
 	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
 
-	int Bcnt = m_pSkeleton->GetBoneCount() - 1; // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
+	int Bcnt = m_pSkeleton->GetBoneCount(); // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
 
 	for (int i = 0; i < Bcnt; ++i) {
 		if (aniState == 0)
@@ -93,6 +107,3 @@ void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
 	}
 }
 
-CAnimatedObject::~CAnimatedObject()
-{
-}

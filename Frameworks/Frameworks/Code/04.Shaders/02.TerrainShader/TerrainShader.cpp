@@ -6,7 +6,7 @@
 /// 목적: 지형 출력용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-17
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,16 +146,6 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	m_pMaterial = Materials::CreateTerrainMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 
 	m_pTerrain->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr);
-}
-
-void CTerrainShader::ReleaseShaderVariables()
-{
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-
-	CShader::ReleaseShaderVariables();
 }
 
 void CTerrainShader::ReleaseObjects()

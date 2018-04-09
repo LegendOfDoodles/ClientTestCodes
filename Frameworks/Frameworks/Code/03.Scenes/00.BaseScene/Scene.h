@@ -47,7 +47,7 @@ public: // 공개 함수
 	void OnProcessingMouseMessage(HWND hWnd, UINT messageID,
 		WPARAM wParam, LPARAM lParam, float timeElapsed);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT messageID,
-		WPARAM wParam, LPARAM lParam, float timeElapsed);
+		WPARAM wParam, LPARAM lParam);
 
 	CCamera * GetCamera() { return m_pCamera; }
 
@@ -61,12 +61,14 @@ protected: // 내부 함수
 	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables();
 
-	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	void PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam);
+	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
+
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
 
 protected: // 변수
 	HWND m_hWnd{ NULL };
@@ -84,6 +86,8 @@ protected: // 변수
 
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
+
+	CBaseObject * m_pSelectedObject{ NULL };
 
 	bool m_bCurCamIsAOS{ true };
 	bool m_bCamChanged{ false };

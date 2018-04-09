@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-31
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -66,11 +66,16 @@ void CShader::Render(CCamera *pCamera)
 	OnPrepareRender();
 }
 
-void CShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float * pNearHitDistance)
+{
+	return nullptr;
+}
+
+void CShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 }
 
-void CShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 {
 }
 
@@ -308,8 +313,22 @@ void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CShader::ReleaseShaderVariables()
 {
-	if (!m_pCbvSrvDescriptorHeap) return;
-	Safe_Release(m_pCbvSrvDescriptorHeap);
+	if (m_pCbvSrvDescriptorHeap)
+	{
+		Safe_Release(m_pCbvSrvDescriptorHeap);
+	}
+
+	if (m_pInstanceBuffer)
+	{
+		m_pInstanceBuffer->Unmap(0, NULL);
+		Safe_Release(m_pInstanceBuffer);
+	}
+
+	if (m_pConstBuffer)
+	{
+		m_pConstBuffer->Unmap(0, NULL);
+		Safe_Release(m_pConstBuffer);
+	}
 }
 
 void CShader::ReleaseObjects()
