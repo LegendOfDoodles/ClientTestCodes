@@ -42,7 +42,7 @@ void CBillboardObject::SetLookAt(XMFLOAT3 & xmf3Target)
 	XMFLOAT3 xmf3Look = Vector3::Subtract(xmf3Target, xmf3Position);
 	XMFLOAT3 xmf3Right = Vector3::CrossProduct(xmf3Up, xmf3Look, true);
 
-	// 이후 Up 벡터를 갱신한다.
+	// 이후 Up 벡터를 카메라의 방향으로 갱신한다.
 	xmf3Up = Vector3::CrossProduct(xmf3Look, xmf3Right, true);
 
 	m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
