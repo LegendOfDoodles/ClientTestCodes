@@ -15,7 +15,9 @@ public: // 공개 함수
 
 	virtual void ReleaseUploadBuffers();
 
-	bool CheckRayIntersection(XMFLOAT3& rayPosition, XMFLOAT3& rayDirection, float *pNearHitDistance);
+	bool CheckRayIntersection(XMFLOAT3& rayPosition, XMFLOAT3& rayDirection, float &nearHitDistance);
+
+	void SetBoundingBox(XMFLOAT3& center, XMFLOAT3& extents);
 	
 	ID3D12Resource* GetVertexBuffer() { 
 		return m_pVertexBuffer; 
@@ -210,4 +212,14 @@ class CArrowMesh : public CMesh
 public:
 	CArrowMesh(CCreateMgr *pCreateMgr, float length = 100.0f);
 	virtual ~CArrowMesh();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CCubeMesh4Collider : public CMesh
+{
+public:
+	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
+	CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMesh4Collider();
 };

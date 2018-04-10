@@ -86,20 +86,20 @@ void CObjectShader::Render(CCamera *pCamera)
 }
 
 CBaseObject *CObjectShader::PickObjectByRayIntersection(
-	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pNearHitDistance)
+	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance)
 {
 	bool intersected = 0;
 
-	*pNearHitDistance = FLT_MAX;
-	float fHitDistance = FLT_MAX;
+	nearHitDistance = FLT_MAX;
+	float hitDistance = FLT_MAX;
 	CBaseObject *pSelectedObject{ NULL };
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, &fHitDistance);
-		if (intersected && (fHitDistance < *pNearHitDistance))
+		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+		if (intersected && (hitDistance < nearHitDistance))
 		{
-			*pNearHitDistance = fHitDistance;
+			nearHitDistance = hitDistance;
 			pSelectedObject = m_ppObjects[j];
 		}
 	}
@@ -400,20 +400,20 @@ void CAniShader::Render(CCamera *pCamera)
 }
 
 CBaseObject *CAniShader::PickObjectByRayIntersection(
-	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pNearHitDistance)
+	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance)
 {
 	bool intersected = 0;
 
-	*pNearHitDistance = FLT_MAX;
-	float fHitDistance = FLT_MAX;
+	nearHitDistance = FLT_MAX;
+	float hitDistance = FLT_MAX;
 	CBaseObject *pSelectedObject{ NULL };
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, &fHitDistance);
-		if (intersected && (fHitDistance < *pNearHitDistance))
+		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+		if (intersected && (hitDistance < nearHitDistance))
 		{
-			*pNearHitDistance = fHitDistance;
+			nearHitDistance = hitDistance;
 			pSelectedObject = m_ppObjects[j];
 		}
 	}
@@ -577,7 +577,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
+	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -600,6 +600,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
+	pCubeMesh->SetBoundingBox(XMFLOAT3(0.0f, 28.98f, 0.0f), XMFLOAT3(12.42f, 28.98f, 12.42f));
 
 	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
 	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
@@ -624,11 +625,11 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pRotatingObject->SetPosition(x * 30 , y * 100 , z * 100 );
+				pRotatingObject->SetPosition(x * 30 , y * 100, z * 100 );
 				pRotatingObject->SetSkeleton(pSkeleton);
 				pRotatingObject->SetSkeleton1(pSkeleton1);
 				pRotatingObject->SetSkeleton2(pSkeleton2);
-				pRotatingObject->Rotate(90, 0, 0);
+				//pRotatingObject->Rotate(90, 0, 0);
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 #endif

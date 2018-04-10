@@ -66,7 +66,7 @@ void CShader::Render(CCamera *pCamera)
 	OnPrepareRender();
 }
 
-CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float * pNearHitDistance)
+CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float &nearHitDistance)
 {
 	return nullptr;
 }

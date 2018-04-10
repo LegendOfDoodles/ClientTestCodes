@@ -272,15 +272,15 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	pickPosition.z = 1.0f;
 
 	int nIntersected{ 0 };
-	float fHitDistance{ FLT_MAX }, fNearestHitDistance{ FLT_MAX };
+	float hitDistance{ FLT_MAX }, nearestHitDistance{ FLT_MAX };
 	CBaseObject *pIntersectedObject{ NULL };
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
-		pIntersectedObject = m_ppShaders[i]->PickObjectByRayIntersection(pickPosition, xmf4x4View, &fHitDistance);
-		if (pIntersectedObject && (fHitDistance < fNearestHitDistance))
+		pIntersectedObject = m_ppShaders[i]->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+		if (pIntersectedObject && (hitDistance < nearestHitDistance))
 		{
-			fNearestHitDistance = fHitDistance;
+			nearestHitDistance = hitDistance;
 			m_pSelectedObject = pIntersectedObject;
 			printf("selected!\n");
 		}

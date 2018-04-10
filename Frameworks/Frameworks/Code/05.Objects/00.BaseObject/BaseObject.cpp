@@ -129,8 +129,9 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 	}
 }
 
-void CBaseObject::GenerateRayForPicking(XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&
-	xmf4x4View, XMFLOAT3 *pxmf3PickRayOrigin, XMFLOAT3 *pxmf3PickRayDirection)
+void CBaseObject::GenerateRayForPicking(
+	XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&	 xmf4x4View, 
+	XMFLOAT3 *pxmf3PickRayOrigin, XMFLOAT3 *pxmf3PickRayDirection)
 {
 	XMFLOAT4X4 xmf4x4WorldView{ Matrix4x4::Multiply(m_xmf4x4World, xmf4x4View) };
 	XMFLOAT4X4 xmf4x4Inverse{ Matrix4x4::Inverse(xmf4x4WorldView) };
@@ -144,8 +145,8 @@ void CBaseObject::GenerateRayForPicking(XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&
 	*pxmf3PickRayDirection = Vector3::Normalize(Vector3::Subtract(*pxmf3PickRayDirection, *pxmf3PickRayOrigin));
 }
 
-bool CBaseObject::PickObjectByRayIntersection(XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&
-	xmf4x4View, float *pfHitDistance)
+bool CBaseObject::PickObjectByRayIntersection(
+	XMFLOAT3& xmf3PickPosition, XMFLOAT4X4& xmf4x4View, float &hitDistance)
 {
 	if (!m_ppMeshes) return false;
 	if (!m_ppMeshes[0]) return false;
@@ -155,7 +156,7 @@ bool CBaseObject::PickObjectByRayIntersection(XMFLOAT3& xmf3PickPosition, XMFLOA
 
 	GenerateRayForPicking(xmf3PickPosition, xmf4x4View, &pickRayOrigin, &pickRayDirection);
 
-	intersected = m_ppMeshes[0]->CheckRayIntersection(pickRayOrigin,	pickRayDirection, pfHitDistance);
+	intersected = m_ppMeshes[0]->CheckRayIntersection(pickRayOrigin,	pickRayDirection, hitDistance);
 
 	return(intersected);
 }

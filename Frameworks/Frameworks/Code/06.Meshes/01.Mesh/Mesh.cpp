@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-10
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ void CMesh::Render(UINT istanceCnt)
 	}
 }
 
-bool CMesh::CheckRayIntersection(XMFLOAT3& xmf3RayOrigin, XMFLOAT3& xmf3RayDirection, float *pfNearHitDistance)
+bool CMesh::CheckRayIntersection(XMFLOAT3& xmf3RayOrigin, XMFLOAT3& xmf3RayDirection, float &nearHitDistance)
 {
 	if (!m_pBoundingBox) return false;
 
@@ -62,9 +62,14 @@ bool CMesh::CheckRayIntersection(XMFLOAT3& xmf3RayOrigin, XMFLOAT3& xmf3RayDirec
 	XMVECTOR xmRayOrigin{ XMLoadFloat3(&xmf3RayOrigin) };
 	XMVECTOR xmRayDirection{ XMLoadFloat3(&xmf3RayDirection) };
 
-	bIntersected = m_pBoundingBox->Intersects(xmRayOrigin, xmRayDirection, *pfNearHitDistance);
+	bIntersected = m_pBoundingBox->Intersects(xmRayOrigin, xmRayDirection, nearHitDistance);
 
 	return(bIntersected);
+}
+
+void CMesh::SetBoundingBox(XMFLOAT3& center, XMFLOAT3 & extents)
+{
+	m_pBoundingBox = new BoundingBox(center, extents);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -913,8 +918,6 @@ CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminated
 	m_vertexBufferView.StrideInBytes = m_nStride;
 	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
 
-	m_pBoundingBox = new BoundingBox(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(15, 15, 15));
-
 	delete[](pxmf3Positions);
 	delete[](pnIndices);
 	delete[](pxmf3Normals);
@@ -931,8 +934,7 @@ CSkinnedMesh::~CSkinnedMesh()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3
-	xmf3Scale)
+CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale)
 {
 	m_nWidth = nWidth;
 	m_nLength = nLength;
@@ -1060,8 +1062,8 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 	{
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
-			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), OnGetHeight(x, z, pContext) - 90, (z*m_xmf3Scale.z)),
-				XMFLOAT2(z * 0.25f, x * 0.25f), Vector4::Add(OnGetColor(x, z, pContext), xmf4Color));
+			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), (OnGetHeight(x, z, pContext) - 173.44f)* m_xmf3Scale.y, (z*m_xmf3Scale.z)),
+				XMFLOAT2(z * 0.25f, x * 0.25f), Vector4::Add(OnGetColor(x * 0.25f, z * 0.25f, pContext), xmf4Color));
 		}
 	}
 
@@ -1251,8 +1253,8 @@ CTexturedRectMesh::~CTexturedRectMesh()
 //
 CArrowMesh::CArrowMesh(CCreateMgr * pCreateMgr, float length) : CMesh(pCreateMgr)
 {
-	m_nIndices = 108;
 	m_nVertices = 24;
+	m_nIndices = 108;
 	m_nStride = sizeof(CDiffusedVertex);
 	m_nOffset = 0;
 	m_nSlot = 0;
@@ -1336,5 +1338,67 @@ CArrowMesh::CArrowMesh(CCreateMgr * pCreateMgr, float length) : CMesh(pCreateMgr
 }
 
 CArrowMesh::~CArrowMesh()
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+CCubeMesh4Collider::CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth) : CMesh(pCreateMgr)
+{
+	m_nVertices = 8;
+	m_nIndices = 36;
+	m_nStride = sizeof(CDiffusedVertex);
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	float fx = fWidth * 0.5f, fy = fHeight, fz = fDepth * 0.5f;
+
+	CDiffusedVertex pVertices[8];
+	pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, 0.0f, -fz), RANDOM_COLOR);
+	pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, 0.0f, -fz), RANDOM_COLOR);
+	pVertices[6] = CDiffusedVertex(XMFLOAT3(+fx, 0.0f, +fz), RANDOM_COLOR);
+	pVertices[7] = CDiffusedVertex(XMFLOAT3(-fx, 0.0f, +fz), RANDOM_COLOR);
+
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices,
+		m_nStride * m_nVertices,
+		D3D12_HEAP_TYPE_DEFAULT,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		&m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+
+	UINT pIndices[36];
+	pIndices[0] = 3; pIndices[1] = 1; pIndices[2] = 0;
+	pIndices[3] = 2; pIndices[4] = 1; pIndices[5] = 3;
+	pIndices[6] = 0; pIndices[7] = 5; pIndices[8] = 4;
+	pIndices[9] = 1; pIndices[10] = 5; pIndices[11] = 0;
+	pIndices[12] = 3; pIndices[13] = 4; pIndices[14] = 7;
+	pIndices[15] = 0; pIndices[16] = 4; pIndices[17] = 3;
+	pIndices[18] = 1; pIndices[19] = 6; pIndices[20] = 5;
+	pIndices[21] = 2; pIndices[22] = 6; pIndices[23] = 1;
+	pIndices[24] = 2; pIndices[25] = 7; pIndices[26] = 6;
+	pIndices[27] = 3; pIndices[28] = 7; pIndices[29] = 2;
+	pIndices[30] = 6; pIndices[31] = 4; pIndices[32] = 5;
+	pIndices[33] = 7; pIndices[34] = 4; pIndices[35] = 6;
+
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
+		pIndices,
+		sizeof(UINT) * m_nIndices,
+		D3D12_HEAP_TYPE_DEFAULT, 
+		D3D12_RESOURCE_STATE_INDEX_BUFFER,
+		&m_pIndexUploadBuffer);
+
+	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+}
+
+CCubeMesh4Collider::~CCubeMesh4Collider()
 {
 }

@@ -19,7 +19,7 @@ public: // 공개 함수
 	virtual void Render(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
-		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pNearHitDistance);
+		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
 	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
@@ -67,7 +67,7 @@ public: // 공개 함수
 	virtual void Render(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
-		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pNearHitDistance);
+		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
 	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);

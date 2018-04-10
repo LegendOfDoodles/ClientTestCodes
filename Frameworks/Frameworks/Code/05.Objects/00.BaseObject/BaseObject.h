@@ -39,7 +39,7 @@ public: // 공개 함수
 
 	void GenerateRayForPicking(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View,
 		XMFLOAT3 *pPickRayOrigin, XMFLOAT3 *pPickRayDirection);
-	bool PickObjectByRayIntersection(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float *pfHitDistance);
+	bool PickObjectByRayIntersection(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &hitDistance);
 
 	void MoveStrafe(float fDistance = 1.0f);
 	void MoveUp(float fDistance = 1.0f);
