@@ -1063,7 +1063,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
 			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), (OnGetHeight(x, z, pContext) - 173.44f)* m_xmf3Scale.y, (z*m_xmf3Scale.z)),
-				XMFLOAT2(z * 0.25f, x * 0.25f), Vector4::Add(OnGetColor(x * 0.25f, z * 0.25f, pContext), xmf4Color));
+				XMFLOAT2(z * 0.5f, x * 0.5f), Vector4::Add(OnGetColor(x * 0.5f, z * 0.5f, pContext), xmf4Color));
 		}
 	}
 
@@ -1149,7 +1149,7 @@ XMFLOAT4 CHeightMapGridMesh::OnGetColor(int x, int z, void *pContext)
 	CHeightMapImage *pHeightMapImage = (CHeightMapImage *)pContext;
 	XMFLOAT3 xmf3Scale = pHeightMapImage->GetScale();
 	//조명의 색상(세기, 밝기)이다.
-	XMFLOAT4 xmf4IncidentLightColor(0.3f, 0.3f, 0.3f, 1.0f);
+	XMFLOAT4 xmf4IncidentLightColor(0.5f, 0.5f, 0.5f, 1.0f);
 	float fScale = Vector3::DotProduct(pHeightMapImage->GetHeightMapNormal(x, z), xmf3LightDirection);
 	fScale += Vector3::DotProduct(pHeightMapImage->GetHeightMapNormal(x + 1, z), xmf3LightDirection);
 	fScale += Vector3::DotProduct(pHeightMapImage->GetHeightMapNormal(x + 1, z + 1), xmf3LightDirection);

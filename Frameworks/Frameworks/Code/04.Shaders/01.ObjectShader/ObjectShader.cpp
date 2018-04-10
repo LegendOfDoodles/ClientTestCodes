@@ -577,7 +577,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -600,7 +600,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
-	pCubeMesh->SetBoundingBox(XMFLOAT3(0.0f, 28.98f, 0.0f), XMFLOAT3(12.42f, 28.98f, 12.42f));
+	pCubeMesh->SetBoundingBox(XMFLOAT3(0.0f, 0.0f, -16.56), XMFLOAT3(12.42f, 12.42f, 28.98f));
 
 	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
 	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
@@ -625,11 +625,11 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pRotatingObject->SetPosition(x * 30 , y * 100, z * 100 );
+				pRotatingObject->SetPosition(x * 30 , y * 100 + 16.56, z * 100 );
 				pRotatingObject->SetSkeleton(pSkeleton);
 				pRotatingObject->SetSkeleton1(pSkeleton1);
 				pRotatingObject->SetSkeleton2(pSkeleton2);
-				//pRotatingObject->Rotate(90, 0, 0);
+				pRotatingObject->Rotate(90, 0, 0);
 #if !USE_INSTANCING
 				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 #endif

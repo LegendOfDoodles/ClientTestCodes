@@ -274,6 +274,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	int nIntersected{ 0 };
 	float hitDistance{ FLT_MAX }, nearestHitDistance{ FLT_MAX };
 	CBaseObject *pIntersectedObject{ NULL };
+	m_pSelectedObject = NULL;
 
 	for (int i = 0; i < m_nShaders; i++)
 	{

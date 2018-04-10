@@ -34,7 +34,7 @@ public: // 공개 함수
 
 	void SetAlbedo(XMFLOAT4 xmf4Albedo) { m_color.m_xmf4Diffuse = xmf4Albedo; }
 	void SetSpecularPower(float SP) { m_color.m_cSpecularPower = SP; }
-	void SetRoughness(float R) { m_color.m_cRoughness = CLAMP(R, 0, 1); }
+	void SetRoughness(float R) { m_color.m_cRoughness = CLAMP(1 - R, 0, 1); }
 	void SetMetalic(float M) { m_color.m_cMetalic = CLAMP(M, 0, 1); }
 	
 	void AddRef() { m_nReferences++; }
