@@ -24,8 +24,11 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual CBaseObject *PickObjectByRayIntersection(
+		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
+
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
 
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }

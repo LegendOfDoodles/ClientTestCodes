@@ -30,12 +30,18 @@ public: // 공개 함수
 	void ReleaseUploadBuffers();
 
 	void SetMesh(int nIndex, CMesh *pMesh);
+	void SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth);
 	void SetShader(CShader *pShader);
 	void SetMaterial(CMaterial *pMaterial);
 
 	virtual void Animate(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
+	virtual void RenderBoundingBox(CCamera *pCamera, UINT istanceCnt = 1);
+
+	void GenerateRayForPicking(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View,
+		XMFLOAT3 *pPickRayOrigin, XMFLOAT3 *pPickRayDirection);
+	bool PickObjectByRayIntersection(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &hitDistance);
 
 	void MoveStrafe(float fDistance = 1.0f);
 	void MoveUp(float fDistance = 1.0f);
@@ -59,9 +65,9 @@ public: // 공개 함수
 	XMFLOAT4X4* GetFrameMatrix() { return m_xmf4x4Frame; }
 
 
-	void SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) { m_d3dCbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle; }
-	void SetCbvGPUDescriptorHandlePtr(UINT64 nCbvGPUDescriptorHandlePtr) { m_d3dCbvGPUDescriptorHandle.ptr = nCbvGPUDescriptorHandlePtr; }
-	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_d3dCbvGPUDescriptorHandle); }
+	void SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) { m_cbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle; }
+	void SetCbvGPUDescriptorHandlePtr(UINT64 nCbvGPUDescriptorHandlePtr) { m_cbvGPUDescriptorHandle.ptr = nCbvGPUDescriptorHandlePtr; }
+	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_cbvGPUDescriptorHandle); }
 
 protected: // 내부 함수
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
@@ -79,10 +85,12 @@ protected: // 변수
 	CMesh	**m_ppMeshes{ NULL };
 	int m_nMeshes{ 0 };
 
+	CMesh *m_pBoundingMesh{ NULL };
+
 	CShader *m_pShader{ NULL };
 	CMaterial	 *m_pMaterial{ NULL };
 
-	D3D12_GPU_DESCRIPTOR_HANDLE m_d3dCbvGPUDescriptorHandle{ NULL };
+	D3D12_GPU_DESCRIPTOR_HANDLE m_cbvGPUDescriptorHandle{ NULL };
 
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };

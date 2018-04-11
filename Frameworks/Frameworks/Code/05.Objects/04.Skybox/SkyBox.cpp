@@ -36,8 +36,8 @@ CSkyBox::~CSkyBox()
 // 공개 함수
 void CSkyBox::Render(CCamera *pCamera, UINT istanceCnt)
 {
-	if (m_d3dCbvGPUDescriptorHandle.ptr)
-		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_cbvGPUDescriptorHandle);
 
 	if (m_ppMeshes)
 	{

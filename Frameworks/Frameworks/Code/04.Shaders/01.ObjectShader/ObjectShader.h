@@ -18,8 +18,11 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual CBaseObject *PickObjectByRayIntersection(
+		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
+
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -32,7 +35,6 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
-	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
 protected: // 변수
@@ -64,8 +66,11 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual CBaseObject *PickObjectByRayIntersection(
+		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
+
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -78,8 +83,6 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
-
-	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
 protected: // 변수

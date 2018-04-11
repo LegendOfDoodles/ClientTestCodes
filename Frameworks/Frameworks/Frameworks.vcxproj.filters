@@ -117,6 +117,12 @@
     <Filter Include="소스 파일\05.Objects\05.Minion">
       <UniqueIdentifier>{5babff02-8628-4ae6-a587-3d422108063e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.ArrowShader">
+      <UniqueIdentifier>{70d23914-ffae-4e4d-b1a6-4aac8dacb79c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\100.Arrow">
+      <UniqueIdentifier>{da6614e3-61ea-4567-80c7-8b12d82ea4d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -212,8 +218,11 @@
     <ClInclude Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.h">
       <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
-      <Filter>소스 파일\05.Objects\05.Minion</Filter>
+    <ClInclude Include="Code\04.Shaders\98.ArrowShader\ArrowShader.h">
+      <Filter>소스 파일\04.Shaders\98.ArrowShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\100.Arrow\Arrow.h">
+      <Filter>소스 파일\05.Objects\100.Arrow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -277,9 +286,6 @@
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp">
       <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp">
-      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
-    </ClCompile>
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp">
       <Filter>소스 파일\05.Objects\97.Skeleton</Filter>
     </ClCompile>
@@ -298,8 +304,14 @@
     <ClCompile Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
-      <Filter>소스 파일\05.Objects\05.Minion</Filter>
+    <ClCompile Include="Code\04.Shaders\98.ArrowShader\ArrowShader.cpp">
+      <Filter>소스 파일\04.Shaders\98.ArrowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\100.Arrow\Arrow.cpp">
+      <Filter>소스 파일\05.Objects\100.Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp">
+      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 /// 목적: In Game 에서 사용할 카메라
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-07
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ void CAOSCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElap
 	}
 }
 
-void CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 
@@ -123,11 +123,11 @@ void CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeEla
 	GenerateProjectionMatrix(1.0f, 50000.0f, float(m_scissorRect.right) / float(m_scissorRect.bottom), m_angleDegree);
 }
 
-void CAOSCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CAOSCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 }
 
-void CAOSCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CAOSCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 {
 }
 

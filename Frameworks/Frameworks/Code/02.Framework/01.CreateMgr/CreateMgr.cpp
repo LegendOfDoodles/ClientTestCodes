@@ -662,7 +662,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 
 	pDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	pDescriptorRanges[3].NumDescriptors = 1;
-	pDescriptorRanges[3].BaseShaderRegister = 5; //Game Objects
+	pDescriptorRanges[3].BaseShaderRegister = 5; //Animation Objects
 	pDescriptorRanges[3].RegisterSpace = 0;
 	pDescriptorRanges[3].OffsetInDescriptorsFromTableStart = 0;
 #endif
@@ -712,7 +712,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 
 	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[7].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[3]; //Game Objects
+	pRootParameters[7].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[3]; //Animation Objects
 	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 #endif
 

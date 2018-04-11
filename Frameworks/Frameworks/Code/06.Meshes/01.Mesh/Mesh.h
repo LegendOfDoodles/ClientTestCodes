@@ -14,6 +14,10 @@ public: // 공개 함수
 	virtual void Render(UINT istanceCnt = 1);
 
 	virtual void ReleaseUploadBuffers();
+
+	bool CheckRayIntersection(XMFLOAT3& rayPosition, XMFLOAT3& rayDirection, float &nearHitDistance);
+
+	void SetBoundingBox(XMFLOAT3& center, XMFLOAT3& extents);
 	
 	ID3D12Resource* GetVertexBuffer() { 
 		return m_pVertexBuffer; 
@@ -49,6 +53,8 @@ protected: // 변수
 
 	UINT m_nStartIndex{ 0 };
 	UINT m_nBaseVertex{ 0 };
+
+	BoundingBox	 *m_pBoundingBox{ NULL };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };
@@ -96,14 +102,6 @@ public:
 	virtual ~CCubeMeshIlluminated();
 };
 
-
-class CFBXMesh :public CMeshIlluminated
-{
-public :
-	CFBXMesh(CCreateMgr *pCreateMgr);
-	virtual ~CFBXMesh();
-};
-
 class CSphereMeshIlluminated : public CMeshIlluminated
 {
 public:
@@ -132,22 +130,10 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CCubeWithIndices : public CMeshIlluminatedTextured
-{
-public:
-	CCubeWithIndices(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
-	virtual ~CCubeWithIndices();
-};
-
 class CSkinnedMesh : public CMeshIlluminatedTextured
 {
 public:
-	CSkinnedVertex* m_pVertices;
-	int m_nVerticesCnt;
-
 	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
-	UINT GetStride() { return m_nStride; }
-	virtual void ReleaseUploadBuffers();
 	virtual ~CSkinnedMesh();
 };
 
@@ -217,4 +203,23 @@ class CTexturedRectMesh : public CMesh
 public:
 	CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
 	virtual ~CTexturedRectMesh();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CArrowMesh : public CMesh
+{
+public:
+	CArrowMesh(CCreateMgr *pCreateMgr, float length = 100.0f);
+	virtual ~CArrowMesh();
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CCubeMesh4Collider : public CMesh
+{
+public:
+	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
+	CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMesh4Collider();
 };

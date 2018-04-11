@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-07
+/// 최종 수정 날짜: 2018-04-09
 /// </summary>
 
 
@@ -168,7 +168,7 @@ void CCamera::GenerateProjectionMatrix(
 		fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
-void CCamera::OnProcessMouseDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CCamera::OnProcessMouseDown(WPARAM wParam, LPARAM lParam)
 {
 	::GetCursorPos(&m_oldCursorPos);
 }
@@ -197,11 +197,11 @@ void CCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed
 	Update(timeElapsed, false);
 }
 
-void CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 }
 
-void CCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
@@ -226,7 +226,7 @@ void CCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 	}
 }
 
-void CCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{

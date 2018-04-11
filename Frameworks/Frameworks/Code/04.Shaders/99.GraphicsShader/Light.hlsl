@@ -85,7 +85,7 @@ float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera)
     if (R2 != 0)
         D = exp(-(1 - NH2) / (NH2 * R2)) / (4 * R2 * NH2 * NH2);
 	else
-        return float4(1.0f, 1.0f, 1.0f, 1.0f);
+        D = 0;
 
     float G = min(1, min(2 * NH * NV / VH, 2 * NH * NL / VH));
 
