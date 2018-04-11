@@ -169,6 +169,7 @@
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\ObjectShader.h" />
     <ClInclude Include="Code\04.Shaders\02.TerrainShader\TerrainShader.h" />
     <ClInclude Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.h" />
+    <ClInclude Include="Code\04.Shaders\04.BillboardShader\00.Minimap\MiniMapShader.h" />
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp" />
     <ClCompile Include="Code\04.Shaders\02.TerrainShader\TerrainShader.cpp" />
     <ClCompile Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\04.BillboardShader\00.Minimap\MiniMapShader.cpp" />
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.cpp" />
