@@ -286,9 +286,6 @@
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp">
       <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp">
-      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
-    </ClCompile>
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp">
       <Filter>소스 파일\05.Objects\97.Skeleton</Filter>
     </ClCompile>
@@ -312,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\100.Arrow\Arrow.cpp">
       <Filter>소스 파일\05.Objects\100.Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp">
+      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

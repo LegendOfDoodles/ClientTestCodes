@@ -8,7 +8,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -577,7 +577,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
+	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -625,6 +625,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
+				pRotatingObject->SetBoundingMesh(pCreateMgr, 24.84f, 24.84f, 57.96f);
 				pRotatingObject->SetPosition(x * 30 , y * 100 + 16.56, z * 100 );
 				pRotatingObject->SetSkeleton(pSkeleton);
 				pRotatingObject->SetSkeleton1(pSkeleton1);

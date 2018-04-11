@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -38,6 +38,8 @@ CBaseObject::~CBaseObject()
 		}
 		Safe_Delete_Array(m_ppMeshes);
 	}
+	if (m_pBoundingMesh) Safe_Release(m_pBoundingMesh);
+
 	if (m_pShader){ m_pShader->Finalize(); }
 	if (m_pMaterial) m_pMaterial->Finalize();
 }
@@ -77,6 +79,11 @@ void CBaseObject::SetMesh(int nIndex, CMesh *pMesh)
 	if (pMesh) pMesh->AddRef();
 }
 
+void CBaseObject::SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth)
+{
+	m_pBoundingMesh = new CCubeMesh4Collider(pCreateMgr, width, height, depth);
+}
+
 void CBaseObject::SetShader(CShader *pShader)
 {
 	if (m_pShader) m_pShader->Release();
@@ -111,8 +118,8 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 		m_pMaterial->UpdateShaderVariables();
 	}
 
-	if (m_d3dCbvGPUDescriptorHandle.ptr)
-		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_cbvGPUDescriptorHandle);
 
 	if (m_pShader)
 	{
@@ -127,6 +134,13 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
 		}
 	}
+}
+
+void CBaseObject::RenderBoundingBox(CCamera * pCamera, UINT istanceCnt)
+{
+	OnPrepareRender();
+
+	if (m_pBoundingMesh) m_pBoundingMesh->Render(istanceCnt);
 }
 
 void CBaseObject::GenerateRayForPicking(

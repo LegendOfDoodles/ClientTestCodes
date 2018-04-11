@@ -89,8 +89,8 @@ void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
 		m_pMaterial->UpdateShaderVariables();
 	}
 
-	if (m_d3dCbvGPUDescriptorHandle.ptr)
-		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_d3dCbvGPUDescriptorHandle);
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
 
 	if (m_pShader)
 	{
