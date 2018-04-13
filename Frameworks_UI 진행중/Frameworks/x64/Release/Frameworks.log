@@ -1,0 +1,10 @@
+﻿  Scene.cpp
+C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks_UI 진행중\Frameworks\Code\05.Objects/97.Skeleton/Skeleton.h(32): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks_UI 진행중\Frameworks\Code\05.Objects/97.Skeleton/Skeleton.h(36): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Code\03.Scenes\00.BaseScene\Scene.cpp(109): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다.
+  66 of 863 functions ( 7.6%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks_UI 진행중\x64\Release\Framework01.exe
