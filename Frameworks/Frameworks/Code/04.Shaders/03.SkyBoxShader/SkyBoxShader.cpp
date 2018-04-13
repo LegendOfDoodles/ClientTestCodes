@@ -7,7 +7,7 @@
 /// 목적: 스카이 박스 처리용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-27
+/// 최종 수정 날짜: 2018-04-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -126,6 +126,8 @@ void CSkyBoxShader::CreateShader(CCreateMgr *pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
+	CreateDescriptorHeaps();
+
 	CShader::CreateShader(pCreateMgr);
 }
 
@@ -155,7 +157,7 @@ void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
 
 	m_pSkyBox->SetMaterial(Materials::CreateSkyBoxMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle));
-	m_pSkyBox->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr);
+	m_pSkyBox->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }
 
 void CSkyBoxShader::ReleaseObjects()

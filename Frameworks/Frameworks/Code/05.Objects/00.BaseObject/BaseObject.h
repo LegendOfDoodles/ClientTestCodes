@@ -30,7 +30,7 @@ public: // 공개 함수
 	void ReleaseUploadBuffers();
 
 	void SetMesh(int nIndex, CMesh *pMesh);
-	void SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth);
+	void SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
 	void SetShader(CShader *pShader);
 	void SetMaterial(CMaterial *pMaterial);
 
@@ -65,8 +65,12 @@ public: // 공개 함수
 	XMFLOAT4X4* GetFrameMatrix() { return m_xmf4x4Frame; }
 
 
-	void SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) { m_cbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle; }
-	void SetCbvGPUDescriptorHandlePtr(UINT64 nCbvGPUDescriptorHandlePtr) { m_cbvGPUDescriptorHandle.ptr = nCbvGPUDescriptorHandlePtr; }
+	void SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE cbvGPUDescriptorHandle) { m_cbvGPUDescriptorHandle = cbvGPUDescriptorHandle; }
+	void SetCbvGPUDescriptorHandlePtr(UINT64 cbvGPUDescriptorHandlePtr) { m_cbvGPUDescriptorHandle.ptr = cbvGPUDescriptorHandlePtr; }
+
+	void SetCbvGPUDescriptorHandleForBB(D3D12_GPU_DESCRIPTOR_HANDLE cbvGPUDescriptorHandle) { m_cbvGPUDescriptorHandleForBB = cbvGPUDescriptorHandle; }
+	void SetCbvGPUDescriptorHandlePtrForBB(UINT64 cbvGPUDescriptorHandlePtr) { m_cbvGPUDescriptorHandleForBB.ptr = cbvGPUDescriptorHandlePtr; }
+
 	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_cbvGPUDescriptorHandle); }
 
 protected: // 내부 함수
@@ -91,6 +95,7 @@ protected: // 변수
 	CMaterial	 *m_pMaterial{ NULL };
 
 	D3D12_GPU_DESCRIPTOR_HANDLE m_cbvGPUDescriptorHandle{ NULL };
+	D3D12_GPU_DESCRIPTOR_HANDLE m_cbvGPUDescriptorHandleForBB{ NULL };
 
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };

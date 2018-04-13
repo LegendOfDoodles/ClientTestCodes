@@ -60,6 +60,19 @@ void CObjectShader::UpdateShaderVariables()
 #endif
 }
 
+void CObjectShader::UpdateBoundingBoxShaderVariables()
+{
+	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + (i * boundingBoxElementBytes));
+
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+	}
+}
+
 void CObjectShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
@@ -83,6 +96,16 @@ void CObjectShader::Render(CCamera *pCamera)
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 #endif
+}
+
+void CObjectShader::RenderBoundingBox(CCamera * pCamera)
+{
+	CShader::RenderBoundingBox(pCamera);
+
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		if (m_ppObjects[j]) m_ppObjects[j]->RenderBoundingBox(pCamera);
+	}
 }
 
 CBaseObject *CObjectShader::PickObjectByRayIntersection(
@@ -109,19 +132,29 @@ CBaseObject *CObjectShader::PickObjectByRayIntersection(
 
 void CObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
+	static float R = 0.0f;
+	static float M = 0.0f;
 	switch (wParam)
 	{
 	case 'U':
-		m_pMaterial->SetRoughness(0.0f);
+		R -= 0.1f;
+		if (R < 0.0f) R = 0.0f;
+		m_pMaterial->SetRoughness(R);
 		break;
 	case 'I':
-		m_pMaterial->SetRoughness(1.0f);
+		R += 0.1f;
+		if (R > 1.0f) R = 1.0f;
+		m_pMaterial->SetRoughness(R);
 		break;
 	case 'O':
-		m_pMaterial->SetMetalic(0.0f);
+		M -= 0.1f;
+		if (M < 0.0f) M = 0.0f;
+		m_pMaterial->SetMetalic(M);
 		break;
 	case 'P':
-		m_pMaterial->SetMetalic(1.0f);
+		M += 0.1f;
+		if (M > 1.0f) M = 1.0f;
+		m_pMaterial->SetMetalic(M);
 		break;
 	default:
 		break;
@@ -201,10 +234,18 @@ D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 
 void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 {
-	m_nPipelineStates = 1;
+	m_nPipelineStates = 2;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
+	for (int i = 0; i < m_nPipelineStates; ++i)
+	{
+		m_ppPipelineStates[i] = NULL;
+	}
+
+	CreateDescriptorHeaps();
+
 	CShader::CreateShader(pCreateMgr);
+	CShader::CreateBoundingBoxShader(pCreateMgr);
 }
 
 void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
@@ -235,7 +276,17 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
 #endif
 
+	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
+	m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		boundingBoxElementBytes * m_nObjects,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		NULL);
+
+	hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
+	assert(SUCCEEDED(hResult) && "m_pBoundingBoxBuffer->Map Failed");
 }
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
@@ -250,10 +301,13 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CreateShaderVariables(pCreateMgr);
 #else
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
 #endif
 
 #if USE_BATCH_MATERIAL
@@ -294,7 +348,8 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				//pRotatingObject->SetSkeleton2(pSkeleton2);
 				pRotatingObject->Rotate(90, 0, 0);
 #if !USE_INSTANCING
-				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
+				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+				pRotatingObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 #endif
 				m_ppObjects[i++] = pRotatingObject;
 			}
@@ -374,6 +429,19 @@ void CAniShader::UpdateShaderVariables()
 #endif
 }
 
+void CAniShader::UpdateBoundingBoxShaderVariables()
+{
+	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + (i * boundingBoxElementBytes));
+
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+	}
+}
+
 void CAniShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
@@ -397,6 +465,16 @@ void CAniShader::Render(CCamera *pCamera)
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 #endif
+}
+
+void CAniShader::RenderBoundingBox(CCamera * pCamera)
+{
+	CShader::RenderBoundingBox(pCamera);
+
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		if (m_ppObjects[j]) m_ppObjects[j]->RenderBoundingBox(pCamera);
+	}
 }
 
 CBaseObject *CAniShader::PickObjectByRayIntersection(
@@ -423,19 +501,30 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 
 void CAniShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
+	static float R = 0.0f;
+	static float M = 0.0f;
+
 	switch (wParam)
 	{
 	case 'U':
-		m_pMaterial->SetRoughness(0.0f);
+		R -= 0.1f;
+		if (R < 0.0f) R = 0.0f;
+		m_pMaterial->SetRoughness(R);
 		break;
 	case 'I':
-		m_pMaterial->SetRoughness(1.0f);
+		R += 0.1f;
+		if (R > 1.0f) R = 1.0f;
+		m_pMaterial->SetRoughness(R);
 		break;
 	case 'O':
-		m_pMaterial->SetMetalic(0.0f);
+		M -= 0.1f;
+		if (M < 0.0f) M = 0.0f;
+		m_pMaterial->SetMetalic(M);
 		break;
 	case 'P':
-		m_pMaterial->SetMetalic(1.0f);
+		M += 0.1f;
+		if (M > 1.0f) M = 1.0f;
+		m_pMaterial->SetMetalic(M);
 		break;
 	default:
 		break;
@@ -538,10 +627,18 @@ D3D12_SHADER_BYTECODE CAniShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 
 void CAniShader::CreateShader(CCreateMgr *pCreateMgr)
 {
-	m_nPipelineStates = 1;
+	m_nPipelineStates = 2;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
+	for (int i = 0; i < m_nPipelineStates; ++i)
+	{
+		m_ppPipelineStates[i] = NULL;
+	}
+
+	CreateDescriptorHeaps();
+
 	CShader::CreateShader(pCreateMgr);
+	CShader::CreateBoundingBoxShader(pCreateMgr);
 }
 
 void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
@@ -572,12 +669,22 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
 #endif
 
+	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
+	m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		boundingBoxElementBytes * m_nObjects,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		NULL);
+
+	hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
+	assert(SUCCEEDED(hResult) && "m_pBoundingBoxBuffer->Map Failed");
 }
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -587,10 +694,13 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CreateShaderVariables(pCreateMgr);
 #else
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
+	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
 #endif
 
 #if USE_BATCH_MATERIAL
@@ -625,14 +735,15 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pRotatingObject->SetBoundingMesh(pCreateMgr, 24.84f, 24.84f, 57.96f);
-				pRotatingObject->SetPosition(x * 30 , y * 100 + 16.56, z * 100 );
+				pRotatingObject->SetBoundingMesh(pCreateMgr, 24.84f, 12.42f, 57.96f, 0, 0, -16.56);
+				pRotatingObject->SetPosition(x * 30 , y * 100, z * 100 );
 				pRotatingObject->SetSkeleton(pSkeleton);
 				pRotatingObject->SetSkeleton1(pSkeleton1);
 				pRotatingObject->SetSkeleton2(pSkeleton2);
 				pRotatingObject->Rotate(90, 0, 0);
 #if !USE_INSTANCING
-				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
+				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+				pRotatingObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 #endif
 				m_ppObjects[i++] = pRotatingObject;
 			}

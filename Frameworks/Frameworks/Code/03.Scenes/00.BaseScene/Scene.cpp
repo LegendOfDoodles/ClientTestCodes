@@ -72,6 +72,12 @@ void CScene::Render()
 	{
 		m_ppShaders[i]->Render(m_pCamera);
 	}
+
+	for (int i = 0; i < m_nShaders; i++)
+	{
+		if(m_ppShaders[i]->HasBoundingBox())
+			m_ppShaders[i]->RenderBoundingBox(m_pCamera);
+	}
 }
 
 void CScene::SetViewportsAndScissorRects()

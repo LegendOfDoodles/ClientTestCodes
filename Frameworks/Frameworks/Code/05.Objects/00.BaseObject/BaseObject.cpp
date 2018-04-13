@@ -79,9 +79,9 @@ void CBaseObject::SetMesh(int nIndex, CMesh *pMesh)
 	if (pMesh) pMesh->AddRef();
 }
 
-void CBaseObject::SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth)
+void CBaseObject::SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth, float xOffset, float yOffSet, float zOffSet)
 {
-	m_pBoundingMesh = new CCubeMesh4Collider(pCreateMgr, width, height, depth);
+	m_pBoundingMesh = new CCubeMesh4Collider(pCreateMgr, width, height, depth, xOffset, yOffSet, zOffSet);
 }
 
 void CBaseObject::SetShader(CShader *pShader)
@@ -139,6 +139,9 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 void CBaseObject::RenderBoundingBox(CCamera * pCamera, UINT istanceCnt)
 {
 	OnPrepareRender();
+
+	if (m_cbvGPUDescriptorHandleForBB.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(2, m_cbvGPUDescriptorHandleForBB);
 
 	if (m_pBoundingMesh) m_pBoundingMesh->Render(istanceCnt);
 }

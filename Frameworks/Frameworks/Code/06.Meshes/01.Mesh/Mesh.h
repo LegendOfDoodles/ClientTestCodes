@@ -220,6 +220,6 @@ class CCubeMesh4Collider : public CMesh
 {
 public:
 	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
-	CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
 	virtual ~CCubeMesh4Collider();
 };

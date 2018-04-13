@@ -12,11 +12,11 @@
 // 持失切, 社瑚切
 CArrow::CArrow(CCreateMgr *pCreateMgr, float length) : CBaseObject(pCreateMgr)
 {
-	//CArrowMesh *pArrowMesh = new CArrowMesh(pCreateMgr, length);
+	CArrowMesh *pArrowMesh = new CArrowMesh(pCreateMgr, length);
 
-	//SetMesh(0, pArrowMesh);
-	CCubeMesh4Collider *pCubeMesh = new CCubeMesh4Collider(pCreateMgr, 24.84, 57.96, 24.84);
-	SetMesh(0, pCubeMesh);
+	SetMesh(0, pArrowMesh);
+	//CCubeMesh4Collider *pCubeMesh = new CCubeMesh4Collider(pCreateMgr, 24.84, 57.96, 24.84);
+	//SetMesh(0, pCubeMesh);
 
 	CreateShaderVariables(pCreateMgr);
 }

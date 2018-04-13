@@ -1343,7 +1343,7 @@ CArrowMesh::~CArrowMesh()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-CCubeMesh4Collider::CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth) : CMesh(pCreateMgr)
+CCubeMesh4Collider::CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth, float xOffset, float yOffSet, float zOffSet) : CMesh(pCreateMgr)
 {
 	m_nVertices = 8;
 	m_nIndices = 36;
@@ -1353,14 +1353,14 @@ CCubeMesh4Collider::CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth, flo
 	float fx = fWidth * 0.5f, fy = fHeight, fz = fDepth * 0.5f;
 
 	CDiffusedVertex pVertices[8];
-	pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx, +fy, -fz), RANDOM_COLOR);
-	pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, +fy, -fz), RANDOM_COLOR);
-	pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx, +fy, +fz), RANDOM_COLOR);
-	pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, +fy, +fz), RANDOM_COLOR);
-	pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, 0.0f, -fz), RANDOM_COLOR);
-	pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, 0.0f, -fz), RANDOM_COLOR);
-	pVertices[6] = CDiffusedVertex(XMFLOAT3(+fx, 0.0f, +fz), RANDOM_COLOR);
-	pVertices[7] = CDiffusedVertex(XMFLOAT3(-fx, 0.0f, +fz), RANDOM_COLOR);
+	pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx + xOffset, +fy + yOffSet, -fz + zOffSet), RANDOM_COLOR);
+	pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx + xOffset, +fy + yOffSet, -fz + zOffSet), RANDOM_COLOR);
+	pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx + xOffset, +fy + yOffSet, +fz + zOffSet), RANDOM_COLOR);
+	pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx + xOffset, +fy + yOffSet, +fz + zOffSet), RANDOM_COLOR);
+	pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx + xOffset, -fy + yOffSet, -fz + zOffSet), RANDOM_COLOR);
+	pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx + xOffset, -fy + yOffSet, -fz + zOffSet), RANDOM_COLOR);
+	pVertices[6] = CDiffusedVertex(XMFLOAT3(+fx + xOffset, -fy + yOffSet, +fz + zOffSet), RANDOM_COLOR);
+	pVertices[7] = CDiffusedVertex(XMFLOAT3(-fx + xOffset, -fy + yOffSet, +fz + zOffSet), RANDOM_COLOR);
 
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
 		pVertices,

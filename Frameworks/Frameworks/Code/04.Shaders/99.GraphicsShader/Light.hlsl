@@ -50,9 +50,9 @@ cbuffer cbMaterial : register(b4)
 // OrenNayar Diffuse Function
 float4 OrenNayarDiffuse(float3 vLight, float3 vNormal, float3 vCamera)
 {
-    float3 L = normalize(vLight);
+    float3 L = normalize(-vLight);
     float3 N = vNormal;
-    float3 V = normalize(vCamera);
+    float3 V = normalize(-vCamera);
 
     half LN = dot(L, N);
     half VN = dot(V, N);
@@ -79,34 +79,29 @@ float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera)
     float NL = dot(N, L);
     float LH = dot(L, H);
 
-    float R2 = gMaterials.m_cRoughness * gMaterials.m_cRoughness;
-    float NH2 = NH * NH;
-    float D;
-    if (R2 != 0)
-        D = exp(-(1 - NH2) / (NH2 * R2)) / (4 * R2 * NH2 * NH2);
-	else
-        D = 0;
+    float a = acos(NH);
+    float e = -((a / gMaterials.m_cRoughness) * (a / gMaterials.m_cRoughness));
+    float D = 1.0f * exp(e);
 
-    float G = min(1, min(2 * NH * NV / VH, 2 * NH * NL / VH));
+    float x = 2 * NH / VH;
+    float G = min(1, min(x * NV, x * NL));
 
     float n = 20.0f;
-    float g = sqrt(n * n + LH * LH - 1);
-    float gpc = g + LH;
-    float gnc = g - LH;
-    float cgpc = LH * gpc - 1;
-    float cgnc = LH * gnc + 1;
-    float F = 0.5f * gnc * gnc * (1 + cgpc * cgnc / (cgnc * cgnc)) / (gpc * gpc);
+    float g = sqrt(n * n + VH * VH - 1);
+    float gpc = g + VH;
+    float gmc = g - VH;
+    float cgpc = VH * gpc - 1;
+    float cgmc = VH * gmc + 1;
+    float F = 0.5f * gmc * gmc * (1 + cgpc * cgmc / (cgmc * cgmc)) / (gpc * gpc);
 
-    float4 ks = { 2.0f * gMaterials.m_cMetalic, 2.0f * gMaterials.m_cMetalic, 2.0f * gMaterials.m_cMetalic, 1.0f };
-
-    return gMaterials.m_cAlbedo + ks * max(0, F * D * G / NV);
+    return gMaterials.m_cAlbedo * max(0, (F * D * G) / (NV * NL));
 }
 
 float4 DirectionalLight(int nIndex, float3 vNormal, float3 vCamera)
 {
     float3 vToLight = -gLights[nIndex].m_vDirection;
 
-    return gLights[nIndex].m_cAlbedo * (OrenNayarDiffuse(vToLight, vNormal, vCamera) + CookTorranceSpecular(vToLight, vNormal, vCamera));
+    return gLights[nIndex].m_cAlbedo * (OrenNayarDiffuse(vToLight, vNormal, vCamera) + gMaterials.m_cMetalic * CookTorranceSpecular(vToLight, vNormal, vCamera));
 }
 
 float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera)
@@ -120,7 +115,7 @@ float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera)
         float fAttenuationFactor = 1.0f / dot(gLights[nIndex].m_vAttenuation, float3(1.0f, fDistance, fDistance * fDistance));
 
         if (fAttenuationFactor != 0)
-            return gLights[nIndex].m_cAlbedo * (OrenNayarDiffuse(vToLight, vNormal, vCamera) + CookTorranceSpecular(vToLight, vNormal, vCamera)) * fAttenuationFactor;
+            return gLights[nIndex].m_cAlbedo * (OrenNayarDiffuse(vToLight, vNormal, vCamera) + gMaterials.m_cMetalic * CookTorranceSpecular(vToLight, vNormal, vCamera)) * fAttenuationFactor;
     }
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
 }
@@ -142,7 +137,7 @@ float4 SpotLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera)
         float fAttenuationFactor = 1.0f / dot(gLights[nIndex].m_vAttenuation, float3(1.0f, fDistance, fDistance * fDistance));
 
         if (fSpotFactor != 0 && fAttenuationFactor != 0)
-            return gLights[nIndex].m_cAlbedo * (OrenNayarDiffuse(vToLight, vNormal, vCamera) + CookTorranceSpecular(vToLight, vNormal, vCamera)) * fAttenuationFactor * fSpotFactor;
+            return gLights[nIndex].m_cAlbedo * (OrenNayarDiffuse(vToLight, vNormal, vCamera) + gMaterials.m_cMetalic * CookTorranceSpecular(vToLight, vNormal, vCamera)) * fAttenuationFactor * fSpotFactor;
     }
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
 }

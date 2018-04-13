@@ -105,6 +105,8 @@ void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
+	CreateDescriptorHeaps();
+
 	CShader::CreateShader(pCreateMgr);
 }
 
@@ -145,7 +147,7 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	m_pMaterial = Materials::CreateTerrainMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 
-	m_pTerrain->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr);
+	m_pTerrain->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }
 
 void CTerrainShader::ReleaseObjects()

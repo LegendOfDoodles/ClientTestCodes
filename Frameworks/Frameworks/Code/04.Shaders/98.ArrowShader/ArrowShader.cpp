@@ -6,7 +6,7 @@
 /// 목적: 작업 시 화살표 표시용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-10
+/// 최종 수정 날짜: 2018-04-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -73,26 +73,6 @@ D3D12_INPUT_LAYOUT_DESC CArrowShader::CreateInputLayout()
 	return(inputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC CArrowShader::CreateRasterizerState()
-{
-	D3D12_RASTERIZER_DESC rasterizerDesc;
-	::ZeroMemory(&rasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
-
-	rasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
-	rasterizerDesc.FrontCounterClockwise = FALSE;
-	rasterizerDesc.DepthBias = 0;
-	rasterizerDesc.DepthBiasClamp = 0.0f;
-	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
-	rasterizerDesc.DepthClipEnable = TRUE;
-	rasterizerDesc.MultisampleEnable = FALSE;
-	rasterizerDesc.AntialiasedLineEnable = FALSE;
-	rasterizerDesc.ForcedSampleCount = 0;
-	rasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-
-	return(rasterizerDesc);
-}
-
 D3D12_SHADER_BYTECODE CArrowShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
@@ -115,6 +95,8 @@ void CArrowShader::CreateShader(CCreateMgr *pCreateMgr)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
+
+	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
 }
@@ -144,7 +126,7 @@ void CArrowShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
 
-	m_pArrow->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr);
+	m_pArrow->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }
 
 void CArrowShader::ReleaseObjects()

@@ -13,10 +13,12 @@ public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
 
 	virtual void UpdateShaderVariables();
+	virtual void UpdateBoundingBoxShaderVariables();
 
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
+	virtual void RenderBoundingBox(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
@@ -47,6 +49,7 @@ protected: // 변수
 #else
 	UINT8 *m_pMappedObjects{ NULL };
 #endif
+	UINT8 *m_pMappedBoundingBoxes{ NULL };
 };
 
 
@@ -61,10 +64,12 @@ public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
 
 	virtual void UpdateShaderVariables();
+	virtual void UpdateBoundingBoxShaderVariables();
 
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
+	virtual void RenderBoundingBox(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
@@ -93,6 +98,7 @@ protected: // 변수
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial						*m_pMaterial{ NULL };
 #else
-	UINT8 *m_pMappedObjects = NULL;
+	UINT8 *m_pMappedObjects{ NULL };
 #endif
+	UINT8 *m_pMappedBoundingBoxes{ NULL };
 };

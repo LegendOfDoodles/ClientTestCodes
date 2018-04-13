@@ -1,4 +1,21 @@
-﻿  Arrow.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\100.arrow\arrow.cpp(18): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\100.arrow\arrow.cpp(13): warning C4100: 'length': 참조되지 않은 정식 매개 변수입니다.
+﻿  Shader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(59): warning C4100: 'pxmf4x4World': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(67): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(71): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(76): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(81): warning C4100: 'nearHitDistance': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(81): warning C4100: 'xmf4x4View': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(81): warning C4100: 'pickPosition': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(86): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(86): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(90): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(90): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(273): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(280): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(286): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(331): warning C4100: 'ppd3dShaderBlob': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(340): warning C4100: 'ppShaderBlob': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(427): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(431): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(431): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

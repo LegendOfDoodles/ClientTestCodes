@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -22,12 +22,15 @@ CShader::~CShader()
 {
 	if (!m_ppPipelineStates) return;
 
-	for (int i = 0; i < m_nPipelineStates; i++)
+	for (int i = 0; i < m_nPipelineStates; ++i)
 	{
 		Safe_Release(m_ppPipelineStates[i]);
 	}
-
 	Safe_Delete_Array(m_ppPipelineStates);
+
+	Safe_Delete_Array(m_ppCbvSrvDescriptorHeaps);
+	Safe_Delete_Array(m_pcbvCPUDescriptorStartHandle);
+	Safe_Delete_Array(m_pcbvGPUDescriptorStartHandle);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -57,6 +60,10 @@ void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
 {
 }
 
+void CShader::UpdateBoundingBoxShaderVariables()
+{
+}
+
 void CShader::AnimateObjects(float timeElapsed)
 {
 }
@@ -64,6 +71,11 @@ void CShader::AnimateObjects(float timeElapsed)
 void CShader::Render(CCamera *pCamera)
 {
 	OnPrepareRender();
+}
+
+void CShader::RenderBoundingBox(CCamera * pCamera)
+{
+	OnPrepareRender(BOUNDING_BOX);
 }
 
 CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float &nearHitDistance)
@@ -154,7 +166,67 @@ D3D12_DEPTH_STENCIL_DESC CShader::CreateDepthStencilState()
 	return(depthStencilDesc);
 }
 
-void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews)
+D3D12_INPUT_LAYOUT_DESC CShader::CreateBoundingBoxInputLayout()
+{
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	pInputElementDescs[0] = {
+		"POSITION",
+		0,
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
+		0,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
+		0 };
+	pInputElementDescs[1] = {
+		"COLOR",
+		0,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
+		0,
+		12,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
+		0 };
+
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
+	inputLayoutDesc.pInputElementDescs = pInputElementDescs;
+	inputLayoutDesc.NumElements = nInputElementDescs;
+	return(inputLayoutDesc);
+}
+
+D3D12_RASTERIZER_DESC CShader::CreateBoundingBoxRasterizerState()
+{
+	D3D12_RASTERIZER_DESC rasterizerDesc;
+	::ZeroMemory(&rasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
+
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc.FrontCounterClockwise = FALSE;
+	rasterizerDesc.DepthBias = 0;
+	rasterizerDesc.DepthBiasClamp = 0.0f;
+	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	rasterizerDesc.DepthClipEnable = TRUE;
+	rasterizerDesc.MultisampleEnable = FALSE;
+	rasterizerDesc.AntialiasedLineEnable = FALSE;
+	rasterizerDesc.ForcedSampleCount = 0;
+	rasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+
+	return(rasterizerDesc);
+}
+
+void CShader::CreateDescriptorHeaps()
+{
+	m_ppCbvSrvDescriptorHeaps = new ID3D12DescriptorHeap*[m_nPipelineStates];
+	m_pcbvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
+	m_pcbvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
+
+	for (int i = 0; i < m_nPipelineStates; ++i)
+	{
+		m_ppCbvSrvDescriptorHeaps[i] = NULL;
+	}
+}
+
+void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc;
@@ -162,16 +234,17 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConsta
 	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	descriptorHeapDesc.NodeMask = 0;
-	pCreateMgr->GetDevice()->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&m_pCbvSrvDescriptorHeap));
+	HRESULT hResult = pCreateMgr->GetDevice()->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&m_ppCbvSrvDescriptorHeaps[index]));
+	assert(hResult == S_OK && "pCreateMgr->GetDevice()->CreateDescriptorHeap Failed");
 
-	m_cbvCPUDescriptorStartHandle = m_pCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	m_cbvGPUDescriptorStartHandle = m_pCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	m_srvCPUDescriptorStartHandle.ptr = m_cbvCPUDescriptorStartHandle.ptr + (incrementSize * nConstantBufferViews);
-	m_srvGPUDescriptorStartHandle.ptr = m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * nConstantBufferViews);
+	m_pcbvCPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetCPUDescriptorHandleForHeapStart();
+	m_pcbvGPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetGPUDescriptorHandleForHeapStart();
+	m_srvCPUDescriptorStartHandle.ptr = m_pcbvCPUDescriptorStartHandle[index].ptr + (incrementSize * nConstantBufferViews);
+	m_srvGPUDescriptorStartHandle.ptr = m_pcbvGPUDescriptorStartHandle[index].ptr + (incrementSize * nConstantBufferViews);
 }
 
 void CShader::CreateConstantBufferViews(
-	CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride)
+	CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pConstantBuffers->GetGPUVirtualAddress();
@@ -181,7 +254,7 @@ void CShader::CreateConstantBufferViews(
 	{
 		CBVDesc.BufferLocation = gpuVirtualAddress + (nStride * j);
 		D3D12_CPU_DESCRIPTOR_HANDLE cbvCPUDescriptorHandle;
-		cbvCPUDescriptorHandle.ptr = m_cbvCPUDescriptorStartHandle.ptr + (incrementSize * j);
+		cbvCPUDescriptorHandle.ptr = m_pcbvCPUDescriptorStartHandle[index].ptr + (incrementSize * j);
 		pCreateMgr->GetDevice()->CreateConstantBufferView(&CBVDesc, cbvCPUDescriptorHandle);
 	}
 }
@@ -273,6 +346,24 @@ D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 	return(d3dShaderByteCode);
 }
 
+D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxVertexShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"VSDiffused",
+		"vs_5_1",
+		ppShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxPixelShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"PSDiffused",
+		"ps_5_1",
+		ppShaderBlob));
+}
+
 void CShader::CreateShader(CCreateMgr *pCreateMgr)
 {
 	ComPtr<ID3DBlob> pVertexShaderBlob{ NULL }, pPixelShaderBlob{ NULL };
@@ -303,6 +394,36 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr)
 	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
 }
 
+void CShader::CreateBoundingBoxShader(CCreateMgr * pCreateMgr)
+{
+	ComPtr<ID3DBlob> pVertexShaderBlob{ NULL }, pPixelShaderBlob{ NULL };
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
+	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+
+	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature();
+	pipelineStateDesc.VS = CreateBoundingBoxVertexShader(&pVertexShaderBlob);
+	pipelineStateDesc.PS = CreateBoundingBoxPixelShader(&pPixelShaderBlob);
+	pipelineStateDesc.RasterizerState = CreateBoundingBoxRasterizerState();
+	pipelineStateDesc.BlendState = CreateBlendState();
+	pipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	pipelineStateDesc.InputLayout = CreateBoundingBoxInputLayout();
+	pipelineStateDesc.SampleMask = UINT_MAX;
+	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	pipelineStateDesc.NumRenderTargets = 1;
+	pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	pipelineStateDesc.SampleDesc.Count = 1;
+	pipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+
+	HRESULT hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&pipelineStateDesc,
+		IID_PPV_ARGS(&m_ppPipelineStates[1]));
+	assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
+
+	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
+}
+
 void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
 }
@@ -313,9 +434,14 @@ void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CShader::ReleaseShaderVariables()
 {
-	if (m_pCbvSrvDescriptorHeap)
+	if (m_ppCbvSrvDescriptorHeaps)
 	{
-		Safe_Release(m_pCbvSrvDescriptorHeap);
+		for (int i = 0; i < m_nPipelineStates; ++i)
+		{
+			if(m_ppCbvSrvDescriptorHeaps[i]) 
+				Safe_Release(m_ppCbvSrvDescriptorHeaps[i]);
+		}
+		Safe_Delete_Array(m_ppCbvSrvDescriptorHeaps);
 	}
 
 	if (m_pInstanceBuffer)
@@ -329,19 +455,26 @@ void CShader::ReleaseShaderVariables()
 		m_pConstBuffer->Unmap(0, NULL);
 		Safe_Release(m_pConstBuffer);
 	}
+
+	if (m_pBoundingBoxBuffer)
+	{
+		m_pBoundingBoxBuffer->Unmap(0, NULL);
+		Safe_Release(m_pBoundingBoxBuffer);
+	}
 }
 
 void CShader::ReleaseObjects()
 {
 }
 
-void CShader::OnPrepareRender()
+void CShader::OnPrepareRender(int opt)
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
-	m_pCommandList->SetPipelineState(m_ppPipelineStates[0]);
-	if(m_pCbvSrvDescriptorHeap) m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeap);
+	m_pCommandList->SetPipelineState(m_ppPipelineStates[opt]);
+	if(m_ppCbvSrvDescriptorHeaps) m_pCommandList->SetDescriptorHeaps(1, &m_ppCbvSrvDescriptorHeaps[opt]);
 
-	UpdateShaderVariables();
+	if(opt != BOUNDING_BOX) UpdateShaderVariables();
+	else UpdateBoundingBoxShaderVariables();
 }
 
 D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
