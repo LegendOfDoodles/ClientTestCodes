@@ -1,6 +1,6 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
-#include "05.Objects/100.Arrow/Arrow.h"
+#include "05.Objects/96.Arrow/Arrow.h"
 
 class CArrowShader : public CShader
 {
