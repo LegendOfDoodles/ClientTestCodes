@@ -13,6 +13,10 @@
 CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr)
 	: CBaseObject(pCreateMgr)
 {
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 20.f, 20.f, 0.f, 0.0f, 0.0f, 1.f);
+	SetMesh(0, pRectMesh);
+
+	CreateShaderVariables(pCreateMgr);
 }
 
 CBillboardObject::~CBillboardObject()
@@ -29,17 +33,12 @@ void CBillboardObject::Animate(float fTimeElapsed)
 	}
 }
 
-void CBillboardObject::Render(CCamera *pCamera, UINT instanceCnt)
-{
-	CBaseObject::Render(pCamera, instanceCnt);
-}
-
 void CBillboardObject::SetLookAt(XMFLOAT3 & xmf3Target)
 {
 	// Up Vector를 1로 가정하고 계산
 	XMFLOAT3 xmf3Up(0.0f, 1.0f, 0.0f);
 	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-	XMFLOAT3 xmf3Look = Vector3::Subtract(xmf3Target, xmf3Position);
+	XMFLOAT3 xmf3Look = Vector3::Normalize(Vector3::Subtract(xmf3Target, xmf3Position));
 	XMFLOAT3 xmf3Right = Vector3::CrossProduct(xmf3Up, xmf3Look, true);
 
 	// 이후 Up 벡터를 카메라의 방향으로 갱신한다.
@@ -56,6 +55,8 @@ CMinimap::CMinimap(CCreateMgr * pCreateMgr)
 	:CBillboardObject(pCreateMgr)
 {
 	m_xmf3Position = XMFLOAT3(0,0,0);
+
+	CreateShaderVariables(pCreateMgr);
 }
 
 CMinimap::~CMinimap()
@@ -84,9 +85,11 @@ void CMinimap::Animate(float fTimeElapsed)
 	m_xmf4x4World._43 = m_pCamera->GetPosition().z + (m_fDistance * m_pCamera->GetLookVector().z) + (6 * m_pCamera->GetRightVector().z) - (4 * m_pCamera->GetUpVector().z);
 
 	// 맵위 UI
+	/*
 	m_xmf4x4World._41 += (m_xmf3Position.x * m_pCamera->GetRightVector().x) + (m_xmf3Position.y * m_pCamera->GetUpVector().x);
 	m_xmf4x4World._42 += (m_xmf3Position.x * m_pCamera->GetRightVector().y) + (m_xmf3Position.y * m_pCamera->GetUpVector().y);
 	m_xmf4x4World._43 += (m_xmf3Position.x * m_pCamera->GetRightVector().z) + (m_xmf3Position.y * m_pCamera->GetUpVector().z);
+	*/
 
 	// 이후 빌보드 업데이트
 	CBillboardObject::Animate(fTimeElapsed);

@@ -5,6 +5,7 @@
 #include "04.Shaders/01.ObjectShader/ObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
+#include "04.Shaders/04.BillboardShader/00.MiniMap/MiniMapShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 
 /// <summary>
@@ -168,24 +169,26 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	m_nShaders = 3;
-	m_ppShaders = new CShader*[m_nShaders];
-	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
-	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
-	m_ppShaders[2] = new CObjectShader(pCreateMgr);
-	
-
-	for (int i = 0; i < m_nShaders; ++i)
-	{
-		m_ppShaders[i]->Initialize(pCreateMgr);
-	}
-
-	m_pCamera = new  CAOSCamera();
+	m_pCamera = new  CCamera();
 
 	m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 	m_pCamera->RegenerateViewMatrix();
 
 	m_pCamera->Initialize(pCreateMgr);
+
+	m_nShaders = 3;
+	m_ppShaders = new CShader*[m_nShaders];
+	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
+	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
+
+	m_ppShaders[2] = new CMiniMapShader(pCreateMgr);
+	//m_ppShaders[3] = new CMiniMapShader(pCreateMgr);
+
+
+	for (int i = 0; i < m_nShaders; ++i)
+	{
+		m_ppShaders[i]->Initialize(pCreateMgr, m_pCamera);
+	}
 
 	BuildLights();
 }

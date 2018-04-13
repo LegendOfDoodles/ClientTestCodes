@@ -20,7 +20,6 @@ public:	// 생성자, 소멸자
 
 public: // 공개함수
 	virtual void Animate(float fTimeElapsed);
-	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 
 	void SetLookAt(XMFLOAT3& xmf3Target);
 	void SetCamera(CCamera *pCamera) { m_pCamera = pCamera; };
@@ -30,7 +29,7 @@ protected: // 내부 함수
 private: // 변수
 
 protected:
-	CCamera * m_pCamera = NULL;
+	CCamera *m_pCamera = NULL;
 };
 
 class CMinimap : public CBillboardObject
@@ -40,7 +39,7 @@ public:
 	virtual ~CMinimap();
 
 	virtual void SetPos(XMFLOAT3 xmf3Position);
-	virtual void SetPos(float x) {
+	virtual void SetDistance(float x) {
 		m_xmf4x4World = Matrix4x4::Identity();
 
 		m_fDistance = x;

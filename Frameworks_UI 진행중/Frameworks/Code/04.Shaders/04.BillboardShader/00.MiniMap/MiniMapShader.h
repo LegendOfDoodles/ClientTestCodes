@@ -1,12 +1,15 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
 
+class CBillboardObject;
+class CMinimap;
 class CMaterial;
 
 class CMiniMapShader : public CShader
 {
 public: // 생성자, 소멸자
 	CMiniMapShader(CCreateMgr *pCreateMgr);
+	CMiniMapShader(CCreateMgr *pCreateMgr, CCamera *pCamera);
 	~CMiniMapShader();
 
 public: // 공개 함수
@@ -36,14 +39,13 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
-	int m_nObjects = 0;
+	CBillboardObject *m_pMiniMap{ NULL };
 
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial						*m_pMaterial{ NULL };
 #else
-	UINT8 *m_pMappedObjects{ NULL };
+	CB_GAMEOBJECT_INFO m_pMappedMiniMap;
 #endif
 };
 
