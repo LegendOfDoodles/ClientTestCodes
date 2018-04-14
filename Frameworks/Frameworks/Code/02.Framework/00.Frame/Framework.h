@@ -18,14 +18,11 @@ public: // 공개 함수
 
 	// Message Process
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
-		WPARAM wParam, LPARAM lParam, float timeElapsed);
+		WPARAM wParam, LPARAM lParam);
 
 private: // 내부 함수
 	void BuildObjects();
 	void ReleaseObjects();
-
-	void AnimateObjects(float timeElapsed);
-	void RenderObjects();
 
 private: // 변수
 	HWND m_hWnd{ NULL };

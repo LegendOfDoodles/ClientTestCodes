@@ -37,6 +37,7 @@ public: // 공개 함수
 
 	void ReleaseUploadBuffers();
 
+	void ProcessInput();
 	void AnimateObjects(float timeElapsed);
 	void Render();
 
@@ -45,7 +46,7 @@ public: // 공개 함수
 
 	// Message Process
 	void OnProcessingMouseMessage(HWND hWnd, UINT messageID,
-		WPARAM wParam, LPARAM lParam, float timeElapsed);
+		WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT messageID,
 		WPARAM wParam, LPARAM lParam);
 
@@ -63,12 +64,7 @@ protected: // 내부 함수
 
 	void PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam);
 
-	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
-
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
 
 protected: // 변수
 	HWND m_hWnd{ NULL };

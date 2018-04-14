@@ -7,7 +7,7 @@ using namespace std::chrono;
 /// 목적: 타이머, 프레임 고정, 프레임 워크에 표시 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-01-24
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -75,25 +75,6 @@ bool CTimer::Update()
 
 	if (m_hWnd) UpdateCaption();
 #endif
-	return true;
-}
-
-bool CTimer::ReadyToUpdate()
-{
-	static bool OnCreateUpdate{ false };
-
-	if (!OnCreateUpdate)
-	{
-		OnCreateUpdate = true;
-		return true;
-	}
-
-	if (m_timeElapsed <= MAX_FPS)	 return false;
-
-#if defined(SHOW_CAPTIONFPS)
-	if (m_updateElapsed.count() <= MAX_UPDATE_FPS)				return true;
-#endif
-
 	return true;
 }
 

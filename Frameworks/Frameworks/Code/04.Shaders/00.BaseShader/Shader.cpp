@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-11
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -83,12 +83,9 @@ CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFL
 	return nullptr;
 }
 
-void CShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
+bool CShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
-}
-
-void CShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
-{
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////

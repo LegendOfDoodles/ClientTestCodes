@@ -23,8 +23,7 @@ public: // 공개 함수
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
+	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -74,8 +73,7 @@ public: // 공개 함수
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
+	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

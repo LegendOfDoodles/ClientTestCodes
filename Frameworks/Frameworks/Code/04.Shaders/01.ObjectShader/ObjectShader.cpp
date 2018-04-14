@@ -8,7 +8,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-11
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -130,44 +130,41 @@ CBaseObject *CObjectShader::PickObjectByRayIntersection(
 	return(pSelectedObject);
 }
 
-void CObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
+bool CObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
 	static float R = 0.0f;
 	static float M = 0.0f;
-	switch (wParam)
+
+	if (pKeyBuffer['U'] & 0xF0)
 	{
-	case 'U':
 		R -= 0.1f;
 		if (R < 0.0f) R = 0.0f;
 		m_pMaterial->SetRoughness(R);
-		break;
-	case 'I':
+		return true;
+	}
+	if (pKeyBuffer['I'] & 0xF0)
+	{
 		R += 0.1f;
 		if (R > 1.0f) R = 1.0f;
 		m_pMaterial->SetRoughness(R);
-		break;
-	case 'O':
+		return true;
+	}
+	if (pKeyBuffer['O'] & 0xF0)
+	{
 		M -= 0.1f;
 		if (M < 0.0f) M = 0.0f;
 		m_pMaterial->SetMetalic(M);
-		break;
-	case 'P':
+		return true;
+	}
+	if (pKeyBuffer['P'] & 0xF0)
+	{
 		M += 0.1f;
 		if (M > 1.0f) M = 1.0f;
 		m_pMaterial->SetMetalic(M);
-		break;
-	default:
-		break;
+		return true;
 	}
-}
 
-void CObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
-{
-	switch (wParam)
-	{
-	default:
-		break;
-	}
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -499,51 +496,49 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 	return(pSelectedObject);
 }
 
-void CAniShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
+bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	switch (wParam)
+	if (pKeyBuffer['U'] & 0xF0)
 	{
-	case 'U':
 		R -= 0.1f;
 		if (R < 0.0f) R = 0.0f;
 		m_pMaterial->SetRoughness(R);
-		break;
-	case 'I':
+		return true;
+	}
+	if (pKeyBuffer['I'] & 0xF0)
+	{
 		R += 0.1f;
 		if (R > 1.0f) R = 1.0f;
 		m_pMaterial->SetRoughness(R);
-		break;
-	case 'O':
+		return true;
+	}
+	if (pKeyBuffer['O'] & 0xF0)
+	{
 		M -= 0.1f;
 		if (M < 0.0f) M = 0.0f;
 		m_pMaterial->SetMetalic(M);
-		break;
-	case 'P':
+		return true;
+	}
+	if (pKeyBuffer['P'] & 0xF0)
+	{
 		M += 0.1f;
 		if (M > 1.0f) M = 1.0f;
 		m_pMaterial->SetMetalic(M);
-		break;
-	default:
-		break;
+		return true;
 	}
-}
-
-void CAniShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
-{
-	switch (wParam)
+	if (pKeyBuffer['M'] & 0xF0)
 	{
-	case 'M':
 		for (int i = 0; i < m_nObjects; ++i) {
 			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
 			obj->AniStateSet();
 		}
-		break;
-	default:
-		break;
+		return true;
 	}
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////

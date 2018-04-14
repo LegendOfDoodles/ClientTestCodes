@@ -8,11 +8,9 @@ d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\framewor
   Scene.cpp
 d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(139): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(270): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(283): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-  ArrowShader.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.arrowshader\arrowshader.cpp(119): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
-  Arrow.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(156): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(278): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(291): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(309): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
   코드를 생성하고 있습니다...
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

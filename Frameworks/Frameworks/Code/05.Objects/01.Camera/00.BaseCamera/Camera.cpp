@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 
@@ -168,87 +168,72 @@ void CCamera::GenerateProjectionMatrix(
 		fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
-void CCamera::OnProcessMouseDown(WPARAM wParam, LPARAM lParam)
+void CCamera::SavePickedPos()
 {
-	::GetCursorPos(&m_oldCursorPos);
+	::GetCursorPos(&m_pickCursorPos);
 }
 
-void CCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
-	float cxDelta = 0.0f, cyDelta = 0.0f;
+	return true;
+}
+
+bool CCamera::OnProcessMouseInput(UCHAR * pKeyBuffer)
+{
 	POINT cursorPos;
+	float cxDelta{ 0.0f }, cyDelta{ 0.0f };
+
 	if (::GetCapture() == m_hWnd)
 	{
 		::GetCursorPos(&cursorPos);
-		cxDelta = (float)(cursorPos.x - m_oldCursorPos.x) / 3.0f;
-		cyDelta = (float)(cursorPos.y - m_oldCursorPos.y) / 3.0f;
-		::SetCursorPos(m_oldCursorPos.x, m_oldCursorPos.y);
+		cxDelta = (float)(cursorPos.x - m_pickCursorPos.x) / 3.0f;
+		cyDelta = (float)(cursorPos.y - m_pickCursorPos.y) / 3.0f;
+		::SetCursorPos(m_pickCursorPos.x, m_pickCursorPos.y);
 	}
 	if ((cxDelta != 0.0f) || (cyDelta != 0.0f))
 	{
 		if (cxDelta || cyDelta)
 		{
-			if (wParam == VK_RBUTTON)
+			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
 				SetRotation(cyDelta, 0.0f, -cxDelta);
 			else
 				SetRotation(cyDelta, cxDelta, 0.0f);
 		}
 	}
-	Update(timeElapsed, false);
+	return true;
 }
 
-void CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
+bool CCamera::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-}
+	DWORD direction{ NULL };
 
-void CCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
-{
-	switch (wParam)
+	if (pKeyBuffer['W'] & 0xF0)
 	{
-	case 'W':
-		m_direction &= ~DIR_FORWARD;
-		break;
-	case 'S':
-		m_direction &= ~DIR_BACKWARD;
-		break;
-	case 'A':
-		m_direction &= ~DIR_LEFT;
-		break;
-	case 'D':
-		m_direction &= ~DIR_RIGHT;
-		break;
-	case 'Q':
-		m_direction &= ~DIR_UP;
-		break;
-	case 'E':
-		m_direction &= ~DIR_DOWN;
-		break;
+		direction |= DIR_FORWARD;
 	}
-}
-
-void CCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
-{
-	switch (wParam)
+	if (pKeyBuffer['S'] & 0xF0)
 	{
-	case 'W':
-		m_direction |= DIR_FORWARD;
-		break;
-	case 'S':
-		m_direction |= DIR_BACKWARD;
-		break;
-	case 'A':
-		m_direction |= DIR_LEFT;
-		break;
-	case 'D':
-		m_direction |= DIR_RIGHT;
-		break;
-	case 'Q':
-		m_direction |= DIR_UP;
-		break;
-	case 'E':
-		m_direction |= DIR_DOWN;
-		break;
+		direction |= DIR_BACKWARD;
 	}
+	if (pKeyBuffer['A'] & 0xF0)
+	{
+		direction |= DIR_LEFT;
+	}
+	if (pKeyBuffer['D'] & 0xF0)
+	{
+		direction |= DIR_RIGHT;
+	}
+	if (pKeyBuffer['Q'] & 0xF0)
+	{
+		direction |= DIR_UP;
+	}
+	if (pKeyBuffer['E'] & 0xF0)
+	{
+		direction |= DIR_DOWN;
+	}
+	m_direction = direction;
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////

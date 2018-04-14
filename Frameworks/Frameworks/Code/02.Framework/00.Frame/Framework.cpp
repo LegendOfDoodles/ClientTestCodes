@@ -5,7 +5,7 @@
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -40,12 +40,13 @@ void CFramework::Finalize()
 
 void CFramework::FrameAdvance(float timeElapsed)
 {
-	AnimateObjects(timeElapsed);
-	RenderObjects();
+	m_pScene->ProcessInput();
+	m_pScene->AnimateObjects(timeElapsed);
+	m_pRenderMgr->Render(m_pScene);
 }
 
 LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam, float timeElapsed)
+	WPARAM wParam, LPARAM lParam)
 {
 	switch (nMessageID)
 	{
@@ -61,7 +62,7 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	case WM_RBUTTONUP:
 	case WM_MOUSEMOVE:
 	case WM_MOUSEWHEEL:
-		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam, timeElapsed);
+		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 		break;
 	case WM_KEYDOWN:
 	case WM_KEYUP:
@@ -91,14 +92,4 @@ void CFramework::ReleaseObjects()
 
 	m_pScene->Finalize();
 	Safe_Delete(m_pScene);
-}
-
-void CFramework::AnimateObjects(float timeElapsed)
-{
-	m_pScene->AnimateObjects(timeElapsed);
-}
-
-void CFramework::RenderObjects()
-{
-	m_pRenderMgr->Render(m_pScene);
 }

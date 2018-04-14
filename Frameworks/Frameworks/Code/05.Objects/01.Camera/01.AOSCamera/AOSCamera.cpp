@@ -6,7 +6,7 @@
 /// 목적: In Game 에서 사용할 카메라
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -63,49 +63,7 @@ void CAOSCamera::Move(DWORD direction, float distance, bool bVelocity)
 	}
 }
 
-void CAOSCamera::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed)
-{
-	int mx = LOWORD(lParam);
-	int my = HIWORD(lParam);
-
-	if (mx < m_edgeSize.left)
-	{
-		m_direction |= DIR_LEFT;
-	}
-	else
-	{
-		m_direction &= ~DIR_LEFT;
-	}
-
-	if (mx > m_edgeSize.right)
-	{
-		m_direction |= DIR_RIGHT;
-	}
-	else
-	{
-		m_direction &= ~DIR_RIGHT;
-	}
-
-	if (my < m_edgeSize.top)
-	{
-		m_direction |= DIR_FORWARD;
-	}
-	else
-	{
-		m_direction &= ~DIR_FORWARD;
-	}
-
-	if(my > m_edgeSize.bottom)
-	{
-		m_direction |= DIR_BACKWARD;
-	}
-	else
-	{
-		m_direction &= ~DIR_BACKWARD;
-	}
-}
-
-void CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
+bool CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 
@@ -121,14 +79,41 @@ void CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 	}
 
 	GenerateProjectionMatrix(1.0f, 50000.0f, float(m_scissorRect.right) / float(m_scissorRect.bottom), m_angleDegree);
+	return true;
 }
 
-void CAOSCamera::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
+bool CAOSCamera::OnProcessMouseInput(UCHAR * pKeyBuffer)
 {
+	POINT cursorPos;
+	DWORD direction{ NULL };
+
+	GetCursorPos(&cursorPos);
+	ScreenToClient(m_hWnd, &cursorPos);
+
+	if (cursorPos.x < m_edgeSize.left)
+	{
+		direction |= DIR_LEFT;
+	}
+	if (cursorPos.x > m_edgeSize.right)
+	{
+		direction |= DIR_RIGHT;
+	}
+	if (cursorPos.y < m_edgeSize.top)
+	{
+		direction |= DIR_FORWARD;
+	}
+	if (cursorPos.y > m_edgeSize.bottom)
+	{
+		direction |= DIR_BACKWARD;
+	}
+	m_direction = direction;
+
+	return true;
 }
 
-void CAOSCamera::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
+bool CAOSCamera::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////

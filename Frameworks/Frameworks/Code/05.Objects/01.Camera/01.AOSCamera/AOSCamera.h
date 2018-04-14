@@ -18,11 +18,10 @@ public:	// 공개 함수
 
 	virtual void Move(DWORD direction, float distance, bool bVelocity) override;
 
-	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
+	virtual bool OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
+	virtual bool OnProcessMouseInput(UCHAR* pKeyBuffer);
+	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 protected: // 내부 함수
 

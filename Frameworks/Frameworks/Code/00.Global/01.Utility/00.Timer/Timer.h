@@ -14,8 +14,6 @@ public:	// 공개 함수
 
 	bool Update();
 
-	bool ReadyToUpdate();
-
 	float GetTimeElapsed() const { return m_timeElapsed; }
 
 private:	// 내부 함수

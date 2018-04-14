@@ -12,7 +12,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-14
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -52,15 +52,34 @@ void CScene::ReleaseUploadBuffers()
 	}
 }
 
+void CScene::ProcessInput()
+{
+	static UCHAR pKeyBuffer[256];
+
+	GetKeyboardState(pKeyBuffer);
+
+	for (int i = 0; i < m_nShaders; ++i)
+		m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
+
+	m_pCamera->OnProcessMouseInput(pKeyBuffer);
+	m_pCamera->OnProcessKeyInput(pKeyBuffer);
+
+	if (m_pSelectedObject && pKeyBuffer['P'] & 0xF0)
+	{
+		m_pSelectedObject->Rotate(10, 0, 0);
+	}
+}
+
 void CScene::AnimateObjects(float timeElapsed)
 {
+	m_pCamera->Update(timeElapsed);
+
 	UpdateShaderVariables();
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
 		m_ppShaders[i]->AnimateObjects(timeElapsed);
 	}
-	m_pCamera->Update(timeElapsed);
 }
 
 void CScene::Render()
@@ -112,24 +131,22 @@ void CScene::UpdateCamera()
 }
 
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
-	WPARAM wParam, LPARAM lParam, float timeElapsed)
+	WPARAM wParam, LPARAM lParam)
 {
 	switch (nMessageID)
 	{
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 		::SetCapture(hWnd);
-		OnProcessMouseDown(wParam, lParam);
+		m_pCamera->SavePickedPos();
+		PickObjectPointedByCursor(wParam, lParam);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 		::ReleaseCapture();
 		break;
-	case WM_MOUSEMOVE:
-		OnProcessMouseMove(wParam, lParam, timeElapsed);
-		break;
 	case WM_MOUSEWHEEL:
-		OnProcessMouseWheel(wParam, lParam);
+		m_pCamera->OnProcessMouseWheel(wParam, lParam);
 		break;
 	default:
 		break;
@@ -142,15 +159,6 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	if (nMessageID == WM_KEYUP)
 	{
 		OnProcessKeyUp(wParam, lParam);
-		for (int i = 0; i < m_nObjects; ++i)
-			m_ppShaders[i]->OnProcessKeyUp(wParam, lParam);
-	}
-	else if (nMessageID == WM_KEYDOWN)
-	{
-		OnProcessKeyDown(wParam, lParam);
-
-		for (int i = 0; i < m_nObjects; ++i)
-			m_ppShaders[i]->OnProcessKeyDown(wParam, lParam);
 	}
 }
 
@@ -297,37 +305,12 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-void CScene::OnProcessMouseDown(WPARAM wParam, LPARAM lParam)
-{
-	PickObjectPointedByCursor(wParam, lParam);
-	m_pCamera->OnProcessMouseDown(wParam, lParam);
-}
-
-void CScene::OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed)
-{
-	m_pCamera->OnProcessMouseMove(wParam, lParam, timeElapsed);
-}
-
-void CScene::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
-{
-	m_pCamera->OnProcessMouseWheel(wParam, lParam);
-}
-
 // Process Keyboard Input
 void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 	if(wParam == VK_ESCAPE)
 		::PostQuitMessage(0);
-
-	m_pCamera->OnProcessKeyUp(wParam, lParam);
-
-	for (int i = 0; i < m_nShaders; ++i)
-		m_ppShaders[i]->OnProcessKeyUp(wParam, lParam);
-}
-
-void CScene::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
-{
-	if (wParam == VK_F1)
+	else if (wParam == VK_F1)
 	{
 		if (!m_bCurCamIsAOS)
 		{
@@ -347,12 +330,4 @@ void CScene::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 	{
 		m_bRenderBoundingBox = !m_bRenderBoundingBox;
 	}
-	else if (m_pSelectedObject && wParam == 'P')
-	{
-		m_pSelectedObject->Rotate(10, 0, 0);
-	}
-	m_pCamera->OnProcessKeyDown(wParam, lParam);
-
-	for (int i = 0; i < m_nShaders; ++i)
-		m_ppShaders[i]->OnProcessKeyDown(wParam, lParam);
 }

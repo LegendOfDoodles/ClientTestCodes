@@ -49,12 +49,12 @@ public:	// 공개 함수
 		float fNearPlaneDistance, float fFarPlaneDistance,
 		float fAspectRatio, float fFOVAngle);
 
-	virtual void OnProcessMouseDown(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessMouseMove(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
+	void SavePickedPos();
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam);
+	virtual bool OnProcessMouseWheel(WPARAM wParam, LPARAM lParam);
+
+	virtual bool OnProcessMouseInput(UCHAR* pKeyBuffer);
+	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void SetMode(DWORD nMode) { m_nMode = nMode; }
 	DWORD GetMode() { return(m_nMode); }
@@ -117,7 +117,7 @@ protected: // 변수
 	DWORD m_direction{ NULL };
 	XMFLOAT3 m_rotation{ 0.0f, 0.0f, 0.0f };
 
-	POINT m_oldCursorPos{ 0, 0 };
+	POINT m_pickCursorPos{ 0, 0 };
 
 	ID3D12Resource *m_pConstBuffer{ NULL };
 	VS_CB_CAMERA_INFO	 *m_pMappedCamera{ NULL };
