@@ -91,6 +91,8 @@ protected: // º¯¼ö
 
 	bool m_bCurCamIsAOS{ true };
 	bool m_bCamChanged{ false };
+	bool m_bRenderBoundingBox{ false };
+
 	CCreateMgr* m_pCreateMgr{ NULL };
 };
 

@@ -73,10 +73,13 @@ void CScene::Render()
 		m_ppShaders[i]->Render(m_pCamera);
 	}
 
-	for (int i = 0; i < m_nShaders; i++)
+	if (m_bRenderBoundingBox)
 	{
-		if(m_ppShaders[i]->HasBoundingBox())
-			m_ppShaders[i]->RenderBoundingBox(m_pCamera);
+		for (int i = 0; i < m_nShaders; i++)
+		{
+			if (m_ppShaders[i]->HasBoundingBox())
+				m_ppShaders[i]->RenderBoundingBox(m_pCamera);
+		}
 	}
 }
 
@@ -339,6 +342,10 @@ void CScene::OnProcessKeyDown(WPARAM wParam, LPARAM lParam)
 			m_bCurCamIsAOS = false;
 			m_bCamChanged = true;
 		}
+	}
+	else if (wParam == VK_F3)
+	{
+		m_bRenderBoundingBox = !m_bRenderBoundingBox;
 	}
 	else if (m_pSelectedObject && wParam == 'P')
 	{
