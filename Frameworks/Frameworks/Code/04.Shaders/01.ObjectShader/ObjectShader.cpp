@@ -506,38 +506,32 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		R -= 0.1f;
 		if (R < 0.0f) R = 0.0f;
 		m_pMaterial->SetRoughness(R);
-		return true;
 	}
 	if (pKeyBuffer['I'] & 0xF0)
 	{
 		R += 0.1f;
 		if (R > 1.0f) R = 1.0f;
 		m_pMaterial->SetRoughness(R);
-		return true;
 	}
 	if (pKeyBuffer['O'] & 0xF0)
 	{
 		M -= 0.1f;
 		if (M < 0.0f) M = 0.0f;
 		m_pMaterial->SetMetalic(M);
-		return true;
 	}
 	if (pKeyBuffer['P'] & 0xF0)
 	{
 		M += 0.1f;
 		if (M > 1.0f) M = 1.0f;
 		m_pMaterial->SetMetalic(M);
-		return true;
 	}
-	if (pKeyBuffer['M'] & 0xF0)
+	if (GetAsyncKeyState('M') & 0x0001)
 	{
 		for (int i = 0; i < m_nObjects; ++i) {
 			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
 			obj->AniStateSet();
 		}
-		return true;
 	}
-
 	return true;
 }
 
