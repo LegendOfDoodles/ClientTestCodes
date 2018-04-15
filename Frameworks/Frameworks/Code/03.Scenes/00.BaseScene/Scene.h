@@ -63,6 +63,7 @@ protected: // 내부 함수
 	virtual void UpdateShaderVariables();
 
 	void PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam);
+	void GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View);
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
 
@@ -88,6 +89,8 @@ protected: // 변수
 	bool m_bCurCamIsAOS{ true };
 	bool m_bCamChanged{ false };
 	bool m_bRenderBoundingBox{ false };
+
+	XMFLOAT3 m_pickWorldPosition{ 0.f, 0.f, 0.f };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
 };

@@ -12,7 +12,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-04-15
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -291,7 +291,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	int nIntersected{ 0 };
 	float hitDistance{ FLT_MAX }, nearestHitDistance{ FLT_MAX };
 	CBaseObject *pIntersectedObject{ NULL };
-	m_pSelectedObject = NULL;
+	//m_pSelectedObject = NULL;
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
@@ -302,6 +302,27 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			m_pSelectedObject = pIntersectedObject;
 			printf("selected!\n");
 		}
+	}
+
+	if (wParam == MK_RBUTTON)
+	{
+		GenerateLayEndWorldPosition(pickPosition, xmf4x4View);
+	}
+}
+
+void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View)
+{
+	XMFLOAT4X4  inverseArr = Matrix4x4::Inverse(xmf4x4View);
+	XMFLOAT3 camPosition = m_pCamera->GetPosition();
+	XMFLOAT3 layWorldPosition = Vector3::TransformCoord(pickPosition, inverseArr);
+	XMFLOAT3 layDirection = Vector3::Subtract(layWorldPosition, camPosition);
+	float yDiff = abs(camPosition.y / layDirection.y);
+
+	m_pickWorldPosition = Vector3::Add(camPosition, Vector3::ScalarProduct(layDirection, yDiff, false));
+
+	if (m_pSelectedObject)
+	{
+		m_pSelectedObject->LookAt(m_pickWorldPosition);
 	}
 }
 

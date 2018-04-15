@@ -40,7 +40,7 @@ public: // 공개 함수
 	virtual void RenderBoundingBox(CCamera *pCamera, UINT istanceCnt = 1);
 
 	void GenerateRayForPicking(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View,
-		XMFLOAT3 *pPickRayOrigin, XMFLOAT3 *pPickRayDirection);
+		XMFLOAT3 &pickRayOrigin, XMFLOAT3 &pickRayDirection);
 	bool PickObjectByRayIntersection(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &hitDistance);
 
 	void MoveStrafe(float fDistance = 1.0f);
@@ -49,6 +49,8 @@ public: // 공개 함수
 
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
+
+	void LookAt(XMFLOAT3 objPosition);
 
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetLook();

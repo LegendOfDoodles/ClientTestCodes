@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-11
+/// 최종 수정 날짜: 2018-04-15
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -147,19 +147,19 @@ void CBaseObject::RenderBoundingBox(CCamera * pCamera, UINT istanceCnt)
 }
 
 void CBaseObject::GenerateRayForPicking(
-	XMFLOAT3& xmf3PickPosition, XMFLOAT4X4&	 xmf4x4View, 
-	XMFLOAT3 *pxmf3PickRayOrigin, XMFLOAT3 *pxmf3PickRayDirection)
+	XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View, 
+	XMFLOAT3 &pickRayOrigin, XMFLOAT3 &pickRayDirection)
 {
 	XMFLOAT4X4 xmf4x4WorldView{ Matrix4x4::Multiply(m_xmf4x4World, xmf4x4View) };
 	XMFLOAT4X4 xmf4x4Inverse{ Matrix4x4::Inverse(xmf4x4WorldView) };
 	XMFLOAT3 xmf3CameraOrigin(0.0f, 0.0f, 0.0f);
 
 	//카메라 좌표계의 원점을 모델 좌표계로 변환한다.
-	*pxmf3PickRayOrigin = Vector3::TransformCoord(xmf3CameraOrigin, xmf4x4Inverse);
+	pickRayOrigin = Vector3::TransformCoord(xmf3CameraOrigin, xmf4x4Inverse);
 	//카메라 좌표계의 점(마우스 좌표를 역변환하여 구한 점)을 모델 좌표계로 변환한다.
-	*pxmf3PickRayDirection = Vector3::TransformCoord(xmf3PickPosition, xmf4x4Inverse);
+	pickRayDirection = Vector3::TransformCoord(pickPosition, xmf4x4Inverse);
 	//광선의 방향 벡터를 구한다.
-	*pxmf3PickRayDirection = Vector3::Normalize(Vector3::Subtract(*pxmf3PickRayDirection, *pxmf3PickRayOrigin));
+	pickRayDirection = Vector3::Normalize(Vector3::Subtract(pickRayDirection, pickRayOrigin));
 }
 
 bool CBaseObject::PickObjectByRayIntersection(
@@ -171,7 +171,7 @@ bool CBaseObject::PickObjectByRayIntersection(
 	bool intersected{ false };
 	XMFLOAT3 pickRayOrigin, pickRayDirection;
 
-	GenerateRayForPicking(xmf3PickPosition, xmf4x4View, &pickRayOrigin, &pickRayDirection);
+	GenerateRayForPicking(xmf3PickPosition, xmf4x4View, pickRayOrigin, pickRayDirection);
 
 	intersected = m_ppMeshes[0]->CheckRayIntersection(pickRayOrigin,	pickRayDirection, hitDistance);
 
@@ -219,6 +219,27 @@ void CBaseObject::Rotate(float fPitch, float fYaw, float fRoll)
 		XMConvertToRadians(fRoll));
 
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
+}
+
+void CBaseObject::LookAt(XMFLOAT3 objPosition)
+{
+	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
+	XMFLOAT3 playerLook = Vector3::ScalarProduct(GetUp(), -1);
+	XMFLOAT3 towardVector = Vector3::Normalize(Vector3::Subtract(objPosition, GetPosition()));
+
+	float angle{ Vector3::DotProduct(towardVector, playerLook) };
+	angle = XMConvertToDegrees(acos(angle));
+
+	if (isnan(angle))
+		return;
+
+	float check{ Vector3::DotProduct(Vector3::CrossProduct(towardVector, playerLook), upVector) };
+
+	// 캐릭터가 선택된 오브젝트 보다 오른쪽 보고 있는 경우
+	if (check < 0.0f)
+		Rotate(0.0f, 0.0f, -angle);
+	else
+		Rotate(0.0f, 0.0f, angle);
 }
 
 XMFLOAT3 CBaseObject::GetPosition()
