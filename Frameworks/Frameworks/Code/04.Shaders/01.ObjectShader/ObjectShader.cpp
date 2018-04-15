@@ -679,7 +679,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
+	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -704,18 +704,19 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
-	pCubeMesh->SetBoundingBox(XMFLOAT3(0.0f, 0.0f, -16.56), XMFLOAT3(12.42f, 12.42f, 28.98f));
+	CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion.meshinfo");
+	CSkinnedMesh *pSword = new CSkinnedMesh(pCreateMgr, "FBXBinary//Sword.meshinfo");
+	pMinionMesh->SetBoundingBox(XMFLOAT3(0.0f, 0.0f, -16.56), XMFLOAT3(12.42f, 12.42f, 28.98f));
 
-	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
-	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
-	CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//minion2.aniinfo");
+	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//MinionIdle.aniinfo");
+	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//MinionDie.aniinfo");
+	CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//MinionWalk.aniinfo");
 	float fxPitch = 12.0f * 5.f;
 	float fyPitch = 12.0f * 5.f;
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CAnimatedObject *pRotatingObject = NULL;
+	CAnimatedObject *pMinionObject = NULL;
 	for (int y = 0; y <= yObjects; y++)
 	{
 		for (int z =0; z <= zObjects; z++)
@@ -723,24 +724,27 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			for (int x = 0; x <= xObjects; x++)
 			{
 
-				pRotatingObject = new CAnimatedObject(pCreateMgr);
+				pMinionObject = new CAnimatedObject(pCreateMgr,2);
 #if !USE_INSTANCING
-				pRotatingObject->SetMesh(0, pCubeMesh);
+				pMinionObject->SetMesh(0, pSword);
+				pMinionObject->SetMesh(1, pMinionMesh);
 #endif
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pRotatingObject->SetBoundingMesh(pCreateMgr, 24.84f, 12.42f, 57.96f, 0, 0, -16.56);
-				pRotatingObject->SetPosition(x * 30 , y * 100, z * 100 );
-				pRotatingObject->SetSkeleton(pSkeleton);
-				pRotatingObject->SetSkeleton1(pSkeleton1);
-				pRotatingObject->SetSkeleton2(pSkeleton2);
-				pRotatingObject->Rotate(90, 0, 0);
+				pMinionObject->SetBoundingMesh(pCreateMgr, 24.84f, 12.42f, 57.96f, 0, 0, -16.56);
+				pMinionObject->SetPosition(x * 30, y * 100, z * 100);
+				pMinionObject->SetSkeleton(pSkeleton);
+				pMinionObject->SetSkeleton1(pSkeleton1);
+				pMinionObject->SetSkeleton2(pSkeleton2);
+				pMinionObject->Rotate(90, 0, 0);
+				
+
 #if !USE_INSTANCING
-				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-				pRotatingObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+				pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+				pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 #endif
-				m_ppObjects[i++] = pRotatingObject;
+				m_ppObjects[i++] = pMinionObject;
 			}
 		}
 	}

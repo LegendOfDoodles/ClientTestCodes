@@ -20,19 +20,26 @@ private:	 // º¯¼ö
 	float m_rotationSpeed;
 };
 
+
+
 class CAnimatedObject : public CBaseObject 
 {
 public:
 	CAnimatedObject(CCreateMgr *pCreateMgr);
+	CAnimatedObject(CCreateMgr *pCreateMgr, int nMeshes);
 	virtual ~CAnimatedObject();
 
 public:
 	virtual void Animate(float timeElapsed);
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 
-	void SetSkeleton(CSkeleton *skeleton) { m_pSkeleton = skeleton; }
+	void SetSkeleton(CSkeleton *skeleton) {
+		m_pSkeleton = skeleton;
+		//m_pSkeleton->GerAnimationLength;
+	}
 	void SetSkeleton1(CSkeleton *skeleton) { m_pSkeleton1 = skeleton; }
 	void SetSkeleton2(CSkeleton *skeleton) { m_pSkeleton2 = skeleton; }
+
 
 	void AniStateSet() { 
 		++aniState;
@@ -44,6 +51,8 @@ protected:
 	CSkeleton*	m_pSkeleton{ NULL };
 	CSkeleton*	m_pSkeleton1{ NULL };
 	CSkeleton*	m_pSkeleton2{ NULL };
+
 	int aniState{ 0 };
 	float m_fFrameTime{ 0 };
 };
+
