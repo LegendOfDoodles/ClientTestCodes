@@ -30,6 +30,6 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CHeightMapTerrain *m_pTerrain{ NULL };
+	CHeightMapTerrain * m_pTerrain{ NULL };
 	CB_GAMEOBJECT_INFO *m_pMappedTerrain{ NULL };
 };

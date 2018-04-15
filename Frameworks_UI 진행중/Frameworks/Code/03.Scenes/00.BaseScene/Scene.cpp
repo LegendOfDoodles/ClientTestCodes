@@ -6,6 +6,7 @@
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "04.Shaders/04.BillboardShader/00.MiniMap/MiniMapShader.h"
+#include "04.Shaders/04.BillboardShader/99.Billboard/BillboardShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 
 /// <summary>
@@ -181,8 +182,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
 
-	m_ppShaders[2] = new CMiniMapShader(pCreateMgr);
-	//m_ppShaders[3] = new CMiniMapShader(pCreateMgr);
+	m_ppShaders[2] = new CBillboardShader(pCreateMgr);
 
 
 	for (int i = 0; i < m_nShaders; ++i)

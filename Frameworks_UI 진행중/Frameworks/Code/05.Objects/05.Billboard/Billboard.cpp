@@ -5,7 +5,7 @@
 /// 목적: UI 이용을 위한 Bilboard 클래스 제작
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-04
+/// 최종 수정 날짜: 2018-04-15
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -13,8 +13,9 @@
 CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr)
 	: CBaseObject(pCreateMgr)
 {
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 20.f, 20.f, 0.f, 0.0f, 0.0f, 1.f);
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 50.f, 50.0f, 0.f);
 	SetMesh(0, pRectMesh);
+
 
 	CreateShaderVariables(pCreateMgr);
 }
@@ -93,9 +94,4 @@ void CMinimap::Animate(float fTimeElapsed)
 
 	// 이후 빌보드 업데이트
 	CBillboardObject::Animate(fTimeElapsed);
-}
-
-void CMinimap::SetCamera(CCamera * pCamera)
-{
-	CBillboardObject::SetCamera(pCamera);
 }

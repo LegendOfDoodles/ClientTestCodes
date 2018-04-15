@@ -249,3 +249,34 @@ float4 PSDiffuseTextured(VS_DIFFUSE_TEXTURED_OUTPUT input) : SV_TARGET
 {
     return lerp(input.color, gtxtTexture.Sample(wrapSampler, input.uv), 0.7f);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+struct VS_BILLBOARD_INPUT
+{
+    float3 position : POSITION;
+    float2 uv : TEXCOORD;
+};
+
+struct VS_BILLBOARD_OUTPUT
+{
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
+};
+
+VS_BILLBOARD_OUTPUT VSBillboard(VS_BILLBOARD_INPUT input)
+{
+    VS_BILLBOARD_OUTPUT output;
+
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
+    output.uv = input.uv;
+
+    return (output);
+}
+
+float4 PSBillboard(VS_BILLBOARD_OUTPUT input, uint nPrimitiveID : SV_PrimitiveID) : SV_TARGET
+{
+    float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
+
+    return (cColor);
+}

@@ -9,7 +9,6 @@ class CMiniMapShader : public CShader
 {
 public: // 생성자, 소멸자
 	CMiniMapShader(CCreateMgr *pCreateMgr);
-	CMiniMapShader(CCreateMgr *pCreateMgr, CCamera *pCamera);
 	~CMiniMapShader();
 
 public: // 공개 함수

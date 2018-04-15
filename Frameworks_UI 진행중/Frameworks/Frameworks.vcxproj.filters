@@ -123,6 +123,9 @@
     <Filter Include="소스 파일\04.Shaders\04.BillboardShader\00.MiniMap">
       <UniqueIdentifier>{e88afd5a-1b78-4334-b570-76ea5942f3ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\04.BillboardShader\99.Billboard">
+      <UniqueIdentifier>{0746bba3-1652-4bd9-9a7f-73b3d7661ab9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -224,6 +227,9 @@
     <ClInclude Include="Code\04.Shaders\04.BillboardShader\00.Minimap\MiniMapShader.h">
       <Filter>소스 파일\04.Shaders\04.BillboardShader\00.MiniMap</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\04.BillboardShader\99.BIllboard\BillboardShader.h">
+      <Filter>소스 파일\04.Shaders\04.BillboardShader\99.Billboard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -312,6 +318,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\04.BillboardShader\00.Minimap\MiniMapShader.cpp">
       <Filter>소스 파일\04.Shaders\04.BillboardShader\00.MiniMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\04.BillboardShader\99.BIllboard\BillboardShader.cpp">
+      <Filter>소스 파일\04.Shaders\04.BillboardShader\99.Billboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

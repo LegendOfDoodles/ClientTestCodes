@@ -8,7 +8,7 @@
 /// 목적: UI MiniMap 테스트 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-11
+/// 최종 수정 날짜: 2018-04-15
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -16,13 +16,6 @@
 CMiniMapShader::CMiniMapShader(CCreateMgr * pCreateMgr)
 	: CShader(pCreateMgr)
 {
-
-}
-
-CMiniMapShader::CMiniMapShader(CCreateMgr * pCreateMgr, CCamera * pCamera)
-	:CShader(pCreateMgr)
-{
-
 
 }
 

@@ -1,10 +1,8 @@
-﻿  MiniMapShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(22): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(75): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(69): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(69): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(84): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(78): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(78): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-  Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks_UI 진행중\x64\Debug\Framework01.exe
+﻿  Billboard.cpp
+d:\job\kpu\graduate project\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\job\kpu\graduate project\clienttestcodes\frameworks_ui 진행중\frameworks\code\05.objects\05.billboard\billboard.cpp(27): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  BillboardShader.cpp
+d:\job\kpu\graduate project\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\job\kpu\graduate project\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(43): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다...
+  Frameworks.vcxproj -> D:\Job\KPU\Graduate Project\ClientTestCodes\Frameworks_UI 진행중\x64\Debug\Framework01.exe
