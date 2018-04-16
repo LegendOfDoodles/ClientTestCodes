@@ -8,7 +8,7 @@
 /// 목적: UI MiniMap 테스트 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-15
+/// 최종 수정 날짜: 2018-04-16
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ void CMiniMapShader::Render(CCamera * pCamera)
 
 	if (m_pMaterial)
 	{
-		m_pMaterial->Render(pCamera);
+		//m_pMaterial->Render(pCamera);
 		m_pMaterial->UpdateShaderVariables();
 	}
 	if (m_pMiniMap) m_pMiniMap->Render(pCamera);

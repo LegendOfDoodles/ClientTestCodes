@@ -38,7 +38,7 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBillboardObject *m_pMiniMap{ NULL };
+	CMinimap *m_pMiniMap{ NULL };
 
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
