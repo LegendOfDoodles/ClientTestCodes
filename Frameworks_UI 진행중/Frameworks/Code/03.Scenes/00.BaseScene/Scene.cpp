@@ -181,9 +181,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
-
 	m_ppShaders[2] = new CBillboardShader(pCreateMgr);
-
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{

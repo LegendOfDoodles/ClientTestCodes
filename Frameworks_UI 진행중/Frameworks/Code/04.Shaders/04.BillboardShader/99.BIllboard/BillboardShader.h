@@ -2,15 +2,15 @@
 #include "04.Shaders/00.BaseShader/Shader.h"
 
 class CBillboardObject;
-class CHeightMapTerrain;
+class CMaterial;
 
 class CBillboardShader : public CShader
 {
-public:
+public: // 생성자, 소멸자
 	CBillboardShader(CCreateMgr *pCreateMgr);
-	virtual ~CBillboardShader();
+	~CBillboardShader();
 
-public:
+public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
 
 	virtual void UpdateShaderVariables();
@@ -19,7 +19,10 @@ public:
 
 	virtual void Render(CCamera *pCamera);
 
-protected:
+	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+
+protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
@@ -32,7 +35,16 @@ protected:
 
 	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
-private:
-	CBillboardObject * m_pBillboard{ NULL };
-	CB_GAMEOBJECT_INFO m_pMappedBillboard;
+
+protected: // 변수
+	CBaseObject * *m_ppObjects{ NULL };
+	int m_nObjects = 0;
+
+#if USE_INSTANCING
+	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
+	CMaterial						*m_pMaterial{ NULL };
+#else
+	UINT8 *m_pMappedObjects{ NULL };
+#endif
 };
+
