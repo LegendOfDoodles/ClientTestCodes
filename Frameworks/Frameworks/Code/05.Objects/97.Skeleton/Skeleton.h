@@ -33,7 +33,7 @@ public:
 	int GetBoneCount() {
 		return m_vBone.size();
 	}
-	int GerAnimationLength() { return m_iAnimationLegth; }
+	int GetAnimationLength() { return m_iAnimationLegth; }
 	Bone GetBone(float id) {
 		return m_vBone.at(id);
 	}

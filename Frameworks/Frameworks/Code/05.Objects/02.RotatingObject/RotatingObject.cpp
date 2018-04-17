@@ -38,51 +38,33 @@ void CRotatingObject::Animate(float timeElapsed)
 CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
 {
 	m_fFrameTime = 0;
-	aniState = 0;
+	m_nAniState = 0;
 }
 
 
 CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr,int nMeshes) : CBaseObject(pCreateMgr,nMeshes)
 {
 	m_fFrameTime = 0;
-	aniState = 0;
+	m_nAniState = 0;
 }
 CAnimatedObject::~CAnimatedObject()
 {
-	Safe_Delete(m_pSkeleton);
-	Safe_Delete(m_pSkeleton1);
-	Safe_Delete(m_pSkeleton2);
-
-
+	
 }
 
 void CAnimatedObject::Animate(float timeElapsed)
 {
 
 	m_fFrameTime += 30 * timeElapsed;
-	if (aniState == 0 && m_fFrameTime >= 33) {
-		while (m_fFrameTime > 33)
-			m_fFrameTime -= 33;
-	}
-	else if (aniState == 1 && m_fFrameTime > 30) {
-		while(m_fFrameTime > 30)
-			m_fFrameTime -= 30;
-	}
-	else if (aniState == 2 && m_fFrameTime > 33) {
-		while (m_fFrameTime > 33)
-			m_fFrameTime -= 33;
+	if (m_fFrameTime > m_nAniLength[m_nAniState]) {
+		while (m_fFrameTime > m_nAniLength[m_nAniState])
+			m_fFrameTime -= m_nAniLength[m_nAniState];
 	}
 
-
-	int Bcnt = m_pSkeleton->GetBoneCount(); // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
+	int Bcnt = m_pSkeleton[m_nAniState].GetBoneCount(); // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
 
 	for (int i = 0; i < Bcnt; ++i) {
-		if (aniState == 0)
-			m_xmf4x4Frame[i] = m_pSkeleton->GetBone(i).GetFrame((int)m_fFrameTime);
-		else if (aniState == 1)
-			m_xmf4x4Frame[i] = m_pSkeleton1->GetBone(i).GetFrame((int)m_fFrameTime);
-		else if (aniState == 2)
-			m_xmf4x4Frame[i] = m_pSkeleton2->GetBone(i).GetFrame((int)m_fFrameTime);
+		m_xmf4x4Frame[i] = m_pSkeleton[m_nAniState].GetBone(i).GetFrame((int)m_fFrameTime);
 	}
 
 }

@@ -133,6 +133,7 @@ public:
 class CSkinnedMesh : public CMeshIlluminatedTextured
 {
 public:
+	
 	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
 	virtual ~CSkinnedMesh();
 };

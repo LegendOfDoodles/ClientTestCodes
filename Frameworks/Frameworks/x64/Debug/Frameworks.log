@@ -1,10 +1,19 @@
-﻿  BaseObject.cpp
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(107): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(139): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(227): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(227): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(228): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(228): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(236): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(236): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+﻿  ObjectShader.cpp
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(342): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(289): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(323): warning C4189: 'fyPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(324): warning C4189: 'fzPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(322): warning C4189: 'fxPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(553): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(727): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(727): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(727): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(752): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(753): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(683): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(731): warning C4189: 'fyPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(732): warning C4189: 'fzPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\objectshader.cpp(730): warning C4189: 'fxPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe

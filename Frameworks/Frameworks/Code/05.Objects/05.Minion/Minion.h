@@ -13,7 +13,7 @@ class CMinion : public CBaseObject
 protected:
 
 	MinionState AnimateState = Walking;
-	CSkeleton	m_pSkeleton[20];
+	CSkeleton*	m_pSkeleton[20];
 	int m_iAniCnt=0;
 	int aniState = 0;
 	float m_fFrameTime;

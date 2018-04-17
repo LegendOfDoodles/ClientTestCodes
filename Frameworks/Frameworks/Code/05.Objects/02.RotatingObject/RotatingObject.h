@@ -34,25 +34,28 @@ public:
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 
 	void SetSkeleton(CSkeleton *skeleton) {
-		m_pSkeleton = skeleton;
-		//m_pSkeleton->GerAnimationLength;
+		m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
+		m_pSkeleton[m_nAniCnt++] = *skeleton;
 	}
-	void SetSkeleton1(CSkeleton *skeleton) { m_pSkeleton1 = skeleton; }
-	void SetSkeleton2(CSkeleton *skeleton) { m_pSkeleton2 = skeleton; }
-
 
 	void AniStateSet() { 
-		++aniState;
+		++m_nAniState;
 		m_fFrameTime = 0;
-		if (aniState >= 3) { aniState = 0; }
+		if (m_nAniState >= m_nAniCnt) { m_nAniState = 0; }
+	}
+
+	void MinionTypeSet() {
+		++m_nAniState;
+		m_fFrameTime = 0;
+		if (m_nAniState >= m_nAniCnt) { m_nAniState = 0; }
 	}
 
 protected:
-	CSkeleton*	m_pSkeleton{ NULL };
-	CSkeleton*	m_pSkeleton1{ NULL };
-	CSkeleton*	m_pSkeleton2{ NULL };
+	CSkeleton	m_pSkeleton[20];
+	int m_nAniLength[20];
+	int m_nAniCnt{ 0 };
+	int m_nAniState{ 0 };
 
-	int aniState{ 0 };
 	float m_fFrameTime{ 0 };
 };
 

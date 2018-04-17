@@ -527,6 +527,15 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('M') & 0x0001)
 	{
+		m_nWeaponState++;
+		if (m_nWeaponState >= 3)m_nWeaponState = 0;
+		for (int i = 0; i < m_nObjects; ++i) {
+			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
+			obj->SetMesh(1,m_pWeapons[m_nWeaponState]);
+		}
+	}
+	if (GetAsyncKeyState('N') & 0x0001)
+	{
 		for (int i = 0; i < m_nObjects; ++i) {
 			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
 			obj->AniStateSet();
@@ -699,18 +708,32 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 	CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion.meshinfo");
-	CSkinnedMesh *pSword = new CSkinnedMesh(pCreateMgr, "FBXBinary//Sword.meshinfo");
+	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Sword.meshinfo");
+	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Staff.meshinfo");
+	m_pWeapons[2]= new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Bow.meshinfo");
+
+
+
+	CSkeleton *pSIdle		= new CSkeleton("FBXBinary//Minion_S_Idle.aniinfo");
+	CSkeleton *pSAtk1		= new CSkeleton("FBXBinary//Minion_S_Attack1.aniinfo");
+	CSkeleton *pSAtk2		= new CSkeleton("FBXBinary//Minion_S_Attack2.aniinfo");
+	CSkeleton *pSWalkStart	= new CSkeleton("FBXBinary//Minion_S_WalkStart.aniinfo");
+	CSkeleton *pSWalk = new CSkeleton("FBXBinary//Minion_S_Walk.aniinfo");
+
+	CSkeleton *pDie		= new CSkeleton("FBXBinary//Minion_Die.aniinfo");
+
+
+
 	pMinionMesh->SetBoundingBox(XMFLOAT3(0.0f, 0.0f, -16.56), XMFLOAT3(12.42f, 12.42f, 28.98f));
 
-	CSkeleton *pSkeleton = new CSkeleton("FBXBinary//MinionIdle.aniinfo");
-	CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//MinionDie.aniinfo");
-	CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//MinionWalk.aniinfo");
+
 	float fxPitch = 12.0f * 5.f;
 	float fyPitch = 12.0f * 5.f;
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CAnimatedObject *pMinionObject = NULL;
+
 	for (int y = 0; y <= yObjects; y++)
 	{
 		for (int z =0; z <= zObjects; z++)
@@ -720,17 +743,24 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 				pMinionObject = new CAnimatedObject(pCreateMgr,2);
 #if !USE_INSTANCING
-				pMinionObject->SetMesh(0, pSword);
-				pMinionObject->SetMesh(1, pMinionMesh);
+				pMinionObject->SetMesh(0, pMinionMesh);
+				pMinionObject->SetMesh(1, m_pWeapons[0]);
 #endif
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 				pMinionObject->SetBoundingMesh(pCreateMgr, 24.84f, 12.42f, 57.96f, 0, 0, -16.56);
 				pMinionObject->SetPosition(x * 30, y * 100, z * 100);
-				pMinionObject->SetSkeleton(pSkeleton);
-				pMinionObject->SetSkeleton1(pSkeleton1);
-				pMinionObject->SetSkeleton2(pSkeleton2);
+
+
+				pMinionObject->SetSkeleton(pSIdle);
+				pMinionObject->SetSkeleton(pSAtk1);
+				pMinionObject->SetSkeleton(pSAtk2);
+				pMinionObject->SetSkeleton(pSWalkStart);
+				pMinionObject->SetSkeleton(pSWalk);
+				pMinionObject->SetSkeleton(pDie);
+
+
 				pMinionObject->Rotate(90, 0, 0);
 				
 
@@ -757,6 +787,7 @@ void CAniShader::ReleaseObjects()
 		Safe_Delete(m_ppObjects[j]);
 	}
 	Safe_Delete_Array(m_ppObjects);
+
 
 #if USE_BATCH_MATERIAL
 	Safe_Delete(m_pMaterial);
