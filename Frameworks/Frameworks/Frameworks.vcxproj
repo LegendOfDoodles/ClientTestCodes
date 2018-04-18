@@ -176,6 +176,7 @@
     <ClInclude Include="Code\05.Objects\02.RotatingObject\RotatingObject.h" />
     <ClInclude Include="Code\05.Objects\03.Terrain\HeightMapTerrain.h" />
     <ClInclude Include="Code\05.Objects\04.Skybox\SkyBox.h" />
+    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h" />
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h" />
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h" />
     <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="Code\05.Objects\02.RotatingObject\RotatingObject.cpp" />
     <ClCompile Include="Code\05.Objects\03.Terrain\HeightMapTerrain.cpp" />
     <ClCompile Include="Code\05.Objects\04.Skybox\SkyBox.cpp" />
+    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp" />
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp" />
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp" />
     <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp" />

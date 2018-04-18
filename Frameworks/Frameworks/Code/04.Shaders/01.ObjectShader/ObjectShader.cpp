@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ObjectShader.h"
 #include "05.Objects/02.RotatingObject/RotatingObject.h"
+#include "05.Objects/05.Minion/Minion.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 
@@ -288,7 +289,7 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 10, yObjects = 0, zObjects =10, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -314,7 +315,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 	//CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
-	CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr,20,20,20);
+	CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr, 20, 20, 20);
 
 	//CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
 	//CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
@@ -339,7 +340,7 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pRotatingObject->SetPosition(x * 30+200, y * 100 + 100, z * 100+1000);
+				pRotatingObject->SetPosition(x * 30 + 200, y * 100 + 100, z * 100 + 1000);
 				//pRotatingObject->SetSkeleton(pSkeleton);
 				//pRotatingObject->SetSkeleton1(pSkeleton1);
 				//pRotatingObject->SetSkeleton2(pSkeleton2);
@@ -417,9 +418,9 @@ void CAniShader::UpdateShaderVariables()
 	{
 		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		XMFLOAT4X4 tmp[128];
-		memcpy( tmp, m_ppObjects[i]->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		memcpy( pMappedObject->m_xmf4x4Frame, tmp,sizeof(XMFLOAT4X4)*128);
-		
+		memcpy(tmp, m_ppObjects[i]->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -530,14 +531,15 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		m_nWeaponState++;
 		if (m_nWeaponState >= 3)m_nWeaponState = 0;
 		for (int i = 0; i < m_nObjects; ++i) {
-			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
-			obj->SetMesh(1,m_pWeapons[m_nWeaponState]);
+			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
+
+			obj->SetMesh(1, m_pWeapons[m_nWeaponState]);
 		}
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
 		for (int i = 0; i < m_nObjects; ++i) {
-			CAnimatedObject* obj = dynamic_cast<CAnimatedObject*>(m_ppObjects[i]);
+			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
 			obj->AniStateSet();
 		}
 	}
@@ -548,7 +550,7 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CAniShader::CreateInputLayout()
 {
-	UINT nInputElementDescs =6;
+	UINT nInputElementDescs = 6;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 	UINT cnt = 0;
 	pd3dInputElementDescs[0] = {
@@ -710,17 +712,17 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion.meshinfo");
 	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Sword.meshinfo");
 	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Staff.meshinfo");
-	m_pWeapons[2]= new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Bow.meshinfo");
+	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Bow.meshinfo");
 
 
 
-	CSkeleton *pSIdle		= new CSkeleton("FBXBinary//Minion_S_Idle.aniinfo");
-	CSkeleton *pSAtk1		= new CSkeleton("FBXBinary//Minion_S_Attack1.aniinfo");
-	CSkeleton *pSAtk2		= new CSkeleton("FBXBinary//Minion_S_Attack2.aniinfo");
-	CSkeleton *pSWalkStart	= new CSkeleton("FBXBinary//Minion_S_WalkStart.aniinfo");
+	CSkeleton *pSIdle = new CSkeleton("FBXBinary//Minion_S_Idle.aniinfo");
+	CSkeleton *pSAtk1 = new CSkeleton("FBXBinary//Minion_S_Attack1.aniinfo");
+	CSkeleton *pSAtk2 = new CSkeleton("FBXBinary//Minion_S_Attack2.aniinfo");
+	CSkeleton *pSWalkStart = new CSkeleton("FBXBinary//Minion_S_WalkStart.aniinfo");
 	CSkeleton *pSWalk = new CSkeleton("FBXBinary//Minion_S_Walk.aniinfo");
 
-	CSkeleton *pDie		= new CSkeleton("FBXBinary//Minion_Die.aniinfo");
+	CSkeleton *pDie = new CSkeleton("FBXBinary//Minion_Die.aniinfo");
 
 
 
@@ -732,16 +734,21 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	float fzPitch = 12.0f * 5.f;
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CAnimatedObject *pMinionObject = NULL;
+	CMinion *pMinionObject = NULL;
+
+	for (int i = 0; i < 3; ++i) {
+		m_pWeapons[i]->AddRef();
+	}
+
 
 	for (int y = 0; y <= yObjects; y++)
 	{
-		for (int z =0; z <= zObjects; z++)
+		for (int z = 0; z <= zObjects; z++)
 		{
 			for (int x = 0; x <= xObjects; x++)
 			{
 
-				pMinionObject = new CAnimatedObject(pCreateMgr,2);
+				pMinionObject = new CMinion(pCreateMgr, 2);
 #if !USE_INSTANCING
 				pMinionObject->SetMesh(0, pMinionMesh);
 				pMinionObject->SetMesh(1, m_pWeapons[0]);
@@ -762,7 +769,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 
 				pMinionObject->Rotate(90, 0, 0);
-				
+
 
 #if !USE_INSTANCING
 				pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
@@ -773,9 +780,24 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 		}
 	}
 
+
+
+	
+
+
+
 #if USE_INSTANCING
 	m_ppObjects[0]->SetMesh(0, pCubeMesh);
 #endif
+
+
+
+	Safe_Delete(pSIdle);
+	Safe_Delete(pSAtk1);
+	Safe_Delete(pSAtk2);
+	Safe_Delete(pSWalkStart);
+	Safe_Delete(pSWalk);
+	Safe_Delete(pDie);
 }
 
 void CAniShader::ReleaseObjects()

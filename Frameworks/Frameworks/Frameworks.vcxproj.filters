@@ -224,6 +224,9 @@
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
+      <Filter>소스 파일\05.Objects\05.Minion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -312,6 +315,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
+      <Filter>소스 파일\05.Objects\05.Minion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
