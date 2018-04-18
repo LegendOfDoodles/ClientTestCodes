@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -184,6 +184,8 @@
     <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\Mesh.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h" />
+    <ClInclude Include="Code\07.Network\Network.h" />
+    <ClInclude Include="Code\07.Network\protocol.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +221,7 @@
     <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\Mesh.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp" />
+    <ClCompile Include="Code\07.Network\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Framework01.ico" />
