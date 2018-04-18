@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 #include "Minion.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
@@ -5,8 +6,10 @@
 
 CMinion::CMinion(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
 {
-	m_fFrameTime = 0;
+}
 
+CMinion::CMinion(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr, nMeshes)
+{
 }
 
 void CMinion::Animate(float timeElapsed)
@@ -14,47 +17,97 @@ void CMinion::Animate(float timeElapsed)
 
 	m_fFrameTime += 30 * timeElapsed;
 
-	CSkinnedMesh* pMesh = dynamic_cast<CSkinnedMesh*>(m_ppMeshes[0]);
+	int Bcnt = m_pSkeleton[m_nCurrAnimation].GetBoneCount();
 
-	int Bcnt = m_pSkeleton->GetBoneCount() - 1; // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
-	switch (AnimateState) {
-	case MinionState::Walking:
-		if (m_fFrameTime >= 33) {
-			m_fFrameTime =0;
-		}
-		for (int i = 0; i < Bcnt; ++i) {
-				m_xmf4x4Frame[i] = m_pSkeleton[0].GetBone(i).GetFrame((int)m_fFrameTime);
-		}
-		break;
-	case MinionState::Attack_1:
-		if (m_fFrameTime >= 49) {
-			m_fFrameTime =0;
-		}
-		for (int i = 0; i < Bcnt; ++i) {
-			m_xmf4x4Frame[i] = m_pSkeleton[1].GetBone(i).GetFrame((int)m_fFrameTime);
-		}
-		break;
-	case MinionState::Die:
-		if (m_fFrameTime >= 33) {
-			m_fFrameTime =32;
-		}
-		for (int i = 0; i < Bcnt; ++i) {
-			m_xmf4x4Frame[i] = m_pSkeleton[2].GetBone(i).GetFrame((int)m_fFrameTime);
-		}
-		break;
-	default:
-		XMFLOAT4X4 mat{
-			1,0,0,0,
-			0,1,0,0,
-			0,0,1,0,
-			0,0,0,1
-		};
+	if (m_CurrAnimationState != m_NextAnimationState) {
+		
+			switch (m_NextAnimationState) {
+			case MinionState::Idle:
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				{
+					m_nCurrAnimation = 0;
+				m_CurrAnimationState = m_NextAnimationState;
+				m_fFrameTime = 0;
+				}
+				break;
+			case MinionState::Attack:
+					m_nCurrAnimation = 1;
+					m_CurrAnimationState = m_NextAnimationState;
+					m_fFrameTime = 0;
+				break;
+			case MinionState::Walking:
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				{
+				m_nCurrAnimation = 3;
+				m_CurrAnimationState = m_NextAnimationState;
+				m_fFrameTime = 0;
+				}
+				break;
+			case MinionState::Die:
+				m_nCurrAnimation = 5;
+				m_CurrAnimationState = m_NextAnimationState;
+				m_fFrameTime = 0;
 
-		for (int i = 0; i < Bcnt; ++i) {
-			m_xmf4x4Frame[i] = mat;
-		}
-		break;
+				break;
+			default:
+
+				break;
+			}
+			
 	}
+	else {
+		switch (m_CurrAnimationState) {
+		case MinionState::Idle:
+
+			break;
+		case MinionState::Attack:
+			if (m_nCurrAnimation == 1) {
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation] / 2&&
+					m_CurrAnimationState != m_NextAnimationState)
+				{
+					m_nCurrAnimation = 2;
+					m_fFrameTime = 0;
+				}
+			}
+			else if (m_nCurrAnimation == 2)
+			{
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				{
+					m_nCurrAnimation = 1;
+					m_fFrameTime = 0;
+
+				}
+			}
+			break;
+
+		case MinionState::Walking:
+			if (m_nCurrAnimation == 3) {
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				{
+					m_nCurrAnimation = 4;
+					m_fFrameTime = 0;
+				}
+			}
+			break;
+		case MinionState::Die:
+
+			break;
+		default:
+
+			break;
+		}
+	}
+
+	if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]) {
+		while (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+			m_fFrameTime -= m_nAniLength[m_nCurrAnimation];
+	}
+
+	for (int i = 0; i < Bcnt; ++i) {
+		m_xmf4x4Frame[i] = m_pSkeleton[m_nCurrAnimation].GetBone(i).GetFrame((int)m_fFrameTime);
+	}
+
+
 }
 
 void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
@@ -67,8 +120,8 @@ void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
 		m_pMaterial->UpdateShaderVariables();
 	}
 
-	if (m_d3dCbvGPUDescriptorHandle.ptr)
-		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_d3dCbvGPUDescriptorHandle);
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
 
 	if (m_pShader)
 	{
