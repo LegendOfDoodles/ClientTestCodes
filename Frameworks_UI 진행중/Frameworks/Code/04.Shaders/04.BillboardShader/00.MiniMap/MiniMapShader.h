@@ -38,13 +38,14 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CMinimap *m_pMiniMap{ NULL };
+	CBaseObject * *m_ppObjects{ NULL };
+	int m_nObjects = 0;
 
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial						*m_pMaterial{ NULL };
 #else
-	CB_GAMEOBJECT_INFO m_pMappedMiniMap;
+	UINT8 *m_pMappedObjects{ NULL };
 #endif
 };
 

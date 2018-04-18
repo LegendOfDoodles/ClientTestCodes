@@ -86,11 +86,9 @@ void CMinimap::Animate(float fTimeElapsed)
 	m_xmf4x4World._43 = m_pCamera->GetPosition().z + (m_fDistance * m_pCamera->GetLookVector().z) + (6 * m_pCamera->GetRightVector().z) - (4 * m_pCamera->GetUpVector().z);
 
 	// 맵위 UI
-	/*
 	m_xmf4x4World._41 += (m_xmf3Position.x * m_pCamera->GetRightVector().x) + (m_xmf3Position.y * m_pCamera->GetUpVector().x);
 	m_xmf4x4World._42 += (m_xmf3Position.x * m_pCamera->GetRightVector().y) + (m_xmf3Position.y * m_pCamera->GetUpVector().y);
 	m_xmf4x4World._43 += (m_xmf3Position.x * m_pCamera->GetRightVector().z) + (m_xmf3Position.y * m_pCamera->GetUpVector().z);
-	*/
 
 	// 이후 빌보드 업데이트
 	CBillboardObject::Animate(fTimeElapsed);
