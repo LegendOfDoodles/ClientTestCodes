@@ -9,7 +9,7 @@
 /// 목적: 오브젝트 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-04-18
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -725,8 +725,9 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CSkeleton *pDie = new CSkeleton("FBXBinary//Minion_Die.aniinfo");
 
 
-
-	pMinionMesh->SetBoundingBox(XMFLOAT3(0.0f, 0.0f, -16.56), XMFLOAT3(12.42f, 12.42f, 28.98f));
+	pMinionMesh->SetBoundingBox(
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
 
 
 	float fxPitch = 12.0f * 5.f;
@@ -756,7 +757,9 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pMinionObject->SetBoundingMesh(pCreateMgr, 24.84f, 12.42f, 57.96f, 0, 0, -16.56);
+				pMinionObject->SetBoundingMesh(pCreateMgr,
+					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
+					0, 0, -CONVERT_PaperUnit_to_InG(4));
 				pMinionObject->SetPosition(x * 30, y * 100, z * 100);
 
 

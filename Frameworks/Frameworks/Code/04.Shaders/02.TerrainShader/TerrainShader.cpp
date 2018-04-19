@@ -131,12 +131,16 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	XMFLOAT4 xmf4Color(0.6f, 0.6f, 0.6f, 0.0f);
 
 #ifdef _WITH_TERRAIN_PARTITION
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/HeightMap.raw"), 257, 257, 17,
-		17, xmf3Scale, xmf4Color);
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"),
+		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
+		TERRAIN_IMAGE_WIDTH / 10, TERRAIN_IMAGE_HEIGHT / 10,
+		TERRAIN_IMAGE_SCALE, XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
 #else
 	//지형을 하나의 격자 메쉬(257x257)로 생성한다.
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"), 500, 250, 500,
-		250, xmf3Scale, xmf4Color);
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"),
+		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
+		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
+		TERRAIN_IMAGE_SCALE, XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
 #endif
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);

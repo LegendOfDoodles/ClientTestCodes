@@ -57,6 +57,9 @@ public: // 공개 함수
 	XMFLOAT3 GetUp();
 	XMFLOAT3 GetRight();
 
+	XMFLOAT3 GetLookModel();
+	XMFLOAT3 GetUpModel();
+
 	void SetPosition(float x, float y, float z);
 	void SetPosition(XMFLOAT3 xmf3Position);
 

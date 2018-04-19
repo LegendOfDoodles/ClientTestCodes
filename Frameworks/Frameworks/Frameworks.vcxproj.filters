@@ -123,8 +123,17 @@
     <Filter Include="소스 파일\05.Objects\96.Arrow">
       <UniqueIdentifier>{da6614e3-61ea-4567-80c7-8b12d82ea4d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\07.Network">
-      <UniqueIdentifier>{6b303bc3-0306-45e1-992b-c50209b755c6}</UniqueIdentifier>
+    <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder">
+      <UniqueIdentifier>{f526b4e0-ff88-4498-adcc-4b909c0c60a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar">
+      <UniqueIdentifier>{4b9c984b-aa41-47ca-960a-c0c5b3845d55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder\01.Edge">
+      <UniqueIdentifier>{856f313f-be07-45e1-b18c-dfdddc628711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder\00.Node">
+      <UniqueIdentifier>{3b2c4782-862f-4857-bf53-f03183ca879b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -227,16 +236,23 @@
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Code\07.Network\protocol.h">
-      <Filter>소스 파일\07.Network</Filter>
+    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h" />
+    <ClInclude Include="Code\07.Network\Network.h" />
+    <ClInclude Include="Code\07.Network\protocol.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\Macros.h">
+      <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Code\07.Network\Network.h">
-      <Filter>소스 파일\07.Network</Filter>
-=======
-    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
-      <Filter>소스 파일\05.Objects\05.Minion</Filter>
->>>>>>> 휘현
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\WayFinder.h">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\00.Node\Node.h">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\00.Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\01.Edge\Edge.h">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\01.Edge</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.h">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -327,13 +343,23 @@
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="Code\07.Network\Network.cpp">
-      <Filter>소스 파일\07.Network</Filter>
-=======
     <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
-      <Filter>소스 파일\05.Objects\05.Minion</Filter>
->>>>>>> 휘현
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\07.Network\Network.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\WayFinder.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\00.Node\Node.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\00.Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\01.Edge\Edge.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\01.Edge</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
