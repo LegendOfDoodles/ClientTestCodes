@@ -152,7 +152,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\ServerTestCodes\ServerTestCodes\protocol.h" />
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h" />
     <ClInclude Include="Code\00.Global\00.Standard\targetver.h" />
     <ClInclude Include="Code\00.Global\01.Utility\00.Timer\Timer.h" />
@@ -192,6 +191,7 @@
     <ClInclude Include="Code\06.Meshes\01.Mesh\Mesh.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h" />
     <ClInclude Include="Code\07.Network\Network.h" />
+    <ClInclude Include="Code\07.Network\protocol.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>

@@ -135,6 +135,9 @@
     <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder\00.Node">
       <UniqueIdentifier>{3b2c4782-862f-4857-bf53-f03183ca879b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\07.Network">
+      <UniqueIdentifier>{ed8f421a-dea7-4a21-92b7-629cad64076d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -236,7 +239,6 @@
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClInclude>
-    <ClInclude Include="Code\07.Network\Network.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Macros.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
@@ -252,13 +254,14 @@
     <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.h">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\..\..\ServerTestCodes\ServerTestCodes\protocol.h">
-      <Filter>소스 파일</Filter>
-=======
     <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
       <Filter>소스 파일\05.Objects\05.Minion</Filter>
->>>>>>> 김나단
+    </ClInclude>
+    <ClInclude Include="Code\07.Network\Network.h">
+      <Filter>소스 파일\07.Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\07.Network\protocol.h">
+      <Filter>소스 파일\07.Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -349,9 +352,6 @@
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClCompile>
-    <ClCompile Include="Code\07.Network\Network.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\WayFinder.cpp">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder</Filter>
     </ClCompile>
@@ -366,6 +366,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
       <Filter>소스 파일\05.Objects\05.Minion</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\07.Network\Network.cpp">
+      <Filter>소스 파일\07.Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
