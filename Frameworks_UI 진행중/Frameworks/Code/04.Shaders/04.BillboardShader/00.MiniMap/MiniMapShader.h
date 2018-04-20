@@ -42,7 +42,7 @@ protected: // º¯¼ö
 	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
-	//CMaterial	**m_pMaterial{ NULL };
+	CMaterial	**m_ppMaterials{ NULL };
 
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };

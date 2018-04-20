@@ -38,7 +38,28 @@ public:
 	CMinimap(CCreateMgr *pCreateMgr);
 	virtual ~CMinimap();
 
+	void SetUIType();
+
 	virtual void SetPos(XMFLOAT3 xmf3Position);
+	virtual void SetDistance(float x) {
+		m_xmf4x4World = Matrix4x4::Identity();
+
+		m_fDistance = x;
+	}
+
+	virtual void Animate(float fTimeElapsed);
+
+private:
+	XMFLOAT3	m_xmf3Position;
+	float		m_fDistance;
+};
+
+class CInfoToKDA : public CBillboardObject
+{
+public:
+	CInfoToKDA(CCreateMgr *pCreateMgr);
+	virtual ~CInfoToKDA();
+
 	virtual void SetDistance(float x) {
 		m_xmf4x4World = Matrix4x4::Identity();
 

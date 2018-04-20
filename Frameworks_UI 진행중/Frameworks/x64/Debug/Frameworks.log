@@ -1,9 +1,26 @@
 ﻿  MiniMapShader.cpp
 c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(95): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(89): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(89): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(104): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(98): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(98): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(82): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(76): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(76): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(91): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(85): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(85): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+  BillboardShader.cpp
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(88): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(88): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(88): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(93): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(93): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(93): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(251): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(233): warning C4189: 'fyPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(234): warning C4189: 'fzPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\99.billboard\billboardshader.cpp(232): warning C4189: 'fxPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Billboard.cpp
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\05.objects\05.billboard\billboard.cpp(29): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\05.objects\05.billboard\billboard.cpp(104): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다...
   Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks_UI 진행중\x64\Debug\Framework01.exe

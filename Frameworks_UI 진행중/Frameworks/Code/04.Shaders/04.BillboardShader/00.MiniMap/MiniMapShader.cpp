@@ -32,24 +32,15 @@ void CMiniMapShader::ReleaseUploadBuffers()
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->ReleaseUploadBuffers();
-	}
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+		if (m_ppMaterials[j]) m_ppMaterials[j]->ReleaseUploadBuffers();
 #endif
+	}
+
 }
 
 void CMiniMapShader::UpdateShaderVariables()
 {
-#if USE_INSTANCING
-	m_pCommandList->SetGraphicsRootShaderResourceView(2,
-		m_pInstanceBuffer->GetGPUVirtualAddress());
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		XMStoreFloat4x4(&m_pMappedObjects[i].m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	}
-#else
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)
@@ -58,7 +49,6 @@ void CMiniMapShader::UpdateShaderVariables()
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
-#endif
 }
 
 void CMiniMapShader::AnimateObjects(float timeElapsed)
@@ -72,18 +62,15 @@ void CMiniMapShader::AnimateObjects(float timeElapsed)
 void CMiniMapShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
-#endif
 
-#if USE_INSTANCING
-	m_ppObjects[0]->Render(pCamera, m_nObjects);
-#else
 	for (int j = 0; j < m_nObjects; j++)
 	{
+#if USE_BATCH_MATERIAL
+		if (m_ppMaterials[j]) m_ppMaterials[j]->UpdateShaderVariables();
+#endif
+	
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
-#endif
 }
 
 void CMiniMapShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
@@ -159,19 +146,11 @@ D3D12_BLEND_DESC CMiniMapShader::CreateBlendState()
 D3D12_SHADER_BYTECODE CMiniMapShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
 {
 	//./Code/04.Shaders/99.GraphicsShader/
-#if USE_INSTANCING
-	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTexturedLightingInstancing",
-		"vs_5_1",
-		ppShaderBlob));
-#else
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"VSTextured",
 		"vs_5_1",
 		ppShaderBlob));
-#endif
 }
 
 D3D12_SHADER_BYTECODE CMiniMapShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
@@ -195,17 +174,6 @@ void CMiniMapShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
 {
 	HRESULT hResult;
 
-#if USE_INSTANCING
-	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		NULL);
-
-	hResult = m_pInstanceBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pInstanceBuffer->Map Failed");
-#else
 	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
@@ -217,23 +185,19 @@ void CMiniMapShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
-#endif
 }
 
 void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	CCamera *pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 1;
+	m_nObjects = 2;
 	m_ppObjects = new CBaseObject*[m_nObjects];
+	m_ppMaterials = new CMaterial*[m_nObjects];
 
-#if USE_INSTANCING
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
-	CreateShaderVariables(pCreateMgr);
-#else
-
-	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D, 0);
+	CTexture *pTexture = new CTexture(2, RESOURCE_TEXTURE_2D, 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 1);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -242,54 +206,33 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
 	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);
-
-#endif
-
-#if USE_BATCH_MATERIAL
-	m_pMaterial = new CMaterial(pCreateMgr);
-	m_pMaterial->Initialize(pCreateMgr);
-	m_pMaterial->SetTexture(pTexture);
-#else
-	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
-#endif
-
+	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinimap *m_pMiniMap = NULL;
+	CMinimap *pMiniMap = NULL;
+	CMaterial *pMaterial = NULL;
+
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		m_pMiniMap = new CMinimap(pCreateMgr);
-#if !USE_INSTANCING
+#if USE_BATCH_MATERIAL
+		pMaterial = new CMaterial(pCreateMgr);
+		pMaterial->Initialize(pCreateMgr);
+		pMaterial->SetTexture(pTexture);
+		m_ppMaterials[i] = pMaterial;
 #endif
-#if !USE_BATCH_MATERIAL
-		pRotatingObject->SetMaterial(pCubeMaterial);
-#endif
-		m_pMiniMap->SetPosition(0.f, 0.f, 0.f);
-		m_pMiniMap->SetCamera(pCamera);
-		m_pMiniMap->SetDistance(10.f);
-#if !USE_INSTANCING
-		m_pMiniMap->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
-#endif
-		m_ppObjects[i++] = m_pMiniMap;
+		pMiniMap = new CMinimap(pCreateMgr);
+		pMiniMap->SetCamera(pCamera);
+		pMiniMap->SetDistance(10.f);
+		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
+		m_ppObjects[i] = pMiniMap;
 	}
-
-#if USE_INSTANCING
-	m_ppObjects[0]->SetMesh(0, pCubeMesh);
-#endif
 }
 
 void CMiniMapShader::ReleaseShaderVariables()
 {
-#if USE_INSTANCING
-	if (!m_pInstanceBuffer) return;
-
-	m_pInstanceBuffer->Unmap(0, NULL);
-	Safe_Release(m_pInstanceBuffer);
-#else
 	if (!m_pConstBuffer) return;
 
 	m_pConstBuffer->Unmap(0, NULL);
 	Safe_Release(m_pConstBuffer);
-#endif
 
 	CShader::ReleaseShaderVariables();
 }
