@@ -6,7 +6,7 @@
 /// 목적: 지형 출력용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-10
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,6 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
 		TERRAIN_IMAGE_SCALE, XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
 #endif
-
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 1);

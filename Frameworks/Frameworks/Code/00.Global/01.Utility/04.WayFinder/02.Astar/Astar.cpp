@@ -5,7 +5,7 @@
 /// 목적: 길찾기 용 Astar 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-19
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -164,9 +164,9 @@ int CAstar::FindPath()
 	return Processing;
 }
 
-Path CAstar::GetPath()
+Path* CAstar::GetPath()
 {
-	Path path;
+	Path *path = new Path;
 
 	if (m_target < 0)  return path;
 
@@ -174,7 +174,7 @@ Path CAstar::GetPath()
 
 	while ((nd != m_source) && (m_shortestPathTree[nd] != 0))
 	{
-		path.push_front(CPathEdge(m_pFinder->GetNodeAt(m_shortestPathTree[nd]->From()).Position(),
+		path->push_front(CPathEdge(m_pFinder->GetNodeAt(m_shortestPathTree[nd]->From()).Position(),
 			m_pFinder->GetNodeAt(m_shortestPathTree[nd]->To()).Position()));
 
 		nd = m_shortestPathTree[nd]->From();

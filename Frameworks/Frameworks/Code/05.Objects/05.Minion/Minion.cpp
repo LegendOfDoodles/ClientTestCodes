@@ -1,9 +1,16 @@
-
 #include "stdafx.h"
 #include "Minion.h"
-#include "06.Meshes/00.Vertex/Vertex.h"
+#include "05.Objects/03.Terrain/HeightMapTerrain.h"
 
+/// <summary>
+/// 목적: 스카이 박스 출력용 오브젝트
+/// 최종 수정자:  김나단
+/// 수정자 목록:  정휘현, 김나단
+/// 최종 수정 날짜: 2018-04-20
+/// </summary>
 
+////////////////////////////////////////////////////////////////////////
+// 생성자, 소멸자
 CMinion::CMinion(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
 {
 }
@@ -12,6 +19,12 @@ CMinion::CMinion(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr,
 {
 }
 
+CMinion::~CMinion()
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
 void CMinion::Animate(float timeElapsed)
 {
 
@@ -107,7 +120,34 @@ void CMinion::Animate(float timeElapsed)
 		m_xmf4x4Frame[i] = m_pSkeleton[m_nCurrAnimation].GetBone(i).GetFrame((int)m_fFrameTime);
 	}
 
-
+	if (m_pathToGo)
+	{
+		if (m_destination.x == -1)	// 처음 움직이기 시작하는 경우
+		{
+			m_destination = m_pathToGo->front().To();
+			m_pathToGo->pop_front();
+		}
+		else if (IsArrive(m_destination))	//  도착 한 경우
+		{
+			if (m_pathToGo->size() == 0)
+			{
+				Safe_Delete(m_pathToGo);
+				m_destination.x = -1;
+			}
+			else
+			{
+				m_destination = m_pathToGo->front().To();
+				LookAt(XMFLOAT3(m_destination.x, 0, m_destination.y));
+			}
+		}
+		else  // 아직 도착하지 않은 경우
+		{
+			MoveForwardModel(1.f);
+			XMFLOAT3 position = GetPosition();
+			position.y = m_pTerrain->GetHeight(position.x, position.z);
+			SetPosition(position);
+		}
+	}
 }
 
 void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
@@ -138,6 +178,21 @@ void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
 	}
 }
 
-CMinion::~CMinion()
+void CMinion::SetPathToGo(Path * path)
 {
+	if (m_pathToGo) Safe_Delete(m_pathToGo);
+	m_pathToGo = path;
+	m_destination.x = -1;
+}
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
+bool CMinion::IsArrive(const XMFLOAT2 & nextPos)
+{
+	static int radius = 3 * 3;
+	XMFLOAT3 curPos = GetPosition();
+
+	int distance = (nextPos.x - curPos.x) * (nextPos.x - curPos.x) + (nextPos.y - curPos.z) * (nextPos.y - curPos.z);
+
+	return distance < radius;
 }

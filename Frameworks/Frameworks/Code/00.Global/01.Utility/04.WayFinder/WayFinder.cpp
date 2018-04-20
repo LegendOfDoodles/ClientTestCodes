@@ -6,19 +6,20 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-19
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CWayFinder::CWayFinder(XMFLOAT2 size)
-	: m_size(size)
+CWayFinder::CWayFinder(float sizeX, float sizeY)
+	: m_size(sizeX, sizeY)
 {
-	m_nodeMax.x = (TERRAIN_SIZE_WIDTH / size.x + 1);
-	m_nodeMax.y = (TERRAIN_SIZE_HEIGHT / size.y + 1);
-	m_nodes.reserve((TERRAIN_SIZE_WIDTH / size.x + 1) * (TERRAIN_SIZE_HEIGHT / size.y) + 1);
-	m_edges.reserve(m_nodes.capacity());
+	m_nodeMax.x = (TERRAIN_SIZE_WIDTH / sizeX + 1);
+	m_nodeMax.y = (TERRAIN_SIZE_HEIGHT / sizeY + 1);
+	m_nodes.reserve((m_nodeMax.x) * (m_nodeMax.y));
+	// 엣지 개수 공식 적용 단, 가로 세로가 2개 이상씩이 되어야 한다.
+	m_edges.reserve(24 + (m_nodeMax.x-2) * 20 + (m_nodeMax.y-2) * 20 + ((m_nodeMax.x - 2) * (m_nodeMax.y - 2)) * 16);
 
 	// 노드 추가
 	for (int y = 0, index = 0; y <= m_nodeMax.y; ++y)
@@ -28,7 +29,7 @@ CWayFinder::CWayFinder(XMFLOAT2 size)
 			// Height Map 가져와서 못 가는 노드인지 아닌지 검사 할 필요 있음
 			// 그 결과에 따라 index 대신 INVALID_NODE 추가
 			// 그리고 그 경우 edge에 추가 안함
-			m_nodes.emplace_back(index, XMFLOAT2(x * size.x, y * size.y), size);
+			m_nodes.emplace_back(index, XMFLOAT2(x * sizeX, y * sizeY), m_size);
 			if (m_nodes.back().Index() != INVALID_NODE)
 				m_edges.emplace_back(EdgeVector());
 		}
@@ -142,23 +143,47 @@ bool CWayFinder::CanGoDirectly(const XMFLOAT2 & source, const XMFLOAT2 & target)
 	return false;
 }
 
-Path CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target)
+Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target)
 {
-	Path path;
+	Path *path;
 
 	if (CanGoDirectly(source, target))
 	{
-		path.emplace_back();
+		path = new Path;
+		path->push_back(CPathEdge(source, target));
 	}
 	else
 	{
-		// source , target 가까운 노드 찾는 함수 필요
-		m_pCurSearch = new CAstar(this, 0, 0);
+		int srcIndex = FindClosestNodeIndexWithPosition(source);
+		int dstIndex = FindClosestNodeIndexWithPosition(target);
+		m_pCurSearch = new CAstar(this, srcIndex, dstIndex);
 		m_pCurSearch->FindPath();
 		path = m_pCurSearch->GetPath();
+		path->push_back(CPathEdge(source, target));
+		delete m_pCurSearch;
 	}
 
 	return path;
+}
+
+int CWayFinder::FindClosestNodeIndexWithPosition(const XMFLOAT2 & position)
+{
+	int closestIndex{ INVALID_NODE };
+	int closestRange{ INT_MAX };
+	int curRange{ INT_MAX };
+
+	for (int i = 0; i < m_nodes.size(); ++i)
+	{
+		if (m_nodes[i].Index() == INVALID_NODE) continue;
+		curRange = m_nodes[i].GetDistanceSquareWithPosition(position);
+		if (curRange < closestRange)
+		{
+			closestRange = curRange;
+			closestIndex = m_nodes[i].Index();
+		}
+	}
+
+	return closestIndex;
 }
 
 ////////////////////////////////////////////////////////////////////////
