@@ -238,7 +238,6 @@
     </ClInclude>
     <ClInclude Include="Code\05.Objects\05.Minion\Minion.h" />
     <ClInclude Include="Code\07.Network\Network.h" />
-    <ClInclude Include="Code\07.Network\protocol.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Macros.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
@@ -253,6 +252,9 @@
     </ClInclude>
     <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.h">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ServerTestCodes\ServerTestCodes\protocol.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

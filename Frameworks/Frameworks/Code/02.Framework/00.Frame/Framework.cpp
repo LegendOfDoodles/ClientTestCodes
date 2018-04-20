@@ -97,6 +97,17 @@ void CFramework::ProcessPacket(char *ptr)
 		//}
 		break;
 	}
+	case SC_PUT_MINION:
+	{
+		SC_MsgMoCreate *my_packet = reinterpret_cast<SC_MsgMoCreate *>(ptr);
+		int id = my_packet->Monster_id;
+		if (first_time) {
+			first_time = false;
+		}
+
+		break;
+	}
+
 	case SC_MOVE_PLAYER:
 	{
 		SC_MsgChMove *my_packet = reinterpret_cast<SC_MsgChMove *>(ptr);
