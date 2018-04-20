@@ -7,12 +7,13 @@
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
+#include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-15
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -217,19 +218,26 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_nShaders = 4;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
-	m_ppShaders[1] = new CTerrainShader(pCreateMgr);
+	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
+	m_ppShaders[1] = pTerrainShader;
 	m_ppShaders[2] = new CAniShader(pCreateMgr);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
-	
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
+	for (int i = 2; i < m_nShaders; ++i)
+	{
+		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
+	}
+
 	m_pCamera = new  CAOSCamera();
 
 	m_pCamera->Initialize(pCreateMgr);
+
+	m_pWayFinder = new CWayFinder(248.4, 248.4);
 
 	BuildLights();
 }
@@ -248,6 +256,10 @@ void CScene::ReleaseObjects()
 			if(m_ppShaders[i]) m_ppShaders[i]->Finalize();
 		}
 		Safe_Delete_Array(m_ppShaders);
+	}
+	if (m_pWayFinder)
+	{
+		Safe_Delete(m_pWayFinder);
 	}
 }
 
@@ -323,6 +335,9 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 	if (m_pSelectedObject)
 	{
 		m_pSelectedObject->LookAt(m_pickWorldPosition);
+		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(
+			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z), 
+			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z)));
 	}
 }
 

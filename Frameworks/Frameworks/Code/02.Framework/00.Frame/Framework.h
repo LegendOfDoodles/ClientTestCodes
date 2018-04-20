@@ -2,6 +2,10 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "03.Scenes/00.BaseScene/Scene.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
+#include "07.Network/Network.h"
+#include "07.Network/protocol.h"
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 class CFramework
 {
@@ -13,7 +17,8 @@ public: // 공개 함수
 	// Initialize and Release
 	bool Initialize(HINSTANCE hInstance, HWND hWnd);
 	void Finalize();
-
+	void ReadPacket(SOCKET socket);
+	void ProcessPacket(char *ptr);
 	void FrameAdvance(float timeElapsed);
 
 	// Message Process
@@ -31,5 +36,15 @@ private: // 변수
 	CRenderMgr *m_pRenderMgr{ NULL };
 
 	CScene *m_pScene{ NULL };
+
+	SOCKET  m_mysocket;
+	WSABUF	m_send_wsabuf;
+	char 	m_send_buffer[MAX_BUFF_SIZE];
+	WSABUF	m_recv_wsabuf;
+	char	m_recv_buffer[MAX_BUFF_SIZE];
+	char	m_packet_buffer[MAX_BUFF_SIZE];
+	DWORD	m_in_packet_size = 0;
+	int		m_saved_packet_size = 0;
+	int		m_myid;
 };
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -159,6 +159,11 @@
     <ClInclude Include="Code\00.Global\01.Utility\02.TextureLoader\d3dx12.h" />
     <ClInclude Include="Code\00.Global\01.Utility\02.TextureLoader\DDSTextureLoader12.h" />
     <ClInclude Include="Code\00.Global\01.Utility\03.SafeFunc\SafeFunc.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\00.Node\Node.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\01.Edge\Edge.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\WayFinder.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\Macros.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Vectors.h" />
     <ClInclude Include="Code\01.Main\Framework01.h" />
     <ClInclude Include="Code\02.Framework\00.Frame\Framework.h" />
@@ -176,6 +181,7 @@
     <ClInclude Include="Code\05.Objects\02.RotatingObject\RotatingObject.h" />
     <ClInclude Include="Code\05.Objects\03.Terrain\HeightMapTerrain.h" />
     <ClInclude Include="Code\05.Objects\04.Skybox\SkyBox.h" />
+    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h" />
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h" />
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h" />
     <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h" />
@@ -184,6 +190,8 @@
     <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\Mesh.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h" />
+    <ClInclude Include="Code\07.Network\Network.h" />
+    <ClInclude Include="Code\07.Network\protocol.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +203,10 @@
     <ClCompile Include="Code\00.Global\01.Utility\01.Exception\ExptProcess.cpp" />
     <ClCompile Include="Code\00.Global\01.Utility\02.TextureLoader\DDSTextureLoader12.cpp" />
     <ClCompile Include="Code\00.Global\01.Utility\03.SafeFunc\SafeFunc.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\00.Node\Node.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\01.Edge\Edge.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\WayFinder.cpp" />
     <ClCompile Include="Code\01.Main\Framework01.cpp" />
     <ClCompile Include="Code\02.Framework\00.Frame\Framework.cpp" />
     <ClCompile Include="Code\02.Framework\01.CreateMgr\CreateMgr.cpp" />
@@ -211,6 +223,7 @@
     <ClCompile Include="Code\05.Objects\02.RotatingObject\RotatingObject.cpp" />
     <ClCompile Include="Code\05.Objects\03.Terrain\HeightMapTerrain.cpp" />
     <ClCompile Include="Code\05.Objects\04.Skybox\SkyBox.cpp" />
+    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp" />
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp" />
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp" />
     <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp" />
@@ -219,6 +232,7 @@
     <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\Mesh.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp" />
+    <ClCompile Include="Code\07.Network\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Framework01.ico" />

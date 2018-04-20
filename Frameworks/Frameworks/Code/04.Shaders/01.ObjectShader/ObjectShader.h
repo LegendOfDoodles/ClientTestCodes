@@ -2,6 +2,7 @@
 #include "04.Shaders/00.BaseShader/Shader.h"
 
 class CMaterial;
+class CHeightMapTerrain;
 
 class CObjectShader : public CShader
 {
@@ -49,11 +50,13 @@ protected: // 변수
 	UINT8 *m_pMappedObjects{ NULL };
 #endif
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
+
+	CHeightMapTerrain * m_pTerrain{ NULL };
 };
 
 
 
-class CAniShader : public CShader
+class CAniShader : public CShader	// 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
 {
 public: // 생성자, 소멸자
 	CAniShader(CCreateMgr *pCreateMgr);
@@ -102,4 +105,6 @@ protected: // 변수
 	UINT8 *m_pMappedObjects{ NULL };
 #endif
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
+
+	CHeightMapTerrain * m_pTerrain{ NULL };
 };

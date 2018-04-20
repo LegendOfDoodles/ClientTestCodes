@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-10
+/// 최종 수정 날짜: 2018-04-18
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -855,6 +855,8 @@ CCubeMeshIlluminatedTextured::~CCubeMeshIlluminatedTextured()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
+
+
 CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminatedTextured(pCreateMgr)
 {
 	CMeshImporter importer;
@@ -1063,7 +1065,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
 			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), (OnGetHeight(x, z, pContext) - 173.44f)* m_xmf3Scale.y, (z*m_xmf3Scale.z)),
-				XMFLOAT2(z * 0.5f, x * 0.5f), Vector4::Add(OnGetColor(x * 0.5f, z * 0.5f, pContext), xmf4Color));
+				XMFLOAT2(z * 0.2f, x * 0.2f), Vector4::Add(OnGetColor(x * 0.2f, z * 0.2f, pContext), xmf4Color));
 		}
 	}
 
