@@ -1,5 +1,9 @@
-﻿  Scene.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\05.objects\97.skeleton\skeleton.h(32): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\05.objects\97.skeleton\skeleton.h(36): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\03.scenes\00.basescene\scene.cpp(110): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+﻿  MiniMapShader.cpp
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(95): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(89): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(89): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(104): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(98): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks_ui 진행중\frameworks\code\04.shaders\04.billboardshader\00.minimap\minimapshader.cpp(98): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
   Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks_UI 진행중\x64\Debug\Framework01.exe

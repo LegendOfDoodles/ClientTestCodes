@@ -21,7 +21,7 @@ public:	// 생성자, 소멸자
 public: // 공개함수
 	virtual void Animate(float fTimeElapsed);
 
-	void SetLookAt(XMFLOAT3& xmf3Target);
+	void SetLookAt();
 	void SetCamera(CCamera *pCamera) { m_pCamera = pCamera; };
 
 protected: // 내부 함수

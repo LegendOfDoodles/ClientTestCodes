@@ -25,7 +25,8 @@ public: // 공개 함수
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
-
+	virtual D3D12_BLEND_DESC CreateBlendState();
+	
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
 
@@ -38,8 +39,10 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
+	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
+
+	//CMaterial	**m_pMaterial{ NULL };
 
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };

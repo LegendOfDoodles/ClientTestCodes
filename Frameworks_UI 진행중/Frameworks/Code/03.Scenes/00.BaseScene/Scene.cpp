@@ -170,7 +170,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	m_pCamera = new  CAOSCamera();
+	m_pCamera = new  CCamera();
 
 	m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 	m_pCamera->RegenerateViewMatrix();

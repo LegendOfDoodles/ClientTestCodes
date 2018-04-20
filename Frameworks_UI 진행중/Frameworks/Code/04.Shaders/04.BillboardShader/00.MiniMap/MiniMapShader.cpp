@@ -135,6 +135,27 @@ D3D12_INPUT_LAYOUT_DESC CMiniMapShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
+D3D12_BLEND_DESC CMiniMapShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC blendDesc;
+	::ZeroMemory(&blendDesc, sizeof(D3D12_BLEND_DESC));
+
+	blendDesc.AlphaToCoverageEnable = TRUE;
+	blendDesc.IndependentBlendEnable = FALSE;
+	blendDesc.RenderTarget[0].BlendEnable = FALSE;
+	blendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return(blendDesc);
+}
+
 D3D12_SHADER_BYTECODE CMiniMapShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
 {
 	//./Code/04.Shaders/99.GraphicsShader/
@@ -212,7 +233,7 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 #else
 
 	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D, 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Stones.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 0);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -244,7 +265,7 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 #endif
 		m_pMiniMap->SetPosition(0.f, 0.f, 0.f);
 		m_pMiniMap->SetCamera(pCamera);
-		m_pMiniMap->SetDistance(100.f);
+		m_pMiniMap->SetDistance(10.f);
 #if !USE_INSTANCING
 		m_pMiniMap->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
 #endif
