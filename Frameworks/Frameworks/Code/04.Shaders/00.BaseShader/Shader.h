@@ -7,7 +7,7 @@ class CCreateMgr;
 class CCamera;
 class CTexture;
 
-class CShader
+class CShader	// Ani Shader가 오브젝트 쉐이더 상속받으면 적당히 기능 나눌 필요 있음
 {
 public:	// 생성자, 소멸자
 	CShader(CCreateMgr *pCreateMgr);

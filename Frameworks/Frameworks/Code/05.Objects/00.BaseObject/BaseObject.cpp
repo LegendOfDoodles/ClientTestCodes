@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-18
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -42,6 +42,7 @@ CBaseObject::~CBaseObject()
 
 	if (m_pShader){ m_pShader->Finalize(); }
 	if (m_pMaterial) m_pMaterial->Finalize();
+	if (m_pathToGo) Safe_Delete(m_pathToGo);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -206,6 +207,22 @@ void CBaseObject::MoveForward(float fDistance)
 	CBaseObject::SetPosition(xmf3Position);
 }
 
+void CBaseObject::MoveUpModel(float fDistance)
+{
+	XMFLOAT3 xmf3Position = GetPosition();
+	XMFLOAT3 xmf3Up = GetUpModel();
+	xmf3Position = Vector3::Add(xmf3Position, xmf3Up, fDistance);
+	CBaseObject::SetPosition(xmf3Position);
+}
+
+void CBaseObject::MoveForwardModel(float fDistance)
+{
+	XMFLOAT3 xmf3Position = GetPosition();
+	XMFLOAT3 xmf3Look = GetLookModel();
+	xmf3Position = Vector3::Add(xmf3Position, xmf3Look, fDistance);
+	CBaseObject::SetPosition(xmf3Position);
+}
+
 void CBaseObject::Rotate(XMFLOAT3 *pxmf3Axis, float fAngle)
 {
 	XMMATRIX mtxRotate = XMMatrixRotationAxis(
@@ -286,6 +303,12 @@ void CBaseObject::SetPosition(float x, float y, float z)
 void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 {
 	SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
+}
+
+void CBaseObject::SetPathToGo(Path * path)
+{
+	if (m_pathToGo) Safe_Delete(m_pathToGo);
+	m_pathToGo = path;
 }
 
 ////////////////////////////////////////////////////////////////////////

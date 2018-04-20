@@ -5,7 +5,7 @@
 /// 목적: Create 통합 중 테스트 용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-09
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -30,9 +30,6 @@ void CRotatingObject::Animate(float timeElapsed)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-
-
-
 
 
 CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
@@ -61,12 +58,11 @@ void CAnimatedObject::Animate(float timeElapsed)
 			m_fFrameTime -= m_nAniLength[m_nAniState];
 	}
 
-	int Bcnt = m_pSkeleton[m_nAniState].GetBoneCount(); // 이거 1 줄어야 디버그에서 오류 안남 왜인진 모르겠다.
+	int Bcnt = m_pSkeleton[m_nAniState].GetBoneCount(); 
 
 	for (int i = 0; i < Bcnt; ++i) {
 		m_xmf4x4Frame[i] = m_pSkeleton[m_nAniState].GetBone(i).GetFrame((int)m_fFrameTime);
 	}
-
 }
 
 void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
@@ -96,3 +92,4 @@ void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
 		}
 	}
 }
+

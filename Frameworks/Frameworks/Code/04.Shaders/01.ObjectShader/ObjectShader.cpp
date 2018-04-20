@@ -4,6 +4,7 @@
 #include "05.Objects/05.Minion/Minion.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
+#include "05.Objects/03.Terrain/HeightMapTerrain.h"
 
 /// <summary>
 /// 목적: 오브젝트 테스트 쉐이더
@@ -289,6 +290,7 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
+	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
@@ -684,7 +686,8 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
+	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
+	int xObjects = 10, yObjects = 0, zObjects = 0, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -769,7 +772,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pMinionObject->SetSkeleton(pSWalkStart);
 				pMinionObject->SetSkeleton(pSWalk);
 				pMinionObject->SetSkeleton(pDie);
-
+				pMinionObject->SetTerrain(m_pTerrain);
 
 				pMinionObject->Rotate(90, 0, 0);
 

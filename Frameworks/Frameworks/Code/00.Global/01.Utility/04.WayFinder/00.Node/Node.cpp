@@ -5,7 +5,7 @@
 /// 목적: 길찾기 알고리즘에서 사용할 노드 정의
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-19
+/// 최종 수정 날짜: 2018-04-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -30,6 +30,12 @@ const POINT & CNode::GetDividIndex() const
 
 	return dividIndex;
 }
+
+int CNode::GetDistanceSquareWithPosition(const XMFLOAT2 &position)
+{
+	return  (position.x - m_position.x) * (position.x - m_position.x) + (position.y - m_position.y) * (position.y - m_position.y);
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수

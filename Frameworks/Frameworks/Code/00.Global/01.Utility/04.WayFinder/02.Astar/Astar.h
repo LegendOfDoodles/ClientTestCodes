@@ -39,7 +39,7 @@ public: // 생성자, 소멸자
 
 public: // 공개 함수
 	int FindPath();
-	Path GetPath();
+	Path *GetPath();
 
 protected: // 내부 함수
 	double Heuristic_Menhattan(int from, int to);

@@ -18,7 +18,7 @@ protected: // 내부 함수
 private:	 // 변수
 	XMFLOAT3 m_rotationAxis;
 	float m_rotationSpeed;
-};
+};	// 이거 안쓰므로 날리고 파일 및 경로 이름 바꿀 것
 
 
 
@@ -32,7 +32,6 @@ protected:
 	int m_nAniState{ 0 };
 
 	float m_fFrameTime{ 0 };
-
 
 public:
 	CAnimatedObject(CCreateMgr *pCreateMgr);
@@ -59,6 +58,7 @@ public:
 		m_fFrameTime = 0;
 		if (m_nAniState >= m_nAniCnt) { m_nAniState = 0; }
 	}
+protected:
 
 };
 

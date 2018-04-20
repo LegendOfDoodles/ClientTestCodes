@@ -12,26 +12,20 @@ enum MinionState {
 	Die
 };
 
-class CMinion : public CBaseObject
+class CHeightMapTerrain;
+
+class CMinion : public CBaseObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
 {
-protected:
-
-	MinionState m_CurrAnimationState = MinionState::Walking;
-	MinionState m_NextAnimationState = MinionState::Walking;
-	CSkeleton	m_pSkeleton[20];
-	int m_nAniLength[20];
-	int m_nCurrAnimation{ 3 };
-	/*
-		0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
-	*/
-	float m_fFrameTime{ 0 };
-
-	int m_nAniCnt{ 0 };
-
-public:
+public: // 생성자, 소멸자
 	CMinion(CCreateMgr *pCreateMgr);
-	CMinion(CCreateMgr *pCreateMgr,int nMeshes);
-	
+	CMinion(CCreateMgr *pCreateMgr, int nMeshes);
+	virtual ~CMinion();
+
+public:	// 외부 함수
+	virtual void Animate(float timeElapsed);
+	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
+	virtual void SetPathToGo(Path *path);
+
 	void SetSkeleton(CSkeleton *skeleton) {
 		m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
 		m_pSkeleton[m_nAniCnt++] = *skeleton;
@@ -59,9 +53,27 @@ public:
 		}
 		m_fFrameTime = 0;
 	}
-	
-	virtual void Animate(float timeElapsed);
-	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
-	virtual ~CMinion();
 
+	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
+
+protected:	// 내부 함수
+	bool IsArrive(const XMFLOAT2& nextPos);
+
+protected:	// 변수
+	MinionState m_CurrAnimationState = MinionState::Walking;
+	MinionState m_NextAnimationState = MinionState::Walking;
+	CSkeleton	m_pSkeleton[20];
+
+	int m_nAniLength[20];
+	int m_nCurrAnimation{ 3 };
+	/*
+	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
+	*/
+	float m_fFrameTime{ 0 };
+
+	int m_nAniCnt{ 0 };
+
+	XMFLOAT2 m_destination{ -1,  -1 };	// 얘를 깔끔하게 API 같이 만들 필요 있을 듯
+
+	CHeightMapTerrain * m_pTerrain{ NULL };	// 나중에 상속 부모 바뀌면 수정 필요
 };

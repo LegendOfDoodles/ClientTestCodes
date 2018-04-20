@@ -236,7 +236,6 @@
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h" />
     <ClInclude Include="Code\07.Network\Network.h" />
     <ClInclude Include="Code\07.Network\protocol.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Macros.h">
@@ -253,6 +252,9 @@
     </ClInclude>
     <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.h">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
+      <Filter>소스 파일\05.Objects\05.Minion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -343,9 +345,6 @@
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Code\07.Network\Network.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -360,6 +359,9 @@
     </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.cpp">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\05.Minion\Minion.cpp">
+      <Filter>소스 파일\05.Objects\05.Minion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

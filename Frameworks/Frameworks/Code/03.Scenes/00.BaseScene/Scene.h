@@ -3,6 +3,7 @@
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
 
 class CCreateMgr;
+class CWayFinder;
 
 struct LIGHT
 {
@@ -25,7 +26,7 @@ struct LIGHTS
 	XMFLOAT4				m_xmf4GlobalAmbient;
 };
 
-class CScene
+class CScene	// 인 게임 씬이랑 공백 씬이랑 분리할 필요 있음
 {
 public:	// 생성자, 소멸자
 	CScene();
@@ -91,6 +92,8 @@ protected: // 변수
 	bool m_bRenderBoundingBox{ false };
 
 	XMFLOAT3 m_pickWorldPosition{ 0.f, 0.f, 0.f };
+
+	CWayFinder* m_pWayFinder{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
 };

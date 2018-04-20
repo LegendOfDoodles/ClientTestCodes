@@ -13,6 +13,8 @@ public: // 생성자, 소멸자
 public: // 공개 함수
 	const POINT &GetDividIndex() const;
 
+	int GetDistanceSquareWithPosition(const XMFLOAT2 &position);
+
 	int Index() { return m_index; }
 	XMFLOAT2 Position() { return m_position; }
 	XMFLOAT2 Position() const { return m_position; }

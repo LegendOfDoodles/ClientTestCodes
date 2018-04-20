@@ -15,6 +15,8 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
+	CHeightMapTerrain * GetTerrain() { return m_pTerrain; }
+
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
