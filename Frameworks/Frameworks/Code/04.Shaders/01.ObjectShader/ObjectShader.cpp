@@ -687,7 +687,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-	int xObjects = 10, yObjects = 0, zObjects = 0, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects = 2, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -712,20 +712,32 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion.meshinfo");
-	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Sword.meshinfo");
-	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Staff.meshinfo");
-	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "FBXBinary//Minion_Bow.meshinfo");
+	CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
+	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Sword.meshinfo");
+	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Staff.meshinfo");
+	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Bow2.meshinfo");
 
 
 
-	CSkeleton *pSIdle = new CSkeleton("FBXBinary//Minion_S_Idle.aniinfo");
-	CSkeleton *pSAtk1 = new CSkeleton("FBXBinary//Minion_S_Attack1.aniinfo");
-	CSkeleton *pSAtk2 = new CSkeleton("FBXBinary//Minion_S_Attack2.aniinfo");
-	CSkeleton *pSWalkStart = new CSkeleton("FBXBinary//Minion_S_WalkStart.aniinfo");
-	CSkeleton *pSWalk = new CSkeleton("FBXBinary//Minion_S_Walk.aniinfo");
+	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
+	CSkeleton *pSAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
+	CSkeleton *pSAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
+	CSkeleton *pSWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
+	CSkeleton *pSWalk = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
 
-	CSkeleton *pDie = new CSkeleton("FBXBinary//Minion_Die.aniinfo");
+	CSkeleton *pBIdle = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
+	CSkeleton *pBAtk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
+	CSkeleton *pBWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
+	CSkeleton *pBWalk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
+
+	CSkeleton *pMIdle = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
+	CSkeleton *pMAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
+	CSkeleton *pMAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
+	CSkeleton *pMWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
+	CSkeleton *pMWalk = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
+
+
+	CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
 
 
 	pMinionMesh->SetBoundingBox(
@@ -751,11 +763,38 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 		{
 			for (int x = 0; x <= xObjects; x++)
 			{
-
-				pMinionObject = new CMinion(pCreateMgr, 2);
+				switch (z)
+				{
+				case 0:
+					pMinionObject = new CSwordMinion(pCreateMgr, 2);
+					break;
+				case 1:
+					pMinionObject = new CMagicMinion(pCreateMgr, 2);
+					break;
+				case 2:
+					pMinionObject = new CBowMinion(pCreateMgr, 2);
+					break;
+				default:
+					pMinionObject = new CSwordMinion(pCreateMgr, 2);
+					break;
+				}
 #if !USE_INSTANCING
 				pMinionObject->SetMesh(0, pMinionMesh);
-				pMinionObject->SetMesh(1, m_pWeapons[0]);
+				switch (z)
+				{
+				case 0:
+					pMinionObject->SetMesh(1, m_pWeapons[0]);
+					break;
+				case 1:
+					pMinionObject->SetMesh(1, m_pWeapons[1]);
+					break;
+				case 2:
+					pMinionObject->SetMesh(1, m_pWeapons[2]);
+					break;
+				default:
+					pMinionObject->SetMesh(1, m_pWeapons[0]);
+					break;
+			}
 #endif
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);
@@ -765,12 +804,38 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
 				pMinionObject->SetPosition(x * 30, y * 100, z * 100);
 
+				switch (z)
+				{
+				case 0:
+					pMinionObject->SetSkeleton(pSIdle);
+					pMinionObject->SetSkeleton(pSAtk1);
+					pMinionObject->SetSkeleton(pSAtk2);
+					pMinionObject->SetSkeleton(pSWalkStart);
+					pMinionObject->SetSkeleton(pSWalk);
+					break;
+				case 1:
+					pMinionObject->SetSkeleton(pMIdle);
+					pMinionObject->SetSkeleton(pMAtk1);
+					pMinionObject->SetSkeleton(pMAtk2);
+					pMinionObject->SetSkeleton(pMWalkStart);
+					pMinionObject->SetSkeleton(pMWalk);
+					break;
+				case 2:
+					pMinionObject->SetSkeleton(pBIdle);
+					pMinionObject->SetSkeleton(pBAtk);
+					pMinionObject->SetSkeleton(pBWalkStart);
+					pMinionObject->SetSkeleton(pBWalk);
+					break;
+				default:
+					pMinionObject->SetSkeleton(pSIdle);
+					pMinionObject->SetSkeleton(pSAtk1);
+					pMinionObject->SetSkeleton(pSAtk2);
+					pMinionObject->SetSkeleton(pSWalkStart);
+					pMinionObject->SetSkeleton(pSWalk);
 
-				pMinionObject->SetSkeleton(pSIdle);
-				pMinionObject->SetSkeleton(pSAtk1);
-				pMinionObject->SetSkeleton(pSAtk2);
-				pMinionObject->SetSkeleton(pSWalkStart);
-				pMinionObject->SetSkeleton(pSWalk);
+					break;
+				}
+
 				pMinionObject->SetSkeleton(pDie);
 				pMinionObject->SetTerrain(m_pTerrain);
 
@@ -782,13 +847,13 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 #endif
 				m_ppObjects[i++] = pMinionObject;
-			}
 		}
 	}
+}
 
 
 
-	
+
 
 
 
