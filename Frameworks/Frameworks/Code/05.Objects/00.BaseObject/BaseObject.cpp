@@ -293,6 +293,12 @@ XMFLOAT3 CBaseObject::GetUpModel()
 	return(Vector3::Normalize(XMFLOAT3(m_xmf4x4World._31, m_xmf4x4World._32, m_xmf4x4World._33)));
 }
 
+void CBaseObject::SetPosition(float x, float z)
+{
+	m_xmf4x4World._41 = x;
+	m_xmf4x4World._43 = z;
+}
+
 void CBaseObject::SetPosition(float x, float y, float z)
 {
 	m_xmf4x4World._41 = x;

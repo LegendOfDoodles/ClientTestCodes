@@ -26,6 +26,8 @@ public:	// 외부 함수
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 	virtual void SetPathToGo(Path *path);
 
+	virtual void SetPosition(float x, float z);
+
 	void SetSkeleton(CSkeleton *skeleton) {
 		m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
 		m_pSkeleton[m_nAniCnt++] = *skeleton;

@@ -66,6 +66,7 @@ public: // 공개 함수
 	XMFLOAT3 GetLookModel();	// 모델 오브젝트만 적용할 수 있도록 수정할 필요
 	XMFLOAT3 GetUpModel();// 모델 오브젝트만 적용할 수 있도록 수정할 필요
 
+	virtual void SetPosition(float x, float z);
 	void SetPosition(float x, float y, float z);
 	void SetPosition(XMFLOAT3 xmf3Position);
 

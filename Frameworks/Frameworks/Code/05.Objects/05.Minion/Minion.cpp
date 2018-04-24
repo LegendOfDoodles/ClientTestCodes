@@ -63,7 +63,7 @@ void CMinion::Animate(float timeElapsed)
 			MoveForwardModel(1.f);
 			XMFLOAT3 position = GetPosition();
 			position.y = m_pTerrain->GetHeight(position.x, position.z);
-			SetPosition(position);
+			CBaseObject::SetPosition(position);
 		}
 	}
 }
@@ -101,6 +101,11 @@ void CMinion::SetPathToGo(Path * path)
 	if (m_pathToGo) Safe_Delete(m_pathToGo);
 	m_pathToGo = path;
 	m_destination.x = -1;
+}
+
+void CMinion::SetPosition(float x, float z)
+{
+	CBaseObject::SetPosition(x, m_pTerrain->GetHeight(x, z), z);
 }
 
 ////////////////////////////////////////////////////////////////////////

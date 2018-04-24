@@ -802,7 +802,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pMinionObject->SetBoundingMesh(pCreateMgr,
 					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pMinionObject->SetPosition(x * 30, y * 100, z * 100);
+				pMinionObject->CBaseObject::SetPosition(x * 30, y * 100, z * 100);
 
 				switch (z)
 				{

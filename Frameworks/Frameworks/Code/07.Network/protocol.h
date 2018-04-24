@@ -88,12 +88,12 @@ struct CS_MsgChMove : public Packet
 #define VIEW_RADIUS 3
 
 #define MY_SERVER_PORT 4000
-
+#define WM_SOCKET		WM_USER+1
 //enum class Type : BYTE { Connect, Create, Delete, Move, Attack, Hit };
 //Server-> Client
 #define SC_CONNECT_PLAYER		  101
 #define SC_PUT_PLAYER			  102
-#define SC_REMOVE_PLAYER	  103
+#define SC_REMOVE_PLAYER		  103
 #define SC_MOVE_PLAYER			  104
 #define SC_ATTACK				  105
 #define SC_HIT					  106
@@ -103,10 +103,10 @@ struct CS_MsgChMove : public Packet
 #define CS_ACTION				  201
 #define CS_MOVE_PLAYER			  202
 //In Client Move Object
-#define CS_UP					  203
-#define CS_DOWN					  204
-#define CS_LEFT					  205
-#define CS_RIGHT				  206
+#define CS_UP					  1
+#define CS_DOWN					  2
+#define CS_LEFT					  3
+#define CS_RIGHT				  4
 
 
 

@@ -257,10 +257,10 @@
     <ClInclude Include="Code\05.Objects\05.Minion\Minion.h">
       <Filter>소스 파일\05.Objects\05.Minion</Filter>
     </ClInclude>
-    <ClInclude Include="Code\07.Network\Network.h">
+    <ClInclude Include="Code\07.Network\protocol.h">
       <Filter>소스 파일\07.Network</Filter>
     </ClInclude>
-    <ClInclude Include="Code\07.Network\protocol.h">
+    <ClInclude Include="Code\07.Network\Network.h">
       <Filter>소스 파일\07.Network</Filter>
     </ClInclude>
   </ItemGroup>
