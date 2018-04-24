@@ -43,7 +43,7 @@ CMaterial* Materials::CreateTerrainMaterial(CCreateMgr *pCreateMgr,
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/paperTex.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/asdf.dds", 0);
 	
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

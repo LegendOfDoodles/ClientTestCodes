@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-18
+/// 최종 수정 날짜: 2018-04-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -961,14 +961,13 @@ CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMF
 		}
 	}
 
-	if (pHeightMapPixels) delete[] pHeightMapPixels;
+	if (pHeightMapPixels) Safe_Delete_Array(pHeightMapPixels);
 }
 
 
 CHeightMapImage::~CHeightMapImage()
 {
-	if (m_pHeightMapPixels) delete[] m_pHeightMapPixels;
-	m_pHeightMapPixels = NULL;
+	if (m_pHeightMapPixels) Safe_Delete_Array(m_pHeightMapPixels);
 }
 
 
@@ -1064,8 +1063,8 @@ CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int z
 	{
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
-			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), (OnGetHeight(x, z, pContext) - 173.44f)* m_xmf3Scale.y, (z*m_xmf3Scale.z)),
-				XMFLOAT2(z * 0.2f, x * 0.2f), Vector4::Add(OnGetColor(x * 0.2f, z * 0.2f, pContext), xmf4Color));
+			pVertices[i] = CDiffuseTexturedVertex(XMFLOAT3((x*m_xmf3Scale.x), (OnGetHeight(x, z, pContext) - REVISE_HEIGHT)* m_xmf3Scale.y, (z*m_xmf3Scale.z)),
+				XMFLOAT2( (float)x / (xStart + nWidth - 1), 1 - (float)z / (zStart + nLength - 1)), /*Vector4::Add(OnGetColor(x * 0.2f, z * 0.2f, pContext),*/ xmf4Color);
 		}
 	}
 
@@ -1403,4 +1402,61 @@ CCubeMesh4Collider::CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth, flo
 
 CCubeMesh4Collider::~CCubeMesh4Collider()
 {
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+CCollisionMapImage::CCollisionMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale)
+{
+	m_nWidth = nWidth;
+	m_nLength = nLength;
+	m_xmf3Scale = xmf3Scale;
+	BYTE *pCollisionMapPixels = new BYTE[m_nWidth * m_nLength];
+
+	HANDLE hFile = ::CreateFile(pFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_READONLY, NULL);
+	DWORD dwBytesRead;
+	::ReadFile(hFile, pCollisionMapPixels, (m_nWidth * m_nLength), &dwBytesRead, NULL);
+	::CloseHandle(hFile);
+
+	m_pCollisionMapPixels = new BYTE[m_nWidth * m_nLength];
+	for (int y = 0; y < m_nLength; y++)
+	{
+		for (int x = 0; x < m_nWidth; x++)
+		{
+			m_pCollisionMapPixels[x + ((m_nLength - 1 - y)*m_nWidth)] = pCollisionMapPixels[x + (y*m_nWidth)];
+		}
+	}
+
+	if (pCollisionMapPixels) Safe_Delete_Array(pCollisionMapPixels);
+}
+
+CCollisionMapImage::~CCollisionMapImage(void)
+{
+	if (m_pCollisionMapPixels) Safe_Delete_Array(m_pCollisionMapPixels);
+}
+
+bool CCollisionMapImage::GetCollision(float fx, float fz)
+{
+	fx = fx / m_xmf3Scale.x;
+	fz = fz / m_xmf3Scale.z;
+
+	// 좌표를 벗어나면 항상 콜리전이 일어나도록 한다.
+	if ((fx < 0.0f) || (fz < 0.0f) || (fx >= m_nWidth) || (fz >= m_nLength)) return(true);
+
+	//높이 맵의 좌표의 정수 부분과 소수 부분을 계산한다.
+	int x = (int)fx;
+	int z = (int)fz;
+	float fxPercent = fx - x;
+	float fzPercent = fz - z;
+
+	float fBottomLeft = (float)m_pCollisionMapPixels[x + (z*m_nWidth)];
+	float fBottomRight = (float)m_pCollisionMapPixels[(x + 1) + (z*m_nWidth)];
+	float fTopLeft = (float)m_pCollisionMapPixels[x + ((z + 1)*m_nWidth)];
+	float fTopRight = (float)m_pCollisionMapPixels[(x + 1) + ((z + 1)*m_nWidth)];
+
+	//사각형의 네 점 중 두개 이상이 충돌 지역인 경우 충돌하는 것으로 가정한다.
+	float sumValue = fBottomLeft + fBottomRight + fTopLeft + fTopRight;
+
+	return(sumValue>=510);
 }

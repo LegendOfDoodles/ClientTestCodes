@@ -66,9 +66,6 @@
     <Filter Include="소스 파일\00.Global\01.Utility\00.Timer">
       <UniqueIdentifier>{941e7b22-a475-49c5-9afc-b53f5867e479}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\05.Objects\02.RotatingObject">
-      <UniqueIdentifier>{be3fc130-7dbf-4272-9abf-efccf81d9bf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\04.Shaders\99.GraphicsShader">
       <UniqueIdentifier>{143b46d5-28cb-4cc9-a938-bdcd4a629a39}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,21 @@
     <Filter Include="소스 파일\07.Network">
       <UniqueIdentifier>{ed8f421a-dea7-4a21-92b7-629cad64076d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\02.AnimatedObject">
+      <UniqueIdentifier>{be3fc130-7dbf-4272-9abf-efccf81d9bf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\06.StaticObjects">
+      <UniqueIdentifier>{8c0a7184-1d6e-4cf0-b583-e5b31917633e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\06.StaticObjects\01.Nexus">
+      <UniqueIdentifier>{e82e1ea4-61b8-4b90-8a36-59d2c4cae410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\06.StaticObjects\02.Tower">
+      <UniqueIdentifier>{aecd502d-645b-4b85-9173-aa6e536a2ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\06.StaticObjects\03.Obstacle">
+      <UniqueIdentifier>{b0db6c80-ec33-46ee-94a1-4b17c117db0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -188,9 +200,6 @@
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h">
       <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\02.RotatingObject\RotatingObject.h">
-      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
-    </ClInclude>
     <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h">
       <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
     </ClInclude>
@@ -211,9 +220,6 @@
     </ClInclude>
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h">
       <Filter>소스 파일\06.Meshes\01.Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\04.Shaders\01.ObjectShader\ObjectShader.h">
-      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClInclude>
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h">
       <Filter>소스 파일\05.Objects\97.Skeleton</Filter>
@@ -263,6 +269,21 @@
     <ClInclude Include="Code\07.Network\Network.h">
       <Filter>소스 파일\07.Network</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\02.AnimatedObject\AnimatedObject.h">
+      <Filter>소스 파일\05.Objects\02.AnimatedObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\06.StaticObjects\01.Nexus\Nexus.h">
+      <Filter>소스 파일\05.Objects\06.StaticObjects\01.Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\06.StaticObjects\02.Tower\Tower.h">
+      <Filter>소스 파일\05.Objects\06.StaticObjects\02.Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\06.StaticObjects\03.Obstacles\Obstacle.h">
+      <Filter>소스 파일\05.Objects\06.StaticObjects\03.Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.h">
+      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -300,9 +321,6 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp">
       <Filter>소스 파일\05.Objects\00.BaseObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\02.RotatingObject\RotatingObject.cpp">
-      <Filter>소스 파일\05.Objects\02.RotatingObject</Filter>
     </ClCompile>
     <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp">
       <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
@@ -346,9 +364,6 @@
     <ClCompile Include="Code\04.Shaders\98.ArrowShader\ArrowShader.cpp">
       <Filter>소스 파일\04.Shaders\98.ArrowShader</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\01.ObjectShader\ObjectShader.cpp">
-      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
-    </ClCompile>
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp">
       <Filter>소스 파일\05.Objects\96.Arrow</Filter>
     </ClCompile>
@@ -369,6 +384,21 @@
     </ClCompile>
     <ClCompile Include="Code\07.Network\Network.cpp">
       <Filter>소스 파일\07.Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\02.AnimatedObject\AnimatedObject.cpp">
+      <Filter>소스 파일\05.Objects\02.AnimatedObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\06.StaticObjects\01.Nexus\Nexus.cpp">
+      <Filter>소스 파일\05.Objects\06.StaticObjects\01.Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\06.StaticObjects\02.Tower\Tower.cpp">
+      <Filter>소스 파일\05.Objects\06.StaticObjects\02.Tower</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\06.StaticObjects\03.Obstacles\Obstacle.cpp">
+      <Filter>소스 파일\05.Objects\06.StaticObjects\03.Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.cpp">
+      <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

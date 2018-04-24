@@ -187,8 +187,8 @@ Path* CAstar::GetPath()
 // 내부 함수
 double CAstar::Heuristic_Menhattan(int from, int to)
 {
-	const POINT& fromDividIndex = m_pFinder->GetNodeAt(from).GetDividIndex();
-	const POINT& toDividIndex = m_pFinder->GetNodeAt(to).GetDividIndex();
+	const POINT fromDividIndex = m_pFinder->GetNodeAt(from).GetDividIndex();
+	const POINT toDividIndex = m_pFinder->GetNodeAt(to).GetDividIndex();
 	return ((fromDividIndex.x > toDividIndex.x ? fromDividIndex.x - toDividIndex.x : toDividIndex.x - fromDividIndex.x) +
 		(fromDividIndex.y > toDividIndex.y ? fromDividIndex.y - toDividIndex.y : toDividIndex.y - fromDividIndex.y)) * 10.0f;
 }

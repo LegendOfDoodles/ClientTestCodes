@@ -223,3 +223,27 @@ public:
 	CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
 	virtual ~CCubeMesh4Collider();
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CCollisionMapImage
+{
+private:
+	BYTE * m_pCollisionMapPixels;
+	int m_nWidth;
+	int m_nLength;
+
+	XMFLOAT3 m_xmf3Scale;
+
+public:
+	CCollisionMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale);
+	~CCollisionMapImage(void);
+
+	bool GetCollision(float x, float z);
+
+	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
+
+	BYTE *GetCollisionMapPixels() { return(m_pCollisionMapPixels); }
+	int GetHeightMapWidth() { return(m_nWidth); }
+	int GetHeightMapLength() { return(m_nLength); }
+};

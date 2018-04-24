@@ -4,19 +4,17 @@
 class CMaterial;
 class CHeightMapTerrain;
 
-class CObjectShader : public CShader
+class CStaticObjectShader : public CShader
 {
 public: // 생성자, 소멸자
-	CObjectShader(CCreateMgr *pCreateMgr);
-	~CObjectShader();
+	CStaticObjectShader(CCreateMgr *pCreateMgr);
+	~CStaticObjectShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
 
 	virtual void UpdateShaderVariables();
 	virtual void UpdateBoundingBoxShaderVariables();
-
-	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
 	virtual void RenderBoundingBox(CCamera *pCamera);

@@ -11,10 +11,6 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CMinion::CMinion(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
-{
-}
-
 CMinion::CMinion(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr, nMeshes)
 {
 }
@@ -40,14 +36,9 @@ void CMinion::Animate(float timeElapsed)
 
 	if (m_pathToGo)
 	{
-		if (m_destination.x == -1)	// 처음 움직이기 시작하는 경우
+		if (m_destination.x == -1 || IsArrive(m_destination))	//  도착 한 경우
 		{
-			m_destination = m_pathToGo->front().To();
-			m_pathToGo->pop_front();
-		}
-		else if (IsArrive(m_destination))	//  도착 한 경우
-		{
-			if (m_pathToGo->size() == 0)
+			if (m_pathToGo->empty())
 			{
 				Safe_Delete(m_pathToGo);
 				m_destination.x = -1;
@@ -55,6 +46,7 @@ void CMinion::Animate(float timeElapsed)
 			else
 			{
 				m_destination = m_pathToGo->front().To();
+				m_pathToGo->pop_front();
 				LookAt(XMFLOAT3(m_destination.x, 0, m_destination.y));
 			}
 		}
@@ -98,7 +90,11 @@ void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
 
 void CMinion::SetPathToGo(Path * path)
 {
-	if (m_pathToGo) Safe_Delete(m_pathToGo);
+	if (m_pathToGo)
+	{
+		m_pathToGo->clear();
+		Safe_Delete(m_pathToGo);
+	}
 	m_pathToGo = path;
 	m_destination.x = -1;
 }
@@ -112,7 +108,7 @@ void CMinion::SetPosition(float x, float z)
 // 내부 함수
 bool CMinion::IsArrive(const XMFLOAT2 & nextPos)
 {
-	static int radius = 3 * 3;
+	static int radius = 20 * 20;
 	XMFLOAT3 curPos = GetPosition();
 
 	int distance = (nextPos.x - curPos.x) * (nextPos.x - curPos.x) + (nextPos.y - curPos.z) * (nextPos.y - curPos.z);
