@@ -15,7 +15,7 @@ struct SC_MsgConnect : public Packet
 	BYTE client_id;
 	BYTE Character_id;
 };
-struct SC_MsgChCreate : public Packet
+struct SC_Msg_Put_Character : public Packet
 {
 	BYTE Character_id;
 	short x;
@@ -27,7 +27,7 @@ struct SC_MsgMoCreate : public Packet
 	short x;
 	short y;
 };
-struct SC_MsgChDelete : public Packet
+struct SC_Msg_Remove_Character : public Packet
 {
 	BYTE Character_id;
 };
@@ -85,6 +85,7 @@ struct CS_MsgChMove : public Packet
 #define MAX_USER 5
 #define NPC_START 1000
 #define NUM_OF_NPC 10000
+#define VIEW_RADIUS 3
 
 #define MY_SERVER_PORT 4000
 
@@ -92,7 +93,7 @@ struct CS_MsgChMove : public Packet
 //Server-> Client
 #define SC_CONNECT_PLAYER		  101
 #define SC_PUT_PLAYER			  102
-#define SC_DISCONNECT_PLAYER	  103
+#define SC_REMOVE_PLAYER	  103
 #define SC_MOVE_PLAYER			  104
 #define SC_ATTACK				  105
 #define SC_HIT					  106
