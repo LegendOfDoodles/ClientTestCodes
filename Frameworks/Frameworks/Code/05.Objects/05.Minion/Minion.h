@@ -17,8 +17,7 @@ class CHeightMapTerrain;
 class CMinion : public CBaseObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
 {
 public: // 생성자, 소멸자
-	CMinion(CCreateMgr *pCreateMgr);
-	CMinion(CCreateMgr *pCreateMgr, int nMeshes);
+	CMinion(CCreateMgr *pCreateMgr, int nMeshes = 1);
 	virtual ~CMinion();
 
 public:	// 외부 함수

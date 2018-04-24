@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-20
+/// 최종 수정 날짜: 2018-04-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -307,7 +307,11 @@ void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 
 void CBaseObject::SetPathToGo(Path * path)
 {
-	if (m_pathToGo) Safe_Delete(m_pathToGo);
+	if (m_pathToGo)
+	{
+		m_pathToGo->clear();
+		Safe_Delete(m_pathToGo);
+	}
 	m_pathToGo = path;
 }
 

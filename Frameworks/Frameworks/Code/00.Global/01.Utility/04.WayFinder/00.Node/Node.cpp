@@ -21,7 +21,7 @@ CNode::~CNode()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-const POINT & CNode::GetDividIndex() const
+const POINT CNode::GetDividIndex() const
 {
 	POINT dividIndex;
 

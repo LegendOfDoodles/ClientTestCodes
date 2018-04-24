@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
-#include "05.Objects/02.RotatingObject/RotatingObject.h"
-#include "04.Shaders/01.ObjectShader/ObjectShader.h"
+#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "04.Shaders/01.ObjectShader/StaticObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
@@ -237,7 +237,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_pWayFinder = new CWayFinder(248.4, 248.4);
+	m_pWayFinder = new CWayFinder(124.2, 124.2);
 
 	BuildLights();
 }

@@ -1,32 +1,32 @@
 #include "stdafx.h"
-#include "ObjectShader.h"
-#include "05.Objects/02.RotatingObject/RotatingObject.h"
+#include "StaticObjectShader.h"
+#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/05.Minion/Minion.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 #include "05.Objects/03.Terrain/HeightMapTerrain.h"
 
 /// <summary>
-/// 목적: 오브젝트 테스트 쉐이더
+/// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-18
+/// 최종 수정 날짜: 2018-04-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CObjectShader::CObjectShader(CCreateMgr *pCreateMgr)
+CStaticObjectShader::CStaticObjectShader(CCreateMgr *pCreateMgr)
 	: CShader(pCreateMgr)
 {
 }
 
-CObjectShader::~CObjectShader()
+CStaticObjectShader::~CStaticObjectShader()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CObjectShader::ReleaseUploadBuffers()
+void CStaticObjectShader::ReleaseUploadBuffers()
 {
 	if (!m_ppObjects) return;
 
@@ -39,7 +39,7 @@ void CObjectShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CObjectShader::UpdateShaderVariables()
+void CStaticObjectShader::UpdateShaderVariables()
 {
 #if USE_INSTANCING
 	m_pCommandList->SetGraphicsRootShaderResourceView(2,
@@ -62,7 +62,7 @@ void CObjectShader::UpdateShaderVariables()
 #endif
 }
 
-void CObjectShader::UpdateBoundingBoxShaderVariables()
+void CStaticObjectShader::UpdateBoundingBoxShaderVariables()
 {
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -75,15 +75,7 @@ void CObjectShader::UpdateBoundingBoxShaderVariables()
 	}
 }
 
-void CObjectShader::AnimateObjects(float timeElapsed)
-{
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(timeElapsed);
-	}
-}
-
-void CObjectShader::Render(CCamera *pCamera)
+void CStaticObjectShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 #if USE_BATCH_MATERIAL
@@ -100,7 +92,7 @@ void CObjectShader::Render(CCamera *pCamera)
 #endif
 }
 
-void CObjectShader::RenderBoundingBox(CCamera * pCamera)
+void CStaticObjectShader::RenderBoundingBox(CCamera * pCamera)
 {
 	CShader::RenderBoundingBox(pCamera);
 
@@ -110,7 +102,7 @@ void CObjectShader::RenderBoundingBox(CCamera * pCamera)
 	}
 }
 
-CBaseObject *CObjectShader::PickObjectByRayIntersection(
+CBaseObject *CStaticObjectShader::PickObjectByRayIntersection(
 	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance)
 {
 	bool intersected = 0;
@@ -132,7 +124,7 @@ CBaseObject *CObjectShader::PickObjectByRayIntersection(
 	return(pSelectedObject);
 }
 
-bool CObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
+bool CStaticObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
 	static float R = 0.0f;
 	static float M = 0.0f;
@@ -171,7 +163,7 @@ bool CObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC CStaticObjectShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 4;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
@@ -216,7 +208,7 @@ D3D12_INPUT_LAYOUT_DESC CObjectShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CStaticObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
 	//./Code/04.Shaders/99.GraphicsShader/
 #if USE_INSTANCING
@@ -226,12 +218,12 @@ D3D12_SHADER_BYTECODE CObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 #endif
 }
 
-D3D12_SHADER_BYTECODE CObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CStaticObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLighting", "ps_5_1", ppShaderBlob));
 }
 
-void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
+void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 {
 	m_nPipelineStates = 2;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -247,7 +239,7 @@ void CObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 	CShader::CreateBoundingBoxShader(pCreateMgr);
 }
 
-void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 {
 	HRESULT hResult;
 
@@ -288,18 +280,13 @@ void CObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 	assert(SUCCEEDED(hResult) && "m_pBoundingBoxBuffer->Map Failed");
 }
 
-void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
-	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
+	m_nObjects = 1;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
-#if USE_INSTANCING
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
-	CreateShaderVariables(pCreateMgr);
-#else
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -308,7 +295,6 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
-#endif
 
 #if USE_BATCH_MATERIAL
 	m_pMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
@@ -316,52 +302,9 @@ void CObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	//CSkinnedMesh *pCubeMesh = new CSkinnedMesh(pCreateMgr, "FBXBinary//minion.meshinfo");
-	CCubeMeshIlluminatedTextured* pCubeMesh = new CCubeMeshIlluminatedTextured(pCreateMgr, 20, 20, 20);
-
-	//CSkeleton *pSkeleton = new CSkeleton("FBXBinary//minion.aniinfo");
-	//CSkeleton *pSkeleton1 = new CSkeleton("FBXBinary//minion1.aniinfo");
-	//CSkeleton *pSkeleton2 = new CSkeleton("FBXBinary//minion2.aniinfo");
-	float fxPitch = 12.0f * 5.f;
-	float fyPitch = 12.0f * 5.f;
-	float fzPitch = 12.0f * 5.f;
-
-	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CRotatingObject *pRotatingObject = NULL;
-	for (int y = -yObjects; y <= yObjects; y++)
-	{
-		for (int z = -zObjects; z <= zObjects; z++)
-		{
-			for (int x = -xObjects; x <= xObjects; x++)
-			{
-
-				pRotatingObject = new CRotatingObject(pCreateMgr);
-#if !USE_INSTANCING
-				pRotatingObject->SetMesh(0, pCubeMesh);
-#endif
-#if !USE_BATCH_MATERIAL
-				pRotatingObject->SetMaterial(pCubeMaterial);
-#endif
-				pRotatingObject->SetPosition(x * 30 + 200, y * 100 + 100, z * 100 + 1000);
-				//pRotatingObject->SetSkeleton(pSkeleton);
-				//pRotatingObject->SetSkeleton1(pSkeleton1);
-				//pRotatingObject->SetSkeleton2(pSkeleton2);
-				pRotatingObject->Rotate(90, 0, 0);
-#if !USE_INSTANCING
-				pRotatingObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-				pRotatingObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
-#endif
-				m_ppObjects[i++] = pRotatingObject;
-			}
-		}
-	}
-
-#if USE_INSTANCING
-	m_ppObjects[0]->SetMesh(0, pCubeMesh);
-#endif
 }
 
-void CObjectShader::ReleaseObjects()
+void CStaticObjectShader::ReleaseObjects()
 {
 	if (!m_ppObjects) return;
 

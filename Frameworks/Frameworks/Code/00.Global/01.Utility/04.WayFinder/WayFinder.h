@@ -1,6 +1,7 @@
 #pragma once
 #include "00.Global/01.Utility/04.WayFinder/00.Node/Node.h"
 #include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
+#include "06.Meshes/01.Mesh/Mesh.h"
 
 typedef std::vector<CNode> NodeVector;
 typedef std::vector<CEdge> EdgeVector;
@@ -35,4 +36,5 @@ protected: // 변수
 	POINT m_nodeMax{ 0, 0 };	// 노드 최대 개수(가로, 세로)
 
 	CAstar* m_pCurSearch{ NULL };
+	CCollisionMapImage *m_pCollisionMapImage{ NULL };
 };
