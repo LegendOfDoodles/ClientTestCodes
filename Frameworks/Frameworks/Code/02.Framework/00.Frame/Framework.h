@@ -15,10 +15,10 @@ public:	// 생성자, 소멸자
 
 public: // 공개 함수
 	// Initialize and Release
-	bool Initialize(HINSTANCE hInstance, HWND hWnd);
+	bool Initialize(HINSTANCE hInstance, HWND hWnd, Network network);
 	void Finalize();
 	void ReadPacket(SOCKET socket);
-	void ProcessPacket(char *ptr);
+	//void ProcessPacket(char *ptr);
 	void FrameAdvance(float timeElapsed);
 
 	// Message Process
@@ -36,15 +36,18 @@ private: // 변수
 	CRenderMgr *m_pRenderMgr{ NULL };
 
 	CScene *m_pScene{ NULL };
+	
+	Network m_Network;
 
-	SOCKET  m_mysocket;
-	WSABUF	m_send_wsabuf;
-	char 	m_send_buffer[MAX_BUFF_SIZE];
-	WSABUF	m_recv_wsabuf;
-	char	m_recv_buffer[MAX_BUFF_SIZE];
-	char	m_packet_buffer[MAX_BUFF_SIZE];
-	DWORD	m_in_packet_size = 0;
-	int		m_saved_packet_size = 0;
-	int		m_myid;
+//public: //네트워크 관련 변수들
+//	SOCKET  m_mysocket;
+//	WSABUF	m_send_wsabuf;
+//	char 	m_send_buffer[MAX_BUFF_SIZE];
+//	WSABUF	m_recv_wsabuf;
+//	char	m_recv_buffer[MAX_BUFF_SIZE];
+//	char	m_packet_buffer[MAX_BUFF_SIZE];
+//	DWORD	m_in_packet_size = 0;
+//	int		m_saved_packet_size = 0;
+//	int		m_myid;
 };
 

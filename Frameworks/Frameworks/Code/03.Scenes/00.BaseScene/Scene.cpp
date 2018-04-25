@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
-#include "05.Objects/02.RotatingObject/RotatingObject.h"
-#include "04.Shaders/01.ObjectShader/ObjectShader.h"
+#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "04.Shaders/01.ObjectShader/StaticObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
@@ -28,10 +28,30 @@ CScene::~CScene()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CScene::Initialize(CCreateMgr *pCreateMgr)
+void CScene::Initialize(CCreateMgr *pCreateMgr, Network network)
 {
+	m_Network = network;
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
+	WSADATA	wsadata;
+	WSAStartup(MAKEWORD(2, 2), &wsadata);
+
+	m_Network.m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+
+	SOCKADDR_IN ServerAddr;
+	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
+	ServerAddr.sin_family = AF_INET;
+	ServerAddr.sin_port = htons(MY_SERVER_PORT);
+	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+	int Result = WSAConnect(m_Network.m_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
+
+	WSAAsyncSelect(m_Network.m_mysocket, m_hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
+
+	m_Network.m_send_wsabuf.buf = m_Network.m_send_buffer;
+	m_Network.m_send_wsabuf.len = MAX_BUFF_SIZE;
+	m_Network.m_recv_wsabuf.buf = m_Network.m_recv_buffer;
+	m_Network.m_recv_wsabuf.len = MAX_BUFF_SIZE;
 }
 
 void CScene::Finalize()
@@ -69,6 +89,7 @@ void CScene::ProcessInput()
 	{
 		m_pSelectedObject->Rotate(10, 0, 0);
 	}
+	
 }
 
 void CScene::AnimateObjects(float timeElapsed)
@@ -237,7 +258,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_pWayFinder = new CWayFinder(248.4, 248.4);
+	m_pWayFinder = new CWayFinder(124.2, 124.2);
 
 	BuildLights();
 }
@@ -344,6 +365,8 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 // Process Keyboard Input
 void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
+	
+
 	if(wParam == VK_ESCAPE)
 		::PostQuitMessage(0);
 	else if (wParam == VK_F1)
@@ -366,4 +389,8 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 	{
 		m_bRenderBoundingBox = !m_bRenderBoundingBox;
 	}
+	if(m_Network.m_mysocket != 0)
+		m_Network.SendMovePacket(wParam,m_pSelectedObject);
+
+	
 }

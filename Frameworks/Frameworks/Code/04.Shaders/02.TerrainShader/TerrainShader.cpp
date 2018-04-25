@@ -136,7 +136,6 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		TERRAIN_IMAGE_WIDTH / 10, TERRAIN_IMAGE_HEIGHT / 10,
 		TERRAIN_IMAGE_SCALE, XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
 #else
-	//지형을 하나의 격자 메쉬(257x257)로 생성한다.
 	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"),
 		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
 		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,

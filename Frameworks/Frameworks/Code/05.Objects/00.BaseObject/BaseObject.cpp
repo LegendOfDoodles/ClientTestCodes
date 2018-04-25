@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-20
+/// 최종 수정 날짜: 2018-04-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -293,6 +293,12 @@ XMFLOAT3 CBaseObject::GetUpModel()
 	return(Vector3::Normalize(XMFLOAT3(m_xmf4x4World._31, m_xmf4x4World._32, m_xmf4x4World._33)));
 }
 
+void CBaseObject::SetPosition(float x, float z)
+{
+	m_xmf4x4World._41 = x;
+	m_xmf4x4World._43 = z;
+}
+
 void CBaseObject::SetPosition(float x, float y, float z)
 {
 	m_xmf4x4World._41 = x;
@@ -307,7 +313,11 @@ void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 
 void CBaseObject::SetPathToGo(Path * path)
 {
-	if (m_pathToGo) Safe_Delete(m_pathToGo);
+	if (m_pathToGo)
+	{
+		m_pathToGo->clear();
+		Safe_Delete(m_pathToGo);
+	}
 	m_pathToGo = path;
 }
 

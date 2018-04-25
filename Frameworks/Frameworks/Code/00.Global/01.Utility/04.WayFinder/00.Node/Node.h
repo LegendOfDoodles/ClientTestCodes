@@ -11,7 +11,7 @@ public: // 생성자, 소멸자
 	~CNode();
 
 public: // 공개 함수
-	const POINT &GetDividIndex() const;
+	const POINT GetDividIndex() const;
 
 	int GetDistanceSquareWithPosition(const XMFLOAT2 &position);
 

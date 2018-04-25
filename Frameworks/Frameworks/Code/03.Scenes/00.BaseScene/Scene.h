@@ -1,6 +1,8 @@
 #pragma once
+#include "02.Framework/00.Frame/Framework.h"
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
+
 
 class CCreateMgr;
 class CWayFinder;
@@ -33,7 +35,7 @@ public:	// 생성자, 소멸자
 	~CScene();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr);
+	virtual void Initialize(CCreateMgr *pCreateMgr, Network network);
 	virtual void Finalize();
 
 	void ReleaseUploadBuffers();
@@ -96,5 +98,8 @@ protected: // 변수
 	CWayFinder* m_pWayFinder{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
+
+	Network m_Network;
+	
 };
 
