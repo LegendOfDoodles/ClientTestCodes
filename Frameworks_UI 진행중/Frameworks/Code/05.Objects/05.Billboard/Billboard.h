@@ -12,6 +12,13 @@
 /// 최종 수정 날짜: 2018-04-04
 /// </summary>
 
+enum Type {
+	Minimap = 0,
+	KDA		= 1,
+	Skill	= 2,
+	Status	= 3
+};
+
 class CBillboardObject : public CBaseObject
 {
 public:	// 생성자, 소멸자
@@ -36,9 +43,8 @@ class CMinimap : public CBillboardObject
 {
 public:
 	CMinimap(CCreateMgr *pCreateMgr);
+	CMinimap(CCreateMgr *pCreateMgr, Type type);
 	virtual ~CMinimap();
-
-	void SetUIType();
 
 	virtual void SetPos(XMFLOAT3 xmf3Position);
 	virtual void SetDistance(float x) {
@@ -52,23 +58,5 @@ public:
 private:
 	XMFLOAT3	m_xmf3Position;
 	float		m_fDistance;
-};
-
-class CInfoToKDA : public CBillboardObject
-{
-public:
-	CInfoToKDA(CCreateMgr *pCreateMgr);
-	virtual ~CInfoToKDA();
-
-	virtual void SetDistance(float x) {
-		m_xmf4x4World = Matrix4x4::Identity();
-
-		m_fDistance = x;
-	}
-
-	virtual void Animate(float fTimeElapsed);
-
-private:
-	XMFLOAT3	m_xmf3Position;
-	float		m_fDistance;
+	Type		m_type;
 };

@@ -5,7 +5,7 @@
 /// 목적: UI 이용을 위한 Bilboard 클래스 제작
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-15
+/// 최종 수정 날짜: 2018-04-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -13,8 +13,8 @@
 CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr)
 	: CBaseObject(pCreateMgr)
 {
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 5.f, 5.0f, 0.f);
-	SetMesh(0, pRectMesh);
+	//CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 5.f, 5.0f, 0.f);
+	//SetMesh(0, pRectMesh);
 
 
 	CreateShaderVariables(pCreateMgr);
@@ -59,6 +59,38 @@ CMinimap::CMinimap(CCreateMgr * pCreateMgr)
 	CreateShaderVariables(pCreateMgr);
 }
 
+CMinimap::CMinimap(CCreateMgr * pCreateMgr, Type type)
+	:CBillboardObject(pCreateMgr)
+{
+	CTexturedRectMesh *pRectMesh = NULL;
+
+	switch (type)
+	{
+	case Type::Minimap:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case Type::KDA:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 228.f, FRAME_BUFFER_HEIGHT / 600.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case Type::Skill:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 100.f, FRAME_BUFFER_HEIGHT / 150.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case Type::Status:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 140.f, FRAME_BUFFER_HEIGHT / 150.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	default:
+		break;
+	}
+	
+	m_type = type;
+
+	CreateShaderVariables(pCreateMgr);
+}
+
 CMinimap::~CMinimap()
 {
 }
@@ -77,12 +109,32 @@ void CMinimap::SetPos(XMFLOAT3 xmf3Position)
 void CMinimap::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
-
-	// 미니맵 위치 업데이트 (카메라 화면 앞)
-	// UI 전체 위치
-	XMFLOAT3 newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-	newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -7.f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 10.f));
 	
+	XMFLOAT3 newPos{0, 0, 0};
+
+	switch (m_type)
+	{
+	case Minimap:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -7.f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 10.5f));
+		break;
+	case KDA:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 9.2f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 11.4f));
+		break;
+	case Skill:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -7.5f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 1.f));
+		break;
+	case Status:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 7.5f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -10.f));
+		break;
+	default:
+		break;
+	}
+
+
 	m_xmf4x4World._41 = newPos.x; 
 	m_xmf4x4World._42 = newPos.y; 
 	m_xmf4x4World._43 = newPos.z; 

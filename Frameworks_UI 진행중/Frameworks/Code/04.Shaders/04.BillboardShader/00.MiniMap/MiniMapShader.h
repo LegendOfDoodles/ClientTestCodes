@@ -44,6 +44,8 @@ protected: // º¯¼ö
 
 	CMaterial	**m_ppMaterials{ NULL };
 
+	bool OnOFF = false;
+
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial						*m_pMaterial{ NULL };

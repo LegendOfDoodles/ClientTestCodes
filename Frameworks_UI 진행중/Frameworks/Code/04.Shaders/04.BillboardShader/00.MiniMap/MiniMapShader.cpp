@@ -8,7 +8,7 @@
 /// 목적: UI MiniMap 테스트 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-16
+/// 최종 수정 날짜: 2018-04-24
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,9 @@ void CMiniMapShader::Render(CCamera * pCamera)
 		if (m_ppMaterials[j]) m_ppMaterials[j]->UpdateShaderVariables();
 #endif
 	
-		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
+		if (j == 3 && OnOFF) 
+			m_ppObjects[j]->Render(pCamera);
+		else if (j != 3) m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -77,6 +79,10 @@ void CMiniMapShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElap
 {
 	switch (wParam)
 	{
+	case '1':
+		if (OnOFF == true) OnOFF = false;
+		else OnOFF = true;
+		break;
 	default:
 		break;
 	}
@@ -191,13 +197,12 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	CCamera *pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 2;
+	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 	m_ppMaterials = new CMaterial*[m_nObjects];
 
-	CTexture *pTexture = new CTexture(2, RESOURCE_TEXTURE_2D, 0);
+	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D, 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 1);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -219,7 +224,7 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		pMaterial->SetTexture(pTexture);
 		m_ppMaterials[i] = pMaterial;
 #endif
-		pMiniMap = new CMinimap(pCreateMgr);
+		pMiniMap = new CMinimap(pCreateMgr, (Type)i);
 		pMiniMap->SetCamera(pCamera);
 		pMiniMap->SetDistance(10.f);
 		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
