@@ -181,7 +181,10 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	if (nMessageID == WM_KEYUP)
 	{
 		OnProcessKeyUp(wParam, lParam);
+		if(m_pSelectedObject != NULL && wParam >= 37 && wParam <=40)
+			m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
 	}
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -334,6 +337,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			nearestHitDistance = hitDistance;
 			m_pSelectedObject = pIntersectedObject;
 			printf("selected!\n");
+			//m_Network.StartRecv(m_pSelectedObject);
 		}
 	}
 
@@ -366,7 +370,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 	
-
+	int x = 0, y = 0;
 	if(wParam == VK_ESCAPE)
 		::PostQuitMessage(0);
 	else if (wParam == VK_F1)
@@ -389,8 +393,35 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 	{
 		m_bRenderBoundingBox = !m_bRenderBoundingBox;
 	}
-	if(m_Network.m_mysocket != 0)
-		m_Network.SendMovePacket(wParam,m_pSelectedObject);
+	else if (wParam == VK_RIGHT) x += 1;
+	else if (wParam == VK_LEFT)	 x -= 1;
+	else if (wParam == VK_UP)	 y -= 1;
+	else if (wParam == VK_DOWN)	 y += 1;
 
-	
+	CS_MsgChMove *my_packet = reinterpret_cast<CS_MsgChMove *>(m_Network.m_send_buffer);
+	my_packet->size = sizeof(my_packet);
+	m_Network.m_send_wsabuf.len = sizeof(my_packet);
+	DWORD iobyte;
+	if (0 != x) {
+		if (1 == x) my_packet->type = CS_RIGHT;
+		else my_packet->type = CS_LEFT;
+		int ret = WSASend(m_Network.m_mysocket, &m_Network.m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+		if (ret) {
+			int error_code = WSAGetLastError();
+			printf("Error while sending packet [%d]", error_code);
+		}
+		else
+			printf("Send Comeplete Right or Left\n");
+	}
+	if (0 != y) {
+		if (1 == y) my_packet->type = CS_DOWN;
+		else my_packet->type = CS_UP;
+		int ret = WSASend(m_Network.m_mysocket, &m_Network.m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+		if (ret) {
+			int error_code = WSAGetLastError();
+			printf("Error while sending packet [%d]", error_code);
+		}
+		else
+			printf("Send Comeplete Up or Down\n");
+	}
 }

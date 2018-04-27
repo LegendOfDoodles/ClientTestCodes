@@ -27,6 +27,6 @@ public:
 	void ProcessPacket(int myid, char *ptr, CBaseObject* object);
 	void Finalize();
 	void ReadPacket(SOCKET sock, CBaseObject* object);
-	void SendMovePacket(WPARAM wParam, CBaseObject* object);
+	
 };
 

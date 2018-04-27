@@ -129,13 +129,17 @@ void Network::Finalize()
 
 void Network::ReadPacket(SOCKET sock,CBaseObject* object)
 {
-	DWORD iobyte, ioflag = 0;
+	DWORD ioflag = 0;
+	DWORD iobyte = 0;
 	int ret = WSARecv(sock, &m_recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
 	if (ret) {
 		int err_code = WSAGetLastError();
 		printf("Recv Error [%d]\n", err_code);
+		if (err_code == 10035) {
+			Sleep(50);
+			ProcessPacket(m_myid, m_packet_buffer, object);
+		}
 	}
-
 	BYTE *ptr = reinterpret_cast<BYTE *>(m_recv_buffer);
 
 	while (0 != iobyte) {
@@ -154,32 +158,35 @@ void Network::ReadPacket(SOCKET sock,CBaseObject* object)
 			iobyte = 0;
 		}
 	}
+	
+	
 }
 
-void Network::SendMovePacket(WPARAM wParam, CBaseObject* object)
-{
-	int x = 0, y = 0;
-	if (wParam == VK_RIGHT)	x += 1;
-	if (wParam == VK_LEFT)	x -= 1;
-	if (wParam == VK_UP)	y -= 1;
-	if (wParam == VK_DOWN)	y += 1;
-	CS_MsgChMove *my_packet = reinterpret_cast<CS_MsgChMove *>(m_send_buffer);
-	my_packet->size = sizeof(my_packet);
-	m_send_wsabuf.len = sizeof(my_packet);
-	DWORD iobyte;
-	if (0 != x) {
-		if (1 == x) my_packet->type = CS_RIGHT;
-		else my_packet->type = CS_LEFT;
-		int ret = WSASend(m_mysocket, &m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
-		if (ret) {
-			int error_code = WSAGetLastError();
-			printf("Error while sending packet [%d]", error_code);
-		}
-	}
-	if (0 != y) {
-		if (1 == y) my_packet->type = CS_DOWN;
-		else my_packet->type = CS_UP;
-		WSASend(m_mysocket, &m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
-	}
-	ReadPacket(m_mysocket,object);
-}
+//void Network::SendMovePacket(WPARAM wParam, CBaseObject* object)
+//{
+//	int x = 0, y = 0;
+//	if (wParam == VK_RIGHT)	x += 1;
+//	if (wParam == VK_LEFT)	x -= 1;
+//	if (wParam == VK_UP)	y -= 1;
+//	if (wParam == VK_DOWN)	y += 1;
+//	CS_MsgChMove *my_packet = reinterpret_cast<CS_MsgChMove *>(m_send_buffer);
+//	my_packet->size = sizeof(my_packet);
+//	m_send_wsabuf.len = sizeof(my_packet);
+//	DWORD iobyte;
+//	if (0 != x) {
+//		if (1 == x) my_packet->type = CS_RIGHT;
+//		else my_packet->type = CS_LEFT;
+//		int ret = WSASend(m_mysocket, &m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+//		if (ret) {
+//			int error_code = WSAGetLastError();
+//			printf("Error while sending packet [%d]", error_code);
+//		}
+//	}
+//	if (0 != y) {
+//		if (1 == y) my_packet->type = CS_DOWN;
+//		else my_packet->type = CS_UP;
+//		WSASend(m_mysocket, &m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+//	}
+//	ReadPacket(m_mysocket,object);
+//}
+

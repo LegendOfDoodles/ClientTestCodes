@@ -245,7 +245,7 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 			}
 			switch (WSAGETSELECTEVENT(lParam)) {
 			case FD_READ:
-				//m_Network.ReadPacket((SOCKET)wParam);
+				m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
 				break;
 			case FD_CLOSE:
 				closesocket((SOCKET)wParam);

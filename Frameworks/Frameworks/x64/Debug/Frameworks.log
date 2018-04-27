@@ -1,5 +1,5 @@
 ﻿  Network.cpp
-c:\users\김선필\desktop\graduationwork\client\frameworks\frameworks\code\07.network\network.cpp(28): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-c:\users\김선필\desktop\graduationwork\client\frameworks\frameworks\code\07.network\network.cpp(72): warning C4189: 'id': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\Client\Frameworks\x64\Debug\Framework01.exe
-  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\Client\Frameworks\x64\Debug\Framework01.pdb (Partial PDB)
+c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\07.network\network.cpp(28): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\07.network\network.cpp(72): warning C4189: 'id': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\ClientCodes\Frameworks\x64\Debug\Framework01.exe
+  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\ClientCodes\Frameworks\x64\Debug\Framework01.pdb (Partial PDB)
