@@ -155,6 +155,8 @@ void CScene::UpdateCamera()
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	WPARAM wParam, LPARAM lParam)
 {
+	
+	int ret = 0;
 	switch (nMessageID)
 	{
 	case WM_LBUTTONDOWN:
@@ -181,8 +183,8 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	if (nMessageID == WM_KEYUP)
 	{
 		OnProcessKeyUp(wParam, lParam);
-		if(m_pSelectedObject != NULL && wParam >= 37 && wParam <=40)
-			m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
+		/*if(m_pSelectedObject != NULL && wParam >= 37 && wParam <=40)
+			m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);*/
 	}
 
 }
@@ -349,6 +351,8 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 
 void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View)
 {
+	CS_MsgChMove *my_packet = reinterpret_cast<CS_MsgChMove *>(m_Network.m_send_buffer);
+	int ret = 0;
 	XMFLOAT4X4  inverseArr = Matrix4x4::Inverse(xmf4x4View);
 	XMFLOAT3 camPosition = m_pCamera->GetPosition();
 	XMFLOAT3 layWorldPosition = Vector3::TransformCoord(pickPosition, inverseArr);
@@ -363,6 +367,23 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z), 
 			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z)));
+		
+		my_packet->size = sizeof(my_packet);
+		my_packet->x = m_pickWorldPosition.x;
+		my_packet->y = m_pickWorldPosition.z;
+		m_Network.m_send_wsabuf.len = sizeof(my_packet);
+		DWORD iobyte;
+		my_packet->type = CS_MOVE_PLAYER;
+		ret = WSASend(m_Network.m_mysocket, &m_Network.m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+		if (ret) {
+			int error_code = WSAGetLastError();
+			printf("Error while sending packet [%d]", error_code);
+		}
+		else {
+			printf("Send Comeplete Moving\n");
+		}
+	
+		m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
 	}
 }
 

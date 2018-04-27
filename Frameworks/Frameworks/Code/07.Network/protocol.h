@@ -73,6 +73,8 @@ struct SC_MsgMoHit : public Packet
 struct CS_MsgChMove : public Packet
 {
 	BYTE Character_id;
+	short x;
+	short y;
 };
 #pragma pack(pop)
 

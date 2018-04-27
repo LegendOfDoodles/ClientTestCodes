@@ -83,7 +83,8 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject* object)
 			int other_id = my_packet->Character_id;
 			if (other_id == myid) {
 				//printf("fuck\n");
-				object->SetPosition(my_packet->x, my_packet->y);
+				//object->SetPathToGo(
+				//object->SetPosition(my_packet->x, my_packet->y);
 				//player.x = my_packet->x;
 				//player.y = my_packet->y;
 				
