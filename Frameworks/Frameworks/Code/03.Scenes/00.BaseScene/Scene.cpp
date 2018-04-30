@@ -263,7 +263,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_pWayFinder = new CWayFinder(124.2, 124.2);
+	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 
 	BuildLights();
 }
