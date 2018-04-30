@@ -13,7 +13,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-20
+/// 최종 수정 날짜: 2018-04-30
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -365,8 +365,9 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 	{
 		m_pSelectedObject->LookAt(m_pickWorldPosition);
 		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(
-			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z), 
-			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z)));
+			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
+			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z), 
+			m_pSelectedObject->GetBoundingRadius()));
 		
 		my_packet->size = sizeof(my_packet);
 		my_packet->x = m_pickWorldPosition.x;

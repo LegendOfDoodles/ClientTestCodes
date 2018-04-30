@@ -17,8 +17,11 @@ public: // 생성자, 소멸자
 	~CWayFinder();
 
 public: // 공개 함수
-	bool CanGoDirectly(const XMFLOAT2 &source, const XMFLOAT2 &target);
-	Path *GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target);
+	bool CanGoDirectly(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
+	XMFLOAT2 GetClosestNotCollidePos(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
+	Path *GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
+
+	void SmoothPath(Path *path, float boundingRadius);
 
 	int FindClosestNodeIndexWithPosition(const XMFLOAT2 &position);
 

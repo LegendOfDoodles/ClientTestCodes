@@ -6,13 +6,14 @@
 /// 목적: 미니언 클래스 분할
 /// 최종 수정자:  정휘현
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-04-23
+/// 최종 수정 날짜: 2018-04-30
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CMinion::CMinion(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr, nMeshes)
 {
+	SetBoundingRadius(CONVERT_PaperUnit_to_InG(3));
 }
 
 CMinion::~CMinion()
