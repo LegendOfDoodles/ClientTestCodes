@@ -56,6 +56,7 @@ void CMinion::Animate(float timeElapsed)
 			XMFLOAT3 position = GetPosition();
 			position.y = m_pTerrain->GetHeight(position.x, position.z);
 			CBaseObject::SetPosition(position);
+			LookAt(XMFLOAT3(m_destination.x, 0, m_destination.y));
 		}
 	}
 }

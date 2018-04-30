@@ -168,7 +168,7 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 		if (dstIndex == INVALID_NODE) return nullptr;
 
 		m_pCurSearch = new CAstar(this, srcIndex, dstIndex);
-		for (int i = 0; i < 1000; ++i)
+		for (int i = 0; i < 10000; ++i)
 		{
 			int result = m_pCurSearch->FindPath();
 			if (result == Found || result == Not_Found)

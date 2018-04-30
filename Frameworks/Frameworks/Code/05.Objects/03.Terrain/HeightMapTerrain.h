@@ -17,7 +17,7 @@ public: // 생성자, 소멸자
 public: // 공개 함수
 	//지형의 높이를 계산하는 함수이다(월드 좌표계). 높이 맵의 높이에 스케일의 y를 곱한 값이다.
 	float GetHeight(float x, float z) {
-		return(m_pHeightMapImage->GetHeight(x / m_xmf3Scale.x, z / m_xmf3Scale.z) * m_xmf3Scale.y - REVISE_HEIGHT);
+		return(m_pHeightMapImage->GetHeight(x / m_xmf3Scale.x, z / m_xmf3Scale.z) * m_xmf3Scale.y - REVISE_HEIGHT_FOR_OBJECT);
 	}
 
 	//지형의 법선 벡터를 계산하는 함수이다(월드 좌표계). 높이 맵의 법선 벡터를 사용한다.
