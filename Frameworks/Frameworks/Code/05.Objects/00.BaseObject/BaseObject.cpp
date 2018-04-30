@@ -259,7 +259,7 @@ void CBaseObject::LookAt(XMFLOAT3 objPosition)
 	// 캐릭터가 선택된 오브젝트 보다 오른쪽 보고 있는 경우
 	if (check < 0.0f)
 		Rotate(0.0f, 0.0f, -angle);
-	else
+	else if (check > 0.0f)
 		Rotate(0.0f, 0.0f, angle);
 }
 
