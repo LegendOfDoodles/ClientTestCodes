@@ -58,7 +58,7 @@ public:	// 외부 함수
 	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
 
 protected:	// 내부 함수
-	bool IsArrive(const XMFLOAT2& nextPos);
+	bool IsArrive(XMFLOAT2& nextPos, float dst);
 
 protected:	// 변수
 	MinionState m_CurrAnimationState = MinionState::Walking;

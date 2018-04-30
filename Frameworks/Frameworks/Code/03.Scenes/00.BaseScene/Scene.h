@@ -28,7 +28,7 @@ struct LIGHTS
 	XMFLOAT4				m_xmf4GlobalAmbient;
 };
 
-class CScene	// 인 게임 씬이랑 공백 씬이랑 분리할 필요 있음
+class CScene	// Warning! 인 게임 씬이랑 공백 씬이랑 분리할 필요 있음
 {
 public:	// 생성자, 소멸자
 	CScene();

@@ -37,7 +37,8 @@ void CMinion::Animate(float timeElapsed)
 
 	if (m_pathToGo)
 	{
-		if (m_destination.x == -1 || IsArrive(m_destination))	//  도착 한 경우
+			// Warning! IsArrive에 들어간은거 이동 거리로 바꿔야 함
+		if (m_destination.x == -1 || IsArrive(m_destination, 1.0f))	//  도착 한 경우
 		{
 			if (m_pathToGo->empty())
 			{
@@ -53,6 +54,7 @@ void CMinion::Animate(float timeElapsed)
 		}
 		else  // 아직 도착하지 않은 경우
 		{
+			// Warning! 속도를 적용하고 이동 거리를 처리해야 함
 			MoveForwardModel(1.f);
 			XMFLOAT3 position = GetPosition();
 			position.y = m_pTerrain->GetHeight(position.x, position.z);
@@ -108,14 +110,12 @@ void CMinion::SetPosition(float x, float z)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-bool CMinion::IsArrive(const XMFLOAT2 & nextPos)
+bool CMinion::IsArrive(XMFLOAT2 & nextPos, float dst)
 {
-	static int radius = 20 * 20;
-	XMFLOAT3 curPos = GetPosition();
+	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
+	int distanceSqr = Vector2::DistanceSquare(curPos, nextPos);
 
-	int distance = (nextPos.x - curPos.x) * (nextPos.x - curPos.x) + (nextPos.y - curPos.z) * (nextPos.y - curPos.z);
-
-	return distance < radius;
+	return distanceSqr < dst * dst;
 }
 
 //////////////////////////////////////////////////////////////////////////
