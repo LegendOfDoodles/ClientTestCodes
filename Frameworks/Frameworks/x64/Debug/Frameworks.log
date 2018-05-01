@@ -1,4 +1,5 @@
 ﻿  Scene.cpp
+<<<<<<< HEAD
 c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(28): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
@@ -17,3 +18,59 @@ c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code
 c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(384): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
   Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\ClientCodes\Frameworks\x64\Debug\Framework01.exe
   Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\ClientCodes\Frameworks\x64\Debug\Framework01.pdb (Partial PDB)
+=======
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(25): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(47): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(159): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(180): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(266): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(329): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(372): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(373): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(391): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+  StaticObjectShader.cpp
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(500): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(687): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(688): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(688): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(688): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(698): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
+  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(633): note: 'i' 선언을 참조하십시오.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(747): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(748): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(692): warning C4189: 'fyPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(693): warning C4189: 'fzPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(691): warning C4189: 'fxPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Mesh.cpp
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(331): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(874): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(875): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(876): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(908): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(955): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(956): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(957): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(984): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1223): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1223): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1224): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1224): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1225): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1225): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1226): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1226): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1520): warning C4189: 'fzPercent': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1519): warning C4189: 'fxPercent': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  MeshImporter.cpp
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\meshimporter.cpp(32): warning C4189: 'n': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\01.mesh\meshimporter.cpp(127): warning C4189: 'n': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  코드를 생성하고 있습니다...
+  Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+>>>>>>> 휘현

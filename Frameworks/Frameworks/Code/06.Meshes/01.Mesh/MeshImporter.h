@@ -22,6 +22,7 @@ public:
 	CMeshImporter();
 
 	void LoadMeshData(char* in);
+	void LoadStaticMeshData(char* in);
 	
 	~CMeshImporter();
 

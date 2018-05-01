@@ -933,8 +933,77 @@ CSkinnedMesh::~CSkinnedMesh()
 {
 }
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+
+
+CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in) : CMeshIlluminatedTextured(pCreateMgr)
+{
+	CMeshImporter importer;
+	importer.LoadStaticMeshData(in);
+	m_nVertices = importer.m_iVerticesCnt;
+	m_nStride = sizeof(CSkinnedVertex);
+	m_nOffset = 0;
+	m_nSlot = 0;
+	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	m_nIndices = importer.m_iTriCnt * 3;
+	UINT* pnIndices = new UINT[m_nIndices];
+	int indicesCount = 0;
+	for (auto d : importer.m_xmTriIndex) {
+		pnIndices[indicesCount] = d.x;
+		pnIndices[indicesCount + 1] = d.y;
+		pnIndices[indicesCount + 2] = d.z;
+		indicesCount += 3;
+	}
+
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
+
+	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_indexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+
+	XMFLOAT3* pxmf3Positions = new XMFLOAT3[m_nVertices];
+	XMFLOAT3* pxmf3Normals = new XMFLOAT3[m_nVertices];
+
+	XMFLOAT2* pxmf2TexCoords = new XMFLOAT2[m_nVertices];
+
+	int vecticesCount = 0;
+	for (auto d : importer.m_xmVertex) {
+		pxmf3Normals[vecticesCount] = XMFLOAT3(d.normal.x, d.normal.y, d.normal.z);
+		pxmf2TexCoords[vecticesCount] = XMFLOAT2(d.uv.x, d.uv.y);
+		pxmf3Positions[vecticesCount] = XMFLOAT3(d.pos.x, d.pos.y, d.pos.z);
+		++vecticesCount;
+	}
+
+	XMFLOAT3* pxmf3Tangents = new XMFLOAT3[m_nVertices];
+	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords, pnIndices, m_nIndices);
+
+	CIlluminatedTexturedVertex *pVertices = new CIlluminatedTexturedVertex[m_nVertices];
+	for (int i = 0; i < m_nVertices; i++) {
+		pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i]);
+	}
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+
+	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = m_nStride;
+	m_vertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+
+	delete[](pxmf3Positions);
+	delete[](pnIndices);
+	delete[](pxmf3Normals);
+	delete[](pxmf2TexCoords);
+	delete[](pxmf3Tangents);
+}
+
+CStaticMesh::~CStaticMesh()
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+
 
 CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale)
 {
