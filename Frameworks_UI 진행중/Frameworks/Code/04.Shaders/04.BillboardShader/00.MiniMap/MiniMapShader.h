@@ -2,14 +2,14 @@
 #include "04.Shaders/00.BaseShader/Shader.h"
 
 class CBillboardObject;
-class CMinimap;
+class CUIObject;
 class CMaterial;
 
-class CMiniMapShader : public CShader
+class CUIObjectShader : public CShader
 {
 public: // 생성자, 소멸자
-	CMiniMapShader(CCreateMgr *pCreateMgr);
-	~CMiniMapShader();
+	CUIObjectShader(CCreateMgr *pCreateMgr);
+	~CUIObjectShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();

@@ -5,6 +5,7 @@
 #include "04.Shaders/01.ObjectShader/StaticObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
+#include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
@@ -241,13 +242,18 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	m_nShaders = 4;
+	m_pCamera = new  CAOSCamera();
+
+	m_pCamera->Initialize(pCreateMgr);
+
+	m_nShaders = 5;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
 	m_ppShaders[2] = new CAniShader(pCreateMgr);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
+	m_ppShaders[4] = new CUIObjectShader(pCreateMgr);
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{
@@ -259,9 +265,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
-	m_pCamera = new  CAOSCamera();
-
-	m_pCamera->Initialize(pCreateMgr);
+	m_ppShaders[4]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 

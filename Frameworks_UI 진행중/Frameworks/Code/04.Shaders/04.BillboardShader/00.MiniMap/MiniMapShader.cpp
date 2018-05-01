@@ -13,19 +13,19 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CMiniMapShader::CMiniMapShader(CCreateMgr * pCreateMgr)
+CUIObjectShader::CUIObjectShader(CCreateMgr * pCreateMgr)
 	: CShader(pCreateMgr)
 {
 
 }
 
-CMiniMapShader::~CMiniMapShader()
+CUIObjectShader::~CUIObjectShader()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-void CMiniMapShader::ReleaseUploadBuffers()
+void CUIObjectShader::ReleaseUploadBuffers()
 {
 	if (!m_ppObjects) return;
 
@@ -39,7 +39,7 @@ void CMiniMapShader::ReleaseUploadBuffers()
 
 }
 
-void CMiniMapShader::UpdateShaderVariables()
+void CUIObjectShader::UpdateShaderVariables()
 {
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -51,7 +51,7 @@ void CMiniMapShader::UpdateShaderVariables()
 	}
 }
 
-void CMiniMapShader::AnimateObjects(float timeElapsed)
+void CUIObjectShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
@@ -59,7 +59,7 @@ void CMiniMapShader::AnimateObjects(float timeElapsed)
 	}
 }
 
-void CMiniMapShader::Render(CCamera * pCamera)
+void CUIObjectShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 
@@ -75,7 +75,7 @@ void CMiniMapShader::Render(CCamera * pCamera)
 	}
 }
 
-void CMiniMapShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CUIObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (wParam)
 	{
@@ -88,7 +88,7 @@ void CMiniMapShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElap
 	}
 }
 
-void CMiniMapShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+void CUIObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
 	switch (wParam)
 	{
@@ -99,7 +99,7 @@ void CMiniMapShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeEl
 
 ////////////////////////////////////////////////////////////////////////
 // 내부함수
-D3D12_INPUT_LAYOUT_DESC CMiniMapShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC CUIObjectShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
@@ -128,7 +128,7 @@ D3D12_INPUT_LAYOUT_DESC CMiniMapShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_BLEND_DESC CMiniMapShader::CreateBlendState()
+D3D12_BLEND_DESC CUIObjectShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC blendDesc;
 	::ZeroMemory(&blendDesc, sizeof(D3D12_BLEND_DESC));
@@ -149,7 +149,7 @@ D3D12_BLEND_DESC CMiniMapShader::CreateBlendState()
 	return(blendDesc);
 }
 
-D3D12_SHADER_BYTECODE CMiniMapShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CUIObjectShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
 {
 	//./Code/04.Shaders/99.GraphicsShader/
 	return(CShader::CompileShaderFromFile(
@@ -159,7 +159,7 @@ D3D12_SHADER_BYTECODE CMiniMapShader::CreateVertexShader(ID3DBlob ** ppShaderBlo
 		ppShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CMiniMapShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CUIObjectShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
@@ -168,7 +168,7 @@ D3D12_SHADER_BYTECODE CMiniMapShader::CreatePixelShader(ID3DBlob ** ppShaderBlob
 		ppShaderBlob));
 }
 
-void CMiniMapShader::CreateShader(CCreateMgr * pCreateMgr)
+void CUIObjectShader::CreateShader(CCreateMgr * pCreateMgr)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -176,7 +176,7 @@ void CMiniMapShader::CreateShader(CCreateMgr * pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CMiniMapShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
+void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
 {
 	HRESULT hResult;
 
@@ -193,7 +193,7 @@ void CMiniMapShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
 }
 
-void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	CCamera *pCamera = (CCamera*)pContext;
 	
@@ -213,7 +213,7 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinimap *pMiniMap = NULL;
+	CUIObject *pMiniMap = NULL;
 	CMaterial *pMaterial = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i)
@@ -224,7 +224,7 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		pMaterial->SetTexture(pTexture);
 		m_ppMaterials[i] = pMaterial;
 #endif
-		pMiniMap = new CMinimap(pCreateMgr, (Type)i);
+		pMiniMap = new CUIObject(pCreateMgr, (Type)i);
 		pMiniMap->SetCamera(pCamera);
 		pMiniMap->SetDistance(10.f);
 		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_cbvGPUDescriptorStartHandle.ptr + (incrementSize * i));
@@ -232,7 +232,7 @@ void CMiniMapShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	}
 }
 
-void CMiniMapShader::ReleaseShaderVariables()
+void CUIObjectShader::ReleaseShaderVariables()
 {
 	if (!m_pConstBuffer) return;
 
@@ -242,7 +242,7 @@ void CMiniMapShader::ReleaseShaderVariables()
 	CShader::ReleaseShaderVariables();
 }
 
-void CMiniMapShader::ReleaseObjects()
+void CUIObjectShader::ReleaseObjects()
 {
 	if (!m_ppObjects) return;
 

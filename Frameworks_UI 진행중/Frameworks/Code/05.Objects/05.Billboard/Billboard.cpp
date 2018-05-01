@@ -51,7 +51,7 @@ void CBillboardObject::SetLookAt()
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CMinimap::CMinimap(CCreateMgr * pCreateMgr)
+CUIObject::CUIObject(CCreateMgr * pCreateMgr)
 	:CBillboardObject(pCreateMgr)
 {
 	m_xmf3Position = XMFLOAT3(0,0,0);
@@ -59,7 +59,7 @@ CMinimap::CMinimap(CCreateMgr * pCreateMgr)
 	CreateShaderVariables(pCreateMgr);
 }
 
-CMinimap::CMinimap(CCreateMgr * pCreateMgr, Type type)
+CUIObject::CUIObject(CCreateMgr * pCreateMgr, Type type)
 	:CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
@@ -91,13 +91,13 @@ CMinimap::CMinimap(CCreateMgr * pCreateMgr, Type type)
 	CreateShaderVariables(pCreateMgr);
 }
 
-CMinimap::~CMinimap()
+CUIObject::~CUIObject()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CMinimap::SetPos(XMFLOAT3 xmf3Position)
+void CUIObject::SetPos(XMFLOAT3 xmf3Position)
 {
 	m_xmf3Position = xmf3Position;
 
@@ -106,7 +106,7 @@ void CMinimap::SetPos(XMFLOAT3 xmf3Position)
 	m_xmf3Position.y -= 1.5;
 }
 
-void CMinimap::Animate(float fTimeElapsed)
+void CUIObject::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 	
