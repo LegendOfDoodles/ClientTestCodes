@@ -88,6 +88,11 @@ bool CShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	return true;
 }
 
+bool CShader::OnProcessMouseInput(UCHAR * pKeyBuffer)
+{
+	return false;
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CShader::CreateInputLayout()

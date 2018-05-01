@@ -148,6 +148,8 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
+		m_ppShaders[4]->Initialize(m_pCreateMgr, m_pCamera);
+
 		m_bCamChanged = false;
 	}
 	m_pCamera->UpdateShaderVariables();

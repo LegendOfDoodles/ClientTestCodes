@@ -75,27 +75,17 @@ void CUIObjectShader::Render(CCamera * pCamera)
 	}
 }
 
-void CUIObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CUIObjectShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	switch (wParam)
-	{
-	
-	default:
-		break;
-	}
+	return false;
 }
 
-void CUIObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CUIObjectShader::OnProcessMouseInput(UCHAR * pKeyBuffer)
 {
-	switch (wParam)
-	{
-	case '1':
-		if (OnOFF == true) OnOFF = false;
-		else OnOFF = true;
-		break;
-	default:
-		break;
-	}
+
+
+
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////
