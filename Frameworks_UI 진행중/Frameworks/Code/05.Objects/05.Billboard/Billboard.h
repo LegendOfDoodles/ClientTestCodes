@@ -39,12 +39,12 @@ protected:
 	CCamera *m_pCamera = NULL;
 };
 
-class CMinimap : public CBillboardObject
+class CUIObject : public CBillboardObject
 {
 public:
-	CMinimap(CCreateMgr *pCreateMgr);
-	CMinimap(CCreateMgr *pCreateMgr, Type type);
-	virtual ~CMinimap();
+	CUIObject(CCreateMgr *pCreateMgr);
+	CUIObject(CCreateMgr *pCreateMgr, Type type);
+	virtual ~CUIObject();
 
 	virtual void SetPos(XMFLOAT3 xmf3Position);
 	virtual void SetDistance(float x) {

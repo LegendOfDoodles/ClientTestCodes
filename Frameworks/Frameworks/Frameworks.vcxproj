@@ -175,6 +175,8 @@
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.h" />
     <ClInclude Include="Code\04.Shaders\02.TerrainShader\TerrainShader.h" />
     <ClInclude Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.h" />
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.h" />
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\99.BIllboard\BillboardShader.h" />
     <ClInclude Include="Code\04.Shaders\98.ArrowShader\ArrowShader.h" />
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h" />
@@ -186,6 +188,7 @@
     <ClInclude Include="Code\05.Objects\06.StaticObjects\01.Nexus\Nexus.h" />
     <ClInclude Include="Code\05.Objects\06.StaticObjects\02.Tower\Tower.h" />
     <ClInclude Include="Code\05.Objects\06.StaticObjects\03.Obstacles\Obstacle.h" />
+    <ClInclude Include="Code\05.Objects\95.Billboard\Billboard.h" />
     <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h" />
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h" />
     <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h" />
@@ -220,6 +223,8 @@
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.cpp" />
     <ClCompile Include="Code\04.Shaders\02.TerrainShader\TerrainShader.cpp" />
     <ClCompile Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\99.BIllboard\BillboardShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.ArrowShader\ArrowShader.cpp" />
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp" />
@@ -231,6 +236,7 @@
     <ClCompile Include="Code\05.Objects\06.StaticObjects\01.Nexus\Nexus.cpp" />
     <ClCompile Include="Code\05.Objects\06.StaticObjects\02.Tower\Tower.cpp" />
     <ClCompile Include="Code\05.Objects\06.StaticObjects\03.Obstacles\Obstacle.cpp" />
+    <ClCompile Include="Code\05.Objects\95.Billboard\Billboard.cpp" />
     <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp" />
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp" />
     <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp" />

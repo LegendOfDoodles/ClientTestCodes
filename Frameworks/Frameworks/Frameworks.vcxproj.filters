@@ -150,6 +150,18 @@
     <Filter Include="소스 파일\05.Objects\06.StaticObjects\03.Obstacle">
       <UniqueIdentifier>{b0db6c80-ec33-46ee-94a1-4b17c117db0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\95.Billboard">
+      <UniqueIdentifier>{55fe72be-b996-42b9-af24-96806570544b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader">
+      <UniqueIdentifier>{571b66e2-4e70-4740-a411-e6398c94664f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\00.UIShader">
+      <UniqueIdentifier>{53f786f2-cdf8-4f8a-adda-aa3fca040f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader">
+      <UniqueIdentifier>{22b3e6fb-1293-40c2-9daa-2dfd14e1f83b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -284,6 +296,15 @@
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.h">
       <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\95.Billboard\Billboard.h">
+      <Filter>소스 파일\05.Objects\95.Billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\99.BIllboard\BillboardShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\00.UIShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -399,6 +420,15 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.cpp">
       <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\95.Billboard\Billboard.cpp">
+      <Filter>소스 파일\05.Objects\95.Billboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\99.BIllboard\BillboardShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\00.UIShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
