@@ -67,19 +67,19 @@ CMinimap::CMinimap(CCreateMgr * pCreateMgr, Type type)
 	switch (type)
 	{
 	case Type::Minimap:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case Type::KDA:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 228.f, FRAME_BUFFER_HEIGHT / 600.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 458.f, FRAME_BUFFER_HEIGHT / 900.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case Type::Skill:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 100.f, FRAME_BUFFER_HEIGHT / 150.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 200.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case Type::Status:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 140.f, FRAME_BUFFER_HEIGHT / 150.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 276.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	default:
@@ -116,11 +116,11 @@ void CMinimap::Animate(float fTimeElapsed)
 	{
 	case Minimap:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -7.f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 10.5f));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -7.f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 14.5f));
 		break;
 	case KDA:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 9.2f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 11.4f));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 9.2f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 15.5f));
 		break;
 	case Skill:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
@@ -128,7 +128,7 @@ void CMinimap::Animate(float fTimeElapsed)
 		break;
 	case Status:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 7.5f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -10.f));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 7.5f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -14.f));
 		break;
 	default:
 		break;
