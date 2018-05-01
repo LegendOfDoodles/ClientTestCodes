@@ -1,19 +1,254 @@
-﻿  Scene.cpp
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(28): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(47): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(159): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(180): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(266): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(329): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(370): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
-  c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(370): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(371): warning C4244: '=': 'int'에서 'BYTE'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(373): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(374): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(355): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(376): warning C4101: 'iobyte' :참조되지 않은 지역 변수입니다.
-c:\users\김선필\desktop\graduationwork\clientcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(384): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\ClientCodes\Frameworks\x64\Debug\Framework01.exe
-  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\ClientCodes\Frameworks\x64\Debug\Framework01.pdb (Partial PDB)
+﻿  stdafx.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(138): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMVECTOR'에서 'DirectX::XMVECTOR &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(138): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(157): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMMATRIX'에서 'DirectX::XMMATRIX &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(157): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(276): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMVECTOR'에서 'DirectX::XMVECTOR &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(276): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(295): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMMATRIX'에서 'DirectX::XMMATRIX &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(295): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  Timer.cpp
+  ExptProcess.cpp
+  DDSTextureLoader12.cpp
+  SafeFunc.cpp
+  Node.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\00.node\node.cpp(28): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\00.node\node.cpp(29): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\00.node\node.cpp(36): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\00.node\node.cpp(44): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\00.node\node.cpp(45): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\00.node\node.cpp(46): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Edge.cpp
+  Astar.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(28): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  WayFinder.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(28): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(19): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(21): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(40): warning C4189: 'edgeIdx': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(192): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(192): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(242): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(242): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\xmemory0(919): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\xmemory0(919): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\vector(968): note: 컴파일 중인 함수 템플릿 인스턴스화 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,int,DirectX::XMFLOAT2,DirectX::XMFLOAT2&>(_Alloc &,_Objty *const ,int &&,DirectX::XMFLOAT2 &&,DirectX::XMFLOAT2 &)'에 대한 참조를 확인하십시오.
+          with
+          [
+              _Alloc=std::allocator<CNode>,
+              _Ty=CNode,
+              _Objty=CNode
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\vector(968): note: 컴파일 중인 함수 템플릿 인스턴스화 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,int,DirectX::XMFLOAT2,DirectX::XMFLOAT2&>(_Alloc &,_Objty *const ,int &&,DirectX::XMFLOAT2 &&,DirectX::XMFLOAT2 &)'에 대한 참조를 확인하십시오.
+          with
+          [
+              _Alloc=std::allocator<CNode>,
+              _Ty=CNode,
+              _Objty=CNode
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(33): note: 컴파일 중인 함수 템플릿 인스턴스화 'void std::vector<CNode,std::allocator<_Ty>>::emplace_back<int,DirectX::XMFLOAT2,DirectX::XMFLOAT2&>(int &&,DirectX::XMFLOAT2 &&,DirectX::XMFLOAT2 &)'에 대한 참조를 확인하십시오.
+          with
+          [
+              _Ty=CNode
+          ]
+  Framework01.cpp
+  Framework.cpp
+  CreateMgr.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(163): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(225): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(227): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(242): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(243): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(259): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(350): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(496): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(589): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(591): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(593): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+  RenderMgr.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(24): warning C4100: 'height': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(24): warning C4100: 'width': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(48): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\02.rendermgr\rendermgr.cpp(91): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+  Scene.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(28): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(48): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(160): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(181): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(270): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(333): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(374): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(374): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(375): warning C4244: '=': 'int'에서 'BYTE'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(377): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(378): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(359): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(380): warning C4101: 'iobyte' :참조되지 않은 지역 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(388): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+  Shader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(59): warning C4100: 'pxmf4x4World': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(67): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(71): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(76): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(81): warning C4100: 'nearHitDistance': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(81): warning C4100: 'xmf4x4View': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(81): warning C4100: 'pickPosition': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(86): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(270): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(277): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(283): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(328): warning C4100: 'ppd3dShaderBlob': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(337): warning C4100: 'ppShaderBlob': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(424): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(428): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(428): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
+  StaticObjectShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(500): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(687): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(688): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(688): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(688): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(698): warning C4456: 'i' 선언은 이전 로컬 선언을 숨깁니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(633): note: 'i' 선언을 참조하십시오.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(747): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(748): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(692): warning C4189: 'fyPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(693): warning C4189: 'fzPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\01.objectshader\staticobjectshader.cpp(691): warning C4189: 'fxPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  TerrainShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.terrainshader\terrainshader.cpp(142): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\02.terrainshader\terrainshader.cpp(128): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+  SkyBoxShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\03.skyboxshader\skyboxshader.cpp(149): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+  UIShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(85): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(78): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(78): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(88): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(88): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+  BillboardShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(88): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(88): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(88): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(93): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(93): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(93): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(251): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(233): warning C4189: 'fyPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(234): warning C4189: 'fzPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\99.billboard\billboardshader.cpp(232): warning C4189: 'fxPitch': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  ArrowShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.arrowshader\arrowshader.cpp(119): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  BaseObject.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(112): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(144): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(249): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(249): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(257): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(257): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(288): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\00.baseobject\baseobject.cpp(288): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  Camera.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(70): warning C4100: 'bVelocity': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(136): warning C4100: 'xmf3LookAt': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(176): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\00.basecamera\camera.cpp(176): warning C4100: 'wParam': 참조되지 않은 정식 매개 변수입니다.
+  AOSCamera.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(53): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(53): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(54): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(54): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(56): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(56): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(57): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(57): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(59): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(59): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(60): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(60): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(47): warning C4100: 'bVelocity': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(66): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(85): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\01.camera\01.aoscamera\aoscamera.cpp(114): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+  AnimatedObject.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.animatedobject\animatedobject.cpp(38): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  HeightMapTerrain.cpp
+  SkyBox.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\04.skybox\skybox.cpp(37): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
+  Minion.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\05.minion\minion.cpp(16): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\05.minion\minion.cpp(35): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\05.minion\minion.cpp(25): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\05.minion\minion.cpp(116): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Nexus.cpp
+  Tower.cpp
+  Obstacle.cpp
+  Billboard.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\95.billboard\billboard.cpp(29): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  Arrow.cpp
+  Skeleton.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(18): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(24): warning C4456: 'end' 선언은 이전 로컬 선언을 숨깁니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(17): note: 'end' 선언을 참조하십시오.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(25): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(26): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(58): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(65): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(70): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(23): warning C4101: 'IDindex' :참조되지 않은 지역 변수입니다.
+  Prefabs.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(16): warning C4100: 'pSrvGPUDescriptorStartHandle': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(15): warning C4100: 'pSrvCPUDescriptorStartHandle': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(102): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(109): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(115): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+  Texture.cpp
+  Material.cpp
+  Vertex.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+  Mesh.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(38): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(331): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(874): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(875): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(876): warning C4244: '=': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(908): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1067): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1154): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1154): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1155): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1155): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1156): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1156): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1157): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1157): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1451): warning C4189: 'fzPercent': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\mesh.cpp(1450): warning C4189: 'fxPercent': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  MeshImporter.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\01.mesh\meshimporter.cpp(32): warning C4189: 'n': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  Network.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\07.network\network.cpp(28): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\07.network\network.cpp(38): warning C4100: 'object': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\07.network\network.cpp(72): warning C4189: 'id': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\07.network\network.cpp(194): warning C4100: 'id': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다...
+  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

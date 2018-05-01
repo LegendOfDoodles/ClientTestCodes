@@ -172,21 +172,14 @@ XMFLOAT2 CWayFinder::GetClosestNotCollidePos(XMFLOAT2 & source, XMFLOAT2 & targe
 
 	for (XMFLOAT2 curPos = source; Vector2::DistanceSquare(curPos, target) > boundingRadius * boundingRadius; curPos = Vector2::Add(curPos, addVal))
 	{
-		if (!m_pCollisionMapImage->GetCollision(curPos.x - boundingRadius, curPos.y)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + boundingRadius)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x + boundingRadius, curPos.y)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x, curPos.y - boundingRadius)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x - boundingRadius, curPos.y + boundingRadius)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x + boundingRadius, curPos.y + boundingRadius)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x - boundingRadius, curPos.y - boundingRadius)) return curPos;
-		if (!m_pCollisionMapImage->GetCollision(curPos.x + boundingRadius, curPos.y - boundingRadius)) return curPos;
+		if (!m_pCollisionMapImage->GetCollision(curPos.x , curPos.y)) return curPos;
 	}
-	return source;
+	return target;
 }
 
 Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius)
 {
-	Path *path;
+	Path *path{ nullptr };
 
 	// 시작지와 끝 지점에서 가장 가까운 노드 검색
 	int srcIndex = FindClosestNodeIndexWithPosition(source);
@@ -204,24 +197,31 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float bo
 		// 목적지만 패스에 넣고 종료
 		path = new Path;
 		path->push_back(CPathEdge(source, target));
-
 		return path;
 	}
 	else
 	{
 		// 길찾기 수행
 		m_pCurSearch = new CAstar(this, srcIndex, dstIndex);
+
+		int result;
 		for (int i = 0; i < 10000; ++i)
 		{
-			int result = m_pCurSearch->FindPath();
+			result = m_pCurSearch->FindPath();
 			if (result == Found || result == Not_Found)
 				break;
 		}
 		// 찾은 패스 저장
 		path = m_pCurSearch->GetPath();
-		// 패스에 도착지를 추가로 연결하고 종료한다.
-		path->push_back(CPathEdge(path->back().To(), target));
-
+		if (result == Found)
+		{
+			// 패스에 도착지를 추가로 연결하고 종료한다.
+			if (!path->empty())
+				path->push_back(CPathEdge(path->back().To(), target));
+			else
+				path->push_back(CPathEdge(source, target));
+		}
+	
 		delete m_pCurSearch;
 	}
 
