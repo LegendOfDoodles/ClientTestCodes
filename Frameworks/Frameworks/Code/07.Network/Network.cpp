@@ -51,7 +51,7 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject* object)
 				myid = id;
 			}
 			if (id == myid) {
-				//player.x = my_packet->x;//캐릭터
+				//object->SetPosition(my_packet->x, my_packet->y);
 				//player.y = my_packet->y;//캐릭터
 			}
 			//else if (id < NPC_START) { //다른플레이어에게 알려줄때 쓰는거
@@ -190,4 +190,25 @@ void Network::ReadPacket(SOCKET sock,CBaseObject* object)
 //	}
 //	ReadPacket(m_mysocket,object);
 //}
+
+void Network::SendPacket(int id, void* ptr)
+{
+	char *packet = reinterpret_cast<char *>(ptr);
+	EXOVER *s_over = new EXOVER;
+	s_over->is_recv = false;
+	memcpy(s_over->m_iobuf, packet, packet[0]);
+	s_over->m_wsabuf.buf = s_over->m_iobuf;
+	s_over->m_wsabuf.len = s_over->m_iobuf[0];
+	ZeroMemory(&s_over->m_over, sizeof(WSAOVERLAPPED));
+	int res = WSASend(m_mysocket, &s_over->m_wsabuf, 1, NULL, 0,
+		&s_over->m_over, NULL);
+	if (0 != res) {
+		int err_no = WSAGetLastError();
+		if (WSA_IO_PENDING != err_no) printf("Send Error![%d] ", err_no);
+	}
+}
+
+
+
+
 

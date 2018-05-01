@@ -104,6 +104,8 @@ struct CS_MsgChMove : public Packet
 //Client->Server
 #define CS_ACTION				  201
 #define CS_MOVE_PLAYER			  202
+#define CS_DEMAND_LOGIN			  203
+
 //In Client Move Object
 #define CS_UP					  1
 #define CS_DOWN					  2

@@ -3,6 +3,15 @@
 
 
 #pragma once
+
+struct EXOVER {
+	WSAOVERLAPPED m_over;
+	char m_iobuf[MAX_BUFF_SIZE];
+	WSABUF m_wsabuf;
+	bool is_recv;
+};
+
+
 class Network
 {
 public:
@@ -27,6 +36,6 @@ public:
 	void ProcessPacket(int myid, char *ptr, CBaseObject* object);
 	void Finalize();
 	void ReadPacket(SOCKET sock, CBaseObject* object);
-	
+	void SendPacket(int id, void *ptr);
 };
 

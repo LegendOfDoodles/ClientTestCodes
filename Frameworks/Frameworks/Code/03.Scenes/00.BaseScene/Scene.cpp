@@ -351,7 +351,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 
 void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View)
 {
-	CS_MsgChMove *my_packet = reinterpret_cast<CS_MsgChMove *>(m_Network.m_send_buffer);
+	CS_MsgChMove my_packet; //= reinterpret_cast<CS_MsgChMove *>(m_Network.m_send_buffer);
 	int ret = 0;
 	XMFLOAT4X4  inverseArr = Matrix4x4::Inverse(xmf4x4View);
 	XMFLOAT3 camPosition = m_pCamera->GetPosition();
@@ -368,22 +368,14 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
 			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z), 
 			m_pSelectedObject->GetBoundingRadius()));
-		
-		my_packet->size = sizeof(my_packet);
-		my_packet->x = m_pickWorldPosition.x;
-		my_packet->y = m_pickWorldPosition.z;
+		my_packet.Character_id = m_Network.m_myid;
+		my_packet.size = sizeof(my_packet);
+		my_packet.x = m_pickWorldPosition.x;
+		my_packet.y = m_pickWorldPosition.z;
 		m_Network.m_send_wsabuf.len = sizeof(my_packet);
 		DWORD iobyte;
-		my_packet->type = CS_MOVE_PLAYER;
-		ret = WSASend(m_Network.m_mysocket, &m_Network.m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
-		if (ret) {
-			int error_code = WSAGetLastError();
-			printf("Error while sending packet [%d]", error_code);
-		}
-		else {
-			printf("Send Comeplete Moving\n");
-		}
-	
+		my_packet.type = CS_MOVE_PLAYER;
+		m_Network.SendPacket(m_Network.m_myid,&my_packet);
 		m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
 	}
 }
