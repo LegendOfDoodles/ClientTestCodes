@@ -75,27 +75,49 @@ void CUIObjectShader::Render(CCamera * pCamera)
 	}
 }
 
-void CUIObjectShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CUIObjectShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	switch (wParam)
-	{
-	
-	default:
-		break;
-	}
+	return false;
 }
 
-void CUIObjectShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
-	switch (wParam)
+	POINT cursorPos;
+
+	GetCursorPos(&cursorPos);
+	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
+
+	// 나중에 Define 하는 형식으로 변형
+	XMFLOAT4 MinimapArea;
+	XMFLOAT4 StatusArea;
+
+	MinimapArea.x = FRAME_BUFFER_WIDTH  / 1.1743f;
+	MinimapArea.y = FRAME_BUFFER_WIDTH  / 1.0372f;
+	MinimapArea.z = FRAME_BUFFER_HEIGHT / 1.3333f;
+	MinimapArea.w = FRAME_BUFFER_HEIGHT / 1.0526f;
+
+	StatusArea.x = FRAME_BUFFER_WIDTH  / 2.2824f;
+	StatusArea.y = FRAME_BUFFER_WIDTH  / 1.6177f;
+	StatusArea.z = FRAME_BUFFER_HEIGHT / 1.2578f;
+	StatusArea.w = FRAME_BUFFER_HEIGHT / 1.0471f;
+
+	if(pKeyBuffer == MK_LBUTTON)
 	{
-	case '1':
-		if (OnOFF == true) OnOFF = false;
-		else OnOFF = true;
-		break;
-	default:
-		break;
+		printf("%d, %d\n", cursorPos.x, cursorPos.y);
+
+		// 미니맵 클릭
+		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y) 
+			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
+			printf("MiniMap Area\n");
+
+		// 스테이터스 클릭
+		if ((cursorPos.x > StatusArea.x  && cursorPos.x < StatusArea.y)
+			&& (cursorPos.y > StatusArea.z && cursorPos.y < StatusArea.w))
+			printf("StatusArea Area\n");
 	}
+
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -198,7 +220,7 @@ void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
 
 void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
-	CCamera *pCamera = (CCamera*)pContext;
+	m_pCamera = (CCamera*)pContext;
 	
 	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -228,8 +250,8 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		m_ppMaterials[i] = pMaterial;
 #endif
 		pMiniMap = new CUIObject(pCreateMgr, (Type)i);
-		pMiniMap->SetCamera(pCamera);
-		pMiniMap->SetDistance(10.f);
+		pMiniMap->SetCamera(m_pCamera);
+		pMiniMap->SetDistance(FRAME_BUFFER_WIDTH / 128);
 		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 		m_ppObjects[i] = pMiniMap;
 	}

@@ -80,6 +80,8 @@ public:	// 공개 함수
 	D3D12_VIEWPORT GetViewport() { return(m_viewport); }
 	D3D12_RECT GetScissorRect() { return(m_scissorRect); }
 
+	HWND GetHwnd() { return(m_hWnd); }
+
 	void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y, m_rotation.z = z; }
 
 protected: // 내부 함수

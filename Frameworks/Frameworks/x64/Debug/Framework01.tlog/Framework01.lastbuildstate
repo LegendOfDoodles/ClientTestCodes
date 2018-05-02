@@ -1,2 +1,6 @@
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v141:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0.16299.0
+<<<<<<< HEAD
 Debug|x64|D:\새 폴더\client\Frameworks\|
+=======
+Debug|x64|D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\|
+>>>>>>> a5344f5dd27db7fd7f9f5239c9340d744ba247e9

@@ -41,6 +41,11 @@ namespace Vector2
 		return xmf2Result;
 	}
 
+	inline bool Equal(const XMFLOAT2& xmf2Vector1, const XMFLOAT2& xmf2Vector2)
+	{
+		return(xmf2Vector1.x == xmf2Vector2.x && xmf2Vector1.y == xmf2Vector2.y);
+	}
+
 	inline XMFLOAT2 ScalarProduct(XMFLOAT2& xmf2Vector, float fScalar, bool bNormalize = true)
 	{
 		XMFLOAT2 xmf2Result;
@@ -171,6 +176,11 @@ namespace Vector3
 		XMFLOAT3 xmf3Result;
 		XMStoreFloat3(&xmf3Result, xmvVector);
 		return(xmf3Result);
+	}
+
+	inline bool Equal(const XMFLOAT3& xmf3Vector1, const XMFLOAT3& xmf3Vector2)
+	{
+		return(xmf3Vector1.x == xmf3Vector2.x && xmf3Vector1.y == xmf3Vector2.y && xmf3Vector1.z == xmf3Vector2.z);
 	}
 
 	inline XMFLOAT3 ScalarProduct(XMFLOAT3& xmf3Vector, float fScalar, bool bNormalize = true)
