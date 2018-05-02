@@ -226,7 +226,7 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float bo
 	}
 
 	// 직선 상으로 갈 수 있는 길 돌아가지 않도록 설정
-	SmoothPath(path, boundingRadius);
+	SmoothPathDetail(path, boundingRadius);
 
 	return path;
 }
@@ -249,6 +249,33 @@ void CWayFinder::SmoothPath(Path *path, float boundingRadius)
 			e1 = e2;
 			++e2;
 		}
+	}
+}
+
+void CWayFinder::SmoothPathDetail(Path * path, float boundingRadius)
+{
+	Path::iterator e1(path->begin()), e2;
+
+	while (e1 != path->end())
+	{
+		e2 = e1;
+		++e2;
+
+		while (e2 != path->end())
+		{
+			if (CanGoDirectly(e1->From(), e2->To(), boundingRadius))
+			{
+				e1->SetDestination(e2->To());
+				e2 = path->erase(++e1, ++e2);
+				e1 = e2;
+				--e1;
+			}
+			else
+			{
+				++e2;
+			}
+		}
+		++e1;
 	}
 }
 

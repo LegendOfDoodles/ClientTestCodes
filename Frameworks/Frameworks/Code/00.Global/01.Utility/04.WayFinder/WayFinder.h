@@ -22,6 +22,7 @@ public: // 공개 함수
 	Path *GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
 
 	void SmoothPath(Path *path, float boundingRadius);
+	void SmoothPathDetail(Path *path, float boundingRadius);
 
 	int FindClosestNodeIndexWithPosition(const XMFLOAT2 &position);
 
