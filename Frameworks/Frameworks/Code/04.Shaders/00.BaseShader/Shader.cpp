@@ -88,7 +88,7 @@ bool CShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	return true;
 }
 
-bool CShader::OnProcessMouseInput(UCHAR * pKeyBuffer)
+bool CShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
 	return false;
 }

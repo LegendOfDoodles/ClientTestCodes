@@ -80,8 +80,10 @@ void CScene::ProcessInput()
 
 	GetKeyboardState(pKeyBuffer);
 
-	for (int i = 0; i < m_nShaders; ++i)
+	for (int i = 0; i < m_nShaders; ++i) {
 		m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
+	
+	}
 
 	m_pCamera->OnProcessMouseInput(pKeyBuffer);
 	m_pCamera->OnProcessKeyInput(pKeyBuffer);
@@ -167,6 +169,8 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		::SetCapture(hWnd);
 		m_pCamera->SavePickedPos();
 		PickObjectPointedByCursor(wParam, lParam);
+		for (int i =0; i < m_nShaders; ++i)
+			m_ppShaders[i]->OnProcessMouseInput(wParam);
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
@@ -345,6 +349,12 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			nearestHitDistance = hitDistance;
 			m_pSelectedObject = pIntersectedObject;
 			printf("selected!\n");
+			
+			// Status 창 띄우기 수도 코드
+			// 현재 4번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
+			// 그 해당 오브젝트에 대한 정보를 출력
+			//m_ppShaders[4]->OnStatus(pIntersectedObject->GetType());
+			
 			//m_Network.StartRecv(m_pSelectedObject);
 		}
 	}
@@ -352,6 +362,12 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	if (wParam == MK_RBUTTON)
 	{
 		GenerateLayEndWorldPosition(pickPosition, xmf4x4View);
+
+		
+	}
+	else if (wParam == MK_LBUTTON) {
+		// 바닥 선택시 Status창 Off
+		//m_ppShaders[4]->OffStatus();
 	}
 }
 
