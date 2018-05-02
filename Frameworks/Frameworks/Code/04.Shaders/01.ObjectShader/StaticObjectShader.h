@@ -16,6 +16,8 @@ public: // 공개 함수
 	virtual void UpdateShaderVariables();
 	virtual void UpdateBoundingBoxShaderVariables();
 
+	virtual void AnimateObjects(float timeElapsed);
+
 	virtual void Render(CCamera *pCamera);
 	virtual void RenderBoundingBox(CCamera *pCamera);
 
@@ -40,6 +42,9 @@ protected: // 내부 함수
 protected: // 변수
 	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
+
+	CMaterial			**m_ppMaterials{ NULL };
+	int					m_nMaterials{ 0 };
 
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };

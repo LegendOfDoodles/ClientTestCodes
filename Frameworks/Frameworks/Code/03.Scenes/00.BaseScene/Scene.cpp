@@ -150,7 +150,7 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
-		m_ppShaders[4]->Initialize(m_pCreateMgr, m_pCamera);
+		m_ppShaders[5]->Initialize(m_pCreateMgr, m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -252,26 +252,27 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 5;
+	m_nShaders = 6;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
 	m_ppShaders[2] = new CAniShader(pCreateMgr);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
-	m_ppShaders[4] = new CUIObjectShader(pCreateMgr);
+	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
+	m_ppShaders[5] = new CUIObjectShader(pCreateMgr);
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders; ++i)
+	for (int i = 2; i < m_nShaders - 1; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
-	m_ppShaders[4]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[5]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 
@@ -353,7 +354,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			// Status 창 띄우기 수도 코드
 			// 현재 4번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
 			// 그 해당 오브젝트에 대한 정보를 출력
-			//m_ppShaders[4]->OnStatus(pIntersectedObject->GetType());
+			//m_ppShaders[5]->OnStatus(pIntersectedObject->GetType());
 			
 			//m_Network.StartRecv(m_pSelectedObject);
 		}
@@ -367,7 +368,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	}
 	else if (wParam == MK_LBUTTON) {
 		// 바닥 선택시 Status창 Off
-		//m_ppShaders[4]->OffStatus();
+		//m_ppShaders[5]->OffStatus();
 	}
 }
 

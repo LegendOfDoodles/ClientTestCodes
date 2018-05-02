@@ -242,6 +242,13 @@ void CBaseObject::Rotate(float fPitch, float fYaw, float fRoll)
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
 }
 
+void CBaseObject::Scale(float x, float y, float z)
+{
+	XMMATRIX mtxScale = XMMatrixScaling(x, y, z);
+
+	m_xmf4x4World = Matrix4x4::Multiply(mtxScale, m_xmf4x4World);
+}
+
 void CBaseObject::LookAt(XMFLOAT3 objPosition)
 {
 	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };

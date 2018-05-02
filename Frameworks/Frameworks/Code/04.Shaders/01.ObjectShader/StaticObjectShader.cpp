@@ -5,6 +5,7 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 #include "05.Objects/03.Terrain/HeightMapTerrain.h"
+#include "05.Objects/06.StaticObjects/01.Nexus/Nexus.h"
 
 /// <summary>
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
@@ -36,6 +37,11 @@ void CStaticObjectShader::ReleaseUploadBuffers()
 	}
 #if USE_BATCH_MATERIAL
 	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for(int i=0;i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 #endif
 }
 
@@ -75,11 +81,24 @@ void CStaticObjectShader::UpdateBoundingBoxShaderVariables()
 	}
 }
 
+void CStaticObjectShader::AnimateObjects(float timeElapsed)
+{
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		m_ppObjects[j]->Animate(timeElapsed);
+	}
+}
+
 void CStaticObjectShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 #if USE_BATCH_MATERIAL
 	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->UpdateShaderVariables();
+	}
 #endif
 
 #if USE_INSTANCING
@@ -126,37 +145,13 @@ CBaseObject *CStaticObjectShader::PickObjectByRayIntersection(
 
 bool CStaticObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
-	static float R = 0.0f;
-	static float M = 0.0f;
-
-	if (pKeyBuffer['U'] & 0xF0)
-	{
-		R -= 0.1f;
-		if (R < 0.0f) R = 0.0f;
-		m_pMaterial->SetRoughness(R);
-		return true;
-	}
-	if (pKeyBuffer['I'] & 0xF0)
-	{
-		R += 0.1f;
-		if (R > 1.0f) R = 1.0f;
-		m_pMaterial->SetRoughness(R);
-		return true;
-	}
-	if (pKeyBuffer['O'] & 0xF0)
-	{
-		M -= 0.1f;
-		if (M < 0.0f) M = 0.0f;
-		m_pMaterial->SetMetalic(M);
-		return true;
-	}
-	if (pKeyBuffer['P'] & 0xF0)
-	{
-		M += 0.1f;
-		if (M > 1.0f) M = 1.0f;
-		m_pMaterial->SetMetalic(M);
-		return true;
-	}
+	//if (pKeyBuffer['U'] & 0xF0)
+	//{
+	//	R -= 0.1f;
+	//	if (R < 0.0f) R = 0.0f;
+	//	m_pMaterial->SetRoughness(R);
+	//	return true;
+	//}
 
 	return true;
 }
@@ -210,7 +205,6 @@ D3D12_INPUT_LAYOUT_DESC CStaticObjectShader::CreateInputLayout()
 
 D3D12_SHADER_BYTECODE CStaticObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
-	//./Code/04.Shaders/99.GraphicsShader/
 #if USE_INSTANCING
 	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "VSTexturedLightingInstancing", "vs_5_1", ppShaderBlob));
 #else
@@ -225,7 +219,7 @@ D3D12_SHADER_BYTECODE CStaticObjectShader::CreatePixelShader(ID3DBlob **ppShader
 
 void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 {
-	m_nPipelineStates = 2;
+	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; ++i)
@@ -236,7 +230,7 @@ void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
-	CShader::CreateBoundingBoxShader(pCreateMgr);
+	//CShader::CreateBoundingBoxShader(pCreateMgr);
 }
 
 void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
@@ -291,17 +285,27 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
+	//CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
+	//CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
 
 #if USE_BATCH_MATERIAL
-	m_pMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
+	m_nMaterials = 1;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+	m_ppMaterials[0] = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
+	CSkinnedMesh *pMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");;
+	
+	m_ppObjects[0] = new CNexus(pCreateMgr);
+	m_ppObjects[0]->SetPosition(CONVERT_Unit_to_InG(0.25), 153, CONVERT_Unit_to_InG(2.5));
+	m_ppObjects[0]->Rotate(0, 0, 0);
+	m_ppObjects[0]->SetMesh(0, pMesh);
+
+	m_ppObjects[0]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }
 
 void CStaticObjectShader::ReleaseObjects()
@@ -315,7 +319,11 @@ void CStaticObjectShader::ReleaseObjects()
 	Safe_Delete_Array(m_ppObjects);
 
 #if USE_BATCH_MATERIAL
-	Safe_Delete(m_pMaterial);
+	for (int i = 0; i < m_nMaterials; ++i)
+	{
+		delete m_ppMaterials[i];
+	}
+	Safe_Delete(m_ppMaterials);
 #endif
 }
 
