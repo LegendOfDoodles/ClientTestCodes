@@ -910,7 +910,6 @@ void FBXExporter::WriteMeshToStream(std::ostream& inStream)
 	else
 	{
 		inStream << "\t<format>pnt</format>" << std::endl;
-	//inStream << "\t<texture>" << mMaterialLookUp[0]->mDiffuseMapName << "</texture>" << std::endl;
 	}
 	inStream << "\t<triangles count='" << mTriangleCount << "'>" << std::endl;
 
