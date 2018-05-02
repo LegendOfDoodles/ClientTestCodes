@@ -131,12 +131,12 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	XMFLOAT4 xmf4Color(0.6f, 0.6f, 0.6f, 0.0f);
 
 #ifdef _WITH_TERRAIN_PARTITION
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"),
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/HeightMap.raw"),
 		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
 		TERRAIN_IMAGE_WIDTH / 10, TERRAIN_IMAGE_HEIGHT / 10,
 		TERRAIN_IMAGE_SCALE, XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
 #else
-	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/test2.raw"),
+	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/HeightMap.raw"),
 		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
 		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT,
 		TERRAIN_IMAGE_SCALE, XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));

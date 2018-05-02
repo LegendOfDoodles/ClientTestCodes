@@ -298,11 +298,11 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");;
+	CSkinnedMesh *pMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");;
 	
 	m_ppObjects[0] = new CNexus(pCreateMgr);
-	m_ppObjects[0]->SetPosition(CONVERT_Unit_to_InG(0.25), 153, CONVERT_Unit_to_InG(2.5));
-	m_ppObjects[0]->Rotate(0, 0, 0);
+	m_ppObjects[0]->SetPosition(CONVERT_Unit_to_InG(0.25), 0, CONVERT_Unit_to_InG(2.5));
+	m_ppObjects[0]->Rotate(90, 0, 90);
 	m_ppObjects[0]->SetMesh(0, pMesh);
 
 	m_ppObjects[0]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
@@ -753,7 +753,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pMinionObject->SetBoundingMesh(pCreateMgr,
 					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pMinionObject->CBaseObject::SetPosition(x * 30, y * 100, z * 100);
+				pMinionObject->CBaseObject::SetPosition(x * 30, y * 100, z * 100 + 3000);
 
 				switch (z)
 				{
