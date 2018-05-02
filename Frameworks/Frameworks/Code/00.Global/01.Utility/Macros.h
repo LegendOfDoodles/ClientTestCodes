@@ -22,8 +22,8 @@
 #define SPOT_LIGHT				2
 #define DIRECTIONAL_LIGHT		3
 
-#define TERRAIN_SIZE_WIDTH 34500
-#define TERRAIN_SIZE_HEIGHT 17250
+#define TERRAIN_SIZE_WIDTH 10000
+#define TERRAIN_SIZE_HEIGHT 5000
 
 #define TERRAIN_IMAGE_WIDTH 500
 #define TERRAIN_IMAGE_HEIGHT 250
@@ -32,14 +32,14 @@
 #define REVISE_HEIGHT 153
 #define REVISE_HEIGHT_FOR_OBJECT REVISE_HEIGHT + 7.0f
 
-#define NODE_SIZE 124.2
+#define NODE_SIZE 41.4
 
 // 랜덤 색상
 #define RANDOM_COLOR XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 
 // 단위 변환 함수
 #define CONVERT_PaperUnit_to_InG(val) val * 8.28
-#define CONVERT_Unit_to_InG(val) val * 3450
+#define CONVERT_Unit_to_InG(val) val * 1000
 
 // 캡션 FPS 출력 여부 -------------------
 // 항상 캡션에 FPS를 출력		(0 : 비활성 | 1 : 활성)
