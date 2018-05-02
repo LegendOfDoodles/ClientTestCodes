@@ -33,6 +33,7 @@ public: // 공개 함수
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
+	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
 	bool HasBoundingBox() { return m_nPipelineStates > 1; }
 

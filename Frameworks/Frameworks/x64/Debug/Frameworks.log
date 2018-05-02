@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  stdafx.cpp
 d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(138): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMVECTOR'에서 'DirectX::XMVECTOR &'(으)로의 변환입니다.
   d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\vectors.h(138): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
@@ -252,3 +253,9 @@ d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\framewor
 d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\07.network\network.cpp(194): warning C4100: 'id': 참조되지 않은 정식 매개 변수입니다.
   코드를 생성하고 있습니다...
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+=======
+﻿  Billboard.cpp
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\95.billboard\billboard.cpp(29): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+>>>>>>> 용선

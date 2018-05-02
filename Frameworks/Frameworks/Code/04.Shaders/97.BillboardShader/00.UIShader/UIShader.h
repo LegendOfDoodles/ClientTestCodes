@@ -20,8 +20,8 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed);
-	virtual void OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed);
+	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
+	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -43,6 +43,8 @@ protected: // 변수
 	int m_nObjects = 0;
 
 	CMaterial	**m_ppMaterials{ NULL };
+
+	CCamera *m_pCamera;
 
 	bool OnOFF = false;
 
