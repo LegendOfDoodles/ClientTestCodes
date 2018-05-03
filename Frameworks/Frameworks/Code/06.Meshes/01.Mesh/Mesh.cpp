@@ -943,7 +943,7 @@ CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in) : CMeshIlluminatedT
 	CMeshImporter importer;
 	importer.LoadStaticMeshData(in);
 	m_nVertices = importer.m_iVerticesCnt;
-	m_nStride = sizeof(CSkinnedVertex);
+	m_nStride = sizeof(CIlluminatedTexturedVertex);
 	m_nOffset = 0;
 	m_nSlot = 0;
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;

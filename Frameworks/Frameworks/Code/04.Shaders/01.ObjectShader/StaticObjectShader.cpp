@@ -214,7 +214,7 @@ D3D12_SHADER_BYTECODE CStaticObjectShader::CreateVertexShader(ID3DBlob **ppShade
 
 D3D12_SHADER_BYTECODE CStaticObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLighting", "ps_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLightingDetail", "ps_5_1", ppShaderBlob));
 }
 
 void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr)
@@ -284,7 +284,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4);
 	//CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
@@ -298,7 +298,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");
+	CStaticMesh *pMesh = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");
 	
 	m_ppObjects[0] = new CNexus(pCreateMgr);
 	m_ppObjects[0]->SetPosition(CONVERT_Unit_to_InG(0.25), 0, CONVERT_Unit_to_InG(2.5));
@@ -650,7 +650,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);

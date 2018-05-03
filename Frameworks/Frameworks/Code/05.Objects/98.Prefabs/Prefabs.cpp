@@ -90,9 +90,11 @@ CMaterial * Materials::CreateSkyBoxMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_D
 CMaterial * Materials::CreateTresureBoxMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
+	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/Diffuse.dds", 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/Normal.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/RoughnessAndMetallic.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/Specular.dds", 3);
 	
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -103,6 +105,8 @@ CMaterial * Materials::CreateTresureBoxMaterial(CCreateMgr * pCreateMgr, D3D12_C
 	pMaterial->Initialize(pCreateMgr);
 
 	pMaterial->SetTexture(pTexture);
+
+	//pMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
 
 	return pMaterial;
 }
