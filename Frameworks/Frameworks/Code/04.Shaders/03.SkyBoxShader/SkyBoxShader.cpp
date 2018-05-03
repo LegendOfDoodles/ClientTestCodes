@@ -156,7 +156,7 @@ void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
 
-	m_pSkyBox->SetMaterial(Materials::CreateSkyBoxMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle));
+	m_pSkyBox->SetMaterial(Materials::CreateSkyBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 	m_pSkyBox->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }
 

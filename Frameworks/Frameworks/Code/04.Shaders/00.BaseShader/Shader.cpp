@@ -27,10 +27,12 @@ CShader::~CShader()
 		Safe_Release(m_ppPipelineStates[i]);
 	}
 	Safe_Delete_Array(m_ppPipelineStates);
-
+																   
 	Safe_Delete_Array(m_ppCbvSrvDescriptorHeaps);
 	Safe_Delete_Array(m_pcbvCPUDescriptorStartHandle);
 	Safe_Delete_Array(m_pcbvGPUDescriptorStartHandle);
+	Safe_Delete_Array(m_psrvCPUDescriptorStartHandle);
+	Safe_Delete_Array(m_psrvGPUDescriptorStartHandle);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -221,6 +223,8 @@ void CShader::CreateDescriptorHeaps()
 	m_ppCbvSrvDescriptorHeaps = new ID3D12DescriptorHeap*[m_nPipelineStates];
 	m_pcbvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
 	m_pcbvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
+	m_psrvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
+	m_psrvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; ++i)
 	{
@@ -241,8 +245,8 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConsta
 
 	m_pcbvCPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetCPUDescriptorHandleForHeapStart();
 	m_pcbvGPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetGPUDescriptorHandleForHeapStart();
-	m_srvCPUDescriptorStartHandle.ptr = m_pcbvCPUDescriptorStartHandle[index].ptr + (incrementSize * nConstantBufferViews);
-	m_srvGPUDescriptorStartHandle.ptr = m_pcbvGPUDescriptorStartHandle[index].ptr + (incrementSize * nConstantBufferViews);
+	m_psrvCPUDescriptorStartHandle[index].ptr = m_pcbvCPUDescriptorStartHandle[index].ptr + (incrementSize * nConstantBufferViews);
+	m_psrvGPUDescriptorStartHandle[index].ptr = m_pcbvGPUDescriptorStartHandle[index].ptr + (incrementSize * nConstantBufferViews);
 }
 
 void CShader::CreateConstantBufferViews(
@@ -309,11 +313,11 @@ void GetShaderResourceViewDesc(
 
 void CShader::CreateShaderResourceViews(
 	CCreateMgr *pCreateMgr, CTexture *pTexture, 
-	UINT nRootParameterStartIndex, bool bAutoIncrement)
+	UINT nRootParameterStartIndex, bool bAutoIncrement, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
-	D3D12_CPU_DESCRIPTOR_HANDLE srvCPUDescriptorHandle = m_srvCPUDescriptorStartHandle;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle = m_srvGPUDescriptorStartHandle;
+	D3D12_CPU_DESCRIPTOR_HANDLE srvCPUDescriptorHandle = m_psrvCPUDescriptorStartHandle[index];
+	D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle = m_psrvGPUDescriptorStartHandle[index];
 	D3D12_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 	int nTextures = pTexture->GetTextureCount();
 	int nTextureType = pTexture->GetTextureType();

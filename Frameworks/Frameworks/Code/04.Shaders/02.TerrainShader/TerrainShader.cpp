@@ -147,7 +147,7 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
 
-	m_pMaterial = Materials::CreateTerrainMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
+	m_pMaterial = Materials::CreateTerrainMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
 	m_pTerrain->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }

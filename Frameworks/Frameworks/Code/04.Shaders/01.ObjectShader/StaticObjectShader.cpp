@@ -284,7 +284,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
 	//CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
@@ -293,12 +293,12 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if USE_BATCH_MATERIAL
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
+	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");;
+	CSkinnedMesh *pMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");
 	
 	m_ppObjects[0] = new CNexus(pCreateMgr);
 	m_ppObjects[0]->SetPosition(CONVERT_Unit_to_InG(0.25), 0, CONVERT_Unit_to_InG(2.5));
@@ -650,7 +650,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
@@ -658,7 +658,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 #if USE_BATCH_MATERIAL
-	m_pMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
+	m_pMaterial = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif

@@ -245,7 +245,7 @@ float4 PSTexturedLighting(VS_TEXTURED_LIGHTING_OUTPUT input) : SV_TARGET
         N = mul(normal, TBN); // 노말을 TBN행렬로 변환
     }
 
-    float4 cIllumination = Lighting(input.positionW, N);
+    float4 cIllumination = Lighting(input.positionW, N, cColor);
 #endif
     return (lerp(cColor, cIllumination, 0.5f));
 }
@@ -366,7 +366,7 @@ float4 PSBone(VS_BONEOUTPUT input) : SV_TARGET
 		N = mul(normal, TBN); // 노말을 TBN행렬로 변환
 	}
 
-	float4 cIllumination = Lighting(input.positionW, N);
+    float4 cIllumination = Lighting(input.positionW, N, cColor);
 #endif
 	return (lerp(cColor, cIllumination, 0.5f));
 }
