@@ -87,12 +87,6 @@ void CScene::ProcessInput()
 
 	m_pCamera->OnProcessMouseInput(pKeyBuffer);
 	m_pCamera->OnProcessKeyInput(pKeyBuffer);
-
-	if (m_pSelectedObject && pKeyBuffer['P'] & 0xF0)
-	{
-		m_pSelectedObject->Rotate(10, 0, 0);
-	}
-	
 }
 
 void CScene::AnimateObjects(float timeElapsed)
@@ -207,13 +201,13 @@ void CScene::BuildLights()
 
 	m_pLights->m_pLights[0].m_bEnable = true;
 	m_pLights->m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.1f, -1.0f, 0.8f));
+	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.5f, -1.0f, -1.0f));
 
-	m_pLights->m_pLights[1].m_bEnable = false;
+	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = SPOT_LIGHT;
 	m_pLights->m_pLights[1].m_fRange = 500.0f;
-	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.0f, 1.0f, 0.4f, 1.0f);
+	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
 	m_pLights->m_pLights[1].m_position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
 	m_pLights->m_pLights[1].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	m_pLights->m_pLights[1].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);

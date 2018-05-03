@@ -70,7 +70,7 @@ float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera, float
 {
     float3 L = normalize(vLight);
     float3 N = vNormal;
-    float3 V = normalize(-vCamera);
+    float3 V = normalize(vCamera);
     float3 H = normalize(L + V);
 
     float NV = dot(N, V);
@@ -258,7 +258,6 @@ float4 Lighting(float3 vPosition, float3 vNormal, float4 texColor, float4 specul
 {
     float3 vCameraPosition = float3(gvCameraPosition.x, gvCameraPosition.y, gvCameraPosition.z);
     float3 vCamera = vCameraPosition - vPosition;
-
     float4 cColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
     for (int i = 0; i < MAX_LIGHTS; i++)
     {
@@ -266,15 +265,15 @@ float4 Lighting(float3 vPosition, float3 vNormal, float4 texColor, float4 specul
         {
             if (gLights[i].m_nType == DIRECTIONAL_LIGHT)
             {
-                cColor += DirectionalLight(i, vNormal, vCamera, texColor, specular);
+                cColor += DirectionalLight(i, vNormal, vCamera, texColor, specular, roughnessMetallicFresnel);
             }
             else if (gLights[i].m_nType == POINT_LIGHT)
             {
-                cColor += PointLight(i, vPosition, vNormal, vCamera, texColor, specular);
+                cColor += PointLight(i, vPosition, vNormal, vCamera, texColor, specular, roughnessMetallicFresnel);
             }
             else if (gLights[i].m_nType == SPOT_LIGHT)
             {
-                cColor += SpotLight(i, vPosition, vNormal, vCamera, texColor, specular);
+                cColor += SpotLight(i, vPosition, vNormal, vCamera, texColor, specular, roughnessMetallicFresnel);
             }
         }
     }

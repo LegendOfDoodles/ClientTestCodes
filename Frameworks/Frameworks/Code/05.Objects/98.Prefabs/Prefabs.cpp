@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-27
+/// 최종 수정 날짜: 2018-05-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -91,10 +91,10 @@ CMaterial * Materials::CreateTresureBoxMaterial(CCreateMgr * pCreateMgr, D3D12_C
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/Diffuse.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/Normal.dds", 1);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/RoughnessAndMetallic.dds", 2);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/Tresure Box/Specular.dds", 3);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/TresureBox/Diffuse.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/TresureBox/Normal.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/TresureBox/RoughnessAndMetallic.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Building/TresureBox/Specular.dds", 3);
 	
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
