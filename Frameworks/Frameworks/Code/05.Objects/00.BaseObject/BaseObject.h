@@ -56,6 +56,9 @@ public: // 공개 함수
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
 
+	void Translate(XMFLOAT3 *pxmf3Axis);
+	void Translate(float x,float y, float z);
+
 	void Scale(float x = 1.0f, float y = 1.0f, float z = 1.0f);
 
 	void LookAt(XMFLOAT3 objPosition);	// Warning! 움직이는 오브젝트에 가지도록 설정할 필요 있음

@@ -12,12 +12,21 @@ protected:
 	int m_nAniState{ 0 };
 
 	float m_fFrameTime{ 0 };
+	float m_fCollisionSize{ 1 };
 
 public:
 	CAnimatedObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
 	virtual ~CAnimatedObject();
 
 public:
+
+	virtual void SetCollisionSize(float size) {
+		m_fCollisionSize = size;
+	}
+	virtual float GetCollisionSize() {
+		return m_fCollisionSize;
+	}
+
 	virtual void Animate(float timeElapsed);
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 

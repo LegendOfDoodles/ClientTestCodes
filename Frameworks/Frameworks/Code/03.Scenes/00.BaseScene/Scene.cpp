@@ -82,7 +82,7 @@ void CScene::ProcessInput()
 
 	for (int i = 0; i < m_nShaders; ++i) {
 		m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
-	
+
 	}
 
 	m_pCamera->OnProcessMouseInput(pKeyBuffer);
@@ -99,6 +99,7 @@ void CScene::AnimateObjects(float timeElapsed)
 	{
 		m_ppShaders[i]->AnimateObjects(timeElapsed);
 	}
+	CollisionTest();
 }
 
 void CScene::Render()
@@ -154,7 +155,7 @@ void CScene::UpdateCamera()
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	WPARAM wParam, LPARAM lParam)
 {
-	
+
 	int ret = 0;
 	switch (nMessageID)
 	{
@@ -163,7 +164,7 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		::SetCapture(hWnd);
 		m_pCamera->SavePickedPos();
 		PickObjectPointedByCursor(wParam, lParam);
-		for (int i =0; i < m_nShaders; ++i)
+		for (int i = 0; i < m_nShaders; ++i)
 			m_ppShaders[i]->OnProcessMouseInput(wParam);
 		break;
 	case WM_LBUTTONUP:
@@ -265,7 +266,7 @@ void CScene::ReleaseObjects()
 	{
 		for (int i = 0; i < m_nShaders; i++)
 		{
-			if(m_ppShaders[i]) m_ppShaders[i]->Finalize();
+			if (m_ppShaders[i]) m_ppShaders[i]->Finalize();
 		}
 		Safe_Delete_Array(m_ppShaders);
 	}
@@ -325,12 +326,12 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			nearestHitDistance = hitDistance;
 			m_pSelectedObject = pIntersectedObject;
 			printf("selected!\n");
-			
+
 			// Status 창 띄우기 수도 코드
 			// 현재 4번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
 			// 그 해당 오브젝트에 대한 정보를 출력
 			//m_ppShaders[5]->OnStatus(pIntersectedObject->GetType());
-			
+
 			//m_Network.StartRecv(m_pSelectedObject);
 		}
 	}
@@ -339,7 +340,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	{
 		GenerateLayEndWorldPosition(pickPosition, xmf4x4View);
 
-		
+
 	}
 	else if (wParam == MK_LBUTTON) {
 		// 바닥 선택시 Status창 Off
@@ -364,7 +365,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		m_pSelectedObject->LookAt(m_pickWorldPosition);
 		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
-			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z), 
+			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z),
 			m_pSelectedObject->GetBoundingRadius()));
 		my_packet.Character_id = m_Network.m_myid;
 		my_packet.size = sizeof(my_packet);
@@ -373,7 +374,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		m_Network.m_send_wsabuf.len = sizeof(my_packet);
 		DWORD iobyte;
 		my_packet.type = CS_MOVE_PLAYER;
-		m_Network.SendPacket(m_Network.m_myid,&my_packet);
+		m_Network.SendPacket(m_Network.m_myid, &my_packet);
 		m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
 	}
 }
@@ -381,9 +382,9 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 // Process Keyboard Input
 void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
-	
+
 	int x = 0, y = 0;
-	if(wParam == VK_ESCAPE)
+	if (wParam == VK_ESCAPE)
 		::PostQuitMessage(0);
 	else if (wParam == VK_F1)
 	{
@@ -435,5 +436,33 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 		}
 		else
 			printf("Send Comeplete Up or Down\n");
+	}
+}
+
+void CScene::CollisionTest()
+{
+	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
+	CAnimatedObject** colliders = (CAnimatedObject * *)pAniS->GetCollisionObjects();
+	int nColliderObject = pAniS->GetnObject();
+	for (int i = 0; i < nColliderObject - 1; ++i)
+	{
+		for (int j = i + 1; j < nColliderObject; ++j)
+		{
+			float sizeA = colliders[i]->GetCollisionSize();
+			float sizeB = colliders[j]->GetCollisionSize();
+
+			float distance = Vector3::Distance(colliders[i]->GetPosition(), colliders[j]->GetPosition());
+			float collisionLength = sizeA + sizeB;
+
+			if (distance <= collisionLength)
+			{
+				float length = (collisionLength - distance);
+				XMFLOAT3 vec3 = Vector3::Add(colliders[i]->GetPosition(), colliders[j]->GetPosition(), -1);
+				vec3.y = 0;
+				vec3 = Vector3::Normalize(vec3);
+				colliders[i]->Translate(&Vector3::ScalarProduct(vec3, length *sizeB / (sizeA + sizeB)));
+				colliders[j]->Translate(&Vector3::ScalarProduct(vec3, -length *sizeB / (sizeA + sizeB)));
+			}
+		}
 	}
 }

@@ -39,6 +39,7 @@ public: // 공개 함수
 
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
+	virtual CBaseObject * * GetCollisionObjects() { return nullptr; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

@@ -70,6 +70,8 @@ protected: // 내부 함수
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
 
+	void CollisionTest();
+
 protected: // 변수
 	HWND m_hWnd{ NULL };
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };

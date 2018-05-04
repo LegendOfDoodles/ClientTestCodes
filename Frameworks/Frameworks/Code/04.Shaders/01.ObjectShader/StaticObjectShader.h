@@ -81,6 +81,13 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
+	virtual CBaseObject * * GetCollisionObjects() {
+		return m_ppObjects;
+	}
+	int GetnObject() {
+		return m_nObjects;
+	}
+
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 

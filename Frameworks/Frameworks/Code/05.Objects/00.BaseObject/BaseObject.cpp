@@ -242,6 +242,21 @@ void CBaseObject::Rotate(float fPitch, float fYaw, float fRoll)
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
 }
 
+void CBaseObject::Translate(XMFLOAT3 * pxmf3Axis)
+{
+	XMFLOAT3 xmf3Position = GetPosition();
+	xmf3Position = Vector3::Add(xmf3Position, *pxmf3Axis);
+	CBaseObject::SetPosition(xmf3Position);
+}
+
+void CBaseObject::Translate(float x, float y, float z)
+{
+	XMFLOAT3 xmf3Position = GetPosition();
+	XMFLOAT3 xmf3Translate = XMFLOAT3(x,y,z);
+	xmf3Position = Vector3::Add(xmf3Position, xmf3Translate);
+	CBaseObject::SetPosition(xmf3Position);
+}
+
 void CBaseObject::Scale(float x, float y, float z)
 {
 	XMMATRIX mtxScale = XMMatrixScaling(x, y, z);

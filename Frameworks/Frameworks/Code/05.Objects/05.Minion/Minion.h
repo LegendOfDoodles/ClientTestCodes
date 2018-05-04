@@ -1,5 +1,6 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
+#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/97.Skeleton/Skeleton.h"
 
 enum MinionState {
@@ -14,7 +15,7 @@ enum MinionState {
 
 class CHeightMapTerrain;
 
-class CMinion : public CBaseObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
+class CMinion : public CAnimatedObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
 {
 public: // 생성자, 소멸자
 	CMinion(CCreateMgr *pCreateMgr, int nMeshes = 1);
@@ -31,6 +32,8 @@ public:	// 외부 함수
 		m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
 		m_pSkeleton[m_nAniCnt++] = *skeleton;
 	}
+
+
 
 	void AniStateSet() {
 		switch (m_CurrAnimationState) {
@@ -70,9 +73,11 @@ protected:	// 변수
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/
+	int m_nAniCnt{ 0 };
+	
+	
 	float m_fFrameTime{ 0 };
 
-	int m_nAniCnt{ 0 };
 
 	XMFLOAT2 m_destination{ -1,  -1 };	// 얘를 깔끔하게 API 같이 만들 필요 있을 듯
 

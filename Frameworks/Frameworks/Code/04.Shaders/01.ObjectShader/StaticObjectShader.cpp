@@ -753,7 +753,8 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pMinionObject->SetBoundingMesh(pCreateMgr,
 					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pMinionObject->CBaseObject::SetPosition(x * 30, y * 100, z * 100 + 3000);
+				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
+				pMinionObject->CBaseObject::SetPosition(x * 100, y * 100, z * 100 + 3000);
 
 				switch (z)
 				{
