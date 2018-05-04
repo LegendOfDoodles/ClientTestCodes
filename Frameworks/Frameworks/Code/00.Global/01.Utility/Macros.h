@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-19
+/// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -41,6 +41,7 @@
 // 단위 변환 함수
 #define CONVERT_PaperUnit_to_InG(val) val * 8.28
 #define CONVERT_Unit_to_InG(val) val * 1000
+#define CONVERT_cm_to_InG(val) val * 34.5
 
 // 캡션 FPS 출력 여부 -------------------
 // 항상 캡션에 FPS를 출력		(0 : 비활성 | 1 : 활성)
