@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "WayFinder.h"
 #include "00.Global/01.Utility/04.WayFinder/02.Astar/Astar.h"
+#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
 
 /// <summary>
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-20
+/// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
 
@@ -147,37 +148,59 @@ CWayFinder::~CWayFinder()
 }
 
 // 직선 이동 가능한지 파악하기 위한 함수
-bool CWayFinder::CanGoDirectly(XMFLOAT2 & source, XMFLOAT2 & target, float boundingRadius)
+bool CWayFinder::CanGoDirectly(XMFLOAT2 & source, XMFLOAT2 & target, float collisionSize)
 {
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
-	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, boundingRadius * 0.5f) };
+	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, collisionSize * 0.5f) };
+	XMFLOAT2 curPos = source;
 
-	for (XMFLOAT2 curPos = source; Vector2::DistanceSquare(curPos, target) > boundingRadius * boundingRadius; curPos = Vector2::Add(curPos, addVal))
+	do
 	{
-		if (m_pCollisionMapImage->GetCollision(curPos.x - boundingRadius, curPos.y)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + boundingRadius)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x + boundingRadius, curPos.y)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y - boundingRadius)) return false;
-	}
+		if (m_pCollisionMapImage->GetCollision(curPos.x - collisionSize, curPos.y)) return false;
+		if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + collisionSize)) return false;
+		if (m_pCollisionMapImage->GetCollision(curPos.x + collisionSize, curPos.y)) return false;
+		if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y - collisionSize)) return false;
+		curPos = Vector2::Add(curPos, addVal);
+	} while (Vector2::DistanceSquare(curPos, target) > collisionSize * collisionSize);
 	return true;
 }
 
+bool CWayFinder::CanGoDirectly(XMFLOAT3 & source, XMFLOAT3 & target, float collisionSize)
+{
+	return CanGoDirectly(XMFLOAT2(source.x, source.z), XMFLOAT2(target.x, target.z), collisionSize);
+}
+
 // 충돌 지점에서 충돌이 없는 가장 가까운 지점을 찾는 함수
-XMFLOAT2 CWayFinder::GetClosestNotCollidePos(XMFLOAT2 & source, XMFLOAT2 & target, float boundingRadius)
+XMFLOAT2 CWayFinder::GetClosestNotCollidePos(XMFLOAT2 & source, XMFLOAT2 & target, float collisionSize)
 {
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
-	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, boundingRadius * 0.5f) };
+	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, collisionSize * 0.5f) };
+	XMFLOAT2 curPos = source;
 
-	for (XMFLOAT2 curPos = source; Vector2::DistanceSquare(curPos, target) > boundingRadius * boundingRadius; curPos = Vector2::Add(curPos, addVal))
+	do
 	{
-		if (!m_pCollisionMapImage->GetCollision(curPos.x , curPos.y)) return curPos;
-	}
+		if (!m_pCollisionMapImage->GetCollision(curPos.x - collisionSize, curPos.y)) return XMFLOAT2(curPos.x - collisionSize, curPos.y);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x +collisionSize, curPos.y)) return XMFLOAT2(curPos.x + collisionSize, curPos.y);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x, curPos.y - collisionSize)) return XMFLOAT2(curPos.x, curPos.y - collisionSize);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + collisionSize)) return XMFLOAT2(curPos.x, curPos.y + collisionSize);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x - collisionSize, curPos.y - collisionSize)) return XMFLOAT2(curPos.x - collisionSize, curPos.y - collisionSize);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x + collisionSize, curPos.y - collisionSize)) return XMFLOAT2(curPos.x + collisionSize, curPos.y - collisionSize);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x - collisionSize, curPos.y + collisionSize)) return XMFLOAT2(curPos.x - collisionSize, curPos.y + collisionSize);
+		if (!m_pCollisionMapImage->GetCollision(curPos.x + collisionSize, curPos.y + collisionSize)) return XMFLOAT2(curPos.x + collisionSize, curPos.y + collisionSize);
+		curPos = Vector2::Add(curPos, addVal);
+	} while (Vector2::DistanceSquare(curPos, target) > collisionSize * collisionSize);
 	return target;
 }
 
-Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius)
+XMFLOAT3 CWayFinder::GetClosestNotCollidePos(XMFLOAT3 & source, XMFLOAT3 & target, float collisionSize)
+{
+	XMFLOAT2 result{ GetClosestNotCollidePos(XMFLOAT2(source.x, source.z), XMFLOAT2(target.x, target.z), collisionSize) };
+	return XMFLOAT3(result.x, 0, result.y);
+}
+
+Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize)
 {
 	Path *path{ nullptr };
 
@@ -189,10 +212,10 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float bo
 
 	// 도착지가 충돌체 위인 경우 도착지를 충돌이 없는 가장 가까운 위치로 변경한다.
 	if (m_pCollisionMapImage->GetCollision(target.x, target.y))
-		target = GetClosestNotCollidePos(target, m_nodes[dstIndex].Position(), boundingRadius);
+		target = GetClosestNotCollidePos(target, m_nodes[dstIndex].Position(), collisionSize);
 
 	// 직선으로 이동 가능한 경우
-	if (CanGoDirectly(source, target, boundingRadius))
+	if (CanGoDirectly(source, target, collisionSize))
 	{
 		// 목적지만 패스에 넣고 종료
 		path = new Path;
@@ -226,12 +249,12 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float bo
 	}
 
 	// 직선 상으로 갈 수 있는 길 돌아가지 않도록 설정
-	SmoothPathDetail(path, boundingRadius);
+	SmoothPathDetail(path, collisionSize);
 
 	return path;
 }
 
-void CWayFinder::SmoothPath(Path *path, float boundingRadius)
+void CWayFinder::SmoothPath(Path *path, float collisionSize)
 {
 	Path::iterator e1(path->begin()), e2(path->begin());
 
@@ -239,7 +262,7 @@ void CWayFinder::SmoothPath(Path *path, float boundingRadius)
 
 	while (e2 != path->end())
 	{
-		if (CanGoDirectly(e1->From(), e2->To(), boundingRadius))
+		if (CanGoDirectly(e1->From(), e2->To(), collisionSize))
 		{
 			e1->SetDestination(e2->To());
 			e2 = path->erase(e2);
@@ -252,7 +275,7 @@ void CWayFinder::SmoothPath(Path *path, float boundingRadius)
 	}
 }
 
-void CWayFinder::SmoothPathDetail(Path * path, float boundingRadius)
+void CWayFinder::SmoothPathDetail(Path * path, float collisionSize)
 {
 	Path::iterator e1(path->begin()), e2;
 
@@ -263,7 +286,7 @@ void CWayFinder::SmoothPathDetail(Path * path, float boundingRadius)
 
 		while (e2 != path->end())
 		{
-			if (CanGoDirectly(e1->From(), e2->To(), boundingRadius))
+			if (CanGoDirectly(e1->From(), e2->To(), collisionSize))
 			{
 				e1->SetDestination(e2->To());
 				e2 = path->erase(++e1, ++e2);
@@ -297,6 +320,23 @@ int CWayFinder::FindClosestNodeIndexWithPosition(const XMFLOAT2 & position)
 	}
 
 	return closestIndex;
+}
+
+void CWayFinder::AdjustValueByWallCollision(CAnimatedObject* collider, XMFLOAT3 & dir, float val)
+{
+	XMFLOAT3 pos{ collider->GetPosition() };
+	XMFLOAT3 velocity{ Vector3::ScalarProduct(dir, val) };
+	XMFLOAT3 newPos{ Vector3::Add(pos, velocity) };
+
+	if (CanGoDirectly(pos, newPos, collider->GetCollisionSize()))
+	{
+		collider->Translate(&velocity);
+	}
+	else
+	{
+		XMFLOAT3 newDir{ Vector3::Subtract(GetClosestNotCollidePos(pos, newPos, collider->GetCollisionSize()), newPos, true) };
+		collider->Translate(&Vector3::ScalarProduct(newDir, val));
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@
 #include "02.Framework/00.Frame/Framework.h"
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
-
+#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
 
 class CCreateMgr;
 class CWayFinder;
@@ -89,7 +89,7 @@ protected: // º¯¼ö
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
 
-	CBaseObject * m_pSelectedObject{ NULL };
+	CAnimatedObject * m_pSelectedObject{ NULL };
 
 	bool m_bCurCamIsAOS{ true };
 	bool m_bCamChanged{ false };

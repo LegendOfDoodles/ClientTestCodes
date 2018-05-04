@@ -97,6 +97,29 @@ float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera, float
     return max(0, (F * D * G) / (NV * NL));
 }
 
+float4 CookTorranceSpecular(float3 vLight, float3 vNormal, float3 vCamera, float roughness, float fresnel)
+{
+    float3 L = normalize(vLight);
+    float3 N = vNormal;
+    float3 V = normalize(vCamera);
+    float3 H = normalize(L + V);
+
+    float NV = dot(N, V);
+    float NH = dot(N, H);
+    float VH = dot(V, H);
+    float NL = dot(N, L);
+    float LH = dot(L, H);
+
+    float a = acos(NH);
+    float e = -((a / roughness) * (a / roughness));
+    float D = 1.0f * exp(e);
+
+    float x = 2 * NH / VH;
+    float G = min(1, min(x * NV, x * NL));
+
+    return max(0, (fresnel * D * G) / (NV * NL));
+}
+
 float4 DirectionalLight(int nIndex, float3 vNormal, float3 vCamera, float4 texColor, float4 specular)
 {
     float3 vToLight = -gLights[nIndex].m_vDirection;
@@ -110,7 +133,7 @@ float4 DirectionalLight(int nIndex, float3 vNormal, float3 vCamera, float4 texCo
     float3 vToLight = -gLights[nIndex].m_vDirection;
 
     return gLights[nIndex].m_cAlbedo * ((1 - roughnessMetallicFresnel.g) * texColor * OrenNayarDiffuse(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r) +
-				roughnessMetallicFresnel.g * specular * CookTorranceSpecular(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r));
+				roughnessMetallicFresnel.g * specular * CookTorranceSpecular(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r, roughnessMetallicFresnel.b));
 }
 
 float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera, float4 texColor, float4 specular)
@@ -142,7 +165,7 @@ float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera, 
 
         if (fAttenuationFactor != 0)
             return gLights[nIndex].m_cAlbedo * ((1 - roughnessMetallicFresnel.g) * texColor * OrenNayarDiffuse(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r) +
-						roughnessMetallicFresnel.g * specular * CookTorranceSpecular(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r)) * fAttenuationFactor;
+						roughnessMetallicFresnel.g * specular * CookTorranceSpecular(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r, roughnessMetallicFresnel.b)) * fAttenuationFactor;
     }
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
 }
@@ -188,7 +211,7 @@ float4 SpotLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera, f
 
         if (fSpotFactor != 0 && fAttenuationFactor != 0)
             return gLights[nIndex].m_cAlbedo * ((1 - roughnessMetallicFresnel.g) * texColor * OrenNayarDiffuse(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r) +
-			roughnessMetallicFresnel.g * specular * CookTorranceSpecular(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r)) * fAttenuationFactor * fSpotFactor;
+			roughnessMetallicFresnel.g * specular * CookTorranceSpecular(vToLight, vNormal, vCamera, roughnessMetallicFresnel.r, roughnessMetallicFresnel.b)) * fAttenuationFactor * fSpotFactor;
     }
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
 }

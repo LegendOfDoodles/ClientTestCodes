@@ -11,7 +11,7 @@
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-24
+/// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -455,30 +455,6 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	if (pKeyBuffer['U'] & 0xF0)
-	{
-		R -= 0.1f;
-		if (R < 0.0f) R = 0.0f;
-		m_pMaterial->SetRoughness(R);
-	}
-	if (pKeyBuffer['I'] & 0xF0)
-	{
-		R += 0.1f;
-		if (R > 1.0f) R = 1.0f;
-		m_pMaterial->SetRoughness(R);
-	}
-	if (pKeyBuffer['O'] & 0xF0)
-	{
-		M -= 0.1f;
-		if (M < 0.0f) M = 0.0f;
-		m_pMaterial->SetMetalic(M);
-	}
-	if (pKeyBuffer['P'] & 0xF0)
-	{
-		M += 0.1f;
-		if (M > 1.0f) M = 1.0f;
-		m_pMaterial->SetMetalic(M);
-	}
 	if (GetAsyncKeyState('M') & 0x0001)
 	{
 		m_nWeaponState++;

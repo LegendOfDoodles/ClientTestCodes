@@ -9,6 +9,7 @@ typedef std::vector<EdgeVector> EdgeArray;
 typedef std::list<CPathEdge> Path;
 
 class CAstar;
+class CAnimatedObject;
 
 class CWayFinder
 {
@@ -17,14 +18,18 @@ public: // 생성자, 소멸자
 	~CWayFinder();
 
 public: // 공개 함수
-	bool CanGoDirectly(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
-	XMFLOAT2 GetClosestNotCollidePos(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
-	Path *GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float boundingRadius);
+	bool CanGoDirectly(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize);
+	bool CanGoDirectly(XMFLOAT3 &source, XMFLOAT3 &target, float collisionSize);
+	XMFLOAT2 GetClosestNotCollidePos(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize);
+	XMFLOAT3 GetClosestNotCollidePos(XMFLOAT3 &source, XMFLOAT3 &target, float collisionSize);
+	Path *GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize);
 
-	void SmoothPath(Path *path, float boundingRadius);
-	void SmoothPathDetail(Path *path, float boundingRadius);
+	void SmoothPath(Path *path, float collisionSize);
+	void SmoothPathDetail(Path *path, float collisionSize);
 
 	int FindClosestNodeIndexWithPosition(const XMFLOAT2 &position);
+
+	void AdjustValueByWallCollision(CAnimatedObject* collider, XMFLOAT3& dir, float val);
 
 	int GetNodeCount() const { return m_nodes.size(); }
 	const CNode& GetNodeAt(int idx) const { return m_nodes[idx]; }

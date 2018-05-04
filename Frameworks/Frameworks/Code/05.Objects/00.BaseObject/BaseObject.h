@@ -91,9 +91,6 @@ public: // 공개 함수
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_cbvGPUDescriptorHandle); }
 
-	float GetBoundingRadius() { return m_boundingRadius; }
-	void SetBoundingRadius(float boundingRadius) { m_boundingRadius = boundingRadius; }
-
 protected: // 내부 함수
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
 	virtual void ReleaseShaderVariables();
@@ -111,7 +108,6 @@ protected: // 변수
 	int m_nMeshes{ 0 };
 
 	CMesh *m_pBoundingMesh{ NULL };
-	float m_boundingRadius{ 0.0 };
 
 	CShader *m_pShader{ NULL };
 	CMaterial	 *m_pMaterial{ NULL };

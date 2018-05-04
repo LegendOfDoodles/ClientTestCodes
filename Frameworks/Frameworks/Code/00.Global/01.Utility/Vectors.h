@@ -7,7 +7,7 @@ using namespace DirectX;
 /// 목적: 벡터 연산을 간략화 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-30
+/// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
 #define	PI		3.141592
@@ -63,7 +63,7 @@ namespace Vector2
 		return(xmf2Result);
 	}
 
-	inline XMFLOAT2 Add(XMFLOAT2& xmf2Vector1, XMFLOAT2& xmf2Vector2, float fScalar)
+	inline XMFLOAT2 Add(XMFLOAT2& xmf2Vector1, XMFLOAT2& xmf2Vector2, float fScalar = 1)
 	{
 		XMFLOAT2 xmf2Result;
 		XMStoreFloat2(&xmf2Result, XMLoadFloat2(&xmf2Vector1) + (XMLoadFloat2(&xmf2Vector2) * fScalar));
@@ -200,7 +200,7 @@ namespace Vector3
 		return(xmf3Result);
 	}
 
-	inline XMFLOAT3 Add(XMFLOAT3& xmf3Vector1, XMFLOAT3& xmf3Vector2, float fScalar)
+	inline XMFLOAT3 Add(XMFLOAT3& xmf3Vector1, XMFLOAT3& xmf3Vector2, float fScalar = 1)
 	{
 		XMFLOAT3 xmf3Result;
 		XMStoreFloat3(&xmf3Result, XMLoadFloat3(&xmf3Vector1) + (XMLoadFloat3(&xmf3Vector2) * fScalar));
@@ -313,6 +313,13 @@ namespace Vector4
 	{
 		XMFLOAT4 xmf4Result;
 		XMStoreFloat4(&xmf4Result, XMLoadFloat4(&xmf4Vector1) + XMLoadFloat4(&xmf4Vector2));
+		return(xmf4Result);
+	}
+
+	inline XMFLOAT4 Add(XMFLOAT4& xmf4Vector1, XMFLOAT4& xmf4Vector2, float fScalar = 1)
+	{
+		XMFLOAT4 xmf4Result;
+		XMStoreFloat4(&xmf4Result, XMLoadFloat4(&xmf4Vector1) + (XMLoadFloat4(&xmf4Vector2) * fScalar));
 		return(xmf4Result);
 	}
 

@@ -14,7 +14,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-30
+/// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -251,7 +251,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[5]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
-
+	
 	BuildLights();
 }
 
@@ -324,7 +324,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 		if (pIntersectedObject && (hitDistance < nearestHitDistance))
 		{
 			nearestHitDistance = hitDistance;
-			m_pSelectedObject = pIntersectedObject;
+			m_pSelectedObject = reinterpret_cast<CAnimatedObject*>(pIntersectedObject);
 			printf("selected!\n");
 
 			// Status 창 띄우기 수도 코드
@@ -366,7 +366,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
 			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z),
-			m_pSelectedObject->GetBoundingRadius()));
+			m_pSelectedObject->GetCollisionSize()));
 		my_packet.Character_id = m_Network.m_myid;
 		my_packet.size = sizeof(my_packet);
 		my_packet.x = m_pickWorldPosition.x;
@@ -454,14 +454,14 @@ void CScene::CollisionTest()
 			float distance = Vector3::Distance(colliders[i]->GetPosition(), colliders[j]->GetPosition());
 			float collisionLength = sizeA + sizeB;
 
-			if (distance <= collisionLength)
+			if (distance < collisionLength)
 			{
 				float length = (collisionLength - distance);
-				XMFLOAT3 vec3 = Vector3::Add(colliders[i]->GetPosition(), colliders[j]->GetPosition(), -1);
+				XMFLOAT3 vec3 = Vector3::Subtract(colliders[i]->GetPosition(), colliders[j]->GetPosition());
 				vec3.y = 0;
 				vec3 = Vector3::Normalize(vec3);
-				colliders[i]->Translate(&Vector3::ScalarProduct(vec3, length *sizeB / (sizeA + sizeB)));
-				colliders[j]->Translate(&Vector3::ScalarProduct(vec3, -length *sizeB / (sizeA + sizeB)));
+				m_pWayFinder->AdjustValueByWallCollision(colliders[i], vec3, length *sizeB / (sizeA + sizeB));
+				m_pWayFinder->AdjustValueByWallCollision(colliders[j], vec3, -length * sizeB / (sizeA + sizeB));
 			}
 		}
 	}
