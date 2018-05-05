@@ -39,7 +39,7 @@ public class TranformExporter : MonoBehaviour {
         {
             Transform[] tempTransforms = Objects[i].GetComponentsInChildren<Transform>();
             tw.WriteLine(Objects[i].name);
-            tw.WriteLine(tempTransforms .Length);
+            tw.WriteLine(tempTransforms.Length - 1);
             int n = 0;
             foreach (Transform child in tempTransforms)
             {
