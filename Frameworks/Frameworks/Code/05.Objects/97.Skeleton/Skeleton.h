@@ -23,21 +23,18 @@ struct Bone {
 
 class CSkeleton
 {
-private:
+public: // 생성자, 소멸자
+	CSkeleton() {}
+	CSkeleton(char* in);
+	virtual ~CSkeleton();
+
+public: // 공개 함수
+	int GetAnimationLength() { return m_iAnimationLegth; }
+	Bone GetBone(float id) { return m_vBone.at(id); }
+	int GetBoneCount() { return m_vBone.size(); }
+
+private:	 // 변수
 	int m_iAnimationLegth;
 	std::vector<Bone> m_vBone;
-public:
-	CSkeleton() {}
-
-	CSkeleton(char* in);
-	int GetBoneCount() {
-		return m_vBone.size();
-	}
-	int GetAnimationLength() { return m_iAnimationLegth; }
-	Bone GetBone(float id) {
-		return m_vBone.at(id);
-	}
-
-	~CSkeleton();
 };
 

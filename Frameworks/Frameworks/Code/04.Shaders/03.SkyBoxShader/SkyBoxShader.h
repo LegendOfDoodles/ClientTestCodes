@@ -6,7 +6,7 @@ class CSkyBoxShader : public CShader
 {
 public: // 생성자, 소멸자
 	CSkyBoxShader(CCreateMgr *pCreateMgr);
-	~CSkyBoxShader();
+	virtual ~CSkyBoxShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();

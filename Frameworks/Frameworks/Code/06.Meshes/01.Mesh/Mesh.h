@@ -60,32 +60,23 @@ protected: // 변수
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 텍스처 메쉬
+//
 class CMeshTextured : public CMesh
 {
-public:
+public: // 생성자, 소멸자
 	CMeshTextured(CCreateMgr *pCreateMgr);
 	virtual ~CMeshTextured();
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 텍스처 상자 메쉬
-class CCubeMeshTextured : public CMeshTextured
-{
-public:
-	CCubeMeshTextured(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
-	virtual ~CCubeMeshTextured();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CMeshIlluminated : public CMesh
 {
-public:
+public: // 생성자, 소멸자
 	CMeshIlluminated(CCreateMgr *pCreateMgr);
 	virtual ~CMeshIlluminated();
 
-public:
+public: // 공개 함수
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices);
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
 	void CalculateTriangleStripVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
@@ -95,25 +86,11 @@ public:
 	void CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices, XMFLOAT2 *xmf2TexCoord, UINT *pnIndices = NULL, UINT nIndices = NULL);
 };
 
-class CCubeMeshIlluminated : public CMeshIlluminated
-{
-public:
-	CCubeMeshIlluminated(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
-	virtual ~CCubeMeshIlluminated();
-};
-
-class CSphereMeshIlluminated : public CMeshIlluminated
-{
-public:
-	CSphereMeshIlluminated(CCreateMgr *pCreateMgr, float fRadius = 2.0f, UINT nSlices = 20, UINT nStacks = 20);
-	virtual ~CSphereMeshIlluminated();
-};
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CMeshIlluminatedTextured : public CMeshIlluminated
 {
-public:
+public: // 생성자, 소멸자
 	CMeshIlluminatedTextured(CCreateMgr *pCreateMgr);
 	CMeshIlluminatedTextured(CCreateMgr *pCreateMgr, UINT nVertices, XMFLOAT3 *pxmf3Positions, XMFLOAT3 *pxmf3Normals, XMFLOAT2 *pxmf2UVs, UINT nIndices, UINT *pnIndices);
 	virtual ~CMeshIlluminatedTextured();
@@ -121,28 +98,18 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CCubeMeshIlluminatedTextured : public CMeshIlluminatedTextured
-{
-public:
-	CCubeMeshIlluminatedTextured(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
-	virtual ~CCubeMeshIlluminatedTextured();
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 class CSkinnedMesh : public CMeshIlluminatedTextured
 {
-public:
+public: // 생성자, 소멸자
 	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
 	virtual ~CSkinnedMesh();
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-
 class CStaticMesh : public CMeshIlluminatedTextured
 {
-public:
+public: // 생성자, 소멸자
 	CStaticMesh(CCreateMgr* pCreateMgr, char* in);
 	virtual ~CStaticMesh();
 };
@@ -151,19 +118,11 @@ public:
 //
 class CHeightMapImage
 {
-private:
-	//높이 맵 이미지 픽셀(8-비트)들의 이차원 배열이다. 각 픽셀은 0~255의 값을 갖는다.
-	BYTE *m_pHeightMapPixels;
-	//높이 맵 이미지의 가로와 세로 크기이다.
-	int m_nWidth;
-	int m_nLength;
-	//높이 맵 이미지를 실제로 몇 배 확대하여 사용할 것인가를 나타내는 스케일 벡터이다.
-	XMFLOAT3 m_xmf3Scale;
-
-public:
+public: // 생성자, 소멸자
 	CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale);
-	~CHeightMapImage(void);
+	virtual ~CHeightMapImage(void);
 
+public: // 공개 함수
 	//높이 맵 이미지에서 (x, z) 위치의 픽셀 값에 기반한 지형의 높이를 반환한다.
 	float GetHeight(float x, float z);
 	//높이 맵 이미지에서 (x, z) 위치의 법선 벡터를 반환한다.
@@ -174,13 +133,38 @@ public:
 	BYTE *GetHeightMapPixels() { return(m_pHeightMapPixels); }
 	int GetHeightMapWidth() { return(m_nWidth); }
 	int GetHeightMapLength() { return(m_nLength); }
+
+private: // 변수
+	//높이 맵 이미지 픽셀(8-비트)들의 이차원 배열이다. 각 픽셀은 0~255의 값을 갖는다.
+	BYTE * m_pHeightMapPixels;
+	//높이 맵 이미지의 가로와 세로 크기이다.
+	int m_nWidth;
+	int m_nLength;
+	//높이 맵 이미지를 실제로 몇 배 확대하여 사용할 것인가를 나타내는 스케일 벡터이다.
+	XMFLOAT3 m_xmf3Scale;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CHeightMapGridMesh : public CMesh
 {
-protected:
+public: // 생성자, 소멸자
+	CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale =
+		XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), void
+		*pContext = NULL);
+	virtual ~CHeightMapGridMesh();
+
+public: // 공개 함수
+	//격자의 좌표가 (x, z)일 때 교점(정점)의 높이를 반환하는 함수이다.
+	virtual float OnGetHeight(int x, int z, void *pContext);
+	//격자의 좌표가 (x, z)일 때 교점(정점)의 색상을 반환하는 함수이다.
+	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
+
+	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
+	int GetWidth() { return(m_nWidth); }
+	int GetLength() { return(m_nLength); }
+
+protected: // 변수
 	//격자의 크기(가로: x-방향, 세로: z-방향)이다.
 	int m_nWidth;
 	int m_nLength;
@@ -189,28 +173,13 @@ protected:
 	라 스케일 벡터의 x-좌표가 된다. 이렇게 하면 작은 격자(적은 정점)를 사용하더라도 큰 크기의 격자(지형)를 생성할
 	수 있다.*/
 	XMFLOAT3 m_xmf3Scale;
-
-public:
-	CHeightMapGridMesh(CCreateMgr *pCreateMgr, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale =
-		XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), void
-		*pContext = NULL);
-	virtual ~CHeightMapGridMesh();
-
-	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
-	int GetWidth() { return(m_nWidth); }
-	int GetLength() { return(m_nLength); }
-
-	//격자의 좌표가 (x, z)일 때 교점(정점)의 높이를 반환하는 함수이다.
-	virtual float OnGetHeight(int x, int z, void *pContext);
-	//격자의 좌표가 (x, z)일 때 교점(정점)의 색상을 반환하는 함수이다.
-	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CTexturedRectMesh : public CMesh
 {
-public:
+public: // 생성자, 소멸자
 	CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
 	virtual ~CTexturedRectMesh();
 };
@@ -219,36 +188,30 @@ public:
 //
 class CArrowMesh : public CMesh
 {
-public:
+public: // 생성자, 소멸자
 	CArrowMesh(CCreateMgr *pCreateMgr, float length = 100.0f);
 	virtual ~CArrowMesh();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CCubeMesh4Collider : public CMesh
+class CCubeMesh : public CMesh
 {
-public:
+public: // 생성자, 소멸자
 	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
-	CCubeMesh4Collider(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
-	virtual ~CCubeMesh4Collider();
+	CCubeMesh(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
+	virtual ~CCubeMesh();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CCollisionMapImage
 {
-private:
-	BYTE * m_pCollisionMapPixels;
-	int m_nWidth;
-	int m_nLength;
-
-	XMFLOAT3 m_xmf3Scale;
-
-public:
+public: // 생성자, 소멸자
 	CCollisionMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale);
-	~CCollisionMapImage(void);
+	virtual ~CCollisionMapImage(void);
 
+public: // 공개 함수
 	bool GetCollision(float x, float z);
 
 	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
@@ -256,4 +219,11 @@ public:
 	BYTE *GetCollisionMapPixels() { return(m_pCollisionMapPixels); }
 	int GetHeightMapWidth() { return(m_nWidth); }
 	int GetHeightMapLength() { return(m_nLength); }
+
+private: // 변수
+	BYTE * m_pCollisionMapPixels;
+	int m_nWidth;
+	int m_nLength;
+
+	XMFLOAT3 m_xmf3Scale;
 };

@@ -6,7 +6,7 @@ class CObstacle : public CBaseObject
 {
 public: // 생성자, 소멸자
 	CObstacle(CCreateMgr *pCreateMgr);
-	~CObstacle();
+	virtual ~CObstacle();
 
 public:	// 외부 함수
 

@@ -162,8 +162,6 @@ void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 void CSkyBoxShader::ReleaseObjects()
 {
-	if (!m_pSkyBox) return;
-
 	Safe_Delete(m_pSkyBox);
 	Safe_Delete(m_pMaterial);
 }

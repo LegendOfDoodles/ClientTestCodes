@@ -3,15 +3,14 @@
 
 /// <summary>
 /// 목적: UI 이용을 위한 Bilboard 클래스 제작
-/// 최종 수정자:  이용선
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-24
+/// 최종 수정자:  김나단
+/// 수정자 목록:  이용선, 김나단
+/// 최종 수정 날짜: 2018-05-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr)
-	: CBaseObject(pCreateMgr)
+CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr)
 {
 	//CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 5.f, 5.0f, 0.f);
 	//SetMesh(0, pRectMesh);
@@ -51,8 +50,7 @@ void CBillboardObject::SetLookAt()
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CUIObject::CUIObject(CCreateMgr * pCreateMgr)
-	:CBillboardObject(pCreateMgr)
+CUIObject::CUIObject(CCreateMgr * pCreateMgr) : CBillboardObject(pCreateMgr)
 {
 	m_xmf3Position = XMFLOAT3(0,0,0);
 

@@ -35,6 +35,8 @@
 
 #define NODE_SIZE 41.4
 
+#define NONE -1
+
 // ·£´ý »ö»ó
 #define RANDOM_COLOR XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 

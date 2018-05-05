@@ -9,7 +9,7 @@ class CUIObjectShader : public CShader
 {
 public: // 생성자, 소멸자
 	CUIObjectShader(CCreateMgr *pCreateMgr);
-	~CUIObjectShader();
+	virtual ~CUIObjectShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();

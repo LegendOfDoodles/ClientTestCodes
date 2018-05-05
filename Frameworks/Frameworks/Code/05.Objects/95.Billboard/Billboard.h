@@ -7,13 +7,6 @@
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
 
-/// <summary>
-/// 목적: UI 이용을 위한 Bilboard 클래스 제작
-/// 최종 수정자:  이용선
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-05-01
-/// </summary>
-
 enum Type {
 	Minimap = 0,
 	KDA		= 1,
@@ -38,7 +31,7 @@ protected: // 내부 함수
 private: // 변수
 
 protected:
-	CCamera *m_pCamera = NULL;
+	CCamera * m_pCamera{ NULL };
 };
 
 class CUIObject : public CBillboardObject

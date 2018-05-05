@@ -1,8 +1,5 @@
 #pragma once
 #include "06.Meshes/01.Mesh/Mesh.h"
-#include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
-
-typedef std::list<CPathEdge> Path;
 
 class CCreateMgr;
 class CShader;
@@ -14,17 +11,11 @@ struct CB_GAMEOBJECT_INFO
 	XMFLOAT4X4 m_xmf4x4World;
 };
 
-struct CB_ANIOBJECT_INFO
-{
-	XMFLOAT4X4 m_xmf4x4World0;
-	XMFLOAT4X4 m_xmf4x4Frame[128];
-};
-
 class CBaseObject
 {
 public:	// 생성자, 소멸자
 	CBaseObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
-	~CBaseObject();
+	virtual ~CBaseObject();
 
 public: // 공개 함수
 	virtual void Initialize(CCreateMgr *pCreateMgr);
@@ -47,11 +38,8 @@ public: // 공개 함수
 	bool PickObjectByRayIntersection(XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &hitDistance);
 
 	void MoveStrafe(float fDistance = 1.0f);
-	void MoveUp(float fDistance = 1.0f);
-	void MoveForward(float fDistance = 1.0f);
-
-	void MoveUpModel(float fDistance = 1.0f);	// Warning! 모델 오브젝트만 적용할 수 있도록(오버로딩 고려)
-	void MoveForwardModel(float fDistance = 1.0f);	// Warning! 모델 오브젝트만 적용할 수 있도록(오버로딩 고려)
+	virtual void MoveUp(float fDistance = 1.0f);
+	virtual void MoveForward(float fDistance = 1.0f);
 
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
@@ -61,21 +49,14 @@ public: // 공개 함수
 
 	void Scale(float x = 1.0f, float y = 1.0f, float z = 1.0f);
 
-	void LookAt(XMFLOAT3 objPosition);	// Warning! 움직이는 오브젝트에 가지도록 설정할 필요 있음
-
 	XMFLOAT3 GetPosition();
-	XMFLOAT3 GetLook();
-	XMFLOAT3 GetUp();
+	virtual XMFLOAT3 GetLook();
+	virtual XMFLOAT3 GetUp();
 	XMFLOAT3 GetRight();
-
-	XMFLOAT3 GetLookModel();	// Warning! 모델 오브젝트만 적용할 수 있도록 수정할 필요
-	XMFLOAT3 GetUpModel();// Warning! 모델 오브젝트만 적용할 수 있도록 수정할 필요
 
 	virtual void SetPosition(float x, float z);
 	void SetPosition(float x, float y, float z);
 	void SetPosition(XMFLOAT3 xmf3Position);
-
-	virtual void SetPathToGo(Path *path);	// Warning! 이거 움직이는 오브젝트만 가지도록 할 필요 있음
 
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
@@ -117,8 +98,6 @@ protected: // 변수
 
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };
-
-	Path *m_pathToGo{ NULL };	// Warning! 움직이는 오브젝트만 가지도록 해줄 필요 있음
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

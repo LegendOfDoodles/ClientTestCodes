@@ -1,12 +1,11 @@
 #include "stdafx.h"
 #include "Minion.h"
-#include "05.Objects/03.Terrain/HeightMapTerrain.h"
 
 /// <summary>
 /// 목적: 미니언 클래스 분할
-/// 최종 수정자:  정휘현
+/// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-04-30
+/// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -34,33 +33,7 @@ void CMinion::Animate(float timeElapsed)
 		m_xmf4x4Frame[i] = m_pSkeleton[m_nCurrAnimation].GetBone(i).GetFrame((int)m_fFrameTime);
 	}
 
-	if (m_pathToGo)
-	{
-			// Warning! IsArrive에 들어간은거 이동 거리로 바꿔야 함
-		if (m_destination.x == -1 || IsArrive(m_destination, 1.0f))	//  도착 한 경우
-		{
-			if (m_pathToGo->empty())
-			{
-				Safe_Delete(m_pathToGo);
-				m_destination.x = -1;
-			}
-			else
-			{
-				m_destination = m_pathToGo->front().To();
-				m_pathToGo->pop_front();
-				LookAt(XMFLOAT3(m_destination.x, 0, m_destination.y));
-			}
-		}
-		else  // 아직 도착하지 않은 경우
-		{
-			// Warning! 속도를 적용하고 이동 거리를 처리해야 함
-			MoveForwardModel(1.f);
-			XMFLOAT3 position = GetPosition();
-			position.y = m_pTerrain->GetHeight(position.x, position.z);
-			CBaseObject::SetPosition(position);
-			LookAt(XMFLOAT3(m_destination.x, 0, m_destination.y));
-		}
-	}
+	MoveToDestination(timeElapsed);
 }
 
 void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
@@ -109,13 +82,6 @@ void CMinion::SetPosition(float x, float z)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-bool CMinion::IsArrive(XMFLOAT2 & nextPos, float dst)
-{
-	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
-	int distanceSqr = Vector2::DistanceSquare(curPos, nextPos);
-
-	return distanceSqr < dst * dst;
-}
 
 //////////////////////////////////////////////////////////////////////////
 //근접 미니언

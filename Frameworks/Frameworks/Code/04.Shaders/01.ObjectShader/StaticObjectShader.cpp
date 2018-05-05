@@ -310,13 +310,14 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CStaticObjectShader::ReleaseObjects()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	if (m_ppObjects)
 	{
-		Safe_Delete(m_ppObjects[j]);
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			delete m_ppObjects[j];
+		}
+		Safe_Delete_Array(m_ppObjects);
 	}
-	Safe_Delete_Array(m_ppObjects);
 
 #if USE_BATCH_MATERIAL
 	for (int i = 0; i < m_nMaterials; ++i)
@@ -329,8 +330,7 @@ void CStaticObjectShader::ReleaseObjects()
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-CAniShader::CAniShader(CCreateMgr *pCreateMgr)
-	: CShader(pCreateMgr)
+CAniShader::CAniShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
 {
 }
 
@@ -763,7 +763,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 					break;
 				}
-
+				pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
 				pMinionObject->SetSkeleton(pDie);
 				pMinionObject->SetTerrain(m_pTerrain);
 
@@ -801,14 +801,14 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CAniShader::ReleaseObjects()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	if (m_ppObjects)
 	{
-		Safe_Delete(m_ppObjects[j]);
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			delete m_ppObjects[j];
+		}
+		Safe_Delete_Array(m_ppObjects);
 	}
-	Safe_Delete_Array(m_ppObjects);
-
 
 #if USE_BATCH_MATERIAL
 	Safe_Delete(m_pMaterial);

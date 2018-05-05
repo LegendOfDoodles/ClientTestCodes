@@ -8,7 +8,7 @@ class CBillboardShader : public CShader
 {
 public: // 생성자, 소멸자
 	CBillboardShader(CCreateMgr *pCreateMgr);
-	~CBillboardShader();
+	virtual ~CBillboardShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();

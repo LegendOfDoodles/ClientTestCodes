@@ -9,7 +9,7 @@
 /// 목적: 기본 오브젝트 클래스, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,6 @@ CBaseObject::~CBaseObject()
 
 	if (m_pShader){ m_pShader->Finalize(); }
 	if (m_pMaterial) m_pMaterial->Finalize();
-	if (m_pathToGo) Safe_Delete(m_pathToGo);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -86,7 +85,7 @@ void CBaseObject::SetMesh(int nIndex, CMesh *pMesh)
 
 void CBaseObject::SetBoundingMesh(CCreateMgr *pCreateMgr, float width, float height, float depth, float xOffset, float yOffSet, float zOffSet)
 {
-	m_pBoundingMesh = new CCubeMesh4Collider(pCreateMgr, width, height / 2.f, depth, xOffset, yOffSet, zOffSet);
+	m_pBoundingMesh = new CCubeMesh(pCreateMgr, width, height / 2.f, depth, xOffset, yOffSet, zOffSet);
 }
 
 void CBaseObject::SetShader(CShader *pShader)
@@ -207,22 +206,6 @@ void CBaseObject::MoveForward(float fDistance)
 	CBaseObject::SetPosition(xmf3Position);
 }
 
-void CBaseObject::MoveUpModel(float fDistance)
-{
-	XMFLOAT3 xmf3Position = GetPosition();
-	XMFLOAT3 xmf3Up = GetUpModel();
-	xmf3Position = Vector3::Add(xmf3Position, xmf3Up, fDistance);
-	CBaseObject::SetPosition(xmf3Position);
-}
-
-void CBaseObject::MoveForwardModel(float fDistance)
-{
-	XMFLOAT3 xmf3Position = GetPosition();
-	XMFLOAT3 xmf3Look = GetLookModel();
-	xmf3Position = Vector3::Add(xmf3Position, xmf3Look, fDistance);
-	CBaseObject::SetPosition(xmf3Position);
-}
-
 void CBaseObject::Rotate(XMFLOAT3 *pxmf3Axis, float fAngle)
 {
 	XMMATRIX mtxRotate = XMMatrixRotationAxis(
@@ -264,27 +247,6 @@ void CBaseObject::Scale(float x, float y, float z)
 	m_xmf4x4World = Matrix4x4::Multiply(mtxScale, m_xmf4x4World);
 }
 
-void CBaseObject::LookAt(XMFLOAT3 objPosition)
-{
-	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
-	XMFLOAT3 playerLook = GetLookModel();
-	XMFLOAT3 towardVector = Vector3::Normalize(Vector3::Subtract(objPosition, GetPosition()));
-
-	float angle{ Vector3::DotProduct(towardVector, playerLook) };
-	angle = XMConvertToDegrees(acos(angle));
-
-	if (isnan(angle))
-		return;
-
-	float check{ Vector3::DotProduct(Vector3::CrossProduct(towardVector, playerLook), upVector) };
-
-	// 캐릭터가 선택된 오브젝트 보다 오른쪽 보고 있는 경우
-	if (check < 0.0f)
-		Rotate(0.0f, 0.0f, -angle);
-	else if (check > 0.0f)
-		Rotate(0.0f, 0.0f, angle);
-}
-
 XMFLOAT3 CBaseObject::GetPosition()
 {
 	return(XMFLOAT3(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43));
@@ -305,16 +267,6 @@ XMFLOAT3 CBaseObject::GetRight()
 	return(Vector3::Normalize(XMFLOAT3( m_xmf4x4World._11, m_xmf4x4World._12, m_xmf4x4World._13)));
 }
 
-XMFLOAT3 CBaseObject::GetLookModel()
-{
-	return(Vector3::ScalarProduct(XMFLOAT3(m_xmf4x4World._21, m_xmf4x4World._22, m_xmf4x4World._23), -1));
-}
-
-XMFLOAT3 CBaseObject::GetUpModel()
-{
-	return(Vector3::Normalize(XMFLOAT3(m_xmf4x4World._31, m_xmf4x4World._32, m_xmf4x4World._33)));
-}
-
 void CBaseObject::SetPosition(float x, float z)
 {
 	m_xmf4x4World._41 = x;
@@ -331,16 +283,6 @@ void CBaseObject::SetPosition(float x, float y, float z)
 void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 {
 	SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
-}
-
-void CBaseObject::SetPathToGo(Path * path)
-{
-	if (m_pathToGo)
-	{
-		m_pathToGo->clear();
-		Safe_Delete(m_pathToGo);
-	}
-	m_pathToGo = path;
 }
 
 ////////////////////////////////////////////////////////////////////////

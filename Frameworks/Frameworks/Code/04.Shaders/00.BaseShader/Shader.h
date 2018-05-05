@@ -11,7 +11,7 @@ class CShader	// Warning!  Ani Shader가 오브젝트 쉐이더 상속받으면 적당히 기능 �
 {
 public:	// 생성자, 소멸자
 	CShader(CCreateMgr *pCreateMgr);
-	~CShader();
+	virtual ~CShader();
 
 public: // 공개 함수
 	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);

@@ -13,8 +13,6 @@ enum MinionState {
 	Die
 };
 
-class CHeightMapTerrain;
-
 class CMinion : public CAnimatedObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
 {
 public: // 생성자, 소멸자
@@ -32,8 +30,6 @@ public:	// 외부 함수
 		m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
 		m_pSkeleton[m_nAniCnt++] = *skeleton;
 	}
-
-
 
 	void AniStateSet() {
 		switch (m_CurrAnimationState) {
@@ -58,10 +54,9 @@ public:	// 외부 함수
 		m_fFrameTime = 0;
 	}
 
-	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
+
 
 protected:	// 내부 함수
-	bool IsArrive(XMFLOAT2& nextPos, float dst);
 
 protected:	// 변수
 	MinionState m_CurrAnimationState = MinionState::Walking;
@@ -77,11 +72,6 @@ protected:	// 변수
 	
 	
 	float m_fFrameTime{ 0 };
-
-
-	XMFLOAT2 m_destination{ -1,  -1 };	// 얘를 깔끔하게 API 같이 만들 필요 있을 듯
-
-	CHeightMapTerrain * m_pTerrain{ NULL };	// 나중에 상속 부모 바뀌면 수정 필요
 };
 
 class CSwordMinion : public CMinion

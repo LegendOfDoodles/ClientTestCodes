@@ -8,7 +8,7 @@ class CStaticObjectShader : public CShader
 {
 public: // 생성자, 소멸자
 	CStaticObjectShader(CCreateMgr *pCreateMgr);
-	~CStaticObjectShader();
+	virtual ~CStaticObjectShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
@@ -63,7 +63,7 @@ class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 �
 {
 public: // 생성자, 소멸자
 	CAniShader(CCreateMgr *pCreateMgr);
-	~CAniShader();
+	virtual ~CAniShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
