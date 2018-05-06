@@ -374,6 +374,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		m_Network.m_send_wsabuf.len = sizeof(my_packet);
 		DWORD iobyte;
 		my_packet.type = CS_MOVE_PLAYER;
+		memcpy(m_Network.m_send_buffer, &my_packet, sizeof(my_packet));
 		m_Network.SendPacket(m_Network.m_myid, &my_packet);
 		m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
 	}
@@ -441,6 +442,7 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 
 void CScene::CollisionTest()
 {
+	CS_MsgChCollision my_packet;
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
 	CAnimatedObject** colliders = (CAnimatedObject * *)pAniS->GetCollisionObjects();
 	int nColliderObject = pAniS->GetnObject();
@@ -456,6 +458,17 @@ void CScene::CollisionTest()
 
 			if (distance < collisionLength)
 			{
+				my_packet.Character_id = m_Network.m_myid;
+				my_packet.size = sizeof(my_packet);
+				my_packet.x = colliders[i]->GetPosition().x;
+				my_packet.y = colliders[i]->GetPosition().z;
+				m_Network.m_send_wsabuf.len = sizeof(my_packet);
+				DWORD iobyte;
+				my_packet.type = CS_COLLISION;
+				memcpy(m_Network.m_send_buffer, &my_packet, sizeof(my_packet));
+				m_Network.SendPacket(m_Network.m_myid, &my_packet);
+				
+				
 				float length = (collisionLength - distance);
 				XMFLOAT3 vec3 = Vector3::Subtract(colliders[i]->GetPosition(), colliders[j]->GetPosition());
 				vec3.y = 0;

@@ -76,6 +76,13 @@ struct CS_MsgChMove : public Packet
 	short x;
 	short y;
 };
+
+struct CS_MsgChCollision : public Packet
+{
+	BYTE Character_id;
+	short x;
+	short y;
+};
 #pragma pack(pop)
 
 #define MAX_BUFF_SIZE 4000
@@ -104,7 +111,7 @@ struct CS_MsgChMove : public Packet
 //Client->Server
 #define CS_ACTION				  201
 #define CS_MOVE_PLAYER			  202
-#define CS_DEMAND_LOGIN			  203
+#define CS_COLLISION			  203
 
 //In Client Move Object
 #define CS_UP					  1
