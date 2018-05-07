@@ -4,6 +4,8 @@ Texture2D gtxtNormal : register(t1);
 Texture2D gtxtRoughnessMetalFresnel : register(t2);
 Texture2D gtxtSpecular : register(t3);
 
+Texture2D gtxtTextures[4] : register(t4);
+
 SamplerState wrapSampler : register(s0);
 
 //게임 객체의 정보를 위한 상수 버퍼를 선언한다.
@@ -110,6 +112,45 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 	float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
 
 	return(cColor);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+//
+cbuffer cbGameObjectInfo : register(b6)
+{
+    matrix gmtxUI : packoffset(c0);
+    uint texIndex : packoffset(c4);
+};
+
+struct VS_UI_INPUT
+{
+    float3 position : POSITION;
+    float2 uv : TEXCOORD;
+};
+
+struct VS_UI_OUTPUT
+{
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
+    uint texIndex : TEXINDEX;
+};
+
+VS_UI_OUTPUT VSTexturedUI(VS_UI_INPUT input)
+{
+    VS_UI_OUTPUT output;
+
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxUI), gmtxView), gmtxProjection);
+    output.uv = input.uv;
+    output.texIndex = texIndex;
+
+    return (output);
+}
+
+float4 PSTexturedUI(VS_UI_OUTPUT input) : SV_TARGET
+{
+    float4 cColor = gtxtTextures[NonUniformResourceIndex(input.texIndex)].Sample(wrapSampler, input.uv);
+
+    return (cColor);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

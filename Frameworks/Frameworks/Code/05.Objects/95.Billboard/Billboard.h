@@ -49,6 +49,7 @@ public:
 	}
 
 	virtual void Animate(float fTimeElapsed);
+	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
 
 private:
 	XMFLOAT3	m_xmf3Position;

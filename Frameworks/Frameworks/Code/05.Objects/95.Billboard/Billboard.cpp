@@ -57,8 +57,7 @@ CUIObject::CUIObject(CCreateMgr * pCreateMgr) : CBillboardObject(pCreateMgr)
 	CreateShaderVariables(pCreateMgr);
 }
 
-CUIObject::CUIObject(CCreateMgr * pCreateMgr, Type type)
-	:CBillboardObject(pCreateMgr)
+CUIObject::CUIObject(CCreateMgr * pCreateMgr, Type type) :CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
 
@@ -132,4 +131,32 @@ void CUIObject::Animate(float fTimeElapsed)
 	m_xmf4x4World._41 = newPos.x; 
 	m_xmf4x4World._42 = newPos.y; 
 	m_xmf4x4World._43 = newPos.z; 
+}
+
+void CUIObject::Render(CCamera *pCamera, UINT istanceCnt)
+{
+	OnPrepareRender();
+
+	if (m_pMaterial)
+	{
+		m_pMaterial->Render(pCamera);
+		m_pMaterial->UpdateShaderVariables();
+	}
+
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(10, m_cbvGPUDescriptorHandle);
+
+	if (m_pShader)
+	{
+		UpdateShaderVariables();
+		m_pShader->Render(pCamera);
+	}
+
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
+		}
+	}
 }
