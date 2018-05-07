@@ -138,10 +138,6 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader">
       <UniqueIdentifier>{22b3e6fb-1293-40c2-9daa-2dfd14e1f83b}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
-    <Filter Include="소스 파일\04.Shaders\04.PlayerShader">
-      <UniqueIdentifier>{0cd93544-9737-4abe-a91d-bf2b37dda782}</UniqueIdentifier>
-=======
     <Filter Include="소스 파일\00.Global\02.AI">
       <UniqueIdentifier>{187ca8d2-9c69-422e-b104-1446eb1cb44d}</UniqueIdentifier>
     </Filter>
@@ -177,7 +173,6 @@
     </Filter>
     <Filter Include="소스 파일\05.Objects\02.CollisionObject">
       <UniqueIdentifier>{b3b9a6a4-3dc0-43ad-a4b0-edd67b1177be}</UniqueIdentifier>
->>>>>>> 16617adb84bd9f7a5ebeebcc7ed3d8fbe9d8ea6c
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -301,9 +296,6 @@
     <ClInclude Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.h">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\00.UIShader</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="PlayerShader.h" />
-=======
     <ClInclude Include="Code\00.Global\02.AI\00.FSMMgr\FSMMgr.h">
       <Filter>소스 파일\00.Global\02.AI\00.FSMMgr</Filter>
     </ClInclude>
@@ -337,7 +329,6 @@
     <ClInclude Include="Code\05.Objects\07.StaticObjects\03.Obstacle\Obstacle.h">
       <Filter>소스 파일\05.Objects\07.StaticObjects\03.Obstacle</Filter>
     </ClInclude>
->>>>>>> 16617adb84bd9f7a5ebeebcc7ed3d8fbe9d8ea6c
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -442,10 +433,6 @@
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.cpp">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\00.UIShader</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="PlayerShader.cpp">
-      <Filter>소스 파일</Filter>
-=======
     <ClCompile Include="Code\00.Global\02.AI\00.FSMMgr\FSMMgr.cpp">
       <Filter>소스 파일\00.Global\02.AI\00.FSMMgr</Filter>
     </ClCompile>
@@ -475,7 +462,6 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\07.StaticObjects\03.Obstacle\Obstacle.cpp">
       <Filter>소스 파일\05.Objects\07.StaticObjects\03.Obstacle</Filter>
->>>>>>> 16617adb84bd9f7a5ebeebcc7ed3d8fbe9d8ea6c
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

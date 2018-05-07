@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "PlayerShader.h"
-#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
-#include "05.Objects/05.Minion/Minion.h"
+#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
+#include "05.Objects/06.Minion/Minion.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
-#include "05.Objects/03.Terrain/HeightMapTerrain.h"
-#include "05.Objects/06.StaticObjects/01.Nexus/Nexus.h"
+#include "05.Objects/04.Terrain/HeightMapTerrain.h"
+#include "05.Objects/07.StaticObjects/01.Nexus/Nexus.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
 
 
