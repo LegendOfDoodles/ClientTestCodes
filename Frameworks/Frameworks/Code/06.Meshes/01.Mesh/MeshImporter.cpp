@@ -206,7 +206,7 @@ void CTransformImporter::LoadMeshData(char * in)
 		std::getline(ifs, line);
 		int cnt = strtof(line.c_str(), NULL);
 		m_iTotalCnt += cnt;
-		m_iKindMeshCnt[i++] = cnt;
+		m_iKindMeshCnt[i] = cnt;
 		
 		while (std::getline(ifs, line) && line.find("<end>", 0) == -1)
 		{
@@ -241,13 +241,15 @@ void CTransformImporter::LoadMeshData(char * in)
 					index[1] = strtof(end, &end);
 					index[2] = strtof(end, NULL);
 					vertex.scale = XMFLOAT3(index[0], index[1], index[2]);
-					if (i >= 13 && BookScale[i - 13].x == 0)BookScale[i - 13] = vertex.scale;
+					if (i >= 13 && BookScale[i - 13].x == 0)
+						BookScale[i - 13] = vertex.scale;
 				}
 
 				LineNum++;
 			}
 			m_Transform.push_back(vertex);
 		}
+		++i;
 	}
 
 }
