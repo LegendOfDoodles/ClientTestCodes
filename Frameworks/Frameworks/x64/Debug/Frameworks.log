@@ -20,7 +20,15 @@ d:\새 폴더\client\frameworks\frameworks\code\04.shaders\01.objectshader\stati
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
 =======
 ﻿  UIShader.cpp
+<<<<<<< HEAD
 d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
 d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(79): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
   Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
 >>>>>>> 16617adb84bd9f7a5ebeebcc7ed3d8fbe9d8ea6c
+=======
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(79): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(114): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(116): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+>>>>>>> e2cd048fd12b103be19f77dbfb89a1fee3056e29

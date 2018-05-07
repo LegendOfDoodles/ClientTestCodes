@@ -92,8 +92,8 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	XMFLOAT4 MinimapArea;
 	XMFLOAT4 StatusArea;
 
-	MinimapArea.x = FRAME_BUFFER_WIDTH  / 1.1743f;
-	MinimapArea.y = FRAME_BUFFER_WIDTH  / 1.0372f;
+	MinimapArea.x = FRAME_BUFFER_WIDTH  / 1.3034f;
+	MinimapArea.y = FRAME_BUFFER_WIDTH  / 1.0078f;
 	MinimapArea.z = FRAME_BUFFER_HEIGHT / 1.3333f;
 	MinimapArea.w = FRAME_BUFFER_HEIGHT / 1.0526f;
 
@@ -107,9 +107,16 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 		printf("%d, %d\n", cursorPos.x, cursorPos.y);
 
 		// 미니맵 클릭
-		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y) 
+		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
 			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
-			printf("MiniMap Area\n");
+		{
+			XMFLOAT3 newCameraPos;
+			newCameraPos.x = (MinimapArea.x - cursorPos.x) * -1.736 * 20;
+			newCameraPos.y = m_pCamera->GetPosition().y;
+			newCameraPos.z = (MinimapArea.w - cursorPos.y) * 1.736 * 20;
+
+			m_pCamera->SetPosition(newCameraPos);
+		}
 
 		// 스테이터스 클릭
 		if ((cursorPos.x > StatusArea.x  && cursorPos.x < StatusArea.y)
