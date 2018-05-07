@@ -1,17 +1,8 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
-#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/97.Skeleton/Skeleton.h"
-
-enum MinionState {
-	Idle,
-
-	Attack,
-	
-	Walking,
-	
-	Die
-};
+#include "00.Global/01.Utility/Enumerations.h"
 
 class CMinion : public CAnimatedObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
 {
@@ -29,9 +20,8 @@ public:	// 외부 함수
 protected:	// 내부 함수
 
 protected:	// 변수
-	MinionState m_CurrState = MinionState::Idle;
-	MinionState m_NextState = MinionState::Idle;
-	
+	States m_CurrState = States::Idle;
+
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/

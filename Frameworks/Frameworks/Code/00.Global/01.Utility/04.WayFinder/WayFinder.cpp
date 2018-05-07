@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WayFinder.h"
 #include "00.Global/01.Utility/04.WayFinder/02.Astar/Astar.h"
-#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 
 /// <summary>
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성

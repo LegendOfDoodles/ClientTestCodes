@@ -1,5 +1,6 @@
 #pragma once
 #include "06.Meshes/01.Mesh/Mesh.h"
+#include "00.Global/01.Utility/Enumerations.h"
 
 class CCreateMgr;
 class CShader;
@@ -72,6 +73,16 @@ public: // 공개 함수
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_cbvGPUDescriptorHandle); }
 
+	int GetState() { return m_state; }
+	void SetState(States newState) { m_state = newState; }
+
+	bool IsCollider() { return false; }
+
+	bool HaveWalkState() { return false; }
+	bool HaveChaseState() { return false; }
+	bool HaveAttackState() { return false; }
+	bool HaveDieState() { return false; }
+
 protected: // 내부 함수
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
 	virtual void ReleaseShaderVariables();
@@ -99,21 +110,7 @@ protected: // 변수
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };
 
+	States m_state{ States::Idle };
+
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
-};
-
-class CCollisionObject : public CBaseObject 
-{
-	public:	// 생성자, 소멸자
-		CCollisionObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
-		virtual ~CCollisionObject();
-
-	public: // 공개 함수
-		virtual void SetCollisionSize(float size) { m_fCollisionSize = size; }
-		virtual float GetCollisionSize() { return m_fCollisionSize; }
-
-	protected: // 내부 함수
-
-	protected: // 변수
-		float m_fCollisionSize{ 1 };
 };
