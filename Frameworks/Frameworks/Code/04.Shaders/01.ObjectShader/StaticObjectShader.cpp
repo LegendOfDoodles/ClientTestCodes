@@ -306,23 +306,23 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CStaticMesh *pMeshes[17];
 	//CStaticMesh *pNexus = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");
-	pMeshes[0]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//eraser.meshinfo");
-	pMeshes[1]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//duck.meshinfo");
+	pMeshes[0]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//Eraser.meshinfo");
+	pMeshes[1]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//Duck.meshinfo");
 	pMeshes[2]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//KeumWonBo.meshinfo");
-	pMeshes[3]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//pencilcase.meshinfo");//***
-	pMeshes[4]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//nail.meshinfo");//***
-	pMeshes[5]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//bluehead.meshinfo");//***
-	pMeshes[6] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//shortpencil.meshinfo");
-	pMeshes[7]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//longpencil.meshinfo");
-	pMeshes[8]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//cup.meshinfo");
-	pMeshes[9]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//redhead.meshinfo");
-	pMeshes[10]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//pencover.meshinfo");
-	pMeshes[11]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//pen.meshinfo");
-	pMeshes[12]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//dice.meshinfo");
-	pMeshes[13] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[0]);
-	pMeshes[14] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[1]);
-	pMeshes[15] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[2]);
-	pMeshes[16]=  new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[3]);
+	pMeshes[3]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//PencilCase.meshinfo");//***
+	pMeshes[4]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nail.meshinfo");//***
+	pMeshes[5]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//BlueHead.meshinfo");//***
+	pMeshes[6] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//ShortPencil.meshinfo");
+	pMeshes[7]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//LongPencil.meshinfo");
+	pMeshes[8]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//Cup.meshinfo");
+	pMeshes[9]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//RedHead.meshinfo");
+	pMeshes[10]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//PenCover.meshinfo");
+	pMeshes[11]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//Pen.meshinfo");
+	pMeshes[12]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//Dice.meshinfo");
+	pMeshes[13] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[0]);
+	pMeshes[14] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[1]);
+	pMeshes[15] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[2]);
+	pMeshes[16]=  new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[3]);
 	int cnt = 0;
 	for (int i = 0; i < 17; ++i) {
 		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i]; ++j) {
@@ -330,6 +330,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			XMFLOAT3 rot = transformInporter.m_Transform[cnt].rotation;
 			m_ppObjects[cnt] = new CNexus(pCreateMgr);
 			m_ppObjects[cnt]->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
+			//m_ppObjects[cnt]->SetPosition(CONVERT_Unit_to_InG(i), CONVERT_Unit_to_InG(0), CONVERT_Unit_to_InG(0));
 			
 			m_ppObjects[cnt]->Rotate(0, 180, 0);
 			m_ppObjects[cnt]->Rotate(-rot.x, rot.y,-rot.z);

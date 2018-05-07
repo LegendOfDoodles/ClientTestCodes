@@ -199,6 +199,7 @@
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h" />
     <ClInclude Include="Code\07.Network\Network.h" />
     <ClInclude Include="Code\07.Network\protocol.h" />
+    <ClInclude Include="PlayerShader.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +247,7 @@
     <ClCompile Include="Code\06.Meshes\01.Mesh\Mesh.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp" />
     <ClCompile Include="Code\07.Network\Network.cpp" />
+    <ClCompile Include="PlayerShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Framework01.ico" />

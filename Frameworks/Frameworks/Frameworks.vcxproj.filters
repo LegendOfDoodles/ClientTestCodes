@@ -162,6 +162,9 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader">
       <UniqueIdentifier>{22b3e6fb-1293-40c2-9daa-2dfd14e1f83b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\04.PlayerShader">
+      <UniqueIdentifier>{0cd93544-9737-4abe-a91d-bf2b37dda782}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -305,6 +308,7 @@
     <ClInclude Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.h">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\00.UIShader</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -429,6 +433,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\00.UIShader\UIShader.cpp">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\00.UIShader</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerShader.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
