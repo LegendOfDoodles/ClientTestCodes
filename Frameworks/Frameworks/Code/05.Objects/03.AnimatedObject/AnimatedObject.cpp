@@ -131,16 +131,6 @@ void CAnimatedObject::SetPathToGo(Path * path)
 	ResetDestination();
 }
 
-////////////////////////////////////////////////////////////////////////
-// 내부 함수
-bool CAnimatedObject::IsArrive(XMFLOAT2 & nextPos, float dst)
-{
-	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
-	int distanceSqr = Vector2::DistanceSquare(curPos, nextPos);
-
-	return distanceSqr < dst * dst;
-}
-
 void CAnimatedObject::MoveToDestination(float timeElapsed)
 {
 	if (!m_pathToGo) return;
@@ -167,4 +157,15 @@ void CAnimatedObject::MoveToDestination(float timeElapsed)
 		CBaseObject::SetPosition(position);
 		LookAt(m_destination);
 	}
+}
+
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
+bool CAnimatedObject::IsArrive(XMFLOAT2 & nextPos, float dst)
+{
+	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
+	int distanceSqr = Vector2::DistanceSquare(curPos, nextPos);
+
+	return distanceSqr < dst * dst;
 }

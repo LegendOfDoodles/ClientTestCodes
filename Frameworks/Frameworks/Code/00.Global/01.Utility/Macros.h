@@ -36,6 +36,9 @@
 
 #define NONE -1
 
+// 최대 수치
+#define MAX_MINION 300
+
 // 랜덤 색상
 #define RANDOM_COLOR XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 

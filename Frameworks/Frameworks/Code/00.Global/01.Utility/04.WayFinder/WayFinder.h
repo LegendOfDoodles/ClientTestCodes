@@ -9,7 +9,7 @@ typedef std::vector<EdgeVector> EdgeArray;
 typedef std::list<CPathEdge> Path;
 
 class CAstar;
-class CAnimatedObject;
+class CCollisionObject;
 
 class CWayFinder
 {

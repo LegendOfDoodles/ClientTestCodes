@@ -220,8 +220,6 @@ void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 #if USE_BATCH_MATERIAL
-	//m_pMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
-
 	m_pMaterial = new CMaterial(pCreateMgr);
 	m_pMaterial->Initialize(pCreateMgr);
 	m_pMaterial->SetTexture(pTexture);

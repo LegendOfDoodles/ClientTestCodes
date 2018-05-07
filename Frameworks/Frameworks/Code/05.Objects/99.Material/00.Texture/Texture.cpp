@@ -76,9 +76,16 @@ void CTexture::SetSampler(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE samplerGpuDesc
 
 void CTexture::UpdateShaderVariables()
 {
-	for (int i = 0; i < m_nTextures; i++)
+	if (m_textureType == RESOURCE_TEXTURE_2D_ARRAY)
 	{
-		m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[i].m_nRootParameterIndex, m_pRootArgumentInfos[i].m_srvGpuDescriptorHandle);
+		m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[0].m_nRootParameterIndex, m_pRootArgumentInfos[0].m_srvGpuDescriptorHandle);
+	}
+	else
+	{
+		for (int i = 0; i < m_nTextures; i++)
+		{
+			m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[i].m_nRootParameterIndex, m_pRootArgumentInfos[i].m_srvGpuDescriptorHandle);
+		}
 	}
 }
 

@@ -2,7 +2,7 @@
 #include "02.Framework/00.Frame/Framework.h"
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
-#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 
 class CCreateMgr;
 class CWayFinder;

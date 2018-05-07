@@ -1,8 +1,8 @@
 #pragma once
-#include "05.Objects/00.BaseObject/BaseObject.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 #include "05.Objects/97.Skeleton/Skeleton.h"
 #include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
-#include "05.Objects/03.Terrain/HeightMapTerrain.h"
+#include "05.Objects/04.Terrain/HeightMapTerrain.h"
 
 typedef std::list<CPathEdge> Path;
 
@@ -34,13 +34,14 @@ public: // 공개 함수
 	virtual XMFLOAT3 GetUp();
 
 	void SetPathToGo(Path *path);
+	void MoveToDestination(float timeElapsed);
+
 	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
 
 	void  SetSpeed(float speed) { m_speed = speed; }
 
 protected: // 내부 함수
 	bool IsArrive(XMFLOAT2 & nextPos, float dst);
-	void MoveToDestination(float timeElapsed);
 
 	void ResetDestination() { m_destination.x = NONE; }
 	bool NoneDestination() { return m_destination.x == NONE;	}
