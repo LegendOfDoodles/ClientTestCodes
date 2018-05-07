@@ -83,6 +83,12 @@ struct CS_MsgChCollision : public Packet
 	short x;
 	short y;
 };
+
+struct CS_MsgDemandMakeRoom : public Packet
+{
+	BYTE Character_id;
+
+};
 #pragma pack(pop)
 
 #define MAX_BUFF_SIZE 4000
@@ -108,11 +114,12 @@ struct CS_MsgChCollision : public Packet
 #define SC_HIT					  106
 #define SC_PUT_MONSTER			  107
 #define SC_PUT_MINION			  108
+#define SC_PERMIT_MAKE_ROOM		  109
 //Client->Server
 #define CS_ACTION				  201
 #define CS_MOVE_PLAYER			  202
 #define CS_COLLISION			  203
-
+#define CS_DAMAND_MAKE_ROOM		  204
 //In Client Move Object
 #define CS_UP					  1
 #define CS_DOWN					  2
