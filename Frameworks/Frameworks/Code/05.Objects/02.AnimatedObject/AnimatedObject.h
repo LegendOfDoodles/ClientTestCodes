@@ -12,7 +12,7 @@ struct CB_ANIOBJECT_INFO
 	XMFLOAT4X4 m_xmf4x4Frame[128];
 };
 
-class CAnimatedObject : public CBaseObject 
+class CAnimatedObject : public CCollisionObject
 {
 public:	// 생성자, 소멸자
 	CAnimatedObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
@@ -23,8 +23,6 @@ public: // 공개 함수
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 
 	void SetSkeleton(CSkeleton *skeleton);
-	void AniStateSet();
-	void MinionTypeSet();
 
 	virtual void MoveUp(float fDistance = 1.0f);
 	virtual void MoveForward(float fDistance = 1.0f);
@@ -38,9 +36,6 @@ public: // 공개 함수
 	void SetPathToGo(Path *path);
 	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
 
-	virtual void SetCollisionSize(float size) { m_fCollisionSize = size; }
-	virtual float GetCollisionSize() { return m_fCollisionSize; }
-
 	void  SetSpeed(float speed) { m_speed = speed; }
 
 protected: // 내부 함수
@@ -51,13 +46,16 @@ protected: // 내부 함수
 	bool NoneDestination() { return m_destination.x == NONE;	}
 
 protected: // 변수
-	CSkeleton m_pSkeleton[20];
+	CSkeleton	m_pSkeleton[20];
+
 	int m_nAniLength[20];
+	int m_nCurrAnimation{ 3 };
+
 	int m_nAniCnt{ 0 };
-	int m_nAniState{ 0 };
 
 	float m_fFrameTime{ 0 };
-	float m_fCollisionSize{ 1 };
+
+	float m_fAnimationSpeed{ 1 };
 
 	float m_speed{ 0.0f };
 

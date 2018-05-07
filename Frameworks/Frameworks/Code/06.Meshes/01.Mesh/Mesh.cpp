@@ -454,7 +454,7 @@ CSkinnedMesh::~CSkinnedMesh()
 // CStaticMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in) : CMeshIlluminatedTextured(pCreateMgr)
+CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in,XMFLOAT3 scalevalue) : CMeshIlluminatedTextured(pCreateMgr)
 {
 	CMeshImporter importer;
 	importer.LoadStaticMeshData(in);
@@ -489,7 +489,7 @@ CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in) : CMeshIlluminatedT
 	for (auto d : importer.m_xmVertex) {
 		pxmf3Normals[vecticesCount] = XMFLOAT3(d.normal.x, d.normal.y, d.normal.z);
 		pxmf2TexCoords[vecticesCount] = XMFLOAT2(d.uv.x, d.uv.y);
-		pxmf3Positions[vecticesCount] = XMFLOAT3(d.pos.x, d.pos.y, d.pos.z);
+		pxmf3Positions[vecticesCount] = XMFLOAT3(d.pos.x*scalevalue.x, d.pos.y*scalevalue.y, d.pos.z*scalevalue.z);
 		++vecticesCount;
 	}
 
@@ -516,6 +516,8 @@ CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in) : CMeshIlluminatedT
 CStaticMesh::~CStaticMesh()
 {
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CHeightMapImage

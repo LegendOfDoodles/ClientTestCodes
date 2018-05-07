@@ -314,3 +314,11 @@ void CBaseObject::UpdateShaderVariables()
 void CBaseObject::OnPrepareRender()
 {
 }
+
+CCollisionObject::CCollisionObject(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr, nMeshes)
+{
+}
+
+CCollisionObject::~CCollisionObject()
+{
+}

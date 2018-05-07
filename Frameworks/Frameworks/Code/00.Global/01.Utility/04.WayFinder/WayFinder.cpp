@@ -322,7 +322,7 @@ int CWayFinder::FindClosestNodeIndexWithPosition(const XMFLOAT2 & position)
 	return closestIndex;
 }
 
-void CWayFinder::AdjustValueByWallCollision(CAnimatedObject* collider, XMFLOAT3 & dir, float val)
+void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3 & dir, float val)
 {
 	XMFLOAT3 pos{ collider->GetPosition() };
 	XMFLOAT3 velocity{ Vector3::ScalarProduct(dir, val) };

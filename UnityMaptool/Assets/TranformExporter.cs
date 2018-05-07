@@ -34,8 +34,7 @@ public class TranformExporter : MonoBehaviour {
         FileStream fileStream = file.OpenWrite();
 
         TextWriter tw = new StreamWriter(fileStream);
-
-        for(int i=0; i<Objects.Length; ++i)
+        for (int i=0; i<Objects.Length; ++i)
         {
             Transform[] tempTransforms = Objects[i].GetComponentsInChildren<Transform>();
             tw.WriteLine(Objects[i].name);
@@ -47,11 +46,12 @@ public class TranformExporter : MonoBehaviour {
                 {
 
                 tw.WriteLine(child.position.x + " "+ child.position.y + " " + child.position.z);
-                tw.WriteLine(child.rotation.x + " "+ child.rotation.y + " " + child.rotation.z);
+                tw.WriteLine(child.rotation.eulerAngles.x + " "+ child.rotation.eulerAngles.y + " " + child.rotation.eulerAngles.z);
                 tw.WriteLine(child.lossyScale.x + " "+ child.lossyScale.y + " " + child.lossyScale.z );
                 }
                 n++; 
             }
+            tw.WriteLine("<end>");
         }
         tw.Close();
         fileStream.Close();

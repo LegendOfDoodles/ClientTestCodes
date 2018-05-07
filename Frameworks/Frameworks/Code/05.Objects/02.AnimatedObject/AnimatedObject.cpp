@@ -10,10 +10,10 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr, nMeshes)
+CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
 {
 	m_fFrameTime = 0;
-	m_nAniState = 0;
+	m_nCurrAnimation = 0;
 }
 
 CAnimatedObject::~CAnimatedObject()
@@ -26,16 +26,11 @@ CAnimatedObject::~CAnimatedObject()
 void CAnimatedObject::Animate(float timeElapsed)
 {
 
-	m_fFrameTime += 30 * timeElapsed;
-	if (m_fFrameTime > m_nAniLength[m_nAniState]) {
-		while (m_fFrameTime > m_nAniLength[m_nAniState])
-			m_fFrameTime -= m_nAniLength[m_nAniState];
-	}
 
-	int Bcnt = m_pSkeleton[m_nAniState].GetBoneCount(); 
+	int Bcnt = m_pSkeleton[m_nCurrAnimation].GetBoneCount();
 
 	for (int i = 0; i < Bcnt; ++i) {
-		m_xmf4x4Frame[i] = m_pSkeleton[m_nAniState].GetBone(i).GetFrame((int)m_fFrameTime);
+		m_xmf4x4Frame[i] = m_pSkeleton[m_nCurrAnimation].GetBone(i).GetFrame((int)m_fFrameTime);
 	}
 }
 
@@ -71,20 +66,6 @@ void CAnimatedObject::SetSkeleton(CSkeleton *skeleton)
 {
 	m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
 	m_pSkeleton[m_nAniCnt++] = *skeleton;
-}
-
-void CAnimatedObject::AniStateSet() 
-{
-	++m_nAniState;
-	m_fFrameTime = 0;
-	if (m_nAniState >= m_nAniCnt) { m_nAniState = 0; }
-}
-
-void CAnimatedObject::MinionTypeSet()
-{
-	++m_nAniState;
-	m_fFrameTime = 0;
-	if (m_nAniState >= m_nAniCnt) { m_nAniState = 0; }
 }
 
 void CAnimatedObject::MoveUp(float fDistance)
