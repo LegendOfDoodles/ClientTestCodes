@@ -26,52 +26,15 @@ public:	// 외부 함수
 
 	virtual void SetPosition(float x, float z);
 
-	void SetSkeleton(CSkeleton *skeleton) {
-		m_nAniLength[m_nAniCnt] = skeleton->GetAnimationLength();
-		m_pSkeleton[m_nAniCnt++] = *skeleton;
-	}
-
-	void AniStateSet() {
-		switch (m_CurrAnimationState) {
-		case MinionState::Idle:
-			m_NextAnimationState = MinionState::Attack;
-			break;
-
-		case MinionState::Attack:
-			m_NextAnimationState = MinionState::Walking;
-			break;
-
-		case MinionState::Walking:
-			m_NextAnimationState = MinionState::Die;
-			break;
-		case MinionState::Die:
-			m_NextAnimationState = MinionState::Idle;
-			break;
-
-		default:
-			break;
-		}
-		m_fFrameTime = 0;
-	}
-
-
-
 protected:	// 내부 함수
 
 protected:	// 변수
-	MinionState m_CurrAnimationState = MinionState::Walking;
-	MinionState m_NextAnimationState = MinionState::Walking;
-	CSkeleton	m_pSkeleton[20];
-
-	int m_nAniLength[20];
-	int m_nCurrAnimation{ 3 };
+	MinionState m_CurrState = MinionState::Idle;
+	MinionState m_NextState = MinionState::Idle;
+	
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/
-	int m_nAniCnt{ 0 };
-	
-	
-	float m_fFrameTime{ 0 };
 };
 
 class CSwordMinion : public CMinion

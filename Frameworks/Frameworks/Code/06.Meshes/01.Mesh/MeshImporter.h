@@ -17,7 +17,6 @@ public:
 	std::vector<XMFLOAT3> m_xmTriIndex;
 	int m_iVerticesCnt;
 	std::vector<MyVertex> m_xmVertex;
-	char* m_FileRoute;
 public:
 	CMeshImporter();
 
@@ -28,3 +27,23 @@ public:
 
 };
 
+struct Transform {
+	XMFLOAT3 pos;
+	XMFLOAT3 rotation;
+	XMFLOAT3 scale;
+};
+class CTransformImporter
+{
+public:
+	int m_iTotalCnt;
+	std::vector<Transform> m_Transform;
+	int m_iKindMeshCnt[17];
+	XMFLOAT3 BookScale[4];
+public:
+	CTransformImporter();
+
+	void LoadMeshData(char* in);
+
+	~CTransformImporter();
+
+};

@@ -442,7 +442,7 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 void CScene::CollisionTest()
 {
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
-	CAnimatedObject** colliders = (CAnimatedObject * *)pAniS->GetCollisionObjects();
+	CCollisionObject** colliders = (CCollisionObject * *)pAniS->GetCollisionObjects();
 	int nColliderObject = pAniS->GetnObject();
 	for (int i = 0; i < nColliderObject - 1; ++i)
 	{

@@ -6,6 +6,7 @@
 #include "05.Objects/99.Material/Material.h"
 #include "05.Objects/03.Terrain/HeightMapTerrain.h"
 #include "05.Objects/06.StaticObjects/01.Nexus/Nexus.h"
+#include "06.Meshes/01.Mesh/MeshImporter.h"
 
 /// <summary>
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
@@ -278,7 +279,11 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
-	m_nObjects = 1;
+	CTransformImporter transformInporter;
+
+	transformInporter.LoadMeshData("Resource//Setting.txt");
+
+	m_nObjects = transformInporter.m_iTotalCnt;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -298,14 +303,46 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CStaticMesh *pMesh = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");
-	
-	m_ppObjects[0] = new CNexus(pCreateMgr);
-	m_ppObjects[0]->SetPosition(CONVERT_Unit_to_InG(0.25), 0, CONVERT_Unit_to_InG(2.5));
-	m_ppObjects[0]->Rotate(90, 0, 90);
-	m_ppObjects[0]->SetMesh(0, pMesh);
+	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+	CStaticMesh *pMeshes[17];
+	//CStaticMesh *pNexus = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nexus//Treasure Box Nexus(UV).meshinfo");
+	pMeshes[0]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//eraser.meshinfo");
+	pMeshes[1]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//duck.meshinfo");
+	pMeshes[2]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//KeumWonBo.meshinfo");
+	pMeshes[3]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//pencilcase.meshinfo");//***
+	pMeshes[4]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//nail.meshinfo");//***
+	pMeshes[5]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//bluehead.meshinfo");//***
+	pMeshes[6] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//shortpencil.meshinfo");
+	pMeshes[7]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//longpencil.meshinfo");
+	pMeshes[8]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//cup.meshinfo");
+	pMeshes[9]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//redhead.meshinfo");
+	pMeshes[10]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//pencover.meshinfo");
+	pMeshes[11]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//pen.meshinfo");
+	pMeshes[12]= new CStaticMesh(pCreateMgr, "Resource//3D//Building//dice.meshinfo");
+	pMeshes[13] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[0]);
+	pMeshes[14] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[1]);
+	pMeshes[15] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[2]);
+	pMeshes[16]=  new CStaticMesh(pCreateMgr, "Resource//3D//Building//book.meshinfo", transformInporter.BookScale[3]);
+	int cnt = 0;
+	for (int i = 0; i < 17; ++i) {
+		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i]; ++j) {
+			XMFLOAT3 pos = transformInporter.m_Transform[cnt].pos;
+			XMFLOAT3 rot = transformInporter.m_Transform[cnt].rotation;
+			m_ppObjects[cnt] = new CNexus(pCreateMgr);
+			m_ppObjects[cnt]->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
+			
+			m_ppObjects[cnt]->Rotate(0, 180, 0);
+			m_ppObjects[cnt]->Rotate(-rot.x, rot.y,-rot.z);
 
-	m_ppObjects[0]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
+
+			m_ppObjects[cnt]->SetMesh(0, pMeshes[i]);
+
+			m_ppObjects[cnt]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
+			++cnt;
+		}
+	}	
+		
+		
 }
 
 void CStaticObjectShader::ReleaseObjects()
@@ -467,10 +504,7 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
-		for (int i = 0; i < m_nObjects; ++i) {
-			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
-			obj->AniStateSet();
-		}
+
 	}
 	return true;
 }
@@ -679,8 +713,8 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CMinion *pMinionObject = NULL;
 
-	for (int i = 0; i < 3; ++i) {
-		m_pWeapons[i]->AddRef();
+	for (int j = 0; j < 3; ++j) {
+		m_pWeapons[j]->AddRef();
 	}
 
 

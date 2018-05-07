@@ -22,18 +22,27 @@ CMinion::~CMinion()
 // 공개 함수
 void CMinion::Animate(float timeElapsed)
 {
+	m_fFrameTime += 30 * timeElapsed;
+
 
 	if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]) {
 		while (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
 			m_fFrameTime -= m_nAniLength[m_nCurrAnimation];
 	}
-	int Bcnt = m_pSkeleton[m_nCurrAnimation].GetBoneCount();
-
-	for (int i = 0; i < Bcnt; ++i) {
-		m_xmf4x4Frame[i] = m_pSkeleton[m_nCurrAnimation].GetBone(i).GetFrame((int)m_fFrameTime);
+	MoveToDestination(timeElapsed);
+	if (m_pathToGo&&m_CurrState != MinionState::Walking) {
+		m_NextState = MinionState::Walking;
+		m_CurrState = MinionState::Walking;
+		m_fFrameTime = 0;
+	}
+	else if (!m_pathToGo&&m_CurrState == MinionState::Walking) {
+		m_NextState = MinionState::Idle;
+		m_CurrState = MinionState::Idle;
+		m_fFrameTime = 0;
 	}
 
-	MoveToDestination(timeElapsed);
+	CAnimatedObject::Animate(timeElapsed);
+
 }
 
 void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
@@ -99,54 +108,15 @@ CSwordMinion::~CSwordMinion()
 
 void CSwordMinion::Animate(float timeElapsed)
 {
-	m_fFrameTime += 30 * timeElapsed;
-
-
-	if (m_CurrAnimationState != m_NextAnimationState) {
-
-		switch (m_NextAnimationState) {
+		switch (m_CurrState) {
 		case MinionState::Idle:
-			if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			{
+			if (m_nCurrAnimation != SwordMinionAnimation::Idle)
 				m_nCurrAnimation = SwordMinionAnimation::Idle;
-				m_CurrAnimationState = m_NextAnimationState;
-				m_fFrameTime = 0;
-			}
-			break;
-		case MinionState::Attack:
-			m_nCurrAnimation = SwordMinionAnimation::Attack1;
-			m_CurrAnimationState = m_NextAnimationState;
-			m_fFrameTime = 0;
-			break;
-		case MinionState::Walking:
-			if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			{
-				m_nCurrAnimation = SwordMinionAnimation::StartWalk;
-				m_CurrAnimationState = m_NextAnimationState;
-				m_fFrameTime = 0;
-			}
-			break;
-		case MinionState::Die:
-			m_nCurrAnimation = SwordMinionAnimation::Die;
-			m_CurrAnimationState = m_NextAnimationState;
-			m_fFrameTime = 0;
-
-			break;
-		default:
-
-			break;
-		}
-
-	}
-	else {
-		switch (m_CurrAnimationState) {
-		case MinionState::Idle:
-
 			break;
 		case MinionState::Attack:
 			if (m_nCurrAnimation == SwordMinionAnimation::Attack1) {
 				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation] / 2 &&
-					m_CurrAnimationState == m_NextAnimationState)
+					m_CurrState == m_NextState)
 				{
 					m_nCurrAnimation = SwordMinionAnimation::Attack2;
 					m_fFrameTime = 0;
@@ -164,8 +134,12 @@ void CSwordMinion::Animate(float timeElapsed)
 			break;
 
 		case MinionState::Walking:
+			if(m_nCurrAnimation!= SwordMinionAnimation::StartWalk&&
+				m_nCurrAnimation != SwordMinionAnimation::Walking)
+				m_nCurrAnimation = SwordMinionAnimation::StartWalk;
+
 			if (m_nCurrAnimation == SwordMinionAnimation::StartWalk) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation]-1)
 				{
 					m_nCurrAnimation = SwordMinionAnimation::Walking;
 					m_fFrameTime = 0;
@@ -179,7 +153,6 @@ void CSwordMinion::Animate(float timeElapsed)
 
 			break;
 		}
-	}
 	CMinion::Animate(timeElapsed);
 }
 
@@ -199,54 +172,15 @@ CMagicMinion::~CMagicMinion()
 
 void CMagicMinion::Animate(float timeElapsed)
 {
-	m_fFrameTime += 30 * timeElapsed;
-
-
-	if (m_CurrAnimationState != m_NextAnimationState) {
-
-		switch (m_NextAnimationState) {
+		switch (m_CurrState) {
 		case MinionState::Idle:
-			if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			{
+			if (m_nCurrAnimation != MagicMinionAnimation::Idle)
 				m_nCurrAnimation = MagicMinionAnimation::Idle;
-				m_CurrAnimationState = m_NextAnimationState;
-				m_fFrameTime = 0;
-			}
-			break;
-		case MinionState::Attack:
-			m_nCurrAnimation = MagicMinionAnimation::Attack1;
-			m_CurrAnimationState = m_NextAnimationState;
-			m_fFrameTime = 0;
-			break;
-		case MinionState::Walking:
-			if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			{
-				m_nCurrAnimation = MagicMinionAnimation::StartWalk;
-				m_CurrAnimationState = m_NextAnimationState;
-				m_fFrameTime = 0;
-			}
-			break;
-		case MinionState::Die:
-			m_nCurrAnimation = MagicMinionAnimation::Die;
-			m_CurrAnimationState = m_NextAnimationState;
-			m_fFrameTime = 0;
-
-			break;
-		default:
-
-			break;
-		}
-
-	}
-	else {
-		switch (m_CurrAnimationState) {
-		case MinionState::Idle:
-
 			break;
 		case MinionState::Attack:
 			if (m_nCurrAnimation == MagicMinionAnimation::Attack1) {
 				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation] / 2 &&
-					m_CurrAnimationState == m_NextAnimationState)
+					m_CurrState == m_NextState)
 				{
 					m_nCurrAnimation = MagicMinionAnimation::Attack2;
 					m_fFrameTime = 0;
@@ -264,8 +198,11 @@ void CMagicMinion::Animate(float timeElapsed)
 			break;
 
 		case MinionState::Walking:
+			if (m_nCurrAnimation != MagicMinionAnimation::StartWalk &&
+				m_nCurrAnimation != MagicMinionAnimation::Walking)
+				m_nCurrAnimation = MagicMinionAnimation::StartWalk;
 			if (m_nCurrAnimation == MagicMinionAnimation::StartWalk) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]-1)
 				{
 					m_nCurrAnimation = MagicMinionAnimation::Walking;
 					m_fFrameTime = 0;
@@ -279,7 +216,6 @@ void CMagicMinion::Animate(float timeElapsed)
 
 			break;
 		}
-	}
 	CMinion::Animate(timeElapsed);
 
 }
@@ -300,57 +236,22 @@ CBowMinion::~CBowMinion()
 
 void CBowMinion::Animate(float timeElapsed)
 {
-	m_fFrameTime += 30 * timeElapsed;
-
-
-	if (m_CurrAnimationState != m_NextAnimationState) {
-
-		switch (m_NextAnimationState) {
+		switch (m_CurrState) {
 		case MinionState::Idle:
-			if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			{
+
+			if (m_nCurrAnimation != BowMinionAnimation::Idle)
 				m_nCurrAnimation = BowMinionAnimation::Idle;
-				m_CurrAnimationState = m_NextAnimationState;
-				m_fFrameTime = 0;
-			}
-			break;
-		case MinionState::Attack:
-			m_nCurrAnimation = BowMinionAnimation::Attack;
-			m_CurrAnimationState = m_NextAnimationState;
-			m_fFrameTime = 0;
-			break;
-		case MinionState::Walking:
-			if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			{
-				m_nCurrAnimation = BowMinionAnimation::StartWalk;
-				m_CurrAnimationState = m_NextAnimationState;
-				m_fFrameTime = 0;
-			}
-			break;
-		case MinionState::Die:
-			m_nCurrAnimation = BowMinionAnimation::Die;
-			m_CurrAnimationState = m_NextAnimationState;
-			m_fFrameTime = 0;
-
-			break;
-		default:
-
-			break;
-		}
-
-	}
-	else {
-		switch (m_CurrAnimationState) {
-		case MinionState::Idle:
-
 			break;
 		case MinionState::Attack:
 			
 			break;
 
 		case MinionState::Walking:
+			if (m_nCurrAnimation != BowMinionAnimation::StartWalk &&
+				m_nCurrAnimation != BowMinionAnimation::Walking)
+				m_nCurrAnimation = BowMinionAnimation::StartWalk;
 			if (m_nCurrAnimation == BowMinionAnimation::StartWalk) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]-1)
 				{
 					m_nCurrAnimation = BowMinionAnimation::Walking;
 					m_fFrameTime = 0;
@@ -364,7 +265,6 @@ void CBowMinion::Animate(float timeElapsed)
 
 			break;
 		}
-	}
 	CMinion::Animate(timeElapsed);
 
 }

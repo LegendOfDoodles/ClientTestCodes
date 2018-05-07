@@ -1,37 +1,72 @@
 fileFormatVersion: 2
-guid: e02605fa6714af24392af584ebad2feb
-timeCreated: 1524229794
+guid: 5b946b3ca30efca4695c7dd1356f8fbb
+timeCreated: 1525623449
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Box001
-    100002: //RootNode
-    100004: NGon001
-    100006: NGon002
-    100008: NGon003
-    100010: NGon004
-    100012: NGon005
-    100014: NGon006
-    100016: NGon007
-    100018: NGon008
-    100020: NGon009
-    400000: Box001
-    400002: //RootNode
-    400004: NGon001
-    400006: NGon002
-    400008: NGon003
-    400010: NGon004
-    400012: NGon005
-    400014: NGon006
-    400016: NGon007
-    400018: NGon008
-    400020: NGon009
+    100000: ' 1'
+    100002: Bip001
+    100004: Bip001 Footsteps
+    100006: Bip001 Head
+    100008: Bip001 HeadNub
+    100010: Bip001 L Calf
+    100012: Bip001 L Clavicle
+    100014: Bip001 L Foot
+    100016: Bip001 L Forearm
+    100018: Bip001 L Hand
+    100020: Bip001 L Thigh
+    100022: Bip001 L Toe0
+    100024: Bip001 L Toe0Nub
+    100026: Bip001 L UpperArm
+    100028: Bip001 Neck
+    100030: Bip001 Pelvis
+    100032: Bip001 R Calf
+    100034: Bip001 R Clavicle
+    100036: Bip001 R Foot
+    100038: Bip001 R Forearm
+    100040: Bip001 R Hand
+    100042: Bip001 R Thigh
+    100044: Bip001 R Toe0
+    100046: Bip001 R Toe0Nub
+    100048: Bip001 R UpperArm
+    100050: Bip001 Spine
+    100052: Bip001 Spine1
+    100054: Dummy001
+    100056: //RootNode
+    400000: ' 1'
+    400002: Bip001
+    400004: Bip001 Footsteps
+    400006: Bip001 Head
+    400008: Bip001 HeadNub
+    400010: Bip001 L Calf
+    400012: Bip001 L Clavicle
+    400014: Bip001 L Foot
+    400016: Bip001 L Forearm
+    400018: Bip001 L Hand
+    400020: Bip001 L Thigh
+    400022: Bip001 L Toe0
+    400024: Bip001 L Toe0Nub
+    400026: Bip001 L UpperArm
+    400028: Bip001 Neck
+    400030: Bip001 Pelvis
+    400032: Bip001 R Calf
+    400034: Bip001 R Clavicle
+    400036: Bip001 R Foot
+    400038: Bip001 R Forearm
+    400040: Bip001 R Hand
+    400042: Bip001 R Thigh
+    400044: Bip001 R Toe0
+    400046: Bip001 R Toe0Nub
+    400048: Bip001 R UpperArm
+    400050: Bip001 Spine
+    400052: Bip001 Spine1
+    400054: Dummy001
+    400056: //RootNode
     2100000: No Name
-    2300000: Box001
-    3300000: Box001
-    4300000: Box001
+    7400000: Take 001
     9500000: //RootNode
+    13700000: ' 1'
   externalObjects: {}
   materials:
     importMaterials: 1

@@ -29,7 +29,7 @@ public: // 공개 함수
 
 	int FindClosestNodeIndexWithPosition(const XMFLOAT2 &position);
 
-	void AdjustValueByWallCollision(CAnimatedObject* collider, XMFLOAT3& dir, float val);
+	void AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3& dir, float val);
 
 	int GetNodeCount() const { return m_nodes.size(); }
 	const CNode& GetNodeAt(int idx) const { return m_nodes[idx]; }
