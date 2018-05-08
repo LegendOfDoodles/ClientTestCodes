@@ -5,10 +5,10 @@
 #include "05.Objects/99.Material/Material.h"
 
 /// <summary>
-/// 목적: UI MiniMap 테스트 쉐이더
+/// 목적: UI 테스트 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-24
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -70,9 +70,20 @@ void CUIObjectShader::Render(CCamera * pCamera)
 	//	if (m_ppMaterials[j]) m_ppMaterials[j]->UpdateShaderVariables();
 #endif
 	
-		if (j == 3 && OnOFF) 
-			m_ppObjects[j]->Render(pCamera);
-		else if (j != 3) m_ppObjects[j]->Render(pCamera);
+		if (j == 3 && OnOFF) m_ppObjects[j]->Render(pCamera);
+		else if (j != 3)	 m_ppObjects[j]->Render(pCamera);
+	}
+}
+
+void CUIObjectShader::OnStatus(int  ObjectType)
+{
+
+	if (OnOFF == false) OnOFF = true;
+
+	switch (ObjectType)
+	{
+	default:
+		break;
 	}
 }
 
@@ -104,7 +115,7 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 
 	if(pKeyBuffer == MK_LBUTTON)
 	{
-		printf("%d, %d\n", cursorPos.x, cursorPos.y);
+		//printf("%d, %d\n", cursorPos.x, cursorPos.y);
 
 		// 미니맵 클릭
 		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
@@ -114,14 +125,16 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 			newCameraPos.x = (MinimapArea.x - cursorPos.x) * -1.736 * 20;
 			newCameraPos.y = m_pCamera->GetPosition().y;
 			newCameraPos.z = (MinimapArea.w - cursorPos.y) * 1.736 * 20;
-
+			
 			m_pCamera->SetPosition(newCameraPos);
 		}
 
 		// 스테이터스 클릭
 		if ((cursorPos.x > StatusArea.x  && cursorPos.x < StatusArea.y)
 			&& (cursorPos.y > StatusArea.z && cursorPos.y < StatusArea.w))
+		{
 			printf("StatusArea Area\n");
+		}
 	}
 
 

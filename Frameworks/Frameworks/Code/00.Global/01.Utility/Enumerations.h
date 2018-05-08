@@ -15,9 +15,26 @@ enum States {
 	Die
 };
 
+<<<<<<< HEAD
 enum Minion_Species {
 	Blue_Up,
 	Blue_Down,
 	Red_Up,
 	Red_Down
 };
+=======
+enum ObjectType {
+	SwordPlayer,
+	StaffPlayer,
+	BowPlayer,
+	SwordMinion,
+	StaffMinion,
+	BowMinion,
+	Loyde,
+	CAM,
+	GOLEM,
+	FirstTower,
+	SecnondTower,
+	Nexus
+};
+>>>>>>> 용선

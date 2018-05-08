@@ -95,6 +95,14 @@ bool CShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	return false;
 }
 
+void CShader::OnStatus(int ObjectType)
+{
+}
+
+void CShader::OffStatus()
+{
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CShader::CreateInputLayout()
