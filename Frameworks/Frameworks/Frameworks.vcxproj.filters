@@ -186,6 +186,12 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader">
       <UniqueIdentifier>{865a229b-606a-46e0-82b5-63b023eafc41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\00.PlayerGaugeShader">
+      <UniqueIdentifier>{348c3afd-ab13-4f47-986a-b0d18d90bf59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader">
+      <UniqueIdentifier>{51bcd638-c1d9-4073-aa8d-15fe57eb1797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -350,8 +356,11 @@
     <ClInclude Include="Code\05.Objects\08.Player\Player.h">
       <Filter>소스 파일\05.Objects\08.Player</Filter>
     </ClInclude>
-    <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\GaugeShader.h">
-      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader</Filter>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\00.PlayerGaugeShader\PlayerGaugeShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\00.PlayerGaugeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader\MinionGaugeShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -496,8 +505,11 @@
     <ClCompile Include="Code\05.Objects\08.Player\Player.cpp">
       <Filter>소스 파일\05.Objects\08.Player</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\GaugeShader.cpp">
-      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader</Filter>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\00.PlayerGaugeShader\PlayerGaugeShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\00.PlayerGaugeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader\MinionGaugeShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

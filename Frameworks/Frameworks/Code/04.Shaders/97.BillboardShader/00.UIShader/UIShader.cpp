@@ -261,7 +261,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderResourceViews(pCreateMgr, pTexture, 11, false);
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CUIObject *pMiniMap{ NULL };
+	CUIObject *pUIObject{ NULL };
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
@@ -275,13 +275,13 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		pMaterial->Initialize(pCreateMgr);
 		pMaterial->SetTexture(pTexture);
 
-		pMiniMap = new CUIObject(pCreateMgr, (Type)i);
-		pMiniMap->SetMaterial(pMaterial);
-		pMiniMap->SetCamera(m_pCamera);
-		pMiniMap->SetDistance(FRAME_BUFFER_WIDTH / 128);
-		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		pUIObject = new CUIObject(pCreateMgr, (Type)i);
+		pUIObject->SetMaterial(pMaterial);
+		pUIObject->SetCamera(m_pCamera);
+		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);
+		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
-		m_ppObjects[i] = pMiniMap;
+		m_ppObjects[i] = pUIObject;
 	}
 }
 

@@ -94,8 +94,12 @@ namespace Materials
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
+<<<<<<< HEAD
 	// Player
 	CMaterial* CreatePlayerMaterial(CCreateMgr *pCreateMgr,
+=======
+	CMaterial* CreateGreyMaterial(CCreateMgr *pCreateMgr,
+>>>>>>> 용선
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 

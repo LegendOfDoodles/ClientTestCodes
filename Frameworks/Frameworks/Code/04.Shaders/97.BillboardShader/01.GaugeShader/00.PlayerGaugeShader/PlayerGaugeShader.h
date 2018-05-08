@@ -1,48 +1,34 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
 
+class CBillboardObject;
 class CMaterial;
-class CHeightMapTerrain;
-class CCollisionManager;
-class CPlayerShader : public CShader
+class CPlayer;
+
+class CPlayerHPGaugeShader : public CShader
 {
 public:
-	CPlayerShader(CCreateMgr *pCreateMgr);
-	~CPlayerShader();
+	CPlayerHPGaugeShader(CCreateMgr *pCreateMgr);
+	virtual ~CPlayerHPGaugeShader();
 
 public: // °ø°³ ÇÔ¼ö
 	virtual void ReleaseUploadBuffers();
 
 	virtual void UpdateShaderVariables();
-	virtual void UpdateBoundingBoxShaderVariables();
 
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
-	virtual void RenderBoundingBox(CCamera *pCamera);
-
-	virtual CBaseObject *PickObjectByRayIntersection(
-		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
+	
+	void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
+	void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
-
-<<<<<<< HEAD
-
-	void SetColManagerToObject(CCollisionManager* manager);
-	
-	
-	virtual CBaseObject * * GetCollisionObjects() {
-=======
-	virtual CBaseObject **GetCollisionObjects() {
->>>>>>> ìš©ì„ 
-		return m_ppObjects;
-	}
-	int GetnObject() {
-		return m_nObjects;
-	}
+	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
 protected: // ³»ºÎ ÇÔ¼ö
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
+	virtual D3D12_BLEND_DESC CreateBlendState();
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
@@ -52,22 +38,27 @@ protected: // ³»ºÎ ÇÔ¼ö
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
+	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
 protected: // º¯¼ö
-	CBaseObject * *m_ppObjects{ NULL };
+	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
-	CSkinnedMesh* m_pWeapons[2];
-	int m_nWeaponState{ 0 };
+	CMaterial	**m_ppMaterials{ NULL };
+	int m_nMaterials = 0;
 
+	CCamera *m_pCamera;
+
+	CPlayer **m_pPlayer;
+	int m_nPlayer;
+
+	CCreateMgr* m_pCreateMgr{ NULL };
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
-	CMaterial						*m_pMaterial{ NULL };
+	CMaterial		   *m_pMaterial{ NULL };
 #else
 	UINT8 *m_pMappedObjects{ NULL };
 #endif
-	UINT8 *m_pMappedBoundingBoxes{ NULL };
 
-	CHeightMapTerrain * m_pTerrain{ NULL };
 };

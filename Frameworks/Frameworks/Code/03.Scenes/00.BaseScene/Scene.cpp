@@ -83,13 +83,13 @@ void CScene::ProcessInput()
 
 	GetKeyboardState(pKeyBuffer);
 
+	bool continual = m_pCamera->OnProcessMouseInput(pKeyBuffer);
+	if(continual) continual = m_pCamera->OnProcessKeyInput(pKeyBuffer);
 	for (int i = 0; i < m_nShaders; ++i) {
-		m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
-
+		if(continual) continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
 
-	m_pCamera->OnProcessMouseInput(pKeyBuffer);
-	m_pCamera->OnProcessKeyInput(pKeyBuffer);
+
 }
 
 void CScene::AnimateObjects(float timeElapsed)
