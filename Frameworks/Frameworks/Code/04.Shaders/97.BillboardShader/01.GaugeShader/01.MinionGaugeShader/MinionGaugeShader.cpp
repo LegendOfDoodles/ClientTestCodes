@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "BillboardShader.h"
+#include "MinionGaugeShader.h"
 #include "05.Objects/95.Billboard/Billboard.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
@@ -13,18 +13,18 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CBillboardShader::CBillboardShader(CCreateMgr *pCreateMgr)
+CMinionHPGaugeShader::CMinionHPGaugeShader(CCreateMgr *pCreateMgr)
 	: CShader(pCreateMgr)
 {
 }
 
-CBillboardShader::~CBillboardShader()
+CMinionHPGaugeShader::~CMinionHPGaugeShader()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CBillboardShader::ReleaseUploadBuffers()
+void CMinionHPGaugeShader::ReleaseUploadBuffers()
 {
 	if (!m_ppObjects) return;
 
@@ -37,7 +37,7 @@ void CBillboardShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CBillboardShader::UpdateShaderVariables()
+void CMinionHPGaugeShader::UpdateShaderVariables()
 {
 #if USE_INSTANCING
 	m_pCommandList->SetGraphicsRootShaderResourceView(2,
@@ -60,7 +60,7 @@ void CBillboardShader::UpdateShaderVariables()
 #endif
 }
 
-void CBillboardShader::AnimateObjects(float timeElapsed)
+void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
@@ -68,7 +68,7 @@ void CBillboardShader::AnimateObjects(float timeElapsed)
 	}
 }
 
-void CBillboardShader::Render(CCamera *pCamera)
+void CMinionHPGaugeShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 #if USE_BATCH_MATERIAL
@@ -85,19 +85,37 @@ void CBillboardShader::Render(CCamera *pCamera)
 #endif
 }
 
-void CBillboardShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CMinionHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-
+	/*
+	if (GetAsyncKeyState('N'))
+	{
+	MakeHPGauge(m_pCreateMgr, Minion_Species::Blue_Up);
+	}
+	if (GetAsyncKeyState('B'))
+	{
+	MakeHPGauge(m_pCreateMgr, Minion_Species::Blue_Down);
+	}
+	if (GetAsyncKeyState('V'))
+	{
+	MakeHPGauge(m_pCreateMgr, Minion_Species::Red_Up);
+	}
+	if (GetAsyncKeyState('C'))
+	{
+	MakeHPGauge(m_pCreateMgr, Minion_Species::Red_Down);
+	}
+	*/
+	return false;
 }
 
-void CBillboardShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
+bool CMinionHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
-
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-D3D12_INPUT_LAYOUT_DESC CBillboardShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC CMinionHPGaugeShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
@@ -126,7 +144,7 @@ D3D12_INPUT_LAYOUT_DESC CBillboardShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CBillboardShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
 	//./Code/04.Shaders/99.GraphicsShader/
 #if USE_INSTANCING
@@ -144,7 +162,7 @@ D3D12_SHADER_BYTECODE CBillboardShader::CreateVertexShader(ID3DBlob **ppShaderBl
 #endif
 }
 
-D3D12_SHADER_BYTECODE CBillboardShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
@@ -153,7 +171,7 @@ D3D12_SHADER_BYTECODE CBillboardShader::CreatePixelShader(ID3DBlob **ppShaderBlo
 		ppShaderBlob));
 }
 
-void CBillboardShader::CreateShader(CCreateMgr *pCreateMgr)
+void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -163,7 +181,7 @@ void CBillboardShader::CreateShader(CCreateMgr *pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
+void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
@@ -194,7 +212,7 @@ void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffer
 
 }
 
-void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CMinionHPGaugeShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	CCamera *pCamera = (CCamera*)pContext;
 
@@ -264,7 +282,7 @@ void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 }
 
 
-void CBillboardShader::ReleaseShaderVariables()
+void CMinionHPGaugeShader::ReleaseShaderVariables()
 {
 #if USE_INSTANCING
 	if (!m_pInstanceBuffer) return;
@@ -281,7 +299,7 @@ void CBillboardShader::ReleaseShaderVariables()
 	CShader::ReleaseShaderVariables();
 }
 
-void CBillboardShader::ReleaseObjects()
+void CMinionHPGaugeShader::ReleaseObjects()
 {
 	if (!m_ppObjects) return;
 

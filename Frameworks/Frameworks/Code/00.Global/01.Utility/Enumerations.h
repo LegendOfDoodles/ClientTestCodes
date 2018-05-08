@@ -7,6 +7,18 @@
 /// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
+enum Shaders {
+	SkyBox,
+	Terrain,
+	Minion,
+	Arrow,
+	StaticObject,
+	Player,
+	UI,
+	HPGauge,
+	Count
+};
+
 enum States {
 	Idle,
 	Walk,

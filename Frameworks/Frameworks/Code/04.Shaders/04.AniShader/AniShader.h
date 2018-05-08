@@ -33,6 +33,9 @@ public: // 공개 함수
 	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() {  return m_nObjects; }
 
+	ObjectList GetBlueList() { return m_blueObjects; }
+	ObjectList GetRedList()  { return m_redObjects; }
+
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
@@ -62,6 +65,7 @@ protected: // 변수
 
 	ObjectList m_blueObjects;
 	ObjectList m_redObjects;
+	ObjectList m_hpObjects;
 
 	bool m_indexArr[MAX_MINION]{ false };
 

@@ -1,8 +1,9 @@
 #include "stdafx.h"
-#include "GaugeShader.h"
+#include "PlayerGaugeShader.h"
 #include "05.Objects/95.Billboard/Billboard.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
+#include "05.Objects/08.Player/Player.h"
 
 /// <summary>
 /// 목적: UI HP 테스트 쉐이더
@@ -13,18 +14,19 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CHPGaugeShader::CHPGaugeShader(CCreateMgr * pCreateMgr)
+CPlayerHPGaugeShader::CPlayerHPGaugeShader(CCreateMgr * pCreateMgr)
 	: CShader(pCreateMgr)
 {
+	m_pCreateMgr = pCreateMgr;
 }
 
-CHPGaugeShader::~CHPGaugeShader()
+CPlayerHPGaugeShader::~CPlayerHPGaugeShader()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-void CHPGaugeShader::ReleaseUploadBuffers()
+void CPlayerHPGaugeShader::ReleaseUploadBuffers()
 {
 	if (!m_ppObjects) return;
 
@@ -34,15 +36,10 @@ void CHPGaugeShader::ReleaseUploadBuffers()
 	}
 #if USE_BATCH_MATERIAL
 	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i<m_nMaterials; ++i)
-			m_ppMaterials[i]->ReleaseUploadBuffers();
-	}
 #endif
 }
 
-void CHPGaugeShader::UpdateShaderVariables()
+void CPlayerHPGaugeShader::UpdateShaderVariables()
 {
 #if USE_INSTANCING
 	m_pCommandList->SetGraphicsRootShaderResourceView(2,
@@ -65,24 +62,23 @@ void CHPGaugeShader::UpdateShaderVariables()
 #endif
 }
 
-void CHPGaugeShader::AnimateObjects(float timeElapsed)
+void CPlayerHPGaugeShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
+
+		XMFLOAT3 HPGaugePosition = m_pPlayer[j]->GetPosition();
+		HPGaugePosition.y += 35.f;
+		dynamic_cast<CHPGaugeObjects*>(m_ppObjects[j])->SetPosition(HPGaugePosition);
 	}
 }
 
-void CHPGaugeShader::Render(CCamera * pCamera)
+void CPlayerHPGaugeShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 #if USE_BATCH_MATERIAL
 	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i<m_nMaterials; ++i)
-			m_ppMaterials[i]->UpdateShaderVariables();
-	}
 #endif
 
 #if USE_INSTANCING
@@ -95,19 +91,20 @@ void CHPGaugeShader::Render(CCamera * pCamera)
 #endif
 }
 
-bool CHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
+bool CPlayerHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	return false;
+	
+	return true;
 }
 
-bool CHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
+bool CPlayerHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
 	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 내부함수
-D3D12_INPUT_LAYOUT_DESC CHPGaugeShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC CPlayerHPGaugeShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
@@ -136,7 +133,7 @@ D3D12_INPUT_LAYOUT_DESC CHPGaugeShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_BLEND_DESC CHPGaugeShader::CreateBlendState()
+D3D12_BLEND_DESC CPlayerHPGaugeShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC blendDesc;
 	::ZeroMemory(&blendDesc, sizeof(D3D12_BLEND_DESC));
@@ -157,7 +154,7 @@ D3D12_BLEND_DESC CHPGaugeShader::CreateBlendState()
 	return(blendDesc);
 }
 
-D3D12_SHADER_BYTECODE CHPGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
 {
 #if USE_INSTANCING
 	return(CShader::CompileShaderFromFile(
@@ -174,7 +171,7 @@ D3D12_SHADER_BYTECODE CHPGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlo
 #endif
 }
 
-D3D12_SHADER_BYTECODE CHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
@@ -183,7 +180,7 @@ D3D12_SHADER_BYTECODE CHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob
 		ppShaderBlob));
 }
 
-void CHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
+void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -193,7 +190,7 @@ void CHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
+void CPlayerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
@@ -222,52 +219,96 @@ void CHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers
 #endif
 }
 
-void CHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
-	m_nObjects = 1;
-	m_ppObjects = new CBaseObject*[m_nObjects];
+	m_pCamera = (CCamera*)pContext;
 
-	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D_ARRAY, 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Terrain/Color.dds", 0);
+	m_nObjects = m_nPlayer;
+	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
-	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);
+	m_pMaterial = new CMaterial(pCreateMgr);
 
+	m_pMaterial->Initialize(pCreateMgr);
+	m_pMaterial = Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CBillboardObject *pMiniMap{ NULL };
+	CHPGaugeObjects *pBillboardObject = NULL;
 
-	for (int i = 0; i < m_nObjects; ++i)
-	{
-		CMaterial *pMaterial = new CMaterial(pCreateMgr);
-		pMaterial->Initialize(pCreateMgr);
-		pMaterial->SetTexture(pTexture);
+	for (int i = 0; i < m_nObjects; ++i) {
+		pBillboardObject = new CHPGaugeObjects(pCreateMgr);
+		pBillboardObject->SetMaterial(m_pMaterial);
+		pBillboardObject->SetCamera(m_pCamera);
 
-		pMiniMap = new CBillboardObject(pCreateMgr);
-		pMiniMap->SetMaterial(pMaterial);
-		pMiniMap->SetCamera(m_pCamera);
+		XMFLOAT3 HPGaugePosition;
+		
+		HPGaugePosition.x = m_pPlayer[i]->GetPosition().x;
+		HPGaugePosition.y = m_pPlayer[i]->GetPosition().y + 35.f;
+		HPGaugePosition.z = m_pPlayer[i]->GetPosition().z;
 
-		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		pBillboardObject->SetPosition(HPGaugePosition);
 
-		m_ppObjects[i] = pMiniMap;
+		pBillboardObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+
+		m_ppObjects[i] = pBillboardObject;
 	}
 }
 
-void CHPGaugeShader::ReleaseShaderVariables()
+void CPlayerHPGaugeShader::MakeHPGauge(CCreateMgr * pCreateMgr, Minion_Species kind)
 {
+	////printf("%d\n", m_blueObjects.size());
+	//UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+
+	//CBaseObject *pObjects;
+
+	//if (kind == Minion_Species::Blue_Up)
+	//{
+	//}
+	//else if (kind == Minion_Species::Blue_Down)
+	//{
+	//}
+	//else if (kind == Minion_Species::Red_Up)
+	//{
+	//}
+	//else if (kind == Minion_Species::Red_Down)
+	//{
+	//}
+
+	//CBillboardObject *pBillboardObject;
+
+	//pBillboardObject = new CBillboardObject(pCreateMgr);
+	//pBillboardObject->SetMaterial(m_pMaterial);
+	//pBillboardObject->SetCamera(m_pCamera);
+
+	////pBillboardObject->SetPosition();
+
+	//pBillboardObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize));
+
+}
+
+void CPlayerHPGaugeShader::ReleaseShaderVariables()
+{
+#if USE_INSTANCING
+	if (!m_pInstanceBuffer) return;
+
+	m_pInstanceBuffer->Unmap(0, NULL);
+	Safe_Release(m_pInstanceBuffer);
+#else
 	if (!m_pConstBuffer) return;
 
 	m_pConstBuffer->Unmap(0, NULL);
 	Safe_Release(m_pConstBuffer);
+#endif
 
 	CShader::ReleaseShaderVariables();
 }
 
-void CHPGaugeShader::ReleaseObjects()
+void CPlayerHPGaugeShader::ReleaseObjects()
 {
 	if (m_ppObjects)
 	{

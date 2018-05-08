@@ -8,6 +8,7 @@
 #include "04.Shaders/04.AniShader/AniShader.h"
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
+#include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
@@ -85,8 +86,24 @@ void CScene::ProcessInput()
 
 	for (int i = 0; i < m_nShaders; ++i) {
 		m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
-
 	}
+
+	/*if (GetAsyncKeyState('N'))
+	{
+		((CHPGaugeShader*)m_ppShaders[6])->SetBlueList(((CAniShader *)m_ppShaders[2])->GetBlueList());
+	}
+	if (GetAsyncKeyState('B'))
+	{
+		((CHPGaugeShader*)m_ppShaders[6])->SetBlueList(((CAniShader *)m_ppShaders[2])->GetBlueList());
+	}
+	if (GetAsyncKeyState('V'))
+	{
+		((CHPGaugeShader*)m_ppShaders[6])->SetRedList(((CAniShader *)m_ppShaders[2])->GetRedList());
+	}
+	if (GetAsyncKeyState('C'))
+	{
+		((CHPGaugeShader*)m_ppShaders[6])->SetRedList(((CAniShader *)m_ppShaders[2])->GetRedList());
+	}*/
 
 	m_pCamera->OnProcessMouseInput(pKeyBuffer);
 	m_pCamera->OnProcessKeyInput(pKeyBuffer);
@@ -148,7 +165,8 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
-		m_ppShaders[5]->Initialize(m_pCreateMgr, m_pCamera);
+		m_ppShaders[Shaders::UI]->Initialize(m_pCreateMgr, m_pCamera);
+		m_ppShaders[Shaders::HPGauge]->Initialize(m_pCreateMgr, m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -231,16 +249,17 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 7;
+	m_nShaders = Shaders::Count;
 	m_ppShaders = new CShader*[m_nShaders];
-	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
+	m_ppShaders[Shaders::SkyBox] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
-	m_ppShaders[1] = pTerrainShader;
-	m_ppShaders[2] = new CAniShader(pCreateMgr);
-	m_ppShaders[3] = new CArrowShader(pCreateMgr);
-	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
-	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
-	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
+	m_ppShaders[Shaders::Terrain] = pTerrainShader;
+	m_ppShaders[Shaders::Minion] = new CAniShader(pCreateMgr);
+	m_ppShaders[Shaders::Arrow] = new CArrowShader(pCreateMgr);
+	m_ppShaders[Shaders::StaticObject] = new CStaticObjectShader(pCreateMgr);
+	m_ppShaders[Shaders::Player] = new CPlayerShader(pCreateMgr);
+	m_ppShaders[Shaders::UI] = new CUIObjectShader(pCreateMgr);
+	m_ppShaders[Shaders::HPGauge] = new CPlayerHPGaugeShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -252,23 +271,27 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
-	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[Shaders::Player])->GetnObject());
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[Shaders::Player])->GetCollisionObjects());
+
+	m_ppShaders[Shaders::UI]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 	m_pCollisionManager = new CCollisionManager();
 
-	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
+	CAniShader* pAniS = (CAniShader *)m_ppShaders[Shaders::Minion];
 	int nColliderObject = pAniS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
-		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);
+		m_pCollisionManager->AddCollider(((CCollisionObject **)pAniS->GetCollisionObjects())[i]);
 	}
 
-	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
+	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[Shaders::Player];
 	nColliderObject = pPlayerS->GetnObject();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
-		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
+		m_pCollisionManager->AddCollider(((CCollisionObject **)pPlayerS->GetCollisionObjects())[i]);
 	}
 
 	BuildLights();
@@ -349,7 +372,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			// Status 창 띄우기 수도 코드
 			// 현재 6번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
 			// 그 해당 오브젝트에 대한 정보를 출력
-			m_ppShaders[6]->OnStatus(pIntersectedObject->GetType());
+			m_ppShaders[Shaders::UI]->OnStatus(pIntersectedObject->GetType());
 
 			//m_Network.StartRecv(m_pSelectedObject);
 		}

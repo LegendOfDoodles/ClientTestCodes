@@ -12,7 +12,7 @@
 // 생성자, 소멸자
 CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr)
 {
-	//CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 5.f, 5.0f, 0.f);
+	//CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 50.f, 50.0f, 0.f);
 	//SetMesh(0, pRectMesh);
 
 
@@ -167,8 +167,8 @@ CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr)
 	: CBillboardObject(pCreateMgr)
 {
 	// HP게이지 Mesh
-	//CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 5.f, 5.0f, 0.f);
-	//SetMesh(0, pRectMesh);
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 40.f, 5.0f, 0.f);
+	SetMesh(0, pRectMesh);
 
 
 	CreateShaderVariables(pCreateMgr);
@@ -180,7 +180,7 @@ CHPGaugeObjects::~CHPGaugeObjects()
 
 void CHPGaugeObjects::Animate(float fTimeElapsed)
 {
-	// 미니언 위치 따라가기
+	// 플레이어 위치 따라가기
 
 	CBillboardObject::Animate(fTimeElapsed);
 }
