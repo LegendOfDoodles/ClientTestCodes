@@ -76,6 +76,9 @@ public: // 공개 함수
 	int GetState() { return m_state; }
 	void SetState(States newState) { m_state = newState; }
 
+	int GetType() {	return m_ObjectType; };
+	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
+
 	bool IsCollider() { return false; }
 
 	bool HaveWalkState() { return false; }
@@ -111,6 +114,8 @@ protected: // 변수
 	UINT8				*m_pMappedObject{ NULL };
 
 	States m_state{ States::Idle };
+
+	ObjectType m_ObjectType{ ObjectType::SwordPlayer };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

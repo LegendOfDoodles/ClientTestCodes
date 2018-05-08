@@ -8,3 +8,18 @@ enum States {
 	Attack,
 	Die
 };
+
+enum ObjectType {
+	SwordPlayer,
+	StaffPlayer,
+	BowPlayer,
+	SwordMinion,
+	StaffMinion,
+	BowMinion,
+	Loyde,
+	CAM,
+	GOLEM,
+	FirstTower,
+	SecnondTower,
+	Nexus
+};

@@ -22,10 +22,22 @@ protected:	// 내부 함수
 
 protected:	// 변수
 	States m_CurrState = States::Idle;
-
+	
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/
+
+	ObjectType m_ObjectType = ObjectType::SwordMinion;
+
+	/*
+	0. SwordPlayer, 1. StaffPlayer,   2. BowPlayer,
+	3. SwordMinion,	4. StaffMinion,   5. BowMinion,
+	6. Loyde,   	7. CAM,     	  8. GOLEM,
+	9. FirstTower,  10. SecnondTower, 11. Nexus
+	*/
+
+	CommonInfo m_StatusInfo;
+
 };
 
 class CSwordMinion : public CMinion

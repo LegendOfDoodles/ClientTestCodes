@@ -37,6 +37,9 @@ public: // 공개 함수
 
 	bool HasBoundingBox() { return m_nPipelineStates > 1; }
 
+	virtual void OnStatus(int ObjectType);
+	virtual void OffStatus();
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 	virtual CBaseObject * * GetCollisionObjects() { return nullptr; }

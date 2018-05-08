@@ -347,9 +347,9 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			printf("selected!\n");
 
 			// Status 창 띄우기 수도 코드
-			// 현재 4번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
+			// 현재 6번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
 			// 그 해당 오브젝트에 대한 정보를 출력
-			//m_ppShaders[5]->OnStatus(pIntersectedObject->GetType());
+			m_ppShaders[6]->OnStatus(pIntersectedObject->GetType());
 
 			//m_Network.StartRecv(m_pSelectedObject);
 		}
@@ -358,12 +358,10 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	if (wParam == MK_RBUTTON)
 	{
 		GenerateLayEndWorldPosition(pickPosition, xmf4x4View);
-
-
 	}
 	else if (wParam == MK_LBUTTON) {
 		// 바닥 선택시 Status창 Off
-		//m_ppShaders[5]->OffStatus();
+		//m_ppShaders[6]->OffStatus();
 	}
 }
 

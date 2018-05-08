@@ -1,6 +1,45 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
 
+struct PlayerInfo
+{
+	float maxHP;
+	float HP;
+
+	float maxMP;
+	float MP;
+
+	float Atk;
+	float Def;
+
+	UINT Level;
+
+	UINT MaxExp;
+	UINT Exp;
+};
+
+struct CommonInfo
+{
+	float maxHP;
+	float HP;
+
+	float Atk;
+	float Def;
+
+	UINT Exp;
+};
+
+struct StaticInfo 
+{
+	float maxHP;
+	float HP;
+
+	float Atk;
+	float Def;
+
+	UINT Exp;
+};
+
 class CCollisionObject : public CBaseObject
 {
 public:	// 持失切, 社瑚切

@@ -47,7 +47,7 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 			}
 		}
 	}
-	std::cout << cnt << "\n";
+	//std::cout << cnt << "\n";
 }
 
 
