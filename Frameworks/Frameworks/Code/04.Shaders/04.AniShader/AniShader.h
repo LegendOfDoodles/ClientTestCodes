@@ -1,6 +1,7 @@
 #pragma once
 #include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
+#include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 
 typedef std::list<CPathEdge> Path;
 typedef std::list<CBaseObject*> ObjectList;
@@ -11,7 +12,7 @@ class CHeightMapTerrain;
 class CAniShader : public CShader
 {
 public: // 생성자, 소멸자
-	CAniShader(CCreateMgr *pCreateMgr);
+	CAniShader(CCreateMgr *pCreateMgr, CCollisionManager* pCollisionMgr);
 	virtual ~CAniShader();
 
 public: // 공개 함수
@@ -30,7 +31,7 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
-	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
+	virtual CBaseObject ** GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() {  return m_nObjects; }
 
 protected: // 내부 함수
@@ -81,4 +82,5 @@ protected: // 변수
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
+	CCollisionManager* m_pCollisionMgr{ NULL };
 };

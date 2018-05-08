@@ -228,15 +228,17 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_pCommandList = pCreateMgr->GetCommandList();
 
 	m_pCamera = new  CAOSCamera();
-
 	m_pCamera->Initialize(pCreateMgr);
+
+	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
+	m_pCollisionManager = new CCollisionManager();
 
 	m_nShaders = 7;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
-	m_ppShaders[2] = new CAniShader(pCreateMgr);
+	m_ppShaders[2] = new CAniShader(pCreateMgr, m_pCollisionManager);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
@@ -251,21 +253,10 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
-
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
 
-	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
-	m_pCollisionManager = new CCollisionManager();
-
-	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
-	int nColliderObject = pAniS->GetObjectCount();
-	for (int i = 0; i < nColliderObject; ++i)
-	{
-		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);
-	}
-
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
-	nColliderObject = pPlayerS->GetnObject();
+	int nColliderObject = pPlayerS->GetnObject();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);

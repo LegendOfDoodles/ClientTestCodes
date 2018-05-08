@@ -188,6 +188,7 @@ void CHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
+	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);

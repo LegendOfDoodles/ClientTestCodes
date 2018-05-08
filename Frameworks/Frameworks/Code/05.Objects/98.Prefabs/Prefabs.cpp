@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-07
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -191,6 +191,27 @@ CMaterial * Materials::CreateSquareSoapDispenserMaterial(CCreateMgr * pCreateMgr
 
 ////////////////////////////////////////////////////////////////////////
 // Environment
+CMaterial * Materials::CreateEraserMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Eraser/Diffuse.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Eraser/Normal.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Eraser/RoughnessAndMetallic.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Eraser/Specular.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, true,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
 CMaterial * Materials::CreateDiceMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
@@ -401,6 +422,29 @@ CMaterial * Materials::CreateSquareHeadPhoneMaterial(CCreateMgr * pCreateMgr, D3
 	return pMaterial;
 }
 
+CMaterial * Materials::CreateBook1Material(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Book1/Diffuse.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Book1/Normal.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Book1/RoughnessAndMetallic.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Environment/Book1/Specular.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, true,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Minion
 CMaterial * Materials::CreateMinionMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
@@ -409,6 +453,29 @@ CMaterial * Materials::CreateMinionMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_D
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Minion/Normal.dds", 1);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Minion/RoughnessAndMetallic.dds", 2);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Minion/Specular.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, true,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Player
+CMaterial * Materials::CreatePlayerMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Diffuse.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Normal.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/RoughnessAndMetallic.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Specular.dds", 3);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

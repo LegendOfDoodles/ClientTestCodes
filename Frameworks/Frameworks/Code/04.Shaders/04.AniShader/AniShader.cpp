@@ -15,9 +15,10 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CAniShader::CAniShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
+CAniShader::CAniShader(CCreateMgr *pCreateMgr, CCollisionManager* pCollisionMgr) : CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
+	m_pCollisionMgr = pCollisionMgr;
 }
 
 CAniShader::~CAniShader()
@@ -338,6 +339,7 @@ void CAniShader::CreateShader(CCreateMgr *pCreateMgr)
 		m_ppPipelineStates[i] = NULL;
 	}
 
+	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -753,6 +755,8 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	}
 
 	m_pCreateMgr->ExecuteCommandList();
+
+	m_pCollisionMgr->AddCollider(pMinionObject);
 
 	if(kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) m_blueObjects.back()->ReleaseUploadBuffers();
 	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) m_redObjects.back()->ReleaseUploadBuffers();

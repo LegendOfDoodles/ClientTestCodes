@@ -92,24 +92,25 @@ void CStaticObjectShader::AnimateObjects(float timeElapsed)
 
 void CStaticObjectShader::Render(CCamera *pCamera)
 {
-	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i<m_nMaterials; ++i)
-			m_ppMaterials[i]->UpdateShaderVariables();
-	}
-#endif
-
-#if USE_INSTANCING
-	m_ppObjects[0]->Render(pCamera, m_nObjects);
-#else
 	for (int j = 0; j < m_nObjects; j++)
 	{
+		for (int i = 0; i < m_nHeaps; ++i)
+		{
+			if (i == m_nHeaps - 1)
+			{
+				CShader::Render(pCamera, i);
+				m_ppMaterials[i]->UpdateShaderVariables();
+				break;
+			}
+			else if (j >= m_meshCounts[i] && j < m_meshCounts[i + 1])
+			{
+				CShader::Render(pCamera, i);
+				m_ppMaterials[i]->UpdateShaderVariables();
+				break;
+			}
+		}
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
-#endif
 }
 
 void CStaticObjectShader::RenderBoundingBox(CCamera * pCamera)
@@ -228,6 +229,7 @@ void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 		m_ppPipelineStates[i] = NULL;
 	}
 
+	m_nHeaps = 17;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -278,7 +280,7 @@ void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuf
 void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-
+	
 	CTransformImporter transformInporter;
 
 	transformInporter.LoadMeshData("Resource//Data/Setting.txt");
@@ -289,16 +291,33 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4);
-	//CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
 	CreateShaderVariables(pCreateMgr, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
-	//CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
+	for (int i = 0; i < m_nHeaps; ++i)
+	{
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
+	}
 
 #if USE_BATCH_MATERIAL
-	m_nMaterials = 1;
+	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateEraserMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreateDuckMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateKeumOneBoMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreatePencilCaseMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_ppMaterials[4] = Materials::CreateNailClipperMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreateSquareHeadPhoneMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_ppMaterials[6] = Materials::CreateShortPencilMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
+	m_ppMaterials[7] = Materials::CreateLongPencilMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
+	m_ppMaterials[8] = Materials::CreatePaperCupMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[8], &m_psrvGPUDescriptorStartHandle[8]);
+	m_ppMaterials[9] = Materials::CreateRoundHeadPhoneMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[9], &m_psrvGPUDescriptorStartHandle[9]);
+	m_ppMaterials[10] = Materials::CreatePenCoverMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[10], &m_psrvGPUDescriptorStartHandle[10]);
+	m_ppMaterials[11] = Materials::CreatePenMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[11], &m_psrvGPUDescriptorStartHandle[11]);
+	m_ppMaterials[12] = Materials::CreateDiceMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[12], &m_psrvGPUDescriptorStartHandle[12]);
+	m_ppMaterials[13] = Materials::CreateBook1Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[13], &m_psrvGPUDescriptorStartHandle[13]);
+	m_ppMaterials[14] = Materials::CreateBook1Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[14], &m_psrvGPUDescriptorStartHandle[14]);
+	m_ppMaterials[15] = Materials::CreateBook1Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[15], &m_psrvGPUDescriptorStartHandle[15]);
+	m_ppMaterials[16] = Materials::CreateBook1Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[16], &m_psrvGPUDescriptorStartHandle[16]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -325,6 +344,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	pMeshes[16]=  new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[3]);
 	int cnt = 0;
 	for (int i = 0; i < 17; ++i) {
+		m_meshCounts[i] = transformInporter.m_iKindMeshCnt[i];
 		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i]; ++j) {
 			XMFLOAT3 pos = transformInporter.m_Transform[cnt].pos;
 			XMFLOAT3 rot = transformInporter.m_Transform[cnt].rotation;
@@ -341,7 +361,12 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			m_ppObjects[cnt]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
 			++cnt;
 		}
-	}	
+	}
+
+	m_meshCounts[0] = 0;
+	for (int i = 1; i < 17; ++i) {
+		m_meshCounts[i] = m_meshCounts[i - 1] + transformInporter.m_iKindMeshCnt[i - 1];
+	}
 }
 
 void CStaticObjectShader::ReleaseObjects()
