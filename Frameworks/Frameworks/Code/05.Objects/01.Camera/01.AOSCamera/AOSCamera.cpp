@@ -89,29 +89,25 @@ bool CAOSCamera::OnProcessMouseInput(UCHAR * pKeyBuffer)
 	ScreenToClient(m_hWnd, &cursorPos);
 
 	// 마우스를 이용한 이동
-	if (cursorPos.x < m_edgeSize.left)
+	if (cursorPos.x < m_edgeSize.left && m_xmf3Position.x > 0)
 	{
 		m_speedVector.x = (float)(cursorPos.x - m_edgeSize.left) / Window_Edge_Power;
 		m_direction |= DIR_LEFT;
-		printf("x:   %f \n", m_speedVector.x);
 	}
-	if (cursorPos.x > m_edgeSize.right)
+	if (cursorPos.x > m_edgeSize.right && m_xmf3Position.x < TERRAIN_SIZE_WIDTH)
 	{
 		m_speedVector.x = (float)(cursorPos.x - m_edgeSize.right) / Window_Edge_Power;
 		m_direction |= DIR_RIGHT;
-		printf("x:   %f \n", m_speedVector.x);
 	}
-	if (cursorPos.y < m_edgeSize.top)
+	if (cursorPos.y < m_edgeSize.top && m_xmf3Position.z < TERRAIN_SIZE_HEIGHT)
 	{
 		m_speedVector.y = (float)(m_edgeSize.top - cursorPos.y) / Window_Edge_Power;
 		m_direction |= DIR_UP;
-		printf("y:   %f \n", m_speedVector.y);
 	}
-	if (cursorPos.y > m_edgeSize.bottom)
+	if (cursorPos.y > m_edgeSize.bottom && m_xmf3Position.z > 0)
 	{
 		m_speedVector.y = (float)(m_edgeSize.bottom - cursorPos.y) / Window_Edge_Power;
 		m_direction |= DIR_DOWN;
-		printf("y:   %f \n", m_speedVector.y);
 	}
 
 	return true;
@@ -130,22 +126,22 @@ bool CAOSCamera::OnProcessKeyInput(UCHAR * pKeyBuffer)
 	}
 
 	// 키보드를 이용한 이동
-	if (pKeyBuffer[VK_LEFT] & 0xF0)
+	if (pKeyBuffer[VK_LEFT] & 0xF0 && m_xmf3Position.x > 0)
 	{
 		m_speedVector.x = -1;
 		m_direction |= DIR_LEFT;
 	}
-	if (pKeyBuffer[VK_RIGHT] & 0xF0)
+	if (pKeyBuffer[VK_RIGHT] & 0xF0 && m_xmf3Position.x < TERRAIN_SIZE_WIDTH)
 	{
 		m_speedVector.x = 1;
 		m_direction |= DIR_RIGHT;
 	}
-	if (pKeyBuffer[VK_UP] & 0xF0)
+	if (pKeyBuffer[VK_UP] & 0xF0 && m_xmf3Position.z < TERRAIN_SIZE_HEIGHT)
 	{
 		m_speedVector.y = 1;
 		m_direction |= DIR_UP;
 	}
-	if (pKeyBuffer[VK_DOWN] & 0xF0)
+	if (pKeyBuffer[VK_DOWN] & 0xF0 && m_xmf3Position.z > 0)
 	{
 		m_speedVector.y = -1;
 		m_direction |= DIR_DOWN;

@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -425,7 +425,7 @@ void CShader::CreateBoundingBoxShader(CCreateMgr * pCreateMgr)
 	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
 }
 
-void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 }
 
