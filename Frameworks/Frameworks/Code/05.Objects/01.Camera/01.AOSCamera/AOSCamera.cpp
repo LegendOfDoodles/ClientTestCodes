@@ -6,7 +6,7 @@
 /// 목적: In Game 에서 사용할 카메라
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -44,20 +44,19 @@ void CAOSCamera::Initialize(CCreateMgr * pCreateMgr)
 	CreateShaderVariables(pCreateMgr);
 }
 
-void CAOSCamera::Move(DWORD direction, float distance, bool bVelocity)
+void CAOSCamera::Move(float fTimeElapsed, bool bVelocity)
 {
-	if (direction)
+	if (m_direction)
 	{
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 
-		if (direction & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(0, 0, 1), distance);
-		if (direction & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(0, 0, 1), -distance);
+		float upDown = m_speedVector.y * m_speed * fTimeElapsed;
+		if (m_direction & DIR_UP | m_direction & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(0, 0, 1), upDown);
 
-		if (direction & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(1, 0, 0), distance);
-		if (direction & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(1, 0, 0), -distance);
+		float leftRight = m_speedVector.x * m_speed * fTimeElapsed;
+		if (m_direction & DIR_LEFT | m_direction & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(1, 0, 0), leftRight);
 
-		if (direction & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(0, 1, 0), distance);
-		if (direction & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, XMFLOAT3(0, 1, 0), -distance);
+		m_direction = NULL;
 
 		CCamera::Move(xmf3Shift);
 	}
@@ -85,34 +84,73 @@ bool CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 bool CAOSCamera::OnProcessMouseInput(UCHAR * pKeyBuffer)
 {
 	POINT cursorPos;
-	DWORD direction{ NULL };
 
 	GetCursorPos(&cursorPos);
 	ScreenToClient(m_hWnd, &cursorPos);
 
+	// 마우스를 이용한 이동
 	if (cursorPos.x < m_edgeSize.left)
 	{
-		direction |= DIR_LEFT;
+		m_speedVector.x = (float)(cursorPos.x - m_edgeSize.left) / Window_Edge_Power;
+		m_direction |= DIR_LEFT;
+		printf("x:   %f \n", m_speedVector.x);
 	}
 	if (cursorPos.x > m_edgeSize.right)
 	{
-		direction |= DIR_RIGHT;
+		m_speedVector.x = (float)(cursorPos.x - m_edgeSize.right) / Window_Edge_Power;
+		m_direction |= DIR_RIGHT;
+		printf("x:   %f \n", m_speedVector.x);
 	}
 	if (cursorPos.y < m_edgeSize.top)
 	{
-		direction |= DIR_FORWARD;
+		m_speedVector.y = (float)(m_edgeSize.top - cursorPos.y) / Window_Edge_Power;
+		m_direction |= DIR_UP;
+		printf("y:   %f \n", m_speedVector.y);
 	}
 	if (cursorPos.y > m_edgeSize.bottom)
 	{
-		direction |= DIR_BACKWARD;
+		m_speedVector.y = (float)(m_edgeSize.bottom - cursorPos.y) / Window_Edge_Power;
+		m_direction |= DIR_DOWN;
+		printf("y:   %f \n", m_speedVector.y);
 	}
-	m_direction = direction;
 
 	return true;
 }
 
 bool CAOSCamera::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	// 카메라 속도 조절
+	if (pKeyBuffer[VK_OEM_4] & 0xF0) // '['
+	{
+		if (m_speed > MIN_CAMERA_SPEED) m_speed -= 10.0f;
+	}
+	if (pKeyBuffer[VK_OEM_6] & 0xF0) // ']'
+	{
+		if (m_speed < MAX_CAMERA_SPEED) m_speed += 10.0f;
+	}
+
+	// 키보드를 이용한 이동
+	if (pKeyBuffer[VK_LEFT] & 0xF0)
+	{
+		m_speedVector.x = -1;
+		m_direction |= DIR_LEFT;
+	}
+	if (pKeyBuffer[VK_RIGHT] & 0xF0)
+	{
+		m_speedVector.x = 1;
+		m_direction |= DIR_RIGHT;
+	}
+	if (pKeyBuffer[VK_UP] & 0xF0)
+	{
+		m_speedVector.y = 1;
+		m_direction |= DIR_UP;
+	}
+	if (pKeyBuffer[VK_DOWN] & 0xF0)
+	{
+		m_speedVector.y = -1;
+		m_direction |= DIR_DOWN;
+	}
+
 	return true;
 }
 
