@@ -7,13 +7,8 @@ typedef std::list<CBaseObject*> ObjectList;
 
 class CMaterial;
 class CHeightMapTerrain;
-<<<<<<< HEAD
 class CCollisionManager;
 class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
-=======
-
-class CAniShader : public CShader
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 {
 public: // 생성자, 소멸자
 	CAniShader(CCreateMgr *pCreateMgr);

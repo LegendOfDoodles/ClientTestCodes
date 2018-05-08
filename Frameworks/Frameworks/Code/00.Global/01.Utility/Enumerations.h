@@ -15,12 +15,10 @@ enum States {
 	Die
 };
 
-<<<<<<< HEAD
 enum CollisionType {
 	SPHERE,
 	SECTERFORM,
 };
-=======
 
 enum Minion_Species {
 	Blue_Up,
@@ -45,4 +43,3 @@ enum ObjectType {
 	Nexus
 };
 
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6

@@ -49,7 +49,6 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 			}
 		}
 	}
-<<<<<<< HEAD
 }
 
 void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pCol, float data1, float data2)
@@ -112,9 +111,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	default:
 		break;
 	}
-=======
-	//std::cout << cnt << "\n";
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
+
 }
 
 

@@ -353,17 +353,11 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 				pPlayer->SetBoundingMesh(pCreateMgr,
-<<<<<<< HEAD
-					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
-					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-				pPlayer->CBaseObject::SetPosition(0,0,0);
-=======
+
 					CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
 					0, 0, -CONVERT_PaperUnit_to_InG(8));
 				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
 				pPlayer->CBaseObject::SetPosition(0, 0, 2500);
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 
 				pPlayer->SetSkeleton(pSIdle);
 

@@ -4,11 +4,8 @@
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
-<<<<<<< HEAD
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
-=======
 #include "06.Meshes/01.Mesh/MeshImporter.h"
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 
 /// <summary>
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
@@ -236,8 +233,6 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
-<<<<<<< HEAD
-=======
 		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Up);
 	}
 	if (GetAsyncKeyState('B') & 0x0001)
@@ -251,7 +246,6 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	if (GetAsyncKeyState('C') & 0x0001)
 	{
 		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Down);
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 	}
 	return true;
 }
@@ -400,11 +394,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-<<<<<<< HEAD
-	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
-=======
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
-
+	//int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 	//int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
 
 	//m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
@@ -711,99 +701,6 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	switch (m_kind)
 	{
-<<<<<<< HEAD
-		for (int z = 0; z <= zObjects; z++)
-		{
-			for (int x = 0; x <= xObjects; x++)
-			{
-				switch (z)
-				{
-				case 0:
-					pMinionObject = new CSwordMinion(pCreateMgr, 2);
-					break;
-				case 1:
-					pMinionObject = new CMagicMinion(pCreateMgr, 2);
-					break;
-				case 2:
-					pMinionObject = new CBowMinion(pCreateMgr, 2);
-					break;
-				default:
-					pMinionObject = new CSwordMinion(pCreateMgr, 2);
-					break;
-				}
-#if !USE_INSTANCING
-				pMinionObject->SetMesh(0, pMinionMesh);
-				switch (z)
-				{
-				case 0:
-					pMinionObject->SetMesh(1, m_pWeapons[0]);
-					break;
-				case 1:
-					pMinionObject->SetMesh(1, m_pWeapons[1]);
-					break;
-				case 2:
-					pMinionObject->SetMesh(1, m_pWeapons[2]);
-					break;
-				default:
-					pMinionObject->SetMesh(1, m_pWeapons[0]);
-					break;
-				}
-#endif
-#if !USE_BATCH_MATERIAL
-				pRotatingObject->SetMaterial(pCubeMaterial);
-#endif
-				pMinionObject->SetBoundingMesh(pCreateMgr,
-					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
-					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(0));
-				pMinionObject->CBaseObject::SetPosition(x * 50, y * 100, z * 50 + 2500);
-
-				switch (z)
-				{
-				case 0:
-					pMinionObject->SetSkeleton(pSIdle);
-					pMinionObject->SetSkeleton(pSAtk1);
-					pMinionObject->SetSkeleton(pSAtk2);
-					pMinionObject->SetSkeleton(pSWalkStart);
-					pMinionObject->SetSkeleton(pSWalk);
-					break;
-				case 1:
-					pMinionObject->SetSkeleton(pMIdle);
-					pMinionObject->SetSkeleton(pMAtk1);
-					pMinionObject->SetSkeleton(pMAtk2);
-					pMinionObject->SetSkeleton(pMWalkStart);
-					pMinionObject->SetSkeleton(pMWalk);
-					break;
-				case 2:
-					pMinionObject->SetSkeleton(pBIdle);
-					pMinionObject->SetSkeleton(pBAtk);
-					pMinionObject->SetSkeleton(pBWalkStart);
-					pMinionObject->SetSkeleton(pBWalk);
-					break;
-				default:
-					pMinionObject->SetSkeleton(pSIdle);
-					pMinionObject->SetSkeleton(pSAtk1);
-					pMinionObject->SetSkeleton(pSAtk2);
-					pMinionObject->SetSkeleton(pSWalkStart);
-					pMinionObject->SetSkeleton(pSWalk);
-
-					break;
-				}
-				pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
-				pMinionObject->SetSkeleton(pDie);
-				pMinionObject->SetTerrain(m_pTerrain);
-
-				pMinionObject->Rotate(90, 0, 0);
-
-
-#if !USE_INSTANCING
-				pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-				pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
-#endif
-				m_ppObjects[i++] = pMinionObject;
-			}
-		}
-=======
 	case 0:
 		pMinionObject->SetSkeleton(pSIdle);
 		pMinionObject->SetSkeleton(pSAtk1);
@@ -824,7 +721,6 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 		pMinionObject->SetSkeleton(pBWalkStart);
 		pMinionObject->SetSkeleton(pBWalk);
 		break;
->>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 	}
 	pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
 	pMinionObject->SetSkeleton(pDie);
