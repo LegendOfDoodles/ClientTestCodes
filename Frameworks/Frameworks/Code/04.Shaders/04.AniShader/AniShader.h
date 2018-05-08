@@ -56,7 +56,7 @@ protected: // 내부 함수
 
 protected: // 변수
 	CBaseObject * *m_ppObjects{ NULL };
-	int m_nObjects = 0;
+	int m_nObjects{ 0 };
 
 	int m_kind{ 0 };
 

@@ -242,7 +242,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
 
-	for (int i = 0; i < m_nShaders; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}

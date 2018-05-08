@@ -4,6 +4,7 @@
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
+#include "06.Meshes/01.Mesh/MeshImporter.h"
 
 /// <summary>
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
@@ -233,6 +234,18 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	{
 		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Up);
 	}
+	if (GetAsyncKeyState('B') & 0x0001)
+	{
+		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Down);
+	}
+	if (GetAsyncKeyState('V') & 0x0001)
+	{
+		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Up);
+	}
+	if (GetAsyncKeyState('C') & 0x0001)
+	{
+		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Down);
+	}
 	return true;
 }
 
@@ -375,12 +388,10 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-	
-	CreatePathes();
 
-	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
+	//int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
 
-	m_nObjects = 0;// (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
+	//m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	//m_ppObjects = new CBaseObject*[m_nObjects];
 
 #if USE_INSTANCING
@@ -403,49 +414,51 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
 	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Sword.meshinfo");
 	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Staff.meshinfo");
 	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Bow2.meshinfo");
 
-
-
-	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
-	CSkeleton *pSAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
-	CSkeleton *pSAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
-	CSkeleton *pSWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
-	CSkeleton *pSWalk = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
-
-	CSkeleton *pBIdle = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
-	CSkeleton *pBAtk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
-	CSkeleton *pBWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
-	CSkeleton *pBWalk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
-
-	CSkeleton *pMIdle = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
-	CSkeleton *pMAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
-	CSkeleton *pMAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
-	CSkeleton *pMWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
-	CSkeleton *pMWalk = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
-
-
-	CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
-
-
-	pMinionMesh->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
-
-
-	float fxPitch = 12.0f * 5.f;
-	float fyPitch = 12.0f * 5.f;
-	float fzPitch = 12.0f * 5.f;
-
-	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinion *pMinionObject = NULL;
-	
 	for (int j = 0; j < 3; ++j) {
 		m_pWeapons[j]->AddRef();
 	}
+
+	CreatePathes();
+	SpawnMinion(pCreateMgr, Minion_Species::Data_Prepare);
+	//CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
+
+	//CSkeleton *pSIdle = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
+	//CSkeleton *pSAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
+	//CSkeleton *pSAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
+	//CSkeleton *pSWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
+	//CSkeleton *pSWalk = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
+
+	//CSkeleton *pBIdle = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
+	//CSkeleton *pBAtk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
+	//CSkeleton *pBWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
+	//CSkeleton *pBWalk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
+
+	//CSkeleton *pMIdle = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
+	//CSkeleton *pMAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
+	//CSkeleton *pMAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
+	//CSkeleton *pMWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
+	//CSkeleton *pMWalk = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
+
+
+	//CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
+
+
+	//pMinionMesh->SetBoundingBox(
+	//	XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
+	//	XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
+
+
+	//float fxPitch = 12.0f * 5.f;
+	//float fyPitch = 12.0f * 5.f;
+	//float fzPitch = 12.0f * 5.f;
+
+	//UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+	//CMinion *pMinionObject = NULL;
+
 
 //	for (int y = 0; y <= yObjects; y++)
 //	{
@@ -542,16 +555,16 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 //		}
 //	}
 
-#if USE_INSTANCING
-	m_ppObjects[0]->SetMesh(0, pCubeMesh);
-#endif
-
-	Safe_Delete(pSIdle);
-	Safe_Delete(pSAtk1);
-	Safe_Delete(pSAtk2);
-	Safe_Delete(pSWalkStart);
-	Safe_Delete(pSWalk);
-	Safe_Delete(pDie);
+//#if USE_INSTANCING
+//	m_ppObjects[0]->SetMesh(0, pCubeMesh);
+//#endif
+//
+	//Safe_Delete(pSIdle);
+	//Safe_Delete(pSAtk1);
+	//Safe_Delete(pSAtk2);
+	//Safe_Delete(pSWalkStart);
+	//Safe_Delete(pSWalk);
+	//Safe_Delete(pDie);
 }
 
 void CAniShader::ReleaseObjects()
@@ -583,10 +596,18 @@ void CAniShader::ReleaseObjects()
 
 void CAniShader::CreatePathes()
 {
-	m_pathes[Minion_Species::Blue_Up].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
-	m_pathes[Minion_Species::Blue_Down].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
-	m_pathes[Minion_Species::Red_Up].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
-	m_pathes[Minion_Species::Red_Down].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
+	CTransformImporter transformInporter;
+	transformInporter.LoadMeshData("Resource/Data/Pathes.txt");
+	for (int i = 0, cnt = 0; i < 4; ++i) 
+	{
+		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i] - 1; ++j, ++cnt) 
+		{
+			XMFLOAT3 from = transformInporter.m_Transform[cnt].pos;
+			XMFLOAT3 to = transformInporter.m_Transform[cnt + 1].pos;
+			m_pathes[i].push_back(CPathEdge(XMFLOAT2(CONVERT_Unit_to_InG(from.x), CONVERT_Unit_to_InG(from.z)), XMFLOAT2(CONVERT_Unit_to_InG(to.x), CONVERT_Unit_to_InG(to.z))));
+		}
+		++cnt;
+	}
 }
 
 int CAniShader::GetPossibleIndex()
@@ -604,8 +625,6 @@ int CAniShader::GetPossibleIndex()
 
 void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 {
-	m_pCreateMgr->ResetCommandList();
-
 	static bool setFirst{ true };
 	static CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
 	static UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -636,8 +655,10 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
 		pMinionMesh->AddRef();
 		setFirst = false;
+		return;
 	}
 
+	m_pCreateMgr->ResetCommandList();
 	CMinion *pMinionObject{ NULL };
 
 	switch (m_kind)
@@ -712,33 +733,27 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	if (kind == Minion_Species::Blue_Up)
 	{
-		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		pMinionObject->CBaseObject::SetPosition(335, 50, 2787);
 		m_blueObjects.emplace_back(pMinionObject);
 	}
 	else if (kind == Minion_Species::Blue_Down)
 	{
-		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		pMinionObject->CBaseObject::SetPosition(335, 0, 2238);
 		m_blueObjects.emplace_back(pMinionObject);
 	}
 	else if (kind == Minion_Species::Red_Up)
 	{
-		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		pMinionObject->CBaseObject::SetPosition(9669, 0, 2739);
 		m_redObjects.emplace_back(pMinionObject);
 	}
 	else if (kind == Minion_Species::Red_Down)
 	{
-		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		pMinionObject->CBaseObject::SetPosition(9663, 0, 2254);
 		m_redObjects.emplace_back(pMinionObject);
 	}
 
 	m_pCreateMgr->ExecuteCommandList();
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
-	{
-		(*iter)->ReleaseUploadBuffers();
-	}
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-	{
-		(*iter)->ReleaseUploadBuffers();
-	}
+	if(kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) m_blueObjects.back()->ReleaseUploadBuffers();
+	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) m_redObjects.back()->ReleaseUploadBuffers();
 }
