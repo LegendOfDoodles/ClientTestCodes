@@ -270,7 +270,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
 	}
-
+	pAniS->SetCollisionManager(m_pCollisionManager);
 	BuildLights();
 }
 

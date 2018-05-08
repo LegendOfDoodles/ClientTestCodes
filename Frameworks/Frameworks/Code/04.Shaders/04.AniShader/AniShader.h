@@ -2,7 +2,7 @@
 
 class CMaterial;
 class CHeightMapTerrain;
-
+class CCollisionManager;
 class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
 {
 public: // 생성자, 소멸자
@@ -32,6 +32,8 @@ public: // 공개 함수
 		return m_nObjects;
 	}
 
+	void SetCollisionManager(CCollisionManager* manager);
+
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
@@ -59,6 +61,8 @@ protected: // 변수
 	UINT8 *m_pMappedObjects{ NULL };
 #endif
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
-
+	
+	CCollisionManager* pColManager{NULL};
+	
 	CHeightMapTerrain * m_pTerrain{ NULL };
 };

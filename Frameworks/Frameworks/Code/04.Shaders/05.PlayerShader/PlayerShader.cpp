@@ -317,21 +317,16 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 	CSkinnedMesh *pPlayerMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player.meshinfo");
-	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Sword.meshinfo");
-	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Staff.meshinfo");
-	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Bow2.meshinfo");
+	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
+	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword.meshinfo");
 
 
-
-	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Idle.aniinfo");
+	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
 	CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Start_Walk.aniinfo");
 	CSkeleton *pSWalk = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Walk.aniinfo");
 	CSkeleton *pSSlash = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Slash.aniinfo");
 	CSkeleton *pSSmash = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Smash.aniinfo");
 	CSkeleton *pSDispute = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Dispute.aniinfo");
-
-	CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
-	
 
 
 	pPlayerMesh->SetBoundingBox(
@@ -342,7 +337,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CPlayer *pPlayer = NULL;
 
-	for (int j = 0; j < 3; ++j) {
+	for (int j = 0; j <2; ++j) {
 		m_pWeapons[j]->AddRef();
 	}
 	pPlayer = new CPlayer(pCreateMgr, 2);
@@ -351,7 +346,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_INSTANCING
 				pPlayer->SetMesh(0, pPlayerMesh);
 				
-				pPlayer->SetMesh(1, m_pWeapons[0]);
+				pPlayer->SetMesh(1, m_pWeapons[1]);
 				
 #endif
 #if !USE_BATCH_MATERIAL
@@ -361,14 +356,9 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
 				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-				pPlayer->CBaseObject::SetPosition(0, 0, 2500);
+				pPlayer->CBaseObject::SetPosition(0,0,0);
 
-					pPlayer->SetSkeleton(pSIdle);
-					pPlayer->SetSkeleton(pSSmash);
-					pPlayer->SetSkeleton(pSSlash);
-					pPlayer->SetSkeleton(pSSlash);
-					pPlayer->SetSkeleton(pSDispute);
-					pPlayer->SetSkeleton(pSWalk);
+				pPlayer->SetSkeleton(pSIdle);
 
 
 				pPlayer->SetSpeed(CONVERT_cm_to_InG(1.805));
@@ -393,7 +383,6 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	Safe_Delete(pSDispute);
 	Safe_Delete(pSStartWalk);
 	Safe_Delete(pSWalk);
-	Safe_Delete(pDie);
 }
 
 void CPlayerShader::ReleaseObjects()

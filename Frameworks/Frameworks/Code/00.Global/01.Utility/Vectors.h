@@ -10,7 +10,7 @@ using namespace DirectX;
 /// 최종 수정 날짜: 2018-05-04
 /// </summary>
 
-#define	PI		3.141592
+#define	PI		3.141593
 #define	EPSILON		1.0e-10f
 
 #define CLAMP(x, low, high) max(low, min(high, x))

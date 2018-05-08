@@ -8,3 +8,8 @@ enum States {
 	Attack,
 	Die
 };
+
+enum CollisionType {
+	SPHERE,
+	SECTERFORM,
+};

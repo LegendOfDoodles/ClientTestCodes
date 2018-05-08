@@ -14,8 +14,8 @@ public: // 공개 함수
 
 protected: // 내부 함수
 	void ResetCollisionLevel() {
-		m_xmf2CollisionLevel.x = floor(GetPosition().x/ (TERRAIN_SIZE_WIDTH / 100));
-		m_xmf2CollisionLevel.y = floor(GetPosition().z/ (TERRAIN_SIZE_WIDTH / 100));
+		m_xmf2CollisionLevel.x = floor(GetPosition().x/ (TERRAIN_SIZE_WIDTH / 50));
+		m_xmf2CollisionLevel.y = floor(GetPosition().z/ (TERRAIN_SIZE_WIDTH / 50));
 	}
 protected: // 변수
 	float m_fCollisionSize{ 1 };

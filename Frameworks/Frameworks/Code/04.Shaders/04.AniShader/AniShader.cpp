@@ -5,6 +5,7 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
+#include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 
 /// <summary>
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
@@ -152,9 +153,13 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
-
 	}
 	return true;
+}
+
+void CAniShader::SetCollisionManager(CCollisionManager * manager)
+{
+	pColManager = manager;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -296,7 +301,7 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-	int xObjects = 10, yObjects = 0, zObjects = 2, i = 0;
+	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
 
 	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
 	m_ppObjects = new CBaseObject*[m_nObjects];
@@ -411,8 +416,8 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pMinionObject->SetBoundingMesh(pCreateMgr,
 					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-				pMinionObject->CBaseObject::SetPosition(x * 100, y * 100, z * 100 + 3000);
+				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(0));
+				pMinionObject->CBaseObject::SetPosition(x * 50, y * 100, z * 50 + 2500);
 
 				switch (z)
 				{

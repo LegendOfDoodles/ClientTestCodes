@@ -1,5 +1,4 @@
 #pragma once
-
 class CCollisionObject;
 class CWayFinder;
 
@@ -12,6 +11,7 @@ struct CharacterStatus {
 };
 
 
+
 class CCollisionManager
 {
 	std::list<CCollisionObject*> m_lstColliders;
@@ -20,6 +20,8 @@ public:
 	CCollisionManager();
 	void AddCollider(CCollisionObject* pcol);
 	void Update(CWayFinder* pWayFinder);
+	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0);
+
 	~CCollisionManager();
 
 protected:
