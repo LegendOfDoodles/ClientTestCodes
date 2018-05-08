@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WayFinder.h"
 #include "00.Global/01.Utility/04.WayFinder/02.Astar/Astar.h"
-#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 
 /// <summary>
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
@@ -322,7 +322,7 @@ int CWayFinder::FindClosestNodeIndexWithPosition(const XMFLOAT2 & position)
 	return closestIndex;
 }
 
-void CWayFinder::AdjustValueByWallCollision(CAnimatedObject* collider, XMFLOAT3 & dir, float val)
+void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3 & dir, float val)
 {
 	XMFLOAT3 pos{ collider->GetPosition() };
 	XMFLOAT3 velocity{ Vector3::ScalarProduct(dir, val) };

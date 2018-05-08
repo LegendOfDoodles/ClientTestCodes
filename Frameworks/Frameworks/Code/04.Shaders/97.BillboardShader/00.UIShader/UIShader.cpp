@@ -33,7 +33,7 @@ void CUIObjectShader::ReleaseUploadBuffers()
 	{
 		m_ppObjects[j]->ReleaseUploadBuffers();
 #if USE_BATCH_MATERIAL
-		if (m_ppMaterials[j]) m_ppMaterials[j]->ReleaseUploadBuffers();
+		//if (m_ppMaterials[j]) m_ppMaterials[j]->ReleaseUploadBuffers();
 #endif
 	}
 
@@ -41,11 +41,12 @@ void CUIObjectShader::ReleaseUploadBuffers()
 
 void CUIObjectShader::UpdateShaderVariables()
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_TEXTURE_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)
 	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		CB_TEXTURE_INFO *pMappedObject = (CB_TEXTURE_INFO *)(m_pMappedObjects + (i * elementBytes));
+		pMappedObject->m_index = (i==0)?0:1;
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -66,7 +67,7 @@ void CUIObjectShader::Render(CCamera * pCamera)
 	for (int j = 0; j < m_nObjects; j++)
 	{
 #if USE_BATCH_MATERIAL
-		if (m_ppMaterials[j]) m_ppMaterials[j]->UpdateShaderVariables();
+	//	if (m_ppMaterials[j]) m_ppMaterials[j]->UpdateShaderVariables();
 #endif
 	
 		if (j == 3 && OnOFF) 
@@ -113,7 +114,11 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 			newCameraPos.x = (MinimapArea.x - cursorPos.x) * -1.736 * 20;
 			newCameraPos.y = m_pCamera->GetPosition().y;
 			newCameraPos.z = (MinimapArea.w - cursorPos.y) * 1.736 * 20;
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> master
 			m_pCamera->SetPosition(newCameraPos);
 		}
 
@@ -186,7 +191,7 @@ D3D12_SHADER_BYTECODE CUIObjectShader::CreateVertexShader(ID3DBlob ** ppShaderBl
 	//./Code/04.Shaders/99.GraphicsShader/
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTextured",
+		"VSTexturedUI",
 		"vs_5_1",
 		ppShaderBlob));
 }
@@ -195,7 +200,7 @@ D3D12_SHADER_BYTECODE CUIObjectShader::CreatePixelShader(ID3DBlob ** ppShaderBlo
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedUI",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -210,15 +215,15 @@ void CUIObjectShader::CreateShader(CCreateMgr * pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
+void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT elementBytes = ((sizeof(CB_TEXTURE_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		elementBytes * m_nObjects,
+		elementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -233,35 +238,41 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	
 	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
-	m_ppMaterials = new CMaterial*[m_nObjects];
+	//m_ppMaterials = new CMaterial*[m_nObjects];
 
-	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE_2D, 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 0);
+	CTexture *pTexture = new CTexture(2, RESOURCE_TEXTURE_2D_ARRAY, 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Terrain/Color.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/grey.dds", 1);
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_TEXTURE_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateShaderVariables(pCreateMgr);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
+	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
-	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);
+	CreateShaderResourceViews(pCreateMgr, pTexture, 11, false);
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CUIObject *pMiniMap = NULL;
-	CMaterial *pMaterial = NULL;
+	CUIObject *pMiniMap{ NULL };
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
 #if USE_BATCH_MATERIAL
-		pMaterial = new CMaterial(pCreateMgr);
+		/*pMaterial = new CMaterial(pCreateMgr);
 		pMaterial->Initialize(pCreateMgr);
 		pMaterial->SetTexture(pTexture);
-		m_ppMaterials[i] = pMaterial;
+		m_ppMaterials[i] = pMaterial;*/
 #endif
+		CMaterial *pMaterial = new CMaterial(pCreateMgr);
+		pMaterial->Initialize(pCreateMgr);
+		pMaterial->SetTexture(pTexture);
+
 		pMiniMap = new CUIObject(pCreateMgr, (Type)i);
+		pMiniMap->SetMaterial(pMaterial);
 		pMiniMap->SetCamera(m_pCamera);
 		pMiniMap->SetDistance(FRAME_BUFFER_WIDTH / 128);
 		pMiniMap->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+
 		m_ppObjects[i] = pMiniMap;
 	}
 }

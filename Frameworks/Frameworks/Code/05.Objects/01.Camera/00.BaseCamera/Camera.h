@@ -12,6 +12,11 @@
 #define DIR_UP 0x10
 #define DIR_DOWN 0x20
 
+#define DIR_LEFT_FAST 0x05
+#define DIR_RIGHT_FAST 0x09
+#define DIR_UP_FAST 0x11
+#define DIR_DOWN_FAST 0x21
+
 class CCreateMgr;
 
 struct VS_CB_CAMERA_INFO
@@ -35,10 +40,10 @@ public:	// 공개 함수
 
 	virtual void SetViewportsAndScissorRects();
 
-	virtual void Move(DWORD direction, float distance, bool bVelocity);
+	virtual void Move(float fTimeElapsed, bool bVelocity);
 	void Move(XMFLOAT3& xmf3Shift);
 	void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
-	void Update(float fTimeElapsed, bool bUpdateMove = true);
+	void Update(float fTimeElapsed);
 	virtual void SetLookAt(XMFLOAT3& xmf3LookAt);
 
 	void SetOffset(XMFLOAT3 xmf3Offset);
@@ -115,6 +120,8 @@ protected: // 변수
 
 	D3D12_VIEWPORT m_viewport;
 	D3D12_RECT m_scissorRect;
+
+	float m_speed{ 1500.0f };
 
 	DWORD m_direction{ NULL };
 	XMFLOAT3 m_rotation{ 0.0f, 0.0f, 0.0f };

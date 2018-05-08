@@ -2,11 +2,11 @@
 #include "02.Framework/00.Frame/Framework.h"
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
-#include "05.Objects/02.AnimatedObject/AnimatedObject.h"
+#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 
 class CCreateMgr;
 class CWayFinder;
-
+class CCollisionManager;
 struct LIGHT
 {
 	XMFLOAT4				m_color;
@@ -100,6 +100,9 @@ protected: // º¯¼ö
 	CWayFinder* m_pWayFinder{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
+
+	CCollisionManager* m_pCollisionManager{NULL};
+
 
 	Network m_Network;
 	

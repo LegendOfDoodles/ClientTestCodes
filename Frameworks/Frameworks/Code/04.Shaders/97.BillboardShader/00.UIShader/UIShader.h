@@ -5,6 +5,12 @@ class CBillboardObject;
 class CUIObject;
 class CMaterial;
 
+struct CB_TEXTURE_INFO
+{
+	XMFLOAT4X4 m_xmf4x4World;
+	int	m_index;
+};
+
 class CUIObjectShader : public CShader
 {
 public: // 생성자, 소멸자
@@ -31,7 +37,7 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
 
 	virtual void CreateShader(CCreateMgr *pCreateMgr);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 

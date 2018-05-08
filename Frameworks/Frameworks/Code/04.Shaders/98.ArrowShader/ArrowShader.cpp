@@ -101,7 +101,7 @@ void CArrowShader::CreateShader(CCreateMgr *pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CArrowShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
+void CArrowShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
 	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 

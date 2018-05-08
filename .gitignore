@@ -25,6 +25,13 @@
 *.la
 *.a
 *.lib
+*.idb
+*.pdb
+*.log
+*.tlog
+*.ilk
+*.iobj
+*.ipdb
 
 # Executables
 *.exe

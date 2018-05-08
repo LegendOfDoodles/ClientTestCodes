@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -287,13 +287,8 @@ void GetShaderResourceViewDesc(
 		pShaderResourceViewDesc->Texture2DArray.MostDetailedMip = 0;
 		pShaderResourceViewDesc->Texture2DArray.PlaneSlice = 0;
 		pShaderResourceViewDesc->Texture2DArray.ResourceMinLODClamp = 0.0f;
-
-		pShaderResourceViewDesc->Texture2DArray.MostDetailedMip = 0;
-		pShaderResourceViewDesc->Texture2DArray.MipLevels = -1;
 		pShaderResourceViewDesc->Texture2DArray.FirstArraySlice = 0;
 		pShaderResourceViewDesc->Texture2DArray.ArraySize = resourceDesc.DepthOrArraySize;
-		pShaderResourceViewDesc->Texture2DArray.PlaneSlice = 1;
-		pShaderResourceViewDesc->Texture2DArray.ResourceMinLODClamp = 0.0f;
 		break;
 	case RESOURCE_TEXTURE_CUBE: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize == 6)
 		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
@@ -430,7 +425,7 @@ void CShader::CreateBoundingBoxShader(CCreateMgr * pCreateMgr)
 	Safe_Delete_Array(pipelineStateDesc.InputLayout.pInputElementDescs);
 }
 
-void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 }
 

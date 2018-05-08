@@ -1,6 +1,6 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
-#include "05.Objects/04.SkyBox/SkyBox.h"
+#include "05.Objects/05.SkyBox/SkyBox.h"
 
 class CSkyBoxShader : public CShader
 {
@@ -23,7 +23,7 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
 
 	virtual void CreateShader(CCreateMgr *pCreateMgr);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
