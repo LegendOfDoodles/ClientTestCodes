@@ -259,38 +259,6 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	}
 }
 
-void CPlayerHPGaugeShader::MakeHPGauge(CCreateMgr * pCreateMgr, Minion_Species kind)
-{
-	////printf("%d\n", m_blueObjects.size());
-	//UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-
-	//CBaseObject *pObjects;
-
-	//if (kind == Minion_Species::Blue_Up)
-	//{
-	//}
-	//else if (kind == Minion_Species::Blue_Down)
-	//{
-	//}
-	//else if (kind == Minion_Species::Red_Up)
-	//{
-	//}
-	//else if (kind == Minion_Species::Red_Down)
-	//{
-	//}
-
-	//CBillboardObject *pBillboardObject;
-
-	//pBillboardObject = new CBillboardObject(pCreateMgr);
-	//pBillboardObject->SetMaterial(m_pMaterial);
-	//pBillboardObject->SetCamera(m_pCamera);
-
-	////pBillboardObject->SetPosition();
-
-	//pBillboardObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize));
-
-}
-
 void CPlayerHPGaugeShader::ReleaseShaderVariables()
 {
 #if USE_INSTANCING

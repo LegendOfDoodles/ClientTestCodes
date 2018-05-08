@@ -87,24 +87,7 @@ void CMinionHPGaugeShader::Render(CCamera *pCamera)
 
 bool CMinionHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	/*
-	if (GetAsyncKeyState('N'))
-	{
-	MakeHPGauge(m_pCreateMgr, Minion_Species::Blue_Up);
-	}
-	if (GetAsyncKeyState('B'))
-	{
-	MakeHPGauge(m_pCreateMgr, Minion_Species::Blue_Down);
-	}
-	if (GetAsyncKeyState('V'))
-	{
-	MakeHPGauge(m_pCreateMgr, Minion_Species::Red_Up);
-	}
-	if (GetAsyncKeyState('C'))
-	{
-	MakeHPGauge(m_pCreateMgr, Minion_Species::Red_Down);
-	}
-	*/
+	
 	return false;
 }
 

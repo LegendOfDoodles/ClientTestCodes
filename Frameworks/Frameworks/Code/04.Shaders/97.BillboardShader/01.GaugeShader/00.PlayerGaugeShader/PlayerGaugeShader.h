@@ -38,8 +38,6 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
-	void MakeHPGauge(CCreateMgr *pCreateMgr, Minion_Species kind);
-
 	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 

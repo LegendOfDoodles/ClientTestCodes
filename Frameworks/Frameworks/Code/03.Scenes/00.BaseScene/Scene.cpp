@@ -88,23 +88,6 @@ void CScene::ProcessInput()
 		m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
 
-	/*if (GetAsyncKeyState('N'))
-	{
-		((CHPGaugeShader*)m_ppShaders[6])->SetBlueList(((CAniShader *)m_ppShaders[2])->GetBlueList());
-	}
-	if (GetAsyncKeyState('B'))
-	{
-		((CHPGaugeShader*)m_ppShaders[6])->SetBlueList(((CAniShader *)m_ppShaders[2])->GetBlueList());
-	}
-	if (GetAsyncKeyState('V'))
-	{
-		((CHPGaugeShader*)m_ppShaders[6])->SetRedList(((CAniShader *)m_ppShaders[2])->GetRedList());
-	}
-	if (GetAsyncKeyState('C'))
-	{
-		((CHPGaugeShader*)m_ppShaders[6])->SetRedList(((CAniShader *)m_ppShaders[2])->GetRedList());
-	}*/
-
 	m_pCamera->OnProcessMouseInput(pKeyBuffer);
 	m_pCamera->OnProcessKeyInput(pKeyBuffer);
 }
@@ -384,7 +367,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	}
 	else if (wParam == MK_LBUTTON) {
 		// 바닥 선택시 Status창 Off
-		//m_ppShaders[6]->OffStatus();
+		//m_ppShaders[Shaders::UI]->OffStatus();
 	}
 }
 
