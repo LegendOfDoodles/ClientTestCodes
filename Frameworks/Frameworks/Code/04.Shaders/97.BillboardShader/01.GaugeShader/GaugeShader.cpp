@@ -224,6 +224,8 @@ void CHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers
 
 void CHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
+	
+
 	m_nObjects = 1;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 

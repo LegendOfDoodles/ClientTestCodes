@@ -15,14 +15,13 @@ enum States {
 	Die
 };
 
-<<<<<<< HEAD
 enum Minion_Species {
 	Blue_Up,
 	Blue_Down,
 	Red_Up,
 	Red_Down
 };
-=======
+
 enum ObjectType {
 	SwordPlayer,
 	StaffPlayer,
@@ -37,4 +36,3 @@ enum ObjectType {
 	SecnondTower,
 	Nexus
 };
->>>>>>> 용선

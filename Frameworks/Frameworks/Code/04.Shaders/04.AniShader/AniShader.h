@@ -55,7 +55,7 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
+	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
 	int m_kind{ 0 };

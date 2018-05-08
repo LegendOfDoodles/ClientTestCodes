@@ -732,7 +732,7 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	}
 
 	m_pCreateMgr->ExecuteCommandList();
-
+	
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->ReleaseUploadBuffers();
