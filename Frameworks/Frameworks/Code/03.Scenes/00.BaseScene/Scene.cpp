@@ -258,7 +258,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_pCollisionManager = new CCollisionManager();
 
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
-	int nColliderObject = pAniS->GetnObject();
+	int nColliderObject = pAniS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);

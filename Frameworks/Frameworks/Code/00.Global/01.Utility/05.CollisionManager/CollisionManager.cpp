@@ -42,12 +42,14 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 						vec3 = Vector3::Normalize(vec3);
 						pWayFinder->AdjustValueByWallCollision((*i), vec3, length *sizeB / (sizeA + sizeB));
 						pWayFinder->AdjustValueByWallCollision((*j), vec3, -length * sizeB / (sizeA + sizeB));
+						(*i)->RegenerateLookAt();
+						(*j)->RegenerateLookAt();
 					}
 				}
 			}
 		}
 	}
-	std::cout << cnt << "\n";
+	//std::cout << cnt << "\n";
 }
 
 

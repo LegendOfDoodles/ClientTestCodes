@@ -1,9 +1,14 @@
 #pragma once
+#include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
+#include "02.Framework/01.CreateMgr/CreateMgr.h"
+
+typedef std::list<CPathEdge> Path;
+typedef std::list<CBaseObject*> ObjectList;
 
 class CMaterial;
 class CHeightMapTerrain;
 
-class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
+class CAniShader : public CShader
 {
 public: // 생성자, 소멸자
 	CAniShader(CCreateMgr *pCreateMgr);
@@ -25,12 +30,8 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
-	virtual CBaseObject * * GetCollisionObjects() {
-		return m_ppObjects;
-	}
-	int GetnObject() {
-		return m_nObjects;
-	}
+	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
+	int GetObjectCount() {  return m_nObjects; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -45,9 +46,26 @@ protected: // 내부 함수
 
 	virtual void ReleaseObjects();
 
+	void CreatePathes();
+
+	int GetPossibleIndex();
+	void SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind);
+
+	void SetPossibleIndex(int idx) { m_indexArr[idx] = true; }
+	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
+
 protected: // 변수
 	CBaseObject * *m_ppObjects{ NULL };
 	int m_nObjects = 0;
+
+	int m_kind{ 0 };
+
+	ObjectList m_blueObjects;
+	ObjectList m_redObjects;
+
+	bool m_indexArr[MAX_MINION]{ false };
+
+	Path m_pathes[4];
 
 	CSkinnedMesh* m_pWeapons[3];
 	int m_nWeaponState{ 0 };
@@ -61,4 +79,6 @@ protected: // 변수
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
+
+	CCreateMgr* m_pCreateMgr{ NULL };
 };

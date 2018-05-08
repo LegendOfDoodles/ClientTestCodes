@@ -2,7 +2,6 @@
 #include "AniShader.h"
 #include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/06.Minion/Minion.h"
-#include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
 
@@ -17,6 +16,7 @@
 // 持失切, 社瑚切
 CAniShader::CAniShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
 {
+	m_pCreateMgr = pCreateMgr;
 }
 
 CAniShader::~CAniShader()
@@ -52,6 +52,27 @@ void CAniShader::UpdateShaderVariables()
 #else
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		XMFLOAT4X4 tmp[128];
+		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		XMFLOAT4X4 tmp[128];
+		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+	}
+
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
@@ -69,6 +90,21 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 {
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
+
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
+
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+	}
+
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + (i * boundingBoxElementBytes));
@@ -80,6 +116,14 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 
 void CAniShader::AnimateObjects(float timeElapsed)
 {
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		(*iter)->Animate(timeElapsed);
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		(*iter)->Animate(timeElapsed);
+	}
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
@@ -96,6 +140,14 @@ void CAniShader::Render(CCamera *pCamera)
 #if USE_INSTANCING
 	m_ppObjects[0]->Render(pCamera, m_nObjects);
 #else
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		(*iter)->Render(pCamera);
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		(*iter)->Render(pCamera);
+	}
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
@@ -106,7 +158,14 @@ void CAniShader::Render(CCamera *pCamera)
 void CAniShader::RenderBoundingBox(CCamera * pCamera)
 {
 	CShader::RenderBoundingBox(pCamera);
-
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		(*iter)->RenderBoundingBox(pCamera);
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		(*iter)->RenderBoundingBox(pCamera);
+	}
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->RenderBoundingBox(pCamera);
@@ -121,6 +180,26 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 	nearHitDistance = FLT_MAX;
 	float hitDistance = FLT_MAX;
 	CBaseObject *pSelectedObject{ NULL };
+
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+		if (intersected && (hitDistance < nearHitDistance))
+		{
+			nearHitDistance = hitDistance;
+			pSelectedObject = (*iter);
+		}
+	}
+
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+		if (intersected && (hitDistance < nearHitDistance))
+		{
+			nearHitDistance = hitDistance;
+			pSelectedObject = (*iter);
+		}
+	}
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
@@ -152,7 +231,7 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
-
+		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Up);
 	}
 	return true;
 }
@@ -296,10 +375,13 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-	int xObjects = 10, yObjects = 0, zObjects = 2, i = 0;
+	
+	CreatePathes();
 
-	m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
-	m_ppObjects = new CBaseObject*[m_nObjects];
+	int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
+
+	m_nObjects = 0;// (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
+	//m_ppObjects = new CBaseObject*[m_nObjects];
 
 #if USE_INSTANCING
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
@@ -360,106 +442,105 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CMinion *pMinionObject = NULL;
-
+	
 	for (int j = 0; j < 3; ++j) {
 		m_pWeapons[j]->AddRef();
 	}
 
-
-	for (int y = 0; y <= yObjects; y++)
-	{
-		for (int z = 0; z <= zObjects; z++)
-		{
-			for (int x = 0; x <= xObjects; x++)
-			{
-				switch (z)
-				{
-				case 0:
-					pMinionObject = new CSwordMinion(pCreateMgr, 2);
-					break;
-				case 1:
-					pMinionObject = new CMagicMinion(pCreateMgr, 2);
-					break;
-				case 2:
-					pMinionObject = new CBowMinion(pCreateMgr, 2);
-					break;
-				default:
-					pMinionObject = new CSwordMinion(pCreateMgr, 2);
-					break;
-				}
-#if !USE_INSTANCING
-				pMinionObject->SetMesh(0, pMinionMesh);
-				switch (z)
-				{
-				case 0:
-					pMinionObject->SetMesh(1, m_pWeapons[0]);
-					break;
-				case 1:
-					pMinionObject->SetMesh(1, m_pWeapons[1]);
-					break;
-				case 2:
-					pMinionObject->SetMesh(1, m_pWeapons[2]);
-					break;
-				default:
-					pMinionObject->SetMesh(1, m_pWeapons[0]);
-					break;
-				}
-#endif
-#if !USE_BATCH_MATERIAL
-				pRotatingObject->SetMaterial(pCubeMaterial);
-#endif
-				pMinionObject->SetBoundingMesh(pCreateMgr,
-					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
-					0, 0, -CONVERT_PaperUnit_to_InG(4));
-				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-				pMinionObject->CBaseObject::SetPosition(x * 100, y * 100, z * 100 + 3000);
-
-				switch (z)
-				{
-				case 0:
-					pMinionObject->SetSkeleton(pSIdle);
-					pMinionObject->SetSkeleton(pSAtk1);
-					pMinionObject->SetSkeleton(pSAtk2);
-					pMinionObject->SetSkeleton(pSWalkStart);
-					pMinionObject->SetSkeleton(pSWalk);
-					break;
-				case 1:
-					pMinionObject->SetSkeleton(pMIdle);
-					pMinionObject->SetSkeleton(pMAtk1);
-					pMinionObject->SetSkeleton(pMAtk2);
-					pMinionObject->SetSkeleton(pMWalkStart);
-					pMinionObject->SetSkeleton(pMWalk);
-					break;
-				case 2:
-					pMinionObject->SetSkeleton(pBIdle);
-					pMinionObject->SetSkeleton(pBAtk);
-					pMinionObject->SetSkeleton(pBWalkStart);
-					pMinionObject->SetSkeleton(pBWalk);
-					break;
-				default:
-					pMinionObject->SetSkeleton(pSIdle);
-					pMinionObject->SetSkeleton(pSAtk1);
-					pMinionObject->SetSkeleton(pSAtk2);
-					pMinionObject->SetSkeleton(pSWalkStart);
-					pMinionObject->SetSkeleton(pSWalk);
-
-					break;
-				}
-				pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
-				pMinionObject->SetSkeleton(pDie);
-				pMinionObject->SetTerrain(m_pTerrain);
-
-				pMinionObject->Rotate(90, 0, 0);
-
-
-#if !USE_INSTANCING
-				pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-				pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
-#endif
-				m_ppObjects[i++] = pMinionObject;
-			}
-		}
-	}
+//	for (int y = 0; y <= yObjects; y++)
+//	{
+//		for (int z = 0; z <= zObjects; z++)
+//		{
+//			for (int x = 0; x <= xObjects; x++)
+//			{
+//				switch (z)
+//				{
+//				case 0:
+//					pMinionObject = new CSwordMinion(pCreateMgr, 2);
+//					break;
+//				case 1:
+//					pMinionObject = new CMagicMinion(pCreateMgr, 2);
+//					break;
+//				case 2:
+//					pMinionObject = new CBowMinion(pCreateMgr, 2);
+//					break;
+//				default:
+//					pMinionObject = new CSwordMinion(pCreateMgr, 2);
+//					break;
+//				}
+//#if !USE_INSTANCING
+//				pMinionObject->SetMesh(0, pMinionMesh);
+//				switch (z)
+//				{
+//				case 0:
+//					pMinionObject->SetMesh(1, m_pWeapons[0]);
+//					break;
+//				case 1:
+//					pMinionObject->SetMesh(1, m_pWeapons[1]);
+//					break;
+//				case 2:
+//					pMinionObject->SetMesh(1, m_pWeapons[2]);
+//					break;
+//				default:
+//					pMinionObject->SetMesh(1, m_pWeapons[0]);
+//					break;
+//				}
+//#endif
+//#if !USE_BATCH_MATERIAL
+//				pRotatingObject->SetMaterial(pCubeMaterial);
+//#endif
+//				pMinionObject->SetBoundingMesh(pCreateMgr,
+//					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
+//					0, 0, -CONVERT_PaperUnit_to_InG(4));
+//				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
+//				pMinionObject->CBaseObject::SetPosition(x * 100, y * 100, z * 100 + 3000);
+//
+//				switch (z)
+//				{
+//				case 0:
+//					pMinionObject->SetSkeleton(pSIdle);
+//					pMinionObject->SetSkeleton(pSAtk1);
+//					pMinionObject->SetSkeleton(pSAtk2);
+//					pMinionObject->SetSkeleton(pSWalkStart);
+//					pMinionObject->SetSkeleton(pSWalk);
+//					break;
+//				case 1:
+//					pMinionObject->SetSkeleton(pMIdle);
+//					pMinionObject->SetSkeleton(pMAtk1);
+//					pMinionObject->SetSkeleton(pMAtk2);
+//					pMinionObject->SetSkeleton(pMWalkStart);
+//					pMinionObject->SetSkeleton(pMWalk);
+//					break;
+//				case 2:
+//					pMinionObject->SetSkeleton(pBIdle);
+//					pMinionObject->SetSkeleton(pBAtk);
+//					pMinionObject->SetSkeleton(pBWalkStart);
+//					pMinionObject->SetSkeleton(pBWalk);
+//					break;
+//				default:
+//					pMinionObject->SetSkeleton(pSIdle);
+//					pMinionObject->SetSkeleton(pSAtk1);
+//					pMinionObject->SetSkeleton(pSAtk2);
+//					pMinionObject->SetSkeleton(pSWalkStart);
+//					pMinionObject->SetSkeleton(pSWalk);
+//
+//					break;
+//				}
+//				pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
+//				pMinionObject->SetSkeleton(pDie);
+//				pMinionObject->SetTerrain(m_pTerrain);
+//
+//				pMinionObject->Rotate(90, 0, 0);
+//
+//
+//#if !USE_INSTANCING
+//				pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+//				pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+//#endif
+//				m_ppObjects[i++] = pMinionObject;
+//			}
+//		}
+//	}
 
 #if USE_INSTANCING
 	m_ppObjects[0]->SetMesh(0, pCubeMesh);
@@ -475,6 +556,17 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CAniShader::ReleaseObjects()
 {
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		delete (*iter);
+	}
+	m_blueObjects.clear();
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		delete (*iter);
+	}
+	m_redObjects.clear();
+
 	if (m_ppObjects)
 	{
 		for (int j = 0; j < m_nObjects; j++)
@@ -487,4 +579,166 @@ void CAniShader::ReleaseObjects()
 #if USE_BATCH_MATERIAL
 	Safe_Delete(m_pMaterial);
 #endif
+}
+
+void CAniShader::CreatePathes()
+{
+	m_pathes[Minion_Species::Blue_Up].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
+	m_pathes[Minion_Species::Blue_Down].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
+	m_pathes[Minion_Species::Red_Up].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
+	m_pathes[Minion_Species::Red_Down].push_back(CPathEdge(XMFLOAT2(350, 2784), XMFLOAT2(557, 3035)));
+}
+
+int CAniShader::GetPossibleIndex()
+{
+	for (int idx = 0; idx < MAX_MINION; ++idx)
+	{
+		if (!m_indexArr[idx])
+		{
+			m_indexArr[idx] = true;
+			return idx;
+		}
+	}
+	return NONE;
+}
+
+void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
+{
+	m_pCreateMgr->ResetCommandList();
+
+	static bool setFirst{ true };
+	static CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
+	static UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+
+	static CSkeleton *pSIdle = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
+	static CSkeleton *pSAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
+	static CSkeleton *pSAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
+	static CSkeleton *pSWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
+	static CSkeleton *pSWalk = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
+
+	static CSkeleton *pBIdle = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
+	static CSkeleton *pBAtk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
+	static CSkeleton *pBWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
+	static CSkeleton *pBWalk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
+
+	static CSkeleton *pMIdle = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
+	static CSkeleton *pMAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
+	static CSkeleton *pMAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
+	static CSkeleton *pMWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
+	static CSkeleton *pMWalk = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
+
+	static CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
+
+	if (setFirst)
+	{
+		pMinionMesh->SetBoundingBox(
+			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
+			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
+		pMinionMesh->AddRef();
+		setFirst = false;
+	}
+
+	CMinion *pMinionObject{ NULL };
+
+	switch (m_kind)
+	{
+	case 0:
+		pMinionObject = new CSwordMinion(pCreateMgr, 2);
+		break;
+	case 1:
+		pMinionObject = new CMagicMinion(pCreateMgr, 2);
+		break;
+	case 2:
+		pMinionObject = new CBowMinion(pCreateMgr, 2);
+		break;
+	}
+
+	pMinionObject->SetMesh(0, pMinionMesh);
+	switch (m_kind)
+	{
+	case 0:
+		pMinionObject->SetMesh(1, m_pWeapons[0]);
+		break;
+	case 1:
+		pMinionObject->SetMesh(1, m_pWeapons[1]);
+		break;
+	case 2:
+		pMinionObject->SetMesh(1, m_pWeapons[2]);
+		break;
+	}
+
+	pMinionObject->SetBoundingMesh(pCreateMgr,
+		CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
+		0, 0, -CONVERT_PaperUnit_to_InG(4));
+	pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
+
+	switch (m_kind)
+	{
+	case 0:
+		pMinionObject->SetSkeleton(pSIdle);
+		pMinionObject->SetSkeleton(pSAtk1);
+		pMinionObject->SetSkeleton(pSAtk2);
+		pMinionObject->SetSkeleton(pSWalkStart);
+		pMinionObject->SetSkeleton(pSWalk);
+		break;
+	case 1:
+		pMinionObject->SetSkeleton(pMIdle);
+		pMinionObject->SetSkeleton(pMAtk1);
+		pMinionObject->SetSkeleton(pMAtk2);
+		pMinionObject->SetSkeleton(pMWalkStart);
+		pMinionObject->SetSkeleton(pMWalk);
+		break;
+	case 2:
+		pMinionObject->SetSkeleton(pBIdle);
+		pMinionObject->SetSkeleton(pBAtk);
+		pMinionObject->SetSkeleton(pBWalkStart);
+		pMinionObject->SetSkeleton(pBWalk);
+		break;
+	}
+	pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
+	pMinionObject->SetSkeleton(pDie);
+	pMinionObject->SetTerrain(m_pTerrain);
+
+	pMinionObject->Rotate(90, 0, 0);
+
+	int index = GetPossibleIndex();
+
+	pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+	pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
+
+	pMinionObject->SaveIndex(index);
+
+	pMinionObject->SetPathToGo(new Path(m_pathes[kind]));
+
+	if (kind == Minion_Species::Blue_Up)
+	{
+		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		m_blueObjects.emplace_back(pMinionObject);
+	}
+	else if (kind == Minion_Species::Blue_Down)
+	{
+		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		m_blueObjects.emplace_back(pMinionObject);
+	}
+	else if (kind == Minion_Species::Red_Up)
+	{
+		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		m_redObjects.emplace_back(pMinionObject);
+	}
+	else if (kind == Minion_Species::Red_Down)
+	{
+		pMinionObject->CBaseObject::SetPosition(350, 0, 2784);
+		m_redObjects.emplace_back(pMinionObject);
+	}
+
+	m_pCreateMgr->ExecuteCommandList();
+
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		(*iter)->ReleaseUploadBuffers();
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		(*iter)->ReleaseUploadBuffers();
+	}
 }

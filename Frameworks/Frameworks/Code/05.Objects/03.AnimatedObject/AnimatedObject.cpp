@@ -88,13 +88,16 @@ void CAnimatedObject::LookAt(XMFLOAT3 objPosition)
 {
 	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
 	XMFLOAT3 playerLook = GetLook();
-	XMFLOAT3 towardVector = Vector3::Normalize(Vector3::Subtract(objPosition, GetPosition()));
+	XMFLOAT3 playerPos = GetPosition();
+
+	objPosition.y = playerPos.y;
+
+	XMFLOAT3 towardVector = Vector3::Subtract(objPosition, GetPosition(), true);
 
 	float angle{ Vector3::DotProduct(towardVector, playerLook) };
 	angle = XMConvertToDegrees(acos(angle));
 
-	if (isnan(angle))
-		return;
+	if (isnan(angle)) return;
 
 	float check{ Vector3::DotProduct(Vector3::CrossProduct(towardVector, playerLook), upVector) };
 
@@ -155,10 +158,15 @@ void CAnimatedObject::MoveToDestination(float timeElapsed)
 		XMFLOAT3 position = GetPosition();
 		position.y = m_pTerrain->GetHeight(position.x, position.z);
 		CBaseObject::SetPosition(position);
-		LookAt(m_destination);
 	}
 }
 
+void CAnimatedObject::RegenerateLookAt()
+{
+	if (NoneDestination()) return;
+
+	LookAt(m_destination);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수

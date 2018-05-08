@@ -73,6 +73,9 @@ public: // 공개 함수
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_cbvGPUDescriptorHandle); }
 
+	void SaveIndex(int idx) { m_index = idx; }
+	int GetIndex() { return m_index; }
+
 	int GetState() { return m_state; }
 	void SetState(States newState) { m_state = newState; }
 
@@ -91,7 +94,9 @@ protected: // 내부 함수
 	virtual void OnPrepareRender();
 
 protected: // 변수
-	int m_nReferences = 0;
+	int m_nReferences{ 0 };
+
+	int m_index{ 0 };
 
 	XMFLOAT4X4 m_xmf4x4World;
 	XMFLOAT4X4 m_xmf4x4Frame[128];

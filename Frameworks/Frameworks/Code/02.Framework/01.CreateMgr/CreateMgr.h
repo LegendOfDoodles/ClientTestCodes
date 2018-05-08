@@ -27,6 +27,9 @@ public:	// 공개 함수
 		ID3D12Resource **ppUploadBuffer, 
 		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+	void ResetCommandList();
+	void ExecuteCommandList();
+
 	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
 
 	ID3D12Device* GetDevice() { return m_pDevice; }

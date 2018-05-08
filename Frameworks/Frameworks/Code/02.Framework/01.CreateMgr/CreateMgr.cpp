@@ -6,7 +6,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-03-04
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -352,6 +352,24 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 	//	delete[] pd3dSubResourceData;
 
 	return(pTexture);
+}
+
+void CCreateMgr::ResetCommandList()
+{
+	m_pCommandList->Reset(m_pCommandAllocator, NULL);
+}
+
+void CCreateMgr::ExecuteCommandList()
+{
+	HRESULT hResult;
+
+	hResult = m_pCommandList->Close();
+	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
+	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
+
+	m_renderMgr.WaitForGpuComplete();
 }
 
 
