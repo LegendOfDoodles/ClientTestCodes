@@ -242,7 +242,7 @@ bool CCamera::OnProcessKeyInput(UCHAR * pKeyBuffer)
 	
 	m_direction = direction;
 
-	return true;
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////

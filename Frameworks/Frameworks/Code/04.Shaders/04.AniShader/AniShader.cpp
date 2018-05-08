@@ -344,6 +344,7 @@ void CAniShader::CreateShader(CCreateMgr *pCreateMgr)
 		m_ppPipelineStates[i] = NULL;
 	}
 
+	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
