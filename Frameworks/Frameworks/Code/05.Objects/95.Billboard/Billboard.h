@@ -56,3 +56,20 @@ private:
 	float		m_fDistance;
 	Type		m_type;
 };
+
+class CHPGaugeObjects : public CBillboardObject
+{
+public:	// 생성자, 소멸자
+	CHPGaugeObjects(CCreateMgr *pCreateMgr);
+	virtual ~CHPGaugeObjects();
+
+public: // 공개함수
+	virtual void Animate(float fTimeElapsed);
+
+protected: // 내부 함수
+
+private: // 변수
+
+protected:
+
+};

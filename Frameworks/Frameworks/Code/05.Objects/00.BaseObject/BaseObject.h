@@ -73,8 +73,14 @@ public: // 공개 함수
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetCbvGPUDescriptorHandle() { return(m_cbvGPUDescriptorHandle); }
 
+	void SaveIndex(int idx) { m_index = idx; }
+	int GetIndex() { return m_index; }
+
 	int GetState() { return m_state; }
 	void SetState(States newState) { m_state = newState; }
+
+	int GetType() {	return m_ObjectType; };
+	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
 
 	bool IsCollider() { return false; }
 
@@ -91,7 +97,9 @@ protected: // 내부 함수
 	virtual void OnPrepareRender();
 
 protected: // 변수
-	int m_nReferences = 0;
+	int m_nReferences{ 0 };
+
+	int m_index{ 0 };
 
 	XMFLOAT4X4 m_xmf4x4World;
 	XMFLOAT4X4 m_xmf4x4Frame[128];
@@ -111,6 +119,8 @@ protected: // 변수
 	UINT8				*m_pMappedObject{ NULL };
 
 	States m_state{ States::Idle };
+
+	ObjectType m_ObjectType{ ObjectType::SwordPlayer };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

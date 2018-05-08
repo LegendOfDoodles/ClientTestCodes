@@ -26,6 +26,9 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
+	virtual void OnStatus(int ObjectType);
+	virtual void OffStatus() { if (OnOFF) OnOFF = false; };
+
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 

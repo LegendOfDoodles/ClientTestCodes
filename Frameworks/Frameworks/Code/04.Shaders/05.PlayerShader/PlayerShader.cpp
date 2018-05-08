@@ -330,8 +330,8 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 
 	pPlayerMesh->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(8)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(1), CONVERT_PaperUnit_to_InG(1), CONVERT_PaperUnit_to_InG(5)));
 
 	int i = 0;
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -353,15 +353,22 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 				pPlayer->SetBoundingMesh(pCreateMgr,
+<<<<<<< HEAD
 					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 					0, 0, -CONVERT_PaperUnit_to_InG(4));
 				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
 				pPlayer->CBaseObject::SetPosition(0,0,0);
+=======
+					CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
+					0, 0, -CONVERT_PaperUnit_to_InG(8));
+				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
+				pPlayer->CBaseObject::SetPosition(0, 0, 2500);
+>>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 
 				pPlayer->SetSkeleton(pSIdle);
 
 
-				pPlayer->SetSpeed(CONVERT_cm_to_InG(1.805));
+				pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
 				pPlayer->SetTerrain(m_pTerrain);
 
 				pPlayer->Rotate(90, 0, 0);

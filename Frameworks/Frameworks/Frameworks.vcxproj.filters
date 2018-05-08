@@ -183,6 +183,9 @@
     <Filter Include="소스 파일\05.Objects\08.Player">
       <UniqueIdentifier>{a29896a2-fa94-4c74-aca0-eae35af27e52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader">
+      <UniqueIdentifier>{865a229b-606a-46e0-82b5-63b023eafc41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -347,6 +350,9 @@
     <ClInclude Include="Code\05.Objects\08.Player\Player.h">
       <Filter>소스 파일\05.Objects\08.Player</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\GaugeShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -489,6 +495,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\08.Player\Player.cpp">
       <Filter>소스 파일\05.Objects\08.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\GaugeShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

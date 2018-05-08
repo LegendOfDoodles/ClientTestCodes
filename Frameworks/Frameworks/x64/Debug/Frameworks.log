@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  WayFinder.cpp
 d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
@@ -157,3 +158,102 @@ d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+=======
+﻿  AniShader.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(56): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(56): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(66): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(66): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(94): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(94): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(101): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(101): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(120): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(120): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(124): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(124): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(144): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(144): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(148): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(148): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(162): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(162): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(166): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(166): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(185): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(185): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(195): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(195): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(218): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(258): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(572): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(572): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(577): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CBaseObject *
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(577): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(654): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(655): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(655): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(655): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(693): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(694): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(719): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+>>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6

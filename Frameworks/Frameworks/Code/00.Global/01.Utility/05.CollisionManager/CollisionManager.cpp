@@ -42,11 +42,14 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 						vec3 = Vector3::Normalize(vec3);
 						pWayFinder->AdjustValueByWallCollision((*i), vec3, length *sizeB / (sizeA + sizeB));
 						pWayFinder->AdjustValueByWallCollision((*j), vec3, -length * sizeB / (sizeA + sizeB));
+						(*i)->RegenerateLookAt();
+						(*j)->RegenerateLookAt();
 					}
 				}
 			}
 		}
 	}
+<<<<<<< HEAD
 }
 
 void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pCol, float data1, float data2)
@@ -109,6 +112,9 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	default:
 		break;
 	}
+=======
+	//std::cout << cnt << "\n";
+>>>>>>> 31fcc073d47ca78069a3132493d4b07f027566d6
 }
 
 

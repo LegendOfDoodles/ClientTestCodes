@@ -36,6 +36,8 @@ public: // 공개 함수
 	void SetPathToGo(Path *path);
 	void MoveToDestination(float timeElapsed);
 
+	virtual void RegenerateLookAt();
+
 	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
 
 	void  SetSpeed(float speed) { m_speed = speed; }
