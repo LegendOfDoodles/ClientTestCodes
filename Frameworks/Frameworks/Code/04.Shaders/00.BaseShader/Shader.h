@@ -27,6 +27,7 @@ public: // 공개 함수
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
+	void Render(CCamera *pCamera, int opt);
 	virtual void RenderBoundingBox(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
@@ -74,6 +75,7 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 	virtual void OnPrepareRender(int opt = 0);
+	void OnPrepareRenderForBB();
 
 	D3D12_SHADER_BYTECODE CompileShaderFromFile(WCHAR *pszFileName, LPCSTR pszShaderName,
 		LPCSTR pszShaderProfile, ID3DBlob **ppShaderBlob);
@@ -93,6 +95,7 @@ protected: // 변수
 #endif
 
 	ID3D12DescriptorHeap			**m_ppCbvSrvDescriptorHeaps{ NULL };
+	int m_nHeaps{ 0 };
 
 	D3D12_CPU_DESCRIPTOR_HANDLE		*m_pcbvCPUDescriptorStartHandle{ NULL };
 	D3D12_GPU_DESCRIPTOR_HANDLE		*m_pcbvGPUDescriptorStartHandle{ NULL };

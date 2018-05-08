@@ -261,24 +261,6 @@ void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 }
 
-
-void CBillboardShader::ReleaseShaderVariables()
-{
-#if USE_INSTANCING
-	if (!m_pInstanceBuffer) return;
-
-	m_pInstanceBuffer->Unmap(0, NULL);
-	Safe_Release(m_pInstanceBuffer);
-#else
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-#endif
-
-	CShader::ReleaseShaderVariables();
-}
-
 void CBillboardShader::ReleaseObjects()
 {
 	if (!m_ppObjects) return;

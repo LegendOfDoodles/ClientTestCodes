@@ -75,9 +75,14 @@ void CShader::Render(CCamera *pCamera)
 	OnPrepareRender();
 }
 
+void CShader::Render(CCamera *pCamera, int opt)
+{
+	OnPrepareRender(opt);
+}
+
 void CShader::RenderBoundingBox(CCamera * pCamera)
 {
-	OnPrepareRender(BOUNDING_BOX);
+	OnPrepareRenderForBB();
 }
 
 CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float &nearHitDistance)
@@ -228,13 +233,13 @@ D3D12_RASTERIZER_DESC CShader::CreateBoundingBoxRasterizerState()
 
 void CShader::CreateDescriptorHeaps()
 {
-	m_ppCbvSrvDescriptorHeaps = new ID3D12DescriptorHeap*[m_nPipelineStates];
-	m_pcbvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
-	m_pcbvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
-	m_psrvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
-	m_psrvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nPipelineStates];
+	m_ppCbvSrvDescriptorHeaps = new ID3D12DescriptorHeap*[m_nHeaps];
+	m_pcbvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nHeaps];
+	m_pcbvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nHeaps];
+	m_psrvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nHeaps];
+	m_psrvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nHeaps];
 
-	for (int i = 0; i < m_nPipelineStates; ++i)
+	for (int i = 0; i < m_nHeaps; ++i)
 	{
 		m_ppCbvSrvDescriptorHeaps[i] = NULL;
 	}
@@ -445,7 +450,7 @@ void CShader::ReleaseShaderVariables()
 {
 	if (m_ppCbvSrvDescriptorHeaps)
 	{
-		for (int i = 0; i < m_nPipelineStates; ++i)
+		for (int i = 0; i < m_nHeaps; ++i)
 		{
 			if(m_ppCbvSrvDescriptorHeaps[i]) 
 				Safe_Release(m_ppCbvSrvDescriptorHeaps[i]);
@@ -479,11 +484,19 @@ void CShader::ReleaseObjects()
 void CShader::OnPrepareRender(int opt)
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
-	m_pCommandList->SetPipelineState(m_ppPipelineStates[opt]);
+	m_pCommandList->SetPipelineState(m_ppPipelineStates[0]);
 	if(m_ppCbvSrvDescriptorHeaps) m_pCommandList->SetDescriptorHeaps(1, &m_ppCbvSrvDescriptorHeaps[opt]);
 
 	if(opt != BOUNDING_BOX) UpdateShaderVariables();
 	else UpdateBoundingBoxShaderVariables();
+}
+
+void CShader::OnPrepareRenderForBB()
+{
+	//파이프라인에 그래픽스 상태 객체를 설정한다.
+	m_pCommandList->SetPipelineState(m_ppPipelineStates[BOUNDING_BOX]);
+	if (m_ppCbvSrvDescriptorHeaps) m_pCommandList->SetDescriptorHeaps(1, &m_ppCbvSrvDescriptorHeaps[BOUNDING_BOX]);
+	UpdateBoundingBoxShaderVariables();
 }
 
 D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(

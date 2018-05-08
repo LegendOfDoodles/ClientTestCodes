@@ -252,20 +252,21 @@ void CPlayerShader::CreateShader(CCreateMgr *pCreateMgr)
 		m_ppPipelineStates[i] = NULL;
 	}
 
+	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
 	CShader::CreateBoundingBoxShader(pCreateMgr);
 }
 
-void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
 #if USE_INSTANCING
 	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects,
+		sizeof(CB_GAMEOBJECT_INFO) * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		NULL);
@@ -277,7 +278,7 @@ void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		elementBytes * m_nObjects,
+		elementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -290,7 +291,7 @@ void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 	m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		boundingBoxElementBytes * m_nObjects,
+		boundingBoxElementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -315,7 +316,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
 #endif
