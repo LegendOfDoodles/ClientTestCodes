@@ -174,6 +174,15 @@
     <Filter Include="소스 파일\05.Objects\02.CollisionObject">
       <UniqueIdentifier>{b3b9a6a4-3dc0-43ad-a4b0-edd67b1177be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\05.CollisionManager">
+      <UniqueIdentifier>{bea49c74-742c-4b0e-8ab6-bb77cb7f1c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\05.PlayerShader">
+      <UniqueIdentifier>{a65c113e-364b-4392-8ee2-eba9b391c018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\08.Player">
+      <UniqueIdentifier>{a29896a2-fa94-4c74-aca0-eae35af27e52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -329,6 +338,15 @@
     <ClInclude Include="Code\05.Objects\07.StaticObjects\03.Obstacle\Obstacle.h">
       <Filter>소스 파일\05.Objects\07.StaticObjects\03.Obstacle</Filter>
     </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\05.CollisionManager\CollisionManager.h">
+      <Filter>소스 파일\00.Global\01.Utility\05.CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\05.PlayerShader\PlayerShader.h">
+      <Filter>소스 파일\04.Shaders\05.PlayerShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\08.Player\Player.h">
+      <Filter>소스 파일\05.Objects\08.Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -462,6 +480,15 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\07.StaticObjects\03.Obstacle\Obstacle.cpp">
       <Filter>소스 파일\05.Objects\07.StaticObjects\03.Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\05.CollisionManager\CollisionManager.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\05.CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\05.PlayerShader\PlayerShader.cpp">
+      <Filter>소스 파일\04.Shaders\05.PlayerShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\08.Player\Player.cpp">
+      <Filter>소스 파일\05.Objects\08.Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -25,7 +25,7 @@ CAnimatedObject::~CAnimatedObject()
 // 공개 함수
 void CAnimatedObject::Animate(float timeElapsed)
 {
-
+	ResetCollisionLevel();
 
 	int Bcnt = m_pSkeleton[m_nCurrAnimation].GetBoneCount();
 

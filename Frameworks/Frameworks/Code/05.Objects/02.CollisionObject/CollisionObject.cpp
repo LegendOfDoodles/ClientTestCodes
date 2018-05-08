@@ -12,6 +12,7 @@
 // 持失切, 社瑚切
 CCollisionObject::CCollisionObject(CCreateMgr * pCreateMgr, int nMeshes) : CBaseObject(pCreateMgr, nMeshes)
 {
+	ResetCollisionLevel();
 }
 
 CCollisionObject::~CCollisionObject()

@@ -3,13 +3,15 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 #include "04.Shaders/01.ObjectShader/StaticObjectShader.h"
-#include "04.Shaders/04.AniShader/AniShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
+#include "04.Shaders/04.AniShader/AniShader.h"
+#include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
+#include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
@@ -229,7 +231,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 6;
+	m_nShaders = 7;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -237,7 +239,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[2] = new CAniShader(pCreateMgr);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
-	m_ppShaders[5] = new CUIObjectShader(pCreateMgr);
+	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
+	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{
@@ -249,10 +252,25 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
-	m_ppShaders[5]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
-	
+	m_pCollisionManager = new CCollisionManager();
+
+	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
+	int nColliderObject = pAniS->GetnObject();
+	for (int i = 0; i < nColliderObject; ++i)
+	{
+		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);
+	}
+
+	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
+	nColliderObject = pPlayerS->GetnObject();
+	for (int i = 0; i < nColliderObject; ++i)
+	{
+		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
+	}
+
 	BuildLights();
 }
 
@@ -443,7 +461,8 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 
 void CScene::CollisionTest()
 {
-	CS_MsgChCollision my_packet;
+	m_pCollisionManager->Update(m_pWayFinder);
+	/*CS_MsgChCollision my_packet;
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
 	CCollisionObject** colliders = (CCollisionObject * *)pAniS->GetCollisionObjects();
 	int nColliderObject = pAniS->GetnObject();
@@ -478,5 +497,5 @@ void CScene::CollisionTest()
 				m_pWayFinder->AdjustValueByWallCollision(colliders[j], vec3, -length * sizeB / (sizeA + sizeB));
 			}
 		}
-	}
+	}*/
 }

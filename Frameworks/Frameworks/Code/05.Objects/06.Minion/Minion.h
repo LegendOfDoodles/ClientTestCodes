@@ -4,6 +4,7 @@
 #include "05.Objects/97.Skeleton/Skeleton.h"
 #include "00.Global/01.Utility/Enumerations.h"
 
+
 class CMinion : public CAnimatedObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
 {
 public: // 생성자, 소멸자

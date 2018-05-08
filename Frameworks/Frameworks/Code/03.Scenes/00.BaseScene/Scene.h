@@ -6,7 +6,7 @@
 
 class CCreateMgr;
 class CWayFinder;
-
+class CCollisionManager;
 struct LIGHT
 {
 	XMFLOAT4				m_color;
@@ -100,6 +100,9 @@ protected: // º¯¼ö
 	CWayFinder* m_pWayFinder{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
+
+	CCollisionManager* m_pCollisionManager{NULL};
+
 
 	Network m_Network;
 	
