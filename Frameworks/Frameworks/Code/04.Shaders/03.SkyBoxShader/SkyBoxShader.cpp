@@ -131,7 +131,7 @@ void CSkyBoxShader::CreateShader(CCreateMgr *pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CSkyBoxShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
+void CSkyBoxShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
 	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 

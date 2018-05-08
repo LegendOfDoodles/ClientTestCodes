@@ -63,7 +63,7 @@ protected: // 내부 함수
 
 	virtual void CreateShader(CCreateMgr *pCreateMgr);
 	void CreateBoundingBoxShader(CCreateMgr *pCreateMgr);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 

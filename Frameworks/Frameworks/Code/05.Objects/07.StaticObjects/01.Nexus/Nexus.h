@@ -1,8 +1,9 @@
 #pragma once
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 class CCreateMgr;
 
-class CNexus : public CBaseObject
+class CNexus : public CCollisionObject
 {
 public: // 持失切, 社瑚切
 	CNexus(CCreateMgr *pCreateMgr);

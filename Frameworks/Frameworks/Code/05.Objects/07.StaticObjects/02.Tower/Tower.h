@@ -1,8 +1,9 @@
 #pragma once
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 class CCreateMgr;
 
-class CTower : public CBaseObject
+class CTower : public CCollisionObject
 {
 public: // 持失切, 社瑚切
 	CTower(CCreateMgr *pCreateMgr);

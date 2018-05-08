@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 
@@ -67,20 +67,23 @@ void CCamera::SetViewportsAndScissorRects()
 	m_pCommandList->RSSetScissorRects(1, &m_scissorRect);
 }
 
-void CCamera::Move(DWORD direction, float distance, bool bVelocity)
+void CCamera::Move(float fTimeElapsed, bool bVelocity)
 {
-	if (direction)
+	if (m_direction)
 	{
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+		float distance = m_speed * fTimeElapsed;
 
-		if (direction & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, distance);
-		if (direction & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -distance);
+		if (m_direction & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, distance);
+		else if (m_direction & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -distance);
 
-		if (direction & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, distance);
-		if (direction & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -distance);
+		if (m_direction & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, distance);
+		else if (m_direction & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -distance);
 
-		if (direction & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, distance);
-		if (direction & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -distance);
+		if (m_direction & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, distance);
+		else if (m_direction & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -distance);
+
+		m_direction = NULL;
 
 		Move(xmf3Shift);
 	}
@@ -121,9 +124,9 @@ void CCamera::Rotate(float x, float y, float z)
 	}
 }
 
-void CCamera::Update(float fTimeElapsed, bool bUpdateMove)
+void CCamera::Update(float fTimeElapsed)
 {
-	if (bUpdateMove && m_direction) { Move(m_direction, 300.0f *  fTimeElapsed, true); }
+	if (m_direction) { Move(fTimeElapsed, true); }
 	if (!Vector3::IsZero(m_rotation))
 	{
 		Rotate(m_rotation.x, m_rotation.y, m_rotation.z);
@@ -175,6 +178,11 @@ void CCamera::SavePickedPos()
 
 bool CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
+	m_speed += GET_WHEEL_DELTA_WPARAM(wParam);
+
+	if (m_speed < MIN_CAMERA_SPEED) m_speed = MIN_CAMERA_SPEED;
+	else if (m_speed > MAX_CAMERA_SPEED) m_speed = MAX_CAMERA_SPEED;
+
 	return true;
 }
 
@@ -231,6 +239,7 @@ bool CCamera::OnProcessKeyInput(UCHAR * pKeyBuffer)
 	{
 		direction |= DIR_DOWN;
 	}
+	
 	m_direction = direction;
 
 	return true;

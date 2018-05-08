@@ -161,14 +161,14 @@ void CBillboardShader::CreateShader(CCreateMgr *pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
 #if USE_INSTANCING
 	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects,
+		sizeof(CB_GAMEOBJECT_INFO) * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		NULL);
@@ -180,7 +180,7 @@ void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		elementBytes * m_nObjects,
+		elementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -212,7 +212,7 @@ void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
 	CreateShaderResourceViews(pCreateMgr, pTexture, 3, false);

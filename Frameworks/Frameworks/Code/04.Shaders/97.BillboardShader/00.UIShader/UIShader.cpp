@@ -209,7 +209,7 @@ void CUIObjectShader::CreateShader(CCreateMgr * pCreateMgr)
 	CShader::CreateShader(pCreateMgr);
 }
 
-void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
+void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
@@ -217,7 +217,7 @@ void CUIObjectShader::CreateShaderVariables(CCreateMgr * pCreateMgr)
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		elementBytes * m_nObjects,
+		elementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -241,7 +241,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	UINT ncbElementBytes = ((sizeof(CB_TEXTURE_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
 	CreateShaderResourceViews(pCreateMgr, pTexture, 11, false);

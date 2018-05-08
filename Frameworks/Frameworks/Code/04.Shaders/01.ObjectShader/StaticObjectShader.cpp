@@ -12,7 +12,7 @@
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-08
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -234,14 +234,14 @@ void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr)
 	//CShader::CreateBoundingBoxShader(pCreateMgr);
 }
 
-void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
 #if USE_INSTANCING
 	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * m_nObjects,
+		sizeof(CB_GAMEOBJECT_INFO) * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		NULL);
@@ -253,7 +253,7 @@ void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		elementBytes * m_nObjects,
+		elementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -266,7 +266,7 @@ void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr)
 
 	m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
-		boundingBoxElementBytes * m_nObjects,
+		boundingBoxElementBytes * nBuffers,
 		D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		NULL);
@@ -291,7 +291,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4);
 	//CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, 0);
 	//CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
 
