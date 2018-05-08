@@ -33,12 +33,10 @@ public: // °ø°³ ÇÔ¼ö
 	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() {  return m_nObjects; }
 
-<<<<<<< HEAD
 	void SetCollisionManager(CCollisionManager* manager);
-=======
+
 	ObjectList GetBlueList() { return m_blueObjects; }
 	ObjectList GetRedList()  { return m_redObjects; }
->>>>>>> ìš©ì„ 
 
 protected: // ³»ºÎ ÇÔ¼ö
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

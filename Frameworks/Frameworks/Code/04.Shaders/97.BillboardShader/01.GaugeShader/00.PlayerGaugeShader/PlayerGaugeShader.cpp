@@ -69,7 +69,7 @@ void CPlayerHPGaugeShader::AnimateObjects(float timeElapsed)
 		m_ppObjects[j]->Animate(timeElapsed);
 
 		XMFLOAT3 HPGaugePosition = m_pPlayer[j]->GetPosition();
-		HPGaugePosition.y += 35.f;
+		HPGaugePosition.y += 110.f;
 		dynamic_cast<CHPGaugeObjects*>(m_ppObjects[j])->SetPosition(HPGaugePosition);
 	}
 }
@@ -249,7 +249,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 		XMFLOAT3 HPGaugePosition;
 		
 		HPGaugePosition.x = m_pPlayer[i]->GetPosition().x;
-		HPGaugePosition.y = m_pPlayer[i]->GetPosition().y + 35.f;
+		HPGaugePosition.y = m_pPlayer[i]->GetPosition().y + 70.f;
 		HPGaugePosition.z = m_pPlayer[i]->GetPosition().z;
 
 		pBillboardObject->SetPosition(HPGaugePosition);

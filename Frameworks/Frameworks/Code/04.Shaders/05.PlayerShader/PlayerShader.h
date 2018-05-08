@@ -26,15 +26,11 @@ public: // °ø°³ ÇÔ¼ö
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
-<<<<<<< HEAD
 
 	void SetColManagerToObject(CCollisionManager* manager);
 	
 	
-	virtual CBaseObject * * GetCollisionObjects() {
-=======
 	virtual CBaseObject **GetCollisionObjects() {
->>>>>>> ìš©ì„ 
 		return m_ppObjects;
 	}
 	int GetnObject() {

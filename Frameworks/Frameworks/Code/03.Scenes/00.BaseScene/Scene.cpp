@@ -8,6 +8,7 @@
 #include "04.Shaders/04.AniShader/AniShader.h"
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
+#include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
@@ -148,7 +149,8 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
-		m_ppShaders[5]->Initialize(m_pCreateMgr, m_pCamera);
+		m_ppShaders[6]->Initialize(m_pCreateMgr, m_pCamera);
+		m_ppShaders[7]->Initialize(m_pCreateMgr, m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -231,7 +233,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 7;
+	m_nShaders = 8;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -241,18 +243,23 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
+	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 1; ++i)
+	for (int i = 2; i < m_nShaders - 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetnObject());
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
+
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 	m_pCollisionManager = new CCollisionManager();
