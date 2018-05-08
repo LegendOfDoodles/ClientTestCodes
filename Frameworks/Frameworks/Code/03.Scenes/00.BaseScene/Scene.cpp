@@ -263,6 +263,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);
 	}
+	pAniS->SetCollisionManager(m_pCollisionManager);
 
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
 	nColliderObject = pPlayerS->GetnObject();
@@ -270,7 +271,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
 	}
-	pAniS->SetCollisionManager(m_pCollisionManager);
+	pPlayerS->SetColManagerToObject(m_pCollisionManager);
 	BuildLights();
 }
 

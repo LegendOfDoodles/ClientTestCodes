@@ -252,7 +252,7 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 void CAniShader::SetCollisionManager(CCollisionManager * manager)
 {
-	pColManager = manager;
+	m_pColManager = manager;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -741,25 +741,39 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	{
 		pMinionObject->CBaseObject::SetPosition(335, 50, 2787);
 		m_blueObjects.emplace_back(pMinionObject);
+
 	}
 	else if (kind == Minion_Species::Blue_Down)
 	{
 		pMinionObject->CBaseObject::SetPosition(335, 0, 2238);
 		m_blueObjects.emplace_back(pMinionObject);
+
 	}
 	else if (kind == Minion_Species::Red_Up)
 	{
 		pMinionObject->CBaseObject::SetPosition(9669, 0, 2739);
 		m_redObjects.emplace_back(pMinionObject);
+
 	}
 	else if (kind == Minion_Species::Red_Down)
 	{
 		pMinionObject->CBaseObject::SetPosition(9663, 0, 2254);
 		m_redObjects.emplace_back(pMinionObject);
+
 	}
 
 	m_pCreateMgr->ExecuteCommandList();
+	CCollisionObject* pointer;
+	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) {
+		m_blueObjects.back()->ReleaseUploadBuffers();
 
-	if(kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) m_blueObjects.back()->ReleaseUploadBuffers();
-	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) m_redObjects.back()->ReleaseUploadBuffers();
+		pointer = (CCollisionObject*)(m_blueObjects.back());
+		m_pColManager->AddCollider(pointer);
+	}
+	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) {
+		m_redObjects.back()->ReleaseUploadBuffers();
+		
+		pointer = (CCollisionObject*)(m_redObjects.back());
+		m_pColManager->AddCollider(pointer);
+	}
 }

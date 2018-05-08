@@ -3,7 +3,7 @@
 
 class CMaterial;
 class CHeightMapTerrain;
-
+class CCollisionManager;
 class CPlayerShader : public CShader
 {
 public:
@@ -26,6 +26,10 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
+
+	void SetColManagerToObject(CCollisionManager* manager);
+	
+	
 	virtual CBaseObject * * GetCollisionObjects() {
 		return m_ppObjects;
 	}

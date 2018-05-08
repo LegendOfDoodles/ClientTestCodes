@@ -80,7 +80,7 @@ protected: // º¯¼ö
 #endif
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
 	
-	CCollisionManager* pColManager{NULL};
+	CCollisionManager* m_pColManager{NULL};
 	
 	CHeightMapTerrain * m_pTerrain{ NULL };
 

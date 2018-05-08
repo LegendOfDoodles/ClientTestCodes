@@ -136,21 +136,31 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	if (GetAsyncKeyState('M') & 0x0001)
+	if (GetAsyncKeyState('A') & 0x0001)
 	{
 		m_nWeaponState++;
-		if (m_nWeaponState >= 3)m_nWeaponState = 0;
-		for (int i = 0; i < m_nObjects; ++i) {
-			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
-
-			obj->SetMesh(1, m_pWeapons[m_nWeaponState]);
-		}
+		if (m_nWeaponState >= 2)m_nWeaponState = 0;
+		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
 	}
-	if (GetAsyncKeyState('N') & 0x0001)
+	if (GetAsyncKeyState('Q') & 0x0001)
 	{
-
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(CPlayer::PlayerAnimation::SkillQ);
 	}
+	if (GetAsyncKeyState('E') & 0x0001)
+	{
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(CPlayer::PlayerAnimation::SkillE);
+	}
+	if (GetAsyncKeyState('R') & 0x0001)
+	{
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(CPlayer::PlayerAnimation::SkillR);
+	}
+
 	return true;
+}
+
+void CPlayerShader::SetColManagerToObject(CCollisionManager * manager)
+{
+	dynamic_cast<CPlayer*>(m_ppObjects[0])->SetCollisionManager(manager);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -320,13 +330,13 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword.meshinfo");
 
-
+	
 	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
-	CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Start_Walk.aniinfo");
-	CSkeleton *pSWalk = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Walk.aniinfo");
-	CSkeleton *pSSlash = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Slash.aniinfo");
-	CSkeleton *pSSmash = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Smash.aniinfo");
-	CSkeleton *pSDispute = new CSkeleton("Resource//3D//Player//Animation//Sword//Sword_Player_Dispute.aniinfo");
+	CSkeleton *pSStartWalk	= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
+	CSkeleton *pSWalk		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
+	CSkeleton *pSSlash		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
+	CSkeleton *pSSmash		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
+	CSkeleton *pSDispute		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dispute.aniinfo");
 
 
 	pPlayerMesh->SetBoundingBox(
@@ -346,7 +356,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_INSTANCING
 				pPlayer->SetMesh(0, pPlayerMesh);
 				
-				pPlayer->SetMesh(1, m_pWeapons[1]);
+				pPlayer->SetMesh(1, m_pWeapons[0]);
 				
 #endif
 #if !USE_BATCH_MATERIAL
@@ -357,9 +367,16 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 					CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
 					0, 0, -CONVERT_PaperUnit_to_InG(8));
 				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
-				pPlayer->CBaseObject::SetPosition(0, 0, 2500);
+				pPlayer->CBaseObject::SetPosition(2000, 0, 800);
 
 				pPlayer->SetSkeleton(pSIdle);
+				pPlayer->SetSkeleton(pSStartWalk);
+				pPlayer->SetSkeleton(pSWalk);
+				
+				pPlayer->SetSkeleton(pSSmash);
+				pPlayer->SetSkeleton(pSSlash);
+				pPlayer->SetSkeleton(pSDispute);
+
 
 
 				pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));

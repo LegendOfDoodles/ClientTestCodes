@@ -69,8 +69,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					float collisionLength = (*i)->GetCollisionSize() + CONVERT_PaperUnit_to_InG(data2);
 					if (distance <= collisionLength)
 					{
-						//std::cout << "col\n";
-						(*i)->Rotate(new XMFLOAT3(1, 0, 0), 10);
+						std::cout << "col\n";
 						//(*i)->Translate(&Vector3::ScalarProduct(pCol->GetLook(),10));
 					}
 				}
@@ -92,7 +91,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					
 					if (distance <= collisionLength)
 					{
-						XMFLOAT3 result = Vector3::Add(apos, bpos,-1.0f);
+						XMFLOAT3 result = Vector3::Add(apos, bpos, -1.0f);
 
 						float a = Vector3::DotProduct(pCol->GetLook(), Vector3::Normalize(result));
 
@@ -101,7 +100,9 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 
 						// 시야 각 안에 들어오는가
 						if (a <= data2)
-							(*i)->Rotate(new XMFLOAT3(1, 0, 0), 10);
+						{
+							std::cout << "col\n";
+						}
 					}
 				}
 			}
