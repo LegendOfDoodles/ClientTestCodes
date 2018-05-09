@@ -138,7 +138,7 @@ void CAnimatedObject::MoveToDestination(float timeElapsed)
 {
 	if (!m_pathToGo) return;
 
-	if (NoneDestination() || IsArrive(m_destination, m_speed * timeElapsed))	//  도착 한 경우
+	if (NoneDestination() || IsArrive(m_speed * timeElapsed))	//  도착 한 경우
 	{
 		if (m_pathToGo->empty())
 		{
@@ -170,10 +170,18 @@ void CAnimatedObject::RegenerateLookAt()
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-bool CAnimatedObject::IsArrive(XMFLOAT2 & nextPos, float dst)
+bool CAnimatedObject::IsArrive(float dst)
 {
 	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
-	int distanceSqr = Vector2::DistanceSquare(curPos, nextPos);
+	int distanceSqr = Vector2::DistanceSquare(curPos, m_destination);
+	// 정확히 도착 하는 경우
+	if (distanceSqr < dst * dst) return true;
+	if (m_pathToGo->empty()) return false;
 
-	return distanceSqr < dst * dst;
+	XMFLOAT2 next = m_pathToGo->front().To();
+	XMFLOAT2 dstToNext = Vector2::Subtract(next, m_destination, true);
+	float dstToNextLengthSqr = Vector2::DistanceSquare(next, m_destination);
+	float curPosToNextLength = Vector2::DotProduct(Vector2::Subtract(next, curPos), dstToNext);
+
+	return dstToNextLengthSqr > curPosToNextLength * curPosToNextLength;
 }
