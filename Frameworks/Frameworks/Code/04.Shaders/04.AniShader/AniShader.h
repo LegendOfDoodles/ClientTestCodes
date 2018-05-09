@@ -11,7 +11,7 @@ class CCollisionManager;
 class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
 {
 public: // 생성자, 소멸자
-	CAniShader(CCreateMgr *pCreateMgr);
+	CAniShader(CCreateMgr *pCreateMgr, Network* pNetwork);
 	virtual ~CAniShader();
 
 public: // 공개 함수
@@ -89,4 +89,6 @@ protected: // 변수
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
+
+	Network* m_pNetwork{ NULL };
 };

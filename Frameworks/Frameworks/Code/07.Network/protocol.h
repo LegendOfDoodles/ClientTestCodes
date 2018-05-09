@@ -24,14 +24,18 @@ struct SC_Msg_Put_Character : public Packet
 struct SC_MsgMoCreate : public Packet
 {
 	BYTE Monster_id;
-	short x;
-	short y;
+	short hp;
 };
+struct CS_MsgMoCreate : public Packet
+{
+	
+};
+
 struct SC_Msg_Remove_Character : public Packet
 {
 	BYTE Character_id;
 };
-struct SC_MsgMoDelete : public Packet
+struct CS_MsgMoDelete : public Packet
 {
 	BYTE Monster_id;
 };
@@ -97,7 +101,7 @@ struct CS_MsgDemandMakeRoom : public Packet
 #define MAP_WIDTH 800
 #define MAP_HEIGHT 800
 
-#define MAX_USER 5
+#define MAX_USER 4
 #define NPC_START 1000
 #define NUM_OF_NPC 10000
 #define VIEW_RADIUS 3
@@ -120,6 +124,8 @@ struct CS_MsgDemandMakeRoom : public Packet
 #define CS_MOVE_PLAYER			  202
 #define CS_COLLISION			  203
 #define CS_DAMAND_MAKE_ROOM		  204
+#define CS_PUT_MINION			  205
+#define CS_DELETE_MINION		  206
 //In Client Move Object
 #define CS_UP					  1
 #define CS_DOWN					  2
