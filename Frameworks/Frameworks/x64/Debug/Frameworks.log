@@ -1,1 +1,43 @@
-﻿  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+﻿  WayFinder.cpp
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(20): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(23): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(41): warning C4189: 'edgeIdx': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(171): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(171): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(199): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(199): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(215): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(215): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(275): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(275): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(301): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(301): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(349): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(349): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(350): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\xmemory0(919): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\xmemory0(919): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\vector(968): note: 컴파일 중인 함수 템플릿 인스턴스화 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,int,DirectX::XMFLOAT2,DirectX::XMFLOAT2&>(_Alloc &,_Objty *const ,int &&,DirectX::XMFLOAT2 &&,DirectX::XMFLOAT2 &)'에 대한 참조를 확인하십시오.
+          with
+          [
+              _Alloc=std::allocator<CNode>,
+              _Ty=CNode,
+              _Objty=CNode
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\vector(968): note: 컴파일 중인 함수 템플릿 인스턴스화 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,int,DirectX::XMFLOAT2,DirectX::XMFLOAT2&>(_Alloc &,_Objty *const ,int &&,DirectX::XMFLOAT2 &&,DirectX::XMFLOAT2 &)'에 대한 참조를 확인하십시오.
+          with
+          [
+              _Alloc=std::allocator<CNode>,
+              _Ty=CNode,
+              _Objty=CNode
+          ]
+  d:\googledrive\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.cpp(34): note: 컴파일 중인 함수 템플릿 인스턴스화 'void std::vector<CNode,std::allocator<_Ty>>::emplace_back<int,DirectX::XMFLOAT2,DirectX::XMFLOAT2&>(int &&,DirectX::XMFLOAT2 &&,DirectX::XMFLOAT2 &)'에 대한 참조를 확인하십시오.
+          with
+          [
+              _Ty=CNode
+          ]
+  Frameworks.vcxproj -> D:\GoogleDrive\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
