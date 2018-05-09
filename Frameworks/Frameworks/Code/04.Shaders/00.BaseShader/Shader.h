@@ -91,7 +91,8 @@ protected: // º¯¼ö
 	ID3D12Resource *m_pBoundingBoxBuffer{ NULL };
 
 #if USE_BATCH_MATERIAL
-	CMaterial						*m_pMaterial{ NULL };
+	CMaterial			**m_ppMaterials{ NULL };
+	int					m_nMaterials{ 0 };
 #endif
 
 	ID3D12DescriptorHeap			**m_ppCbvSrvDescriptorHeaps{ NULL };

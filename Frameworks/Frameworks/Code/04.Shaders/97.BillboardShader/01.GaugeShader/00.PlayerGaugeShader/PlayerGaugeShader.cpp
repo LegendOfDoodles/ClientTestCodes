@@ -9,7 +9,7 @@
 /// 목적: UI HP 테스트 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-05-08
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -28,14 +28,20 @@ CPlayerHPGaugeShader::~CPlayerHPGaugeShader()
 //
 void CPlayerHPGaugeShader::ReleaseUploadBuffers()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	if (m_ppObjects)
 	{
-		m_ppObjects[j]->ReleaseUploadBuffers();
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
 	}
+
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 #endif
 }
 
@@ -78,7 +84,7 @@ void CPlayerHPGaugeShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
+	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 #endif
 
 #if USE_INSTANCING
@@ -233,17 +239,12 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	CreateShaderVariables(pCreateMgr, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
-	m_pMaterial = new CMaterial(pCreateMgr);
-
-	m_pMaterial->Initialize(pCreateMgr);
-	m_pMaterial = Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CHPGaugeObjects *pBillboardObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
 		pBillboardObject = new CHPGaugeObjects(pCreateMgr);
-		pBillboardObject->SetMaterial(m_pMaterial);
+		pBillboardObject->SetMaterial(Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 		pBillboardObject->SetCamera(m_pCamera);
 
 		XMFLOAT3 HPGaugePosition;
@@ -289,11 +290,14 @@ void CPlayerHPGaugeShader::ReleaseObjects()
 	}
 
 #if USE_BATCH_MATERIAL
-	for (int i = 0; i < m_nMaterials; ++i)
+	if (m_ppMaterials)
 	{
-		delete m_ppMaterials[i];
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
 	}
-	Safe_Delete(m_ppMaterials);
 #endif
 }
 

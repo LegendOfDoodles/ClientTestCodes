@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 
@@ -97,8 +97,8 @@ CWayFinder::CWayFinder(float sizeX, float sizeY)
 					to = m_nodes[m_nodeMax.x * (y - 1) + x - 1].Index();
 					if (to != INVALID_NODE)
 					{
-						m_edges[from].push_back(CEdge(from, to));
-						m_edges[from].push_back(CEdge(to, from));
+						m_edges[from].push_back(CEdge(from, to,14));
+						m_edges[from].push_back(CEdge(to, from, 14));
 					}
 				}
 				// 좌 상단 대각선
@@ -107,8 +107,8 @@ CWayFinder::CWayFinder(float sizeX, float sizeY)
 					to = m_nodes[m_nodeMax.x * (y + 1) + x - 1].Index();
 					if (to != INVALID_NODE)
 					{
-						m_edges[from].push_back(CEdge(from, to));
-						m_edges[from].push_back(CEdge(to, from));
+						m_edges[from].push_back(CEdge(from, to, 14));
+						m_edges[from].push_back(CEdge(to, from, 14));
 					}
 				}
 				// 우 하단 대각선
@@ -117,8 +117,8 @@ CWayFinder::CWayFinder(float sizeX, float sizeY)
 					to = m_nodes[m_nodeMax.x * (y - 1) + x + 1].Index();
 					if (to != INVALID_NODE)
 					{
-						m_edges[from].push_back(CEdge(from, to));
-						m_edges[from].push_back(CEdge(to, from));
+						m_edges[from].push_back(CEdge(from, to, 14));
+						m_edges[from].push_back(CEdge(to, from, 14));
 					}
 				}
 				// 우 상단 대각선
@@ -127,8 +127,8 @@ CWayFinder::CWayFinder(float sizeX, float sizeY)
 					to = m_nodes[m_nodeMax.x * (y + 1) + x + 1].Index();
 					if (to != INVALID_NODE)
 					{
-						m_edges[from].push_back(CEdge(from, to));
-						m_edges[from].push_back(CEdge(to, from));
+						m_edges[from].push_back(CEdge(from, to, 14));
+						m_edges[from].push_back(CEdge(to, from, 14));
 					}
 				}
 			}

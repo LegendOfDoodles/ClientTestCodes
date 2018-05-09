@@ -6,7 +6,7 @@
 /// 목적: 작업 시 화살표 표시용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-11
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,11 @@ CArrowShader::~CArrowShader()
 void CArrowShader::ReleaseUploadBuffers()
 {
 	if (m_pArrow)  m_pArrow->ReleaseUploadBuffers();
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 }
 
 void CArrowShader::UpdateShaderVariables()
@@ -40,6 +44,7 @@ void CArrowShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 
+	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	if (m_pArrow) m_pArrow->Render(pCamera);
 }
 
@@ -133,4 +138,12 @@ void CArrowShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 void CArrowShader::ReleaseObjects()
 {
 	Safe_Delete(m_pArrow);
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
+	}
 }

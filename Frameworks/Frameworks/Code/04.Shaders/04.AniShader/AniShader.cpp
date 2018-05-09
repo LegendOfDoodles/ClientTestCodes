@@ -11,7 +11,7 @@
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-07
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -29,14 +29,20 @@ CAniShader::~CAniShader()
 // 공개 함수
 void CAniShader::ReleaseUploadBuffers()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	if (m_ppObjects)
 	{
-		m_ppObjects[j]->ReleaseUploadBuffers();
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
 	}
+
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 #endif
 }
 
@@ -135,17 +141,13 @@ void CAniShader::AnimateObjects(float timeElapsed)
 void CAniShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
-#endif
 
-#if USE_INSTANCING
-	m_ppObjects[0]->Render(pCamera, m_nObjects);
-#else
+	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
+	if (m_ppMaterials) m_ppMaterials[1]->UpdateShaderVariables();
 	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
@@ -154,7 +156,6 @@ void CAniShader::Render(CCamera *pCamera)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
-#endif
 }
 
 void CAniShader::RenderBoundingBox(CCamera * pCamera)
@@ -344,7 +345,7 @@ void CAniShader::CreateShader(CCreateMgr *pCreateMgr)
 		m_ppPipelineStates[i] = NULL;
 	}
 
-	m_nHeaps = 2;
+	m_nHeaps = 3;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -408,15 +409,27 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
+	CreateShaderVariables(pCreateMgr, MAX_MINION);
+
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 4);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 1);
-	CreateShaderVariables(pCreateMgr, MAX_MINION);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 4, 2);
+
 	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 0);
 	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 2);
+
 #endif
 
 #if USE_BATCH_MATERIAL
-	m_pMaterial = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_nMaterials = 2;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+	// Blue
+	m_ppMaterials[0] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.6, 0.6, 1.0, 1.0));
+	// Red
+	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0, 0.6, 0.6, 1.0));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -597,7 +610,14 @@ void CAniShader::ReleaseObjects()
 	}
 
 #if USE_BATCH_MATERIAL
-	Safe_Delete(m_pMaterial);
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
+	}
 #endif
 }
 

@@ -7,7 +7,7 @@
 /// 목적: 스카이 박스 처리용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-11
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,11 @@ CSkyBoxShader::~CSkyBoxShader()
 void CSkyBoxShader::ReleaseUploadBuffers()
 {
 	if (m_pSkyBox)  m_pSkyBox->ReleaseUploadBuffers();
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 }
 
 void CSkyBoxShader::UpdateShaderVariables()
@@ -44,11 +48,7 @@ void CSkyBoxShader::Render(CCamera * pCamera)
 
 	CShader::Render(pCamera);
 
-	if (m_pMaterial)
-	{
-		m_pMaterial->Render(pCamera);
-		m_pMaterial->UpdateShaderVariables();
-	}
+	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	if (m_pSkyBox) m_pSkyBox->Render(pCamera);
 }
 
@@ -164,5 +164,12 @@ void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 void CSkyBoxShader::ReleaseObjects()
 {
 	Safe_Delete(m_pSkyBox);
-	Safe_Delete(m_pMaterial);
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
+	}
 }

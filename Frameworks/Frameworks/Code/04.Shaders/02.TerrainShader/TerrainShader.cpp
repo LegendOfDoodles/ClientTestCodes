@@ -6,7 +6,7 @@
 /// 목적: 지형 출력용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-20
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,11 @@ CTerrainShader::~CTerrainShader()
 void CTerrainShader::ReleaseUploadBuffers()
 {
 	if (m_pTerrain)  m_pTerrain->ReleaseUploadBuffers();
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 }
 
 void CTerrainShader::UpdateShaderVariables()
@@ -40,7 +44,7 @@ void CTerrainShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 
-	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
+	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	if (m_pTerrain) m_pTerrain->Render(pCamera);
 }
 
@@ -148,15 +152,22 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
 
-	m_pMaterial = Materials::CreateTerrainMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_nMaterials = 1;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+	m_ppMaterials[0] = Materials::CreateTerrainMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
 	m_pTerrain->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 }
 
 void CTerrainShader::ReleaseObjects()
 {
-	if (!m_pTerrain) return;
-
 	Safe_Delete(m_pTerrain);
-	Safe_Delete(m_pMaterial);
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
+	}
 }

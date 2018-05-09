@@ -12,7 +12,7 @@
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-08
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -30,14 +30,15 @@ CStaticObjectShader::~CStaticObjectShader()
 // 공개 함수
 void CStaticObjectShader::ReleaseUploadBuffers()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	if (m_ppObjects)
 	{
-		m_ppObjects[j]->ReleaseUploadBuffers();
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
 	}
+
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
 	if (m_ppMaterials)
 	{
 		for(int i=0;i<m_nMaterials; ++i)
@@ -381,10 +382,13 @@ void CStaticObjectShader::ReleaseObjects()
 	}
 
 #if USE_BATCH_MATERIAL
-	for (int i = 0; i < m_nMaterials; ++i)
+	if (m_ppMaterials)
 	{
-		delete m_ppMaterials[i];
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
 	}
-	Safe_Delete(m_ppMaterials);
 #endif
 }

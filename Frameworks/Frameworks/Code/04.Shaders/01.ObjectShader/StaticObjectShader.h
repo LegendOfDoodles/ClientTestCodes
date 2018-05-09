@@ -46,9 +46,6 @@ protected: // º¯¼ö
 
 	ID3D12Resource *m_myConstBuffer{ NULL };
 
-	CMaterial			**m_ppMaterials{ NULL };
-	int					m_nMaterials{ 0 };
-
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial						*m_pMaterial{ NULL };

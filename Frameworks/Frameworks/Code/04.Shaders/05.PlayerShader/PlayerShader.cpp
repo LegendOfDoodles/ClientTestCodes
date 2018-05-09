@@ -23,14 +23,20 @@ CPlayerShader::~CPlayerShader()
 // 공개 함수
 void CPlayerShader::ReleaseUploadBuffers()
 {
-	if (!m_ppObjects) return;
-
-	for (int j = 0; j < m_nObjects; j++)
+	if (m_ppObjects)
 	{
-		m_ppObjects[j]->ReleaseUploadBuffers();
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
 	}
+
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->ReleaseUploadBuffers();
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
 #endif
 }
 
@@ -86,7 +92,7 @@ void CPlayerShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 #if USE_BATCH_MATERIAL
-	if (m_pMaterial) m_pMaterial->UpdateShaderVariables();
+	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 #endif
 
 #if USE_INSTANCING
@@ -322,7 +328,9 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 #if USE_BATCH_MATERIAL
-	m_pMaterial = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_nMaterials = 1;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -416,6 +424,13 @@ void CPlayerShader::ReleaseObjects()
 	}
 
 #if USE_BATCH_MATERIAL
-	Safe_Delete(m_pMaterial);
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
+	}
 #endif
 }
