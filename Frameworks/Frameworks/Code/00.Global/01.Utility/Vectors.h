@@ -7,7 +7,7 @@ using namespace DirectX;
 /// 목적: 벡터 연산을 간략화 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
 #define	PI		3.141593
@@ -28,6 +28,65 @@ static bool IsZeroFloat(float val)
 	if (val < EPSILON)
 		return true;
 	return false;
+}
+
+////////////////////////////////////////////////////////////////////////
+//2차원 벡터의 연산
+inline int RandInt(int x, int y)
+{
+	assert(y >= x && "<RandInt>: y is less than x");
+	return rand() % (y - x + 1) + x;
+}
+
+inline double RandFloat() 
+{ 
+	return ((rand()) / (RAND_MAX + 1.0));
+}
+
+inline double RandInRange(double x, double y)
+{
+	return x + RandFloat()*(y - x);
+}
+
+inline bool   RandBool()
+{
+	if (RandFloat() > 0.5) return true;
+
+	else return false;
+}
+
+inline double RandomClamped()
+{ 
+	return RandFloat() - RandFloat(); 
+}
+
+inline double RandGaussian(double mean = 0.0, double standard_deviation = 1.0)
+{
+	double x1, x2, w, y1;
+	static double y2;
+	static int use_last = 0;
+
+	if (use_last)		        /* use value from previous call */
+	{
+		y1 = y2;
+		use_last = 0;
+	}
+	else
+	{
+		do
+		{
+			x1 = 2.0 * RandFloat() - 1.0;
+			x2 = 2.0 * RandFloat() - 1.0;
+			w = x1 * x1 + x2 * x2;
+		} while (w >= 1.0);
+
+		w = sqrt((-2.0 * log(w)) / w);
+		y1 = x1 * w;
+		y2 = x2 * w;
+		use_last = 1;
+	}
+
+	return(mean + y1 * standard_deviation);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -122,8 +181,8 @@ namespace Vector2
 
 	inline float DistanceSquare(XMFLOAT2& xmf2Vector1, XMFLOAT2& xmf2Vector2)
 	{
-		float x = xmf2Vector2.x - xmf2Vector1.x;
-		float y = xmf2Vector2.y - xmf2Vector1.y;
+		float x = abs(xmf2Vector2.x - xmf2Vector1.x);
+		float y = abs(xmf2Vector2.y - xmf2Vector1.y);
 		return(x * x + y * y);
 	}
 
@@ -259,9 +318,9 @@ namespace Vector3
 
 	inline float DistanceSquare(XMFLOAT3& xmf3Vector1, XMFLOAT3& xmf3Vector2)
 	{
-		float x = xmf3Vector2.x - xmf3Vector1.x;
-		float y = xmf3Vector2.y - xmf3Vector1.y;
-		float z = xmf3Vector2.z - xmf3Vector1.z;
+		float x = abs(xmf3Vector2.x - xmf3Vector1.x);
+		float y = abs(xmf3Vector2.y - xmf3Vector1.y);
+		float z = abs(xmf3Vector2.z - xmf3Vector1.z);
 		return(x * x + y * y + z * z);
 	}
 
