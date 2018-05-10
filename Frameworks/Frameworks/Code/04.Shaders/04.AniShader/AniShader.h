@@ -8,6 +8,8 @@ typedef std::list<CBaseObject*> ObjectList;
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
+class CHPGaugeManager;
+
 class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
 {
 public: // 생성자, 소멸자
@@ -34,9 +36,7 @@ public: // 공개 함수
 	int GetObjectCount() {  return m_nObjects; }
 
 	void SetCollisionManager(CCollisionManager* manager);
-
-	ObjectList GetBlueList() { return m_blueObjects; }
-	ObjectList GetRedList()  { return m_redObjects; }
+	void SetGaugeManger(CHPGaugeManager *pManger);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -67,7 +67,6 @@ protected: // 변수
 
 	ObjectList m_blueObjects;
 	ObjectList m_redObjects;
-	ObjectList m_hpObjects;
 
 	bool m_indexArr[MAX_MINION]{ false };
 
@@ -85,7 +84,7 @@ protected: // 변수
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
 	
 	CCollisionManager* m_pColManager{NULL};
-	
+	CHPGaugeManager *m_pGaugeManger{ NULL };
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };

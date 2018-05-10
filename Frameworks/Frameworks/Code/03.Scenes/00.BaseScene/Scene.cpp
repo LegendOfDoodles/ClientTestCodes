@@ -9,10 +9,12 @@
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
+#include "04.Shaders/97.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
+#include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
@@ -151,8 +153,9 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
-		m_ppShaders[6]->Initialize(m_pCreateMgr, m_pCamera);
-		m_ppShaders[7]->Initialize(m_pCreateMgr, m_pCamera);
+		static_cast<CUIObjectShader*>(m_ppShaders[6])->GetCamera(m_pCamera);
+		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[7])->GetCamera(m_pCamera);
+		static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->GetCamera(m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -180,6 +183,11 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		break;
 	case WM_MOUSEWHEEL:
 		m_pCamera->OnProcessMouseWheel(wParam, lParam);
+
+		static_cast<CUIObjectShader*>(m_ppShaders[6])->GetCamera(m_pCamera);
+		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[7])->GetCamera(m_pCamera);
+		static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->GetCamera(m_pCamera);
+
 		break;
 	default:
 		break;
@@ -235,7 +243,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 8;
+	m_nShaders = 9;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -246,13 +254,14 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
 	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
+	m_ppShaders[8] = new CMinionHPGaugeShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 2; ++i)
+	for (int i = 2; i < m_nShaders - 3; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -262,9 +271,11 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 	m_pCollisionManager = new CCollisionManager();
+	m_pHPGaugeManager = new CHPGaugeManager();
 
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
 	int nColliderObject = pAniS->GetObjectCount();
@@ -273,6 +284,9 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);
 	}
 	pAniS->SetCollisionManager(m_pCollisionManager);
+	pAniS->SetGaugeManger(m_pHPGaugeManager);
+
+	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetGaugeManager(m_pHPGaugeManager);
 
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
 	nColliderObject = pPlayerS->GetnObject();

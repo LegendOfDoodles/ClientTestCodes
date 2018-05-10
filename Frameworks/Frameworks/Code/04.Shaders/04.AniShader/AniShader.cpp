@@ -5,6 +5,7 @@
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
+#include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
 
 /// <summary>
@@ -261,6 +262,11 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 void CAniShader::SetCollisionManager(CCollisionManager * manager)
 {
 	m_pColManager = manager;
+}
+
+void CAniShader::SetGaugeManger(CHPGaugeManager * pManger)
+{
+	m_pGaugeManger = pManger;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -596,14 +602,14 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CAniShader::ReleaseObjects()
 {
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
 	{
-		delete (*iter);
+		iter = m_blueObjects.erase(iter);
 	}
 	m_blueObjects.clear();
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); )
 	{
-		delete (*iter);
+		iter = m_redObjects.erase(iter);
 	}
 	m_redObjects.clear();
 
@@ -792,16 +798,24 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	m_pCreateMgr->ExecuteCommandList();
 	CCollisionObject* pointer;
+	CBaseObject *pCurrentObject;
+
 	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) {
 		m_blueObjects.back()->ReleaseUploadBuffers();
 
 		pointer = (CCollisionObject*)(m_blueObjects.back());
+		pCurrentObject = (CBaseObject*)(m_blueObjects.back());
+
 		m_pColManager->AddCollider(pointer);
+		m_pGaugeManger->AddMinionObject(pCurrentObject);
 	}
 	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) {
 		m_redObjects.back()->ReleaseUploadBuffers();
 		
 		pointer = (CCollisionObject*)(m_redObjects.back());
+		pCurrentObject = (CBaseObject*)(m_redObjects.back());
+
 		m_pColManager->AddCollider(pointer);
+		m_pGaugeManger->AddMinionObject(pCurrentObject);
 	}
 }

@@ -192,6 +192,9 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader">
       <UniqueIdentifier>{51bcd638-c1d9-4073-aa8d-15fe57eb1797}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\06.HPGaugeManager">
+      <UniqueIdentifier>{da69b070-0d64-4a34-ae5e-e8636545f903}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -362,6 +365,9 @@
     <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader\MinionGaugeShader.h">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.h">
+      <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -510,6 +516,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader\MinionGaugeShader.cpp">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\01.MinionGaugeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

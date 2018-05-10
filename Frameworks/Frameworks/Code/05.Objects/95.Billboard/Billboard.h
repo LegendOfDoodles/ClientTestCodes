@@ -64,10 +64,12 @@ public:	// 생성자, 소멸자
 	virtual ~CHPGaugeObjects();
 
 public: // 공개함수
+	void SetObject(CBaseObject *pObject) { m_pMasterObject = pObject; };
+
 	virtual void Animate(float fTimeElapsed);
 
 protected: // 내부 함수
-
+	CBaseObject * m_pMasterObject;
 private: // 변수
 
 protected:

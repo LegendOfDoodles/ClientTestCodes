@@ -9,7 +9,7 @@
 /// 목적: UI HP 테스트 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-05-09
+/// 최종 수정 날짜: 2018-05-10
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -95,6 +95,16 @@ void CPlayerHPGaugeShader::Render(CCamera * pCamera)
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 #endif
+}
+
+void CPlayerHPGaugeShader::GetCamera(CCamera * pCamera)
+{
+	m_pCamera = pCamera;
+
+	for (int i = 0; i < m_nObjects; ++i) {
+		static_cast<CHPGaugeObjects*>(m_ppObjects[i])->SetCamera(m_pCamera);
+	}
+
 }
 
 bool CPlayerHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
@@ -246,6 +256,8 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 		pBillboardObject = new CHPGaugeObjects(pCreateMgr);
 		pBillboardObject->SetMaterial(Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 		pBillboardObject->SetCamera(m_pCamera);
+
+		pBillboardObject->SetObject(m_pPlayer[i]);
 
 		XMFLOAT3 HPGaugePosition;
 		
