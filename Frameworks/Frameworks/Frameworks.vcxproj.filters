@@ -195,6 +195,9 @@
     <Filter Include="소스 파일\00.Global\01.Utility\06.HPGaugeManager">
       <UniqueIdentifier>{da69b070-0d64-4a34-ae5e-e8636545f903}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\02.IconShader">
+      <UniqueIdentifier>{48b9bf6b-916d-4f61-94a9-dcdc8b552ebf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -368,6 +371,9 @@
     <ClInclude Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.h">
       <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -519,6 +525,9 @@
     </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.cpp">
       <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
