@@ -288,7 +288,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		pMaterial->Initialize(pCreateMgr);
 		pMaterial->SetTexture(pTexture);
 
-		pUIObject = new CUIObject(pCreateMgr, (Type)i);
+		pUIObject = new CUIObject(pCreateMgr, (UIType)i);
 		pUIObject->SetMaterial(pMaterial);
 		pUIObject->SetCamera(m_pCamera);
 		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);
