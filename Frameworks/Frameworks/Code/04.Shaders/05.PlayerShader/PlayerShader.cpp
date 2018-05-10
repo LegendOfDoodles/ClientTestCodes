@@ -376,7 +376,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 					CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
 					0, 0, -CONVERT_PaperUnit_to_InG(8));
 				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
-				pPlayer->CBaseObject::SetPosition(2000, 0, 800);
+				pPlayer->CBaseObject::SetPosition(500, 0,2000);
 
 				pPlayer->SetSkeleton(pSIdle);
 				pPlayer->SetSkeleton(pSStartWalk);

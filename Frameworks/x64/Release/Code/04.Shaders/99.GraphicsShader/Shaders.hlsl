@@ -1,6 +1,11 @@
 #define USE_INSTANCING 0
 Texture2D gtxtTexture : register(t0);
 Texture2D gtxtNormal : register(t1);
+Texture2D gtxtRoughnessMetalFresnel : register(t2);
+Texture2D gtxtSpecular : register(t3);
+
+Texture2D gtxtTextures[4] : register(t4);
+
 SamplerState wrapSampler : register(s0);
 
 //게임 객체의 정보를 위한 상수 버퍼를 선언한다.
@@ -22,7 +27,7 @@ struct INSTANCE_INFO
 {
 	matrix m_mtxGameObject;
 };
-StructuredBuffer<INSTANCE_INFO> gGameObjectInfos : register(t2);
+StructuredBuffer<INSTANCE_INFO> gGameObjectInfos : register(t4);
 #else
 cbuffer cbGameObjectInfo : register(b2)
 {
@@ -107,6 +112,45 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 	float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
 
 	return(cColor);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+//
+cbuffer cbGameObjectInfo : register(b6)
+{
+    matrix gmtxUI : packoffset(c0);
+    uint texIndex : packoffset(c4);
+};
+
+struct VS_UI_INPUT
+{
+    float3 position : POSITION;
+    float2 uv : TEXCOORD;
+};
+
+struct VS_UI_OUTPUT
+{
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
+    uint texIndex : TEXINDEX;
+};
+
+VS_UI_OUTPUT VSTexturedUI(VS_UI_INPUT input)
+{
+    VS_UI_OUTPUT output;
+
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxUI), gmtxView), gmtxProjection);
+    output.uv = input.uv;
+    output.texIndex = texIndex;
+
+    return (output);
+}
+
+float4 PSTexturedUI(VS_UI_OUTPUT input) : SV_TARGET
+{
+    float4 cColor = gtxtTextures[NonUniformResourceIndex(input.texIndex)].Sample(wrapSampler, input.uv);
+
+    return (cColor);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +274,6 @@ VS_TEXTURED_LIGHTING_OUTPUT VSTexturedLighting(VS_TEXTURED_LIGHTING_INPUT input)
 
 float4 PSTexturedLighting(VS_TEXTURED_LIGHTING_OUTPUT input) : SV_TARGET
 {
-    float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
 #ifdef _WITH_VERTEX_LIGHTING
     float4 cIllumination = input.color;
 #else
@@ -245,9 +288,33 @@ float4 PSTexturedLighting(VS_TEXTURED_LIGHTING_OUTPUT input) : SV_TARGET
         N = mul(normal, TBN); // 노말을 TBN행렬로 변환
     }
 
-    float4 cIllumination = Lighting(input.positionW, N);
+    float4 cColor = Lighting(input.positionW, N, gtxtTexture.Sample(wrapSampler, input.uv));
 #endif
-    return (lerp(cColor, cIllumination, 0.5f));
+    return gMaterials.m_cAlbedo * cColor;
+}
+
+float4 PSTexturedLightingDetail(VS_TEXTURED_LIGHTING_OUTPUT input) : SV_TARGET
+{
+#ifdef _WITH_VERTEX_LIGHTING
+    float4 cIllumination = input.color;
+#else
+    float3 N = normalize(input.normalW);
+    if (input.tangentW.x != 0 || input.tangentW.y != 0 || input.tangentW.z != 0)
+    {
+        float3 T = normalize(input.tangentW - dot(input.tangentW, N) * N);
+        float3 B = cross(N, T); // 노말과 탄젠트를 외적해서 바이 탄젠트(바이 노말)생성
+        float3x3 TBN = float3x3(T, B, N); // 이를 바탕으로 TBN행렬 생성
+        float3 normal = gtxtNormal.Sample(wrapSampler, input.uv); // 노말 맵에서 해당하는 uv에 해당하는 노말 읽기
+        normal = 2.0f * normal - 1.0f; // 노말을 -1에서 1사이의 값으로 변환
+        N = mul(normal, TBN); // 노말을 TBN행렬로 변환
+    }
+
+    float4 cColor = Lighting(input.positionW, N, 
+	gtxtTexture.Sample(wrapSampler, input.uv),
+	gtxtSpecular.Sample(wrapSampler, input.uv),
+    gtxtRoughnessMetalFresnel.Sample(wrapSampler, input.uv));
+#endif
+    return gMaterials.m_cAlbedo * cColor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -350,8 +417,6 @@ VS_BONEOUTPUT VSBone(VS_BONEINPUT input) {
 
 float4 PSBone(VS_BONEOUTPUT input) : SV_TARGET
 {
-
-	float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
 #ifdef _WITH_VERTEX_LIGHTING
 	float4 cIllumination = input.color;
 #else
@@ -366,7 +431,7 @@ float4 PSBone(VS_BONEOUTPUT input) : SV_TARGET
 		N = mul(normal, TBN); // 노말을 TBN행렬로 변환
 	}
 
-	float4 cIllumination = Lighting(input.positionW, N);
+    float4 cColor = Lighting(input.positionW, N, gtxtTexture.Sample(wrapSampler, input.uv));
 #endif
-	return (lerp(cColor, cIllumination, 0.5f));
+    return gMaterials.m_cAlbedo * cColor;
 }

@@ -51,19 +51,19 @@ void CPlayer::Animate(float timeElapsed)
 		else if (m_nCurrAnimation == PlayerAnimation::SkillQ) {
 			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 24, 16);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 24, 8);
 			}
 		}
 		else if (m_nCurrAnimation == PlayerAnimation::SkillE) {
 			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, 24, 180);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, 32, 180);
 			}
 		}
 		else if (m_nCurrAnimation == PlayerAnimation::SkillR) {
 			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.666f
 				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.666f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, 32);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, 40);
 			}
 		}
 

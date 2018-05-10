@@ -42,7 +42,7 @@ public:	// 외부 함수
 	
 	float m_fPreFrameTime{ 0 };
 
-	States m_CurrState = States::Idle;
+	States m_CurrState = { States::Idle };
 	CCollisionManager * m_pColManager{ NULL };
 };
 

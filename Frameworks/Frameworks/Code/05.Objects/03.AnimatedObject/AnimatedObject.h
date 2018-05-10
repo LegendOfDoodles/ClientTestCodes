@@ -52,7 +52,7 @@ protected: // º¯¼ö
 	CSkeleton	m_pSkeleton[20];
 
 	int m_nAniLength[20];
-	int m_nCurrAnimation{ 3 };
+	int m_nCurrAnimation{ 0 };
 
 	int m_nAniCnt{ 0 };
 
