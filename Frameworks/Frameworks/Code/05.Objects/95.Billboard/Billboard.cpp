@@ -57,25 +57,25 @@ CUIObject::CUIObject(CCreateMgr * pCreateMgr) : CBillboardObject(pCreateMgr)
 	CreateShaderVariables(pCreateMgr);
 }
 
-CUIObject::CUIObject(CCreateMgr * pCreateMgr, Type type) :CBillboardObject(pCreateMgr)
+CUIObject::CUIObject(CCreateMgr * pCreateMgr, UIType type) :CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
 
 	switch (type)
 	{
-	case Type::Minimap:
+	case UIType::Minimap:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case Type::KDA:
+	case UIType::KDA:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 458.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case Type::Skill:
+	case UIType::Skill:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 200.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case Type::Status:
+	case UIType::Status:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 276.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;

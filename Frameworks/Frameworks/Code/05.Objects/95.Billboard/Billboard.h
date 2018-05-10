@@ -7,7 +7,7 @@
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
 
-enum Type {
+enum UIType {
 	Minimap = 0,
 	KDA		= 1,
 	Skill	= 2,
@@ -38,7 +38,7 @@ class CUIObject : public CBillboardObject
 {
 public:
 	CUIObject(CCreateMgr *pCreateMgr);
-	CUIObject(CCreateMgr *pCreateMgr, Type type);
+	CUIObject(CCreateMgr *pCreateMgr, UIType type);
 	virtual ~CUIObject();
 
 	virtual void SetPos(XMFLOAT3 xmf3Position);
@@ -54,7 +54,7 @@ public:
 private:
 	XMFLOAT3	m_xmf3Position;
 	float		m_fDistance;
-	Type		m_type;
+	UIType		m_type;
 };
 
 class CHPGaugeObjects : public CBillboardObject
