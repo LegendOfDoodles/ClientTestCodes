@@ -1,6 +1,2 @@
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v141:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0.16299.0
-<<<<<<< HEAD
-Debug|x64|D:\새 폴더\client\Frameworks\|
-=======
 Debug|x64|C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks\|
->>>>>>> dd2e2a2df80006b7119535121782523159d0d44c

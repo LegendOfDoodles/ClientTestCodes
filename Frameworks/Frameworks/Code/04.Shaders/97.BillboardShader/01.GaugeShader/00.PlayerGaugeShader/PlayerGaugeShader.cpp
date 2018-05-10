@@ -254,7 +254,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 
 	for (int i = 0; i < m_nObjects; ++i) {
 		pBillboardObject = new CHPGaugeObjects(pCreateMgr);
-		pBillboardObject->SetMaterial(Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+		pBillboardObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 		pBillboardObject->SetCamera(m_pCamera);
 
 		pBillboardObject->SetObject(m_pPlayer[i]);
