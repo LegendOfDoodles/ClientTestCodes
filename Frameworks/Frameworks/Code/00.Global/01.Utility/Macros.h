@@ -56,6 +56,10 @@
 #define INCREASE_PLAYER_EXP 110
 #define INCREASE_MINION_EXP 5
 
+//방어력 적용 공식----------------
+#define Compute_Defence(val) (100)/(100+val)
+
+
 // 플레이어 무기별 증가량-----------
 // 체력
 #define INCREASE_SWORD_PLAYER_HP 84

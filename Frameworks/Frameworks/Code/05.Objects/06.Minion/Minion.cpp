@@ -40,7 +40,6 @@ void CMinion::Animate(float timeElapsed)
 		m_CurrState = States::Idle;
 		m_fFrameTime = 0;
 	}
-
 	CAnimatedObject::Animate(timeElapsed);
 
 }
@@ -94,17 +93,6 @@ void CMinion::SetPosition(float x, float z)
 
 //////////////////////////////////////////////////////////////////////////
 //근접 미니언
-CSwordMinion::CSwordMinion(CCreateMgr * pCreateMgr) : CMinion(pCreateMgr)
-{
-	SetType(ObjectType::SwordMinion);
-
-	m_StatusInfo.maxHP = 445;
-	m_StatusInfo.HP = 445;
-	m_StatusInfo.Atk = 12;
-	m_StatusInfo.Def = 0;
-	m_StatusInfo.Exp = 64;
-}
-
 CSwordMinion::CSwordMinion(CCreateMgr * pCreateMgr, int nMeshes): CMinion(pCreateMgr,nMeshes)
 {
 	SetType(ObjectType::SwordMinion);
@@ -171,15 +159,6 @@ void CSwordMinion::Animate(float timeElapsed)
 
 //////////////////////////////////////////////////////////////////////////
 //마법 미니언
-CMagicMinion::CMagicMinion(CCreateMgr * pCreateMgr) : CMinion(pCreateMgr)
-{
-	SetType(ObjectType::StaffMinion);
-	m_StatusInfo.maxHP = 280;
-	m_StatusInfo.HP = 280;
-	m_StatusInfo.Atk = 23;
-	m_StatusInfo.Def = 0;
-	m_StatusInfo.Exp = 64;
-}
 
 CMagicMinion::CMagicMinion(CCreateMgr * pCreateMgr, int nMeshes) : CMinion(pCreateMgr, nMeshes)
 {
@@ -247,15 +226,6 @@ void CMagicMinion::Animate(float timeElapsed)
 
 //////////////////////////////////////////////////////////////////////////
 //활 미니언
-CBowMinion::CBowMinion(CCreateMgr * pCreateMgr) : CMinion(pCreateMgr)
-{
-	SetType(ObjectType::BowMinion);
-	m_StatusInfo.maxHP = 300;
-	m_StatusInfo.HP = 300;
-	m_StatusInfo.Atk = 20;
-	m_StatusInfo.Def = 0;
-	m_StatusInfo.Exp = 64;
-}
 
 CBowMinion::CBowMinion(CCreateMgr * pCreateMgr, int nMeshes) : CMinion(pCreateMgr, nMeshes)
 {

@@ -18,6 +18,14 @@ public:	// 외부 함수
 
 	virtual void SetPosition(float x, float z);
 
+	virtual void ReceiveDamage(float damage)
+	{
+		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
+		if (m_StatusInfo.HP <= 0)
+			std::cout << "Die\n";
+
+	}
+
 protected:	// 내부 함수
 
 protected:	// 변수
@@ -51,8 +59,7 @@ class CSwordMinion : public CMinion
 		Die
 	};
 public: // 생성자, 소멸자
-	CSwordMinion(CCreateMgr *pCreateMgr);
-	CSwordMinion(CCreateMgr *pCreateMgr, int nMeshes);
+	CSwordMinion(CCreateMgr *pCreateMgr, int nMeshes=1);
 	virtual ~CSwordMinion();
 
 public:	// 외부 함수
@@ -74,8 +81,7 @@ class CMagicMinion : public CMinion
 		Die
 	};
 public: // 생성자, 소멸자
-	CMagicMinion(CCreateMgr *pCreateMgr);
-	CMagicMinion(CCreateMgr *pCreateMgr, int nMeshes);
+	CMagicMinion(CCreateMgr *pCreateMgr, int nMeshes=1);
 	virtual ~CMagicMinion();
 
 public:	// 외부 함수
@@ -96,8 +102,7 @@ class CBowMinion : public CMinion
 		Die
 	};
 public: // 생성자, 소멸자
-	CBowMinion(CCreateMgr *pCreateMgr);
-	CBowMinion(CCreateMgr *pCreateMgr, int nMeshes);
+	CBowMinion(CCreateMgr *pCreateMgr, int nMeshes=1);
 	virtual ~CBowMinion();
 
 public:	// 외부 함수

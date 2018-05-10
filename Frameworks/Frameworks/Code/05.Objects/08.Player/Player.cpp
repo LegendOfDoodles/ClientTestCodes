@@ -51,7 +51,7 @@ void CPlayer::Animate(float timeElapsed)
 		else if (m_nCurrAnimation == PlayerAnimation::SkillQ) {
 			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 24, 8);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 24, 8,100);
 			}
 		}
 		else if (m_nCurrAnimation == PlayerAnimation::SkillE) {

@@ -51,7 +51,7 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 	}
 }
 
-void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pCol, float data1, float data2)
+void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pCol, float data1, float data2, float damage)
 {
 	switch (type)
 	{
@@ -71,6 +71,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					{
 						//std::cout << "col\n";
 						(*i)->Translate(&Vector3::ScalarProduct(pCol->GetLook(),10));
+						(*i)->ReceiveDamage(damage);
 					}
 				}
 			}
@@ -103,6 +104,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 						{
 							//std::cout << "col\n";
 							(*i)->Translate(&Vector3::ScalarProduct(pCol->GetLook(), 10));
+							(*i)->ReceiveDamage(damage);
 						}
 					}
 				}

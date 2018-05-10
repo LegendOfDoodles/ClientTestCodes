@@ -8,7 +8,6 @@ class CCollisionManager;
 
 class CPlayer : public CAnimatedObject
 {
-	
 
 public:
 	enum PlayerAnimation {
@@ -33,6 +32,11 @@ public:	// 외부 함수
 	virtual void SetCollisionManager(CCollisionManager* manager) {
 		m_pColManager = manager;
 	}
+	
+	virtual void ReceiveDamage(float damage)
+	{
+		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
+	}
 
 	virtual void ActiveSkill(PlayerAnimation act);
 	
@@ -41,6 +45,8 @@ public:	// 외부 함수
 	*/
 	
 	float m_fPreFrameTime{ 0 };
+
+	PlayerInfo m_StatusInfo;
 
 	States m_CurrState = { States::Idle };
 	CCollisionManager * m_pColManager{ NULL };

@@ -16,6 +16,23 @@ struct PlayerInfo
 
 	UINT MaxExp;
 	UINT Exp;
+
+
+	PlayerInfo() {
+		maxHP = 500;
+		HP = maxHP;
+
+		maxMP = 500;
+		MP = maxMP = 150;
+
+		Atk = 50;
+		Def = 20;
+
+		Level = 0;
+
+		MaxExp = 170;
+		Exp =0;
+	}
 };
 
 struct CommonInfo
@@ -52,6 +69,7 @@ public: // 공개 함수
 	virtual void SetCollisionSize(float size) { m_fCollisionSize = size; }
 	virtual float GetCollisionSize() { return m_fCollisionSize; }
 	virtual XMFLOAT2 GetCollisionLevel() { return m_xmf2CollisionLevel; }
+	virtual void ReceiveDamage(float Damage) {}
 
 protected: // 내부 함수
 	void ResetCollisionLevel() {

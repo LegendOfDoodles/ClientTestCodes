@@ -20,7 +20,7 @@ public:
 	CCollisionManager();
 	void AddCollider(CCollisionObject* pcol);
 	void Update(CWayFinder* pWayFinder);
-	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0);
+	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0,float damage=0);
 	~CCollisionManager();
 
 protected:
