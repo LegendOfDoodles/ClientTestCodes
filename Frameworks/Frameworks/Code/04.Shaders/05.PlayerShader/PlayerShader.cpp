@@ -150,15 +150,15 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(CPlayer::PlayerAnimation::SkillQ);
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(Animations::SkillQ);
 	}
 	if (GetAsyncKeyState('E') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(CPlayer::PlayerAnimation::SkillE);
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(Animations::SkillE);
 	}
 	if (GetAsyncKeyState('R') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(CPlayer::PlayerAnimation::SkillR);
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(Animations::SkillR);
 	}
 
 	return true;

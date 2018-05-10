@@ -63,7 +63,7 @@ protected: // º¯¼ö
 	CBaseObject * *m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
 
-	int m_kind{ 0 };
+	ObjectType m_kind{ ObjectType::SwordMinion };
 
 	ObjectList m_blueObjects;
 	ObjectList m_redObjects;

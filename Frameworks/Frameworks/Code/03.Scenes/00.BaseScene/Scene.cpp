@@ -218,19 +218,29 @@ void CScene::BuildLights()
 
 	m_pLights->m_pLights[0].m_bEnable = true;
 	m_pLights->m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.5f, -1.0f, -1.0f));
+	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.3f, 1.0f));
 
 	m_pLights->m_pLights[1].m_bEnable = true;
-	m_pLights->m_pLights[1].m_nType = SPOT_LIGHT;
-	m_pLights->m_pLights[1].m_fRange = 500.0f;
-	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
-	m_pLights->m_pLights[1].m_position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
-	m_pLights->m_pLights[1].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	m_pLights->m_pLights[1].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
-	m_pLights->m_pLights[1].m_fFalloff = 8.0f;
-	m_pLights->m_pLights[1].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
-	m_pLights->m_pLights[1].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
+	m_pLights->m_pLights[1].m_nType = DIRECTIONAL_LIGHT;
+	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_pLights->m_pLights[1].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -1.0f, 0.0f));
+
+	m_pLights->m_pLights[2].m_bEnable = true;
+	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
+	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(1.0f, -0.3f, -1.0f));
+
+	m_pLights->m_pLights[3].m_bEnable = true;
+	m_pLights->m_pLights[3].m_nType = SPOT_LIGHT;
+	m_pLights->m_pLights[3].m_fRange = 500.0f;
+	m_pLights->m_pLights[3].m_color = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
+	m_pLights->m_pLights[3].m_position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
+	m_pLights->m_pLights[3].m_direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[3].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	m_pLights->m_pLights[3].m_fFalloff = 8.0f;
+	m_pLights->m_pLights[3].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
+	m_pLights->m_pLights[3].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
 }
 
 void CScene::BuildObjects(CCreateMgr *pCreateMgr)
@@ -267,7 +277,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetnObject());
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetObjectCount());
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
 
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
@@ -290,7 +300,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetGaugeManager(m_pHPGaugeManager);
 
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
-	nColliderObject = pPlayerS->GetnObject();
+	nColliderObject = pPlayerS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
@@ -339,8 +349,8 @@ void CScene::ReleaseShaderVariables()
 
 void CScene::UpdateShaderVariables()
 {
-	m_pLights->m_pLights[1].m_position = m_pCamera->GetPosition();
-	m_pLights->m_pLights[1].m_direction = m_pCamera->GetLookVector();
+	m_pLights->m_pLights[3].m_position = m_pCamera->GetPosition();
+	m_pLights->m_pLights[3].m_direction = m_pCamera->GetLookVector();
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
 }
 

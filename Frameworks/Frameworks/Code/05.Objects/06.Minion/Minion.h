@@ -18,6 +18,8 @@ public:	// 외부 함수
 
 	virtual void SetPosition(float x, float z);
 
+	virtual 	void SetState(StatesType newState);
+
 	virtual void ReceiveDamage(float damage)
 	{
 		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
@@ -27,15 +29,15 @@ public:	// 외부 함수
 	}
 
 protected:	// 내부 함수
+	virtual void AdjustAnimationIndex();
 
 protected:	// 변수
-	States m_CurrState = States::Idle;
 	
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/
 
-	ObjectType m_ObjectType = ObjectType::SwordMinion;
+	ObjectType m_ObjectType{ ObjectType::SwordMinion };
 
 	/*
 	0. SwordPlayer, 1. StaffPlayer,   2. BowPlayer,
@@ -50,14 +52,6 @@ protected:	// 변수
 
 class CSwordMinion : public CMinion
 {
-	enum SwordMinionAnimation {
-		Idle,
-		Attack1,
-		Attack2,
-		StartWalk,
-		Walking,
-		Die
-	};
 public: // 생성자, 소멸자
 	CSwordMinion(CCreateMgr *pCreateMgr, int nMeshes=1);
 	virtual ~CSwordMinion();
@@ -72,14 +66,6 @@ public:	// 외부 함수
 
 class CMagicMinion : public CMinion
 {
-	enum MagicMinionAnimation {
-		Idle,
-		Attack1,
-		Attack2,
-		StartWalk,
-		Walking,
-		Die
-	};
 public: // 생성자, 소멸자
 	CMagicMinion(CCreateMgr *pCreateMgr, int nMeshes=1);
 	virtual ~CMagicMinion();
@@ -94,19 +80,15 @@ public:	// 외부 함수
 
 class CBowMinion : public CMinion
 {
-	enum BowMinionAnimation {
-		Idle		,
-		Attack,
-		StartWalk,
-		Walking	,
-		Die
-	};
 public: // 생성자, 소멸자
 	CBowMinion(CCreateMgr *pCreateMgr, int nMeshes=1);
 	virtual ~CBowMinion();
 
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
+
+protected:	// 내부 함수
+	virtual void AdjustAnimationIndex();
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/

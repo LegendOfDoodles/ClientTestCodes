@@ -5,15 +5,13 @@
 /// 목적: 움직이는 오브젝트 처리용 기본 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
 {
-	m_fFrameTime = 0;
-	m_nCurrAnimation = 0;
 }
 
 CAnimatedObject::~CAnimatedObject()
@@ -27,10 +25,10 @@ void CAnimatedObject::Animate(float timeElapsed)
 {
 	ResetCollisionLevel();
 
-	int Bcnt = m_pSkeleton[m_nCurrAnimation].GetBoneCount();
+	int Bcnt = m_pSkeleton[m_nAniIndex].GetBoneCount();
 
 	for (int i = 0; i < Bcnt; ++i) {
-		m_xmf4x4Frame[i] = m_pSkeleton[m_nCurrAnimation].GetBone(i).GetFrame((int)m_fFrameTime);
+		m_xmf4x4Frame[i] = m_pSkeleton[m_nAniIndex].GetBone(i).GetFrame((int)m_fFrameTime);
 	}
 }
 

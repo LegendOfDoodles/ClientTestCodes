@@ -45,6 +45,8 @@ public: // 공개 함수
 protected: // 내부 함수
 	bool IsArrive(float dst);
 
+	virtual void AdjustAnimationIndex() = 0;
+
 	void ResetDestination() { m_destination.x = NONE; }
 	bool NoneDestination() { return m_destination.x == NONE;	}
 
@@ -52,7 +54,8 @@ protected: // 변수
 	CSkeleton	m_pSkeleton[20];
 
 	int m_nAniLength[20];
-	int m_nCurrAnimation{ 0 };
+	int m_nAniIndex{ 0 };
+	AnimationsType m_nCurrAnimation{ Animations::Idle };
 
 	int m_nAniCnt{ 0 };
 
