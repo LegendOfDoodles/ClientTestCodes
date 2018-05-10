@@ -15,7 +15,7 @@ public:	// 생성자, 소멸자
 
 public: // 공개 함수
 	// Initialize and Release
-	bool Initialize(HINSTANCE hInstance, HWND hWnd, Network* pNetwork);
+	bool Initialize(HINSTANCE hInstance, HWND hWnd, Network pNetwork);
 	void Finalize();
 	void FrameAdvance(float timeElapsed);
 
@@ -35,7 +35,7 @@ private: // 변수
 
 	CScene *m_pScene{ NULL };
 	
-	Network* m_pNetwork;
+	Network m_pNetwork;
 
 //public: //네트워크 관련 변수들
 //	SOCKET  m_mysocket;

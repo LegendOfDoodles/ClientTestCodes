@@ -5,6 +5,7 @@
 
 CCollisionManager::CCollisionManager()
 {
+
 }
 
 void CCollisionManager::AddCollider(CCollisionObject* pcol)

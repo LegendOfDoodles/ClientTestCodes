@@ -39,10 +39,11 @@ void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 {
 	m_pNetwork = pNetwork;
 	
-	WSADATA	wsadata;
+	/*WSADATA	wsadata;
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
 
-	m_pNetwork->m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+	m_pNetwork->m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0); \
+		if (m_pNetwork->m_mysocket == INVALID_SOCKET) printf("Socket Failed\n");
 
 	SOCKADDR_IN ServerAddr;
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
@@ -57,7 +58,7 @@ void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 	m_pNetwork->m_send_wsabuf.buf = m_pNetwork->m_send_buffer;
 	m_pNetwork->m_send_wsabuf.len = MAX_BUFF_SIZE;
 	m_pNetwork->m_recv_wsabuf.buf = m_pNetwork->m_recv_buffer;
-	m_pNetwork->m_recv_wsabuf.len = MAX_BUFF_SIZE;
+	m_pNetwork->m_recv_wsabuf.len = MAX_BUFF_SIZE;*/
 
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
