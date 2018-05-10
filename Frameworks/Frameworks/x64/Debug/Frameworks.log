@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  CollisionManager.cpp
 d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
@@ -45,3 +46,12 @@ d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+=======
+﻿  PlayerGaugeShader.cpp
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\00.playergaugeshader\playergaugeshader.cpp(110): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\00.playergaugeshader\playergaugeshader.cpp(116): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+  Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+>>>>>>> dd2e2a2df80006b7119535121782523159d0d44c

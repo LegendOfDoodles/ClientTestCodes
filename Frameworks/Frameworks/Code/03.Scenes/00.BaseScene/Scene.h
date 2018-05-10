@@ -7,6 +7,8 @@
 class CCreateMgr;
 class CWayFinder;
 class CCollisionManager;
+class CHPGaugeManager;
+
 struct LIGHT
 {
 	XMFLOAT4				m_color;
@@ -101,8 +103,8 @@ protected: // º¯¼ö
 
 	CCreateMgr* m_pCreateMgr{ NULL };
 
-	CCollisionManager* m_pCollisionManager{NULL};
-
+	CCollisionManager *m_pCollisionManager{NULL};
+	CHPGaugeManager *m_pHPGaugeManager{NULL};
 
 	Network* m_pNetwork;
 	

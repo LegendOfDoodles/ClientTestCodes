@@ -2,7 +2,9 @@
 #include "MinionGaugeShader.h"
 #include "05.Objects/95.Billboard/Billboard.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
+#include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/99.Material/Material.h"
+#include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 
 /// <summary>
 /// 목적: Billboard 테스트 쉐이더
@@ -16,6 +18,7 @@
 CMinionHPGaugeShader::CMinionHPGaugeShader(CCreateMgr *pCreateMgr)
 	: CShader(pCreateMgr)
 {
+	m_pCreateMgr = pCreateMgr;
 }
 
 CMinionHPGaugeShader::~CMinionHPGaugeShader()
@@ -26,12 +29,8 @@ CMinionHPGaugeShader::~CMinionHPGaugeShader()
 // 공개 함수
 void CMinionHPGaugeShader::ReleaseUploadBuffers()
 {
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
+	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+		(*iter)->ReleaseUploadBuffers();
 	}
 
 #if USE_BATCH_MATERIAL
@@ -45,55 +44,50 @@ void CMinionHPGaugeShader::ReleaseUploadBuffers()
 
 void CMinionHPGaugeShader::UpdateShaderVariables()
 {
-#if USE_INSTANCING
-	m_pCommandList->SetGraphicsRootShaderResourceView(2,
-		m_pInstanceBuffer->GetGPUVirtualAddress());
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		XMStoreFloat4x4(&m_pMappedObjects[i].m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	}
-#else
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
-#endif
 }
 
 void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(timeElapsed);
+	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+		(*iter)->Animate(timeElapsed);
+	}
+
+	for (int i = 0; i < m_pGaugeManger->GetCount(); ++i) {
+		SpawnGauge();
+
+		if (i == (m_pGaugeManger->GetCount()) - 1) m_pGaugeManger->ResetCount();
 	}
 }
 
 void CMinionHPGaugeShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-#endif
 
-#if USE_INSTANCING
-	m_ppObjects[0]->Render(pCamera, m_nObjects);
-#else
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
+	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+		(*iter)->Render(pCamera);
 	}
-#endif
+}
+
+void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
+{
+	m_pCamera = pCamera;
+
+	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+		static_cast<CHPGaugeObjects*>(*iter)->SetCamera(m_pCamera);
+	}
 }
 
 bool CMinionHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	
+
 	return false;
 }
 
@@ -135,20 +129,11 @@ D3D12_INPUT_LAYOUT_DESC CMinionHPGaugeShader::CreateInputLayout()
 
 D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
-	//./Code/04.Shaders/99.GraphicsShader/
-#if USE_INSTANCING
-	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTexturedLightingInstancing",
-		"vs_5_1",
-		ppShaderBlob));
-#else
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"VSTextured",
 		"vs_5_1",
 		ppShaderBlob));
-#endif
 }
 
 D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
@@ -165,6 +150,7 @@ void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
+	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -174,17 +160,6 @@ void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBu
 {
 	HRESULT hResult;
 
-#if USE_INSTANCING
-	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		NULL);
-
-	hResult = m_pInstanceBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pInstanceBuffer->Map Failed");
-#else
 	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
@@ -196,103 +171,84 @@ void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBu
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
-#endif
-
-
 }
 
 void CMinionHPGaugeShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	CCamera *pCamera = (CCamera*)pContext;
-
-	int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
-
-	m_nObjects = (xObjects * 2 + 1) * (yObjects * 2 + 1) * (zObjects * 2 + 1);
-	m_ppObjects = new CBaseObject*[m_nObjects];
-
-#if USE_INSTANCING
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
-	CreateShaderVariables(pCreateMgr);
-#else
+	m_pCamera = (CCamera*)pContext;
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateShaderVariables(pCreateMgr, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+	CreateShaderVariables(pCreateMgr, MAX_MINION);
 
-#endif
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1);
+
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes);
 
 #if USE_BATCH_MATERIAL
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0]= Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+
+	m_ppMaterials[0] = Materials::CreateGreyMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
-	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
+	CMaterial *pCubeMaterial = Materials::CreateGreyMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle[0], &m_srvGPUDescriptorStartHandle[0]);
 #endif
 
-	float fxPitch = 12.0f * 5.f;
-	float fyPitch = 12.0f * 5.f;
-	float fzPitch = 12.0f * 5.f;
-
-	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CBillboardObject *pBillboardObject = NULL;
-	for (int y = -yObjects; y <= yObjects; y++)
-	{
-		for (int z = -zObjects; z <= zObjects; z++)
-		{
-			for (int x = -xObjects; x <= xObjects; x++)
-			{
-
-				pBillboardObject = new CBillboardObject(pCreateMgr);
-#if !USE_INSTANCING
-#endif
-#if !USE_BATCH_MATERIAL
-				pRotatingObject->SetMaterial(pCubeMaterial);
-#endif
-				pBillboardObject->SetPosition(x * 30 + 200, y * 100 + 100, z * 100 + 1000);
-				pBillboardObject->SetCamera(pCamera);
-#if !USE_INSTANCING
-				pBillboardObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-#endif
-				m_ppObjects[i++] = pBillboardObject;
-			}
-		}
-	}
-
-#if USE_INSTANCING
-	m_ppObjects[0]->SetMesh(0, pCubeMesh);
-#endif
 }
 
-
-void CMinionHPGaugeShader::ReleaseShaderVariables()
+int CMinionHPGaugeShader::GetPossibleIndex()
 {
-#if USE_INSTANCING
-	if (!m_pInstanceBuffer) return;
+	for (int idx = 0; idx < MAX_MINION; ++idx)
+	{
+		if (!m_indexArr[idx])
+		{
+			m_indexArr[idx] = true;
+			return idx;
+		}
+	}
+	return NONE;
+}
 
-	m_pInstanceBuffer->Unmap(0, NULL);
-	Safe_Release(m_pInstanceBuffer);
-#else
-	if (!m_pConstBuffer) return;
+void CMinionHPGaugeShader::SpawnGauge()
+{
+	m_MinionObjectList = m_pGaugeManger->GetMinionObjectList();
 
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
-#endif
+	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 
-	CShader::ReleaseShaderVariables();
+	m_pCreateMgr->ResetCommandList();
+
+	CHPGaugeObjects *pGaugeObject{ NULL };
+	CBaseObject *pMinionObjects{ NULL };
+
+	pGaugeObject = new CHPGaugeObjects(m_pCreateMgr);
+	pMinionObjects = m_MinionObjectList->back();
+
+	pGaugeObject->SetObject(pMinionObjects);
+	pGaugeObject->SetMaterial(m_ppMaterials[0]);
+	pGaugeObject->SetCamera(m_pCamera);
+
+	int index = GetPossibleIndex();
+
+	pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+
+	pGaugeObject->SaveIndex(index);
+
+	XMFLOAT3 xmfGaugePosition;
+	xmfGaugePosition = pMinionObjects->GetPosition();
+	xmfGaugePosition.y += 70.f;
+	pGaugeObject->SetPosition(xmfGaugePosition);
+	m_GaugeObjectList.emplace_back(pGaugeObject);
+
+	m_pCreateMgr->ExecuteCommandList();
 }
 
 void CMinionHPGaugeShader::ReleaseObjects()
 {
-	if (m_ppObjects)
+	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end();)
 	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			Safe_Delete(m_ppObjects[j]);
-		}
-		Safe_Delete_Array(m_ppObjects);
+		iter = m_GaugeObjectList.erase(iter);
 	}
+	m_GaugeObjectList.clear();
 
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)

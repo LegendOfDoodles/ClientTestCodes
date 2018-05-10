@@ -61,6 +61,7 @@ void CUIObjectShader::AnimateObjects(float timeElapsed)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
+
 }
 
 void CUIObjectShader::Render(CCamera * pCamera)
@@ -75,6 +76,15 @@ void CUIObjectShader::Render(CCamera * pCamera)
 	
 		if (j == 3 && OnOFF) m_ppObjects[j]->Render(pCamera);
 		else if (j != 3)	 m_ppObjects[j]->Render(pCamera);
+	}
+}
+
+void CUIObjectShader::GetCamera(CCamera * pCamera)
+{
+	m_pCamera = pCamera;
+
+	for (int i = 0; i < m_nObjects; ++i) {
+		static_cast<CUIObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
 	}
 }
 

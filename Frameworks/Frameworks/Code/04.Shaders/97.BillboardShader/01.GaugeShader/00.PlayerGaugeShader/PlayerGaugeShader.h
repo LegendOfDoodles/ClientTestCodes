@@ -20,6 +20,8 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 	
+	virtual void GetCamera(CCamera *pCamera);
+
 	void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
 	void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 

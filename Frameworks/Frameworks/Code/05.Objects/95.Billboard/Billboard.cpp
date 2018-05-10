@@ -180,7 +180,9 @@ CHPGaugeObjects::~CHPGaugeObjects()
 
 void CHPGaugeObjects::Animate(float fTimeElapsed)
 {
-	// 플레이어 위치 따라가기
-
 	CBillboardObject::Animate(fTimeElapsed);
+
+	m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
+	m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
+	m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 }
