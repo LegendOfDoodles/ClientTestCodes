@@ -220,7 +220,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 	CHPGaugeObjects *pGaugeObject{ NULL };
 	CBaseObject *pMinionObjects{ NULL };
 
-	pGaugeObject = new CHPGaugeObjects(m_pCreateMgr);
+	pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GaugeUiType::MinionGauge);
 	pMinionObjects = m_MinionObjectList->back();
 
 	pGaugeObject->SetObject(pMinionObjects);

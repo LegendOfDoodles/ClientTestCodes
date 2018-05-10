@@ -527,7 +527,7 @@
       <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

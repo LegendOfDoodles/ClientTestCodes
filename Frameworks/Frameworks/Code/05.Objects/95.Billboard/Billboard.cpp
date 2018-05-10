@@ -166,12 +166,19 @@ void CUIObject::Render(CCamera *pCamera, UINT istanceCnt)
 CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr)
 	: CBillboardObject(pCreateMgr)
 {
+	
+
+	CreateShaderVariables(pCreateMgr);
+}
+
+CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GaugeUiType type)
+	: CBillboardObject(pCreateMgr)
+{
 	// HP°ÔÀÌÁö Mesh
 	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 40.f, 5.0f, 0.f);
 	SetMesh(0, pRectMesh);
 
-
-	CreateShaderVariables(pCreateMgr);
+	m_Type = type;
 }
 
 CHPGaugeObjects::~CHPGaugeObjects()
@@ -182,7 +189,17 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 
-	m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
-	m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
-	m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+	if (m_Type == GaugeUiType::PlayerGauge)
+	{
+		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
+		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 110.f;
+		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+	}
+	else if (m_Type == GaugeUiType::MinionGauge)
+	{
+		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
+		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
+		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+	}
+	
 }

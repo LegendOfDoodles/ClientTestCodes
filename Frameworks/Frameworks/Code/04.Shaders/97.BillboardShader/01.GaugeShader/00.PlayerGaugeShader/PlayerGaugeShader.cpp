@@ -74,9 +74,9 @@ void CPlayerHPGaugeShader::AnimateObjects(float timeElapsed)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
 
-		XMFLOAT3 HPGaugePosition = m_pPlayer[j]->GetPosition();
+		/*XMFLOAT3 HPGaugePosition = m_pPlayer[j]->GetPosition();
 		HPGaugePosition.y += 110.f;
-		dynamic_cast<CHPGaugeObjects*>(m_ppObjects[j])->SetPosition(HPGaugePosition);
+		dynamic_cast<CHPGaugeObjects*>(m_ppObjects[j])->SetPosition(HPGaugePosition);*/
 	}
 }
 
@@ -250,26 +250,24 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CHPGaugeObjects *pBillboardObject = NULL;
+	CHPGaugeObjects *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pBillboardObject = new CHPGaugeObjects(pCreateMgr);
-		pBillboardObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
-		pBillboardObject->SetCamera(m_pCamera);
+		pGaugeObject = new CHPGaugeObjects(pCreateMgr, GaugeUiType::PlayerGauge);
+		pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+		pGaugeObject->SetCamera(m_pCamera);
 
-		pBillboardObject->SetObject(m_pPlayer[i]);
+		pGaugeObject->SetObject(m_pPlayer[i]);
 
-		XMFLOAT3 HPGaugePosition;
+		XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
 		
-		HPGaugePosition.x = m_pPlayer[i]->GetPosition().x;
-		HPGaugePosition.y = m_pPlayer[i]->GetPosition().y + 70.f;
-		HPGaugePosition.z = m_pPlayer[i]->GetPosition().z;
+		HPGaugePosition.y += 110.f;
 
-		pBillboardObject->SetPosition(HPGaugePosition);
+		pGaugeObject->SetPosition(HPGaugePosition);
 
-		pBillboardObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
-		m_ppObjects[i] = pBillboardObject;
+		m_ppObjects[i] = pGaugeObject;
 	}
 }
 

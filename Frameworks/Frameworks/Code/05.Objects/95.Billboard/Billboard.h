@@ -14,6 +14,11 @@ enum UIType {
 	Status	= 3
 };
 
+enum GaugeUiType {
+	PlayerGauge,
+	MinionGauge
+};
+
 class CBillboardObject : public CBaseObject
 {
 public:	// 생성자, 소멸자
@@ -61,6 +66,7 @@ class CHPGaugeObjects : public CBillboardObject
 {
 public:	// 생성자, 소멸자
 	CHPGaugeObjects(CCreateMgr *pCreateMgr);
+	CHPGaugeObjects(CCreateMgr *pCreateMgr, GaugeUiType type);
 	virtual ~CHPGaugeObjects();
 
 public: // 공개함수
@@ -68,9 +74,11 @@ public: // 공개함수
 
 	virtual void Animate(float fTimeElapsed);
 
-protected: // 내부 함수
+protected:
 	CBaseObject * m_pMasterObject;
+
 private: // 변수
+	GaugeUiType		m_Type;
 
 protected:
 

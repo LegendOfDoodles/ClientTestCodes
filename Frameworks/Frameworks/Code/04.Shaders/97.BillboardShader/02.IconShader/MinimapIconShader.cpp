@@ -58,10 +58,6 @@ void CMinimapIconShader::AnimateObjects(float timeElapsed)
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
-
-		XMFLOAT3 HPGaugePosition = m_pPlayer[j]->GetPosition();
-		HPGaugePosition.y += 110.f;
-		dynamic_cast<CHPGaugeObjects*>(m_ppObjects[j])->SetPosition(HPGaugePosition);
 	}
 }
 
