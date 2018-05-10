@@ -15,10 +15,8 @@ public:	// 생성자, 소멸자
 
 public: // 공개 함수
 	// Initialize and Release
-	bool Initialize(HINSTANCE hInstance, HWND hWnd, Network network);
+	bool Initialize(HINSTANCE hInstance, HWND hWnd, Network* pNetwork);
 	void Finalize();
-	void ReadPacket(SOCKET socket);
-	//void ProcessPacket(char *ptr);
 	void FrameAdvance(float timeElapsed);
 
 	// Message Process
@@ -37,7 +35,7 @@ private: // 변수
 
 	CScene *m_pScene{ NULL };
 	
-	Network m_Network;
+	Network* m_pNetwork;
 
 //public: //네트워크 관련 변수들
 //	SOCKET  m_mysocket;

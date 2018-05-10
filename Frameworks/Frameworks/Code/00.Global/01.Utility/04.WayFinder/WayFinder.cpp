@@ -225,7 +225,8 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float co
 	else
 	{
 		// 길찾기 수행
-		m_pCurSearch = new CAstar(this, srcIndex, dstIndex);
+		if(source.x < target.x) m_pCurSearch = new CAstar(this, srcIndex, dstIndex);
+		else m_pCurSearch = new CAstar(this, dstIndex, srcIndex);
 
 		int result;
 		for (int i = 0; i < 10000; ++i)
@@ -234,15 +235,22 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float co
 			if (result == Found || result == Not_Found)
 				break;
 		}
-		// 찾은 패스 저장
-		path = m_pCurSearch->GetPath();
 		if (result == Found)
 		{
-			// 패스에 도착지를 추가로 연결하고 종료한다.
-			if (!path->empty())
-				path->push_back(CPathEdge(path->back().To(), target));
+			// 찾은 패스 저장
+			path = m_pCurSearch->GetPath();
+			// 소스가 오른쪽 이었으면 패스를 뒤집는다.
+			if (source.x < target.x)
+			{
+				// 패스에 도착지를 추가로 연결하고 종료한다.
+				if (!path->empty()) path->push_back(CPathEdge(path->back().To(), target));
+			}
 			else
-				path->push_back(CPathEdge(source, target));
+			{
+				// 패스에 도착지를 추가로 연결하고 종료한다.
+				if (!path->empty()) path->push_back(CPathEdge(path->back().To(), source));
+				path->reverse();
+			}
 		}
 	
 		delete m_pCurSearch;
@@ -277,6 +285,8 @@ void CWayFinder::SmoothPath(Path *path, float collisionSize)
 
 void CWayFinder::SmoothPathDetail(Path * path, float collisionSize)
 {
+	if (!path) return;
+
 	Path::iterator e1(path->begin()), e2;
 
 	while (e1 != path->end())

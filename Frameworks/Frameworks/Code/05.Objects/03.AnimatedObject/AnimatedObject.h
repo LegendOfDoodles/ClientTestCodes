@@ -43,7 +43,7 @@ public: // 공개 함수
 	void  SetSpeed(float speed) { m_speed = speed; }
 
 protected: // 내부 함수
-	bool IsArrive(XMFLOAT2 & nextPos, float dst);
+	bool IsArrive(float dst);
 
 	void ResetDestination() { m_destination.x = NONE; }
 	bool NoneDestination() { return m_destination.x == NONE;	}

@@ -73,6 +73,9 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject* object)
 			if (first_time) {
 				first_time = false;
 			}
+			else {
+				
+			}
 
 			break;
 		}
@@ -82,6 +85,7 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject* object)
 			SC_MsgChMove *my_packet = reinterpret_cast<SC_MsgChMove *>(ptr);
 			int other_id = my_packet->Character_id;
 			if (other_id == myid) {
+				m_myid = other_id;
 				//printf("fuck\n");
 				//object->SetPathToGo(
 				//object->SetPosition(my_packet->x, my_packet->y);

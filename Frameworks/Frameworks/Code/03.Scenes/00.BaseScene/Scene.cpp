@@ -33,15 +33,14 @@ CScene::~CScene()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CScene::Initialize(CCreateMgr *pCreateMgr, Network network)
+void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 {
-	m_Network = network;
-	BuildObjects(pCreateMgr);
-	CreateShaderVariables(pCreateMgr);
+	m_pNetwork = pNetwork;
+	
 	WSADATA	wsadata;
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
 
-	m_Network.m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+	m_pNetwork->m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
 
 	SOCKADDR_IN ServerAddr;
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
@@ -49,14 +48,17 @@ void CScene::Initialize(CCreateMgr *pCreateMgr, Network network)
 	ServerAddr.sin_port = htons(MY_SERVER_PORT);
 	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-	int Result = WSAConnect(m_Network.m_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
+	int Result = WSAConnect(m_pNetwork->m_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
 
-	WSAAsyncSelect(m_Network.m_mysocket, m_hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
+	WSAAsyncSelect(m_pNetwork->m_mysocket, m_hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
 
-	m_Network.m_send_wsabuf.buf = m_Network.m_send_buffer;
-	m_Network.m_send_wsabuf.len = MAX_BUFF_SIZE;
-	m_Network.m_recv_wsabuf.buf = m_Network.m_recv_buffer;
-	m_Network.m_recv_wsabuf.len = MAX_BUFF_SIZE;
+	m_pNetwork->m_send_wsabuf.buf = m_pNetwork->m_send_buffer;
+	m_pNetwork->m_send_wsabuf.len = MAX_BUFF_SIZE;
+	m_pNetwork->m_recv_wsabuf.buf = m_pNetwork->m_recv_buffer;
+	m_pNetwork->m_recv_wsabuf.len = MAX_BUFF_SIZE;
+
+	BuildObjects(pCreateMgr);
+	CreateShaderVariables(pCreateMgr);
 }
 
 void CScene::Finalize()
@@ -238,7 +240,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
-	m_ppShaders[2] = new CAniShader(pCreateMgr);
+	m_ppShaders[2] = new CAniShader(pCreateMgr, m_pNetwork);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
@@ -392,16 +394,17 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
 			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z),
 			m_pSelectedObject->GetCollisionSize()));
-		my_packet.Character_id = m_Network.m_myid;
+		my_packet.Character_id = m_pNetwork->m_myid;
+
 		my_packet.size = sizeof(my_packet);
 		my_packet.x = m_pickWorldPosition.x;
 		my_packet.y = m_pickWorldPosition.z;
-		m_Network.m_send_wsabuf.len = sizeof(my_packet);
+		m_pNetwork->m_send_wsabuf.len = sizeof(my_packet);
 		DWORD iobyte;
 		my_packet.type = CS_MOVE_PLAYER;
-		memcpy(m_Network.m_send_buffer, &my_packet, sizeof(my_packet));
-		m_Network.SendPacket(m_Network.m_myid, &my_packet);
-		m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);
+		memcpy(m_pNetwork->m_send_buffer, &my_packet, sizeof(my_packet));
+		m_pNetwork->SendPacket(m_pNetwork->m_myid, &my_packet);
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_pSelectedObject);
 	}
 }
 
@@ -432,76 +435,9 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 	{
 		m_bRenderBoundingBox = !m_bRenderBoundingBox;
 	}
-	else if (wParam == VK_RIGHT) x += 1;
-	else if (wParam == VK_LEFT)	 x -= 1;
-	else if (wParam == VK_UP)	 y -= 1;
-	else if (wParam == VK_DOWN)	 y += 1;
-
-	CS_MsgChMove *my_packet = reinterpret_cast<CS_MsgChMove *>(m_Network.m_send_buffer);
-	my_packet->size = sizeof(my_packet);
-	m_Network.m_send_wsabuf.len = sizeof(my_packet);
-	DWORD iobyte;
-	if (0 != x) {
-		if (1 == x) my_packet->type = CS_RIGHT;
-		else my_packet->type = CS_LEFT;
-		int ret = WSASend(m_Network.m_mysocket, &m_Network.m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
-		if (ret) {
-			int error_code = WSAGetLastError();
-			printf("Error while sending packet [%d]", error_code);
-		}
-		else
-			printf("Send Comeplete Right or Left\n");
-	}
-	if (0 != y) {
-		if (1 == y) my_packet->type = CS_DOWN;
-		else my_packet->type = CS_UP;
-		int ret = WSASend(m_Network.m_mysocket, &m_Network.m_send_wsabuf, 1, &iobyte, 0, NULL, NULL);
-		if (ret) {
-			int error_code = WSAGetLastError();
-			printf("Error while sending packet [%d]", error_code);
-		}
-		else
-			printf("Send Comeplete Up or Down\n");
-	}
 }
 
 void CScene::CollisionTest()
 {
 	m_pCollisionManager->Update(m_pWayFinder);
-	/*CS_MsgChCollision my_packet;
-	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
-	CCollisionObject** colliders = (CCollisionObject * *)pAniS->GetCollisionObjects();
-	int nColliderObject = pAniS->GetnObject();
-	for (int i = 0; i < nColliderObject - 1; ++i)
-	{
-		for (int j = i + 1; j < nColliderObject; ++j)
-		{
-			float sizeA = colliders[i]->GetCollisionSize();
-			float sizeB = colliders[j]->GetCollisionSize();
-
-			float distance = Vector3::Distance(colliders[i]->GetPosition(), colliders[j]->GetPosition());
-			float collisionLength = sizeA + sizeB;
-
-			if (distance < collisionLength)
-			{
-				my_packet.Character_id = m_Network.m_myid;
-				my_packet.size = sizeof(my_packet);
-				my_packet.x = colliders[i]->GetPosition().x;
-				my_packet.y = colliders[i]->GetPosition().z;
-				m_Network.m_send_wsabuf.len = sizeof(my_packet);
-				DWORD iobyte;
-				my_packet.type = CS_COLLISION;
-				memcpy(m_Network.m_send_buffer, &my_packet, sizeof(my_packet));
-				m_Network.SendPacket(m_Network.m_myid, &my_packet);
-				
-				
-				float length = (collisionLength - distance);
-				XMFLOAT3 vec3 = Vector3::Subtract(colliders[i]->GetPosition(), colliders[j]->GetPosition());
-				vec3.y = 0;
-				vec3 = Vector3::Normalize(vec3);
-				m_pWayFinder->AdjustValueByWallCollision(colliders[i], vec3, length *sizeB / (sizeA + sizeB));
-				m_pWayFinder->AdjustValueByWallCollision(colliders[j], vec3, -length * sizeB / (sizeA + sizeB));
-			}
-		}
-	}*/
 }

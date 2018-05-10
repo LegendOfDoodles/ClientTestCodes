@@ -134,7 +134,8 @@ int CAstar::FindPath()
 	for (int i = 0; i < edges.size(); ++i)
 	{
 		// 휴리스틱 구한다.           
-		double HCost = Heuristic_Menhattan(m_target, edges[i].To());
+		double HCost = Heuristic_Diagonal(m_target, edges[i].To());
+
 		// 단계 코스트 구한다.
 		double GCost = m_GCosts[NextClosestNode] + edges[i].Cost();
 
@@ -185,10 +186,45 @@ Path* CAstar::GetPath()
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
+// 참고 : http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#S7 
 double CAstar::Heuristic_Menhattan(int from, int to)
 {
-	const POINT fromDividIndex = m_pFinder->GetNodeAt(from).GetDividIndex();
-	const POINT toDividIndex = m_pFinder->GetNodeAt(to).GetDividIndex();
-	return ((fromDividIndex.x > toDividIndex.x ? fromDividIndex.x - toDividIndex.x : toDividIndex.x - fromDividIndex.x) +
-		(fromDividIndex.y > toDividIndex.y ? fromDividIndex.y - toDividIndex.y : toDividIndex.y - fromDividIndex.y)) * 10.0f;
+	XMFLOAT2 fromDividIndex = m_pFinder->GetNodeAt(from).Position();
+	XMFLOAT2 toDividIndex = m_pFinder->GetNodeAt(to).Position();
+	return (abs(fromDividIndex.x - toDividIndex.x) + abs(fromDividIndex.y - toDividIndex.y)) * 10.0f;
+}
+
+double CAstar::Heuristic_Diagonal(int from, int to)
+{
+	XMFLOAT2 fromDividIndex = m_pFinder->GetNodeAt(from).Position();
+	XMFLOAT2 toDividIndex = m_pFinder->GetNodeAt(to).Position();
+	float dx = abs(fromDividIndex.x - toDividIndex.x);
+	float dy = abs(fromDividIndex.y - toDividIndex.y);
+	return 10.0f * max(dx, dy) + /*(14.0f -  10.0f)*/ 4.0f * min(dx, dy);
+}
+
+double CAstar::Heuristic_Euclidean(int from, int to)
+{
+	XMFLOAT2 fromDividIndex = m_pFinder->GetNodeAt(from).Position();
+	XMFLOAT2 toDividIndex = m_pFinder->GetNodeAt(to).Position();
+	return 10.0f * Vector2::Distance(fromDividIndex, toDividIndex);
+}
+
+double CAstar::Heuristic_EuclideanSquare(int from, int to)
+{
+	XMFLOAT2 fromDividIndex = m_pFinder->GetNodeAt(from).Position();
+	XMFLOAT2 toDividIndex = m_pFinder->GetNodeAt(to).Position();
+	return 10.0f * Vector2::DistanceSquare(fromDividIndex, toDividIndex);
+}
+
+double CAstar::Heuristic_NoisyEuclidean(int from, int to)
+{
+	XMFLOAT2 fromDividIndex = m_pFinder->GetNodeAt(from).Position();
+	XMFLOAT2 toDividIndex = m_pFinder->GetNodeAt(to).Position();
+	return 10.0f * Vector2::Distance(fromDividIndex, toDividIndex) * RandInRange(0.9f, 1.1f);
+}
+
+double CAstar::Heuristic_Dijkstra(int from, int to)
+{
+	return 0.0;
 }

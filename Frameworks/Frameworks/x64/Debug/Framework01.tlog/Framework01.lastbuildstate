@@ -1,2 +1,6 @@
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v141:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0.16299.0
+<<<<<<< HEAD
 Debug|x64|D:\새 폴더\client\Frameworks\|
+=======
+Debug|x64|C:\Users\김선필\Desktop\GraduationWork\Client\Frameworks\|
+>>>>>>> 8501ae9c033e3845bc5906e89a2b725dea384e0c

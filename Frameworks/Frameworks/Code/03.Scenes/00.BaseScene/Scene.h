@@ -35,7 +35,7 @@ public:	// 생성자, 소멸자
 	~CScene();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, Network network);
+	virtual void Initialize(CCreateMgr *pCreateMgr, Network* pNetwork);
 	virtual void Finalize();
 
 	void ReleaseUploadBuffers();
@@ -104,7 +104,7 @@ protected: // 변수
 	CCollisionManager* m_pCollisionManager{NULL};
 
 
-	Network m_Network;
+	Network* m_pNetwork;
 	
 };
 
