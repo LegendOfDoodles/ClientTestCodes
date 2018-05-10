@@ -237,24 +237,40 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
 		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Up);
+		//미니언 생성 패킷 조립, 전송
 		CS_MsgMoCreate p;
 		p.type = CS_PUT_MINION;
 		p.size = sizeof(p);
-		m_pNetwork->SendPacket(0, &p);//.m_pNetwork->m_myid, &p);
+		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
 		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 
 	}
 	if (GetAsyncKeyState('B') & 0x0001)
 	{
 		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Down);
+		CS_MsgMoCreate p;
+		p.type = CS_PUT_MINION;
+		p.size = sizeof(p);
+		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 	if (GetAsyncKeyState('V') & 0x0001)
 	{
 		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Up);
+		CS_MsgMoCreate p;
+		p.type = CS_PUT_MINION;
+		p.size = sizeof(p);
+		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 	if (GetAsyncKeyState('C') & 0x0001)
 	{
 		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Down);
+		CS_MsgMoCreate p;
+		p.type = CS_PUT_MINION;
+		p.size = sizeof(p);
+		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 	return true;
 }

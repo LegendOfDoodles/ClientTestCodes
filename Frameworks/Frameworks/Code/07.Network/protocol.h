@@ -28,7 +28,7 @@ struct SC_MsgMoCreate : public Packet
 };
 struct CS_MsgMoCreate : public Packet
 {
-	
+
 };
 
 struct SC_Msg_Remove_Character : public Packet

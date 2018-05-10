@@ -23,10 +23,32 @@ CFramework::~CFramework()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd, Network* pNetwork)
+bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd, Network pNetwork)
 {
 	m_hWnd = hWnd;
 	m_pNetwork = pNetwork;
+
+	WSADATA	wsadata;
+	WSAStartup(MAKEWORD(2, 2), &wsadata);
+
+	m_pNetwork.m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0); \
+		if (m_pNetwork.m_mysocket == INVALID_SOCKET) printf("Socket Failed\n");
+
+	SOCKADDR_IN ServerAddr;
+	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
+	ServerAddr.sin_family = AF_INET;
+	ServerAddr.sin_port = htons(MY_SERVER_PORT);
+	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+	int Result = WSAConnect(m_pNetwork.m_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
+
+	WSAAsyncSelect(m_pNetwork.m_mysocket, m_hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
+
+	m_pNetwork.m_send_wsabuf.buf = m_pNetwork.m_send_buffer;
+	m_pNetwork.m_send_wsabuf.len = MAX_BUFF_SIZE;
+	m_pNetwork.m_recv_wsabuf.buf = m_pNetwork.m_recv_buffer;
+	m_pNetwork.m_recv_wsabuf.len = MAX_BUFF_SIZE;
+
 	m_createMgr.Initialize(hInstance, hWnd);
 	m_pRenderMgr = m_createMgr.GetRenderMgr();
 
@@ -37,7 +59,7 @@ bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd, Network* pNetwork)
 
 void CFramework::Finalize()
 {
-	m_pNetwork->Finalize();
+	m_pNetwork.Finalize();
 	ReleaseObjects();
 	m_createMgr.Release();
 	
@@ -108,7 +130,7 @@ void CFramework::BuildObjects()
 	m_pRenderMgr->ResetCommandList();
 
 	m_pScene = new CScene();
-	m_pScene->Initialize(&m_createMgr,m_pNetwork);
+	m_pScene->Initialize(&m_createMgr,&m_pNetwork);
 
 	m_pRenderMgr->ExecuteCommandList();
 
