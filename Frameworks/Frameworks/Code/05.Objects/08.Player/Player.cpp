@@ -2,9 +2,16 @@
 #include "Player.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 
+/// <summary>
+/// 목적: 플레이어 관리 클래스
+/// 최종 수정자:  김나단
+/// 수정자 목록:  정휘현, 김나단
+/// 최종 수정 날짜: 2018-05-11
+/// </summary>
 
-CPlayer::CPlayer(CCreateMgr *pCreateMgr, int nMeshes)
-	: CAnimatedObject(pCreateMgr, nMeshes)
+////////////////////////////////////////////////////////////////////////
+// 생성자, 소멸자
+CPlayer::CPlayer(CCreateMgr *pCreateMgr, int nMeshes) : CAnimatedObject(pCreateMgr, nMeshes)
 {
 }
 
@@ -13,56 +20,57 @@ CPlayer::~CPlayer()
 {
 }
 
-
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
 void CPlayer::Animate(float timeElapsed)
 {
 	m_fPreFrameTime = m_fFrameTime;
 	m_fFrameTime += 30 * timeElapsed;
 
 
-	if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]) {
-		while (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			m_fFrameTime -= m_nAniLength[m_nCurrAnimation];
+	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
+		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
+			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
 	MoveToDestination(timeElapsed);
 	if (m_pathToGo&&m_CurrState != States::Walk) {
-		m_state = States::Walk;
+		m_nextState = States::Walk;
 		m_CurrState = States::Walk;
 		m_fFrameTime = 0;
 	}
 	else if (!m_pathToGo&&m_CurrState == States::Walk) {
-		m_state = States::Idle;
+		m_nextState = States::Idle;
 		m_CurrState = States::Idle;
 		m_fFrameTime = 0;
 	}
 
 	switch (m_CurrState) {
 	case States::Idle:
-		if (m_nCurrAnimation != PlayerAnimation::Idle)
-			m_nCurrAnimation = PlayerAnimation::Idle;
+		if (m_nCurrAnimation != Animations::Idle)
+			m_nCurrAnimation = Animations::Idle;
 		break;
 	case States::Attack:
-		if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] - 1)
+		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)
 		{
 			m_CurrState = States::Idle;
-			m_nCurrAnimation = PlayerAnimation::Idle;
+			m_nCurrAnimation = Animations::Idle;
 			m_fFrameTime = 0;
 		}
-		else if (m_nCurrAnimation == PlayerAnimation::SkillQ) {
-			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.5f) {
+		else if (m_nCurrAnimation == Animations::SkillQ) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 24, 8,100);
 			}
 		}
-		else if (m_nCurrAnimation == PlayerAnimation::SkillE) {
-			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.5f) {
+		else if (m_nCurrAnimation == Animations::SkillE) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, 32, 180);
 			}
 		}
-		else if (m_nCurrAnimation == PlayerAnimation::SkillR) {
-			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] * 0.666f
-				&&m_fPreFrameTime < m_nAniLength[m_nCurrAnimation] * 0.666f) {
+		else if (m_nCurrAnimation == Animations::SkillR) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, 40);
 			}
 		}
@@ -70,27 +78,28 @@ void CPlayer::Animate(float timeElapsed)
 		break;
 
 	case States::Walk:
-		if (m_nCurrAnimation != PlayerAnimation::StartWalk&&
-			m_nCurrAnimation != PlayerAnimation::Walking)
-			m_nCurrAnimation = PlayerAnimation::StartWalk;
+		if (m_nCurrAnimation != Animations::StartWalk&&
+			m_nCurrAnimation != Animations::Walking)
+			m_nCurrAnimation = Animations::StartWalk;
 
-		if (m_nCurrAnimation == PlayerAnimation::StartWalk) {
-			if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation] - 1)
+		if (m_nCurrAnimation == Animations::StartWalk) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)
 			{
-				m_nCurrAnimation = PlayerAnimation::Walking;
+				m_nCurrAnimation = Animations::Walking;
 				m_fFrameTime = 0;
 			}
 		}
 		break;
 	case States::Die:
-
+		m_nCurrAnimation = Animations::Die;
+		m_fFrameTime = 0;
 		break;
 	default:
 
 		break;
 	}
 
-
+	AdjustAnimationIndex();
 	CAnimatedObject::Animate(timeElapsed);
 
 }
@@ -139,7 +148,7 @@ void CPlayer::SetPosition(float x, float z)
 	CBaseObject::SetPosition(x, m_pTerrain->GetHeight(x, z), z);
 }
 
-void CPlayer::ActiveSkill(PlayerAnimation act)
+void CPlayer::ActiveSkill(AnimationsType act)
 {
 	if (m_CurrState != States::Attack) {
 		if (m_pathToGo) {
@@ -148,5 +157,39 @@ void CPlayer::ActiveSkill(PlayerAnimation act)
 		m_CurrState = States::Attack;
 		m_nCurrAnimation = act;
 		m_fFrameTime = 0;
+	}
+}
+
+void CPlayer::SetState(StatesType newState)
+{
+	m_CurrState = newState;
+
+	AdjustAnimationIndex();
+}
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
+void CPlayer::AdjustAnimationIndex()
+{
+	switch (m_nCurrAnimation)
+	{
+	case Animations::Idle:
+		m_nAniIndex = 0;
+		break;
+	case Animations::StartWalk:
+		m_nAniIndex = 1;
+		break;
+	case Animations::Walking:
+		m_nAniIndex = 2;
+		break;
+	case Animations::SkillQ:
+		m_nAniIndex = 3;
+		break;
+	case Animations::SkillE:
+		m_nAniIndex = 4;
+		break;
+	case Animations::SkillR:
+		m_nAniIndex = 5;
+		break;
 	}
 }

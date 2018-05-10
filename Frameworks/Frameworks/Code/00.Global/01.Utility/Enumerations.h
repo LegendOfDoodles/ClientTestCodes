@@ -4,16 +4,38 @@
 /// 목적: 여러 지점에서 사용할 나열형 데이터를 통합 관리한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-08
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
-enum States {
-	Idle,
-	Walk,
-	Chase,
-	Attack,
-	Die
-};
+namespace States
+{
+	enum States {
+		Idle,
+		Walk,
+		Chase,
+		Attack,
+		Die,
+		Remove
+	};
+}
+
+namespace Animations
+{
+	enum Animations {
+		Idle,
+		Attack1,
+		Attack2,
+		StartWalk,
+		Walking,
+		Die,
+		SkillQ,
+		SkillE,
+		SkillR
+	};
+}
+
+typedef States::States StatesType;
+typedef Animations::Animations AnimationsType;
 
 enum CollisionType {
 	SPHERE,
@@ -43,3 +65,41 @@ enum ObjectType {
 	Nexus
 };
 
+struct PlayerInfo
+{
+	float maxHP{ 500 };
+	float HP{ maxHP };
+
+	float maxMP{ 500 };
+	float MP{ 150 };
+
+	float Atk{ 50 };
+	float Def{ 20 };
+
+	UINT Level{ 0 };
+
+	UINT MaxExp{ 170 };
+	UINT Exp{ 0 };
+};
+
+struct CommonInfo
+{
+	float maxHP;
+	float HP;
+
+	float Atk;
+	float Def;
+
+	UINT Exp;
+};
+
+struct StaticInfo
+{
+	float maxHP;
+	float HP;
+
+	float Atk;
+	float Def;
+
+	UINT Exp;
+};

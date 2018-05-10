@@ -12,7 +12,7 @@
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-09
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -457,147 +457,6 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CreatePathes();
 	SpawnMinion(pCreateMgr, Minion_Species::Data_Prepare);
-	//CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
-
-	//CSkeleton *pSIdle = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
-	//CSkeleton *pSAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
-	//CSkeleton *pSAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
-	//CSkeleton *pSWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
-	//CSkeleton *pSWalk = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
-
-	//CSkeleton *pBIdle = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
-	//CSkeleton *pBAtk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
-	//CSkeleton *pBWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
-	//CSkeleton *pBWalk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
-
-	//CSkeleton *pMIdle = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
-	//CSkeleton *pMAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
-	//CSkeleton *pMAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
-	//CSkeleton *pMWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
-	//CSkeleton *pMWalk = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
-
-
-	//CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
-
-
-	//pMinionMesh->SetBoundingBox(
-	//	XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
-	//	XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
-
-
-	//float fxPitch = 12.0f * 5.f;
-	//float fyPitch = 12.0f * 5.f;
-	//float fzPitch = 12.0f * 5.f;
-
-	//UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	//CMinion *pMinionObject = NULL;
-
-
-//	for (int y = 0; y <= yObjects; y++)
-//	{
-//		for (int z = 0; z <= zObjects; z++)
-//		{
-//			for (int x = 0; x <= xObjects; x++)
-//			{
-//				switch (z)
-//				{
-//				case 0:
-//					pMinionObject = new CSwordMinion(pCreateMgr, 2);
-//					break;
-//				case 1:
-//					pMinionObject = new CMagicMinion(pCreateMgr, 2);
-//					break;
-//				case 2:
-//					pMinionObject = new CBowMinion(pCreateMgr, 2);
-//					break;
-//				default:
-//					pMinionObject = new CSwordMinion(pCreateMgr, 2);
-//					break;
-//				}
-//#if !USE_INSTANCING
-//				pMinionObject->SetMesh(0, pMinionMesh);
-//				switch (z)
-//				{
-//				case 0:
-//					pMinionObject->SetMesh(1, m_pWeapons[0]);
-//					break;
-//				case 1:
-//					pMinionObject->SetMesh(1, m_pWeapons[1]);
-//					break;
-//				case 2:
-//					pMinionObject->SetMesh(1, m_pWeapons[2]);
-//					break;
-//				default:
-//					pMinionObject->SetMesh(1, m_pWeapons[0]);
-//					break;
-//				}
-//#endif
-//#if !USE_BATCH_MATERIAL
-//				pRotatingObject->SetMaterial(pCubeMaterial);
-//#endif
-//				pMinionObject->SetBoundingMesh(pCreateMgr,
-//					CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
-//					0, 0, -CONVERT_PaperUnit_to_InG(4));
-//				pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-//				pMinionObject->CBaseObject::SetPosition(x * 100, y * 100, z * 100 + 3000);
-//
-//				switch (z)
-//				{
-//				case 0:
-//					pMinionObject->SetSkeleton(pSIdle);
-//					pMinionObject->SetSkeleton(pSAtk1);
-//					pMinionObject->SetSkeleton(pSAtk2);
-//					pMinionObject->SetSkeleton(pSWalkStart);
-//					pMinionObject->SetSkeleton(pSWalk);
-//					break;
-//				case 1:
-//					pMinionObject->SetSkeleton(pMIdle);
-//					pMinionObject->SetSkeleton(pMAtk1);
-//					pMinionObject->SetSkeleton(pMAtk2);
-//					pMinionObject->SetSkeleton(pMWalkStart);
-//					pMinionObject->SetSkeleton(pMWalk);
-//					break;
-//				case 2:
-//					pMinionObject->SetSkeleton(pBIdle);
-//					pMinionObject->SetSkeleton(pBAtk);
-//					pMinionObject->SetSkeleton(pBWalkStart);
-//					pMinionObject->SetSkeleton(pBWalk);
-//					break;
-//				default:
-//					pMinionObject->SetSkeleton(pSIdle);
-//					pMinionObject->SetSkeleton(pSAtk1);
-//					pMinionObject->SetSkeleton(pSAtk2);
-//					pMinionObject->SetSkeleton(pSWalkStart);
-//					pMinionObject->SetSkeleton(pSWalk);
-//
-//					break;
-//				}
-//				pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
-//				pMinionObject->SetSkeleton(pDie);
-//				pMinionObject->SetTerrain(m_pTerrain);
-//
-//				pMinionObject->Rotate(90, 0, 0);
-//
-//
-//#if !USE_INSTANCING
-//				pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-//				pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
-//#endif
-//				m_ppObjects[i++] = pMinionObject;
-//			}
-//		}
-//	}
-
-//#if USE_INSTANCING
-//	m_ppObjects[0]->SetMesh(0, pCubeMesh);
-//#endif
-//
-	//Safe_Delete(pSIdle);
-	//Safe_Delete(pSAtk1);
-	//Safe_Delete(pSAtk2);
-	//Safe_Delete(pSWalkStart);
-	//Safe_Delete(pSWalk);
-	//Safe_Delete(pDie);
 }
 
 void CAniShader::ReleaseObjects()
@@ -669,24 +528,24 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	static CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
 	static UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 
-	static CSkeleton *pSIdle = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
-	static CSkeleton *pSAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
-	static CSkeleton *pSAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
-	static CSkeleton *pSWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
-	static CSkeleton *pSWalk = new CSkeleton("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
+	static CSkeleton SIdle("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
+	static CSkeleton SAtk1("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
+	static CSkeleton SAtk2("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
+	static CSkeleton SWalkStart("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
+	static CSkeleton SWalk("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
 
-	static CSkeleton *pBIdle = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
-	static CSkeleton *pBAtk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
-	static CSkeleton *pBWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
-	static CSkeleton *pBWalk = new CSkeleton("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
+	static CSkeleton BIdle("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
+	static CSkeleton BAtk("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
+	static CSkeleton BWalkStart("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
+	static CSkeleton BWalk("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
 
-	static CSkeleton *pMIdle = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
-	static CSkeleton *pMAtk1 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
-	static CSkeleton *pMAtk2 = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
-	static CSkeleton *pMWalkStart = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
-	static CSkeleton *pMWalk = new CSkeleton("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
+	static CSkeleton MIdle("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
+	static CSkeleton MAtk1("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
+	static CSkeleton MAtk2("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
+	static CSkeleton MWalkStart("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
+	static CSkeleton MWalk("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
 
-	static CSkeleton *pDie = new CSkeleton("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
+	static CSkeleton Die("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
 
 	if (setFirst)
 	{
@@ -703,13 +562,13 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	switch (m_kind)
 	{
-	case 0:
+	case ObjectType::SwordMinion:
 		pMinionObject = new CSwordMinion(pCreateMgr, 2);
 		break;
-	case 1:
+	case ObjectType::StaffMinion:
 		pMinionObject = new CMagicMinion(pCreateMgr, 2);
 		break;
-	case 2:
+	case ObjectType::BowMinion:
 		pMinionObject = new CBowMinion(pCreateMgr, 2);
 		break;
 	}
@@ -717,13 +576,13 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	pMinionObject->SetMesh(0, pMinionMesh);
 	switch (m_kind)
 	{
-	case 0:
+	case ObjectType::SwordMinion:
 		pMinionObject->SetMesh(1, m_pWeapons[0]);
 		break;
-	case 1:
+	case ObjectType::StaffMinion:
 		pMinionObject->SetMesh(1, m_pWeapons[1]);
 		break;
-	case 2:
+	case ObjectType::BowMinion:
 		pMinionObject->SetMesh(1, m_pWeapons[2]);
 		break;
 	}
@@ -735,29 +594,29 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	switch (m_kind)
 	{
-	case 0:
-		pMinionObject->SetSkeleton(pSIdle);
-		pMinionObject->SetSkeleton(pSAtk1);
-		pMinionObject->SetSkeleton(pSAtk2);
-		pMinionObject->SetSkeleton(pSWalkStart);
-		pMinionObject->SetSkeleton(pSWalk);
+	case ObjectType::SwordMinion:
+		pMinionObject->SetSkeleton(&SIdle);
+		pMinionObject->SetSkeleton(&SAtk1);
+		pMinionObject->SetSkeleton(&SAtk2);
+		pMinionObject->SetSkeleton(&SWalkStart);
+		pMinionObject->SetSkeleton(&SWalk);
 		break;
-	case 1:
-		pMinionObject->SetSkeleton(pMIdle);
-		pMinionObject->SetSkeleton(pMAtk1);
-		pMinionObject->SetSkeleton(pMAtk2);
-		pMinionObject->SetSkeleton(pMWalkStart);
-		pMinionObject->SetSkeleton(pMWalk);
+	case ObjectType::StaffMinion:
+		pMinionObject->SetSkeleton(&MIdle);
+		pMinionObject->SetSkeleton(&MAtk1);
+		pMinionObject->SetSkeleton(&MAtk2);
+		pMinionObject->SetSkeleton(&MWalkStart);
+		pMinionObject->SetSkeleton(&MWalk);
 		break;
-	case 2:
-		pMinionObject->SetSkeleton(pBIdle);
-		pMinionObject->SetSkeleton(pBAtk);
-		pMinionObject->SetSkeleton(pBWalkStart);
-		pMinionObject->SetSkeleton(pBWalk);
+	case ObjectType::BowMinion:
+		pMinionObject->SetSkeleton(&BIdle);
+		pMinionObject->SetSkeleton(&BAtk);
+		pMinionObject->SetSkeleton(&BWalkStart);
+		pMinionObject->SetSkeleton(&BWalk);
 		break;
 	}
 	pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
-	pMinionObject->SetSkeleton(pDie);
+	pMinionObject->SetSkeleton(&Die);
 	pMinionObject->SetTerrain(m_pTerrain);
 
 	pMinionObject->Rotate(90, 0, 0);

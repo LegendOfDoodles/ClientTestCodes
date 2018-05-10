@@ -5,7 +5,7 @@
 /// 목적: 미니언 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -25,21 +25,22 @@ void CMinion::Animate(float timeElapsed)
 	m_fFrameTime += 30 * timeElapsed;
 
 
-	if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]) {
-		while (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
-			m_fFrameTime -= m_nAniLength[m_nCurrAnimation];
+	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
+		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
+			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
 	MoveToDestination(timeElapsed);
-	if (m_pathToGo&&m_CurrState != States::Walk) {
-		m_state = States::Walk;
-		m_CurrState = States::Walk;
+	if (m_pathToGo&&m_curState != States::Walk) {
+		m_nextState = States::Walk;
+		m_curState = States::Walk;
 		m_fFrameTime = 0;
 	}
-	else if (!m_pathToGo&&m_CurrState == States::Walk) {
-		m_state = States::Idle;
-		m_CurrState = States::Idle;
+	else if (!m_pathToGo&&m_curState == States::Walk) {
+		m_nextState = States::Idle;
+		m_curState = States::Idle;
 		m_fFrameTime = 0;
 	}
+	AdjustAnimationIndex();
 	CAnimatedObject::Animate(timeElapsed);
 
 }
@@ -88,6 +89,61 @@ void CMinion::SetPosition(float x, float z)
 	CBaseObject::SetPosition(x, m_pTerrain->GetHeight(x, z), z);
 }
 
+void CMinion::SetState(StatesType newState)
+{
+	m_curState = newState;
+
+	switch (newState)
+	{
+	case States::Idle:
+		m_nCurrAnimation = Animations::Idle;
+		break;
+	case States::Walk:
+		m_nCurrAnimation = Animations::StartWalk;
+		break;
+	case States::Chase:
+		m_nCurrAnimation = Animations::StartWalk;
+		break;
+	case States::Attack:
+		m_nCurrAnimation = Animations::Attack1;
+		m_fFrameTime = 0;
+		break;
+	case States::Die:
+		m_nCurrAnimation = Animations::Die;
+		m_fFrameTime = 0;
+		break;
+	case States::Remove:
+		break;
+	default:
+		assert(!"Error:: There is No State");
+	}
+}
+
+void CMinion::AdjustAnimationIndex()
+{
+	switch (m_nCurrAnimation)
+	{
+	case Animations::Idle:
+		m_nAniIndex = 0;
+		break;
+	case Animations::Attack1:
+		m_nAniIndex = 1;
+		break;
+	case Animations::Attack2:
+		m_nAniIndex = 2;
+		break;
+	case Animations::StartWalk:
+		m_nAniIndex = 3;
+		break;
+	case Animations::Walking:
+		m_nAniIndex = 4;
+		break;
+	case Animations::Die:
+		m_nAniIndex = 5;
+		break;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 
@@ -109,25 +165,25 @@ CSwordMinion::~CSwordMinion()
 
 void CSwordMinion::Animate(float timeElapsed)
 {
-		switch (m_CurrState) {
+		switch (m_curState) {
 		case States::Idle:
-			if (m_nCurrAnimation != SwordMinionAnimation::Idle)
-				m_nCurrAnimation = SwordMinionAnimation::Idle;
+			if (m_nCurrAnimation != Animations::Idle)
+				m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
-			if (m_nCurrAnimation == SwordMinionAnimation::Attack1) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation] / 2 &&
-					m_CurrState == m_state)
+			if (m_nCurrAnimation == Animations::Attack1) {
+				if (m_fFrameTime > m_nAniLength[m_nAniIndex] / 2 &&
+					m_curState == m_nextState)
 				{
-					m_nCurrAnimation = SwordMinionAnimation::Attack2;
+					m_nCurrAnimation = Animations::Attack2;
 					m_fFrameTime = 0;
 				}
 			}
-			else if (m_nCurrAnimation == SwordMinionAnimation::Attack2)
+			else if (m_nCurrAnimation == Animations::Attack2)
 			{
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				if (m_fFrameTime > m_nAniLength[m_nAniIndex])
 				{
-					m_nCurrAnimation = SwordMinionAnimation::Attack1;
+					m_nCurrAnimation = Animations::Attack1;
 					m_fFrameTime = 0;
 
 				}
@@ -135,20 +191,21 @@ void CSwordMinion::Animate(float timeElapsed)
 			break;
 
 		case States::Walk:
-			if(m_nCurrAnimation!= SwordMinionAnimation::StartWalk&&
-				m_nCurrAnimation != SwordMinionAnimation::Walking)
-				m_nCurrAnimation = SwordMinionAnimation::StartWalk;
+			if(m_nCurrAnimation!= Animations::StartWalk&&
+				m_nCurrAnimation != Animations::Walking)
+				m_nCurrAnimation = Animations::StartWalk;
 
-			if (m_nCurrAnimation == SwordMinionAnimation::StartWalk) {
-				if (m_fFrameTime >= m_nAniLength[m_nCurrAnimation]-1)
+			if (m_nCurrAnimation == Animations::StartWalk) {
+				if (m_fFrameTime >= m_nAniLength[m_nAniIndex]-1)
 				{
-					m_nCurrAnimation = SwordMinionAnimation::Walking;
+					m_nCurrAnimation = Animations::Walking;
 					m_fFrameTime = 0;
 				}
 			}
 			break;
 		case States::Die:
-
+			m_nCurrAnimation = Animations::Die;
+			m_fFrameTime = 0;
 			break;
 		default:
 
@@ -176,25 +233,25 @@ CMagicMinion::~CMagicMinion()
 
 void CMagicMinion::Animate(float timeElapsed)
 {
-		switch (m_CurrState) {
+		switch (m_curState) {
 		case States::Idle:
-			if (m_nCurrAnimation != MagicMinionAnimation::Idle)
-				m_nCurrAnimation = MagicMinionAnimation::Idle;
+			if (m_nCurrAnimation != Animations::Idle)
+				m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
-			if (m_nCurrAnimation == MagicMinionAnimation::Attack1) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation] / 2 &&
-					m_CurrState == m_state)
+			if (m_nCurrAnimation == Animations::Attack1) {
+				if (m_fFrameTime > m_nAniLength[m_nAniIndex] / 2 &&
+					m_curState == m_nextState)
 				{
-					m_nCurrAnimation = MagicMinionAnimation::Attack2;
+					m_nCurrAnimation = Animations::Attack2;
 					m_fFrameTime = 0;
 				}
 			}
-			else if (m_nCurrAnimation == MagicMinionAnimation::Attack2)
+			else if (m_nCurrAnimation == Animations::Attack2)
 			{
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation])
+				if (m_fFrameTime > m_nAniLength[m_nAniIndex])
 				{
-					m_nCurrAnimation = MagicMinionAnimation::Attack1;
+					m_nCurrAnimation = Animations::Attack1;
 					m_fFrameTime = 0;
 
 				}
@@ -202,19 +259,20 @@ void CMagicMinion::Animate(float timeElapsed)
 			break;
 
 		case States::Walk:
-			if (m_nCurrAnimation != MagicMinionAnimation::StartWalk &&
-				m_nCurrAnimation != MagicMinionAnimation::Walking)
-				m_nCurrAnimation = MagicMinionAnimation::StartWalk;
-			if (m_nCurrAnimation == MagicMinionAnimation::StartWalk) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]-1)
+			if (m_nCurrAnimation != Animations::StartWalk &&
+				m_nCurrAnimation != Animations::Walking)
+				m_nCurrAnimation = Animations::StartWalk;
+			if (m_nCurrAnimation == Animations::StartWalk) {
+				if (m_fFrameTime > m_nAniLength[m_nAniIndex]-1)
 				{
-					m_nCurrAnimation = MagicMinionAnimation::Walking;
+					m_nCurrAnimation = Animations::Walking;
 					m_fFrameTime = 0;
 				}
 			}
 			break;
 		case States::Die:
-
+			m_nCurrAnimation = Animations::Die;
+			m_fFrameTime = 0;
 			break;
 		default:
 
@@ -243,30 +301,31 @@ CBowMinion::~CBowMinion()
 
 void CBowMinion::Animate(float timeElapsed)
 {
-		switch (m_CurrState) {
+		switch (m_curState) {
 		case States::Idle:
 
-			if (m_nCurrAnimation != BowMinionAnimation::Idle)
-				m_nCurrAnimation = BowMinionAnimation::Idle;
+			if (m_nCurrAnimation != Animations::Idle)
+				m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
 			
 			break;
 
 		case States::Walk:
-			if (m_nCurrAnimation != BowMinionAnimation::StartWalk &&
-				m_nCurrAnimation != BowMinionAnimation::Walking)
-				m_nCurrAnimation = BowMinionAnimation::StartWalk;
-			if (m_nCurrAnimation == BowMinionAnimation::StartWalk) {
-				if (m_fFrameTime > m_nAniLength[m_nCurrAnimation]-1)
+			if (m_nCurrAnimation != Animations::StartWalk &&
+				m_nCurrAnimation != Animations::Walking)
+				m_nCurrAnimation = Animations::StartWalk;
+			if (m_nCurrAnimation == Animations::StartWalk) {
+				if (m_fFrameTime > m_nAniLength[m_nAniIndex]-1)
 				{
-					m_nCurrAnimation = BowMinionAnimation::Walking;
+					m_nCurrAnimation = Animations::Walking;
 					m_fFrameTime = 0;
 				}
 			}
 			break;
 		case States::Die:
-
+			m_nCurrAnimation = Animations::Die;
+			m_fFrameTime = 0;
 			break;
 		default:
 
@@ -274,4 +333,26 @@ void CBowMinion::Animate(float timeElapsed)
 		}
 	CMinion::Animate(timeElapsed);
 
+}
+
+void CBowMinion::AdjustAnimationIndex()
+{
+	switch (m_nCurrAnimation)
+	{
+	case Animations::Idle:
+		m_nAniIndex = 0;
+		break;
+	case Animations::Attack1:
+		m_nAniIndex = 1;
+		break;
+	case Animations::StartWalk:
+		m_nAniIndex = 2;
+		break;
+	case Animations::Walking:
+		m_nAniIndex = 3;
+		break;
+	case Animations::Die:
+		m_nAniIndex = 4;
+
+	}
 }

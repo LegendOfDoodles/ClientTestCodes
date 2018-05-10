@@ -30,12 +30,8 @@ public: // 공개 함수
 	void SetColManagerToObject(CCollisionManager* manager);
 	
 	
-	virtual CBaseObject **GetCollisionObjects() {
-		return m_ppObjects;
-	}
-	int GetnObject() {
-		return m_nObjects;
-	}
+	virtual CBaseObject **GetCollisionObjects() {	return m_ppObjects; }
+	int GetObjectCount() { return m_nObjects;	}
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -54,7 +50,7 @@ protected: // 변수
 	CBaseObject * *m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
-	CSkinnedMesh* m_pWeapons[2];
+	CSkinnedMesh* m_pWeapons[2]{ NULL };
 	int m_nWeaponState{ 0 };
 
 #if USE_INSTANCING

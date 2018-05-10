@@ -1,62 +1,6 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
 
-struct PlayerInfo
-{
-	float maxHP;
-	float HP;
-
-	float maxMP;
-	float MP;
-
-	float Atk;
-	float Def;
-
-	UINT Level;
-
-	UINT MaxExp;
-	UINT Exp;
-
-
-	PlayerInfo() {
-		maxHP = 500;
-		HP = maxHP;
-
-		maxMP = 500;
-		MP = maxMP = 150;
-
-		Atk = 50;
-		Def = 20;
-
-		Level = 0;
-
-		MaxExp = 170;
-		Exp =0;
-	}
-};
-
-struct CommonInfo
-{
-	float maxHP;
-	float HP;
-
-	float Atk;
-	float Def;
-
-	UINT Exp;
-};
-
-struct StaticInfo 
-{
-	float maxHP;
-	float HP;
-
-	float Atk;
-	float Def;
-
-	UINT Exp;
-};
-
 class CCollisionObject : public CBaseObject
 {
 public:	// 생성자, 소멸자
@@ -71,6 +15,9 @@ public: // 공개 함수
 	virtual XMFLOAT2 GetCollisionLevel() { return m_xmf2CollisionLevel; }
 	virtual void ReceiveDamage(float Damage) {}
 
+	StatesType GetState() { return m_curState; }
+	virtual void SetState(StatesType newState) { m_curState = newState; }
+
 protected: // 내부 함수
 	void ResetCollisionLevel() {
 		m_xmf2CollisionLevel.x = floor(GetPosition().x/ (TERRAIN_SIZE_WIDTH / 50));
@@ -79,4 +26,7 @@ protected: // 내부 함수
 protected: // 변수
 	float m_fCollisionSize{ 1 };
 	XMFLOAT2 m_xmf2CollisionLevel{ 0,0 };
+
+	StatesType m_curState{ States::Idle };
+	StatesType m_nextState{ States::Idle };
 };

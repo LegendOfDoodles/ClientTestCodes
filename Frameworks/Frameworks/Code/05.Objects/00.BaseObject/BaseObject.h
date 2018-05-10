@@ -76,9 +76,6 @@ public: // 공개 함수
 	void SaveIndex(int idx) { m_index = idx; }
 	int GetIndex() { return m_index; }
 
-	int GetState() { return m_state; }
-	void SetState(States newState) { m_state = newState; }
-
 	int GetType() {	return m_ObjectType; };
 	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
 
@@ -117,8 +114,6 @@ protected: // 변수
 
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };
-
-	States m_state{ States::Idle };
 
 	ObjectType m_ObjectType{ ObjectType::SwordPlayer };
 
