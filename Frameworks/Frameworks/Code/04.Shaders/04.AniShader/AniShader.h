@@ -1,9 +1,10 @@
 #pragma once
 #include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 typedef std::list<CPathEdge> Path;
-typedef std::list<CBaseObject*> ObjectList;
+typedef std::list<CCollisionObject*> CollisionObjectList;
 
 class CMaterial;
 class CHeightMapTerrain;
@@ -65,8 +66,8 @@ protected: // º¯¼ö
 
 	ObjectType m_kind{ ObjectType::SwordMinion };
 
-	ObjectList m_blueObjects;
-	ObjectList m_redObjects;
+	CollisionObjectList m_blueObjects;
+	CollisionObjectList m_redObjects;
 
 	bool m_indexArr[MAX_MINION]{ false };
 

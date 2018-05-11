@@ -20,7 +20,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-04
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,11 @@ void CScene::ProcessInput()
 		if(continual) continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
 
-
+	if (m_pSelectedObject && GetAsyncKeyState('K') & 0x0001)
+	{
+		if(m_pSelectedObject->GetState() != States::Die)
+			m_pSelectedObject->SetState(States::Die);
+	}
 }
 
 void CScene::AnimateObjects(float timeElapsed)

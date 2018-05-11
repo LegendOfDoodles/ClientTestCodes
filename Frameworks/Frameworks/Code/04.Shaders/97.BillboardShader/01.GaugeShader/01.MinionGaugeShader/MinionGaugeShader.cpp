@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "MinionGaugeShader.h"
-#include "05.Objects/95.Billboard/Billboard.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/99.Material/Material.h"
@@ -8,9 +7,9 @@
 
 /// <summary>
 /// 목적: Billboard 테스트 쉐이더
-/// 최종 수정자:  이용선
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-04-16
+/// 최종 수정자:  김나단
+/// 수정자 목록:  이용선, 김나단
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,7 @@ CMinionHPGaugeShader::~CMinionHPGaugeShader()
 // 공개 함수
 void CMinionHPGaugeShader::ReleaseUploadBuffers()
 {
-	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		(*iter)->ReleaseUploadBuffers();
 	}
 
@@ -46,7 +45,7 @@ void CMinionHPGaugeShader::UpdateShaderVariables()
 {
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
@@ -55,7 +54,9 @@ void CMinionHPGaugeShader::UpdateShaderVariables()
 
 void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
-	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+	m_HPGaugeObjectList.remove_if([](CHPGaugeObjects* obj) { return obj->GetState() == States::Die; });
+
+	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		(*iter)->Animate(timeElapsed);
 	}
 
@@ -71,7 +72,7 @@ void CMinionHPGaugeShader::Render(CCamera *pCamera)
 	CShader::Render(pCamera);
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 
-	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		(*iter)->Render(pCamera);
 	}
 }
@@ -80,7 +81,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
-	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end(); ++iter) {
+	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		static_cast<CHPGaugeObjects*>(*iter)->SetCamera(m_pCamera);
 	}
 }
@@ -218,7 +219,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 	m_pCreateMgr->ResetCommandList();
 
 	CHPGaugeObjects *pGaugeObject{ NULL };
-	CBaseObject *pMinionObjects{ NULL };
+	CCollisionObject *pMinionObjects{ NULL };
 
 	pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GaugeUiType::MinionGauge);
 	pMinionObjects = m_MinionObjectList->back();
@@ -237,18 +238,18 @@ void CMinionHPGaugeShader::SpawnGauge()
 	xmfGaugePosition = pMinionObjects->GetPosition();
 	xmfGaugePosition.y += 70.f;
 	pGaugeObject->SetPosition(xmfGaugePosition);
-	m_GaugeObjectList.emplace_back(pGaugeObject);
+	m_HPGaugeObjectList.emplace_back(pGaugeObject);
 
 	m_pCreateMgr->ExecuteCommandList();
 }
 
 void CMinionHPGaugeShader::ReleaseObjects()
 {
-	for (auto& iter = m_GaugeObjectList.begin(); iter != m_GaugeObjectList.end();)
+	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end();)
 	{
-		iter = m_GaugeObjectList.erase(iter);
+		iter = m_HPGaugeObjectList.erase(iter);
 	}
-	m_GaugeObjectList.clear();
+	m_HPGaugeObjectList.clear();
 
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)

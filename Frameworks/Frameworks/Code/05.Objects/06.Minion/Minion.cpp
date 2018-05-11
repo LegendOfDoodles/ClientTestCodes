@@ -29,7 +29,9 @@ void CMinion::Animate(float timeElapsed)
 		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
 			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
+
 	MoveToDestination(timeElapsed);
+
 	if (m_pathToGo&&m_curState != States::Walk) {
 		m_nextState = States::Walk;
 		m_curState = States::Walk;
@@ -40,9 +42,10 @@ void CMinion::Animate(float timeElapsed)
 		m_curState = States::Idle;
 		m_fFrameTime = 0;
 	}
-	AdjustAnimationIndex();
-	CAnimatedObject::Animate(timeElapsed);
 
+	AdjustAnimationIndex();
+
+	CAnimatedObject::Animate(timeElapsed);
 }
 
 void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
@@ -111,6 +114,7 @@ void CMinion::SetState(StatesType newState)
 	case States::Die:
 		m_nCurrAnimation = Animations::Die;
 		m_fFrameTime = 0;
+		SetPathToGo(NULL);
 		break;
 	case States::Remove:
 		break;
@@ -205,7 +209,10 @@ void CSwordMinion::Animate(float timeElapsed)
 			break;
 		case States::Die:
 			m_nCurrAnimation = Animations::Die;
-			m_fFrameTime = 0;
+			if (GetAnimTimeRemainRatio() < 0.02)
+			{
+				m_curState = States::Remove;
+			}
 			break;
 		default:
 
@@ -272,7 +279,6 @@ void CMagicMinion::Animate(float timeElapsed)
 			break;
 		case States::Die:
 			m_nCurrAnimation = Animations::Die;
-			m_fFrameTime = 0;
 			break;
 		default:
 
@@ -325,7 +331,6 @@ void CBowMinion::Animate(float timeElapsed)
 			break;
 		case States::Die:
 			m_nCurrAnimation = Animations::Die;
-			m_fFrameTime = 0;
 			break;
 		default:
 

@@ -1,6 +1,7 @@
 #pragma once
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 
-typedef std::list<CBaseObject*> ObjectList;
+typedef std::list<CCollisionObject*> CollisionObjectList;
 
 class CHPGaugeManager
 {
@@ -8,13 +9,13 @@ public:
 	CHPGaugeManager();
 	~CHPGaugeManager();
 
-	void AddMinionObject(CBaseObject *pNewMinion);
+	void AddMinionObject(CCollisionObject *pNewMinion);
 	int GetCount() { return m_naddCount; };
 	void ResetCount() { m_naddCount = 0; };
 
-	ObjectList *GetMinionObjectList() { return &m_MinionObjectList; };
+	CollisionObjectList *GetMinionObjectList() { return &m_MinionObjectList; };
 
 private:
-	ObjectList m_MinionObjectList;
+	CollisionObjectList m_MinionObjectList;
 	int m_naddCount{ 0 };
 };
