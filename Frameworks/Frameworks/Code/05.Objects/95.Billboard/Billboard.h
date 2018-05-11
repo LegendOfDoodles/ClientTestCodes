@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "Billboard.h"
-#include "05.Objects/00.BaseObject/BaseObject.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 #include "05.Objects/01.Camera/00.BaseCamera/Camera.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
@@ -33,9 +33,7 @@ public: // 공개함수
 
 protected: // 내부 함수
 
-private: // 변수
-
-protected:
+protected: // 변수
 	CCamera * m_pCamera{ NULL };
 };
 
@@ -46,17 +44,17 @@ public:
 	CUIObject(CCreateMgr *pCreateMgr, UIType type);
 	virtual ~CUIObject();
 
-	virtual void SetPos(XMFLOAT3 xmf3Position);
+public: // 공개함수
+	virtual void Animate(float fTimeElapsed);
+	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
+
 	virtual void SetDistance(float x) {
 		m_xmf4x4World = Matrix4x4::Identity();
 
 		m_fDistance = x;
 	}
 
-	virtual void Animate(float fTimeElapsed);
-	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
-
-private:
+protected: // 변수
 	XMFLOAT3	m_xmf3Position;
 	float		m_fDistance;
 	UIType		m_type;
@@ -70,18 +68,14 @@ public:	// 생성자, 소멸자
 	virtual ~CHPGaugeObjects();
 
 public: // 공개함수
-	void SetObject(CBaseObject *pObject) { m_pMasterObject = pObject; };
-
 	virtual void Animate(float fTimeElapsed);
 
-protected:
-	CBaseObject * m_pMasterObject;
+	StatesType GetState() { return m_pMasterObject->GetState(); }
+	void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
-private: // 변수
+protected: // 변수
+	CCollisionObject * m_pMasterObject;
 	GaugeUiType		m_Type;
-
-protected:
-
 };
 
 class CMinimapIconObjects :public CUIObject
@@ -90,11 +84,11 @@ public:
 	CMinimapIconObjects(CCreateMgr *pCreateMgr) ;
 	virtual ~CMinimapIconObjects();
 
-	void SetObject(CBaseObject *pObject) { m_pMasterObject = pObject; };
+	void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
 	virtual void Animate(float fTimeElapsed);
 
 protected:
-	CBaseObject * m_pMasterObject;
+	CCollisionObject * m_pMasterObject;
 
 };
