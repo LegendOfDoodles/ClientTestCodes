@@ -209,7 +209,7 @@ void CSwordMinion::Animate(float timeElapsed)
 			break;
 		case States::Die:
 			m_nCurrAnimation = Animations::Die;
-			if (GetAnimTimeRemainRatio() < 0.02)
+			if (GetAnimTimeRemainRatio() < 0.05)
 			{
 				m_curState = States::Remove;
 			}
@@ -331,6 +331,10 @@ void CBowMinion::Animate(float timeElapsed)
 			break;
 		case States::Die:
 			m_nCurrAnimation = Animations::Die;
+			if (GetAnimTimeRemainRatio() < 0.05)
+			{
+				m_curState = States::Remove;
+			}
 			break;
 		default:
 

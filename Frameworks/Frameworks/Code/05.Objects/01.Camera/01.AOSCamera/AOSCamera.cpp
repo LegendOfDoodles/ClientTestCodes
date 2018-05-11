@@ -38,7 +38,7 @@ void CAOSCamera::Initialize(CCreateMgr * pCreateMgr)
 	SetScissorRect(0, 0, width, height);
 	GenerateProjectionMatrix(1.0f, 50000.0f, float(width) / float(height), m_angleDegree);
 	GenerateViewMatrix(
-		XMFLOAT3(0.0f, 800.0f, -300.0f),
+		XMFLOAT3(0.0f, 500.0f, -200.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f));
 
 	CreateShaderVariables(pCreateMgr);

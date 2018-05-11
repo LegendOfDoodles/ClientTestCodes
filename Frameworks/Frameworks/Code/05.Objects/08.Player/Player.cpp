@@ -92,7 +92,6 @@ void CPlayer::Animate(float timeElapsed)
 		break;
 	case States::Die:
 		m_nCurrAnimation = Animations::Die;
-		m_fFrameTime = 0;
 		break;
 	default:
 

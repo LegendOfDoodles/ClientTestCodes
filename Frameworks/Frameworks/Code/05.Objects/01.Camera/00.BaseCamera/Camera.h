@@ -121,7 +121,7 @@ protected: // º¯¼ö
 	D3D12_VIEWPORT m_viewport;
 	D3D12_RECT m_scissorRect;
 
-	float m_speed{ 1500.0f };
+	float m_speed{ 1000.0f };
 
 	DWORD m_direction{ NULL };
 	XMFLOAT3 m_rotation{ 0.0f, 0.0f, 0.0f };
