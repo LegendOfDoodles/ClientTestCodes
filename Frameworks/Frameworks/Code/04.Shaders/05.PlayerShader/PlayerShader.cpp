@@ -147,6 +147,9 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		m_nWeaponState++;
 		if (m_nWeaponState >= 2)m_nWeaponState = 0;
 		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
+
+		// 무기에 따라 수정필요
+		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
@@ -365,8 +368,8 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_INSTANCING
 				pPlayer->SetMesh(0, pPlayerMesh);
 				
-				pPlayer->SetMesh(1, m_pWeapons[0]);
-				
+				pPlayer->SetMesh(1, m_pWeapons[1]);
+				pPlayer->SetType(ObjectType::SwordPlayer);
 #endif
 #if !USE_BATCH_MATERIAL
 				pRotatingObject->SetMaterial(pCubeMaterial);

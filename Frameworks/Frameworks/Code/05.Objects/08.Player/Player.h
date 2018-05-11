@@ -21,10 +21,10 @@ public:	// 외부 함수
 
 	virtual void ActiveSkill(AnimationsType act);
 
-	virtual 	void SetState(StatesType newState);
+	virtual void SetState(StatesType newState);
 
+	//virtual void SetObjectType(ObjectType type) { m_StatusInfo.WeaponType = type; };
 	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
-
 	virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
 
 protected: // 내부 함수
