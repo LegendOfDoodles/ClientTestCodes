@@ -5,7 +5,7 @@
 /// 목적: UI 이용을 위한 Bilboard 클래스 제작
 /// 최종 수정자:  김나단
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-05-05
+/// 최종 수정 날짜: 2018-05-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,11 +94,6 @@ CUIObject::~CUIObject()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CUIObject::SetPos(XMFLOAT3 xmf3Position)
-{
-	m_xmf3Position = xmf3Position;
-}
-
 void CUIObject::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);

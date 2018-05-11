@@ -1,9 +1,11 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
+#include "05.Objects/95.Billboard/Billboard.h"
 
-typedef std::list<CBaseObject*> ObjectList;
+typedef std::list<CCollisionObject*> CollisionObjectList;
+typedef std::list<CHPGaugeObjects*> HPGaugeObjectList;
 
-class CBillboardObject;
 class CMaterial;
 class CHPGaugeManager;
 
@@ -53,8 +55,8 @@ protected: // º¯¼ö
 
 	CCamera *m_pCamera;
 
-	ObjectList *m_MinionObjectList;
-	ObjectList m_GaugeObjectList;
+	CollisionObjectList *m_MinionObjectList;
+	HPGaugeObjectList m_HPGaugeObjectList;
 
 	bool m_indexArr[MAX_MINION]{ false };
 

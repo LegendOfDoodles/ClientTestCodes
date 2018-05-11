@@ -22,6 +22,9 @@ void CCollisionManager::AddCollider(CCollisionObject* pcol)
 void CCollisionManager::Update(CWayFinder* pWayFinder)
 {
 	int cnt = 0;
+
+	m_lstColliders.remove_if([](CCollisionObject* obj) { return obj->GetState() == States::Die; });
+
 	for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 	{
 		for (auto& j = m_lstColliders.begin(); j != m_lstColliders.end(); ++j)

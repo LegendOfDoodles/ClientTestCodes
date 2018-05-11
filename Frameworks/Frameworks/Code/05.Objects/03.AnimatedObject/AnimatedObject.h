@@ -42,6 +42,9 @@ public: // 공개 함수
 
 	void  SetSpeed(float speed) { m_speed = speed; }
 
+	int GetAnimTimeRemain() { return m_nAniLength[m_nCurrAnimation] - m_fFrameTime; }
+	float GetAnimTimeRemainRatio() { return (m_nAniLength[m_nCurrAnimation] - m_fFrameTime) / (float)m_nAniLength[m_nCurrAnimation]; }
+
 protected: // 내부 함수
 	bool IsArrive(float dst);
 

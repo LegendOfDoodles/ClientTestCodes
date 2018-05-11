@@ -9,7 +9,7 @@ CHPGaugeManager::~CHPGaugeManager()
 {
 }
 
-void CHPGaugeManager::AddMinionObject(CBaseObject * pNewMinion)
+void CHPGaugeManager::AddMinionObject(CCollisionObject * pNewMinion)
 {
 	if (pNewMinion) {
 		m_MinionObjectList.push_back(pNewMinion);

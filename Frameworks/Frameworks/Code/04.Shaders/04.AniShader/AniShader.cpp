@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "AniShader.h"
-#include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
@@ -31,14 +30,6 @@ CAniShader::~CAniShader()
 // 공개 함수
 void CAniShader::ReleaseUploadBuffers()
 {
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
-	}
-
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
 	{
@@ -50,16 +41,6 @@ void CAniShader::ReleaseUploadBuffers()
 
 void CAniShader::UpdateShaderVariables()
 {
-#if USE_INSTANCING
-	m_pCommandList->SetGraphicsRootShaderResourceView(2,
-		m_pInstanceBuffer->GetGPUVirtualAddress());
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		XMStoreFloat4x4(&m_pMappedObjects[i].m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	}
-#else
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
@@ -72,6 +53,7 @@ void CAniShader::UpdateShaderVariables()
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
+
 	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
@@ -82,18 +64,6 @@ void CAniShader::UpdateShaderVariables()
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
-		XMFLOAT4X4 tmp[128];
-		memcpy(tmp, m_ppObjects[i]->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
-
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	}
-#endif
 }
 
 void CAniShader::UpdateBoundingBoxShaderVariables()
@@ -114,18 +84,13 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + (i * boundingBoxElementBytes));
-
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	}
 }
 
 void CAniShader::AnimateObjects(float timeElapsed)
 {
+	m_blueObjects.remove_if([](CCollisionObject* obj) { return obj->GetState() == States::Remove; });
+	m_redObjects.remove_if([](CCollisionObject* obj) { return obj->GetState() == States::Remove; });
+
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Animate(timeElapsed);
@@ -133,10 +98,6 @@ void CAniShader::AnimateObjects(float timeElapsed)
 	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->Animate(timeElapsed);
-	}
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(timeElapsed);
 	}
 }
 
@@ -154,10 +115,6 @@ void CAniShader::Render(CCamera *pCamera)
 	{
 		(*iter)->Render(pCamera);
 	}
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
-	}
 }
 
 void CAniShader::RenderBoundingBox(CCamera * pCamera)
@@ -171,10 +128,6 @@ void CAniShader::RenderBoundingBox(CCamera * pCamera)
 	{
 		(*iter)->RenderBoundingBox(pCamera);
 	}
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		if (m_ppObjects[j]) m_ppObjects[j]->RenderBoundingBox(pCamera);
-	}
 }
 
 CBaseObject *CAniShader::PickObjectByRayIntersection(
@@ -184,7 +137,7 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 
 	nearHitDistance = FLT_MAX;
 	float hitDistance = FLT_MAX;
-	CBaseObject *pSelectedObject{ NULL };
+	CCollisionObject *pSelectedObject{ NULL };
 
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
@@ -203,16 +156,6 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 		{
 			nearHitDistance = hitDistance;
 			pSelectedObject = (*iter);
-		}
-	}
-
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
-		if (intersected && (hitDistance < nearHitDistance))
-		{
-			nearHitDistance = hitDistance;
-			pSelectedObject = m_ppObjects[j];
 		}
 	}
 
@@ -228,11 +171,7 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	{
 		m_nWeaponState++;
 		if (m_nWeaponState >= 3)m_nWeaponState = 0;
-		for (int i = 0; i < m_nObjects; ++i) {
-			CMinion* obj = dynamic_cast<CMinion*>(m_ppObjects[i]);
 
-			obj->SetMesh(1, m_pWeapons[m_nWeaponState]);
-		}
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
@@ -425,11 +364,6 @@ void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
-	//int xObjects = 10, yObjects = 0, zObjects = 10, i = 0;
-	//int xObjects = 0, yObjects = 0, zObjects = 0, i = 0;
-
-	//m_nObjects = (xObjects + 1) * (yObjects + 1) * (zObjects + 1);
-	//m_ppObjects = new CBaseObject*[m_nObjects];
 
 #if USE_INSTANCING
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
@@ -487,15 +421,6 @@ void CAniShader::ReleaseObjects()
 		iter = m_redObjects.erase(iter);
 	}
 	m_redObjects.clear();
-
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			delete m_ppObjects[j];
-		}
-		Safe_Delete_Array(m_ppObjects);
-	}
 
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
@@ -646,51 +571,30 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	pMinionObject->SetPathToGo(new Path(m_pathes[kind]));
 
-	if (kind == Minion_Species::Blue_Up)
+	XMFLOAT2 firstPos{ m_pathes[kind].front().From() };
+	pMinionObject->CBaseObject::SetPosition(XMFLOAT3(firstPos.x, 0, firstPos.y));
+
+	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
 	{
-		pMinionObject->CBaseObject::SetPosition(335, 50, 2787);
 		m_blueObjects.emplace_back(pMinionObject);
-
 	}
-	else if (kind == Minion_Species::Blue_Down)
+	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
 	{
-		pMinionObject->CBaseObject::SetPosition(335, 0, 2238);
-		m_blueObjects.emplace_back(pMinionObject);
-
-	}
-	else if (kind == Minion_Species::Red_Up)
-	{
-		pMinionObject->CBaseObject::SetPosition(9669, 0, 2739);
 		m_redObjects.emplace_back(pMinionObject);
-
-	}
-	else if (kind == Minion_Species::Red_Down)
-	{
-		pMinionObject->CBaseObject::SetPosition(9663, 0, 2254);
-		m_redObjects.emplace_back(pMinionObject);
-
 	}
 
 	m_pCreateMgr->ExecuteCommandList();
-	CCollisionObject* pointer;
-	CBaseObject *pCurrentObject;
 
 	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) {
 		m_blueObjects.back()->ReleaseUploadBuffers();
 
-		pointer = (CCollisionObject*)(m_blueObjects.back());
-		pCurrentObject = (CBaseObject*)(m_blueObjects.back());
-
-		m_pColManager->AddCollider(pointer);
-		m_pGaugeManger->AddMinionObject(pCurrentObject);
+		m_pColManager->AddCollider(m_blueObjects.back());
+		m_pGaugeManger->AddMinionObject(m_blueObjects.back());
 	}
 	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) {
 		m_redObjects.back()->ReleaseUploadBuffers();
-		
-		pointer = (CCollisionObject*)(m_redObjects.back());
-		pCurrentObject = (CBaseObject*)(m_redObjects.back());
 
-		m_pColManager->AddCollider(pointer);
-		m_pGaugeManger->AddMinionObject(pCurrentObject);
+		m_pColManager->AddCollider(m_redObjects.back());
+		m_pGaugeManger->AddMinionObject(m_redObjects.back());
 	}
 }
