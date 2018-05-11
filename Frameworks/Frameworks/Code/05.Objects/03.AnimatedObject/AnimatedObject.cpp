@@ -84,6 +84,8 @@ void CAnimatedObject::MoveForward(float fDistance)
 
 void CAnimatedObject::LookAt(XMFLOAT3 objPosition)
 {
+	if (m_curState == States::Attack) return;
+
 	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
 	XMFLOAT3 playerLook = GetLook();
 	XMFLOAT3 playerPos = GetPosition();
@@ -121,6 +123,11 @@ XMFLOAT3 CAnimatedObject::GetUp()
 	return(Vector3::Normalize(XMFLOAT3(m_xmf4x4World._31, m_xmf4x4World._32, m_xmf4x4World._33)));
 }
 
+void CAnimatedObject::SetPosition(float x, float z)
+{
+	CBaseObject::SetPosition(x, m_pTerrain->GetHeight(x, z), z);
+}
+
 void CAnimatedObject::SetPathToGo(Path * path)
 {
 	if (m_pathToGo)
@@ -130,11 +137,13 @@ void CAnimatedObject::SetPathToGo(Path * path)
 	}
 	m_pathToGo = path;
 	ResetDestination();
+	if(m_curState != States::Attack) SetState(States::Walk);
 }
 
-void CAnimatedObject::MoveToDestination(float timeElapsed)
+ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 {
-	if (!m_pathToGo) return;
+	if (m_curState != States::Walk) return States::Processing;
+	if (!m_pathToGo) return States::Done;
 
 	if (NoneDestination() || IsArrive(m_speed * timeElapsed))	//  µµÂø ÇÑ °æ¿ì
 	{
@@ -142,6 +151,7 @@ void CAnimatedObject::MoveToDestination(float timeElapsed)
 		{
 			Safe_Delete(m_pathToGo);
 			ResetDestination();
+			return States::Done;
 		}
 		else
 		{
@@ -157,6 +167,7 @@ void CAnimatedObject::MoveToDestination(float timeElapsed)
 		position.y = m_pTerrain->GetHeight(position.x, position.z);
 		CBaseObject::SetPosition(position);
 	}
+	return States::Processing;
 }
 
 void CAnimatedObject::RegenerateLookAt()

@@ -17,6 +17,14 @@ namespace States
 		Die,
 		Remove
 	};
+
+	enum ProcessStates
+	{ 
+		Processing, 
+		Found, 
+		Not_Found, 
+		Done 
+	};
 }
 
 namespace Animations
@@ -35,6 +43,7 @@ namespace Animations
 }
 
 typedef States::States StatesType;
+typedef States::ProcessStates ProcessType;
 typedef Animations::Animations AnimationsType;
 
 enum CollisionType {

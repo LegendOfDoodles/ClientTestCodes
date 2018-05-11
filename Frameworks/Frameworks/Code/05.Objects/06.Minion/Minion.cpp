@@ -22,28 +22,16 @@ CMinion::~CMinion()
 // 공개 함수
 void CMinion::Animate(float timeElapsed)
 {
-	m_fFrameTime += 30 * timeElapsed;
+	AdjustAnimationIndex();
 
+	m_fFrameTime += 30 * timeElapsed;
 
 	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
 		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
 			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
 
-	MoveToDestination(timeElapsed);
-
-	if (m_pathToGo&&m_curState != States::Walk) {
-		m_nextState = States::Walk;
-		m_curState = States::Walk;
-		m_fFrameTime = 0;
-	}
-	else if (!m_pathToGo&&m_curState == States::Walk) {
-		m_nextState = States::Idle;
-		m_curState = States::Idle;
-		m_fFrameTime = 0;
-	}
-
-	AdjustAnimationIndex();
+	if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
 
 	CAnimatedObject::Animate(timeElapsed);
 }
@@ -76,25 +64,9 @@ void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
 	}
 }
 
-void CMinion::SetPathToGo(Path * path)
-{
-	if (m_pathToGo)
-	{
-		m_pathToGo->clear();
-		Safe_Delete(m_pathToGo);
-	}
-	m_pathToGo = path;
-	m_destination.x = -1;
-}
-
-void CMinion::SetPosition(float x, float z)
-{
-	CBaseObject::SetPosition(x, m_pTerrain->GetHeight(x, z), z);
-}
-
 void CMinion::SetState(StatesType newState)
 {
-	m_curState = newState;
+	m_nextState = m_curState = newState;
 
 	switch (newState)
 	{
@@ -171,29 +143,37 @@ void CSwordMinion::Animate(float timeElapsed)
 {
 		switch (m_curState) {
 		case States::Idle:
-			if (m_nCurrAnimation != Animations::Idle)
-				m_nCurrAnimation = Animations::Idle;
+			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
 			if (m_nCurrAnimation == Animations::Attack1) {
-				if (m_fFrameTime > m_nAniLength[m_nAniIndex] / 2 &&
-					m_curState == m_nextState)
+				if (m_curState == m_nextState)
 				{
+					if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
 					m_nCurrAnimation = Animations::Attack2;
 					m_fFrameTime = 0;
+				}
+				else
+				{
+					if (GetAnimTimeRemainRatio() > 0.05) break;
+					SetState(m_nextState);
 				}
 			}
 			else if (m_nCurrAnimation == Animations::Attack2)
 			{
-				if (m_fFrameTime > m_nAniLength[m_nAniIndex])
+				if (m_curState == m_nextState)
 				{
+					if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
 					m_nCurrAnimation = Animations::Attack1;
 					m_fFrameTime = 0;
-
+				}
+				else
+				{
+					if (GetAnimTimeRemainRatio() > 0.05) break;
+					SetState(m_nextState);
 				}
 			}
 			break;
-
 		case States::Walk:
 			if(m_nCurrAnimation!= Animations::StartWalk&&
 				m_nCurrAnimation != Animations::Walking)
@@ -208,14 +188,13 @@ void CSwordMinion::Animate(float timeElapsed)
 			}
 			break;
 		case States::Die:
-			m_nCurrAnimation = Animations::Die;
+			if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
 			if (GetAnimTimeRemainRatio() < 0.05)
 			{
 				m_curState = States::Remove;
 			}
 			break;
 		default:
-
 			break;
 		}
 	CMinion::Animate(timeElapsed);
@@ -242,29 +221,37 @@ void CMagicMinion::Animate(float timeElapsed)
 {
 		switch (m_curState) {
 		case States::Idle:
-			if (m_nCurrAnimation != Animations::Idle)
-				m_nCurrAnimation = Animations::Idle;
+			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
 			if (m_nCurrAnimation == Animations::Attack1) {
-				if (m_fFrameTime > m_nAniLength[m_nAniIndex] / 2 &&
-					m_curState == m_nextState)
+				if (m_curState == m_nextState)
 				{
+					if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
 					m_nCurrAnimation = Animations::Attack2;
 					m_fFrameTime = 0;
+				}
+				else
+				{
+					if (GetAnimTimeRemainRatio() > 0.05) break;
+					SetState(m_nextState);
 				}
 			}
 			else if (m_nCurrAnimation == Animations::Attack2)
 			{
-				if (m_fFrameTime > m_nAniLength[m_nAniIndex])
+				if (m_curState == m_nextState)
 				{
+					if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
 					m_nCurrAnimation = Animations::Attack1;
 					m_fFrameTime = 0;
-
+				}
+				else
+				{
+					if (GetAnimTimeRemainRatio() > 0.05) break;
+					SetState(m_nextState);
 				}
 			}
 			break;
-
 		case States::Walk:
 			if (m_nCurrAnimation != Animations::StartWalk &&
 				m_nCurrAnimation != Animations::Walking)
@@ -278,14 +265,16 @@ void CMagicMinion::Animate(float timeElapsed)
 			}
 			break;
 		case States::Die:
-			m_nCurrAnimation = Animations::Die;
+			if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
+			if (GetAnimTimeRemainRatio() < 0.05)
+			{
+				m_curState = States::Remove;
+			}
 			break;
 		default:
-
 			break;
 		}
 	CMinion::Animate(timeElapsed);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -309,18 +298,28 @@ void CBowMinion::Animate(float timeElapsed)
 {
 		switch (m_curState) {
 		case States::Idle:
-
-			if (m_nCurrAnimation != Animations::Idle)
-				m_nCurrAnimation = Animations::Idle;
+			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
-			
+			if (m_nCurrAnimation == Animations::Attack1)
+			{
+				if (m_curState == m_nextState)
+				{
+					if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
+					m_fFrameTime = 0;
+				}
+				else
+				{
+					if (GetAnimTimeRemainRatio() > 0.05) break;
+					SetState(m_nextState);
+				}
+			}
 			break;
-
 		case States::Walk:
 			if (m_nCurrAnimation != Animations::StartWalk &&
 				m_nCurrAnimation != Animations::Walking)
 				m_nCurrAnimation = Animations::StartWalk;
+
 			if (m_nCurrAnimation == Animations::StartWalk) {
 				if (m_fFrameTime > m_nAniLength[m_nAniIndex]-1)
 				{
@@ -330,18 +329,16 @@ void CBowMinion::Animate(float timeElapsed)
 			}
 			break;
 		case States::Die:
-			m_nCurrAnimation = Animations::Die;
+			if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
 			if (GetAnimTimeRemainRatio() < 0.05)
 			{
 				m_curState = States::Remove;
 			}
 			break;
 		default:
-
 			break;
 		}
 	CMinion::Animate(timeElapsed);
-
 }
 
 void CBowMinion::AdjustAnimationIndex()
@@ -362,6 +359,6 @@ void CBowMinion::AdjustAnimationIndex()
 		break;
 	case Animations::Die:
 		m_nAniIndex = 4;
-
+		break;
 	}
 }
