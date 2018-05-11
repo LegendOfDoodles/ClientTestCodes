@@ -203,3 +203,24 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 	}
 	
 }
+
+////////////////////////////////////////////////////////////////////////
+// 持失切, 社瑚切
+CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr)
+	: CUIObject(pCreateMgr)
+{
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 42666.f, FRAME_BUFFER_HEIGHT / 24000.f, 0.f);
+	SetMesh(0, pRectMesh);
+}
+
+CMinimapIconObjects::~CMinimapIconObjects()
+{
+
+}
+
+void CMinimapIconObjects::Animate(float fTimeElapsed)
+{
+	CBillboardObject::Animate(fTimeElapsed);
+
+
+}

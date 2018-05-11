@@ -83,3 +83,18 @@ private: // º¯¼ö
 protected:
 
 };
+
+class CMinimapIconObjects :public CUIObject
+{
+public:
+	CMinimapIconObjects(CCreateMgr *pCreateMgr) ;
+	virtual ~CMinimapIconObjects();
+
+	void SetObject(CBaseObject *pObject) { m_pMasterObject = pObject; };
+
+	virtual void Animate(float fTimeElapsed);
+
+protected:
+	CBaseObject * m_pMasterObject;
+
+};

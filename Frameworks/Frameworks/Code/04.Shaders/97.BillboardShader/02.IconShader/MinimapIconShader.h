@@ -1,4 +1,5 @@
 #pragma once
+#include "04.Shaders/00.BaseShader/Shader.h"
 
 class CBillboardObject;
 class CMaterial;
@@ -39,7 +40,6 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
 
-	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
 protected: // 변수

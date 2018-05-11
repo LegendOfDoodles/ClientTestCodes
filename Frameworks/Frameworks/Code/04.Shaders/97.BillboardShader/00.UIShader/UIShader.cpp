@@ -291,7 +291,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 		pUIObject = new CUIObject(pCreateMgr, (UIType)i);
 		pUIObject->SetMaterial(pMaterial);
 		pUIObject->SetCamera(m_pCamera);
-		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);
+		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
 		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
 		m_ppObjects[i] = pUIObject;
