@@ -43,5 +43,6 @@ private:	// º¯¼ö
 #if defined(SHOW_CAPTIONFPS)
 	int			m_nLastFps{ 0 };
 #endif
+
 };
 
