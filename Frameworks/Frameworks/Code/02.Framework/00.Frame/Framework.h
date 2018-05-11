@@ -37,15 +37,6 @@ private: // 변수
 	
 	Network m_pNetwork;
 
-//public: //네트워크 관련 변수들
-//	SOCKET  m_mysocket;
-//	WSABUF	m_send_wsabuf;
-//	char 	m_send_buffer[MAX_BUFF_SIZE];
-//	WSABUF	m_recv_wsabuf;
-//	char	m_recv_buffer[MAX_BUFF_SIZE];
-//	char	m_packet_buffer[MAX_BUFF_SIZE];
-//	DWORD	m_in_packet_size = 0;
-//	int		m_saved_packet_size = 0;
-//	int		m_myid;
+	int m_FrameCheck = 0;
 };
 
