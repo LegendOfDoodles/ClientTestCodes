@@ -10,7 +10,6 @@
 /// 최종 수정 날짜: 2018-05-09
 /// </summary>
 
-
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CWayFinder::CWayFinder(float sizeX, float sizeY)
@@ -232,10 +231,10 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float co
 		for (int i = 0; i < 10000; ++i)
 		{
 			result = m_pCurSearch->FindPath();
-			if (result == Found || result == Not_Found)
+			if (result == States::Found || result == States::Not_Found)
 				break;
 		}
-		if (result == Found)
+		if (result == States::Found)
 		{
 			// 찾은 패스 저장
 			path = m_pCurSearch->GetPath();

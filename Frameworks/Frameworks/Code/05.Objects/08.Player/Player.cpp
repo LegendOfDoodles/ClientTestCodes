@@ -24,37 +24,15 @@ CPlayer::~CPlayer()
 // 공개 함수
 void CPlayer::Animate(float timeElapsed)
 {
-	m_fPreFrameTime = m_fFrameTime;
-	m_fFrameTime += 30 * timeElapsed;
-
-
-	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
-		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
-			m_fFrameTime -= m_nAniLength[m_nAniIndex];
-	}
-	MoveToDestination(timeElapsed);
-	if (m_pathToGo&&m_CurrState != States::Walk) {
-		m_nextState = States::Walk;
-		m_CurrState = States::Walk;
-		m_fFrameTime = 0;
-	}
-	else if (!m_pathToGo&&m_CurrState == States::Walk) {
-		m_nextState = States::Idle;
-		m_CurrState = States::Idle;
-		m_fFrameTime = 0;
-	}
-
-	switch (m_CurrState) {
+	switch (m_curState) {
 	case States::Idle:
-		if (m_nCurrAnimation != Animations::Idle)
-			m_nCurrAnimation = Animations::Idle;
+		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
+		if (m_pathToGo) SetState(States::Walk);
 		break;
 	case States::Attack:
 		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)
 		{
-			m_CurrState = States::Idle;
-			m_nCurrAnimation = Animations::Idle;
-			m_fFrameTime = 0;
+			SetState(States::Idle);
 		}
 		else if (m_nCurrAnimation == Animations::SkillQ) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
@@ -74,7 +52,6 @@ void CPlayer::Animate(float timeElapsed)
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, 40);
 			}
 		}
-
 		break;
 
 	case States::Walk:
@@ -91,16 +68,29 @@ void CPlayer::Animate(float timeElapsed)
 		}
 		break;
 	case States::Die:
-		m_nCurrAnimation = Animations::Die;
+		if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
+		if (GetAnimTimeRemainRatio() < 0.05)
+		{
+			m_curState = States::Remove;
+		}
 		break;
 	default:
-
 		break;
 	}
 
-	AdjustAnimationIndex();
-	CAnimatedObject::Animate(timeElapsed);
+	m_fPreFrameTime = m_fFrameTime;
+	m_fFrameTime += 30 * timeElapsed;
 
+	AdjustAnimationIndex();
+
+	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
+		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
+			m_fFrameTime -= m_nAniLength[m_nAniIndex];
+	}
+
+	if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
+
+	CAnimatedObject::Animate(timeElapsed);
 }
 
 void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
@@ -131,29 +121,10 @@ void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 	}
 }
 
-void CPlayer::SetPathToGo(Path * path)
-{
-	if (m_pathToGo)
-	{
-		m_pathToGo->clear();
-		Safe_Delete(m_pathToGo);
-	}
-	m_pathToGo = path;
-	m_destination.x = -1;
-}
-
-void CPlayer::SetPosition(float x, float z)
-{
-	CBaseObject::SetPosition(x, m_pTerrain->GetHeight(x, z), z);
-}
-
 void CPlayer::ActiveSkill(AnimationsType act)
 {
-	if (m_CurrState != States::Attack) {
-		if (m_pathToGo) {
-			SetPathToGo(NULL);
-		}
-		m_CurrState = States::Attack;
+	if (m_curState != States::Attack) {
+		m_curState = States::Attack;
 		m_nCurrAnimation = act;
 		m_fFrameTime = 0;
 	}
@@ -161,9 +132,32 @@ void CPlayer::ActiveSkill(AnimationsType act)
 
 void CPlayer::SetState(StatesType newState)
 {
-	m_CurrState = newState;
+	m_curState = newState;
 
-	AdjustAnimationIndex();
+	switch (newState)
+	{
+	case States::Idle:
+		m_nCurrAnimation = Animations::Idle;
+		break;
+	case States::Walk:
+		m_nCurrAnimation = Animations::StartWalk;
+		break;
+	case States::Chase:
+		m_nCurrAnimation = Animations::StartWalk;
+		break;
+	case States::Attack:
+		m_fFrameTime = 0;
+		break;
+	case States::Die:
+		m_nCurrAnimation = Animations::Die;
+		m_fFrameTime = 0;
+		SetPathToGo(NULL);
+		break;
+	case States::Remove:
+		break;
+	default:
+		assert(!"Error:: There is No State");
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////

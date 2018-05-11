@@ -17,6 +17,7 @@ public: // 공개 함수
 
 	StatesType GetState() { return m_curState; }
 	virtual void SetState(StatesType newState) { m_curState = newState; }
+	void SetNextState(StatesType newState) { m_nextState = newState; }
 
 protected: // 내부 함수
 	void ResetCollisionLevel() {

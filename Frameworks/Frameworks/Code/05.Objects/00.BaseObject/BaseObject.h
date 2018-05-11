@@ -79,13 +79,6 @@ public: // 공개 함수
 	int GetType() {	return m_ObjectType; };
 	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
 
-	bool IsCollider() { return false; }
-
-	bool HaveWalkState() { return false; }
-	bool HaveChaseState() { return false; }
-	bool HaveAttackState() { return false; }
-	bool HaveDieState() { return false; }
-
 protected: // 내부 함수
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
 	virtual void ReleaseShaderVariables();

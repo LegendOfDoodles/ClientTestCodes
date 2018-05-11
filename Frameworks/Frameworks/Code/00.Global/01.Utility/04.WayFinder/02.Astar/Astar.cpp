@@ -122,13 +122,13 @@ int CAstar::FindPath()
 	int NextClosestNode;
 
 	// 못 찾은 경우
-	if (m_pPQ->empty()) return Not_Found;
+	if (m_pPQ->empty()) return States::Not_Found;
 
 	NextClosestNode = m_pPQ->Pop();
 	m_shortestPathTree[NextClosestNode] = m_searchFrontier[NextClosestNode];
 
 	// 목표에 도착한 경우
-	if (NextClosestNode == m_target) return Found;
+	if (NextClosestNode == m_target) return States::Found;
 
 	const EdgeVector &edges = m_pFinder->GetEdgesAt(NextClosestNode);
 	for (int i = 0; i < edges.size(); ++i)
@@ -162,7 +162,7 @@ int CAstar::FindPath()
 		}
 	}
 
-	return Processing;
+	return States::Processing;
 }
 
 Path* CAstar::GetPath()

@@ -15,9 +15,6 @@ public:
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
-	virtual void SetPathToGo(Path *path);
-
-	virtual void SetPosition(float x, float z);
 
 	virtual void ActiveSkill(AnimationsType act);
 
@@ -38,7 +35,6 @@ protected: // 변수
 
 	PlayerInfo m_StatusInfo;
 
-	StatesType m_CurrState = { States::Idle };
 	CCollisionManager * m_pColManager{ NULL };
 };
 
