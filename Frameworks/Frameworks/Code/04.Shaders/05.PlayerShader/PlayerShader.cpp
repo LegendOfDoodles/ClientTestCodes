@@ -369,17 +369,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer = new CPlayer(pCreateMgr, 2);
 
 #if !USE_INSTANCING
-<<<<<<< HEAD
-			pPlayer->SetMesh(0, pPlayerMesh);
-
-			pPlayer->SetMesh(1, m_pWeapons[0]);
-
-=======
 				pPlayer->SetMesh(0, pPlayerMesh);
 				
 				pPlayer->SetMesh(1, m_pWeapons[1]);
 				pPlayer->SetType(ObjectType::SwordPlayer);
->>>>>>> 용선
 #endif
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);
@@ -399,13 +392,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer->SetSkeleton(pSSlash);
 			pPlayer->SetSkeleton(pSDispute);
 
-
-
 			pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);
-
 
 #if !USE_INSTANCING
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
