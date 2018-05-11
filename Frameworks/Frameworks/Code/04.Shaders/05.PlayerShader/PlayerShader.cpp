@@ -34,7 +34,7 @@ void CPlayerShader::ReleaseUploadBuffers()
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
 	{
-		for (int i = 0; i<m_nMaterials; ++i)
+		for (int i = 0; i < m_nMaterials; ++i)
 			m_ppMaterials[i]->ReleaseUploadBuffers();
 	}
 #endif
@@ -310,7 +310,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
-	m_nObjects =1;
+	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 #if USE_INSTANCING
@@ -339,13 +339,13 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword.meshinfo");
 
-	
+
 	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
-	CSkeleton *pSStartWalk	= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
-	CSkeleton *pSWalk		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
-	CSkeleton *pSSlash		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
-	CSkeleton *pSSmash		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
-	CSkeleton *pSDispute		= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dispute.aniinfo");
+	CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
+	CSkeleton *pSWalk = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
+	CSkeleton *pSSlash = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
+	CSkeleton *pSSmash = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
+	CSkeleton *pSDispute = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dispute.aniinfo");
 
 
 	pPlayerMesh->SetBoundingBox(
@@ -356,55 +356,60 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CPlayer *pPlayer = NULL;
 
-	for (int j = 0; j <2; ++j) {
+	for (int j = 0; j < 2; ++j) {
 		m_pWeapons[j]->AddRef();
 	}
-	pPlayer = new CPlayer(pCreateMgr, 2);
 
+	for (int x = 0; x < m_nObjects / 2; ++x) {
+		for (int z = 0; z < m_nObjects / 2; ++z) {
+
+			pPlayer = new CPlayer(pCreateMgr, 2);
 
 #if !USE_INSTANCING
-				pPlayer->SetMesh(0, pPlayerMesh);
-				
-				pPlayer->SetMesh(1, m_pWeapons[0]);
-				
+			pPlayer->SetMesh(0, pPlayerMesh);
+
+			pPlayer->SetMesh(1, m_pWeapons[0]);
+
 #endif
 #if !USE_BATCH_MATERIAL
-				pRotatingObject->SetMaterial(pCubeMaterial);
+			pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-				pPlayer->SetBoundingMesh(pCreateMgr,
+			pPlayer->SetBoundingMesh(pCreateMgr,
 
-					CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
-					0, 0, -CONVERT_PaperUnit_to_InG(8));
-				pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
-				pPlayer->CBaseObject::SetPosition(500, 0,2000);
+				CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
+				0, 0, -CONVERT_PaperUnit_to_InG(8));
+			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
+			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*500));
 
-				pPlayer->SetSkeleton(pSIdle);
-				pPlayer->SetSkeleton(pSStartWalk);
-				pPlayer->SetSkeleton(pSWalk);
-				
-				pPlayer->SetSkeleton(pSSmash);
-				pPlayer->SetSkeleton(pSSlash);
-				pPlayer->SetSkeleton(pSDispute);
+			pPlayer->SetSkeleton(pSIdle);
+			pPlayer->SetSkeleton(pSStartWalk);
+			pPlayer->SetSkeleton(pSWalk);
+
+			pPlayer->SetSkeleton(pSSmash);
+			pPlayer->SetSkeleton(pSSlash);
+			pPlayer->SetSkeleton(pSDispute);
 
 
 
-				pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
-				pPlayer->SetTerrain(m_pTerrain);
+			pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
+			pPlayer->SetTerrain(m_pTerrain);
 
-				pPlayer->Rotate(90, 0, 0);
+			pPlayer->Rotate(90, 0, 0);
 
 
 #if !USE_INSTANCING
-				pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-				pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 #endif
-				m_ppObjects[i++] = pPlayer;
+			m_ppObjects[i++] = pPlayer;
 
 #if USE_INSTANCING
-	m_ppObjects[0]->SetMesh(0, pCubeMesh);
+			m_ppObjects[0]->SetMesh(0, pCubeMesh);
 #endif
+		}
+	}
 
-	Safe_Delete(pSIdle); 
+	Safe_Delete(pSIdle);
 	Safe_Delete(pSSlash);
 	Safe_Delete(pSSmash);
 	Safe_Delete(pSDispute);
