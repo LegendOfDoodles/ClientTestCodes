@@ -51,6 +51,7 @@ enum Minion_Species {
 };
 
 enum ObjectType {
+	StickPlayer,
 	SwordPlayer,
 	StaffPlayer,
 	BowPlayer,

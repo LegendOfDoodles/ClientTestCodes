@@ -98,7 +98,7 @@ void CUIObject::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 	
-	XMFLOAT3 newPos{0, 0, 0};
+	XMFLOAT3 newPos{ 0, 0, 0 };
 
 	switch (m_type)
 	{
@@ -204,8 +204,10 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr)
 	: CUIObject(pCreateMgr)
 {
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 42666.f, FRAME_BUFFER_HEIGHT / 24000.f, 0.f);
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
 	SetMesh(0, pRectMesh);
+
+	m_MinimapPosition = XMFLOAT3(0, 0, 0);
 }
 
 CMinimapIconObjects::~CMinimapIconObjects()
@@ -216,6 +218,28 @@ CMinimapIconObjects::~CMinimapIconObjects()
 void CMinimapIconObjects::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
+	
+	XMFLOAT3 newPos{ 0, 0, 0 };
 
+	WorldToMinimap();
 
+	newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+	newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 80.f) + m_MinimapPosition.z)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 134.7f) + m_MinimapPosition.x));
+	
+	m_xmf4x4World._41 = newPos.x;
+	m_xmf4x4World._42 = newPos.y;
+	m_xmf4x4World._43 = newPos.z;
+}
+
+void CMinimapIconObjects::Render(CCamera *pCamera, UINT istanceCnt)
+{
+	CBillboardObject::Render(pCamera, istanceCnt);
+}
+
+void CMinimapIconObjects::WorldToMinimap()
+{
+	m_MinimapPosition = m_pMasterObject->GetPosition();
+	
+	m_MinimapPosition.x = (m_MinimapPosition.x / TERRAIN_SIZE_WIDTH) * (FRAME_BUFFER_WIDTH / 160.f);
+	m_MinimapPosition.z = (m_MinimapPosition.z / TERRAIN_SIZE_HEIGHT) * (FRAME_BUFFER_HEIGHT / 180.f);
 }

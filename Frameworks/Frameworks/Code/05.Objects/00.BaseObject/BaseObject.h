@@ -115,7 +115,7 @@ protected: // º¯¼ö
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };
 
-	ObjectType m_ObjectType{ ObjectType::SwordPlayer };
+	ObjectType m_ObjectType{ ObjectType::StickPlayer };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

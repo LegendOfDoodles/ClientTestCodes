@@ -1,4 +1,5 @@
 ﻿  PlayerShader.cpp
+<<<<<<< HEAD
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(16): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
@@ -14,3 +15,19 @@ d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playe
 d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(382): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(394): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+=======
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(16): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(45): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(140): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(181): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(355): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(356): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(356): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(356): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(380): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(381): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(394): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe
+>>>>>>> 용선

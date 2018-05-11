@@ -68,12 +68,23 @@ void CMinimapIconShader::AnimateObjects(float timeElapsed)
 void CMinimapIconShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
-	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-#endif
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
+		CBaseObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
+		
+		switch (master->GetType())
+		{
+		case ObjectType::StickPlayer:
+			CShader::Render(pCamera, 0);
+			m_ppMaterials[0]->UpdateShaderVariables();
+			break;
+		case ObjectType::SwordPlayer:
+			CShader::Render(pCamera, 1);
+			m_ppMaterials[1]->UpdateShaderVariables();
+			break;
+		}
+
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 }
@@ -174,7 +185,7 @@ void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
-	m_nHeaps = 1;
+	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -217,23 +228,34 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
+	
 	CreateShaderVariables(pCreateMgr, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+
+	for (int i = 0; i < m_nHeaps; ++i) {
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
+	}
+#if USE_BATCH_MATERIAL
+	m_nMaterials = m_nHeaps;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+	m_ppMaterials[0] = Materials::CreateStickIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreateSwordIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+#else
+	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
+#endif
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CMinimapIconObjects *pGaugeObject = NULL;
-
+	
 	for (int i = 0; i < m_nObjects; ++i) {
 		pGaugeObject = new CMinimapIconObjects(pCreateMgr);
-		pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 		pGaugeObject->SetCamera(m_pCamera);
-
-		pGaugeObject->SetDistance(FRAME_BUFFER_WIDTH / 142);	// distance 9
-
-		pGaugeObject->SetObject(m_pPlayer[i]);
 		
+		pGaugeObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.01f);	// distance 9
+		
+		pGaugeObject->SetObject(m_pPlayer[i]);
+		pGaugeObject->WorldToMinimap();
+
 		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 		
 		m_ppObjects[i] = pGaugeObject;
