@@ -142,10 +142,10 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	if (GetAsyncKeyState('A') & 0x0001)
+	if (GetAsyncKeyState('L') & 0x0001)
 	{
 		m_nWeaponState++;
-		if (m_nWeaponState >= 2)m_nWeaponState = 0;
+		if (m_nWeaponState >= 4)m_nWeaponState = 0;
 		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
@@ -338,6 +338,8 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CSkinnedMesh *pPlayerMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player.meshinfo");
 	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword.meshinfo");
+	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword2.meshinfo");
+	m_pWeapons[3] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword3.meshinfo");
 
 
 	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
@@ -356,7 +358,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CPlayer *pPlayer = NULL;
 
-	for (int j = 0; j < 2; ++j) {
+	for (int j = 0; j < 4; ++j) {
 		m_pWeapons[j]->AddRef();
 	}
 
