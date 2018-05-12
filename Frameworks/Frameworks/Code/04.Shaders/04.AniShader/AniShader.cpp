@@ -89,6 +89,25 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 
 void CAniShader::AnimateObjects(float timeElapsed)
 {
+	m_spawnTime += timeElapsed;
+
+	if (m_spawnTime >= 0.0f && m_spawnTime <= 5.0f)
+	{
+		bool spawned{ false };
+		for (float time = m_spawnTime - m_preSpawnTime; time >= 0.25; time -= 0.25)
+		{
+			spawned = true;
+			SpawnMinion();
+		}
+		if(spawned) m_preSpawnTime = m_spawnTime;
+	}
+
+	if (m_spawnTime >= 30.0f)
+	{
+		m_spawnTime -= 30.0f;
+		m_preSpawnTime = -0.25f;
+	}
+
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
 	{
 		if ((*iter)->GetState() == States::Remove)
@@ -198,42 +217,9 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
-		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Up);
-		//미니언 생성 패킷 조립, 전송
-		CS_MsgMoCreate p;
-		p.type = CS_PUT_MINION;
-		p.size = sizeof(p);
-		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
+		SpawnMinion();
+	}
 
-	}
-	if (GetAsyncKeyState('B') & 0x0001)
-	{
-		SpawnMinion(m_pCreateMgr, Minion_Species::Blue_Down);
-		CS_MsgMoCreate p;
-		p.type = CS_PUT_MINION;
-		p.size = sizeof(p);
-		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
-	}
-	if (GetAsyncKeyState('V') & 0x0001)
-	{
-		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Up);
-		CS_MsgMoCreate p;
-		p.type = CS_PUT_MINION;
-		p.size = sizeof(p);
-		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
-	}
-	if (GetAsyncKeyState('C') & 0x0001)
-	{
-		SpawnMinion(m_pCreateMgr, Minion_Species::Red_Down);
-		CS_MsgMoCreate p;
-		p.type = CS_PUT_MINION;
-		p.size = sizeof(p);
-		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
-	}
 	return true;
 }
 
@@ -419,7 +405,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	}
 
 	CreatePathes();
-	SpawnMinion(pCreateMgr, Minion_Species::Data_Prepare);
+	SpawnMinion();
 }
 
 void CAniShader::ReleaseObjects()
@@ -476,11 +462,11 @@ int CAniShader::GetPossibleIndex()
 	return NONE;
 }
 
-void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
+void CAniShader::SpawnMinion()
 {
-	static bool setFirst{ true };
-	static CSkinnedMesh *pMinionMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
-	static UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+	static bool dataPrepared{ false };
+	static CSkinnedMesh *pMinionMesh = new CSkinnedMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
+	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 
 	static CSkeleton SIdle("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
 	static CSkeleton SAtk1("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
@@ -501,119 +487,145 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	static CSkeleton Die("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
 
-	if (setFirst)
+	if (!dataPrepared)
 	{
 		pMinionMesh->SetBoundingBox(
 			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
 		pMinionMesh->AddRef();
-		setFirst = false;
+		dataPrepared = true;
 		return;
 	}
 
-	int index = GetPossibleIndex();
-
-	if (index == NONE) return;
-
 	m_pCreateMgr->ResetCommandList();
-	CMinion *pMinionObject { NULL };
 
-	switch (m_kind)
+	int kind{ 0 };
+	int makeCnt{ 0 };
+	for (; kind < 4; ++kind)
 	{
-	case ObjectType::SwordMinion:
-		pMinionObject = new CSwordMinion(pCreateMgr, 2);
-		break;
-	case ObjectType::StaffMinion:
-		pMinionObject = new CMagicMinion(pCreateMgr, 2);
-		break;
-	case ObjectType::BowMinion:
-		pMinionObject = new CBowMinion(pCreateMgr, 2);
-		break;
+		int index = GetPossibleIndex();
+
+		if (index == NONE) break;
+		CMinion *pMinionObject{ NULL };
+
+		switch (m_kind)
+		{
+		case ObjectType::SwordMinion:
+			pMinionObject = new CSwordMinion(m_pCreateMgr, 2);
+			break;
+		case ObjectType::StaffMinion:
+			pMinionObject = new CMagicMinion(m_pCreateMgr, 2);
+			break;
+		case ObjectType::BowMinion:
+			pMinionObject = new CBowMinion(m_pCreateMgr, 2);
+			break;
+		}
+
+		pMinionObject->SetMesh(0, pMinionMesh);
+		switch (m_kind)
+		{
+		case ObjectType::SwordMinion:
+			pMinionObject->SetMesh(1, m_pWeapons[0]);
+			break;
+		case ObjectType::StaffMinion:
+			pMinionObject->SetMesh(1, m_pWeapons[1]);
+			break;
+		case ObjectType::BowMinion:
+			pMinionObject->SetMesh(1, m_pWeapons[2]);
+			break;
+		}
+
+		pMinionObject->SetBoundingMesh(m_pCreateMgr,
+			CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
+			0, 0, -CONVERT_PaperUnit_to_InG(4));
+		pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
+
+		switch (m_kind)
+		{
+		case ObjectType::SwordMinion:
+			pMinionObject->SetSkeleton(&SIdle);
+			pMinionObject->SetSkeleton(&SAtk1);
+			pMinionObject->SetSkeleton(&SAtk2);
+			pMinionObject->SetSkeleton(&SWalkStart);
+			pMinionObject->SetSkeleton(&SWalk);
+			break;
+		case ObjectType::StaffMinion:
+			pMinionObject->SetSkeleton(&MIdle);
+			pMinionObject->SetSkeleton(&MAtk1);
+			pMinionObject->SetSkeleton(&MAtk2);
+			pMinionObject->SetSkeleton(&MWalkStart);
+			pMinionObject->SetSkeleton(&MWalk);
+			break;
+		case ObjectType::BowMinion:
+			pMinionObject->SetSkeleton(&BIdle);
+			pMinionObject->SetSkeleton(&BAtk);
+			pMinionObject->SetSkeleton(&BWalkStart);
+			pMinionObject->SetSkeleton(&BWalk);
+			break;
+		}
+
+		pMinionObject->SetSkeleton(&Die);
+		pMinionObject->SetTerrain(m_pTerrain);
+
+		pMinionObject->Rotate(90, 0, 0);
+
+		pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+		pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
+
+		pMinionObject->SaveIndex(index);
+
+		pMinionObject->SetPathToGo(new Path(m_pathes[kind]));
+
+		XMFLOAT2 firstPos{ m_pathes[kind].front().From() };
+		pMinionObject->CBaseObject::SetPosition(XMFLOAT3(firstPos.x, 0, firstPos.y));
+
+		pMinionObject->SetCollisionManager(m_pColManager);
+
+		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
+		{
+			pMinionObject->SetTeam(TeamType::Blue);
+			m_blueObjects.emplace_back(pMinionObject);
+		}
+		else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
+		{
+			pMinionObject->SetTeam(TeamType::Red);
+			m_redObjects.emplace_back(pMinionObject);
+		}
+
+		makeCnt++;
 	}
-
-	pMinionObject->SetMesh(0, pMinionMesh);
-	switch (m_kind)
-	{
-	case ObjectType::SwordMinion:
-		pMinionObject->SetMesh(1, m_pWeapons[0]);
-		break;
-	case ObjectType::StaffMinion:
-		pMinionObject->SetMesh(1, m_pWeapons[1]);
-		break;
-	case ObjectType::BowMinion:
-		pMinionObject->SetMesh(1, m_pWeapons[2]);
-		break;
-	}
-
-	pMinionObject->SetBoundingMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
-		0, 0, -CONVERT_PaperUnit_to_InG(4));
-	pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
-
-	switch (m_kind)
-	{
-	case ObjectType::SwordMinion:
-		pMinionObject->SetSkeleton(&SIdle);
-		pMinionObject->SetSkeleton(&SAtk1);
-		pMinionObject->SetSkeleton(&SAtk2);
-		pMinionObject->SetSkeleton(&SWalkStart);
-		pMinionObject->SetSkeleton(&SWalk);
-		break;
-	case ObjectType::StaffMinion:
-		pMinionObject->SetSkeleton(&MIdle);
-		pMinionObject->SetSkeleton(&MAtk1);
-		pMinionObject->SetSkeleton(&MAtk2);
-		pMinionObject->SetSkeleton(&MWalkStart);
-		pMinionObject->SetSkeleton(&MWalk);
-		break;
-	case ObjectType::BowMinion:
-		pMinionObject->SetSkeleton(&BIdle);
-		pMinionObject->SetSkeleton(&BAtk);
-		pMinionObject->SetSkeleton(&BWalkStart);
-		pMinionObject->SetSkeleton(&BWalk);
-		break;
-	}
-
-	pMinionObject->SetSkeleton(&Die);
-	pMinionObject->SetTerrain(m_pTerrain);
-
-	pMinionObject->Rotate(90, 0, 0);
-
-	pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
-	pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
-
-	pMinionObject->SaveIndex(index);
-
-	pMinionObject->SetPathToGo(new Path(m_pathes[kind]));
-
-	XMFLOAT2 firstPos{ m_pathes[kind].front().From() };
-	pMinionObject->CBaseObject::SetPosition(XMFLOAT3(firstPos.x, 0, firstPos.y));
-
-	pMinionObject->SetCollisionManager(m_pColManager);
-
-	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
-	{
-		pMinionObject->SetTeam(TeamType::Blue);
-		m_blueObjects.emplace_back(pMinionObject);
-	}
-	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
-	{
-		pMinionObject->SetTeam(TeamType::Red);
-		m_redObjects.emplace_back(pMinionObject);
-	}
-
 	m_pCreateMgr->ExecuteCommandList();
 
-	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) {
-		m_blueObjects.back()->ReleaseUploadBuffers();
+	if (!makeCnt) return;
+	
+	CollisionObjectList::reverse_iterator &blueBegin{ m_blueObjects.rbegin() };
+	CollisionObjectList::reverse_iterator &redBegin{ m_redObjects.rbegin() };
 
-		m_pColManager->AddCollider(m_blueObjects.back());
-		m_pGaugeManger->AddMinionObject(m_blueObjects.back());
-	}
-	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) {
-		m_redObjects.back()->ReleaseUploadBuffers();
+	if (makeCnt > 1) blueBegin++;
+	if (makeCnt > 3) redBegin++;
 
-		m_pColManager->AddCollider(m_redObjects.back());
-		m_pGaugeManger->AddMinionObject(m_redObjects.back());
+	for (kind = 0; makeCnt > 0; --makeCnt, ++kind)
+	{
+		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) {
+			(*blueBegin)->ReleaseUploadBuffers();
+
+			m_pColManager->AddCollider((*blueBegin));
+			m_pGaugeManger->AddMinionObject((*blueBegin));
+			if(blueBegin != m_blueObjects.rbegin()) --blueBegin;
+		}
+		else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) {
+			(*redBegin)->ReleaseUploadBuffers();
+
+			m_pColManager->AddCollider((*redBegin));
+			m_pGaugeManger->AddMinionObject((*redBegin));
+			if (redBegin != m_redObjects.rbegin()) --redBegin;
+		}
+
+		//미니언 생성 패킷 조립, 전송
+		CS_MsgMoCreate p;
+		p.type = CS_PUT_MINION;
+		p.size = sizeof(p);
+		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 }

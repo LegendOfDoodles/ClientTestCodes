@@ -57,7 +57,7 @@ protected: // 내부 함수
 	void CreatePathes();
 
 	int GetPossibleIndex();
-	void SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind);
+	void SpawnMinion();
 
 	void SetPossibleIndex(int idx) { m_indexArr[idx] = true; }
 	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
@@ -94,4 +94,7 @@ protected: // 변수
 	CFSMMgr * m_pFSMMgr{ NULL };
 
 	Network* m_pNetwork{ NULL };
+
+	float m_spawnTime{ 10.1f };
+	float m_preSpawnTime{ 0.0f };
 };

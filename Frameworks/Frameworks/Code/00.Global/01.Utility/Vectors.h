@@ -40,7 +40,7 @@ inline int RandInt(int x, int y)
 
 inline float RandFloat() 
 { 
-	return ((rand()) / (RAND_MAX + 1.0));
+	return ((rand()) / (RAND_MAX + 1.0f));
 }
 
 inline float RandInRange(float x, float y)
@@ -50,7 +50,7 @@ inline float RandInRange(float x, float y)
 
 inline bool   RandBool()
 {
-	if (RandFloat() > 0.5) return true;
+	if (RandFloat() > 0.5f) return true;
 
 	else return false;
 }
@@ -60,7 +60,7 @@ inline double RandomClamped()
 	return RandFloat() - RandFloat(); 
 }
 
-inline float RandGaussian(float mean = 0.0, float standard_deviation = 1.0)
+inline float RandGaussian(float mean = 0.0f, float standard_deviation = 1.0f)
 {
 	float x1, x2, w, y1;
 	static float y2;
@@ -75,12 +75,12 @@ inline float RandGaussian(float mean = 0.0, float standard_deviation = 1.0)
 	{
 		do
 		{
-			x1 = 2.0 * RandFloat() - 1.0;
-			x2 = 2.0 * RandFloat() - 1.0;
+			x1 = 2.0f * RandFloat() - 1.0f;
+			x2 = 2.0f * RandFloat() - 1.0f;
 			w = x1 * x1 + x2 * x2;
-		} while (w >= 1.0);
+		} while (w >= 1.0f);
 
-		w = sqrt((-2.0 * log(w)) / w);
+		w = sqrt((-2.0f * log(w)) / w);
 		y1 = x1 * w;
 		y2 = x2 * w;
 		use_last = 1;

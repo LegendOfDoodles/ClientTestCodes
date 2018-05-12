@@ -56,7 +56,7 @@ void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
 	m_HPGaugeObjectList.remove_if([this](CHPGaugeObjects* obj)
 	{ 
-		if (obj->GetState() == States::Remove)
+		if (obj->GetState() == States::Die)
 		{
 			ResetPossibleIndex(obj->GetIndex());
 			return true;
@@ -68,11 +68,7 @@ void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 		(*iter)->Animate(timeElapsed);
 	}
 
-	for (int i = 0; i < m_pGaugeManger->GetCount(); ++i) {
-		SpawnGauge();
-
-		if (i == (m_pGaugeManger->GetCount()) - 1) m_pGaugeManger->ResetCount();
-	}
+	if(m_pGaugeManger->GetCount() > 0) SpawnGauge();
 }
 
 void CMinionHPGaugeShader::Render(CCamera *pCamera)
@@ -228,33 +224,54 @@ void CMinionHPGaugeShader::SpawnGauge()
 {
 	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 
-	int index = GetPossibleIndex();
-
-	if (index == NONE) return;
-
 	m_pCreateMgr->ResetCommandList();
 
-	CHPGaugeObjects *pGaugeObject{ NULL };
-	CCollisionObject *pMinionObjects{ NULL };
+	int cnt{ 0 };
+	CollisionObjectList::reverse_iterator minion{ m_MinionObjectList->rbegin() };
 
-	pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GaugeUiType::MinionGauge);
-	pMinionObjects = m_MinionObjectList->back();
+	for (; cnt < m_pGaugeManger->GetCount(); ++cnt)
+	{
+		int index = GetPossibleIndex();
+		if (index == NONE) break;
 
-	pGaugeObject->SetObject(pMinionObjects);
-	pGaugeObject->SetMaterial(m_ppMaterials[0]);
-	pGaugeObject->SetCamera(m_pCamera);
+		CHPGaugeObjects *pGaugeObject{ NULL };
+		CCollisionObject *pMinionObjects{ NULL };
 
-	pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+		pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GaugeUiType::MinionGauge);
+		pMinionObjects = (*minion);
 
-	pGaugeObject->SaveIndex(index);
+		pGaugeObject->SetObject(pMinionObjects);
+		pGaugeObject->SetMaterial(m_ppMaterials[0]);
+		pGaugeObject->SetCamera(m_pCamera);
 
-	XMFLOAT3 xmfGaugePosition;
-	xmfGaugePosition = pMinionObjects->GetPosition();
-	xmfGaugePosition.y += 70.f;
-	pGaugeObject->SetPosition(xmfGaugePosition);
-	m_HPGaugeObjectList.emplace_back(pGaugeObject);
+		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
 
+		pGaugeObject->SaveIndex(index);
+
+		XMFLOAT3 xmfGaugePosition;
+		xmfGaugePosition = pMinionObjects->GetPosition();
+		xmfGaugePosition.y += 70.f;
+		pGaugeObject->SetPosition(xmfGaugePosition);
+		m_HPGaugeObjectList.emplace_back(pGaugeObject);
+
+		if(minion != m_MinionObjectList->rend()) ++minion;
+	}
 	m_pCreateMgr->ExecuteCommandList();
+
+	if (!cnt) return;
+
+	HPGaugeObjectList::reverse_iterator &gaugeBegin{ m_HPGaugeObjectList.rbegin() };
+	HPGaugeObjectList::reverse_iterator &gaugeEnd{ m_HPGaugeObjectList.rbegin() };
+
+	for (int i = 0; i < cnt - 1; ++i) ++gaugeBegin;
+
+	for (int i = 0; i < cnt; ++i)
+	{
+		(*gaugeBegin)->ReleaseUploadBuffers();
+		if (gaugeBegin != gaugeEnd) --gaugeBegin;
+	}
+
+	m_pGaugeManger->ResetCount();
 }
 
 void CMinionHPGaugeShader::ReleaseObjects()

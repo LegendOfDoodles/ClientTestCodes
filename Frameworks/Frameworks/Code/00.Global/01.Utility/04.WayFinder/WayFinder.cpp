@@ -335,6 +335,7 @@ void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3
 {
 	XMFLOAT3 pos{ collider->GetPosition() };
 	XMFLOAT3 velocity{ Vector3::ScalarProduct(dir, val) };
+	velocity.y = 0;
 	XMFLOAT3 newPos{ Vector3::Add(pos, velocity) };
 
 	if (CanGoDirectly(pos, newPos, collider->GetCollisionSize()))
