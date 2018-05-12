@@ -33,6 +33,8 @@ void Network::Initialize(HWND hWnd)
 	m_send_wsabuf.len = MAX_BUFF_SIZE;
 	m_recv_wsabuf.buf = m_recv_buffer;
 	m_recv_wsabuf.len = MAX_BUFF_SIZE;
+
+	m_ppObject = new CBaseObject*[4];
 }
 
 void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
@@ -50,13 +52,15 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
 				first_time = false;
 				m_myid = id;
 			}
-			if (id == myid) {
-				//object[id]->SetPosition(my_packet->x, my_packet->y);
-				//object->SetPosition(my_packet->x, my_packet->y);
-				//player.y = my_packet->y;//캐릭터
+			if (id == m_myid) {
+				//자기 아이디 처리
+				printf("Recived Packet ID: %d X:%d Y:%d\n\n", my_packet->Character_id, my_packet->x, my_packet->y);
+				object[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
 			}
 			else if (id < NPC_START) { //다른플레이어에게 알려줄때 쓰는거
-				//object[id]->SetPosition(my_packet->x, my_packet->y);
+				//딴 아이디 처리
+				printf("Recived Packet ID: %d X:%d Y:%d\n\n", my_packet->Character_id, my_packet->x, my_packet->y);
+				object[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
 			}
 			//else { //미니언, 몬스터 관리할때 쓰는거
 			//npc[id - NPC_START].x = my_packet->x;
@@ -134,12 +138,14 @@ void Network::ReadPacket(SOCKET sock,CBaseObject** object)
 {
 	DWORD ioflag = 0;
 	DWORD iobyte = 0;
+	int errorcount = 0;
 	int ret = WSARecv(sock, &m_recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
 	if (ret) {
 		int err_code = WSAGetLastError();
 		printf("Recv Error [%d]\n", err_code);
 		if (err_code == 10035) {
-			Sleep(50);
+			errorcount += 1;
+			//if (errorcount > 3) return; //10035계속 발생하면 걍 리턴 
 			ProcessPacket(m_myid, m_packet_buffer, object);
 		}
 	}

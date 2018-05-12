@@ -41,6 +41,7 @@ void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 	m_pNetwork = pNetwork;
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
+	//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL );
 }
 
 void CScene::Finalize()
@@ -84,11 +85,6 @@ void CScene::ProcessInput()
 void CScene::AnimateObjects(float timeElapsed)
 {
 	m_FrameCheck += 1.0f / timeElapsed;
-	if(m_ppObjects)
-		if (m_FrameCheck % 20 == 0) {
-			m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_pNetwork->m_ppObject);
-		}
-	
 	if (m_pSelectedObject) {
 		if (m_FrameCheck % 20 == 0) {
 			//printf("now time is = %d\n", m_FrameCheck);

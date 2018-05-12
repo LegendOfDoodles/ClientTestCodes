@@ -98,8 +98,8 @@ struct CS_MsgDemandMakeRoom : public Packet
 #define MAX_BUFF_SIZE 4000
 #define MAX_PACKET_SIZE 255
 
-#define MAP_WIDTH 800
-#define MAP_HEIGHT 800
+#define MAP_WIDTH 10000
+#define MAP_HEIGHT 10000
 
 #define MAX_USER 4
 #define NPC_START 1000
