@@ -35,9 +35,9 @@ public:
 	Network();
 	~Network();
 	void Initialize(HWND hWnd);
-	void ProcessPacket(int myid, char *ptr, CBaseObject* object);
+	void ProcessPacket(int myid, char *ptr, CBaseObject** object);
 	void Finalize();
-	void ReadPacket(SOCKET sock, CBaseObject* object);
+	void ReadPacket(SOCKET sock, CBaseObject** object);
 	void SendPacket(int id, void *ptr);
 };
 

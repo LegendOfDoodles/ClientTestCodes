@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  NexusTowerShader.cpp
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(11): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(12): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
@@ -10,3 +11,11 @@ d:\새 폴더\client\frameworks\frameworks\code\04.shaders\06.nexustowershader\n
 d:\새 폴더\client\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(279): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(290): warning C4189: 'boundingBoxElementBytes': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Debug\Framework01.exe
+=======
+﻿  Network.cpp
+c:\users\김선필\desktop\graduationwork\client\frameworks\frameworks\code\07.network\network.cpp(28): warning C4189: 'Result': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+c:\users\김선필\desktop\graduationwork\client\frameworks\frameworks\code\07.network\network.cpp(38): warning C4100: 'object': 참조되지 않은 정식 매개 변수입니다.
+c:\users\김선필\desktop\graduationwork\client\frameworks\frameworks\code\07.network\network.cpp(196): warning C4100: 'id': 참조되지 않은 정식 매개 변수입니다.
+  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\Client\Frameworks\x64\Debug\Framework01.exe
+  Frameworks.vcxproj -> C:\Users\김선필\Desktop\GraduationWork\Client\Frameworks\x64\Debug\Framework01.pdb (Partial PDB)
+>>>>>>> fcb396b263e76c1487dc5759a58719c1620d1627
