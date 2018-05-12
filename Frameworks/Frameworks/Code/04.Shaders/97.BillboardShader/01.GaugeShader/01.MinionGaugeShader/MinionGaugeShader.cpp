@@ -54,7 +54,15 @@ void CMinionHPGaugeShader::UpdateShaderVariables()
 
 void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
-	m_HPGaugeObjectList.remove_if([](CHPGaugeObjects* obj) { return obj->GetState() == States::Die; });
+	m_HPGaugeObjectList.remove_if([this](CHPGaugeObjects* obj)
+	{ 
+		if (obj->GetState() == States::Remove)
+		{
+			ResetPossibleIndex(obj->GetIndex());
+			return true;
+		}
+		return false;
+	});
 
 	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		(*iter)->Animate(timeElapsed);
@@ -84,6 +92,12 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		static_cast<CHPGaugeObjects*>(*iter)->SetCamera(m_pCamera);
 	}
+}
+
+void CMinionHPGaugeShader::SetGaugeManager(CHPGaugeManager * pManger)
+{
+	m_pGaugeManger = pManger;
+	m_MinionObjectList = m_pGaugeManger->GetMinionObjectList();
 }
 
 bool CMinionHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
@@ -212,9 +226,11 @@ int CMinionHPGaugeShader::GetPossibleIndex()
 
 void CMinionHPGaugeShader::SpawnGauge()
 {
-	m_MinionObjectList = m_pGaugeManger->GetMinionObjectList();
-
 	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+
+	int index = GetPossibleIndex();
+
+	if (index == NONE) return;
 
 	m_pCreateMgr->ResetCommandList();
 
@@ -227,8 +243,6 @@ void CMinionHPGaugeShader::SpawnGauge()
 	pGaugeObject->SetObject(pMinionObjects);
 	pGaugeObject->SetMaterial(m_ppMaterials[0]);
 	pGaugeObject->SetCamera(m_pCamera);
-
-	int index = GetPossibleIndex();
 
 	pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
 

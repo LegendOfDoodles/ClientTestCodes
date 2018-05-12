@@ -12,6 +12,8 @@
 // 持失切, 社瑚切
 CMinion::CMinion(CCreateMgr * pCreateMgr, int nMeshes) : CAnimatedObject(pCreateMgr, nMeshes)
 {
+	m_detectRange = CONVERT_PaperUnit_to_InG(40.0f);
+	m_speed = CONVERT_cm_to_InG(1.805);
 }
 
 CMinion::~CMinion()
@@ -75,6 +77,7 @@ void CMinion::SetState(StatesType newState)
 		m_nCurrAnimation = Animations::Idle;
 		break;
 	case States::Walk:
+		RegenerateLookAt();
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:
@@ -133,8 +136,9 @@ void CMinion::PlayAttack(float timeElapsed)
 	if (!CheckEnemyState(m_pEnemy))
 	{
 		SetEnemy(NULL);
-		SetNextState(States::Walk);
+		SetState(States::Walk);
 	}
+
 	else if (!Attackable(m_pEnemy))
 	{
 		SetNextState(States::Chase);
@@ -176,12 +180,11 @@ CSwordMinion::CSwordMinion(CCreateMgr * pCreateMgr, int nMeshes): CMinion(pCreat
 	SetType(ObjectType::SwordMinion);
 	m_StatusInfo.maxHP = 445;
 	m_StatusInfo.HP = 445;
-	m_StatusInfo.Atk = 12;
+	m_StatusInfo.Atk = 500;
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
 
-	m_detectRange = CONVERT_PaperUnit_to_InG(20.0f);
-	m_attackRange = CONVERT_PaperUnit_to_InG(0.5f);
+	m_attackRange = CONVERT_PaperUnit_to_InG(8);
 }
 
 CSwordMinion::~CSwordMinion()
@@ -199,7 +202,7 @@ void CSwordMinion::Animate(float timeElapsed)
 		case States::Attack:
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(1), 120, m_StatusInfo.Atk);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(8), 180, m_StatusInfo.Atk);
 			}
 			if (m_nCurrAnimation == Animations::Attack1) {
 				if (m_curState == m_nextState)

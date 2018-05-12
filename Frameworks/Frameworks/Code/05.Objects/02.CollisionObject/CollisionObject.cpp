@@ -23,6 +23,7 @@ CCollisionObject::~CCollisionObject()
 // 공개 함수
 bool CCollisionObject::CheckEnemyState(CCollisionObject * other)
 {
+	if (!other) return false;
 	if (other->GetState() == States::Die) return false;
 	if (other->GetState() == States::Remove) return false;
 	return true;

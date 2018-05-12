@@ -26,7 +26,7 @@ public: // 공개 함수
 
 	virtual void GetCamera(CCamera *pCamera);
 
-	void SetGaugeManager(CHPGaugeManager * pManger) { m_pGaugeManger = pManger; };
+	void SetGaugeManager(CHPGaugeManager * pManger);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);

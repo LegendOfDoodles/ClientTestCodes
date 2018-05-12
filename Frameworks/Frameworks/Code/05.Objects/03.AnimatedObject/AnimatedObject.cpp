@@ -174,6 +174,8 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 
 void CAnimatedObject::MoveToEnemy(float timeElapsed, CWayFinder* pWayFinder)
 {
+	if (!m_pEnemy) return;
+
 	XMFLOAT3 pos = m_pEnemy->GetPosition();
 	LookAt(XMFLOAT2(pos.x, pos.z));
 	MoveForward(m_speed * timeElapsed);
@@ -194,15 +196,15 @@ void CAnimatedObject::RegenerateLookAt()
 
 bool CAnimatedObject::Attackable(CCollisionObject * other)
 {
+	if (!CheckEnemyState(other)) return false;
 	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
 	// 공격 범위의 절반 안에 적이 있는지 확인 -> 여러 적을 공격하기 위함
-	return (dstSqr < m_attackRange * m_attackRange * 0.25f);
+	return (dstSqr < m_attackRange * m_attackRange * 0.5f);
 }
 
 bool CAnimatedObject::Chaseable(CCollisionObject * other)
 {
-	if (other->GetState() == States::Die) return false;
-	if (other->GetState() == States::Remove) return false;
+	if (!CheckEnemyState(other)) return false;
 	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
 	return (dstSqr < m_detectRange * m_detectRange);
 }
