@@ -51,12 +51,12 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
 				m_myid = id;
 			}
 			if (id == myid) {
-				object[id]->SetPosition(my_packet->x, my_packet->y);
+				//object[id]->SetPosition(my_packet->x, my_packet->y);
 				//object->SetPosition(my_packet->x, my_packet->y);
 				//player.y = my_packet->y;//캐릭터
 			}
 			else if (id < NPC_START) { //다른플레이어에게 알려줄때 쓰는거
-				object[id]->SetPosition(my_packet->x, my_packet->y);
+				//object[id]->SetPosition(my_packet->x, my_packet->y);
 			}
 			//else { //미니언, 몬스터 관리할때 쓰는거
 			//npc[id - NPC_START].x = my_packet->x;

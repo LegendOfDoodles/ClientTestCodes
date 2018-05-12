@@ -85,8 +85,7 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if(m_pNetwork->m_ppObject[j])
-			m_pNetwork->m_ppObject[j]->Animate(timeElapsed);
+		m_ppObjects[j]->Animate(timeElapsed);
 	}
 }
 
@@ -103,7 +102,7 @@ void CPlayerShader::Render(CCamera *pCamera)
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		
-		if (m_pNetwork->m_ppObject[j]) m_pNetwork->m_ppObject[j]->Render(pCamera);
+		m_ppObjects[j]->Render(pCamera);
 	}
 #endif
 }
