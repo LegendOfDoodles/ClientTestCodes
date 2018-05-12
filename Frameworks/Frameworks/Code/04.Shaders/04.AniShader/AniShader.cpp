@@ -6,6 +6,7 @@
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
+#include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
 
 /// <summary>
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
@@ -93,11 +94,11 @@ void CAniShader::AnimateObjects(float timeElapsed)
 
 	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
-		(*iter)->Animate(timeElapsed);
+		m_pFSMMgr->Update(timeElapsed, (*iter));
 	}
 	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
-		(*iter)->Animate(timeElapsed);
+		m_pFSMMgr->Update(timeElapsed, (*iter));
 	}
 }
 
@@ -212,16 +213,6 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 	return true;
-}
-
-void CAniShader::SetCollisionManager(CCollisionManager * manager)
-{
-	m_pColManager = manager;
-}
-
-void CAniShader::SetGaugeManger(CHPGaugeManager * pManger)
-{
-	m_pGaugeManger = pManger;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -499,7 +490,7 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	}
 
 	m_pCreateMgr->ResetCommandList();
-	CMinion *pMinionObject{ NULL };
+	CMinion *pMinionObject { NULL };
 
 	switch (m_kind)
 	{
@@ -578,10 +569,12 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
 	{
+		pMinionObject->SetTeam(TeamType::Blue);
 		m_blueObjects.emplace_back(pMinionObject);
 	}
 	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
 	{
+		pMinionObject->SetTeam(TeamType::Red);
 		m_redObjects.emplace_back(pMinionObject);
 	}
 

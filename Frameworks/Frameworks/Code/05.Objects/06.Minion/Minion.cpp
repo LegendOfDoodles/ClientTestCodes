@@ -98,9 +98,8 @@ void CMinion::SetState(StatesType newState)
 
 void CMinion::PlayIdle(float timeElapsed)
 {
-	CCollisionObject* enemy{ NULL };
+	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
 
-	// enemy = 주변 적 가져오기
 	if (!enemy) return;
 	if (!Chaseable(enemy)) return;
 

@@ -311,6 +311,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	}
 	pAniS->SetCollisionManager(m_pCollisionManager);
 	pAniS->SetGaugeManger(m_pHPGaugeManager);
+	pAniS->SetFSMManager(m_pFSMMgr);
 
 	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetGaugeManager(m_pHPGaugeManager);
 
