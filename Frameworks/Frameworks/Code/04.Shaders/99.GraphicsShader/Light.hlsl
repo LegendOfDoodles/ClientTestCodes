@@ -300,7 +300,7 @@ float4 Lighting(float3 vPosition, float3 vNormal, float4 texColor, float4 specul
             }
         }
     }
-    cColor += (gcGlobalAmbientLight * gMaterials.m_cAlbedo);
+    cColor += (gcGlobalAmbientLight * texColor);
     cColor.a = gMaterials.m_cAlbedo.a;
 
     return (cColor);

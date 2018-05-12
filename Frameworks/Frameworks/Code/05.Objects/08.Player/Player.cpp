@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 
 /// <summary>
 /// 목적: 플레이어 관리 클래스

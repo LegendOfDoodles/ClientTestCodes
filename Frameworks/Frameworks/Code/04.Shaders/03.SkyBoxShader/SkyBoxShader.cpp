@@ -25,6 +25,7 @@ CSkyBoxShader::~CSkyBoxShader()
 void CSkyBoxShader::ReleaseUploadBuffers()
 {
 	if (m_pSkyBox)  m_pSkyBox->ReleaseUploadBuffers();
+	if (m_pFloor) m_pFloor->ReleaseUploadBuffers();
 	if (m_ppMaterials)
 	{
 		for (int i = 0; i<m_nMaterials; ++i)
@@ -36,20 +37,29 @@ void CSkyBoxShader::UpdateShaderVariables()
 {
 	if (m_pMappedSkyBox)
 	{
-		XMStoreFloat4x4(&m_pMappedSkyBox->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_pSkyBox->GetWorldMatrix())));
+		if(m_pSkyBox)
+			XMStoreFloat4x4(&m_pMappedSkyBox->m_xmf4x4World, 
+				XMMatrixTranspose(XMLoadFloat4x4(m_pSkyBox->GetWorldMatrix())));
+
+		if (m_pFloor)
+			XMStoreFloat4x4(&m_pMappedSkyBox->m_xmf4x4World, 
+				XMMatrixTranspose(XMLoadFloat4x4(m_pFloor->GetWorldMatrix())));
 	}
 }
 
 void CSkyBoxShader::Render(CCamera * pCamera)
 {
-	XMFLOAT3 xmf3CameraPos = pCamera->GetPosition();
-	m_pSkyBox->SetPosition(xmf3CameraPos.x, xmf3CameraPos.y, xmf3CameraPos.z);
+	if (m_pSkyBox)
+	{
+		XMFLOAT3 xmf3CameraPos = pCamera->GetPosition();
+		m_pSkyBox->SetPosition(xmf3CameraPos.x, xmf3CameraPos.y, xmf3CameraPos.z);
+	}
 
 	CShader::Render(pCamera);
 
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	if (m_pSkyBox) m_pSkyBox->Render(pCamera);
+	if (m_pFloor) m_pFloor->Render(pCamera);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -116,7 +126,7 @@ D3D12_SHADER_BYTECODE CSkyBoxShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedRepeat",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -149,21 +159,34 @@ void CSkyBoxShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 
 void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
-	m_pSkyBox = new CSkyBox(pCreateMgr);
+	//m_pSkyBox = new CSkyBox(pCreateMgr);
+	m_pFloor = new CFloor(pCreateMgr);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 6);
+	if (m_pSkyBox) CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 6);
+	if (m_pFloor) CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 1);
+
 	CreateShaderVariables(pCreateMgr);
 	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
 
-	m_pSkyBox->SetMaterial(Materials::CreateSkyBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
-	m_pSkyBox->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
+	if (m_pSkyBox)
+	{
+		m_pSkyBox->SetMaterial(Materials::CreateSkyBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+		m_pSkyBox->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
+	}
+
+	if (m_pFloor)
+	{
+		m_pFloor->SetMaterial(Materials::CreateFloorMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+		m_pFloor->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
+	}
 }
 
 void CSkyBoxShader::ReleaseObjects()
 {
 	Safe_Delete(m_pSkyBox);
+	Safe_Delete(m_pFloor);
 	if (m_ppMaterials)
 	{
 		for (int i = 0; i < m_nMaterials; ++i)

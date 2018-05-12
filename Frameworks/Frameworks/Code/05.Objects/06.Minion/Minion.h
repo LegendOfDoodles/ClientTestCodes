@@ -4,7 +4,6 @@
 #include "05.Objects/97.Skeleton/Skeleton.h"
 #include "00.Global/01.Utility/Enumerations.h"
 
-
 class CMinion : public CAnimatedObject
 {
 public: // 생성자, 소멸자
@@ -19,7 +18,7 @@ public:	// 외부 함수
 
 	virtual void PlayIdle(float timeElapsed);
 	virtual void PlayWalk(float timeElapsed);
-	virtual void PlayChase(float timeElapsed);
+	virtual void PlayChase(float timeElapsed, CWayFinder* pWayFinder);
 	virtual void PlayAttack(float timeElapsed);
 
 	virtual void ReceiveDamage(float damage)
@@ -50,7 +49,6 @@ protected:	// 변수
 	*/
 
 	CommonInfo m_StatusInfo;
-
 };
 
 class CSwordMinion : public CMinion
