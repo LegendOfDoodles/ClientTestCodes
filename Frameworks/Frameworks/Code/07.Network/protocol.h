@@ -104,7 +104,7 @@ struct CS_MsgDemandMakeRoom : public Packet
 #define MAX_USER 4
 #define NPC_START 1000
 #define NUM_OF_NPC 10000
-#define VIEW_RADIUS 3
+#define VIEW_RADIUS 500
 
 #define MY_SERVER_PORT 4000
 #define WM_SOCKET		WM_USER+1
