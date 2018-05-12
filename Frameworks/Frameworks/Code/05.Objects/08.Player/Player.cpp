@@ -43,7 +43,7 @@ void CPlayer::Animate(float timeElapsed)
 		else if (m_nCurrAnimation == Animations::SkillE) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, 32, 180);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(4), 180,500);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillR) {

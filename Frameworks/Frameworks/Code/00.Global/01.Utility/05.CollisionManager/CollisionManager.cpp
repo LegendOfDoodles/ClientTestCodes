@@ -70,8 +70,8 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
 					XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
 					XMFLOAT2 look = XMFLOAT2(pCol->GetLook().x, pCol->GetLook().z);
-					float distance = Vector2::Distance(apos, Vector2::Add(bpos, Vector2::ScalarProduct(look, CONVERT_PaperUnit_to_InG(data1))));
-					float collisionLength = (*i)->GetCollisionSize() + CONVERT_PaperUnit_to_InG(data2);
+					float distance = Vector2::Distance(apos, Vector2::Add(bpos, Vector2::ScalarProduct(look, (data1))));
+					float collisionLength = (*i)->GetCollisionSize() + (data2);
 					if (distance <= collisionLength)
 					{
 						//std::cout << "col\n";
@@ -93,7 +93,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					XMFLOAT3 bpos = pCol->GetPosition();
 					
 					float distance = Vector3::Distance(apos,bpos);
-					float collisionLength = CONVERT_PaperUnit_to_InG(data1) - (*i)->GetCollisionSize();
+					float collisionLength = (data1) - (*i)->GetCollisionSize();
 					
 					if (distance <= collisionLength)
 					{
@@ -120,6 +120,45 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	default:
 		break;
 	}
+
+}
+
+CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh)
+{
+
+	CCollisionObject* nearObject = NULL;
+	float nearDistance=0;
+	for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+	{
+		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+		{
+			if ((*i) != pCol) {
+				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
+				{
+					XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
+					XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
+					XMFLOAT2 look = XMFLOAT2(pCol->GetLook().x, pCol->GetLook().z);
+					float distance = Vector2::Distance(apos, Vector2::Add(bpos, Vector2::ScalarProduct(look, (lengh))));
+					if (distance <= lengh)
+					{
+						if (!nearObject) {
+							nearDistance = distance;
+						}
+						else if (nearDistance > distance) {
+							nearDistance = distance;
+						}
+						//std::cout << "col\n";
+					}
+				}
+			}
+		}
+	}
+
+	if (nearObject) {
+		return nearObject;
+	}
+	else
+		return NULL;
 
 }
 

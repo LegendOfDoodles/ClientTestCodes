@@ -144,12 +144,12 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 	if (GetAsyncKeyState('L') & 0x0001)
 	{
+		m_ppObjects[0]->SetMesh(1, m_pSword[m_nWeaponState]);
 		m_nWeaponState++;
-		if (m_nWeaponState >= 4)m_nWeaponState = 0;
-		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
+		if (m_nWeaponState >= 3)m_nWeaponState = 0;
 
 		// 무기에 따라 수정필요
-		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
+		m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
@@ -339,10 +339,17 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 
 	CSkinnedMesh *pPlayerMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player.meshinfo");
-	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
-	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword.meshinfo");
-	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword2.meshinfo");
-	m_pWeapons[3] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword3.meshinfo");
+	m_pStick = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
+	
+	m_nSword = 3;
+
+	m_pSword = new CSkinnedMesh*[m_nSword];
+	m_pSword[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword.meshinfo");
+	m_pSword[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword2.meshinfo");
+	m_pSword[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Sword3.meshinfo");
+	
+	CSkeleton *pWin = new CSkeleton("Resource//3D//Player//Animation//Player_Win.aniinfo");
+	CSkeleton *pDefeat = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat.aniinfo");
 
 
 	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
@@ -361,9 +368,18 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CPlayer *pPlayer = NULL;
 
-	for (int j = 0; j < 4; ++j) {
-		m_pWeapons[j]->AddRef();
+
+	m_pStick->AddRef();
+	for (int j = 0; j < m_nSword; ++j) {
+		m_pSword[j]->AddRef();
 	}
+	for (int j = 0; j < m_nSteff; ++j) {
+		m_pSteff[j]->AddRef();
+	}
+	for (int j = 0; j < m_nBow; ++j) {
+		m_pBow[j]->AddRef();
+	}
+
 
 	for (int x = 0; x < m_nObjects / 2; ++x) {
 		for (int z = 0; z < m_nObjects / 2; ++z) {
@@ -373,8 +389,8 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_INSTANCING
 				pPlayer->SetMesh(0, pPlayerMesh);
 				
-				pPlayer->SetMesh(1, m_pWeapons[1]);
-				pPlayer->SetType(ObjectType::SwordPlayer);
+				pPlayer->SetMesh(1, m_pStick);
+				pPlayer->SetType(ObjectType::StickPlayer);
 #endif
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);

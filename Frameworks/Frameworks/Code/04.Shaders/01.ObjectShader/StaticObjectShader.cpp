@@ -284,7 +284,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	
 	CTransformImporter transformInporter;
 
-	transformInporter.LoadMeshData("Resource//Data/Setting.txt");
+	transformInporter.LoadMeshData("Resource//Data//ObjectSetting.txt");
 
 	m_nObjects = transformInporter.m_iTotalCnt;
 	m_ppObjects = new CBaseObject*[m_nObjects];
