@@ -31,6 +31,7 @@ protected: // 내부 함수
 
 protected: // 변수
 	CSkyBox *m_pSkyBox{ NULL };
+	CFloor *m_pFloor{ NULL };
 	CB_GAMEOBJECT_INFO *m_pMappedSkyBox{ NULL };
 };
 

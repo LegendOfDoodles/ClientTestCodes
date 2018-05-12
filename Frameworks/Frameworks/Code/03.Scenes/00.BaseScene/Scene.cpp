@@ -16,6 +16,7 @@
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
+#include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
@@ -234,21 +235,21 @@ void CScene::BuildLights()
 	m_pLights = new LIGHTS;
 	::ZeroMemory(m_pLights, sizeof(LIGHTS));
 
-	m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
 
 	m_pLights->m_pLights[0].m_bEnable = true;
 	m_pLights->m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.3f, 1.0f));
 
 	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights->m_pLights[1].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -1.0f, 0.0f));
 
 	m_pLights->m_pLights[2].m_bEnable = true;
 	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(1.0f, -0.3f, -1.0f));
 
 	m_pLights->m_pLights[3].m_bEnable = true;
@@ -314,6 +315,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_pCollisionManager = new CCollisionManager();
 	m_pHPGaugeManager = new CHPGaugeManager();
 
+	m_pFSMMgr = new CFSMMgr(m_pWayFinder);
+
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
 	int nColliderObject = pAniS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
@@ -350,10 +353,10 @@ void CScene::ReleaseObjects()
 		}
 		Safe_Delete_Array(m_ppShaders);
 	}
-	if (m_pWayFinder)
-	{
-		Safe_Delete(m_pWayFinder);
-	}
+	if (m_pWayFinder) Safe_Delete(m_pWayFinder);
+	if (m_pCollisionManager) Safe_Delete(m_pCollisionManager);
+	if (m_pHPGaugeManager) Safe_Delete(m_pHPGaugeManager);
+	if (m_pFSMMgr) Safe_Delete(m_pFSMMgr);
 }
 
 void CScene::CreateShaderVariables(CCreateMgr *pCreateMgr)

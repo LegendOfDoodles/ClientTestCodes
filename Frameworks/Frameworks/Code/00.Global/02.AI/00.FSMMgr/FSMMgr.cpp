@@ -12,8 +12,9 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CFSMMgr::CFSMMgr()
+CFSMMgr::CFSMMgr(CWayFinder* pWayFinder)
 {
+	m_pWayFinder = pWayFinder;
 }
 
 CFSMMgr::~CFSMMgr()
@@ -33,7 +34,7 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 		obj->PlayWalk(timeElapsed);
 		break;
 	case States::Chase:
-		obj->PlayChase(timeElapsed);
+		obj->PlayChase(timeElapsed, m_pWayFinder);
 		break;
 	case States::Attack:
 		obj->PlayAttack(timeElapsed);
@@ -54,69 +55,24 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 // 내부 함수
 void CFSMMgr::PlayIdle(float timeElapsed, CCollisionObject * obj)
 {
-	// 주변에 적 존재하는지 검사
-	// {
-	//      해당 적의 상태 조사(Die / Remove 아닌지 확인)
-	//       {
-	//				SetEnemy(other);
-	//              공격 범위 안에 있는지 검사 -> 성공 시 obj->SetState(States::Attack);
-	//               -> 실패 시 obj->SetState(States::Chase); 
-	//        }
-	// }
 }
 
 void CFSMMgr::PlayWalk(float timeElapsed, CCollisionObject * obj)
 {
-	CAnimatedObject* animObj{ static_cast<CAnimatedObject*>(obj) };
-
-	if (animObj->MoveToDestination(timeElapsed) == States::Done)
-	{
-		animObj->SetState(States::Idle);
-		return;
-	}
-
-	// 주변에 적 존재하는지 검사
-	// {
-	//      해당 적의 상태 조사(Die / Remove 아닌지)
-	//       {
-	//				SetEnemy(other);
-	//              공격 범위 안에 있는지 검사 -> 성공 시 obj->SetState(States::Attack);
-	//               -> 실패 시 obj->SetState(States::Chase); 
-	//        }
-	// }
 }
 
 void CFSMMgr::PlayChase(float timeElapsed, CCollisionObject * obj)
 {
-	CAnimatedObject* animObj{ static_cast<CAnimatedObject*>(obj) };
-
-	//   해당 적의 상태 조사(Die / Remove 아닌지, 범위 내에 있는지 확인)
-	//   {
-	//			animObj->MoveToEnemy(timeElapsed);
-	//			SetEnemy(other);
-	//             공격 범위 안에 있는지 검사 -> 성공 시 obj->SetState(States::Attack);
-	//    } 
-	//	   해당 적이 정상 상태가 아닌 경우
-	//		SetEnemy(NULL);
-	//     obj->SetState(States::Walk); 
 }
 
 void CFSMMgr::PlayAttack(float timeElapsed, CCollisionObject * obj)
 {
-	CAnimatedObject* animObj{ static_cast<CAnimatedObject*>(obj) };
-
-	// 해당 적이 공격 가능한 상태인지 확인
-	// 실패시 -> SetEnemy(NULL);	obj->SetNextState(States::Walk); 
-	//	해당 적이 공격 범위 안에 있는지 검사 -> 실패 시 obj->SetNextState(States::Chase);
 }
 
 void CFSMMgr::PlayDie(float timeElapsed, CCollisionObject * obj)
 {
-	// 죽기 애니메이션 실행
-	// 죽기 애니메이션 종료 후 자동으로 RemoveState로 변환
 }
 
 void CFSMMgr::PlayRemove(float timeElapsed, CCollisionObject * obj)
 {
-	// 제거 직전 스테이트
 }

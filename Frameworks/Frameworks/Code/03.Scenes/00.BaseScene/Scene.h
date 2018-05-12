@@ -8,6 +8,7 @@ class CCreateMgr;
 class CWayFinder;
 class CCollisionManager;
 class CHPGaugeManager;
+class CFSMMgr;
 
 struct LIGHT
 {
@@ -105,6 +106,8 @@ protected: // º¯¼ö
 
 	CCollisionManager *m_pCollisionManager{NULL};
 	CHPGaugeManager *m_pHPGaugeManager{NULL};
+
+	CFSMMgr * m_pFSMMgr{ NULL };
 
 	Network* m_pNetwork;
 	

@@ -9,6 +9,7 @@
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
+// CSkyBox
 // 생성자, 소멸자
 CSkyBox::CSkyBox(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr, 6)
 {
@@ -48,3 +49,21 @@ void CSkyBox::Render(CCamera *pCamera, UINT istanceCnt)
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////
+// CFloor
+// 생성자, 소멸자
+CFloor::CFloor(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
+{
+	CTexturedRectMesh *pFloorMesh = new CTexturedRectMesh(pCreateMgr, 1.0f, 0.0f, 1.0f, 8000.0f, -100.0f, 4000.0f);
+	SetMesh(0, pFloorMesh);
+
+	SetPosition(5000.0f, 3500.0f);
+}
+
+CFloor::~CFloor()
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+// 공개 함수

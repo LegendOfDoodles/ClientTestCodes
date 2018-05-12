@@ -788,20 +788,33 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[11].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[7];  //UI Textures
 	pRootParameters[11].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	D3D12_STATIC_SAMPLER_DESC samplerDesc;
+	D3D12_STATIC_SAMPLER_DESC samplerDesc[2];
 	::ZeroMemory(&samplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
-	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.MipLODBias = 0;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	samplerDesc.ShaderRegister = 0;
-	samplerDesc.RegisterSpace = 0;
-	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	samplerDesc[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[0].MipLODBias = 0;
+	samplerDesc[0].MaxAnisotropy = 1;
+	samplerDesc[0].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	samplerDesc[0].MinLOD = 0;
+	samplerDesc[0].MaxLOD = D3D12_FLOAT32_MAX;
+	samplerDesc[0].ShaderRegister = 0;
+	samplerDesc[0].RegisterSpace = 0;
+	samplerDesc[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	samplerDesc[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_MIRROR;
+	samplerDesc[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_MIRROR;
+	samplerDesc[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_MIRROR;
+	samplerDesc[1].MipLODBias = 0;
+	samplerDesc[1].MaxAnisotropy = 1;
+	samplerDesc[1].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	samplerDesc[1].MinLOD = 0;
+	samplerDesc[1].MaxLOD = D3D12_FLOAT32_MAX;
+	samplerDesc[1].ShaderRegister = 1;
+	samplerDesc[1].RegisterSpace = 0;
+	samplerDesc[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
@@ -814,8 +827,8 @@ void CCreateMgr::CreateGraphicsRootSignature()
 
 	rootSignatureDesc.NumParameters = _countof(pRootParameters);
 	rootSignatureDesc.pParameters = pRootParameters;
-	rootSignatureDesc.NumStaticSamplers = 1;
-	rootSignatureDesc.pStaticSamplers = &samplerDesc;
+	rootSignatureDesc.NumStaticSamplers = _countof(samplerDesc);
+	rootSignatureDesc.pStaticSamplers = samplerDesc;
 	rootSignatureDesc.Flags = rootSignatureFlags;
 
 	ComPtr<ID3DBlob> pSignatureBlob{ NULL };		ComPtr<ID3DBlob> pErrorBlob{ NULL };

@@ -4,8 +4,6 @@
 #include "05.Objects/97.Skeleton/Skeleton.h"
 #include "00.Global/01.Utility/Enumerations.h"
 
-class CCollisionManager;
-
 class CPlayer : public CAnimatedObject
 {
 public:
@@ -21,7 +19,6 @@ public:	// 외부 함수
 	virtual void SetState(StatesType newState);
 
 	//virtual void SetObjectType(ObjectType type) { m_StatusInfo.WeaponType = type; };
-	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
 	virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
 
 protected: // 내부 함수
@@ -31,10 +28,6 @@ protected: // 내부 함수
 	*/
 
 protected: // 변수
-	float m_fPreFrameTime{ 0 };
-
 	PlayerInfo m_StatusInfo;
-
-	CCollisionManager * m_pColManager{ NULL };
 };
 
