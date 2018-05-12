@@ -83,7 +83,10 @@ void CScene::ProcessInput()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
-	
+	if(m_ppObjects)
+		if (m_FrameCheck % 20 == 0) {
+			m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_ppObjects);
+		}
 	m_FrameCheck += 1.0f / timeElapsed;
 	if (m_pSelectedObject) {
 		if (m_FrameCheck % 20 == 0) {
@@ -433,7 +436,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		my_packet.type = CS_MOVE_PLAYER;
 		memcpy(m_pNetwork->m_send_buffer, &my_packet, sizeof(my_packet));
 		m_pNetwork->SendPacket(m_pNetwork->m_myid, &my_packet);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_pSelectedObject);
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, (CBaseObject**)m_pSelectedObject);
 	}
 }
 
