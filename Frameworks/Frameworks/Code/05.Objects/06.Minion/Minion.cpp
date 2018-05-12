@@ -188,7 +188,7 @@ CSwordMinion::CSwordMinion(CCreateMgr * pCreateMgr, int nMeshes): CMinion(pCreat
 	SetType(ObjectType::SwordMinion);
 	m_StatusInfo.maxHP = 445;
 	m_StatusInfo.HP = 445;
-	m_StatusInfo.Atk = 500;
+	m_StatusInfo.Atk = 100;
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
 
