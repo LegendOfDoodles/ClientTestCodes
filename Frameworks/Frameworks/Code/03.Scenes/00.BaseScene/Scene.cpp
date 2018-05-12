@@ -83,11 +83,12 @@ void CScene::ProcessInput()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
+	m_FrameCheck += 1.0f / timeElapsed;
 	if(m_ppObjects)
 		if (m_FrameCheck % 20 == 0) {
-			m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_ppObjects);
+			m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_pNetwork->m_ppObject);
 		}
-	m_FrameCheck += 1.0f / timeElapsed;
+	
 	if (m_pSelectedObject) {
 		if (m_FrameCheck % 20 == 0) {
 			//printf("now time is = %d\n", m_FrameCheck);
