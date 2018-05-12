@@ -149,23 +149,10 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	{
 		m_ppObjects[0]->SetMesh(1, m_pSword[m_nWeaponState]);
 		m_nWeaponState++;
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (m_nWeaponState >= 4)m_nWeaponState = 0;
-		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
-
-		// ¹«±â¿¡ µû¶ó ¼öÁ¤ÇÊ¿ä
-		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-=======
 		if (m_nWeaponState >= 2)m_nWeaponState = 0;
-		m_ppObjects[m_pNetwork->m_myid]->SetMesh(1, m_pWeapons[m_nWeaponState]);
->>>>>>> SeunPilKim
-=======
-		if (m_nWeaponState >= 3)m_nWeaponState = 0;
 
 		// ¹«±â¿¡ µû¶ó ¼öÁ¤ÇÊ¿ä
 		m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
->>>>>>> íœ˜í˜„
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
