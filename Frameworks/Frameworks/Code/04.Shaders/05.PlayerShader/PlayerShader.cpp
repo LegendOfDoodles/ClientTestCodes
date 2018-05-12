@@ -171,7 +171,10 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 void CPlayerShader::SetColManagerToObject(CCollisionManager * manager)
 {
-	dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->SetCollisionManager(manager);
+	for (int i = 0; i < 4; ++i) {
+
+	dynamic_cast<CCollisionObject*>(m_ppObjects[i])->SetCollisionManager(manager);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -352,6 +355,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	
 	CSkeleton *pWin = new CSkeleton("Resource//3D//Player//Animation//Player_Win.aniinfo");
 	CSkeleton *pDefeat = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat.aniinfo");
+	CSkeleton *pDefeat2 = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat2.aniinfo");
 
 
 	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
@@ -416,6 +420,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer->SetSkeleton(pSSmash);
 			pPlayer->SetSkeleton(pSSlash);
 			pPlayer->SetSkeleton(pSDispute);
+			
+			pPlayer->SetSkeleton(pWin);
+			pPlayer->SetSkeleton(pDefeat);
+			pPlayer->SetSkeleton(pDefeat2);
 
 			pPlayer->SetSpeed(CONVERT_cm_to_InG(30.285));
 			pPlayer->SetTerrain(m_pTerrain);

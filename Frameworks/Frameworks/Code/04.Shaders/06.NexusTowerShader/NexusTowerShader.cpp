@@ -157,6 +157,14 @@ bool CNexusTowerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	return true;
 }
 
+void CNexusTowerShader::SetColManagerToObject(CCollisionManager * manager)
+{
+	for (int i = 0; i < m_nObjects; ++i) {
+
+		dynamic_cast<CCollisionObject*>(m_ppObjects[i])->SetCollisionManager(manager);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CNexusTowerShader::CreateInputLayout()
@@ -313,7 +321,8 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Shell Nexus (UV).meshinfo");
 	pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Circle Soap Dispenser (UV).meshinfo");
 	pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Square Soap Dispenser ver.2 (UV).meshinfo");
-	
+	CNexusTower *pBuild = NULL;
+
 	
 	int cnt = 0;
 	for (int i = 0; i < 4; ++i) {
@@ -321,17 +330,32 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i]; ++j) {
 			XMFLOAT3 pos = transformInporter.m_Transform[cnt].pos;
 			XMFLOAT3 rot = transformInporter.m_Transform[cnt].rotation;
-			m_ppObjects[cnt] = new CNexusTower(pCreateMgr);
-			m_ppObjects[cnt]->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
+			pBuild = new CNexusTower(pCreateMgr);
+			pBuild->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
+			if (i == 0 || i == 2)
+			{
+				pBuild->SetTeam(TeamType::Blue);
+			}
+			else {
+				pBuild->SetTeam(TeamType::Red);
+			}
+			if (i < 2) {
+				pBuild->SetCollisionSize(CONVERT_PaperUnit_to_InG(40));
+			pBuild->type = ObjectType::Nexus;
+			}
+			else {
+				pBuild->SetCollisionSize(CONVERT_PaperUnit_to_InG(8));
+				pBuild->type = ObjectType::FirstTower;
 
-			m_ppObjects[cnt]->Rotate(0, 180, 0);
-			m_ppObjects[cnt]->Rotate(-rot.x, rot.y, -rot.z);
+			}
+			pBuild->Rotate(0, 180, 0);
+			pBuild->Rotate(-rot.x, rot.y, -rot.z);
+			pBuild->SetMesh(0, pMeshes[i]);
+			pBuild->ResetCollisionLevel();
+			pBuild->SetStatic(StaticType::Static);
 
-
-			m_ppObjects[cnt]->SetMesh(0, pMeshes[i]);
-
-			m_ppObjects[cnt]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
-			++cnt;
+			pBuild->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
+			m_ppObjects[cnt++] = pBuild;
 		}
 	}
 

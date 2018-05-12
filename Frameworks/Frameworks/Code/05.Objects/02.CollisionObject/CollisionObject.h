@@ -33,17 +33,20 @@ public: // 공개 함수
 
 	StatesType GetState() { return m_curState; }
 	virtual void SetState(StatesType newState) { m_curState = newState; }
-	
+
 	void SetNextState(StatesType newState) { m_nextState = newState; }
 	void SetEnemy(CCollisionObject* enemy) { m_pEnemy = enemy; }
 
 	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
-
-protected: // 내부 함수
 	void ResetCollisionLevel() {
-		m_xmf2CollisionLevel.x = floor(GetPosition().x/ (TERRAIN_SIZE_WIDTH / 50));
-		m_xmf2CollisionLevel.y = floor(GetPosition().z/ (TERRAIN_SIZE_WIDTH / 50));
+		m_xmf2CollisionLevel.x = floor(GetPosition().x / (TERRAIN_SIZE_WIDTH / 50));
+		m_xmf2CollisionLevel.y = floor(GetPosition().z / (TERRAIN_SIZE_WIDTH / 50));
 	}
+	void SetStatic(StaticType type) { m_StaticType = type; }
+	StaticType GetStaticType() { return m_StaticType; }
+
+	void GameOver() { m_GameOver = true; }
+protected: // 내부 함수
 
 protected: // 변수
 	float m_fCollisionSize{ 1 };
@@ -56,6 +59,7 @@ protected: // 변수
 	float m_attackRange{ 0.0f };
 
 	CCollisionObject* m_pEnemy{ NULL };
-
+	StaticType m_StaticType {StaticType::Move};
 	CCollisionManager * m_pColManager{ NULL };
+	bool m_GameOver{ false };
 };

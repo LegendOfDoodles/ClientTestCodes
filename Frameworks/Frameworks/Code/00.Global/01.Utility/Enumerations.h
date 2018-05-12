@@ -15,7 +15,9 @@ namespace States
 		Chase,
 		Attack,
 		Die,
-		Remove
+		Remove,
+		Win,
+		Defeat
 	};
 
 	enum ProcessStates
@@ -38,13 +40,21 @@ namespace Animations
 		Die,
 		SkillQ,
 		SkillE,
-		SkillR
+		SkillR,
+		Win,
+		Defeat,
+		Defeat2
 	};
 }
 
 typedef States::States StatesType;
 typedef States::ProcessStates ProcessType;
 typedef Animations::Animations AnimationsType;
+
+enum StaticType {
+	Static,
+	Move
+};
 
 enum TeamType {
 	Blue,
