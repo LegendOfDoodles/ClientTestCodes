@@ -28,8 +28,8 @@ public:
 	int		m_myid;
 
 	CBaseObject * m_pSelectedObject{ NULL };
-
-	CBaseObject* m_ppObject[4] = { NULL };
+protected:
+	CBaseObject** m_ppObject{ NULL };
 
 public:
 	Network();

@@ -71,4 +71,6 @@ protected: // º¯¼ö
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	Network* m_pNetwork;
+
+	int m_FrameCheck = 0;
 };

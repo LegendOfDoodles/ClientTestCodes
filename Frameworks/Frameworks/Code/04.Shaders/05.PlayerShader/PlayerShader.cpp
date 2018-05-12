@@ -83,6 +83,11 @@ void CPlayerShader::UpdateBoundingBoxShaderVariables()
 
 void CPlayerShader::AnimateObjects(float timeElapsed)
 {
+	m_FrameCheck += 1.0f / timeElapsed;
+	if (m_FrameCheck % 20 == 0) {
+		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_ppObjects);
+	}
+
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
@@ -104,6 +109,11 @@ void CPlayerShader::Render(CCamera *pCamera)
 		
 		m_ppObjects[j]->Render(pCamera);
 	}
+
+	/*for (int j = 0; j < 4; j++)
+	{
+		m_pNetwork->m_ppObject[j]->Render(pCamera);
+	}*/
 #endif
 }
 
@@ -317,7 +327,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
-
+	
 #if USE_INSTANCING
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
 	CreateShaderVariables(pCreateMgr);
