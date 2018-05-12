@@ -27,21 +27,22 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 	switch (obj->GetState())
 	{
 	case States::Idle:
-		PlayIdle(timeElapsed, obj);
+		obj->PlayIdle(timeElapsed);
 		break;
 	case States::Walk:
-		PlayWalk(timeElapsed, obj);
+		obj->PlayWalk(timeElapsed);
 		break;
 	case States::Chase:
-		PlayChase(timeElapsed, obj);
+		obj->PlayChase(timeElapsed);
 		break;
 	case States::Attack:
-		PlayAttack(timeElapsed, obj);
+		obj->PlayAttack(timeElapsed);
 		break;
 	case States::Die:
-		PlayDie(timeElapsed, obj);
+		obj->PlayDie(timeElapsed);
 		break;
 	case States::Remove:
+		obj->PlayRemove(timeElapsed);
 		break;
 	default:
 		assert(!"Error:: There is No State");

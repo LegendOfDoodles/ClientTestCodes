@@ -8,6 +8,13 @@ public:	// 생성자, 소멸자
 	virtual ~CCollisionObject();
 
 public: // 공개 함수
+	virtual void PlayIdle(float timeElapsed) {}
+	virtual void PlayWalk(float timeElapsed) {}
+	virtual void PlayChase(float timeElapsed) {}
+	virtual void PlayAttack(float timeElapsed) {}
+	virtual void PlayDie(float timeElapsed) {}
+	virtual void PlayRemove(float timeElapsed) {}
+
 	virtual void RegenerateLookAt() {}
 
 	virtual void SetCollisionSize(float size) { m_fCollisionSize = size; }
@@ -24,10 +31,14 @@ protected: // 내부 함수
 		m_xmf2CollisionLevel.x = floor(GetPosition().x/ (TERRAIN_SIZE_WIDTH / 50));
 		m_xmf2CollisionLevel.y = floor(GetPosition().z/ (TERRAIN_SIZE_WIDTH / 50));
 	}
+
 protected: // 변수
 	float m_fCollisionSize{ 1 };
 	XMFLOAT2 m_xmf2CollisionLevel{ 0,0 };
 
 	StatesType m_curState{ States::Idle };
 	StatesType m_nextState{ States::Idle };
+
+	float m_detectRange{ 0.0f };
+	float m_attackRange{ 0.0f };
 };

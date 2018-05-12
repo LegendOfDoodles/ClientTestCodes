@@ -95,6 +95,24 @@ void CMinion::SetState(StatesType newState)
 	}
 }
 
+void CMinion::PlayIdle(float timeElapsed)
+{
+}
+
+void CMinion::PlayWalk(float timeElapsed)
+{
+}
+
+void CMinion::PlayChase(float timeElapsed)
+{
+}
+
+void CMinion::PlayAttack(float timeElapsed)
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
 void CMinion::AdjustAnimationIndex()
 {
 	switch (m_nCurrAnimation)
@@ -120,11 +138,9 @@ void CMinion::AdjustAnimationIndex()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
-// 내부 함수
-
 //////////////////////////////////////////////////////////////////////////
 //근접 미니언
+// 생성자, 소멸자
 CSwordMinion::CSwordMinion(CCreateMgr * pCreateMgr, int nMeshes): CMinion(pCreateMgr,nMeshes)
 {
 	SetType(ObjectType::SwordMinion);
@@ -139,6 +155,8 @@ CSwordMinion::~CSwordMinion()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
 void CSwordMinion::Animate(float timeElapsed)
 {
 		switch (m_curState) {
@@ -202,7 +220,7 @@ void CSwordMinion::Animate(float timeElapsed)
 
 //////////////////////////////////////////////////////////////////////////
 //마법 미니언
-
+// 생성자, 소멸자
 CMagicMinion::CMagicMinion(CCreateMgr * pCreateMgr, int nMeshes) : CMinion(pCreateMgr, nMeshes)
 {
 	SetType(ObjectType::StaffMinion);
@@ -217,6 +235,8 @@ CMagicMinion::~CMagicMinion()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
 void CMagicMinion::Animate(float timeElapsed)
 {
 		switch (m_curState) {
@@ -279,7 +299,7 @@ void CMagicMinion::Animate(float timeElapsed)
 
 //////////////////////////////////////////////////////////////////////////
 //활 미니언
-
+// 생성자, 소멸자
 CBowMinion::CBowMinion(CCreateMgr * pCreateMgr, int nMeshes) : CMinion(pCreateMgr, nMeshes)
 {
 	SetType(ObjectType::BowMinion);
@@ -294,6 +314,8 @@ CBowMinion::~CBowMinion()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
 void CBowMinion::Animate(float timeElapsed)
 {
 		switch (m_curState) {
@@ -341,6 +363,8 @@ void CBowMinion::Animate(float timeElapsed)
 	CMinion::Animate(timeElapsed);
 }
 
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
 void CBowMinion::AdjustAnimationIndex()
 {
 	switch (m_nCurrAnimation)

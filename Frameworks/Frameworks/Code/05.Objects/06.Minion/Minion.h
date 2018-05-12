@@ -5,7 +5,7 @@
 #include "00.Global/01.Utility/Enumerations.h"
 
 
-class CMinion : public CAnimatedObject		// 상속 AnimatedObject에서 받는 걸로 수정  필
+class CMinion : public CAnimatedObject
 {
 public: // 생성자, 소멸자
 	CMinion(CCreateMgr *pCreateMgr, int nMeshes = 1);
@@ -16,6 +16,11 @@ public:	// 외부 함수
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
 
 	virtual 	void SetState(StatesType newState);
+
+	virtual void PlayIdle(float timeElapsed);
+	virtual void PlayWalk(float timeElapsed);
+	virtual void PlayChase(float timeElapsed);
+	virtual void PlayAttack(float timeElapsed);
 
 	virtual void ReceiveDamage(float damage)
 	{
