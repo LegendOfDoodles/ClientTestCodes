@@ -35,7 +35,7 @@ class CScene	// Warning! 인 게임 씬이랑 공백 씬이랑 분리할 필요 있음
 {
 public:	// 생성자, 소멸자
 	CScene();
-	~CScene();
+	virtual ~CScene();
 
 public: // 공개 함수
 	virtual void Initialize(CCreateMgr *pCreateMgr, Network* pNetwork);

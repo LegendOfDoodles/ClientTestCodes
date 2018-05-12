@@ -10,6 +10,7 @@ class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
 class CHPGaugeManager;
+class CFSMMgr;
 
 class CAniShader : public CShader
 {
@@ -36,8 +37,9 @@ public: // 공개 함수
 	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() {  return m_nObjects; }
 
-	void SetCollisionManager(CCollisionManager* manager);
-	void SetGaugeManger(CHPGaugeManager *pManger);
+	void SetCollisionManager(CCollisionManager* pManger) { m_pColManager = pManger; }
+	void SetGaugeManger(CHPGaugeManager *pManger) { m_pGaugeManger = pManger; }
+	void SetFSMManager(CFSMMgr *pManger) { m_pFSMMgr = pManger; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -89,6 +91,7 @@ protected: // 변수
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
+	CFSMMgr * m_pFSMMgr{ NULL };
 
 	Network* m_pNetwork{ NULL };
 };
