@@ -6,7 +6,8 @@
 // 持失切, 社瑚切
 CNexusTower::CNexusTower(CCreateMgr *pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
 {
-
+	m_StatusInfo.maxHP = 1000;
+	m_StatusInfo.HP = 1000;
 }
 
 

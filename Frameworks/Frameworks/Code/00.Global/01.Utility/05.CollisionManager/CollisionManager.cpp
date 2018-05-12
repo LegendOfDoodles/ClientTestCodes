@@ -64,7 +64,11 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	case CollisionType::SPHERE:
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
-			if ((*i) != pCol || (*i)->GetTeam() != pCol->GetTeam()) {
+			if ((*i) != pCol) {
+				TeamType a = (*i)->GetTeam();
+				TeamType b = pCol->GetTeam();
+					if (a != b) {
+
 				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
 				{
 					XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
@@ -79,6 +83,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 						(*i)->ReceiveDamage(damage);
 					}
 				}
+					}
 			}
 		}
 
@@ -86,30 +91,34 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	case CollisionType::SECTERFORM:
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
-			if ((*i) != pCol || (*i)->GetTeam() != pCol->GetTeam()) {
-				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
-				{
-					XMFLOAT3 apos = (*i)->GetPosition();
-					XMFLOAT3 bpos = pCol->GetPosition();
-					
-					float distance = Vector3::Distance(apos,bpos);
-					float collisionLength = (data1) - (*i)->GetCollisionSize();
-					
-					if (distance <= collisionLength)
+			if ((*i) != pCol) {
+				TeamType a = (*i)->GetTeam();
+				TeamType b = pCol->GetTeam();
+				if (a != b) {
+					if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
 					{
-						XMFLOAT3 result = Vector3::Add(apos, bpos, -1.0f);
+						XMFLOAT3 apos = (*i)->GetPosition();
+						XMFLOAT3 bpos = pCol->GetPosition();
 
-						float a = Vector3::DotProduct(pCol->GetLook(), Vector3::Normalize(result));
+						float distance = Vector3::Distance(apos, bpos);
+						float collisionLength = (data1)-(*i)->GetCollisionSize();
 
-						a = acos(a);
-						a = a * 360 / PI;
-
-						// 시야 각 안에 들어오는가
-						if (a <= data2)
+						if (distance <= collisionLength)
 						{
-							//std::cout << "col\n";
-							(*i)->Translate(&Vector3::ScalarProduct(pCol->GetLook(), 10));
-							(*i)->ReceiveDamage(damage);
+							XMFLOAT3 result = Vector3::Add(apos, bpos, -1.0f);
+
+							float a = Vector3::DotProduct(pCol->GetLook(), Vector3::Normalize(result));
+
+							a = acos(a);
+							a = a * 360 / PI;
+
+							// 시야 각 안에 들어오는가
+							if (a <= data2)
+							{
+								//std::cout << "col\n";
+								(*i)->Translate(&Vector3::ScalarProduct(pCol->GetLook(), 10));
+								(*i)->ReceiveDamage(damage);
+							}
 						}
 					}
 				}

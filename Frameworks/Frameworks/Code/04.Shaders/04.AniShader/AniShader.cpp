@@ -578,10 +578,12 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 
 	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
 	{
+		pMinionObject->SetTeam(TeamType::Blue);
 		m_blueObjects.emplace_back(pMinionObject);
 	}
 	else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
 	{
+		pMinionObject->SetTeam(TeamType::Red);
 		m_redObjects.emplace_back(pMinionObject);
 	}
 
