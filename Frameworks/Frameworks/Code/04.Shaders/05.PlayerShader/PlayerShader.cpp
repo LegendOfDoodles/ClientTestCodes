@@ -402,7 +402,12 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 				CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
 				0, 0, -CONVERT_PaperUnit_to_InG(8));
 			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*500));
+			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*1000));
+			if (z == 1) {
+				pPlayer->SetTeam(TeamType::Red);
+			}
+			else
+				pPlayer->SetTeam(TeamType::Blue);
 
 			pPlayer->SetSkeleton(pSIdle);
 			pPlayer->SetSkeleton(pSStartWalk);
@@ -412,7 +417,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer->SetSkeleton(pSSlash);
 			pPlayer->SetSkeleton(pSDispute);
 
-			pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
+			pPlayer->SetSpeed(CONVERT_cm_to_InG(30.285));
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);

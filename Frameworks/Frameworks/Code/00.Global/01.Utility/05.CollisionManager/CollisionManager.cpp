@@ -64,7 +64,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	case CollisionType::SPHERE:
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
-			if ((*i) != pCol) {
+			if ((*i) != pCol || (*i)->GetTeam() != pCol->GetTeam()) {
 				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
 				{
 					XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
@@ -86,7 +86,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	case CollisionType::SECTERFORM:
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
-			if ((*i) != pCol) {
+			if ((*i) != pCol || (*i)->GetTeam() != pCol->GetTeam()) {
 				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
 				{
 					XMFLOAT3 apos = (*i)->GetPosition();
@@ -130,25 +130,22 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 	float nearDistance=0;
 	for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 	{
-		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
-		{
-			if ((*i) != pCol) {
-				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
+		if ((*i) != pCol || (*i)->GetTeam() != pCol->GetTeam()) {
+			if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
+			{
+				XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
+				XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
+				XMFLOAT2 look = XMFLOAT2(pCol->GetLook().x, pCol->GetLook().z);
+				float distance = Vector2::Distance(apos, Vector2::Add(bpos, Vector2::ScalarProduct(look, (lengh))));
+				if (distance <= lengh)
 				{
-					XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
-					XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
-					XMFLOAT2 look = XMFLOAT2(pCol->GetLook().x, pCol->GetLook().z);
-					float distance = Vector2::Distance(apos, Vector2::Add(bpos, Vector2::ScalarProduct(look, (lengh))));
-					if (distance <= lengh)
-					{
-						if (!nearObject) {
-							nearDistance = distance;
-						}
-						else if (nearDistance > distance) {
-							nearDistance = distance;
-						}
-						//std::cout << "col\n";
+					if (!nearObject) {
+						nearDistance = distance;
 					}
+					else if (nearDistance > distance) {
+						nearDistance = distance;
+					}
+					//std::cout << "col\n";
 				}
 			}
 		}

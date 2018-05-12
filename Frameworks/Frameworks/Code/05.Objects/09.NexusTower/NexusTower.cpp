@@ -6,6 +6,7 @@
 // 持失切, 社瑚切
 CNexusTower::CNexusTower(CCreateMgr *pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
 {
+
 }
 
 

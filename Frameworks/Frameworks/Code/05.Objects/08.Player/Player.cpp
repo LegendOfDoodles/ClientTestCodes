@@ -37,19 +37,19 @@ void CPlayer::Animate(float timeElapsed)
 		else if (m_nCurrAnimation == Animations::SkillQ) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(4), CONVERT_PaperUnit_to_InG(4),100);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8),100);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillE) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(4), 180,500);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180,500);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillR) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(1));
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(12),500);
 			}
 		}
 		break;

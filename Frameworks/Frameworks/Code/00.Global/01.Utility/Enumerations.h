@@ -46,6 +46,13 @@ typedef States::States StatesType;
 typedef States::ProcessStates ProcessType;
 typedef Animations::Animations AnimationsType;
 
+enum TeamType {
+	Blue,
+	Red,
+	Neutral,
+	None,
+};
+
 enum CollisionType {
 	SPHERE,
 	SECTERFORM,
