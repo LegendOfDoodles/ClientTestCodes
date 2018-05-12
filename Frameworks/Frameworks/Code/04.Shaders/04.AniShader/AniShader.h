@@ -11,7 +11,7 @@ class CHeightMapTerrain;
 class CCollisionManager;
 class CHPGaugeManager;
 
-class CAniShader : public CShader	// Warning! 얘는 오브젝트 쉐이더를 상속 받는 구조로 바꿀 필요 있음
+class CAniShader : public CShader
 {
 public: // 생성자, 소멸자
 	CAniShader(CCreateMgr *pCreateMgr, Network* pNetwork);

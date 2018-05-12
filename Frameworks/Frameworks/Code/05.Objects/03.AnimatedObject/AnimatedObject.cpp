@@ -137,7 +137,7 @@ void CAnimatedObject::SetPathToGo(Path * path)
 	}
 	m_pathToGo = path;
 	ResetDestination();
-	if(m_curState != States::Attack) SetState(States::Walk);
+	if(Walkable()) SetState(States::Walk);
 }
 
 ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
@@ -193,4 +193,12 @@ bool CAnimatedObject::IsArrive(float dst)
 	float curPosToNextLength = Vector2::DotProduct(Vector2::Subtract(next, curPos), dstToNext);
 
 	return dstToNextLengthSqr > curPosToNextLength * curPosToNextLength;
+}
+
+bool CAnimatedObject::Walkable()
+{
+	if (m_curState == States::Attack) return false;
+	if (m_curState == States::Die) return false;
+	if (m_curState == States::Remove) return false;
+	return true;
 }

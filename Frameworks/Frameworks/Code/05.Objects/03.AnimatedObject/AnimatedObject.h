@@ -54,6 +54,8 @@ protected: // 내부 함수
 
 	virtual void AdjustAnimationIndex() = 0;
 
+	bool Walkable();
+
 	void ResetDestination() { m_destination.x = NONE; }
 	bool NoneDestination() { return m_destination.x == NONE;	}
 
