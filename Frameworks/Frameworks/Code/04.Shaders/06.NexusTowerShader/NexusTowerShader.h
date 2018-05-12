@@ -4,6 +4,7 @@
 
 class CMaterial;
 class CHeightMapTerrain;
+class CCollisionManager;
 
 class CNexusTowerShader : public CShader
 {
@@ -27,6 +28,10 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
+	int GetObjectCount() { return m_nObjects; }
+	virtual CBaseObject **GetCollisionObjects() { return m_ppObjects; }
+	void SetColManagerToObject(CCollisionManager* manager);
+
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
@@ -43,7 +48,7 @@ protected: // 내부 함수
 protected: // 변수
 	CBaseObject * *m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
-	int m_meshCounts[17];
+	int m_meshCounts[4];
 
 	ID3D12Resource *m_myConstBuffer{ NULL };
 

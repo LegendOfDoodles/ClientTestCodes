@@ -232,5 +232,7 @@ bool CAnimatedObject::Walkable()
 	if (m_curState == States::Attack) return false;
 	if (m_curState == States::Die) return false;
 	if (m_curState == States::Remove) return false;
+	if (m_curState == States::Win) return false;
+	if (m_curState == States::Defeat) return false;
 	return true;
 }

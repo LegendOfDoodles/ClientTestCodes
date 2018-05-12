@@ -73,6 +73,19 @@ void CPlayer::Animate(float timeElapsed)
 			m_curState = States::Remove;
 		}
 		break;
+	case States::Defeat:
+		if (m_nCurrAnimation != Animations::Defeat&&
+			m_nCurrAnimation != Animations::Defeat2)
+			m_nCurrAnimation = Animations::Defeat;
+
+		if (m_nCurrAnimation == Animations::Defeat) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)
+			{
+				m_nCurrAnimation = Animations::Defeat2;
+				m_fFrameTime = 0;
+			}
+		}
+		break;
 	default:
 		break;
 	}
@@ -140,6 +153,8 @@ void CPlayer::SetState(StatesType newState)
 		break;
 	case States::Walk:
 		RegenerateLookAt();
+		if (m_nCurrAnimation != Animations::StartWalk &&
+			m_nCurrAnimation != Animations::Walking)
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:
@@ -154,6 +169,16 @@ void CPlayer::SetState(StatesType newState)
 		SetPathToGo(NULL);
 		break;
 	case States::Remove:
+		break;
+	case States::Win:
+		m_nCurrAnimation = Animations::Win;
+		m_fFrameTime = 0;
+		SetPathToGo(NULL);
+		break;
+	case States::Defeat:
+		m_nCurrAnimation = Animations::Defeat;
+		m_fFrameTime = 0;
+		SetPathToGo(NULL);
 		break;
 	default:
 		assert(!"Error:: There is No State");
@@ -184,5 +209,16 @@ void CPlayer::AdjustAnimationIndex()
 	case Animations::SkillR:
 		m_nAniIndex = 5;
 		break;
+
+	case Animations::Win:
+		m_nAniIndex = 6;
+		break;
+	case Animations::Defeat:
+		m_nAniIndex = 7;
+		break;
+	case Animations::Defeat2:
+		m_nAniIndex = 8;
+		break;
+
 	}
 }

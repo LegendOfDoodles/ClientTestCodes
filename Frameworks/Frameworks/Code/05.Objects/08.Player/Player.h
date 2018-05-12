@@ -24,7 +24,8 @@ public:	// 외부 함수
 protected: // 내부 함수
 	virtual void AdjustAnimationIndex();
 	/*
-	0. Idle		1.StartWalk		2.Walking	3.Smash		4.Slash		5.Dispute
+	0. Idle		1.StartWalk		2.Walking	3.Smash		4.Slash		5.Dispute 
+	6. Win		7.Defeat
 	*/
 
 protected: // 변수

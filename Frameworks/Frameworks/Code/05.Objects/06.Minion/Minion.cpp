@@ -94,6 +94,14 @@ void CMinion::SetState(StatesType newState)
 		break;
 	case States::Remove:
 		break;
+
+	case States::Win:
+		SetPathToGo(NULL);
+		break;
+	case States::Defeat:
+		SetPathToGo(NULL);
+		break;
+
 	default:
 		assert(!"Error:: There is No State");
 	}

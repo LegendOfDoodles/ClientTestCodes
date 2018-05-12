@@ -318,6 +318,15 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
+	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[10];
+	nColliderObject = pNTS->GetObjectCount();
+	for (int i = 0; i < nColliderObject; ++i)
+	{
+		m_pCollisionManager->AddCollider(((CCollisionObject * *)pNTS->GetCollisionObjects())[i]);
+	}
+	pNTS->SetColManagerToObject(m_pCollisionManager);
+
+	
 	BuildLights();
 }
 
