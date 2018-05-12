@@ -39,28 +39,6 @@ CScene::~CScene()
 void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 {
 	m_pNetwork = pNetwork;
-	
-	/*WSADATA	wsadata;
-	WSAStartup(MAKEWORD(2, 2), &wsadata);
-
-	m_pNetwork->m_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0); \
-		if (m_pNetwork->m_mysocket == INVALID_SOCKET) printf("Socket Failed\n");
-
-	SOCKADDR_IN ServerAddr;
-	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
-	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(MY_SERVER_PORT);
-	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-	int Result = WSAConnect(m_pNetwork->m_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
-
-	WSAAsyncSelect(m_pNetwork->m_mysocket, m_hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
-
-	m_pNetwork->m_send_wsabuf.buf = m_pNetwork->m_send_buffer;
-	m_pNetwork->m_send_wsabuf.len = MAX_BUFF_SIZE;
-	m_pNetwork->m_recv_wsabuf.buf = m_pNetwork->m_recv_buffer;
-	m_pNetwork->m_recv_wsabuf.len = MAX_BUFF_SIZE;*/
-
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
 }
@@ -108,8 +86,8 @@ void CScene::AnimateObjects(float timeElapsed)
 	
 	m_FrameCheck += 1.0f / timeElapsed;
 	if (m_pSelectedObject) {
-		if (m_FrameCheck % 10 == 0) {
-			printf("now time is = %d\n", m_FrameCheck);
+		if (m_FrameCheck % 20 == 0) {
+			//printf("now time is = %d\n", m_FrameCheck);
 			CS_MsgChMove p;
 			p.Character_id = m_pNetwork->m_myid;
 			p.size = sizeof(p);
@@ -282,7 +260,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[2] = new CAniShader(pCreateMgr, m_pNetwork);
 	m_ppShaders[3] = new CArrowShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
-	m_ppShaders[5] = new CPlayerShader(pCreateMgr);
+	m_ppShaders[5] = new CPlayerShader(pCreateMgr, m_pNetwork);
 	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
 	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
 	m_ppShaders[8] = new CMinionHPGaugeShader(pCreateMgr);

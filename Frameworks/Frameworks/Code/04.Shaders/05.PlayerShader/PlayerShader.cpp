@@ -11,8 +11,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-CPlayerShader::CPlayerShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
+CPlayerShader::CPlayerShader(CCreateMgr *pCreateMgr, Network* network) : CShader(pCreateMgr)
 {
+	m_pNetwork = network;
 }
 
 CPlayerShader::~CPlayerShader()
@@ -84,7 +85,8 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Animate(timeElapsed);
+		if(m_pNetwork->m_ppObject[j])
+			m_pNetwork->m_ppObject[j]->Animate(timeElapsed);
 	}
 }
 
@@ -100,7 +102,8 @@ void CPlayerShader::Render(CCamera *pCamera)
 #else
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
+		
+		if (m_pNetwork->m_ppObject[j]) m_pNetwork->m_ppObject[j]->Render(pCamera);
 	}
 #endif
 }
@@ -145,23 +148,28 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	if (GetAsyncKeyState('L') & 0x0001)
 	{
 		m_nWeaponState++;
+<<<<<<< HEAD
 		if (m_nWeaponState >= 4)m_nWeaponState = 0;
 		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
 
 		// 무기에 따라 수정필요
 		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
+=======
+		if (m_nWeaponState >= 2)m_nWeaponState = 0;
+		m_ppObjects[m_pNetwork->m_myid]->SetMesh(1, m_pWeapons[m_nWeaponState]);
+>>>>>>> SeunPilKim
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(Animations::SkillQ);
+		dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillQ);
 	}
 	if (GetAsyncKeyState('E') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(Animations::SkillE);
+		dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillE);
 	}
 	if (GetAsyncKeyState('R') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(Animations::SkillR);
+		dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillR);
 	}
 
 	return true;
@@ -169,7 +177,7 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 void CPlayerShader::SetColManagerToObject(CCollisionManager * manager)
 {
-	dynamic_cast<CPlayer*>(m_ppObjects[0])->SetCollisionManager(manager);
+	dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->SetCollisionManager(manager);
 }
 
 ////////////////////////////////////////////////////////////////////////

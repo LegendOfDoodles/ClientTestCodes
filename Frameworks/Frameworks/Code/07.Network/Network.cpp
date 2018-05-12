@@ -48,7 +48,7 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject* object)
 			int id = my_packet->Character_id;
 			if (first_time) {
 				first_time = false;
-				myid = id;
+				m_myid = id;
 			}
 			if (id == myid) {
 				//object->SetPosition(my_packet->x, my_packet->y);
@@ -84,19 +84,18 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject* object)
 		{
 			SC_MsgChMove *my_packet = reinterpret_cast<SC_MsgChMove *>(ptr);
 			int other_id = my_packet->Character_id;
-			if (other_id == myid) {
-				m_myid = other_id;
-				//printf("fuck\n");
-				//object->SetPathToGo(
-				//object->SetPosition(my_packet->x, my_packet->y);
+			if (other_id == m_myid) {	
+				m_ppObject[m_myid] = object;
+				m_ppObject[m_myid]->SetPosition(my_packet->x, my_packet->y);
+				printf("Client[%d] Set Position\n", other_id);
 				//player.x = my_packet->x;
 				//player.y = my_packet->y;
 				
 			}
-			/*else if (other_id < NPC_START) {
-			skelaton[other_id].x = my_packet->x;
-			skelaton[other_id].y = my_packet->y;
+			else if (other_id < NPC_START) {
+				m_ppObject[other_id]->SetPosition(my_packet->x, my_packet->y);
 			}
+			/*
 			else {
 			npc[other_id - NPC_START].x = my_packet->x;
 			npc[other_id - NPC_START].y = my_packet->y;

@@ -29,6 +29,8 @@ public:
 
 	CBaseObject * m_pSelectedObject{ NULL };
 
+	CBaseObject* m_ppObject[4] = { NULL };
+
 public:
 	Network();
 	~Network();
