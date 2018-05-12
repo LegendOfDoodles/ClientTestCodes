@@ -101,7 +101,6 @@ public: // 持失切, 社瑚切
 class CSkinnedMesh : public CMeshIlluminatedTextured
 {
 public: // 持失切, 社瑚切
-	CSkinnedMesh();
 	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
 	virtual ~CSkinnedMesh();
 };
