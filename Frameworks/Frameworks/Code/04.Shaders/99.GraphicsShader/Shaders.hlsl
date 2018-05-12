@@ -7,6 +7,7 @@ Texture2D gtxtSpecular : register(t3);
 Texture2D gtxtTextures[4] : register(t4);
 
 SamplerState wrapSampler : register(s0);
+SamplerState mirrorSampler : register(s1);
 
 //게임 객체의 정보를 위한 상수 버퍼를 선언한다.
 cbuffer cbPlayerInfo : register(b0)
@@ -112,6 +113,17 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 	float4 cColor = gtxtTexture.Sample(wrapSampler, input.uv);
 
 	return(cColor);
+}
+
+float4 PSTexturedRepeat(VS_TEXTURED_OUTPUT input) : SV_TARGET
+{
+    float2 newUV;
+    newUV.x = input.uv.x * 6;
+    newUV.y = input.uv.y * 5;
+
+    float4 cColor = gtxtTexture.Sample(mirrorSampler, newUV);
+
+    return (cColor);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

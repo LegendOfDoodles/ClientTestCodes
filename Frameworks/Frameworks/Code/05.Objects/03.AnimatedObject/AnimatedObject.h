@@ -6,6 +6,8 @@
 
 typedef std::list<CPathEdge> Path;
 
+class CWayFinder;
+
 struct CB_ANIOBJECT_INFO
 {
 	XMFLOAT4X4 m_xmf4x4World0;
@@ -37,8 +39,12 @@ public: // 공개 함수
 
 	void SetPathToGo(Path *path);
 	ProcessType MoveToDestination(float timeElapsed);
+	void MoveToEnemy(float timeElapsed, CWayFinder* pWayFinder);
 
 	virtual void RegenerateLookAt();
+
+	virtual bool Attackable(CCollisionObject* other);
+	virtual bool Chaseable(CCollisionObject* other);
 
 	void SetAnimation(AnimationsType newAnimation) { m_nCurrAnimation = newAnimation; }
 
@@ -68,6 +74,7 @@ protected: // 변수
 
 	int m_nAniCnt{ 0 };
 
+	float m_fPreFrameTime{ 0 };
 	float m_fFrameTime{ 0 };
 
 	float m_fAnimationSpeed{ 1 };

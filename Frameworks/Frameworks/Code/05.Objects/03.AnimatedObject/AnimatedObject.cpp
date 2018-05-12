@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "AnimatedObject.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
+#include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
+
 /// <summary>
 /// 목적: 움직이는 오브젝트 처리용 기본 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-05-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -170,11 +172,39 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 	return States::Processing;
 }
 
+void CAnimatedObject::MoveToEnemy(float timeElapsed, CWayFinder* pWayFinder)
+{
+	XMFLOAT3 pos = m_pEnemy->GetPosition();
+	LookAt(XMFLOAT2(pos.x, pos.z));
+	MoveForward(m_speed * timeElapsed);
+
+	pWayFinder->AdjustValueByWallCollision(this, GetLook(), m_speed * timeElapsed);
+
+	XMFLOAT3 position = GetPosition();
+	position.y = m_pTerrain->GetHeight(position.x, position.z);
+	CBaseObject::SetPosition(position);
+}
+
 void CAnimatedObject::RegenerateLookAt()
 {
 	if (NoneDestination()) return;
 
 	LookAt(m_destination);
+}
+
+bool CAnimatedObject::Attackable(CCollisionObject * other)
+{
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
+	// 공격 범위의 절반 안에 적이 있는지 확인 -> 여러 적을 공격하기 위함
+	return (dstSqr < m_attackRange * m_attackRange * 0.25f);
+}
+
+bool CAnimatedObject::Chaseable(CCollisionObject * other)
+{
+	if (other->GetState() == States::Die) return false;
+	if (other->GetState() == States::Remove) return false;
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
+	return (dstSqr < m_detectRange * m_detectRange);
 }
 
 ////////////////////////////////////////////////////////////////////////

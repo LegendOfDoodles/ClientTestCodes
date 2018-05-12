@@ -5,7 +5,7 @@
 /// 목적: 미니언 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-05-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -24,6 +24,7 @@ void CMinion::Animate(float timeElapsed)
 {
 	AdjustAnimationIndex();
 
+	m_fPreFrameTime = m_fFrameTime;
 	m_fFrameTime += 30 * timeElapsed;
 
 	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
@@ -97,18 +98,48 @@ void CMinion::SetState(StatesType newState)
 
 void CMinion::PlayIdle(float timeElapsed)
 {
+	CCollisionObject* enemy{ NULL };
+
+	// enemy = 주변 적 가져오기
+	if (!enemy) return;
+	if (!Chaseable(enemy)) return;
+
+	SetEnemy(enemy);
+
+	if (Attackable(enemy)) SetState(States::Attack);
+	else SetState(States::Chase);
 }
 
 void CMinion::PlayWalk(float timeElapsed)
 {
+	if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle); 
+	PlayIdle(timeElapsed);
 }
 
-void CMinion::PlayChase(float timeElapsed)
+void CMinion::PlayChase(float timeElapsed, CWayFinder* pWayFinder)
 {
+	if (!Chaseable(m_pEnemy))
+	{
+		SetEnemy(NULL);
+		SetState(States::Walk);
+	}
+
+	MoveToEnemy(timeElapsed, pWayFinder);
+
+	if (Attackable(m_pEnemy)) SetState(States::Attack);
 }
 
 void CMinion::PlayAttack(float timeElapsed)
 {
+	if (!CheckEnemyState(m_pEnemy))
+	{
+		SetEnemy(NULL);
+		SetNextState(States::Walk);
+	}
+	else if (!Attackable(m_pEnemy))
+	{
+		SetNextState(States::Chase);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -149,6 +180,9 @@ CSwordMinion::CSwordMinion(CCreateMgr * pCreateMgr, int nMeshes): CMinion(pCreat
 	m_StatusInfo.Atk = 12;
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
+
+	m_detectRange = CONVERT_PaperUnit_to_InG(20.0f);
+	m_attackRange = CONVERT_PaperUnit_to_InG(0.5f);
 }
 
 CSwordMinion::~CSwordMinion()
@@ -164,6 +198,10 @@ void CSwordMinion::Animate(float timeElapsed)
 			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(1), 120, m_StatusInfo.Atk);
+			}
 			if (m_nCurrAnimation == Animations::Attack1) {
 				if (m_curState == m_nextState)
 				{

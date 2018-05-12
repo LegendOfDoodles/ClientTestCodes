@@ -5,7 +5,7 @@
 /// 목적: 충돌체가 있는 오브젝트 구분용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-05-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -17,4 +17,19 @@ CCollisionObject::CCollisionObject(CCreateMgr * pCreateMgr, int nMeshes) : CBase
 
 CCollisionObject::~CCollisionObject()
 {
+}
+
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
+bool CCollisionObject::CheckEnemyState(CCollisionObject * other)
+{
+	if (other->GetState() == States::Die) return false;
+	if (other->GetState() == States::Remove) return false;
+	return true;
+}
+
+bool CCollisionObject::Attackable(CCollisionObject * other)
+{
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
+	return (dstSqr < m_attackRange * m_attackRange);
 }

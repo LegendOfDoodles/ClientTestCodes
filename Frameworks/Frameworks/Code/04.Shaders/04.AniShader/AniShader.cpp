@@ -574,6 +574,8 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	XMFLOAT2 firstPos{ m_pathes[kind].front().From() };
 	pMinionObject->CBaseObject::SetPosition(XMFLOAT3(firstPos.x, 0, firstPos.y));
 
+	pMinionObject->SetCollisionManager(m_pColManager);
+
 	if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
 	{
 		m_blueObjects.emplace_back(pMinionObject);

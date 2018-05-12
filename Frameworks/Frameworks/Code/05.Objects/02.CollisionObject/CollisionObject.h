@@ -1,5 +1,8 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
+#include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
+
+class CWayFinder;
 
 class CCollisionObject : public CBaseObject
 {
@@ -8,9 +11,12 @@ public:	// 생성자, 소멸자
 	virtual ~CCollisionObject();
 
 public: // 공개 함수
+	bool CheckEnemyState(CCollisionObject* other);
+	virtual bool Attackable(CCollisionObject* other);
+
 	virtual void PlayIdle(float timeElapsed) {}
 	virtual void PlayWalk(float timeElapsed) {}
-	virtual void PlayChase(float timeElapsed) {}
+	virtual void PlayChase(float timeElapsed, CWayFinder* pWayFinder) {}
 	virtual void PlayAttack(float timeElapsed) {}
 	virtual void PlayDie(float timeElapsed) {}
 	virtual void PlayRemove(float timeElapsed) {}
@@ -25,6 +31,9 @@ public: // 공개 함수
 	StatesType GetState() { return m_curState; }
 	virtual void SetState(StatesType newState) { m_curState = newState; }
 	void SetNextState(StatesType newState) { m_nextState = newState; }
+	void SetEnemy(CCollisionObject* enemy) { m_pEnemy = enemy; }
+
+	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
 
 protected: // 내부 함수
 	void ResetCollisionLevel() {
@@ -41,4 +50,8 @@ protected: // 변수
 
 	float m_detectRange{ 0.0f };
 	float m_attackRange{ 0.0f };
+
+	CCollisionObject* m_pEnemy{ NULL };
+
+	CCollisionManager * m_pColManager{ NULL };
 };

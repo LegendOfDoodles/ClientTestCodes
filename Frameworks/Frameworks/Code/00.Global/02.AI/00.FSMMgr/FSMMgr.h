@@ -1,11 +1,12 @@
 #pragma once
+#include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 
 class CCollisionObject;
 
 class CFSMMgr
 {
 public:	// 생성자, 소멸자
-	CFSMMgr();
+	CFSMMgr(CWayFinder* pWayFinder);
 	virtual ~CFSMMgr();
 
 public: // 공개 함수
@@ -20,5 +21,6 @@ protected: // 내부 함수
 	void PlayRemove(float timeElapsed, CCollisionObject* obj);
 
 protected:	// 변수
+	CWayFinder * m_pWayFinder;
 };
 
