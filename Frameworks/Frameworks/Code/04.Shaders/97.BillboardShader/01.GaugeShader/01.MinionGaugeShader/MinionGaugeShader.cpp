@@ -89,7 +89,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 bool CMinionHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
 
-	return false;
+	return true;
 }
 
 bool CMinionHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)

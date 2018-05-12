@@ -6,6 +6,7 @@
 #include "05.Objects/07.StaticObjects/01.Nexus/Nexus.h"
 #include "05.Objects/07.StaticObjects/02.Tower/Tower.h"
 #include "05.Objects/07.StaticObjects/03.Obstacle/Obstacle.h"
+#include "05.Objects/09.NexusTower/NexusTower.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
 
 /// <summary>
@@ -148,14 +149,11 @@ CBaseObject *CNexusTowerShader::PickObjectByRayIntersection(
 
 bool CNexusTowerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
-	//if (pKeyBuffer['U'] & 0xF0)
-	//{
-	//	R -= 0.1f;
-	//	if (R < 0.0f) R = 0.0f;
-	//	m_pMaterial->SetRoughness(R);
-	//	return true;
-	//}
+	if (GetAsyncKeyState('U') & 0x0001)
+	{
+		((CCollisionObject*)m_ppObjects[0])->SetState(States::Die);
 
+	}
 	return true;
 }
 
@@ -230,7 +228,7 @@ void CNexusTowerShader::CreateShader(CCreateMgr *pCreateMgr)
 		m_ppPipelineStates[i] = NULL;
 	}
 
-	m_nHeaps = 17;
+	m_nHeaps = 4;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -280,7 +278,6 @@ void CNexusTowerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffe
 
 void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
 	CTransformImporter transformInporter;
 
@@ -302,53 +299,29 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateEraserMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateDuckMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[2] = Materials::CreateKeumOneBoMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
-	m_ppMaterials[3] = Materials::CreatePencilCaseMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
-	m_ppMaterials[4] = Materials::CreateNailClipperMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
-	m_ppMaterials[5] = Materials::CreateSquareHeadPhoneMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
-	m_ppMaterials[6] = Materials::CreateShortPencilMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
-	m_ppMaterials[7] = Materials::CreateLongPencilMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
-	m_ppMaterials[8] = Materials::CreatePaperCupMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[8], &m_psrvGPUDescriptorStartHandle[8]);
-	m_ppMaterials[9] = Materials::CreateRoundHeadPhoneMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[9], &m_psrvGPUDescriptorStartHandle[9]);
-	m_ppMaterials[10] = Materials::CreatePenCoverMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[10], &m_psrvGPUDescriptorStartHandle[10]);
-	m_ppMaterials[11] = Materials::CreatePenMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[11], &m_psrvGPUDescriptorStartHandle[11]);
-	m_ppMaterials[12] = Materials::CreateDiceMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[12], &m_psrvGPUDescriptorStartHandle[12]);
-	m_ppMaterials[13] = Materials::CreateBook1Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[13], &m_psrvGPUDescriptorStartHandle[13]);
-	m_ppMaterials[14] = Materials::CreateBook2Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[14], &m_psrvGPUDescriptorStartHandle[14]);
-	m_ppMaterials[15] = Materials::CreateBook3Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[15], &m_psrvGPUDescriptorStartHandle[15]);
-	m_ppMaterials[16] = Materials::CreateBook4Material(pCreateMgr, &m_psrvCPUDescriptorStartHandle[16], &m_psrvGPUDescriptorStartHandle[16]);
+	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreateShellMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateRoundSoapDispenserMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateSquareSoapDispenserMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CStaticMesh *pMeshes[17];
-	pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Eraser.meshinfo");
-	pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Duck.meshinfo");
-	pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//KeumWonBo.meshinfo");
-	pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//PencilCase.meshinfo");//***
-	pMeshes[4] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nail.meshinfo");//***
-	pMeshes[5] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//BlueHead.meshinfo");//***
-	pMeshes[6] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//ShortPencil.meshinfo");
-	pMeshes[7] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//LongPencil.meshinfo");
-	pMeshes[8] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Cup.meshinfo");
-	pMeshes[9] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//RedHead.meshinfo");
-	pMeshes[10] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//PenCover.meshinfo");
-	pMeshes[11] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Pen.meshinfo");
-	pMeshes[12] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Dice.meshinfo");
-	pMeshes[13] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[0]);
-	pMeshes[14] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[1]);
-	pMeshes[15] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[2]);
-	pMeshes[16] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[3]);
+	CStaticMesh *pMeshes[4];
+	pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Treasure Box Nexus(UV).meshinfo");
+	pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Shell Nexus (UV).meshinfo");
+	pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Circle Soap Dispenser (UV).meshinfo");
+	pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Square Soap Dispenser ver.2 (UV).meshinfo");
+	
+	
 	int cnt = 0;
-	for (int i = 0; i < 17; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		m_meshCounts[i] = transformInporter.m_iKindMeshCnt[i];
 		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i]; ++j) {
 			XMFLOAT3 pos = transformInporter.m_Transform[cnt].pos;
 			XMFLOAT3 rot = transformInporter.m_Transform[cnt].rotation;
-			m_ppObjects[cnt] = new CObstacle(pCreateMgr);
+			m_ppObjects[cnt] = new CNexusTower(pCreateMgr);
 			m_ppObjects[cnt]->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
 
 			m_ppObjects[cnt]->Rotate(0, 180, 0);
@@ -363,7 +336,7 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	}
 
 	m_meshCounts[0] = 0;
-	for (int i = 1; i < 17; ++i) {
+	for (int i = 1; i < 4; ++i) {
 		m_meshCounts[i] = m_meshCounts[i - 1] + transformInporter.m_iKindMeshCnt[i - 1];
 	}
 }

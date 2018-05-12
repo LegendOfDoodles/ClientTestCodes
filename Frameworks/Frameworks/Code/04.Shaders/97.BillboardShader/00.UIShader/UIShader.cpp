@@ -102,7 +102,7 @@ void CUIObjectShader::OnStatus(int  ObjectType)
 
 bool CUIObjectShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	return false;
+	return true;
 }
 
 bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)

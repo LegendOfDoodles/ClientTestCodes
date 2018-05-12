@@ -7,6 +7,7 @@
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
 #include "04.Shaders/04.AniShader/AniShader.h"
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
+#include "04.Shaders/06.NexusTowerShader/NexusTowerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/97.BillboardShader/02.IconShader/MinimapIconShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
@@ -71,7 +72,8 @@ void CScene::ProcessInput()
 	bool continual = m_pCamera->OnProcessMouseInput(pKeyBuffer);
 	if(continual) continual = m_pCamera->OnProcessKeyInput(pKeyBuffer);
 	for (int i = 0; i < m_nShaders; ++i) {
-		if(continual) continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
+		if(continual)
+			continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
 
 	if (m_pSelectedObject && GetAsyncKeyState('K') & 0x0001)
@@ -252,7 +254,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 10;
+	m_nShaders = 11;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -265,6 +267,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
 	m_ppShaders[8] = new CMinionHPGaugeShader(pCreateMgr);
 	m_ppShaders[9] = new CMinimapIconShader(pCreateMgr);
+	m_ppShaders[10] = new CNexusTowerShader(pCreateMgr);
 
 
 	for (int i = 0; i < 2; ++i)
@@ -272,7 +275,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 4; ++i)
+	for (int i = 2; i < m_nShaders - 5; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -287,6 +290,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[9]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[10]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 	m_pCollisionManager = new CCollisionManager();

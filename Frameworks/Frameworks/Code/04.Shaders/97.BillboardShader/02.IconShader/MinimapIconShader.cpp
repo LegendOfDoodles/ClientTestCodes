@@ -96,7 +96,7 @@ void CMinimapIconShader::GetCamera(CCamera * pCamera)
 
 bool CMinimapIconShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	return false;
+	return true;
 }
 
 bool CMinimapIconShader::OnProcessMouseInput(WPARAM pKeyBuffer)

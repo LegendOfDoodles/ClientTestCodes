@@ -1,5 +1,4 @@
-﻿  Timer.cpp
-  AniShader.cpp
+﻿  Scene.cpp
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(11): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(12): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(13): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
@@ -10,139 +9,31 @@ d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\co
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\새 폴더\client\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(49): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 d:\새 폴더\client\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(46): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(46): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(57): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(57): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(73): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(73): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(80): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(80): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(94): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(94): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(98): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(98): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(109): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(109): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(114): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(114): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(123): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(123): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(127): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(127): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(142): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(142): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(152): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(152): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(165): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(233): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(392): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(395): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(414): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(414): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(419): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(419): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(494): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(495): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(495): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(495): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(533): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(534): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(559): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-  PlayerShader.cpp
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(11): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(12): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(13): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(14): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(15): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(16): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(23): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(49): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(143): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(184): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(367): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(368): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(368): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(368): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(404): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(405): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(406): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(416): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(355): warning C4189: 'pDefeat': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\05.playershader\playershader.cpp(354): warning C4189: 'pWin': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-  NexusTowerShader.cpp
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(11): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(12): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(13): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(14): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(15): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(16): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(23): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(149): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\새 폴더\client\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(293): warning C4189: 'boundingBoxElementBytes': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(88): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(93): warning C4244: '=': 'int'에서 'BYTE'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(96): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(97): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(169): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(197): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(294): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(377): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(428): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(428): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(429): warning C4244: '=': 'int'에서 'BYTE'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(432): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(433): warning C4244: '=': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(413): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(435): warning C4101: 'iobyte' :참조되지 않은 지역 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(444): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(447): warning C4189: 'y': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\새 폴더\client\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(447): warning C4189: 'x': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   코드를 생성하고 있습니다.
-  53 of 2977 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    30 functions had inline decision re-evaluated but remain unchanged
+  2 of 2979 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Frameworks.vcxproj -> D:\새 폴더\client\Frameworks\x64\Release\Framework01.exe

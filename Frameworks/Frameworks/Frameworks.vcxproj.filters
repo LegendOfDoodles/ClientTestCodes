@@ -201,6 +201,9 @@
     <Filter Include="소스 파일\04.Shaders\06.NexusTowerShader">
       <UniqueIdentifier>{95312e46-c39f-414e-bfd1-0f4d071afafd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\09.NexusTower">
+      <UniqueIdentifier>{418d977f-e21f-4e92-a645-323b228aeed2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -380,6 +383,9 @@
     <ClInclude Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.h">
       <Filter>소스 파일\04.Shaders\06.NexusTowerShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\09.NexusTower\NexusTower.h">
+      <Filter>소스 파일\05.Objects\09.NexusTower</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -537,6 +543,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.cpp">
       <Filter>소스 파일\04.Shaders\06.NexusTowerShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\09.NexusTower\NexusTower.cpp">
+      <Filter>소스 파일\05.Objects\09.NexusTower</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
