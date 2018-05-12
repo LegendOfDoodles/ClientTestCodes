@@ -56,7 +56,7 @@ void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
 	m_HPGaugeObjectList.remove_if([this](CHPGaugeObjects* obj)
 	{ 
-		if (obj->GetState() == States::Remove)
+		if (obj->GetState() == States::Die)
 		{
 			ResetPossibleIndex(obj->GetIndex());
 			return true;
