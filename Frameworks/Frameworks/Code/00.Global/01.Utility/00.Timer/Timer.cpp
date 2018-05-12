@@ -13,7 +13,9 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CTimer::CTimer()
+
 {
+	
 }
 
 CTimer::~CTimer()
@@ -75,6 +77,8 @@ bool CTimer::Update()
 
 	if (m_hWnd) UpdateCaption();
 #endif
+
+	
 	return true;
 }
 

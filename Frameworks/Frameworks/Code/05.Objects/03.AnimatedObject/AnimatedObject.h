@@ -33,10 +33,14 @@ public: // 공개 함수
 	virtual XMFLOAT3 GetLook();
 	virtual XMFLOAT3 GetUp();
 
+	virtual void SetPosition(float x, float z);
+
 	void SetPathToGo(Path *path);
-	void MoveToDestination(float timeElapsed);
+	ProcessType MoveToDestination(float timeElapsed);
 
 	virtual void RegenerateLookAt();
+
+	void SetAnimation(AnimationsType newAnimation) { m_nCurrAnimation = newAnimation; }
 
 	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
 

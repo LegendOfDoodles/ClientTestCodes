@@ -54,7 +54,8 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 		}
 	}
 }
-
+// type Sphere data1 = 거리 , data2 = 반지름;
+// typeSecterForm data1 = 거리, data2 = 각도
 void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pCol, float data1, float data2, float damage)
 {
 	switch (type)

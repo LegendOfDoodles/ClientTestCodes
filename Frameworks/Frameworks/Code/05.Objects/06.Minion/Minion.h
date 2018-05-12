@@ -14,17 +14,13 @@ public: // 생성자, 소멸자
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
-	virtual void SetPathToGo(Path *path);
-
-	virtual void SetPosition(float x, float z);
 
 	virtual 	void SetState(StatesType newState);
 
 	virtual void ReceiveDamage(float damage)
 	{
 		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
-		if (m_StatusInfo.HP <= 0)
-			std::cout << "Die\n";
+		if (m_StatusInfo.HP <= 0) {}
 
 	}
 

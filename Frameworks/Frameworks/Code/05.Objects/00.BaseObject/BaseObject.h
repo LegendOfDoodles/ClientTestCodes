@@ -79,13 +79,6 @@ public: // 공개 함수
 	int GetType() {	return m_ObjectType; };
 	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
 
-	bool IsCollider() { return false; }
-
-	bool HaveWalkState() { return false; }
-	bool HaveChaseState() { return false; }
-	bool HaveAttackState() { return false; }
-	bool HaveDieState() { return false; }
-
 protected: // 내부 함수
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
 	virtual void ReleaseShaderVariables();
@@ -115,7 +108,7 @@ protected: // 변수
 	ID3D12Resource					*m_pcbGameObject{ NULL };
 	UINT8				*m_pMappedObject{ NULL };
 
-	ObjectType m_ObjectType{ ObjectType::SwordPlayer };
+	ObjectType m_ObjectType{ ObjectType::StickPlayer };
 
 	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
 };

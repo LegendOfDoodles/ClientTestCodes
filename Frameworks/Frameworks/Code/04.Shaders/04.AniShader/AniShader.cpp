@@ -531,7 +531,7 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 	pMinionObject->SetBoundingMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
 		0, 0, -CONVERT_PaperUnit_to_InG(4));
-	pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
+	pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
 
 	switch (m_kind)
 	{

@@ -108,5 +108,6 @@ protected: // º¯¼ö
 
 	Network* m_pNetwork;
 	
+	int m_FrameCheck = 0;
 };
 

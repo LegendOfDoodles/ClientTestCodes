@@ -58,3 +58,4 @@ FBXexporter/FBXExporter/testModels/minion3.fbx
 FBXexporter/FBXExporter/exportedModels/minion3.meshinfo
 FBXexporter/FBXExporter/exportedModels/minion3.aniinfo
 *.tlog
+*.tlog

@@ -8,6 +8,7 @@
 #include "04.Shaders/04.AniShader/AniShader.h"
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
+#include "04.Shaders/97.BillboardShader/02.IconShader/MinimapIconShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
@@ -104,6 +105,21 @@ void CScene::ProcessInput()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
+	
+	m_FrameCheck += 1.0f / timeElapsed;
+	if (m_pSelectedObject) {
+		if (m_FrameCheck % 10 == 0) {
+			printf("now time is = %d\n", m_FrameCheck);
+			CS_MsgChMove p;
+			p.Character_id = m_pNetwork->m_myid;
+			p.size = sizeof(p);
+			p.type = CS_MOVE_PLAYER;
+			p.x = m_pSelectedObject->GetPosition().x;
+			p.y = m_pSelectedObject->GetPosition().z;
+
+			m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+		}
+	}
 	m_pCamera->Update(timeElapsed);
 
 	UpdateShaderVariables();
@@ -258,7 +274,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 9;
+	m_nShaders = 10;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -270,13 +286,15 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
 	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
 	m_ppShaders[8] = new CMinionHPGaugeShader(pCreateMgr);
+	m_ppShaders[9] = new CMinimapIconShader(pCreateMgr);
+
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 3; ++i)
+	for (int i = 2; i < m_nShaders - 4; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -284,9 +302,13 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetObjectCount());
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
 
+	((CMinimapIconShader*)m_ppShaders[9])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetObjectCount());
+	((CMinimapIconShader*)m_ppShaders[9])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
+
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[9]->Initialize(pCreateMgr, m_pCamera);
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 	m_pCollisionManager = new CCollisionManager();

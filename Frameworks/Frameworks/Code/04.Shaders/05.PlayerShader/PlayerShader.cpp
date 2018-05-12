@@ -147,6 +147,9 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		m_nWeaponState++;
 		if (m_nWeaponState >= 4)m_nWeaponState = 0;
 		m_ppObjects[0]->SetMesh(1, m_pWeapons[m_nWeaponState]);
+
+		// 무기에 따라 수정필요
+		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
@@ -368,10 +371,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer = new CPlayer(pCreateMgr, 2);
 
 #if !USE_INSTANCING
-			pPlayer->SetMesh(0, pPlayerMesh);
-
-			pPlayer->SetMesh(1, m_pWeapons[0]);
-
+				pPlayer->SetMesh(0, pPlayerMesh);
+				
+				pPlayer->SetMesh(1, m_pWeapons[1]);
+				pPlayer->SetType(ObjectType::SwordPlayer);
 #endif
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);
@@ -380,7 +383,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 				CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
 				0, 0, -CONVERT_PaperUnit_to_InG(8));
-			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
+			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
 			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*500));
 
 			pPlayer->SetSkeleton(pSIdle);
@@ -391,13 +394,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer->SetSkeleton(pSSlash);
 			pPlayer->SetSkeleton(pSDispute);
 
-
-
 			pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);
-
 
 #if !USE_INSTANCING
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));

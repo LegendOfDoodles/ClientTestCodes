@@ -135,9 +135,6 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\00.UIShader">
       <UniqueIdentifier>{53f786f2-cdf8-4f8a-adda-aa3fca040f82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader">
-      <UniqueIdentifier>{22b3e6fb-1293-40c2-9daa-2dfd14e1f83b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\00.Global\02.AI">
       <UniqueIdentifier>{187ca8d2-9c69-422e-b104-1446eb1cb44d}</UniqueIdentifier>
     </Filter>
@@ -197,6 +194,9 @@
     </Filter>
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\02.IconShader">
       <UniqueIdentifier>{48b9bf6b-916d-4f61-94a9-dcdc8b552ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader">
+      <UniqueIdentifier>{22b3e6fb-1293-40c2-9daa-2dfd14e1f83b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

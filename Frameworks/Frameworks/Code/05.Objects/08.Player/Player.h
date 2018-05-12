@@ -15,16 +15,13 @@ public:
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 	virtual void Render(CCamera *pCamera, UINT instanceCnt = 1);
-	virtual void SetPathToGo(Path *path);
-
-	virtual void SetPosition(float x, float z);
 
 	virtual void ActiveSkill(AnimationsType act);
 
-	virtual 	void SetState(StatesType newState);
+	virtual void SetState(StatesType newState);
 
+	//virtual void SetObjectType(ObjectType type) { m_StatusInfo.WeaponType = type; };
 	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
-
 	virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
 
 protected: // 내부 함수
@@ -38,7 +35,6 @@ protected: // 변수
 
 	PlayerInfo m_StatusInfo;
 
-	StatesType m_CurrState = { States::Idle };
 	CCollisionManager * m_pColManager{ NULL };
 };
 

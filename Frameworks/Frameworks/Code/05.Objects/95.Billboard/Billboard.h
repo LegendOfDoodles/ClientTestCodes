@@ -71,7 +71,7 @@ public: // 공개함수
 	virtual void Animate(float fTimeElapsed);
 
 	StatesType GetState() { return m_pMasterObject->GetState(); }
-	void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
+	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
@@ -84,11 +84,17 @@ public:
 	CMinimapIconObjects(CCreateMgr *pCreateMgr) ;
 	virtual ~CMinimapIconObjects();
 
-	void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
-
 	virtual void Animate(float fTimeElapsed);
+	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
+
+	void WorldToMinimap();
+	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
+	CBaseObject* GetMasterObject() { return m_pMasterObject; };
 
 protected:
 	CCollisionObject * m_pMasterObject;
+	XMFLOAT3 m_MinimapPosition;
+
+	ObjectType MasterObjectType;
 
 };

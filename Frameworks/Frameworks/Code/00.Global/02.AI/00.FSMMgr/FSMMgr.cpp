@@ -14,7 +14,6 @@
 // 생성자, 소멸자
 CFSMMgr::CFSMMgr()
 {
-	// Warning : ColliderMgr 가져와야 함
 }
 
 CFSMMgr::~CFSMMgr()
@@ -23,10 +22,8 @@ CFSMMgr::~CFSMMgr()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CFSMMgr::UpdateState(float timeElapsed, CCollisionObject * obj)
+void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 {
-	if (!obj->IsCollider()) return;
-
 	switch (obj->GetState())
 	{
 	case States::Idle:
@@ -44,94 +41,81 @@ void CFSMMgr::UpdateState(float timeElapsed, CCollisionObject * obj)
 	case States::Die:
 		PlayDie(timeElapsed, obj);
 		break;
+	case States::Remove:
+		break;
 	default:
 		assert(!"Error:: There is No State");
 	}
+	obj->Animate(timeElapsed);
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 void CFSMMgr::PlayIdle(float timeElapsed, CCollisionObject * obj)
 {
-	// Warning: Collider 오브젝트로 변환 해야할 듯
-
-	if (obj->HaveDieState())
-	{
-
-	}
-	if (obj->HaveWalkState())
-	{
-
-	}
-	if (obj->HaveAttackState())
-	{
-
-	}
-	if (obj->HaveChaseState())
-	{
-
-	}
+	// 주변에 적 존재하는지 검사
+	// {
+	//      해당 적의 상태 조사(Die / Remove 아닌지 확인)
+	//       {
+	//				SetEnemy(other);
+	//              공격 범위 안에 있는지 검사 -> 성공 시 obj->SetState(States::Attack);
+	//               -> 실패 시 obj->SetState(States::Chase); 
+	//        }
+	// }
 }
 
 void CFSMMgr::PlayWalk(float timeElapsed, CCollisionObject * obj)
 {
 	CAnimatedObject* animObj{ static_cast<CAnimatedObject*>(obj) };
 
-	animObj->MoveToDestination(timeElapsed);
-
-	if (animObj->HaveDieState())
+	if (animObj->MoveToDestination(timeElapsed) == States::Done)
 	{
-
+		animObj->SetState(States::Idle);
+		return;
 	}
-	if (animObj->HaveAttackState())
-	{
 
-	}
-	if (animObj->HaveChaseState())
-	{
-
-	}
+	// 주변에 적 존재하는지 검사
+	// {
+	//      해당 적의 상태 조사(Die / Remove 아닌지)
+	//       {
+	//				SetEnemy(other);
+	//              공격 범위 안에 있는지 검사 -> 성공 시 obj->SetState(States::Attack);
+	//               -> 실패 시 obj->SetState(States::Chase); 
+	//        }
+	// }
 }
 
 void CFSMMgr::PlayChase(float timeElapsed, CCollisionObject * obj)
 {
 	CAnimatedObject* animObj{ static_cast<CAnimatedObject*>(obj) };
 
-	animObj->MoveToDestination(timeElapsed);
-
-	if (animObj->HaveDieState())
-	{
-
-	}
-	if (animObj->HaveAttackState())
-	{
-
-	}
-	if (animObj->HaveChaseState())
-	{
-
-	}
+	//   해당 적의 상태 조사(Die / Remove 아닌지, 범위 내에 있는지 확인)
+	//   {
+	//			animObj->MoveToEnemy(timeElapsed);
+	//			SetEnemy(other);
+	//             공격 범위 안에 있는지 검사 -> 성공 시 obj->SetState(States::Attack);
+	//    } 
+	//	   해당 적이 정상 상태가 아닌 경우
+	//		SetEnemy(NULL);
+	//     obj->SetState(States::Walk); 
 }
 
 void CFSMMgr::PlayAttack(float timeElapsed, CCollisionObject * obj)
 {
-	// Warning: Collider 오브젝트로 변환 해야할 듯
+	CAnimatedObject* animObj{ static_cast<CAnimatedObject*>(obj) };
 
-	if (obj->HaveDieState())
-	{
-
-	}
-	if (obj->HaveChaseState())
-	{
-
-	}
-	if (obj->HaveWalkState())
-	{
-
-	}
+	// 해당 적이 공격 가능한 상태인지 확인
+	// 실패시 -> SetEnemy(NULL);	obj->SetNextState(States::Walk); 
+	//	해당 적이 공격 범위 안에 있는지 검사 -> 실패 시 obj->SetNextState(States::Chase);
 }
 
 void CFSMMgr::PlayDie(float timeElapsed, CCollisionObject * obj)
 {
-	// Die 애니메이션 이후(혹은 몇 초 이후) 해당 오브젝트 동적 제거
+	// 죽기 애니메이션 실행
+	// 죽기 애니메이션 종료 후 자동으로 RemoveState로 변환
+}
+
+void CFSMMgr::PlayRemove(float timeElapsed, CCollisionObject * obj)
+{
+	// 제거 직전 스테이트
 }

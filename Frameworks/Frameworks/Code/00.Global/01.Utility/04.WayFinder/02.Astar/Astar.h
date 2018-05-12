@@ -1,8 +1,6 @@
 #pragma once
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 
-enum { Processing, Found, Not_Found };
-
 template<class KeyType>
 class IndexedPriorityQLow
 {
