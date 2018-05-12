@@ -67,54 +67,54 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
 		}
 		case SC_PUT_MINION:
 		{
-			SC_MsgMoCreate *my_packet = reinterpret_cast<SC_MsgMoCreate *>(ptr);
+			/*SC_MsgMoCreate *my_packet = reinterpret_cast<SC_MsgMoCreate *>(ptr);
 			int id = my_packet->Monster_id;
 			if (first_time) {
 				first_time = false;
 			}
 			else {
 				
-			}
+			}*/
 
 			break;
 		}
 
 		case SC_MOVE_PLAYER:
 		{
-			SC_MsgChMove *my_packet = reinterpret_cast<SC_MsgChMove *>(ptr);
-			int other_id = my_packet->Character_id;
-			if (other_id == m_myid) {	
-			/*	m_ppObject[m_myid] = object;
-				m_ppObject[m_myid]->SetPosition(my_packet->x, my_packet->y);
-				printf("Client[%d] Set Position\n", other_id);*/
-				//player.x = my_packet->x;
-				//player.y = my_packet->y;
-				
-			}
-			else if (other_id < NPC_START) {
-				m_ppObject[other_id]->SetPosition(my_packet->x, my_packet->y);
-			}
-			/*
-			else {
-			npc[other_id - NPC_START].x = my_packet->x;
-			npc[other_id - NPC_START].y = my_packet->y;
-			}*/
+			//SC_MsgChMove *my_packet = reinterpret_cast<SC_MsgChMove *>(ptr);
+			//int other_id = my_packet->Character_id;
+			//if (other_id == m_myid) {	
+			///*	m_ppObject[m_myid] = object;
+			//	m_ppObject[m_myid]->SetPosition(my_packet->x, my_packet->y);
+			//	printf("Client[%d] Set Position\n", other_id);*/
+			//	//player.x = my_packet->x;
+			//	//player.y = my_packet->y;
+			//	
+			//}
+			//else if (other_id < NPC_START) {
+			//	m_ppObject[other_id]->SetPosition(my_packet->x, my_packet->y);
+			//}
+			///*
+			//else {
+			//npc[other_id - NPC_START].x = my_packet->x;
+			//npc[other_id - NPC_START].y = my_packet->y;
+			//}*/
 			break;
 		}
 
 		case SC_REMOVE_PLAYER:
 		{
-			SC_Msg_Remove_Character *my_packet = reinterpret_cast<SC_Msg_Remove_Character *>(ptr);
-			int other_id = my_packet->Character_id;
-			if (other_id == myid) {
+			//SC_Msg_Remove_Character *my_packet = reinterpret_cast<SC_Msg_Remove_Character *>(ptr);
+			//int other_id = my_packet->Character_id;
+			//if (other_id == myid) {
 
-			}
-			else if (other_id < NPC_START) {
-				//skelaton[other_id].attr &= //안보이게 처리;
-			}
-			else {
-				//npc[other_id - NPC_START].attr &= //안보이게 처리;
-			}
+			//}
+			//else if (other_id < NPC_START) {
+			//	//skelaton[other_id].attr &= //안보이게 처리;
+			//}
+			//else {
+			//	//npc[other_id - NPC_START].attr &= //안보이게 처리;
+			//}
 			break;
 		}
 
