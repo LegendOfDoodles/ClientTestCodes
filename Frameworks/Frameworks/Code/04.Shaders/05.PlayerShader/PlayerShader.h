@@ -50,7 +50,14 @@ protected: // º¯¼ö
 	CBaseObject * *m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
-	CSkinnedMesh* m_pWeapons[4]{ NULL };
+	int m_nSword{ 0 };
+	int m_nSteff{ 0 };
+	int m_nBow{ 0 };
+
+	CSkinnedMesh* m_pStick{ NULL };
+	CSkinnedMesh** m_pSword{ NULL };
+	CSkinnedMesh** m_pSteff{ NULL };
+	CSkinnedMesh** m_pBow{ NULL };
 	int m_nWeaponState{ 0 };
 
 #if USE_INSTANCING

@@ -198,6 +198,9 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\99.BillboardShader">
       <UniqueIdentifier>{22b3e6fb-1293-40c2-9daa-2dfd14e1f83b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\06.NexusTowerShader">
+      <UniqueIdentifier>{95312e46-c39f-414e-bfd1-0f4d071afafd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -374,6 +377,9 @@
     <ClInclude Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.h">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.h">
+      <Filter>소스 파일\04.Shaders\06.NexusTowerShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -528,6 +534,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.cpp">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.cpp">
+      <Filter>소스 파일\04.Shaders\06.NexusTowerShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

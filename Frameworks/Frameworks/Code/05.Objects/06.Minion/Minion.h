@@ -25,7 +25,9 @@ public:	// 외부 함수
 	virtual void ReceiveDamage(float damage)
 	{
 		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
-		if (m_StatusInfo.HP <= 0) {}
+		if (m_StatusInfo.HP <= 0&&m_curState!=States::Die) {
+			SetState(States::Die);
+		}
 
 	}
 
