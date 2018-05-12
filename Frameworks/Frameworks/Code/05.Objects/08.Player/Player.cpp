@@ -139,6 +139,7 @@ void CPlayer::SetState(StatesType newState)
 		m_nCurrAnimation = Animations::Idle;
 		break;
 	case States::Walk:
+		RegenerateLookAt();
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:

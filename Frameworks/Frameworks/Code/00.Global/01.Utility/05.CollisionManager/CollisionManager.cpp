@@ -135,24 +135,25 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh)
 {
 
-	CCollisionObject* nearObject = NULL;
+	CCollisionObject* nearObject{ NULL };
 	float nearDistance=0;
 	for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 	{
-		if ((*i) != pCol || (*i)->GetTeam() != pCol->GetTeam()) {
+		if ((*i) != pCol && (*i)->GetTeam() != pCol->GetTeam()) {
 			if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
 			{
 				XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
 				XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
-				XMFLOAT2 look = XMFLOAT2(pCol->GetLook().x, pCol->GetLook().z);
-				float distance = Vector2::Distance(apos, Vector2::Add(bpos, Vector2::ScalarProduct(look, (lengh))));
+				float distance = Vector2::Distance(apos,bpos);
 				if (distance <= lengh)
 				{
 					if (!nearObject) {
 						nearDistance = distance;
+						nearObject = (*i);
 					}
 					else if (nearDistance > distance) {
 						nearDistance = distance;
+						nearObject = (*i);
 					}
 					//std::cout << "col\n";
 				}
@@ -160,12 +161,7 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 		}
 	}
 
-	if (nearObject) {
-		return nearObject;
-	}
-	else
-		return NULL;
-
+	return nearObject;
 }
 
 

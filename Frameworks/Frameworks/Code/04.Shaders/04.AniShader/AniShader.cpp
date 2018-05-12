@@ -89,16 +89,38 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 
 void CAniShader::AnimateObjects(float timeElapsed)
 {
-	m_blueObjects.remove_if([](CCollisionObject* obj) { return obj->GetState() == States::Remove; });
-	m_redObjects.remove_if([](CCollisionObject* obj) { return obj->GetState() == States::Remove; });
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
+	{
+		if ((*iter)->GetState() == States::Remove)
+		{
+			CCollisionObject* temp{ *iter };
+			ResetPossibleIndex(temp->GetIndex());
+			Safe_Delete(temp);
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
-	{
-		m_pFSMMgr->Update(timeElapsed, (*iter));
+			iter = m_blueObjects.erase(iter);
+		}
+		else
+		{
+			m_pFSMMgr->Update(timeElapsed, (*iter));
+			++iter;
+		}
 	}
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end();)
 	{
-		m_pFSMMgr->Update(timeElapsed, (*iter));
+		if ((*iter)->GetState() == States::Remove)
+		{
+			CCollisionObject* temp{ *iter };
+			ResetPossibleIndex(temp->GetIndex());
+			Safe_Delete(temp);
+
+			iter = m_redObjects.erase(iter);
+		}
+		else
+		{
+			m_pFSMMgr->Update(timeElapsed, (*iter));
+			++iter;
+		}
 	}
 }
 
@@ -489,6 +511,10 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 		return;
 	}
 
+	int index = GetPossibleIndex();
+
+	if (index == NONE) return;
+
 	m_pCreateMgr->ResetCommandList();
 	CMinion *pMinionObject { NULL };
 
@@ -547,13 +573,11 @@ void CAniShader::SpawnMinion(CCreateMgr *pCreateMgr, Minion_Species kind)
 		pMinionObject->SetSkeleton(&BWalk);
 		break;
 	}
-	pMinionObject->SetSpeed(CONVERT_cm_to_InG(1.805));
+
 	pMinionObject->SetSkeleton(&Die);
 	pMinionObject->SetTerrain(m_pTerrain);
 
 	pMinionObject->Rotate(90, 0, 0);
-
-	int index = GetPossibleIndex();
 
 	pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
 	pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
