@@ -1,9 +1,14 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
+#include "05.Objects/95.Billboard/Billboard.h"
 
-class CBillboardObject;
+typedef std::list<CCollisionObject*> CollisionObjectList;
+typedef std::list<CMinimapIconObjects*> MinionIconObjectList;
+
 class CMaterial;
 class CPlayer;
+class CUIObjectManager;
 
 class CMinimapIconShader : public CShader
 {
@@ -22,11 +27,16 @@ public: // 공개 함수
 
 	virtual void GetCamera(CCamera *pCamera);
 
-	void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
-	void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
-
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
+	
+	void SetUIObjectsManager(CUIObjectManager * pManger);
+
+	virtual void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CCollisionObject**)pPlayer; };
+	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
+
+	virtual void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
+	virtual void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -42,19 +52,41 @@ protected: // 내부 함수
 
 	virtual void ReleaseObjects();
 
+	int GetPossibleIndex();
+	void SpawnMinionIcon();
+
+	void SetPossibleIndex(int idx) { m_indexArr[idx] = true; }
+	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
+
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
+	// Players Icon & Static Objects
+	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
+	// Materials
 	CMaterial	**m_ppMaterials{ NULL };
 	int m_nMaterials = 0;
 
+	// 카메라
 	CCamera *m_pCamera;
 
-	CPlayer **m_pPlayer;
-	int m_nPlayer;
+	// Players
+	CCollisionObject **m_pPlayer;
+	int m_nPlayer = 0;
 
+	// Tower And Nexus
+	CCollisionObject **m_ppNexusAndTower{NULL};
+	int m_nNexusAndTower = 0;
+
+	//동적생성
+	bool m_indexArr[MAX_MINION]{ false };
+
+	CollisionObjectList *m_MinionObjectList;
+	MinionIconObjectList m_MinionIconObjectList;
+
+	CUIObjectManager * m_pIconManger{ NULL };
 	CCreateMgr* m_pCreateMgr{ NULL };
+
 #if USE_INSTANCING
 	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
 	CMaterial		   *m_pMaterial{ NULL };

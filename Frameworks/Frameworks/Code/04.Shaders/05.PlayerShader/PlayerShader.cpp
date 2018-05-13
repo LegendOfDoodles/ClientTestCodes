@@ -161,7 +161,7 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		if (m_nWeaponState >= 2)m_nWeaponState = 0;
 
 		// 무기에 따라 수정필요
-		m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
+		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 	}
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
@@ -348,7 +348,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if USE_BATCH_MATERIAL
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -435,7 +435,6 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			pPlayer->SetSkeleton(pDefeat);
 			pPlayer->SetSkeleton(pDefeat2);
 
-			pPlayer->SetSpeed(CONVERT_cm_to_InG(3.285));
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);

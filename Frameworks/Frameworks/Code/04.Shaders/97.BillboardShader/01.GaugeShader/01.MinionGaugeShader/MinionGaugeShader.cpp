@@ -6,10 +6,10 @@
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 
 /// <summary>
-/// 목적: Billboard 테스트 쉐이더
-/// 최종 수정자:  김나단
+/// 목적: 미니언 HP Gauge 쉐이더
+/// 최종 수정자:  이용선(Shader Code 변경 hlsl)
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-05-13
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -28,10 +28,6 @@ CMinionHPGaugeShader::~CMinionHPGaugeShader()
 // 공개 함수
 void CMinionHPGaugeShader::ReleaseUploadBuffers()
 {
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
-		(*iter)->ReleaseUploadBuffers();
-	}
-
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
 	{
@@ -43,10 +39,11 @@ void CMinionHPGaugeShader::ReleaseUploadBuffers()
 
 void CMinionHPGaugeShader::UpdateShaderVariables()
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		pMappedObject->m_fCurrentHP = (*iter)->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
@@ -90,7 +87,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 	}
 }
 
-void CMinionHPGaugeShader::SetGaugeManager(CHPGaugeManager * pManger)
+void CMinionHPGaugeShader::SetUIObjectsManager(CUIObjectManager * pManger)
 {
 	m_pGaugeManger = pManger;
 	m_MinionObjectList = m_pGaugeManger->GetMinionObjectList();
@@ -142,7 +139,7 @@ D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreateVertexShader(ID3DBlob **ppShad
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTextured",
+		"VSTexturedGauge",
 		"vs_5_1",
 		ppShaderBlob));
 }
@@ -151,7 +148,7 @@ D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreatePixelShader(ID3DBlob **ppShade
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedGauge",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -171,7 +168,7 @@ void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBu
 {
 	HRESULT hResult;
 
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
@@ -188,7 +185,7 @@ void CMinionHPGaugeShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateShaderVariables(pCreateMgr, MAX_MINION);
 
@@ -237,7 +234,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		CHPGaugeObjects *pGaugeObject{ NULL };
 		CCollisionObject *pMinionObjects{ NULL };
 
-		pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GaugeUiType::MinionGauge);
+		pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GagueUIType::MinionGauge);
 		pMinionObjects = (*minion);
 
 		pGaugeObject->SetObject(pMinionObjects);
@@ -271,7 +268,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		if (gaugeBegin != gaugeEnd) --gaugeBegin;
 	}
 
-	m_pGaugeManger->ResetCount();
+	//m_pGaugeManger->ResetCount();
 }
 
 void CMinionHPGaugeShader::ReleaseObjects()

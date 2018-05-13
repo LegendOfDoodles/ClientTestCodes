@@ -7,7 +7,7 @@
 class CCreateMgr;
 class CWayFinder;
 class CCollisionManager;
-class CHPGaugeManager;
+class CUIObjectManager;
 class CFSMMgr;
 
 struct LIGHT
@@ -105,7 +105,7 @@ protected: // º¯¼ö
 	CCreateMgr* m_pCreateMgr{ NULL };
 
 	CCollisionManager *m_pCollisionManager{NULL};
-	CHPGaugeManager *m_pHPGaugeManager{NULL};
+	CUIObjectManager *m_pUIObjectsManager{NULL};
 
 	CFSMMgr * m_pFSMMgr{ NULL };
 

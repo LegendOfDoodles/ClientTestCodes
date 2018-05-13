@@ -7,7 +7,7 @@ typedef std::list<CCollisionObject*> CollisionObjectList;
 typedef std::list<CHPGaugeObjects*> HPGaugeObjectList;
 
 class CMaterial;
-class CHPGaugeManager;
+class CUIObjectManager;
 
 class CMinionHPGaugeShader : public CShader
 {
@@ -26,7 +26,7 @@ public: // 공개 함수
 
 	virtual void GetCamera(CCamera *pCamera);
 
-	void SetGaugeManager(CHPGaugeManager * pManger);
+	void SetUIObjectsManager(CUIObjectManager * pManger);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -51,7 +51,7 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
 
 protected: // 변수
-	CHPGaugeManager * m_pGaugeManger{ NULL };
+	CUIObjectManager * m_pGaugeManger{ NULL };
 
 	CCamera *m_pCamera;
 

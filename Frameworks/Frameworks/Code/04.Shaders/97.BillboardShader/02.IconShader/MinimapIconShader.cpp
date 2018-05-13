@@ -1,14 +1,21 @@
 #include "stdafx.h"
 #include "MinimapIconShader.h"
-#include "05.Objects/95.Billboard/Billboard.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
-#include "05.Objects/99.Material/Material.h"
 #include "05.Objects/08.Player/Player.h"
+#include "05.Objects/99.Material/Material.h"
+#include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
+
+/// <summary>
+/// 목적: 미니맵 Icon 쉐이더
+/// 최종 수정자:  이용선
+/// 수정자 목록:  이용선
+/// 최종 수정 날짜: 2018-05-13
+/// </summary>
 
 CMinimapIconShader::CMinimapIconShader(CCreateMgr *pCreateMgr)
 	: CShader(pCreateMgr)
 {
-
+	m_pCreateMgr = pCreateMgr;
 }
 
 CMinimapIconShader::~CMinimapIconShader()
@@ -54,15 +61,37 @@ void CMinimapIconShader::UpdateShaderVariables()
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
+
+	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+	}
 #endif
 }
 
 void CMinimapIconShader::AnimateObjects(float timeElapsed)
 {
+	m_MinionIconObjectList.remove_if([this](CMinimapIconObjects* obj)
+	{
+		if (obj->GetState() == States::Die)
+		{
+			ResetPossibleIndex(obj->GetIndex());
+			return true;
+		}
+		return false;
+	});
+
+	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+		(*iter)->Animate(timeElapsed);
+	}
+
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
+
+	if (m_pIconManger->GetCount() > 0) SpawnMinionIcon();
 }
 
 void CMinimapIconShader::Render(CCamera * pCamera)
@@ -71,7 +100,7 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		CBaseObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
+		CCollisionObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
 		
 		switch (master->GetType())
 		{
@@ -83,15 +112,61 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 			CShader::Render(pCamera, 1);
 			m_ppMaterials[1]->UpdateShaderVariables();
 			break;
+		case ObjectType::FirstTower:
+			if (master->GetTeam() == TeamType::Blue) {
+				// Blue Tower
+				CShader::Render(pCamera, 3);
+				m_ppMaterials[3]->UpdateShaderVariables();
+			}
+			else {
+				// Red Tower
+				CShader::Render(pCamera, 4);
+				m_ppMaterials[4]->UpdateShaderVariables();
+			}
+			break;
+		case ObjectType::Nexus:
+			if (master->GetTeam() == TeamType::Blue) {
+				// Box
+				CShader::Render(pCamera, 5);
+				m_ppMaterials[5]->UpdateShaderVariables();
+			}
+			else {
+				// Shell
+				CShader::Render(pCamera, 6);
+				m_ppMaterials[6]->UpdateShaderVariables();
+			}
+			break;
 		}
 
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
+	}
+
+	// 미니언
+	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+		CShader::Render(pCamera, 2);
+		m_ppMaterials[2]->UpdateShaderVariables();
+		(*iter)->Render(pCamera);
 	}
 }
 
 void CMinimapIconShader::GetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
+
+	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+		static_cast<CMinimapIconObjects*>(*iter)->SetCamera(m_pCamera);
+	}
+
+	for (int i = 0; i < m_nObjects; ++i)
+	{
+		static_cast<CMinimapIconObjects*>(m_ppObjects[i])->SetCamera(m_pCamera);
+	}
+}
+
+void CMinimapIconShader::SetUIObjectsManager(CUIObjectManager * pManger)
+{
+	m_pIconManger = pManger;
+	m_MinionObjectList = m_pIconManger->GetMinionObjectList();
 }
 
 bool CMinimapIconShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
@@ -104,6 +179,8 @@ bool CMinimapIconShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	return false;
 }
 
+////////////////////////////////////////////////////////////////////////
+// 내부 함수
 D3D12_INPUT_LAYOUT_DESC CMinimapIconShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
@@ -185,7 +262,7 @@ void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
-	m_nHeaps = 2;
+	m_nHeaps = 7;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -224,43 +301,128 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = m_nPlayer;
+	m_nObjects = m_nPlayer + m_nNexusAndTower;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	
-	CreateShaderVariables(pCreateMgr, m_nObjects);
+	CreateShaderVariables(pCreateMgr, m_nObjects + MAX_MINION);
 
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects + MAX_MINION, 1, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects + MAX_MINION, m_pConstBuffer, ncbElementBytes, i);
 	}
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreateStickIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[1] = Materials::CreateSwordIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateBlueTowerIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_ppMaterials[4] = Materials::CreateRedTowerIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreateBoxNexusIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_ppMaterials[6] = Materials::CreateShellNexusIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
+	// Player Icon 생성
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinimapIconObjects *pGaugeObject = NULL;
+	CMinimapIconObjects *pIconObject = NULL;
 	
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CMinimapIconObjects(pCreateMgr);
-		pGaugeObject->SetCamera(m_pCamera);
-		
-		pGaugeObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.01f);	// distance 9
-		
-		pGaugeObject->SetObject(m_pPlayer[i]);
-		pGaugeObject->WorldToMinimap();
+		if (i < m_nPlayer) {
+			pIconObject = new CMinimapIconObjects(pCreateMgr, IconUIType::PlayerIcon);
 
-		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+			pIconObject->SetCamera(m_pCamera);
+			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
+			pIconObject->SetObject(m_pPlayer[i]);
+			pIconObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
+			pIconObject->WorldToMinimap();
+
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		else {
+			pIconObject = new CMinimapIconObjects(pCreateMgr, IconUIType::NexusAndTowerIcon);
+
+			pIconObject->SetCamera(m_pCamera);
+			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
+			pIconObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
+			pIconObject->GetmasterObjectType((ObjectType)m_ppNexusAndTower[i - m_nPlayer]->GetType());
+			pIconObject->WorldToMinimap();
+
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
 		
-		m_ppObjects[i] = pGaugeObject;
+		m_ppObjects[i] = pIconObject;
 	}
 }
+
+
+int CMinimapIconShader::GetPossibleIndex()
+{
+	for (int idx = m_nObjects; idx < MAX_MINION + m_nObjects; ++idx)
+	{
+		if (!m_indexArr[idx])
+		{
+			m_indexArr[idx] = true;
+			return idx;
+		}
+	}
+	return NONE;
+}
+
+void CMinimapIconShader::SpawnMinionIcon()
+{
+	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+
+	m_pCreateMgr->ResetCommandList();
+
+	int cnt{ 0 };
+	CollisionObjectList::reverse_iterator minion{ m_MinionObjectList->rbegin() };
+
+	for (; cnt < m_pIconManger->GetCount(); ++cnt)
+	{
+		int index = GetPossibleIndex();
+		if (index == NONE) break;
+
+		CMinimapIconObjects *pMinionIcon{ NULL };
+		CCollisionObject *pMinionObjects{ NULL };
+
+		pMinionIcon = new CMinimapIconObjects(m_pCreateMgr, IconUIType::MinionIcon);
+		pMinionObjects = (*minion);
+
+		pMinionIcon->SetObject(pMinionObjects);
+		pMinionIcon->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.01f);
+		pMinionIcon->SetCamera(m_pCamera);
+		pMinionIcon->WorldToMinimap();
+
+		pMinionIcon->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+
+		pMinionIcon->SaveIndex(index);
+
+		m_MinionIconObjectList.emplace_back(pMinionIcon);
+
+		if (minion != m_MinionObjectList->rend()) ++minion;
+	}
+	m_pCreateMgr->ExecuteCommandList();
+
+	if (!cnt) return;
+
+	MinionIconObjectList::reverse_iterator &IconBegin{ m_MinionIconObjectList.rbegin() };
+	MinionIconObjectList::reverse_iterator &IconEnd{ m_MinionIconObjectList.rbegin() };
+
+	for (int i = 0; i < cnt - 1; ++i) ++IconBegin;
+
+	for (int i = 0; i < cnt; ++i)
+	{
+		(*IconBegin)->ReleaseUploadBuffers();
+		if (IconBegin != IconEnd) --IconBegin;
+	}
+
+	m_pIconManger->ResetCount();
+}
+
 
 void CMinimapIconShader::ReleaseObjects()
 {

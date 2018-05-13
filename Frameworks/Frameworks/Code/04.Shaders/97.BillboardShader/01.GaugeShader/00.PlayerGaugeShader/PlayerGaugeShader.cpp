@@ -6,10 +6,10 @@
 #include "05.Objects/08.Player/Player.h"
 
 /// <summary>
-/// 목적: UI HP 테스트 쉐이더
-/// 최종 수정자:  이용선
+/// 목적: Player HP Gague 쉐이더
+/// 최종 수정자:  이용선 (Shader Code 변경 hlsl)
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-05-10
+/// 최종 수정 날짜: 2018-05-13
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -57,11 +57,12 @@ void CPlayerHPGaugeShader::UpdateShaderVariables()
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
 #else
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)
 	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
+		pMappedObject->m_fCurrentHP = ((CHPGaugeObjects*)m_ppObjects[i])->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -73,7 +74,6 @@ void CPlayerHPGaugeShader::AnimateObjects(float timeElapsed)
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
-
 	}
 }
 
@@ -169,26 +169,18 @@ D3D12_BLEND_DESC CPlayerHPGaugeShader::CreateBlendState()
 
 D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
 {
-#if USE_INSTANCING
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
-		"VSTxtInstancing", 
+		"VSTexturedGauge", 
 		"vs_5_1", 
 		ppShaderBlob));
-#else
-	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
-		"VSTextured", 
-		"vs_5_1", 
-		ppShaderBlob));
-#endif
 }
 
 D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedGauge",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -219,7 +211,7 @@ void CPlayerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nB
 	hResult = m_pInstanceBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
 	assert(SUCCEEDED(hResult) && "m_pInstanceBuffer->Map Failed");
 #else
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
@@ -237,10 +229,10 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = m_nPlayer;
+	m_nObjects = m_nPlayer + m_nNexusAndTower;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
 	CreateShaderVariables(pCreateMgr, m_nObjects);
@@ -250,20 +242,39 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	CHPGaugeObjects *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CHPGaugeObjects(pCreateMgr, GaugeUiType::PlayerGauge);
-		pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
-		pGaugeObject->SetCamera(m_pCamera);
-
-		pGaugeObject->SetObject(m_pPlayer[i]);
-
-		XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
 		
-		HPGaugePosition.y += 110.f;
+		if (i < m_nPlayer)
+		{
+			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::PlayerGauge);
+			pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+			pGaugeObject->SetCamera(m_pCamera);
 
-		pGaugeObject->SetPosition(HPGaugePosition);
+			pGaugeObject->SetObject(m_pPlayer[i]);
+			pGaugeObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
 
-		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+			XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
+			HPGaugePosition.y += 110.f;
+			pGaugeObject->SetPosition(HPGaugePosition);
 
+			pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		else
+		{
+			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::NexusAndTower);
+			pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+			pGaugeObject->SetCamera(m_pCamera);
+
+			pGaugeObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
+
+			pGaugeObject->GetmasterObjectType((ObjectType)m_ppNexusAndTower[i - m_nPlayer]->GetType());
+
+			XMFLOAT3 HPGaugePosition = m_ppNexusAndTower[i- m_nPlayer]->GetPosition();
+			HPGaugePosition.y += 200.f;
+			pGaugeObject->SetPosition(HPGaugePosition);
+
+			pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		
 		m_ppObjects[i] = pGaugeObject;
 	}
 }

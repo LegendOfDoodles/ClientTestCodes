@@ -341,11 +341,11 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			}
 			if (i < 2) {
 				pBuild->SetCollisionSize(CONVERT_PaperUnit_to_InG(40));
-			pBuild->type = ObjectType::Nexus;
+				pBuild->SetType(ObjectType::Nexus);
 			}
 			else {
 				pBuild->SetCollisionSize(CONVERT_PaperUnit_to_InG(8));
-				pBuild->type = ObjectType::FirstTower;
+				pBuild->SetType(ObjectType::FirstTower);
 
 			}
 			pBuild->Rotate(0, 180, 0);
