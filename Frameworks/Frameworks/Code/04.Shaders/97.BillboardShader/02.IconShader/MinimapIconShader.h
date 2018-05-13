@@ -32,11 +32,11 @@ public: // 공개 함수
 	
 	void SetUIObjectsManager(CUIObjectManager * pManger);
 
-	void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CCollisionObject**)pPlayer; };
-	void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
+	virtual void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CCollisionObject**)pPlayer; };
+	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 
-	void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
-	void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
+	virtual void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
+	virtual void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
