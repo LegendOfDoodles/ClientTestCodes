@@ -204,6 +204,9 @@
     <Filter Include="소스 파일\05.Objects\09.NexusTower">
       <UniqueIdentifier>{418d977f-e21f-4e92-a645-323b228aeed2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader">
+      <UniqueIdentifier>{eaed01f3-22ff-4dd3-89d3-c4948a335373}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -386,6 +389,9 @@
     <ClInclude Include="Code\05.Objects\09.NexusTower\NexusTower.h">
       <Filter>소스 파일\05.Objects\09.NexusTower</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader\NexusAndTowerGaugeShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -546,6 +552,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\09.NexusTower\NexusTower.cpp">
       <Filter>소스 파일\05.Objects\09.NexusTower</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader\NexusAndTowerGaugeShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

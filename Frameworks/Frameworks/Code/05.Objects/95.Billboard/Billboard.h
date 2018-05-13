@@ -22,7 +22,8 @@ enum UIType {
 
 enum GagueUIType {
 	PlayerGauge,
-	MinionGauge
+	MinionGauge,
+	NexusAndTower
 };
 
 enum IconUIType {
@@ -85,13 +86,17 @@ public: // 공개함수
 
 	float GetCurrentHP();
 
+	void GetmasterObjectType(ObjectType type) { m_MasterObjectType = type; };
+
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
 
 protected: // 변수
-	CCollisionObject * m_pMasterObject;
-	GagueUIType		m_Type;
+	CCollisionObject *m_pMasterObject;
+	GagueUIType		  m_Type;
+	ObjectType		  m_MasterObjectType;
+
 };
 
 class CMinimapIconObjects :public CUIObject
@@ -105,7 +110,10 @@ public:
 	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
 
 	void WorldToMinimap();
+
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
+	void GetmasterObjectType(ObjectType type) { m_MasterObjectType = type; };
+	
 	CCollisionObject* GetMasterObject() { return m_pMasterObject; };
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 
@@ -113,6 +121,5 @@ protected:
 	CCollisionObject * m_pMasterObject;
 	XMFLOAT3 m_MinimapPosition;
 
-	ObjectType MasterObjectType;
-
+	ObjectType		  m_MasterObjectType;
 };

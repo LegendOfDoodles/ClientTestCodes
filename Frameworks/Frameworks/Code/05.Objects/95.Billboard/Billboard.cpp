@@ -168,10 +168,24 @@ CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr)
 CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GagueUIType type)
 	: CBillboardObject(pCreateMgr)
 {
-	// HP게이지 Mesh
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 40.f, FRAME_BUFFER_HEIGHT / 144.f, 0.f);
-	SetMesh(0, pRectMesh);
+	CTexturedRectMesh * pRectMesh = NULL;
 
+	// HP게이지 Mesh
+	switch (type)
+	{
+	case PlayerGauge:
+	case MinionGauge:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 40.f, FRAME_BUFFER_HEIGHT / 144.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case NexusAndTower:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 20.6f, FRAME_BUFFER_HEIGHT / 144.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	default:
+		break;
+	}
+	
 	m_Type = type;
 }
 
@@ -195,6 +209,19 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+	}
+	else if (m_Type == GagueUIType::NexusAndTower) {
+		if (m_MasterObjectType == ObjectType::Nexus) {
+			m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
+			m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 300.f;
+			m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+		}
+		else {
+			m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
+			m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 200.f;
+			m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+		}
+		
 	}
 	
 }
@@ -235,6 +262,9 @@ float CHPGaugeObjects::GetCurrentHP()
 	else if (m_Type == GagueUIType::MinionGauge)
 	{
 		return (m_pMasterObject->GetCommonStatus()->HP / m_pMasterObject->GetCommonStatus()->maxHP);
+	}
+	else if (m_Type == GagueUIType::NexusAndTower) {
+		return (m_pMasterObject->GetNexusAndTowerStatus()->HP / m_pMasterObject->GetNexusAndTowerStatus()->maxHP);
 	}
 
 }

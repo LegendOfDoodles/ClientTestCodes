@@ -6,10 +6,10 @@
 #include "05.Objects/08.Player/Player.h"
 
 /// <summary>
-/// 목적: UI HP 테스트 쉐이더
-/// 최종 수정자:  이용선
+/// 목적: Player HP Gague 쉐이더
+/// 최종 수정자:  이용선 (Shader Code 변경 hlsl)
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-05-10
+/// 최종 수정 날짜: 2018-05-13
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,6 @@ void CPlayerHPGaugeShader::AnimateObjects(float timeElapsed)
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
-
 	}
 }
 
@@ -230,7 +229,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = m_nPlayer;
+	m_nObjects = m_nPlayer + m_nNexusAndTower;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
@@ -243,20 +242,39 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	CHPGaugeObjects *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::PlayerGauge);
-		pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
-		pGaugeObject->SetCamera(m_pCamera);
-
-		pGaugeObject->SetObject(m_pPlayer[i]);
-
-		XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
 		
-		HPGaugePosition.y += 110.f;
+		if (i < m_nPlayer)
+		{
+			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::PlayerGauge);
+			pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+			pGaugeObject->SetCamera(m_pCamera);
 
-		pGaugeObject->SetPosition(HPGaugePosition);
+			pGaugeObject->SetObject(m_pPlayer[i]);
+			pGaugeObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
 
-		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+			XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
+			HPGaugePosition.y += 110.f;
+			pGaugeObject->SetPosition(HPGaugePosition);
 
+			pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		else
+		{
+			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::NexusAndTower);
+			pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+			pGaugeObject->SetCamera(m_pCamera);
+
+			pGaugeObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
+
+			pGaugeObject->GetmasterObjectType((ObjectType)m_ppNexusAndTower[i - m_nPlayer]->GetType());
+
+			XMFLOAT3 HPGaugePosition = m_ppNexusAndTower[i- m_nPlayer]->GetPosition();
+			HPGaugePosition.y += 200.f;
+			pGaugeObject->SetPosition(HPGaugePosition);
+
+			pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		
 		m_ppObjects[i] = pGaugeObject;
 	}
 }

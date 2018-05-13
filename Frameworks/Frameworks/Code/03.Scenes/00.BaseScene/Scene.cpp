@@ -12,6 +12,7 @@
 #include "04.Shaders/97.BillboardShader/02.IconShader/MinimapIconShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
+#include "04.Shaders/97.BillboardShader/01.GaugeShader/02.NexusAndTowerGaugeShader/NexusAndTowerGaugeShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
@@ -186,11 +187,6 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 		break;
 	case WM_MOUSEWHEEL:
 		m_pCamera->OnProcessMouseWheel(wParam, lParam);
-
-		static_cast<CUIObjectShader*>(m_ppShaders[7])->GetCamera(m_pCamera);
-		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[8])->GetCamera(m_pCamera);
-		static_cast<CMinionHPGaugeShader*>(m_ppShaders[9])->GetCamera(m_pCamera);
-
 		break;
 	default:
 		break;
@@ -287,12 +283,14 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	// UI Shaders Initialize
 	((CPlayerHPGaugeShader*)m_ppShaders[8])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetObjectCount());
 	((CPlayerHPGaugeShader*)m_ppShaders[8])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
+	((CPlayerHPGaugeShader*)m_ppShaders[8])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
+	((CPlayerHPGaugeShader*)m_ppShaders[8])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
 
 	((CMinimapIconShader*)m_ppShaders[10])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetObjectCount());
 	((CMinimapIconShader*)m_ppShaders[10])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
 	((CMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
 	((CMinimapIconShader*)m_ppShaders[10])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
-
+	
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[9]->Initialize(pCreateMgr, m_pCamera);

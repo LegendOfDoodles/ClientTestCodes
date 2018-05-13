@@ -5,6 +5,12 @@
 #include "05.Objects/99.Material/Material.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 
+/// <summary>
+/// 목적: 미니맵 Icon 쉐이더
+/// 최종 수정자:  이용선
+/// 수정자 목록:  이용선
+/// 최종 수정 날짜: 2018-05-13
+/// </summary>
 
 CMinimapIconShader::CMinimapIconShader(CCreateMgr *pCreateMgr)
 	: CShader(pCreateMgr)
@@ -331,6 +337,7 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 			pIconObject->SetCamera(m_pCamera);
 			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
 			pIconObject->SetObject(m_pPlayer[i]);
+			pIconObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
 			pIconObject->WorldToMinimap();
 
 			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
@@ -341,6 +348,7 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 			pIconObject->SetCamera(m_pCamera);
 			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
 			pIconObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
+			pIconObject->GetmasterObjectType((ObjectType)m_ppNexusAndTower[i - m_nPlayer]->GetType());
 			pIconObject->WorldToMinimap();
 
 			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
