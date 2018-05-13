@@ -1,142 +1,4 @@
-﻿  Timer.cpp
-  AniShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(47): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(47): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(58): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(58): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(74): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(74): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(81): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(81): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(111): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(111): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(128): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(128): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(151): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(151): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(156): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(156): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(165): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(165): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(169): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(169): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(184): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(184): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(194): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(194): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(207): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(232): warning C4189: 'cnt': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(391): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(394): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(413): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(413): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(418): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(418): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(493): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(494): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(494): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT3'에서 'DirectX::XMFLOAT3 &'(으)로의 변환입니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(494): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(540): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(541): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(601): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(601): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(602): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CCollisionObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\04.anishader\anishader.cpp(602): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  NexusTowerShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(150): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(343): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(347): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(287): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\06.nexustowershader\nexustowershader.cpp(298): warning C4189: 'boundingBoxElementBytes': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-  UIShader.cpp
+﻿  PlayerGaugeShader.cpp
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
@@ -148,11 +10,12 @@ c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(100): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(103): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(138): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\00.uishader\uishader.cpp(140): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  NexusTower.cpp
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\00.playergaugeshader\playergaugeshader.cpp(108): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\00.playergaugeshader\playergaugeshader.cpp(114): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+  MinionGaugeShader.cpp
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
@@ -163,9 +26,57 @@ c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(44): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(44): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(64): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(64): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(76): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(76): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(85): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(85): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(96): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(102): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(260): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(260): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(261): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(261): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(276): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+          with
+          [
+              _Ty=CHPGaugeObjects *
+          ]
+  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\97.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(276): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
   코드를 생성하고 있습니다.
-  14 of 3129 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
-    4 functions were new in current compilation
-    47 functions had inline decision re-evaluated but remain unchanged
+  1 of 3137 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Frameworks.vcxproj -> C:\Users\LYS\Documents\Work\GitHub\ClientTestCodes\Frameworks\x64\Release\Framework01.exe

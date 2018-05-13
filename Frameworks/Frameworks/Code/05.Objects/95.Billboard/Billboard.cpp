@@ -122,7 +122,6 @@ void CUIObject::Animate(float fTimeElapsed)
 		break;
 	}
 
-
 	m_xmf4x4World._41 = newPos.x; 
 	m_xmf4x4World._42 = newPos.y; 
 	m_xmf4x4World._43 = newPos.z; 
@@ -170,7 +169,7 @@ CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GagueUIType type)
 	: CBillboardObject(pCreateMgr)
 {
 	// HP°ÔÀÌÁö Mesh
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 40.f, 5.0f, 0.f);
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 40.f, FRAME_BUFFER_HEIGHT / 144.f, 0.f);
 	SetMesh(0, pRectMesh);
 
 	m_Type = type;
@@ -178,6 +177,7 @@ CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GagueUIType type)
 
 CHPGaugeObjects::~CHPGaugeObjects()
 {
+
 }
 
 void CHPGaugeObjects::Animate(float fTimeElapsed)
@@ -197,6 +197,46 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
 	
+}
+
+void CHPGaugeObjects::Render(CCamera * pCamera, UINT istanceCnt)
+{
+	OnPrepareRender();
+
+	if (m_pMaterial)
+	{
+		m_pMaterial->Render(pCamera);
+		m_pMaterial->UpdateShaderVariables();
+	}
+
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(12, m_cbvGPUDescriptorHandle);
+
+	if (m_pShader)
+	{
+		UpdateShaderVariables();
+		m_pShader->Render(pCamera);
+	}
+
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
+		}
+	}
+}
+
+float CHPGaugeObjects::GetCurrentHP()
+{
+	if (m_Type == GagueUIType::PlayerGauge) {
+		return (m_pMasterObject->GetPlayerStatus()->HP / m_pMasterObject->GetPlayerStatus()->maxHP);
+	}
+	else if (m_Type == GagueUIType::MinionGauge)
+	{
+		return (m_pMasterObject->GetCommonStatus()->HP / m_pMasterObject->GetCommonStatus()->maxHP);
+	}
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,15 +263,15 @@ CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr, IconUIType typ
 	switch (type)
 	{
 	case PlayerIcon:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3200.f, FRAME_BUFFER_HEIGHT / 1800.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case MinionIcon:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.1f, 0.1f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 12800.f, FRAME_BUFFER_HEIGHT / 7200.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case NexusAndTowerIcon:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3200.f, FRAME_BUFFER_HEIGHT / 1800.f, 0.f);
 		SetMesh(0, pRectMesh);
 	default:
 		break;

@@ -39,10 +39,11 @@ void CMinionHPGaugeShader::ReleaseUploadBuffers()
 
 void CMinionHPGaugeShader::UpdateShaderVariables()
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		pMappedObject->m_fCurrentHP = (*iter)->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
@@ -138,7 +139,7 @@ D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreateVertexShader(ID3DBlob **ppShad
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTextured",
+		"VSTexturedGauge",
 		"vs_5_1",
 		ppShaderBlob));
 }
@@ -147,7 +148,7 @@ D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreatePixelShader(ID3DBlob **ppShade
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedGauge",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -167,7 +168,7 @@ void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBu
 {
 	HRESULT hResult;
 
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
@@ -184,7 +185,7 @@ void CMinionHPGaugeShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateShaderVariables(pCreateMgr, MAX_MINION);
 

@@ -57,11 +57,12 @@ void CPlayerHPGaugeShader::UpdateShaderVariables()
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
 #else
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)
 	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
+		pMappedObject->m_fCurrentHP = ((CHPGaugeObjects*)m_ppObjects[i])->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -169,26 +170,18 @@ D3D12_BLEND_DESC CPlayerHPGaugeShader::CreateBlendState()
 
 D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
 {
-#if USE_INSTANCING
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
-		"VSTxtInstancing", 
+		"VSTexturedGauge", 
 		"vs_5_1", 
 		ppShaderBlob));
-#else
-	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
-		"VSTextured", 
-		"vs_5_1", 
-		ppShaderBlob));
-#endif
 }
 
 D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedGauge",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -219,7 +212,7 @@ void CPlayerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nB
 	hResult = m_pInstanceBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
 	assert(SUCCEEDED(hResult) && "m_pInstanceBuffer->Map Failed");
 #else
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
@@ -240,7 +233,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	m_nObjects = m_nPlayer;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
 	CreateShaderVariables(pCreateMgr, m_nObjects);

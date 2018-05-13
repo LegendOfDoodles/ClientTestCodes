@@ -7,6 +7,12 @@
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "06.Meshes/00.Vertex/Vertex.h"
 
+struct CB_GAUGE_INFO
+{
+	XMFLOAT4X4	m_xmf4x4World;
+	float		m_fCurrentHP;
+};
+
 enum UIType {
 	Minimap = 0,
 	KDA		= 1,
@@ -75,9 +81,13 @@ public:	// 생성자, 소멸자
 
 public: // 공개함수
 	virtual void Animate(float fTimeElapsed);
+	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
+
+	float GetCurrentHP();
 
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
+
 
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
