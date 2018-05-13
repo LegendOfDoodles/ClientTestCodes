@@ -166,7 +166,7 @@ CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr)
 	CreateShaderVariables(pCreateMgr);
 }
 
-CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GaugeUiType type)
+CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GagueUIType type)
 	: CBillboardObject(pCreateMgr)
 {
 	// HP게이지 Mesh
@@ -184,13 +184,13 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 
-	if (m_Type == GaugeUiType::PlayerGauge)
+	if (m_Type == GagueUIType::PlayerGauge)
 	{
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 110.f;
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
-	else if (m_Type == GaugeUiType::MinionGauge)
+	else if (m_Type == GagueUIType::MinionGauge)
 	{
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
@@ -201,12 +201,39 @@ void CHPGaugeObjects::Animate(float fTimeElapsed)
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
+//CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr)
+//	: CUIObject(pCreateMgr)
+//{
+//	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
+//	SetMesh(0, pRectMesh);
+//
+//	m_MinimapPosition = XMFLOAT3(0, 0, 0);
+//}
+
 CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr)
 	: CUIObject(pCreateMgr)
 {
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
-	SetMesh(0, pRectMesh);
+}
 
+CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr, IconUIType type)
+	: CUIObject(pCreateMgr)
+{
+	CTexturedRectMesh *pRectMesh = NULL;
+
+	switch (type)
+	{
+	case PlayerIcon:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case MinionIcon:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.1f, 0.1f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	default:
+		break;
+	}
+	
 	m_MinimapPosition = XMFLOAT3(0, 0, 0);
 }
 
@@ -218,10 +245,10 @@ CMinimapIconObjects::~CMinimapIconObjects()
 void CMinimapIconObjects::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
-	
-	XMFLOAT3 newPos{ 0, 0, 0 };
 
 	WorldToMinimap();
+	
+	XMFLOAT3 newPos{ 0, 0, 0 };
 
 	newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 	newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 80.f) + m_MinimapPosition.z)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 134.7f) + m_MinimapPosition.x));

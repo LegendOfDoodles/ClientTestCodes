@@ -28,10 +28,6 @@ CMinionHPGaugeShader::~CMinionHPGaugeShader()
 // 공개 함수
 void CMinionHPGaugeShader::ReleaseUploadBuffers()
 {
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
-		(*iter)->ReleaseUploadBuffers();
-	}
-
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
 	{
@@ -90,7 +86,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 	}
 }
 
-void CMinionHPGaugeShader::SetGaugeManager(CHPGaugeManager * pManger)
+void CMinionHPGaugeShader::SetUIObjectsManager(CUIObjectManager * pManger)
 {
 	m_pGaugeManger = pManger;
 	m_MinionObjectList = m_pGaugeManger->GetMinionObjectList();
@@ -237,7 +233,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		CHPGaugeObjects *pGaugeObject{ NULL };
 		CCollisionObject *pMinionObjects{ NULL };
 
-		pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GaugeUiType::MinionGauge);
+		pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GagueUIType::MinionGauge);
 		pMinionObjects = (*minion);
 
 		pGaugeObject->SetObject(pMinionObjects);
@@ -271,7 +267,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		if (gaugeBegin != gaugeEnd) --gaugeBegin;
 	}
 
-	m_pGaugeManger->ResetCount();
+	//m_pGaugeManger->ResetCount();
 }
 
 void CMinionHPGaugeShader::ReleaseObjects()

@@ -9,7 +9,7 @@ typedef std::list<CCollisionObject*> CollisionObjectList;
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
-class CHPGaugeManager;
+class CUIObjectManager;
 class CFSMMgr;
 
 class CAniShader : public CShader
@@ -38,7 +38,7 @@ public: // 공개 함수
 	int GetObjectCount() {  return m_nObjects; }
 
 	void SetCollisionManager(CCollisionManager* pManger) { m_pColManager = pManger; }
-	void SetGaugeManger(CHPGaugeManager *pManger) { m_pGaugeManger = pManger; }
+	void SetGaugeManger(CUIObjectManager *pManger) { m_pGaugeManger = pManger; }
 	void SetFSMManager(CFSMMgr *pManger) { m_pFSMMgr = pManger; }
 
 protected: // 내부 함수
@@ -87,7 +87,7 @@ protected: // 변수
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
 	
 	CCollisionManager* m_pColManager{NULL};
-	CHPGaugeManager *m_pGaugeManger{ NULL };
+	CUIObjectManager *m_pGaugeManger{ NULL };
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	CCreateMgr* m_pCreateMgr{ NULL };
