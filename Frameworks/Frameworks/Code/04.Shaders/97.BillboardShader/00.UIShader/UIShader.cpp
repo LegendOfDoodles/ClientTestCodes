@@ -130,7 +130,7 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	{
 		//printf("%d, %d\n", cursorPos.x, cursorPos.y);
 
-		// 미니맵 클릭
+		// 미니맵 좌 클릭
 		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
 			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
 		{
@@ -148,6 +148,18 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 		{
 			printf("StatusArea Area\n");
 		}
+	}
+
+	else if (pKeyBuffer == MK_RBUTTON)
+	{
+		// 미니맵 우 클릭
+		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
+			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
+		{
+			// 플레이어 이동
+
+		}
+
 	}
 
 

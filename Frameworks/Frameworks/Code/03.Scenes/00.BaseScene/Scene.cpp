@@ -295,24 +295,20 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
 	m_pCollisionManager = new CCollisionManager();
-	m_pHPGaugeManager = new CHPGaugeManager();
-
+	m_pUIObjectsManager = new CUIObjectManager();
 	m_pFSMMgr = new CFSMMgr(m_pWayFinder);
 
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
-	int nColliderObject = pAniS->GetObjectCount();
-	for (int i = 0; i < nColliderObject; ++i)
-	{
-		m_pCollisionManager->AddCollider(((CCollisionObject * *)pAniS->GetCollisionObjects())[i]);
-	}
+	
 	pAniS->SetCollisionManager(m_pCollisionManager);
-	pAniS->SetGaugeManger(m_pHPGaugeManager);
+	pAniS->SetGaugeManger(m_pUIObjectsManager);
 	pAniS->SetFSMManager(m_pFSMMgr);
 
-	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetGaugeManager(m_pHPGaugeManager);
+	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetUIObjectsManager(m_pUIObjectsManager);
+	static_cast<CMinimapIconShader*>(m_ppShaders[9])->SetUIObjectsManager(m_pUIObjectsManager);
 
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[5];
-	nColliderObject = pPlayerS->GetObjectCount();
+	int nColliderObject = pPlayerS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
@@ -347,7 +343,7 @@ void CScene::ReleaseObjects()
 	}
 	if (m_pWayFinder) Safe_Delete(m_pWayFinder);
 	if (m_pCollisionManager) Safe_Delete(m_pCollisionManager);
-	if (m_pHPGaugeManager) Safe_Delete(m_pHPGaugeManager);
+	if (m_pUIObjectsManager) Safe_Delete(m_pUIObjectsManager);
 	if (m_pFSMMgr) Safe_Delete(m_pFSMMgr);
 }
 

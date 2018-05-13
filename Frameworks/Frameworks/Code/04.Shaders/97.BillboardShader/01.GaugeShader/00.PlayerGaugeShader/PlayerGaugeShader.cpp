@@ -250,7 +250,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	CHPGaugeObjects *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CHPGaugeObjects(pCreateMgr, GaugeUiType::PlayerGauge);
+		pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::PlayerGauge);
 		pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 		pGaugeObject->SetCamera(m_pCamera);
 

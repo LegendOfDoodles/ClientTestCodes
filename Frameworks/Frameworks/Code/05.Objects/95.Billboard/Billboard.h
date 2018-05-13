@@ -14,9 +14,14 @@ enum UIType {
 	Status	= 3
 };
 
-enum GaugeUiType {
+enum GagueUIType {
 	PlayerGauge,
 	MinionGauge
+};
+
+enum IconUIType {
+	PlayerIcon,
+	MinionIcon
 };
 
 class CBillboardObject : public CBaseObject
@@ -64,7 +69,7 @@ class CHPGaugeObjects : public CBillboardObject
 {
 public:	// 생성자, 소멸자
 	CHPGaugeObjects(CCreateMgr *pCreateMgr);
-	CHPGaugeObjects(CCreateMgr *pCreateMgr, GaugeUiType type);
+	CHPGaugeObjects(CCreateMgr *pCreateMgr, GagueUIType type);
 	virtual ~CHPGaugeObjects();
 
 public: // 공개함수
@@ -75,13 +80,14 @@ public: // 공개함수
 
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
-	GaugeUiType		m_Type;
+	GagueUIType		m_Type;
 };
 
 class CMinimapIconObjects :public CUIObject
 {
 public:
-	CMinimapIconObjects(CCreateMgr *pCreateMgr) ;
+	CMinimapIconObjects(CCreateMgr *pCreateMgr);
+	CMinimapIconObjects(CCreateMgr *pCreateMgr, IconUIType type);
 	virtual ~CMinimapIconObjects();
 
 	virtual void Animate(float fTimeElapsed);
@@ -90,6 +96,7 @@ public:
 	void WorldToMinimap();
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 	CBaseObject* GetMasterObject() { return m_pMasterObject; };
+	StatesType GetState() { return m_pMasterObject->GetState(); }
 
 protected:
 	CCollisionObject * m_pMasterObject;
