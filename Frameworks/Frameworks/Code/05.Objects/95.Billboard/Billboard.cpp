@@ -230,6 +230,9 @@ CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr, IconUIType typ
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.1f, 0.1f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
+	case NexusAndTowerIcon:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, 0.4f, 0.4f, 0.f);
+		SetMesh(0, pRectMesh);
 	default:
 		break;
 	}

@@ -10,7 +10,7 @@ public:
 	CNexusTower(CCreateMgr *pCreateMgr, int nMeshes = 1);
 	virtual ~CNexusTower();
 
-	ObjectType type;
+	//ObjectType type;
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 
@@ -22,7 +22,7 @@ public:	// 외부 함수
 		
 		if (m_StatusInfo.HP <= 0 && m_curState != States::Die) {
 			SetState(States::Die);
-			if(type== ObjectType::Nexus)
+			if(m_ObjectType== ObjectType::Nexus)
 				m_pColManager->GameOver(m_TeamType);
 		}
 	}

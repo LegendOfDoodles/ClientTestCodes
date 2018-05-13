@@ -27,13 +27,16 @@ public: // 공개 함수
 
 	virtual void GetCamera(CCamera *pCamera);
 
-	void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
-	void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
-
-	void SetUIObjectsManager(CUIObjectManager * pManger);
-
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
+	
+	void SetUIObjectsManager(CUIObjectManager * pManger);
+
+	void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CCollisionObject**)pPlayer; };
+	void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
+
+	void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
+	void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -57,7 +60,7 @@ protected: // 내부 함수
 
 protected: // 변수
 	// Players Icon & Static Objects
-	CBaseObject * *m_ppObjects{ NULL };
+	CBaseObject **m_ppObjects{ NULL };
 	int m_nObjects = 0;
 
 	// Materials
@@ -68,8 +71,12 @@ protected: // 변수
 	CCamera *m_pCamera;
 
 	// Players
-	CPlayer **m_pPlayer;
-	int m_nPlayer;
+	CCollisionObject **m_pPlayer;
+	int m_nPlayer = 0;
+
+	// Tower And Nexus
+	CCollisionObject **m_ppNexusAndTower{NULL};
+	int m_nNexusAndTower = 0;
 
 	//동적생성
 	bool m_indexArr[MAX_MINION]{ false };

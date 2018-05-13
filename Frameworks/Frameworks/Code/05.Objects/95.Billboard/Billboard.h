@@ -21,7 +21,8 @@ enum GagueUIType {
 
 enum IconUIType {
 	PlayerIcon,
-	MinionIcon
+	MinionIcon,
+	NexusAndTowerIcon
 };
 
 class CBillboardObject : public CBaseObject
@@ -95,7 +96,7 @@ public:
 
 	void WorldToMinimap();
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
-	CBaseObject* GetMasterObject() { return m_pMasterObject; };
+	CCollisionObject* GetMasterObject() { return m_pMasterObject; };
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 
 protected:

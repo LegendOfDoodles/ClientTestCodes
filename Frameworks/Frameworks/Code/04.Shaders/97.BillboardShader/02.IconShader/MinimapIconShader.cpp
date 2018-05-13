@@ -94,7 +94,7 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		CBaseObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
+		CCollisionObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
 		
 		switch (master->GetType())
 		{
@@ -105,6 +105,30 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 		case ObjectType::SwordPlayer:
 			CShader::Render(pCamera, 1);
 			m_ppMaterials[1]->UpdateShaderVariables();
+			break;
+		case ObjectType::FirstTower:
+			if (master->GetTeam() == TeamType::Blue) {
+				// Blue Tower
+				CShader::Render(pCamera, 3);
+				m_ppMaterials[3]->UpdateShaderVariables();
+			}
+			else {
+				// Red Tower
+				CShader::Render(pCamera, 4);
+				m_ppMaterials[4]->UpdateShaderVariables();
+			}
+			break;
+		case ObjectType::Nexus:
+			if (master->GetTeam() == TeamType::Blue) {
+				// Box
+				CShader::Render(pCamera, 5);
+				m_ppMaterials[5]->UpdateShaderVariables();
+			}
+			else {
+				// Shell
+				CShader::Render(pCamera, 6);
+				m_ppMaterials[6]->UpdateShaderVariables();
+			}
 			break;
 		}
 
@@ -232,7 +256,7 @@ void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
-	m_nHeaps = 3;
+	m_nHeaps = 7;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -271,7 +295,7 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = m_nPlayer;
+	m_nObjects = m_nPlayer + m_nNexusAndTower;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -288,25 +312,41 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	m_ppMaterials[0] = Materials::CreateStickIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[1] = Materials::CreateSwordIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
 	m_ppMaterials[2] = Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateBlueTowerIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_ppMaterials[4] = Materials::CreateRedTowerIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreateBoxNexusIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_ppMaterials[6] = Materials::CreateShellNexusIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
 	// Player Icon »ý¼º
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinimapIconObjects *pPlayerObject = NULL;
+	CMinimapIconObjects *pIconObject = NULL;
 	
 	for (int i = 0; i < m_nObjects; ++i) {
-		pPlayerObject = new CMinimapIconObjects(pCreateMgr, IconUIType::PlayerIcon);
-		
-		pPlayerObject->SetCamera(m_pCamera);
-		pPlayerObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
-		pPlayerObject->SetObject(m_pPlayer[i]);
-		pPlayerObject->WorldToMinimap();
+		if (i < m_nPlayer) {
+			pIconObject = new CMinimapIconObjects(pCreateMgr, IconUIType::PlayerIcon);
 
-		pPlayerObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+			pIconObject->SetCamera(m_pCamera);
+			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
+			pIconObject->SetObject(m_pPlayer[i]);
+			pIconObject->WorldToMinimap();
+
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		else {
+			pIconObject = new CMinimapIconObjects(pCreateMgr, IconUIType::NexusAndTowerIcon);
+
+			pIconObject->SetCamera(m_pCamera);
+			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
+			pIconObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
+			pIconObject->WorldToMinimap();
+
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
 		
-		m_ppObjects[i] = pPlayerObject;
+		m_ppObjects[i] = pIconObject;
 	}
 }
 
