@@ -45,6 +45,10 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 	case States::Remove:
 		obj->PlayRemove(timeElapsed);
 		break;
+	case States::Win:
+		break;
+	case States::Defeat:
+		break;
 	default:
 		assert(!"Error:: There is No State");
 	}
