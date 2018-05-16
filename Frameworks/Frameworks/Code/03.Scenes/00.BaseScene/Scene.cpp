@@ -25,7 +25,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-05-16
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -301,7 +301,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[11]->Initialize(pCreateMgr, m_pCamera);
 
 	// Managere Initialize
-	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
+	m_pWayFinder = new CWayFinder();
 	m_pCollisionManager = new CCollisionManager();
 	m_pUIObjectsManager = new CUIObjectManager();
 	m_pFSMMgr = new CFSMMgr(m_pWayFinder);
