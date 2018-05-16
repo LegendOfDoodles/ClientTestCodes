@@ -207,6 +207,12 @@
     <Filter Include="소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader">
       <UniqueIdentifier>{eaed01f3-22ff-4dd3-89d3-c4948a335373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader">
+      <UniqueIdentifier>{f39dfd6c-57a2-43db-aba8-67f13277a859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\97.BillboardShader\02.IconShader\00.MinimapIconShader">
+      <UniqueIdentifier>{0bb710b5-a67c-48b8-9a17-1a46ecd9c888}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -380,9 +386,6 @@
     <ClInclude Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.h">
       <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
     </ClInclude>
-    <ClInclude Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.h">
-      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader</Filter>
-    </ClInclude>
     <ClInclude Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.h">
       <Filter>소스 파일\04.Shaders\06.NexusTowerShader</Filter>
     </ClInclude>
@@ -391,6 +394,12 @@
     </ClInclude>
     <ClInclude Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader\NexusAndTowerGaugeShader.h">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\02.IconShader\00.MinimapIconShader\MinimapIconShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader\00.MinimapIconShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.h">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -544,9 +553,6 @@
     <ClCompile Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.cpp">
       <Filter>소스 파일\00.Global\01.Utility\06.HPGaugeManager</Filter>
     </ClCompile>
-    <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\MinimapIconShader.cpp">
-      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader</Filter>
-    </ClCompile>
     <ClCompile Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.cpp">
       <Filter>소스 파일\04.Shaders\06.NexusTowerShader</Filter>
     </ClCompile>
@@ -555,6 +561,12 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader\NexusAndTowerGaugeShader.cpp">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\00.MinimapIconShader\MinimapIconShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader\00.MinimapIconShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.cpp">
+      <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

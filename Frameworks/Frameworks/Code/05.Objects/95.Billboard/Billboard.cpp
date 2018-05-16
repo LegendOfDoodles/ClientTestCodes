@@ -306,6 +306,8 @@ CMinimapIconObjects::CMinimapIconObjects(CCreateMgr * pCreateMgr, IconUIType typ
 	default:
 		break;
 	}
+
+	m_type = type;
 	
 	m_MinimapPosition = XMFLOAT3(0, 0, 0);
 }
@@ -333,7 +335,47 @@ void CMinimapIconObjects::Animate(float fTimeElapsed)
 
 void CMinimapIconObjects::Render(CCamera *pCamera, UINT istanceCnt)
 {
-	CBillboardObject::Render(pCamera, istanceCnt);
+
+	switch (m_type)
+	{
+	case PlayerIcon:
+	case MinionIcon:
+		CBillboardObject::Render(pCamera, istanceCnt);
+		break;
+	case NexusAndTowerIcon:
+		OnPrepareRender();
+
+		if (m_pMaterial)
+		{
+			m_pMaterial->Render(pCamera);
+			m_pMaterial->UpdateShaderVariables();
+		}
+
+		if (m_cbvGPUDescriptorHandle.ptr)
+			m_pCommandList->SetGraphicsRootDescriptorTable(12, m_cbvGPUDescriptorHandle);
+
+		if (m_pShader)
+		{
+			UpdateShaderVariables();
+			m_pShader->Render(pCamera);
+		}
+
+		if (m_ppMeshes)
+		{
+			for (int i = 0; i < m_nMeshes; i++)
+			{
+				if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
+			}
+		}
+		break;
+	}
+
+}
+
+float CMinimapIconObjects::GetCurrentHP()
+{
+	if (m_type == NexusAndTowerIcon)
+		return (m_pMasterObject->GetNexusAndTowerStatus()->HP / m_pMasterObject->GetNexusAndTowerStatus()->maxHP);
 }
 
 void CMinimapIconObjects::WorldToMinimap()

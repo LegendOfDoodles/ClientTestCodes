@@ -199,7 +199,22 @@ VS_GAUGE_OUTPUT VSTexturedGauge(VS_GAUGE_INPUT input)
 float4 PSTexturedGauge(VS_GAUGE_OUTPUT input) : SV_TARGET
 {
 	float4 cColor;
+
 	if (input.uv.x <= CurrentHP) {
+		cColor = gtxtTexture.Sample(wrapSampler, input.uv);
+	}
+	else
+		discard;
+
+return (cColor);
+}
+
+// Icon Gague
+float4 PSTexturedIconGauge(VS_GAUGE_OUTPUT input) : SV_TARGET
+{
+	float4 cColor;
+
+	if (1 - input.uv.y <= CurrentHP) {
 		cColor = gtxtTexture.Sample(wrapSampler, input.uv);
 	}
 	else

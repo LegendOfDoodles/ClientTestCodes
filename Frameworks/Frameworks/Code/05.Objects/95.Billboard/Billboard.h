@@ -84,7 +84,7 @@ public: // 공개함수
 	virtual void Animate(float fTimeElapsed);
 	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
 
-	float GetCurrentHP();
+	virtual float GetCurrentHP();
 
 	void GetmasterObjectType(ObjectType type) { m_MasterObjectType = type; };
 
@@ -109,6 +109,8 @@ public:
 	virtual void Animate(float fTimeElapsed);
 	virtual void Render(CCamera *pCamera, UINT istanceCnt = 1);
 
+	virtual float GetCurrentHP();
+
 	void WorldToMinimap();
 
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
@@ -118,8 +120,8 @@ public:
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 
 protected:
-	CCollisionObject * m_pMasterObject;
-	XMFLOAT3 m_MinimapPosition;
-
+	CCollisionObject *m_pMasterObject;
+	XMFLOAT3		  m_MinimapPosition;
 	ObjectType		  m_MasterObjectType;
+	IconUIType		  m_type;
 };

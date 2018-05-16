@@ -9,10 +9,11 @@
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/06.NexusTowerShader/NexusTowerShader.h"
 #include "04.Shaders/97.BillboardShader/00.UIShader/UIShader.h"
-#include "04.Shaders/97.BillboardShader/02.IconShader/MinimapIconShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
 #include "04.Shaders/97.BillboardShader/01.GaugeShader/02.NexusAndTowerGaugeShader/NexusAndTowerGaugeShader.h"
+#include "04.Shaders/97.BillboardShader/02.IconShader/00.MinimapIconShader/MinimapIconShader.h"
+#include "04.Shaders/97.BillboardShader/02.IconShader/01.BuildingMinimapIconShader/BuildingMinimapIconShader.h"
 #include "04.Shaders/98.ArrowShader/ArrowShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
@@ -252,7 +253,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 11;
+	m_nShaders = 12;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -268,6 +269,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[8] = new CPlayerHPGaugeShader(pCreateMgr);
 	m_ppShaders[9] = new CMinionHPGaugeShader(pCreateMgr);
 	m_ppShaders[10] = new CMinimapIconShader(pCreateMgr);
+	m_ppShaders[11] = new CBuildingMinimapIconShader(pCreateMgr);
 
 	// Object Shaders Initialize
 	for (int i = 0; i < 2; ++i)
@@ -275,7 +277,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 4; ++i)
+	for (int i = 2; i < m_nShaders - 5; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -288,13 +290,15 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	((CMinimapIconShader*)m_ppShaders[10])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[5])->GetObjectCount());
 	((CMinimapIconShader*)m_ppShaders[10])->SetPlayer(((CPlayerShader *)m_ppShaders[5])->GetCollisionObjects());
-	((CMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
-	((CMinimapIconShader*)m_ppShaders[10])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
-	
+
+	((CBuildingMinimapIconShader*)m_ppShaders[11])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
+	((CBuildingMinimapIconShader*)m_ppShaders[11])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
+
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[9]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[10]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[11]->Initialize(pCreateMgr, m_pCamera);
 
 	// Managere Initialize
 	m_pWayFinder = new CWayFinder(NODE_SIZE, NODE_SIZE);
@@ -417,8 +421,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 		GenerateLayEndWorldPosition(pickPosition, xmf4x4View);
 	}
 	else if (wParam == MK_LBUTTON) {
-		// 바닥 선택시 Status창 Off
-		//m_ppShaders[7]->OffStatus();
+		
 	}
 }
 
