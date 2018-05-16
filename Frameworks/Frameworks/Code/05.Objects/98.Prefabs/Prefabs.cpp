@@ -574,7 +574,7 @@ CMaterial * Materials::CreateGreyMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DES
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Grey.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Frame/Grey.dds", 0);
 	
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -588,11 +588,11 @@ CMaterial * Materials::CreateGreyMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DES
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateRedMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateRedGaugeMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Red.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Gauge/Red.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -606,11 +606,11 @@ CMaterial * Materials::CreateRedMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESC
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateStickIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateBlueGaugeMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Stick.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Gauge/Blue.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -624,11 +624,11 @@ CMaterial * Materials::CreateStickIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateSwordIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateStickBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Sword.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Stick.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -642,11 +642,11 @@ CMaterial * Materials::CreateSwordIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateStaffIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateSwordBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Staff.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Sword.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -660,11 +660,137 @@ CMaterial * Materials::CreateStaffIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateBowIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateStaffBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Bow.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Magic.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateBowBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Bow.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateStickRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Stick.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateSwordRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Sword.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateStaffRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Magic.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateBowRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Bow.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateMinionBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Minion.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateMinionRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Minion.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -682,7 +808,7 @@ CMaterial * Materials::CreateDeathIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Death.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/System/Death.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -696,11 +822,29 @@ CMaterial * Materials::CreateDeathIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateCamIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateLevelUpMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Cam.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/System/LevelUp.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateCamBossIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Common/CamBoss.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -718,7 +862,7 @@ CMaterial * Materials::CreateLoydeIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Loyde.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Common/Loyde.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -736,7 +880,115 @@ CMaterial * Materials::CreateGolemIconMaterial(CCreateMgr * pCreateMgr, D3D12_CP
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Golem.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Common/Golem.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateCamBossBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/CamBoss.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateLoydeBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Loyde.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateGolemBlueIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Golem.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateCamBossRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/CamBoss.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateLoydeRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Loyde.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateGolemRedIconMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Golem.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -754,7 +1006,7 @@ CMaterial * Materials::CreateRedTowerIconMaterial(CCreateMgr * pCreateMgr, D3D12
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/RedTower.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Tower.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -772,7 +1024,7 @@ CMaterial * Materials::CreateBlueTowerIconMaterial(CCreateMgr * pCreateMgr, D3D1
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/BlueTower.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Tower.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -790,7 +1042,7 @@ CMaterial * Materials::CreateBoxNexusIconMaterial(CCreateMgr * pCreateMgr, D3D12
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Box.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Nexus.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -808,7 +1060,7 @@ CMaterial * Materials::CreateShellNexusIconMaterial(CCreateMgr * pCreateMgr, D3D
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Shell.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Nexus.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

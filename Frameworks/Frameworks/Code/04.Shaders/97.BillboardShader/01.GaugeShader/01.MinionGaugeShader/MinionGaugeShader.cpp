@@ -197,7 +197,7 @@ void CMinionHPGaugeShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 
-	m_ppMaterials[0] = Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateRedMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle[0], &m_srvGPUDescriptorStartHandle[0]);
 #endif

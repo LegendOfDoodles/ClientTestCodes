@@ -246,7 +246,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 		if (i < m_nPlayer)
 		{
 			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::PlayerGauge);
-			pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+			pGaugeObject->SetMaterial(Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 			pGaugeObject->SetCamera(m_pCamera);
 
 			pGaugeObject->SetObject(m_pPlayer[i]);
@@ -261,7 +261,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 		else
 		{
 			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::NexusAndTower);
-			pGaugeObject->SetMaterial(Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
+			pGaugeObject->SetMaterial(Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 			pGaugeObject->SetCamera(m_pCamera);
 
 			pGaugeObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);

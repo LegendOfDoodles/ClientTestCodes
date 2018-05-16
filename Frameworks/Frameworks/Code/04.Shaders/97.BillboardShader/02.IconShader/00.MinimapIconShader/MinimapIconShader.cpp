@@ -93,23 +93,56 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 		
 		switch (master->GetType())
 		{
-		case ObjectType::StickPlayer:
-			CShader::Render(pCamera, 0);
-			m_ppMaterials[0]->UpdateShaderVariables();
-			break;
-		case ObjectType::SwordPlayer:
-			CShader::Render(pCamera, 1);
-			m_ppMaterials[1]->UpdateShaderVariables();
-			break;
+			
+			case ObjectType::StickPlayer:
+				if (master->GetTeam() == TeamType::Blue) {
+					CShader::Render(pCamera, 0);
+					m_ppMaterials[0]->UpdateShaderVariables();
+				}
+				else if (master->GetTeam() == TeamType::Red) {
+					CShader::Render(pCamera, 4);
+					m_ppMaterials[4]->UpdateShaderVariables();
+				}
+				break;
+			case ObjectType::SwordPlayer:
+				if (master->GetTeam() == TeamType::Blue) {
+					CShader::Render(pCamera, 1);
+					m_ppMaterials[1]->UpdateShaderVariables();
+				}
+				else if (master->GetTeam() == TeamType::Red) {
+					CShader::Render(pCamera, 5);
+					m_ppMaterials[5]->UpdateShaderVariables();
+				}
+				break;
+			case ObjectType::BowPlayer:
+				if (master->GetTeam() == TeamType::Blue) {
+					CShader::Render(pCamera, 2);
+					m_ppMaterials[2]->UpdateShaderVariables();
+				}
+				else if (master->GetTeam() == TeamType::Red) {
+					CShader::Render(pCamera, 6);
+					m_ppMaterials[6]->UpdateShaderVariables();
+				}
+				break;
+			case ObjectType::StaffPlayer:
+				if (master->GetTeam() == TeamType::Blue) {
+					CShader::Render(pCamera, 3);
+					m_ppMaterials[3]->UpdateShaderVariables();
+				}
+				else if (master->GetTeam() == TeamType::Red) {
+					CShader::Render(pCamera, 7);
+					m_ppMaterials[7]->UpdateShaderVariables();
+				}
+				break;
 		}
-
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 
+	CShader::Render(pCamera, 9);
+	m_ppMaterials[9]->UpdateShaderVariables();
 	// ¹Ì´Ï¾ð
 	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
-		CShader::Render(pCamera, 2);
-		m_ppMaterials[2]->UpdateShaderVariables();
+		
 		(*iter)->Render(pCamera);
 	}
 }
@@ -219,7 +252,7 @@ void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
-	m_nHeaps = 3;
+	m_nHeaps = 10;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr);
@@ -260,9 +293,24 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateStickIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateSwordIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[2] = Materials::CreateRedMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	
+	//Player
+		// Blue Team
+	m_ppMaterials[0] = Materials::CreateStickBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreateSwordBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateBowBlueIconMaterial(pCreateMgr,		&m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateStaffBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+		// Red Team
+	m_ppMaterials[4] = Materials::CreateStickRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreateSwordRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_ppMaterials[6] = Materials::CreateBowRedIconMaterial(pCreateMgr,		&m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
+	m_ppMaterials[7] = Materials::CreateStaffRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
+	//Minion
+		// Blue
+	m_ppMaterials[8] = Materials::CreateMinionBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[8], &m_psrvGPUDescriptorStartHandle[8]);
+		// Red
+	m_ppMaterials[9] = Materials::CreateMinionRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[9], &m_psrvGPUDescriptorStartHandle[9]);
+
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
