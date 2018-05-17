@@ -35,6 +35,8 @@ protected:
 
 protected:
 	TeamType m_Winner{ TeamType::None };
+	TeamType m_User{ TeamType::Blue };
+
 
 };
 

@@ -31,11 +31,14 @@ void CCollisionManager::GameOver(TeamType type)
 void CCollisionManager::AddCollider(CCollisionObject* pcol)
 {
 	if (pcol) {
-		m_lstColliders.push_back(pcol);
+		if (pcol->GetTeam() == TeamType::Blue)
+			pcol->SetDetected(true);
+		else
+			pcol->SetDetected(false);
 
+		m_lstColliders.push_back(pcol);
 		m_nCollisers++;
 	}
-
 }
 
 
@@ -43,10 +46,14 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 {
 	if (m_Winner == TeamType::None)
 	{
-
 		int cnt = 0;
-
 		m_lstColliders.remove_if([](CCollisionObject* obj) { return obj->GetState() == States::Die; });
+		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+		{
+			if ((*i)->GetTeam() != m_User) {
+				(*i)->SetDetected(false);
+			}
+		}
 
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
@@ -71,6 +78,25 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 							pWayFinder->AdjustValueByWallCollision((*j), vec3, -length * sizeB / (sizeA + sizeB));
 							(*i)->RegenerateLookAt();
 							(*j)->RegenerateLookAt();
+						}
+					}
+				}
+			}
+			if (m_User == (*i)->GetTeam()) {
+				for (auto& j = m_lstColliders.begin(); j != m_lstColliders.end(); ++j)
+				{
+					if (!(*j)->GetDetected()) {
+						if (i != j && (*i)->GetTeam() != (*j)->GetTeam()) {
+							if (NearLevel((*i)->GetCollisionLevel(), (*j)->GetCollisionLevel()))
+							{
+								XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
+								XMFLOAT2 bpos = XMFLOAT2((*j)->GetPosition().x, (*j)->GetPosition().z);
+								float distance = Vector2::Distance(apos, bpos);
+								if (distance <= (*i)->GetDetectRange())
+								{
+									(*j)->SetDetected(true);
+								}
+							}
 						}
 					}
 				}

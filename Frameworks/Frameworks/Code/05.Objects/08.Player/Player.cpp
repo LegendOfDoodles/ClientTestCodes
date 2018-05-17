@@ -12,7 +12,8 @@
 // 持失切, 社瑚切
 CPlayer::CPlayer(CCreateMgr *pCreateMgr, int nMeshes) : CAnimatedObject(pCreateMgr, nMeshes)
 {
-	SetSpeed(CONVERT_cm_to_InG(3.285));
+	m_detectRange = CONVERT_PaperUnit_to_InG(80.0f);
+	SetSpeed(CONVERT_cm_to_InG(3.285*10));
 }
 
 
@@ -113,7 +114,7 @@ void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 {
 	OnPrepareRender();
 
-	if (!IsVisible(pCamera)) return;
+	if (!IsVisible(pCamera)||!m_Detected) return;
 
 	if (m_pMaterial)
 	{

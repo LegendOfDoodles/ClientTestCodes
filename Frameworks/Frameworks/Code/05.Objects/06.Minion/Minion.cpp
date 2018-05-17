@@ -43,7 +43,7 @@ void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
 {
 	OnPrepareRender();
 
-	if (!IsVisible(pCamera)) return;
+	if (!IsVisible(pCamera)||!m_Detected) return;
 
 	if (m_pMaterial)
 	{

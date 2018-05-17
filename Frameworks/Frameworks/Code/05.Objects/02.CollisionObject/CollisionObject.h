@@ -49,6 +49,11 @@ public: // 공개 함수
 	virtual CommonInfo* GetCommonStatus()			{ return NULL; }
 	virtual StaticInfo* GetNexusAndTowerStatus()	{ return NULL; }
 	
+	float GetDetectRange() { return m_detectRange;}
+	
+	void SetDetected(bool value) { m_Detected = value; }
+	bool GetDetected() { return m_Detected; }
+	
 	void GameOver() { m_GameOver = true; }
 protected: // 내부 함수
 
@@ -59,6 +64,7 @@ protected: // 변수
 	StatesType m_curState{ States::Idle };
 	StatesType m_nextState{ States::Idle };
 	TeamType m_TeamType{ None };
+	bool m_Detected{ false };
 	float m_detectRange{ 0.0f };
 	float m_attackRange{ 0.0f };
 
