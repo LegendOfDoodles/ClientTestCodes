@@ -5,7 +5,7 @@
 /// 목적: 플레이어 관리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-05-17
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -112,6 +112,8 @@ void CPlayer::Animate(float timeElapsed)
 void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 {
 	OnPrepareRender();
+
+	if (!IsVisible(pCamera)) return;
 
 	if (m_pMaterial)
 	{

@@ -53,7 +53,9 @@
   <ItemGroup>
      <Compile Include="Assets\rr.cs" />
      <Compile Include="Assets\TranformExporter.cs" />
-     <None Include="Assets\Setting.txt" />
+     <None Include="Assets\WayPointSetting.txt" />
+     <None Include="Assets\ObjectSetting.txt" />
+     <None Include="Assets\NexusTowerSetting.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

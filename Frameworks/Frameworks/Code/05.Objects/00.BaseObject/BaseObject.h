@@ -88,6 +88,8 @@ protected: // 내부 함수
 
 	virtual void OnPrepareRender();
 
+	bool IsVisible(CCamera *pCamera = NULL);
+
 protected: // 변수
 	int m_nReferences{ 0 };
 

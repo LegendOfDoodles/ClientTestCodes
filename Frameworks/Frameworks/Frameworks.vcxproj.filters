@@ -159,15 +159,6 @@
     <Filter Include="소스 파일\05.Objects\07.StaticObjects">
       <UniqueIdentifier>{8c0a7184-1d6e-4cf0-b583-e5b31917633e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\05.Objects\07.StaticObjects\01.Nexus">
-      <UniqueIdentifier>{e82e1ea4-61b8-4b90-8a36-59d2c4cae410}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\07.StaticObjects\02.Tower">
-      <UniqueIdentifier>{aecd502d-645b-4b85-9173-aa6e536a2ded}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\07.StaticObjects\03.Obstacle">
-      <UniqueIdentifier>{b0db6c80-ec33-46ee-94a1-4b17c117db0c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\05.Objects\02.CollisionObject">
       <UniqueIdentifier>{b3b9a6a4-3dc0-43ad-a4b0-edd67b1177be}</UniqueIdentifier>
     </Filter>
@@ -359,15 +350,6 @@
     <ClInclude Include="Code\05.Objects\06.Minion\Minion.h">
       <Filter>소스 파일\05.Objects\06.Minion</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\07.StaticObjects\01.Nexus\Nexus.h">
-      <Filter>소스 파일\05.Objects\07.StaticObjects\01.Nexus</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\07.StaticObjects\02.Tower\Tower.h">
-      <Filter>소스 파일\05.Objects\07.StaticObjects\02.Tower</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\07.StaticObjects\03.Obstacle\Obstacle.h">
-      <Filter>소스 파일\05.Objects\07.StaticObjects\03.Obstacle</Filter>
-    </ClInclude>
     <ClInclude Include="Code\00.Global\01.Utility\05.CollisionManager\CollisionManager.h">
       <Filter>소스 파일\00.Global\01.Utility\05.CollisionManager</Filter>
     </ClInclude>
@@ -400,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="Code\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.h">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\07.StaticObjects\Obstacle.h">
+      <Filter>소스 파일\05.Objects\07.StaticObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -526,15 +511,6 @@
     <ClCompile Include="Code\05.Objects\06.Minion\Minion.cpp">
       <Filter>소스 파일\05.Objects\06.Minion</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\07.StaticObjects\01.Nexus\Nexus.cpp">
-      <Filter>소스 파일\05.Objects\07.StaticObjects\01.Nexus</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\07.StaticObjects\02.Tower\Tower.cpp">
-      <Filter>소스 파일\05.Objects\07.StaticObjects\02.Tower</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\07.StaticObjects\03.Obstacle\Obstacle.cpp">
-      <Filter>소스 파일\05.Objects\07.StaticObjects\03.Obstacle</Filter>
-    </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\05.CollisionManager\CollisionManager.cpp">
       <Filter>소스 파일\00.Global\01.Utility\05.CollisionManager</Filter>
     </ClCompile>
@@ -567,6 +543,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.cpp">
       <Filter>소스 파일\04.Shaders\97.BillboardShader\02.IconShader\01.BuildingMinimapIconShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\07.StaticObjects\Obstacle.cpp">
+      <Filter>소스 파일\05.Objects\07.StaticObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
