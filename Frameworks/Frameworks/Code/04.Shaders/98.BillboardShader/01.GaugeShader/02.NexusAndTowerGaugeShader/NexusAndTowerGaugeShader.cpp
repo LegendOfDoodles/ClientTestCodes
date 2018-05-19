@@ -168,7 +168,7 @@ D3D12_SHADER_BYTECODE CNexusAndTowerHPGaugeShader::CreatePixelShader(ID3DBlob **
 		ppShaderBlob));
 }
 
-void CNexusAndTowerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
+void CNexusAndTowerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -176,7 +176,7 @@ void CNexusAndTowerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr);
+	CShader::CreateShader(pCreateMgr, nRenderTargets);
 }
 
 void CNexusAndTowerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

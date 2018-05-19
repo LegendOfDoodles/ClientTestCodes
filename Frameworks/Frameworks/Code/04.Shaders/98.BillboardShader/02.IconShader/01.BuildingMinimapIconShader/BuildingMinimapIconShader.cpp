@@ -190,7 +190,7 @@ D3D12_SHADER_BYTECODE CBuildingMinimapIconShader::CreatePixelShader(ID3DBlob ** 
 		ppShaderBlob));
 }
 
-void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr)
+void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -198,7 +198,7 @@ void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nHeaps = 4;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr);
+	CShader::CreateShader(pCreateMgr, nRenderTargets);
 }
 
 void CBuildingMinimapIconShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

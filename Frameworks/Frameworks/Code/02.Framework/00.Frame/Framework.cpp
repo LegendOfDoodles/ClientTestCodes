@@ -54,6 +54,8 @@ bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd, Network pNetwork)
 
 	BuildObjects();
 
+	m_pRenderMgr->SetCamera(m_pScene->GetCamera());
+
 	return(true);
 }
 
@@ -67,14 +69,10 @@ void CFramework::Finalize()
 
 void CFramework::FrameAdvance(float timeElapsed)
 {
-	
 	m_pScene->ProcessInput();
 	m_pScene->AnimateObjects(timeElapsed);
 	m_pRenderMgr->Render(m_pScene);
 }
-
-
-
 
 LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
 	WPARAM wParam, LPARAM lParam)

@@ -12,7 +12,7 @@
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-17
+/// 최종 수정 날짜: 2018-05-19
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -302,7 +302,7 @@ D3D12_SHADER_BYTECODE CAniShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLighting", "ps_5_1", ppShaderBlob));
 }
 
-void CAniShader::CreateShader(CCreateMgr *pCreateMgr)
+void CAniShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets)
 {
 	m_nPipelineStates = 2;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -315,8 +315,8 @@ void CAniShader::CreateShader(CCreateMgr *pCreateMgr)
 	m_nHeaps = 3;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr);
-	CShader::CreateBoundingBoxShader(pCreateMgr);
+	CShader::CreateShader(pCreateMgr, nRenderTargets);
+	CShader::CreateBoundingBoxShader(pCreateMgr, nRenderTargets);
 }
 
 void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
@@ -373,15 +373,15 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CreateShaderVariables(pCreateMgr, MAX_MINION);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 4);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 1);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 4, 2);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 2, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 2, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 2);
 
 	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 0);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 2);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 1);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer, boundingBoxElementBytes, 2);
 
-	SaveBoundingBoxHeapNumber(1);
+	SaveBoundingBoxHeapNumber(2);
 
 #endif
 
@@ -392,7 +392,7 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_ppMaterials[0] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.6, 0.6, 1.0, 1.0));
 	// Red
-	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
 	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0, 0.6, 0.6, 1.0));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
@@ -572,7 +572,7 @@ void CAniShader::SpawnMinion()
 		pMinionObject->Rotate(90, 0, 0);
 
 		pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
-		pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
+		pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * index));
 
 		pMinionObject->SaveIndex(index);
 

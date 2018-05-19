@@ -185,7 +185,7 @@ D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShad
 		ppShaderBlob));
 }
 
-void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
+void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -193,7 +193,7 @@ void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr)
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr);
+	CShader::CreateShader(pCreateMgr, nRenderTargets);
 }
 
 void CPlayerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

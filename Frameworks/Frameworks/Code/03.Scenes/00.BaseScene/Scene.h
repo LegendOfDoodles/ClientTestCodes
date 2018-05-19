@@ -46,6 +46,7 @@ public: // 공개 함수
 	void ProcessInput();
 	void AnimateObjects(float timeElapsed);
 	void Render();
+	void RenderWithLights();
 
 	void SetViewportsAndScissorRects();
 	void UpdateCamera();
@@ -72,8 +73,6 @@ protected: // 내부 함수
 	void GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View);
 
 	virtual void OnProcessKeyUp(WPARAM wParam, LPARAM lParam);
-
-	void CollisionTest();
 
 protected: // 변수
 	HWND m_hWnd{ NULL };
