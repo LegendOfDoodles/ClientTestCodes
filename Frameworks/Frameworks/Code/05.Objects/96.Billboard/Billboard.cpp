@@ -5,14 +5,13 @@
 /// 목적: UI 이용을 위한 Bilboard 클래스 제작
 /// 최종 수정자:  김나단
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-05-21
+/// 최종 수정 날짜: 2018-05-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr)
 {
-	CreateShaderVariables(pCreateMgr);
 }
 
 CBillboardObject::~CBillboardObject()
@@ -49,11 +48,9 @@ void CBillboardObject::SetLookAt()
 CUIObject::CUIObject(CCreateMgr * pCreateMgr) : CBillboardObject(pCreateMgr)
 {
 	m_xmf3Position = XMFLOAT3(0,0,0);
-
-	CreateShaderVariables(pCreateMgr);
 }
 
-CUIObject::CUIObject(CCreateMgr * pCreateMgr, UIType type) :CBillboardObject(pCreateMgr)
+CUIObject::CUIObject(CCreateMgr * pCreateMgr, UIType type) : CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
 
@@ -78,10 +75,8 @@ CUIObject::CUIObject(CCreateMgr * pCreateMgr, UIType type) :CBillboardObject(pCr
 	default:
 		break;
 	}
-	
-	m_type = type;
 
-	CreateShaderVariables(pCreateMgr);
+	m_type = type;
 }
 
 CUIObject::~CUIObject()
@@ -128,9 +123,6 @@ void CUIObject::Animate(float fTimeElapsed)
 CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr)
 	: CBillboardObject(pCreateMgr)
 {
-	
-
-	CreateShaderVariables(pCreateMgr);
 }
 
 CHPGaugeObjects::CHPGaugeObjects(CCreateMgr * pCreateMgr, GagueUIType type)

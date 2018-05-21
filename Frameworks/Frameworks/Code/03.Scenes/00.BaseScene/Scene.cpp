@@ -24,7 +24,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-21
+/// 최종 수정 날짜: 2018-05-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -227,7 +227,7 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[0].m_bEnable = true;
 	m_pLights->m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.6f, 0.0f));
+	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -0.6f, 1.0f));
 
 	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = DIRECTIONAL_LIGHT;
@@ -242,7 +242,7 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[3].m_bEnable = true;
 	m_pLights->m_pLights[3].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[3].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[3].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -0.6f, 1.0f));
+	m_pLights->m_pLights[3].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.6f, 0.0f));
 
 	m_pLights->m_pLights[4].m_bEnable = true;
 	m_pLights->m_pLights[4].m_nType = DIRECTIONAL_LIGHT;
@@ -282,8 +282,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
 	m_ppShaders[2] = new CAniShader(pCreateMgr, m_pNetwork);
-	m_ppShaders[3] = new CStaticObjectShader(pCreateMgr);
-	m_ppShaders[4] = new CPlayerShader(pCreateMgr, m_pNetwork);
+	m_ppShaders[3] = new CPlayerShader(pCreateMgr, m_pNetwork);
+	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CNexusTowerShader(pCreateMgr);
 	
 	//UI Shader
@@ -304,13 +304,13 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	}
 	
 	// UI Shaders Initialize
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[4])->GetObjectCount());
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[4])->GetCollisionObjects());
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
 
-	((CMinimapIconShader*)m_ppShaders[9])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[4])->GetObjectCount());
-	((CMinimapIconShader*)m_ppShaders[9])->SetPlayer(((CPlayerShader *)m_ppShaders[4])->GetCollisionObjects());
+	((CMinimapIconShader*)m_ppShaders[9])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CMinimapIconShader*)m_ppShaders[9])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
 	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
 	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
@@ -337,7 +337,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetUIObjectsManager(m_pUIObjectsManager);
 	static_cast<CMinimapIconShader*>(m_ppShaders[9])->SetUIObjectsManager(m_pUIObjectsManager);
 
-	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[4];
+	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[3];
 	int nColliderObject = pPlayerS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
@@ -463,17 +463,17 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
 			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z),
 			m_pSelectedObject->GetCollisionSize()));
-		my_packet.Character_id = m_pNetwork->m_myid;
+		//my_packet.Character_id = m_pNetwork->m_myid;
 
-		my_packet.size = sizeof(my_packet);
-		my_packet.x = m_pickWorldPosition.x;
-		my_packet.y = m_pickWorldPosition.z;
-		m_pNetwork->m_send_wsabuf.len = sizeof(my_packet);
-		DWORD iobyte;
-		my_packet.type = CS_MOVE_PLAYER;
-		memcpy(m_pNetwork->m_send_buffer, &my_packet, sizeof(my_packet));
-		m_pNetwork->SendPacket(m_pNetwork->m_myid, &my_packet);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, (CBaseObject**)m_pSelectedObject);
+		//my_packet.size = sizeof(my_packet);
+		//my_packet.x = m_pickWorldPosition.x;
+		//my_packet.y = m_pickWorldPosition.z;
+		//m_pNetwork->m_send_wsabuf.len = sizeof(my_packet);
+		//DWORD iobyte;
+		//my_packet.type = CS_MOVE_PLAYER;
+		//memcpy(m_pNetwork->m_send_buffer, &my_packet, sizeof(my_packet));
+		//m_pNetwork->SendPacket(m_pNetwork->m_myid, &my_packet);
+		//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, (CBaseObject**)m_pSelectedObject);
 	}
 }
 
