@@ -2,7 +2,7 @@
 #include "NexusAndTowerGaugeShader.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
-#include "05.Objects/95.Billboard/Billboard.h"
+#include "05.Objects/96.Billboard/Billboard.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 /// <summary>

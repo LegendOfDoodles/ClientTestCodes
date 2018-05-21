@@ -105,9 +105,6 @@
     <Filter Include="소스 파일\05.Objects\01.Camera\01.AOSCamera">
       <UniqueIdentifier>{7d070f59-60db-4a7b-a19d-086a99df7d5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\05.Objects\96.Arrow">
-      <UniqueIdentifier>{da6614e3-61ea-4567-80c7-8b12d82ea4d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder">
       <UniqueIdentifier>{f526b4e0-ff88-4498-adcc-4b909c0c60a4}</UniqueIdentifier>
     </Filter>
@@ -122,9 +119,6 @@
     </Filter>
     <Filter Include="소스 파일\07.Network">
       <UniqueIdentifier>{ed8f421a-dea7-4a21-92b7-629cad64076d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\05.Objects\95.Billboard">
-      <UniqueIdentifier>{55fe72be-b996-42b9-af24-96806570544b}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\00.Global\02.AI">
       <UniqueIdentifier>{187ca8d2-9c69-422e-b104-1446eb1cb44d}</UniqueIdentifier>
@@ -203,6 +197,9 @@
     </Filter>
     <Filter Include="소스 파일\04.Shaders\97.TextureToFullScreenShader">
       <UniqueIdentifier>{54dfd901-de79-467f-9158-8a2b688f935b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard">
+      <UniqueIdentifier>{55fe72be-b996-42b9-af24-96806570544b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +284,6 @@
     <ClInclude Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.h">
       <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\96.Arrow\Arrow.h">
-      <Filter>소스 파일\05.Objects\96.Arrow</Filter>
-    </ClInclude>
     <ClInclude Include="Code\00.Global\01.Utility\Macros.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
@@ -313,9 +307,6 @@
     </ClInclude>
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.h">
       <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\05.Objects\95.Billboard\Billboard.h">
-      <Filter>소스 파일\05.Objects\95.Billboard</Filter>
     </ClInclude>
     <ClInclude Include="Code\00.Global\02.AI\00.FSMMgr\FSMMgr.h">
       <Filter>소스 파일\00.Global\02.AI\00.FSMMgr</Filter>
@@ -385,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="Code\04.Shaders\97.TextureToFullScreenShader\TextureToFullScreenShader.h">
       <Filter>소스 파일\04.Shaders\97.TextureToFullScreenShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\96.Billboard\Billboard.h">
+      <Filter>소스 파일\05.Objects\96.Billboard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -457,9 +451,6 @@
     <ClCompile Include="Code\05.Objects\01.Camera\01.AOSCamera\AOSCamera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\01.AOSCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\96.Arrow\Arrow.cpp">
-      <Filter>소스 파일\05.Objects\96.Arrow</Filter>
-    </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\WayFinder.cpp">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder</Filter>
     </ClCompile>
@@ -477,9 +468,6 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.cpp">
       <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\05.Objects\95.Billboard\Billboard.cpp">
-      <Filter>소스 파일\05.Objects\95.Billboard</Filter>
     </ClCompile>
     <ClCompile Include="Code\00.Global\02.AI\00.FSMMgr\FSMMgr.cpp">
       <Filter>소스 파일\00.Global\02.AI\00.FSMMgr</Filter>
@@ -546,6 +534,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\97.TextureToFullScreenShader\TextureToFullScreenShader.cpp">
       <Filter>소스 파일\04.Shaders\97.TextureToFullScreenShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\96.Billboard\Billboard.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

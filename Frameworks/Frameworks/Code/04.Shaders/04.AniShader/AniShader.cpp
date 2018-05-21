@@ -373,8 +373,8 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CreateShaderVariables(pCreateMgr, MAX_MINION);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 2, 0);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 2, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 1);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 2);
 
 	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 0);
