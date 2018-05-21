@@ -41,7 +41,7 @@ CScene::~CScene()
 // 공개 함수
 void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 {
-	m_pNetwork = pNetwork;
+	//m_pNetwork = pNetwork;
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
 	//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL );
@@ -89,19 +89,19 @@ void CScene::ProcessInput()
 void CScene::AnimateObjects(float timeElapsed)
 {
 	m_FrameCheck += 1.0f / timeElapsed;
-	if (m_pSelectedObject) {
-		if (m_FrameCheck % 20 == 0) {
-			//printf("now time is = %d\n", m_FrameCheck);
-			CS_MsgChMove p;
-			p.Character_id = m_pNetwork->m_myid;
-			p.size = sizeof(p);
-			p.type = CS_MOVE_PLAYER;
-			p.x = m_pSelectedObject->GetPosition().x;
-			p.y = m_pSelectedObject->GetPosition().z;
+	//if (m_pSelectedObject) {
+	//	if (m_FrameCheck % 20 == 0) {
+	//		//printf("now time is = %d\n", m_FrameCheck);
+	//		CS_MsgChMove p;
+	//		p.Character_id = m_pNetwork->m_myid;
+	//		p.size = sizeof(p);
+	//		p.type = CS_MOVE_PLAYER;
+	//		p.x = m_pSelectedObject->GetPosition().x;
+	//		p.y = m_pSelectedObject->GetPosition().z;
 
-			m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		}
-	}
+	//		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+	//	}
+	//}
 	m_pCamera->Update(timeElapsed);
 
 	UpdateShaderVariables();

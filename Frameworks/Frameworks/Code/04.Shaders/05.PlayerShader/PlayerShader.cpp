@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 CPlayerShader::CPlayerShader(CCreateMgr *pCreateMgr, Network* network) : CShader(pCreateMgr)
 {
-	m_pNetwork = network;
+	//m_pNetwork = network;
 }
 
 CPlayerShader::~CPlayerShader()
@@ -88,10 +88,10 @@ void CPlayerShader::UpdateBoundingBoxShaderVariables()
 
 void CPlayerShader::AnimateObjects(float timeElapsed)
 {
-	m_FrameCheck += 1.0f / timeElapsed;
-	if (m_FrameCheck % 20 == 0) {
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_ppObjects);
-	}
+	//m_FrameCheck += 1.0f / timeElapsed;
+	//if (m_FrameCheck % 20 == 0) {
+	//	m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, m_ppObjects);
+	//}
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
@@ -114,11 +114,11 @@ void CPlayerShader::Render(CCamera *pCamera)
 		
 		m_ppObjects[j]->Render(pCamera);
 	}
-
-	/*for (int j = 0; j < 4; j++)
-	{
-		m_pNetwork->m_ppObject[j]->Render(pCamera);
-	}*/
+	
+	//for (int j = 0; j < 4; j++)
+	//{
+	//	m_pNetwork->m_ppObject[j]->Render(pCamera);
+	//}
 #endif
 }
 
@@ -168,18 +168,18 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		// 무기에 따라 수정필요
 		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 	}
-	if (GetAsyncKeyState('Q') & 0x0001)
-	{
-		dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillQ);
-	}
-	if (GetAsyncKeyState('E') & 0x0001)
-	{
-		dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillE);
-	}
-	if (GetAsyncKeyState('R') & 0x0001)
-	{
-		dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillR);
-	}
+	//if (GetAsyncKeyState('Q') & 0x0001)
+	//{
+	//	dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillQ);
+	//}
+	//if (GetAsyncKeyState('E') & 0x0001)
+	//{
+	//	dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillE);
+	//}
+	//if (GetAsyncKeyState('R') & 0x0001)
+	//{
+	//	dynamic_cast<CPlayer*>(m_ppObjects[m_pNetwork->m_myid])->ActiveSkill(Animations::SkillR);
+	//}
 
 	return true;
 }

@@ -20,7 +20,7 @@
 CAniShader::CAniShader(CCreateMgr *pCreateMgr, Network* pNetwork) : CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
-	m_pNetwork = pNetwork;
+	//m_pNetwork = pNetwork;
 }
 
 CAniShader::~CAniShader()
@@ -630,7 +630,7 @@ void CAniShader::SpawnMinion()
 		CS_MsgMoCreate p;
 		p.type = CS_PUT_MINION;
 		p.size = sizeof(p);
-		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
+		//m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
+		//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 }
