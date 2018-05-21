@@ -12,8 +12,6 @@ struct CB_GAMEOBJECT_INFO
 	XMFLOAT4X4 m_xmf4x4World;
 };
 
-
-
 class CBaseObject
 {
 public:	// 持失切, 社瑚切

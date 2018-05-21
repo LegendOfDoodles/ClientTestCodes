@@ -1,73 +1,27 @@
-﻿  Shader.cpp
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(61): warning C4100: 'pxmf4x4World': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(69): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(73): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(78): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(83): warning C4100: 'pCamera': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(88): warning C4100: 'nearHitDistance': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(88): warning C4100: 'xmf4x4View': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(88): warning C4100: 'pickPosition': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(93): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(98): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(103): warning C4100: 'ObjectType': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(293): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(300): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(346): warning C4100: 'ppd3dShaderBlob': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(355): warning C4100: 'ppShaderBlob': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(483): warning C4100: 'nBuffers': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(483): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(487): warning C4100: 'pContext': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(487): warning C4100: 'pCreateMgr': 참조되지 않은 정식 매개 변수입니다.
-  LINK : D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
-Network.obj : warning LNK4099: 'vc141.pdb' PDB를 'Network.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-MeshImporter.obj : warning LNK4099: 'vc141.pdb' PDB를 'MeshImporter.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Mesh.obj : warning LNK4099: 'vc141.pdb' PDB를 'Mesh.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Vertex.obj : warning LNK4099: 'vc141.pdb' PDB를 'Vertex.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Material.obj : warning LNK4099: 'vc141.pdb' PDB를 'Material.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Texture.obj : warning LNK4099: 'vc141.pdb' PDB를 'Texture.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Prefabs.obj : warning LNK4099: 'vc141.pdb' PDB를 'Prefabs.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Skeleton.obj : warning LNK4099: 'vc141.pdb' PDB를 'Skeleton.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Arrow.obj : warning LNK4099: 'vc141.pdb' PDB를 'Arrow.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Billboard.obj : warning LNK4099: 'vc141.pdb' PDB를 'Billboard.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-NexusTower.obj : warning LNK4099: 'vc141.pdb' PDB를 'NexusTower.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Player.obj : warning LNK4099: 'vc141.pdb' PDB를 'Player.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Obstacle.obj : warning LNK4099: 'vc141.pdb' PDB를 'Obstacle.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Minion.obj : warning LNK4099: 'vc141.pdb' PDB를 'Minion.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-SkyBox.obj : warning LNK4099: 'vc141.pdb' PDB를 'SkyBox.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-HeightMapTerrain.obj : warning LNK4099: 'vc141.pdb' PDB를 'HeightMapTerrain.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-AnimatedObject.obj : warning LNK4099: 'vc141.pdb' PDB를 'AnimatedObject.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-CollisionObject.obj : warning LNK4099: 'vc141.pdb' PDB를 'CollisionObject.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-AOSCamera.obj : warning LNK4099: 'vc141.pdb' PDB를 'AOSCamera.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Camera.obj : warning LNK4099: 'vc141.pdb' PDB를 'Camera.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-BaseObject.obj : warning LNK4099: 'vc141.pdb' PDB를 'BaseObject.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-BillboardShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'BillboardShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-BuildingMinimapIconShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'BuildingMinimapIconShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-MinimapIconShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'MinimapIconShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-NexusAndTowerGaugeShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'NexusAndTowerGaugeShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-MinionGaugeShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'MinionGaugeShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-PlayerGaugeShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'PlayerGaugeShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-UIShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'UIShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-TextureToFullScreenShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'TextureToFullScreenShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-NexusTowerShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'NexusTowerShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-PlayerShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'PlayerShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-AniShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'AniShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-SkyBoxShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'SkyBoxShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-TerrainShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'TerrainShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-StaticObjectShader.obj : warning LNK4099: 'vc141.pdb' PDB를 'StaticObjectShader.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Scene.obj : warning LNK4099: 'vc141.pdb' PDB를 'Scene.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-RenderMgr.obj : warning LNK4099: 'vc141.pdb' PDB를 'RenderMgr.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-CreateMgr.obj : warning LNK4099: 'vc141.pdb' PDB를 'CreateMgr.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Framework.obj : warning LNK4099: 'vc141.pdb' PDB를 'Framework.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Framework01.obj : warning LNK4099: 'vc141.pdb' PDB를 'Framework01.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-FSMMgr.obj : warning LNK4099: 'vc141.pdb' PDB를 'FSMMgr.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-HPGaugeManager.obj : warning LNK4099: 'vc141.pdb' PDB를 'HPGaugeManager.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-CollisionManager.obj : warning LNK4099: 'vc141.pdb' PDB를 'CollisionManager.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-WayFinder.obj : warning LNK4099: 'vc141.pdb' PDB를 'WayFinder.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Astar.obj : warning LNK4099: 'vc141.pdb' PDB를 'Astar.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Edge.obj : warning LNK4099: 'vc141.pdb' PDB를 'Edge.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Node.obj : warning LNK4099: 'vc141.pdb' PDB를 'Node.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-SafeFunc.obj : warning LNK4099: 'vc141.pdb' PDB를 'SafeFunc.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DDSTextureLoader12.obj : warning LNK4099: 'vc141.pdb' PDB를 'DDSTextureLoader12.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-ExptProcess.obj : warning LNK4099: 'vc141.pdb' PDB를 'ExptProcess.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-Timer.obj : warning LNK4099: 'vc141.pdb' PDB를 'Timer.obj' 또는 'D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\vc141.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+﻿  CreateMgr.cpp
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(179): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(241): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(243): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(258): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(259): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(275): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(366): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(611): warning C4101: 'hResult' :참조되지 않은 지역 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\02.framework\01.createmgr\createmgr.cpp(683): warning C4101: 'hResult' :참조되지 않은 지역 변수입니다.
+  Billboard.cpp
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\06.meshes\00.vertex\vertex.h(75): warning C4100: 'xmf3Tangent': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\95.billboard\billboard.cpp(28): warning C4100: 'fTimeElapsed': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다...
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\95.billboard\billboard.cpp(242): warning C4715: 'CHPGaugeObjects::GetCurrentHP': 모든 제어 경로에서 값을 반환하지는 않습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\95.billboard\billboard.cpp(351): warning C4715: 'CMinimapIconObjects::GetCurrentHP': 모든 제어 경로에서 값을 반환하지는 않습니다.
   Frameworks.vcxproj -> D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

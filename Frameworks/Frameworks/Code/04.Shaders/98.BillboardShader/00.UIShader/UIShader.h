@@ -5,12 +5,6 @@ class CBillboardObject;
 class CUIObject;
 class CMaterial;
 
-struct CB_TEXTURE_INFO
-{
-	XMFLOAT4X4 m_xmf4x4World;
-	int	m_index;
-};
-
 class CUIObjectShader : public CShader
 {
 public: // 持失切, 社瑚切
