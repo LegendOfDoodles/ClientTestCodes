@@ -12,7 +12,7 @@
 /// 목적: 플레이어 관리 및 렌더링 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-19
+/// 최종 수정 날짜: 2018-05-21
 /// </summary>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -362,6 +362,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	CSkinnedMesh *pPlayerMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player.meshinfo");
 	m_pStick = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
+
+	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
+		CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(1), CONVERT_PaperUnit_to_InG(10),
+		0, 0, -CONVERT_PaperUnit_to_InG(6.5));
 	
 	m_nSword = 3;
 
@@ -418,9 +422,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-			pPlayer->SetBoundingMesh(pCreateMgr,
-				CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(10),
-				0, 0, -CONVERT_PaperUnit_to_InG(6.5));
+			pPlayer->SetBoundingMesh(pBoundingBoxMesh);
 			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
 			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*1000));
 			if (z == 1) {

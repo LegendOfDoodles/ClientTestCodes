@@ -12,7 +12,7 @@
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-19
+/// 최종 수정 날짜: 2018-05-21
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -467,8 +467,13 @@ int CAniShader::GetPossibleIndex()
 void CAniShader::SpawnMinion()
 {
 	static bool dataPrepared{ false };
-	static CSkinnedMesh *pMinionMesh = new CSkinnedMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
+	static CSkinnedMesh minionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
 	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+
+	static CCubeMesh boundingBoxMesh(m_pCreateMgr,
+		CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(7),
+		0, 0, -CONVERT_PaperUnit_to_InG(4));
+	boundingBoxMesh.AddRef();
 
 	static CSkeleton SIdle("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
 	static CSkeleton SAtk1("Resource//3D//Minion//Animation//Sword//Minion_S_Attack1.aniinfo");
@@ -491,10 +496,10 @@ void CAniShader::SpawnMinion()
 
 	if (!dataPrepared)
 	{
-		pMinionMesh->SetBoundingBox(
+		minionMesh.SetBoundingBox(
 			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
-		pMinionMesh->AddRef();
+		minionMesh.AddRef();
 		dataPrepared = true;
 		return;
 	}
@@ -523,7 +528,7 @@ void CAniShader::SpawnMinion()
 			break;
 		}
 
-		pMinionObject->SetMesh(0, pMinionMesh);
+		pMinionObject->SetMesh(0, &minionMesh);
 		switch (m_kind)
 		{
 		case ObjectType::SwordMinion:
@@ -537,9 +542,7 @@ void CAniShader::SpawnMinion()
 			break;
 		}
 
-		pMinionObject->SetBoundingMesh(m_pCreateMgr,
-			CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(7),
-			0, 0, -CONVERT_PaperUnit_to_InG(4));
+		pMinionObject->SetBoundingMesh(&boundingBoxMesh);
 		pMinionObject->SetCollisionSize(CONVERT_PaperUnit_to_InG(2));
 
 		switch (m_kind)
