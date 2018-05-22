@@ -119,13 +119,7 @@ void CScene::AnimateObjects(float timeElapsed)
 void CScene::Render()
 {
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-	m_pCommandList->SetGraphicsRootConstantBufferView(5, d3dcbLightsGpuVirtualAddress); //Lights
-
-	if (m_pCubeMap)
-	{
-		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeap);
-		m_pCubeMap->UpdateShaderVariables();
-	}
+	m_pCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
@@ -146,6 +140,12 @@ void CScene::RenderWithLights()
 {
 	UpdateShaderVariables();
 	m_pCamera->UpdateShaderVariables();
+
+	if (m_pCubeMap)
+	{
+		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeap);
+		m_pCubeMap->UpdateShaderVariables();
+	}
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights

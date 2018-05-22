@@ -28,7 +28,7 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.s
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(513): warning C4189: 'y': 지역 변수가 초기화되었으나 참조되지 않았습니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(513): warning C4189: 'x': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   코드를 생성하고 있습니다.
-  3 of 3341 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 3341 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.

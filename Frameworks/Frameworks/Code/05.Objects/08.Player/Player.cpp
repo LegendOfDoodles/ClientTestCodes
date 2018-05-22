@@ -123,7 +123,7 @@ void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 	}
 
 	if (m_cbvGPUDescriptorHandle.ptr)
-		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
+		m_pCommandList->SetGraphicsRootDescriptorTable(6, m_cbvGPUDescriptorHandle);
 
 	if (m_pShader)
 	{
