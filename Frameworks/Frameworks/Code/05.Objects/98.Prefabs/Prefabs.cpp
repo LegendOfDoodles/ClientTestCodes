@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단, 이용선
-/// 최종 수정 날짜: 2018-05-21
+/// 최종 수정 날짜: 2018-05-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -71,6 +71,25 @@ CMaterial * Materials::CreateFloorMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DE
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
 		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateCubeMapMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_CUBE, 1) };
+
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/CubeMap/cubeMap.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		4, false,
 		pSrvCPUDescriptorStartHandle,
 		pSrvGPUDescriptorStartHandle);
 

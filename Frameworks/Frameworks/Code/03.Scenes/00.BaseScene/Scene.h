@@ -60,6 +60,8 @@ public: // 공개 함수
 	CCamera * GetCamera() { return m_pCamera; }
 
 protected: // 내부 함수
+	void CreateCbvAndSrvDescriptorHeap(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews);
+
 	void BuildLights();
 
 	void BuildObjects(CCreateMgr *pCreateMgr);
@@ -83,9 +85,10 @@ protected: // 변수
 	CShader **m_ppShaders{ NULL };
 	int m_nShaders{ 0 };
 
-	LIGHTS	 *m_pLights = NULL;
+	CMaterial			*m_pCubeMap{ NULL };
+	LIGHTS	 *m_pLights{ NULL };
 
-	ID3D12Resource	*m_pd3dcbLights = NULL;
+	ID3D12Resource	*m_pd3dcbLights{ NULL };
 	LIGHTS *m_pcbMappedLights = NULL;
 
 	CBaseObject ** m_ppObjects{ NULL };
@@ -108,8 +111,14 @@ protected: // 변수
 
 	CFSMMgr * m_pFSMMgr{ NULL };
 
-	Network* m_pNetwork;
+	Network* m_pNetwork{ NULL };
 	
-	int m_FrameCheck = 0;
+	int m_FrameCheck{ 0 };
+
+	ID3D12DescriptorHeap			*m_pCbvSrvDescriptorHeap{ NULL };
+	D3D12_CPU_DESCRIPTOR_HANDLE		m_cbvCPUDescriptorStartHandle{ NULL };
+	D3D12_GPU_DESCRIPTOR_HANDLE		m_cbvGPUDescriptorStartHandle{ NULL };
+	D3D12_CPU_DESCRIPTOR_HANDLE		m_srvCPUDescriptorStartHandle{ NULL };
+	D3D12_GPU_DESCRIPTOR_HANDLE		m_srvGPUDescriptorStartHandle{ NULL };
 };
 
