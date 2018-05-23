@@ -1,199 +1,33 @@
 ﻿  Scene.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.h(7): error C2065: 'CIconObject': 선언되지 않은 식별자입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.h(7): error C2059: 구문 오류: '>'
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.h(7): error C2976: 'std::list': 템플릿 인수가 너무 적습니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\list(789): note: 'std::list' 선언을 참조하십시오.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(93): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(494): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(494): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  UIShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(98): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(101): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(136): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(138): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  PlayerGaugeShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\00.playergaugeshader\playergaugeshader.cpp(107): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\00.playergaugeshader\playergaugeshader.cpp(113): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-  MinionGaugeShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(45): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(45): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(65): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(65): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(77): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(77): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(86): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(86): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(97): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(103): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(261): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(261): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(262): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(262): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(277): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
-          with
-          [
-              _Ty=CGaugeObject *
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\01.miniongaugeshader\miniongaugeshader.cpp(277): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-  NexusAndTowerGaugeShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\02.nexusandtowergaugeshader\nexusandtowergaugeshader.cpp(91): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\02.nexusandtowergaugeshader\nexusandtowergaugeshader.cpp(96): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-  MinimapIconShader.cpp
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.h(7): error C2065: 'CIconObject': 선언되지 않은 식별자입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.h(7): error C2059: 구문 오류: '>'
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.h(7): error C2976: 'std::list': 템플릿 인수가 너무 적습니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\list(789): note: 'std::list' 선언을 참조하십시오.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(18): error C2512: 'std::list': 사용할 수 있는 적절한 기본 생성자가 없습니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\list(789): note: 'std::list' 선언을 참조하십시오.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(56): error C2663: 'std::list<_Ty,_Alloc>::begin': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(56): error C2530: 'iter': 참조를 초기화해야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(56): error C3536: 'iter': 초기화되기 전에 사용할 수 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(56): error C2663: 'std::list<_Ty,_Alloc>::end': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(57): error C2100: 간접 참조가 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(57): error C2227: '->GetIndex' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(57): note: 'int' 형식입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(59): error C2100: 간접 참조가 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(59): error C2227: '->GetWorldMatrix' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(59): note: 'int' 형식입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(58): error C2660: 'DirectX::XMStoreFloat4x4': 함수는 1개의 매개 변수를 사용하지 않습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(65): error C2662: 'void std::list<_Ty,_Alloc>::remove_if<CMinimapIconShader::AnimateObjects::<lambda_482e1f5e1e01a0ef051986b1797af58b>>(_Pr1)': 'this' 포인터를 'MinionIconObjectList'에서 'std::list<_Ty,_Alloc> &'(으)로 변환할 수 없습니다.
-          with
-          [
-              _Pr1=CMinimapIconShader::AnimateObjects::<lambda_482e1f5e1e01a0ef051986b1797af58b>
-          ]
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(73): note: 원인: 'MinionIconObjectList'에서 'std::list<_Ty,_Alloc>'(으)로 변환할 수 없습니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(73): note: 변환하려면 둘째 사용자 정의 변환 연산자 또는 생성자가 있어야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(75): error C2663: 'std::list<_Ty,_Alloc>::begin': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(75): error C2530: 'iter': 참조를 초기화해야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(75): error C3536: 'iter': 초기화되기 전에 사용할 수 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(75): error C2663: 'std::list<_Ty,_Alloc>::end': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(76): error C2100: 간접 참조가 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(76): error C2227: '->Animate' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(76): note: 'int' 형식입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(144): error C2663: 'std::list<_Ty,_Alloc>::begin': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(144): error C2530: 'iter': 참조를 초기화해야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(144): error C3536: 'iter': 초기화되기 전에 사용할 수 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(144): error C2663: 'std::list<_Ty,_Alloc>::end': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(146): error C2100: 간접 참조가 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(146): error C2227: '->Render' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(146): note: 'int' 형식입니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(154): error C2663: 'std::list<_Ty,_Alloc>::begin': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(154): error C2530: 'iter': 참조를 초기화해야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(154): error C3536: 'iter': 초기화되기 전에 사용할 수 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(154): error C2663: 'std::list<_Ty,_Alloc>::end': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(155): error C2100: 간접 참조가 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(155): error C2440: 'static_cast': 'int'에서 'CIconObject *'(으)로 변환할 수 없습니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(155): note: 정수 계열 형식에서 포인터 형식으로 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(155): error C2227: '->SetCamera' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(375): error C2662: 'decltype(auto) std::list<_Ty,_Alloc>::emplace_back<CIconObject*&>(CIconObject *&)': 'this' 포인터를 'MinionIconObjectList'에서 'std::list<_Ty,_Alloc> &'(으)로 변환할 수 없습니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(375): note: 원인: 'MinionIconObjectList'에서 'std::list<_Ty,_Alloc>'(으)로 변환할 수 없습니다.
-  c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(375): note: 변환하려면 둘째 사용자 정의 변환 연산자 또는 생성자가 있어야 합니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(383): error C2955: 'std::list': 클래스 템플릿을(를) 사용하려면 템플릿 인수 목록이 필요합니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\list(789): note: 'std::list' 선언을 참조하십시오.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(383): error C2663: 'std::list<_Ty,_Alloc>::rbegin': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(383): error C2440: '초기화 중': 'initializer list'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<_Alloc_types::_Val_types>>> &'(으)로 변환할 수 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(384): error C2955: 'std::list': 클래스 템플릿을(를) 사용하려면 템플릿 인수 목록이 필요합니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.13.26128\include\list(789): note: 'std::list' 선언을 참조하십시오.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(384): error C2663: 'std::list<_Ty,_Alloc>::rbegin': 2개의 오버로드에서 'this' 포인터에 대한 변환이 잘못되었습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(384): error C2440: '초기화 중': 'initializer list'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<_Alloc_types::_Val_types>>> &'(으)로 변환할 수 없습니다.
-c:\users\lys\documents\work\github\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(386): fatal error C1903: 이전 오류를 복구할 수 없습니다. 컴파일이 중지됩니다.
-  'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\bin\HostX86\x64\CL.exe'에서 내부 컴파일러 오류
-      자세한 내용을 보려면 Visual C++ [도움말] 메뉴에서
-   [기술 지원] 명령을 선택하거나 기술 지원 도움말 파일을 참조하십시오.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(33): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(94): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(198): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(221): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(243): warning C4189: 'hResult': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(460): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(510): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(510): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(494): warning C4101: 'my_packet' :참조되지 않은 지역 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(495): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(531): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(534): warning C4189: 'y': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(534): warning C4189: 'x': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  코드를 생성하고 있습니다.
+  0 of 3332 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  Frameworks.vcxproj -> D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Release\Framework01.exe
