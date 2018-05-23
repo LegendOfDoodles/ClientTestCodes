@@ -4,6 +4,7 @@
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/99.Material/Material.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
+#include "05.Objects/96.Billboard/02.GaugeObject/GaugeObject.h"
 
 /// <summary>
 /// 목적: 미니언 HP Gauge 쉐이더
@@ -51,7 +52,7 @@ void CMinionHPGaugeShader::UpdateShaderVariables()
 
 void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 {
-	m_HPGaugeObjectList.remove_if([this](CHPGaugeObjects* obj)
+	m_HPGaugeObjectList.remove_if([this](CGaugeObject* obj)
 	{ 
 		if (obj->GetState() == States::Die)
 		{
@@ -83,7 +84,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 	m_pCamera = pCamera;
 
 	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
-		static_cast<CHPGaugeObjects*>(*iter)->SetCamera(m_pCamera);
+		static_cast<CGaugeObject*>(*iter)->SetCamera(m_pCamera);
 	}
 }
 
@@ -231,10 +232,10 @@ void CMinionHPGaugeShader::SpawnGauge()
 		int index = GetPossibleIndex();
 		if (index == NONE) break;
 
-		CHPGaugeObjects *pGaugeObject{ NULL };
+		CGaugeObject *pGaugeObject{ NULL };
 		CCollisionObject *pMinionObjects{ NULL };
 
-		pGaugeObject = new CHPGaugeObjects(m_pCreateMgr, GagueUIType::MinionGauge);
+		pGaugeObject = new CGaugeObject(m_pCreateMgr, GagueUIType::MinionGauge);
 		pMinionObjects = (*minion);
 
 		pGaugeObject->SetObject(pMinionObjects);

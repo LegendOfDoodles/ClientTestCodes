@@ -2,7 +2,7 @@
 #include "04.Shaders/00.BaseShader/Shader.h"
 
 class CBillboardObject;
-class CUIObject;
+class CUIFrameObject;
 class CMaterial;
 
 class CUIObjectShader : public CShader

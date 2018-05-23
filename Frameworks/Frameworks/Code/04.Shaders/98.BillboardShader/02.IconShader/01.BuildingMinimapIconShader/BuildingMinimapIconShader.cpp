@@ -3,6 +3,7 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/09.NexusTower/NexusTower.h"
 #include "05.Objects/99.Material/Material.h"
+#include "05.Objects/96.Billboard/03.IconObject/IconObject.h"
 
 /// <summary>
 /// 목적: 미니맵 건물 Icon 쉐이더
@@ -46,7 +47,7 @@ void CBuildingMinimapIconShader::UpdateShaderVariables()
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
-		pMappedObject->m_fCurrentHP = ((CMinimapIconObjects*)m_ppObjects[i])->GetCurrentHP();
+		pMappedObject->m_fCurrentHP = ((CIconObject*)m_ppObjects[i])->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -66,32 +67,28 @@ void CBuildingMinimapIconShader::Render(CCamera * pCamera)
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		CCollisionObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
+		CCollisionObject* master = ((CIconObject*)m_ppObjects[j])->GetMasterObject();
 
 		switch (master->GetType())
 		{
 		case ObjectType::FirstTower:
+			CShader::Render(pCamera, 0);
+
 			if (master->GetTeam() == TeamType::Blue) {
-				// Blue Tower
-				CShader::Render(pCamera, 0);
-				m_ppMaterials[0]->UpdateShaderVariables();
+				m_ppMaterials[0]->UpdateShaderVariable(0);
 			}
 			else {
-				// Red Tower
-				CShader::Render(pCamera, 1);
-				m_ppMaterials[1]->UpdateShaderVariables();
+				m_ppMaterials[0]->UpdateShaderVariable(1);
 			}
 			break;
 		case ObjectType::Nexus:
+			CShader::Render(pCamera, 1);
+
 			if (master->GetTeam() == TeamType::Blue) {
-				// Box
-				CShader::Render(pCamera, 2);
-				m_ppMaterials[2]->UpdateShaderVariables();
+				m_ppMaterials[1]->UpdateShaderVariable(0);
 			}
 			else {
-				// Shell
-				CShader::Render(pCamera, 3);
-				m_ppMaterials[3]->UpdateShaderVariables();
+				m_ppMaterials[1]->UpdateShaderVariable(1);
 			}
 			break;
 		}
@@ -106,7 +103,7 @@ void CBuildingMinimapIconShader::GetCamera(CCamera * pCamera)
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		static_cast<CMinimapIconObjects*>(m_ppObjects[i])->SetCamera(m_pCamera);
+		static_cast<CIconObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
 	}
 }
 
@@ -195,7 +192,7 @@ void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRen
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
-	m_nHeaps = 4;
+	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets);
@@ -230,26 +227,33 @@ void CBuildingMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pC
 	CreateShaderVariables(pCreateMgr, m_nObjects);
 
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2, i);
 		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
 	}
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateBlueTowerIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateRedTowerIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	// Tower
+	/* 0. Blue 1. Red */
+	m_ppMaterials[0] = Materials::CreateTowerIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);/*
+	m_ppMaterials[1] = Materials::CreateRedTowerIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);*/
+
+	// Nexus
+	/* 0. Blue 1. Red */
+	m_ppMaterials[1] = Materials::CreateNexusIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+/*
 	m_ppMaterials[2] = Materials::CreateBoxNexusIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
-	m_ppMaterials[3] = Materials::CreateShellNexusIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_ppMaterials[3] = Materials::CreateShellNexusIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);*/
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
 	// Player Icon 생성
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinimapIconObjects *pIconObject = NULL;
+	CIconObject *pIconObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pIconObject = new CMinimapIconObjects(pCreateMgr, IconUIType::NexusAndTowerIcon);
+		pIconObject = new CIconObject(pCreateMgr, IconUIType::NexusAndTowerIcon);
 
 		pIconObject->SetCamera(m_pCamera);
 		pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9

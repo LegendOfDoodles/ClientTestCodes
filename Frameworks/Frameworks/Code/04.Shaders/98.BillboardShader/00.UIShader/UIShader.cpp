@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "UIShader.h"
-#include "05.Objects/96.Billboard/Billboard.h"
+#include "05.Objects/96.Billboard/01.FrameObject/UIFrameObject.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 
@@ -82,7 +82,7 @@ void CUIObjectShader::GetCamera(CCamera * pCamera)
 	m_pCamera = pCamera;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		static_cast<CUIObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
+		static_cast<CUIFrameObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
 	}
 }
 
@@ -267,7 +267,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 4;
+	m_nObjects = 8;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -277,7 +277,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CUIObject *pUIObject{ NULL };
+	CUIFrameObject *pUIObject{ NULL };
 
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
@@ -285,7 +285,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		pUIObject = new CUIObject(pCreateMgr, (UIType)i);
+		pUIObject = new CUIFrameObject(pCreateMgr, (UIFrameType)i);
 		pUIObject->SetCamera(m_pCamera);
 		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
 		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));

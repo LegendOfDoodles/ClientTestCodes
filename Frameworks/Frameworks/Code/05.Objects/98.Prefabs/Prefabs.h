@@ -140,47 +140,18 @@ namespace Materials
 	// Icon
 		//Player
 			//Blue
-	CMaterial* CreateStickBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateSwordBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-	
-	CMaterial* CreateStaffBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateBowBlueIconMaterial(CCreateMgr *pCreateMgr,
+		// Texture Array 
+	CMaterial* CreatePlayerBlueIconMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
 			//Red
-	CMaterial* CreateStickRedIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateSwordRedIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateStaffRedIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateBowRedIconMaterial(CCreateMgr *pCreateMgr,
+	CMaterial* CreatePlayerRedIconMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
 		// Minion
-			//Blue
-	CMaterial* CreateMinionBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-			//Red
-	CMaterial* CreateMinionRedIconMaterial(CCreateMgr *pCreateMgr,
+	CMaterial* CreateMinionIconMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
@@ -194,7 +165,6 @@ namespace Materials
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
 		// Common Monster
-			//White Icon
 	CMaterial* CreateCamBossIconMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
@@ -207,47 +177,13 @@ namespace Materials
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
-			// Blue Icon
-	CMaterial* CreateCamBossBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateLoydeBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateGolemBlueIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-			// Red Icon
-	CMaterial* CreateCamBossRedIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateLoydeRedIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateGolemRedIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
 		// Tower
-	CMaterial* CreateRedTowerIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateBlueTowerIconMaterial(CCreateMgr *pCreateMgr,
+	CMaterial* CreateTowerIconMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
 		// Nexus
-	CMaterial* CreateBoxNexusIconMaterial(CCreateMgr *pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateShellNexusIconMaterial(CCreateMgr *pCreateMgr,
+	CMaterial* CreateNexusIconMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 

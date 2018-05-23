@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "PlayerGaugeShader.h"
-#include "05.Objects/96.Billboard/Billboard.h"
+#include "05.Objects/96.Billboard/02.GaugeObject/GaugeObject.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 #include "05.Objects/08.Player/Player.h"
@@ -62,7 +62,7 @@ void CPlayerHPGaugeShader::UpdateShaderVariables()
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
-		pMappedObject->m_fCurrentHP = ((CHPGaugeObjects*)m_ppObjects[i])->GetCurrentHP();
+		pMappedObject->m_fCurrentHP = ((CGaugeObject*)m_ppObjects[i])->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -99,7 +99,7 @@ void CPlayerHPGaugeShader::GetCamera(CCamera * pCamera)
 	m_pCamera = pCamera;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		static_cast<CHPGaugeObjects*>(m_ppObjects[i])->SetCamera(m_pCamera);
+		static_cast<CGaugeObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
 	}
 
 }
@@ -239,13 +239,13 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CHPGaugeObjects *pGaugeObject = NULL;
+	CGaugeObject *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
 		
 		if (i < m_nPlayer)
 		{
-			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::PlayerGauge);
+			pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::PlayerGauge);
 			pGaugeObject->SetMaterial(Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 			pGaugeObject->SetCamera(m_pCamera);
 
@@ -260,7 +260,7 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 		}
 		else
 		{
-			pGaugeObject = new CHPGaugeObjects(pCreateMgr, GagueUIType::NexusAndTower);
+			pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::NexusAndTower);
 			pGaugeObject->SetMaterial(Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 			pGaugeObject->SetCamera(m_pCamera);
 
