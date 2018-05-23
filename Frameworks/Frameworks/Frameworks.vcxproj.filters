@@ -201,6 +201,18 @@
     <Filter Include="소스 파일\05.Objects\96.Billboard">
       <UniqueIdentifier>{55fe72be-b996-42b9-af24-96806570544b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard\99.BillboardObject">
+      <UniqueIdentifier>{74cfa5e5-72a9-430c-9afd-56f221de84ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard\02.GaugeObject">
+      <UniqueIdentifier>{4d39b041-e9a3-4f11-8336-97477fd5b603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard\03.IconObject">
+      <UniqueIdentifier>{c77fb4e8-cf0c-4702-bc44-24563b5c846d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard\01.UIFrameObject">
+      <UniqueIdentifier>{d0ff4abe-5dbf-4daf-819c-218d32358ff7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -377,8 +389,17 @@
     <ClInclude Include="Code\04.Shaders\97.TextureToFullScreenShader\TextureToFullScreenShader.h">
       <Filter>소스 파일\04.Shaders\97.TextureToFullScreenShader</Filter>
     </ClInclude>
-    <ClInclude Include="Code\05.Objects\96.Billboard\Billboard.h">
-      <Filter>소스 파일\05.Objects\96.Billboard</Filter>
+    <ClInclude Include="Code\05.Objects\96.Billboard\99.BillboardObject\Billboard.h">
+      <Filter>소스 파일\05.Objects\96.Billboard\99.BillboardObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\96.Billboard\01.FrameObject\UIFrameObject.h">
+      <Filter>소스 파일\05.Objects\96.Billboard\01.UIFrameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\96.Billboard\02.GaugeObject\GaugeObject.h">
+      <Filter>소스 파일\05.Objects\96.Billboard\02.GaugeObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\96.Billboard\03.IconObject\IconObject.h">
+      <Filter>소스 파일\05.Objects\96.Billboard\03.IconObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -535,8 +556,17 @@
     <ClCompile Include="Code\04.Shaders\97.TextureToFullScreenShader\TextureToFullScreenShader.cpp">
       <Filter>소스 파일\04.Shaders\97.TextureToFullScreenShader</Filter>
     </ClCompile>
-    <ClCompile Include="Code\05.Objects\96.Billboard\Billboard.cpp">
-      <Filter>소스 파일\05.Objects\96.Billboard</Filter>
+    <ClCompile Include="Code\05.Objects\96.Billboard\99.BillboardObject\Billboard.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard\99.BillboardObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\96.Billboard\01.FrameObject\UIFrameObject.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard\01.UIFrameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\96.Billboard\02.GaugeObject\GaugeObject.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard\02.GaugeObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\96.Billboard\03.IconObject\IconObject.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard\03.IconObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

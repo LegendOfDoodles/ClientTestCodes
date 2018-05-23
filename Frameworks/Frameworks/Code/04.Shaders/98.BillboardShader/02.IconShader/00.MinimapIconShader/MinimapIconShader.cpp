@@ -61,7 +61,7 @@ void CMinimapIconShader::UpdateShaderVariables()
 
 void CMinimapIconShader::AnimateObjects(float timeElapsed)
 {
-	m_MinionIconObjectList.remove_if([this](CMinimapIconObjects* obj)
+	m_MinionIconObjectList.remove_if([this](CIconObject* obj)
 	{
 		if (obj->GetState() == States::Die)
 		{
@@ -89,57 +89,56 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		CCollisionObject* master = ((CMinimapIconObjects*)m_ppObjects[j])->GetMasterObject();
+		CCollisionObject* master = ((CIconObject*)m_ppObjects[j])->GetMasterObject();
 		
 		switch (master->GetType())
 		{
-			
 			case ObjectType::StickPlayer:
 				if (master->GetTeam() == TeamType::Blue) {
 					CShader::Render(pCamera, 0);
-					m_ppMaterials[0]->UpdateShaderVariables();
+					m_ppMaterials[0]->UpdateShaderVariable(0);
 				}
 				else if (master->GetTeam() == TeamType::Red) {
-					CShader::Render(pCamera, 4);
-					m_ppMaterials[4]->UpdateShaderVariables();
+					CShader::Render(pCamera, 1);
+					m_ppMaterials[1]->UpdateShaderVariable(0);
 				}
 				break;
 			case ObjectType::SwordPlayer:
 				if (master->GetTeam() == TeamType::Blue) {
-					CShader::Render(pCamera, 1);
-					m_ppMaterials[1]->UpdateShaderVariables();
+					CShader::Render(pCamera, 0);
+					m_ppMaterials[0]->UpdateShaderVariable(1);
 				}
 				else if (master->GetTeam() == TeamType::Red) {
-					CShader::Render(pCamera, 5);
-					m_ppMaterials[5]->UpdateShaderVariables();
+					CShader::Render(pCamera, 1);
+					m_ppMaterials[1]->UpdateShaderVariable(1);
 				}
 				break;
 			case ObjectType::BowPlayer:
 				if (master->GetTeam() == TeamType::Blue) {
-					CShader::Render(pCamera, 2);
-					m_ppMaterials[2]->UpdateShaderVariables();
+					CShader::Render(pCamera, 0);
+					m_ppMaterials[0]->UpdateShaderVariable(3);
 				}
 				else if (master->GetTeam() == TeamType::Red) {
-					CShader::Render(pCamera, 6);
-					m_ppMaterials[6]->UpdateShaderVariables();
+					CShader::Render(pCamera, 1);
+					m_ppMaterials[1]->UpdateShaderVariable(3);
 				}
 				break;
 			case ObjectType::StaffPlayer:
 				if (master->GetTeam() == TeamType::Blue) {
-					CShader::Render(pCamera, 3);
-					m_ppMaterials[3]->UpdateShaderVariables();
+					CShader::Render(pCamera, 0);
+					m_ppMaterials[0]->UpdateShaderVariable(2);
 				}
 				else if (master->GetTeam() == TeamType::Red) {
-					CShader::Render(pCamera, 7);
-					m_ppMaterials[7]->UpdateShaderVariables();
+					CShader::Render(pCamera, 1);
+					m_ppMaterials[1]->UpdateShaderVariable(2);
 				}
 				break;
 		}
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 
-	CShader::Render(pCamera, 9);
-	m_ppMaterials[9]->UpdateShaderVariables();
+	CShader::Render(pCamera, 2);
+	m_ppMaterials[2]->UpdateShaderVariable(0);
 	// 미니언
 	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
 		
@@ -152,12 +151,12 @@ void CMinimapIconShader::GetCamera(CCamera * pCamera)
 	m_pCamera = pCamera;
 
 	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
-		static_cast<CMinimapIconObjects*>(*iter)->SetCamera(m_pCamera);
+		static_cast<CIconObject*>(*iter)->SetCamera(m_pCamera);
 	}
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		static_cast<CMinimapIconObjects*>(m_ppObjects[i])->SetCamera(m_pCamera);
+		static_cast<CIconObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
 	}
 }
 
@@ -252,7 +251,7 @@ void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTarge
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
-	m_nHeaps = 10;
+	m_nHeaps = 3;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets);
@@ -287,7 +286,7 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	CreateShaderVariables(pCreateMgr, m_nObjects + MAX_MINION);
 
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects + MAX_MINION, 1, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects + MAX_MINION, 4, i);
 		CreateConstantBufferViews(pCreateMgr, m_nObjects + MAX_MINION, m_pConstBuffer, ncbElementBytes, i);
 	}
 #if USE_BATCH_MATERIAL
@@ -295,21 +294,15 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	
 	//Player
+	/* 0. Stick, 1.Sword, 2.Magic 3.Bow */
 		// Blue Team
-	m_ppMaterials[0] = Materials::CreateStickBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateSwordBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[2] = Materials::CreateBowBlueIconMaterial(pCreateMgr,		&m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
-	m_ppMaterials[3] = Materials::CreateStaffBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_ppMaterials[0] = Materials::CreatePlayerBlueIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 		// Red Team
-	m_ppMaterials[4] = Materials::CreateStickRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
-	m_ppMaterials[5] = Materials::CreateSwordRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
-	m_ppMaterials[6] = Materials::CreateBowRedIconMaterial(pCreateMgr,		&m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
-	m_ppMaterials[7] = Materials::CreateStaffRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
+	m_ppMaterials[1] = Materials::CreatePlayerRedIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	
 	//Minion
-		// Blue
-	m_ppMaterials[8] = Materials::CreateMinionBlueIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[8], &m_psrvGPUDescriptorStartHandle[8]);
-		// Red
-	m_ppMaterials[9] = Materials::CreateMinionRedIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[9], &m_psrvGPUDescriptorStartHandle[9]);
+	/* 0. Blue 1. Red */
+	m_ppMaterials[2] = Materials::CreateMinionIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
 
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
@@ -317,16 +310,15 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	// Player Icon 생성
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CMinimapIconObjects *pIconObject = NULL;
+	CIconObject *pIconObject = NULL;
 	
 	for (int i = 0; i < m_nObjects; ++i) {
 		if (i < m_nPlayer) {
-			pIconObject = new CMinimapIconObjects(pCreateMgr, IconUIType::PlayerIcon);
+			pIconObject = new CIconObject(pCreateMgr, IconUIType::PlayerIcon);
 
 			pIconObject->SetCamera(m_pCamera);
 			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
 			pIconObject->SetObject(m_pPlayer[i]);
-			pIconObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
 			pIconObject->WorldToMinimap();
 
 			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
@@ -364,10 +356,10 @@ void CMinimapIconShader::SpawnMinionIcon()
 		int index = GetPossibleIndex();
 		if (index == NONE) break;
 
-		CMinimapIconObjects *pMinionIcon{ NULL };
+		CIconObject *pMinionIcon{ NULL };
 		CCollisionObject *pMinionObjects{ NULL };
 
-		pMinionIcon = new CMinimapIconObjects(m_pCreateMgr, IconUIType::MinionIcon);
+		pMinionIcon = new CIconObject(m_pCreateMgr, IconUIType::MinionIcon);
 		pMinionObjects = (*minion);
 
 		pMinionIcon->SetObject(pMinionObjects);

@@ -1,13 +1,14 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
-#include "05.Objects/96.Billboard/Billboard.h"
+#include "05.Objects/96.Billboard/03.IconObject/IconObject.h"
 
 typedef std::list<CCollisionObject*> CollisionObjectList;
-typedef std::list<CMinimapIconObjects*> MinionIconObjectList;
+typedef std::list<CIconObject*> MinionIconObjectList;
 
 class CMaterial;
 class CPlayer;
+class CIconObject;
 class CUIObjectManager;
 
 class CMinimapIconShader : public CShader

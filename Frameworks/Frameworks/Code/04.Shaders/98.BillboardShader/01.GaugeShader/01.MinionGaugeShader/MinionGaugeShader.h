@@ -1,10 +1,10 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
-#include "05.Objects/96.Billboard/Billboard.h"
+#include "05.Objects/96.Billboard/02.GaugeObject/GaugeObject.h"
 
 typedef std::list<CCollisionObject*> CollisionObjectList;
-typedef std::list<CHPGaugeObjects*> HPGaugeObjectList;
+typedef std::list<CGaugeObject*> HPGaugeObjectList;
 
 class CMaterial;
 class CUIObjectManager;
