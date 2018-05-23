@@ -41,7 +41,7 @@ CScene::~CScene()
 // 공개 함수
 void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
 {
-	//m_pNetwork = pNetwork;
+	m_pNetwork = pNetwork;
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
 	//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL );
@@ -503,6 +503,11 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		//memcpy(m_pNetwork->m_send_buffer, &my_packet, sizeof(my_packet));
 		//m_pNetwork->SendPacket(m_pNetwork->m_myid, &my_packet);
 		//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, (CBaseObject**)m_pSelectedObject);
+	}
+	else {
+		//이 전에 ppObejct 받아오기만 하면 됌.
+		//m_pSelectedObject = (CAnimatedObject*)m_ppObjects[m_pNetwork->m_myid];
+
 	}
 }
 

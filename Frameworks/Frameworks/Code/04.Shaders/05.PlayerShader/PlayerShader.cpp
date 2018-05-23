@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 CPlayerShader::CPlayerShader(CCreateMgr *pCreateMgr, Network* network) : CShader(pCreateMgr)
 {
-	//m_pNetwork = network;
+	m_pNetwork = network;
 }
 
 CPlayerShader::~CPlayerShader()

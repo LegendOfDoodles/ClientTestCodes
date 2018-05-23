@@ -3,7 +3,7 @@
 #pragma once
 #pragma pack(push,1)
 struct Packet {
-	
+
 	BYTE size;
 	short type;
 };
@@ -93,6 +93,62 @@ struct CS_MsgDemandMakeRoom : public Packet
 	BYTE Character_id;
 
 };
+
+struct SC_Msg_Pos_Character : public Packet
+{
+	BYTE Character_id;
+	short x;
+	short y;
+	short maxhp;
+	short curhp;
+	short state;
+	short frameTime;
+	short weapon;
+	XMFLOAT3 vLook;
+};
+
+struct CS_Msg_Demand_Use_Skill : public Packet
+{
+	BYTE Character_id;
+	BYTE skilltype;
+};
+struct SC_Msg_Permit_Use_Skill : public Packet
+{
+	BYTE Character_id;
+	short state;
+};
+
+struct SC_Msg_Minion_Count : public Packet
+{
+	BYTE color;
+	short count;
+};
+
+struct SC_Msg_Pos_Minion : public Packet
+{
+	BYTE color;
+	short x;
+	short y;
+	short maxhp;
+	short curhp;
+	short state;
+	short frameTime;
+	XMFLOAT3 vLook;
+};
+
+struct SC_Msg_Pos_Nexus : public Packet
+{
+	BYTE Object_id;
+	XMFLOAT3 vPos;
+	short maxhp;
+	short curhp;
+};
+
+struct CS_Msg_Demand_Change_Weapon : public Packet
+{
+	BYTE Character_id;
+};
+
 #pragma pack(pop)
 
 #define MAX_BUFF_SIZE 4000
@@ -119,6 +175,11 @@ struct CS_MsgDemandMakeRoom : public Packet
 #define SC_PUT_MONSTER			  107
 #define SC_PUT_MINION			  108
 #define SC_PERMIT_MAKE_ROOM		  109
+#define SC_POS					  110
+#define SC_PERMIT_USE_SKILL		  111
+#define SC_POS_MINION			  112
+#define SC_MINION_COUNT			  113
+#define SC_POS_NEXUS			  114
 //Client->Server
 #define CS_ACTION				  201
 #define CS_MOVE_PLAYER			  202
@@ -126,6 +187,8 @@ struct CS_MsgDemandMakeRoom : public Packet
 #define CS_DAMAND_MAKE_ROOM		  204
 #define CS_PUT_MINION			  205
 #define CS_DELETE_MINION		  206
+#define CS_DEMAND_USE_SKILL		  207
+#define CS_DEMAND_CHANGE_WEAPON   208
 //In Client Move Object
 #define CS_UP					  1
 #define CS_DOWN					  2

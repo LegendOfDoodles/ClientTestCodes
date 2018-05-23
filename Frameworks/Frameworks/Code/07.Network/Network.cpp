@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Network.h"
-
+#include "..\05.Objects\03.AnimatedObject\AnimatedObject.h"
+#include "..\05.Objects\08.Player\Player.h"
+#include "..\05.Objects\06.Minion\Minion.h"
+#include "..\05.Objects\09.NexusTower\NexusTower.h"
 
 Network::Network()
 {
@@ -34,10 +37,10 @@ void Network::Initialize(HWND hWnd)
 	m_recv_wsabuf.buf = m_recv_buffer;
 	m_recv_wsabuf.len = MAX_BUFF_SIZE;
 
-	m_ppObject = new CBaseObject*[4];
+	m_ppPlayer = new CBaseObject*[4];
 }
 
-void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
+void Network::ProcessPacket(int myid, char *ptr)
 {
 	static bool first_time = true;
 	//printf("%d\n", ptr[1]);
@@ -54,13 +57,11 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
 			}
 			if (id == m_myid) {
 				//자기 아이디 처리
-				printf("Recived Packet ID: %d X:%d Y:%d\n\n", my_packet->Character_id, my_packet->x, my_packet->y);
-				object[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
+				m_ppPlayer[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
 			}
 			else if (id < NPC_START) { //다른플레이어에게 알려줄때 쓰는거
-				//딴 아이디 처리
-				printf("Recived Packet ID: %d X:%d Y:%d\n\n", my_packet->Character_id, my_packet->x, my_packet->y);
-				object[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
+									   //딴 아이디 처리
+				m_ppPlayer[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
 			}
 			//else { //미니언, 몬스터 관리할때 쓰는거
 			//npc[id - NPC_START].x = my_packet->x;
@@ -69,15 +70,41 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
 			//}
 			break;
 		}
+
+		case SC_POS:
+		{
+			SC_Msg_Pos_Character *my_packet = reinterpret_cast<SC_Msg_Pos_Character *>(ptr);
+			int id = my_packet->Character_id;
+			if (first_time) {
+				first_time = false;
+				m_myid = id;
+			}
+			if (id == m_myid) {
+				//자기 아이디 처리
+				m_ppPlayer[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
+				//dynamic_cast<CAnimatedObject*>(m_ppPlayer[id])->SetAnimation((AnimationsType)my_packet->state, (float)my_packet->frameTime);
+				//dynamic_cast<CAnimatedObject*>(m_ppPlayer[id])->RegenerateWorldMatrixWithLook(my_packet->vLook);
+				//dynamic_cast<CPlayer*>(m_ppPlayer[id])->SetMaxHP(my_packet->maxhp, my_packet->curhp);
+				//dynamic_cast<CPlayer*>(m_ppPlayer[id])->SetWeapon(my_packet->weapon);
+			}
+			else if (id < NPC_START) {
+				m_ppPlayer[id]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
+				//dynamic_cast<CAnimatedObject*>(m_ppPlayer[id])->SetAnimation((AnimationsType)my_packet->state, (float)my_packet->frameTime);
+				//dynamic_cast<CAnimatedObject*>(m_ppPlayer[id])->RegenerateWorldMatrixWithLook(my_packet->vLook);
+				//dynamic_cast<CPlayer*>(m_ppPlayer[id])->SetMaxHP(my_packet->maxhp, my_packet->curhp);
+				//dynamic_cast<CPlayer*>(m_ppPlayer[id])->SetWeapon(my_packet->weapon);
+			}
+			break;
+		}
 		case SC_PUT_MINION:
 		{
 			/*SC_MsgMoCreate *my_packet = reinterpret_cast<SC_MsgMoCreate *>(ptr);
 			int id = my_packet->Monster_id;
 			if (first_time) {
-				first_time = false;
+			first_time = false;
 			}
 			else {
-				
+
 			}*/
 
 			break;
@@ -121,7 +148,43 @@ void Network::ProcessPacket(int myid, char *ptr, CBaseObject** object)
 			//}
 			break;
 		}
+		case SC_POS_MINION:
+		{
+			SC_Msg_Pos_Minion* my_packet = reinterpret_cast<SC_Msg_Pos_Minion*>(ptr);
+			if (my_packet->color == 1) {
+				m_ppBlueMinions[m_minon_index]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
+				//dynamic_cast<CAnimatedObject*>(m_ppBlueMinions[m_minon_index])->SetAnimation((AnimationsType)my_packet->state, (float)my_packet->frameTime);
+				//dynamic_cast<CAnimatedObject*>(m_ppBlueMinions[m_minon_index])->RegenerateWorldMatrixWithLook(my_packet->vLook);
+				//dynamic_cast<CMinion*>(m_ppBlueMinions[m_minon_index++])->SetMaxHP(my_packet->maxhp, my_packet->curhp);
 
+			}
+			else {
+				m_ppRedMinions[m_minon_index]->CBaseObject::SetPosition(my_packet->x, my_packet->y);
+				//dynamic_cast<CAnimatedObject*>(m_ppRedMinions[m_minon_index])->SetAnimation((AnimationsType)my_packet->state, (float)my_packet->frameTime);
+				//dynamic_cast<CAnimatedObject*>(m_ppRedMinions[m_minon_index])->RegenerateWorldMatrixWithLook(my_packet->vLook);
+				//dynamic_cast<CMinion*>(m_ppRedMinions[m_minon_index++])->SetMaxHP(my_packet->maxhp, my_packet->curhp);
+			}
+			break;
+		}
+		case SC_MINION_COUNT:
+		{
+			m_minon_index = 0;
+			SC_Msg_Minion_Count* my_packet = reinterpret_cast<SC_Msg_Minion_Count*>(ptr);
+			if (my_packet->color == 1) {
+				*m_pnBlue = my_packet->count;
+			}
+			else {
+				*m_pnRed = my_packet->count;
+			}
+			break;
+		}
+		case SC_POS_NEXUS:
+		{
+			SC_Msg_Pos_Nexus* my_packet = reinterpret_cast<SC_Msg_Pos_Nexus*>(ptr);
+			m_ppNexusTower[my_packet->Object_id]->SetPosition(my_packet->vPos);
+			//dynamic_cast<CNexusTower*>(m_ppNexusTower[my_packet->Object_id])->SetMaxHP(my_packet->maxhp, my_packet->curhp);
+			break;
+		}
 		default:
 			printf("Unknown PACKET type [%d]\n", ptr[1]);
 			break;
@@ -134,7 +197,7 @@ void Network::Finalize()
 	closesocket(m_mysocket);
 }
 
-void Network::ReadPacket(SOCKET sock,CBaseObject** object)
+void Network::ReadPacket(SOCKET sock)
 {
 	DWORD ioflag = 0;
 	DWORD iobyte = 0;
@@ -146,7 +209,7 @@ void Network::ReadPacket(SOCKET sock,CBaseObject** object)
 		if (err_code == 10035) {
 			errorcount += 1;
 			//if (errorcount > 3) return; //10035계속 발생하면 걍 리턴 
-			ProcessPacket(m_myid, m_packet_buffer, object);
+			ProcessPacket(m_myid, m_packet_buffer);
 		}
 	}
 	BYTE *ptr = reinterpret_cast<BYTE *>(m_recv_buffer);
@@ -155,7 +218,7 @@ void Network::ReadPacket(SOCKET sock,CBaseObject** object)
 		if (0 == m_in_packet_size) m_in_packet_size = ptr[0];
 		if (iobyte + m_saved_packet_size >= m_in_packet_size) {
 			memcpy(m_packet_buffer + m_saved_packet_size, ptr, m_in_packet_size - m_saved_packet_size);
-			ProcessPacket(m_myid, m_packet_buffer, object);
+			ProcessPacket(m_myid, m_packet_buffer);
 			ptr += m_in_packet_size - m_saved_packet_size;
 			iobyte -= m_in_packet_size - m_saved_packet_size;
 			m_in_packet_size = 0;
@@ -167,8 +230,8 @@ void Network::ReadPacket(SOCKET sock,CBaseObject** object)
 			iobyte = 0;
 		}
 	}
-	
-	
+
+
 }
 
 //void Network::SendMovePacket(WPARAM wParam, CBaseObject* object)
