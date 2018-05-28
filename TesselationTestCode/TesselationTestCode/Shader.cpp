@@ -105,6 +105,24 @@ D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
 	return(d3dShaderByteCode);
 }
 
+D3D12_SHADER_BYTECODE CShader::CreateHullShader(ID3DBlob ** ppd3dShaderBlob)
+{
+	D3D12_SHADER_BYTECODE d3dShaderByteCode;
+	d3dShaderByteCode.BytecodeLength = 0;
+	d3dShaderByteCode.pShaderBytecode = NULL;
+
+	return(d3dShaderByteCode);
+}
+
+D3D12_SHADER_BYTECODE CShader::CreateDomainShader(ID3DBlob ** ppd3dShaderBlob)
+{
+	D3D12_SHADER_BYTECODE d3dShaderByteCode;
+	d3dShaderByteCode.BytecodeLength = 0;
+	d3dShaderByteCode.pShaderBytecode = NULL;
+
+	return(d3dShaderByteCode);
+}
+
 
 D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
 {
@@ -125,12 +143,15 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(WCHAR *pszFileName, LPCSTR
 	nCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	::D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, pszShaderProfile,
-		nCompileFlags, 0, ppd3dShaderBlob, NULL);
+	ComPtr<ID3DBlob> pErrorBlob{ NULL };
+	HRESULT hResult = ::D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, pszShaderProfile,
+		nCompileFlags, 0, ppd3dShaderBlob, &pErrorBlob);
+	ExptProcess::PrintErrorBlob(pErrorBlob);
 
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = (*ppd3dShaderBlob)->GetBufferSize();
 	d3dShaderByteCode.pShaderBytecode = (*ppd3dShaderBlob)->GetBufferPointer();
+
 
 	return(d3dShaderByteCode);
 }
@@ -140,29 +161,34 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(WCHAR *pszFileName, LPCSTR
 void CShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature
 	*pd3dGraphicsRootSignature)
 {
-	ID3DBlob *pd3dVertexShaderBlob = NULL, *pd3dPixelShaderBlob = NULL;
+	ID3DBlob *pd3dVertexShaderBlob = NULL, *pd3dHullShaderBlob = NULL, *pd3dDomainShaderBlob = NULL, *pd3dPixelShaderBlob = NULL;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
 
 	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
+	d3dPipelineStateDesc.HS = CreateHullShader(&pd3dHullShaderBlob);
+	d3dPipelineStateDesc.DS = CreateDomainShader(&pd3dDomainShaderBlob);
 	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
 	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
 	d3dPipelineStateDesc.BlendState = CreateBlendState();
 	d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState();
 	d3dPipelineStateDesc.InputLayout = CreateInputLayout();
 	d3dPipelineStateDesc.SampleMask = UINT_MAX;
-	d3dPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	d3dPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
 	d3dPipelineStateDesc.NumRenderTargets = 1;
 	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	d3dPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	d3dPipelineStateDesc.SampleDesc.Count = 1;
 	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
-	pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc,
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc,
 		__uuidof(ID3D12PipelineState), (void **)&m_ppd3dPipelineStates[0]);
+	ExptProcess::ThrowIfFailed(hResult);
 
 	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
+	if (pd3dHullShaderBlob) pd3dHullShaderBlob->Release();
+	if (pd3dDomainShaderBlob) pd3dDomainShaderBlob->Release();
 	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();
 
 	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[]
@@ -300,6 +326,18 @@ D3D12_SHADER_BYTECODE CObjectsShader::CreateVertexShader(ID3DBlob **ppd3dShaderB
 		ppd3dShaderBlob));
 }
 
+D3D12_SHADER_BYTECODE CObjectsShader::CreateHullShader(ID3DBlob ** ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "HSDiffused", "hs_5_1",
+		ppd3dShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CObjectsShader::CreateDomainShader(ID3DBlob ** ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "DSDiffused", "ds_5_1",
+		ppd3dShaderBlob));
+}
+
 
 D3D12_SHADER_BYTECODE CObjectsShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
 {
@@ -320,7 +358,7 @@ void CObjectsShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature
 
 void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	CDiffusedRectMesh *pRectMesh = new CDiffusedRectMesh(pd3dDevice, pd3dCommandList, 120, 90, 0, 0, 0, 1);
+	CDiffusedRectMesh *pRectMesh = new CDiffusedRectMesh(pd3dDevice, pd3dCommandList, 5000, 5000, 0, 0);
 
 	m_nObjects = 1;
 
@@ -328,7 +366,7 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 
 	m_ppObjects[0] = new CGameObject();
 	m_ppObjects[0]->SetMesh(pRectMesh);
-	m_ppObjects[0]->SetPosition(0, 0, 0);
+	m_ppObjects[0]->SetPosition(-60, -40, 0);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }

@@ -41,79 +41,27 @@ void CMesh::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	}
 }
 
-CDiffusedRectMesh::CDiffusedRectMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList*pd3dCommandList, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition) : CMesh(pd3dDevice, pd3dCommandList)
+CDiffusedRectMesh::CDiffusedRectMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList*pd3dCommandList, float fWidth, float fHeight, float fxPosition, float fzPosition) : CMesh(pd3dDevice, pd3dCommandList)
 {
-	m_nVertices = 6;
+	m_nVertices =9;
 	m_nStride = sizeof(CDiffusedVertex);
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST;
 
-	CDiffusedVertex pVertices[6];
+	CDiffusedVertex pVertices[9];
 
-	float fx = (fWidth * 0.5f) + fxPosition, fy = (fHeight * 0.5f) + fyPosition, fz = (fDepth * 0.5f) + fzPosition;
+	float fx = fWidth + fxPosition, fy = fHeight + fzPosition;
 
-	if (fWidth == 0.0f)
-	{
-		if (fxPosition > 0.0f)
-		{
-			pVertices[0] = CDiffusedVertex(XMFLOAT3(fx, +fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[1] = CDiffusedVertex(XMFLOAT3(fx, -fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[2] = CDiffusedVertex(XMFLOAT3(fx, -fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[3] = CDiffusedVertex(XMFLOAT3(fx, -fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[4] = CDiffusedVertex(XMFLOAT3(fx, +fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[5] = CDiffusedVertex(XMFLOAT3(fx, +fy, -fz), XMFLOAT4(1, 1, 1, 1));
-		}
-		else
-		{
-			pVertices[0] = CDiffusedVertex(XMFLOAT3(fx, +fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[1] = CDiffusedVertex(XMFLOAT3(fx, -fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[2] = CDiffusedVertex(XMFLOAT3(fx, -fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[3] = CDiffusedVertex(XMFLOAT3(fx, -fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[4] = CDiffusedVertex(XMFLOAT3(fx, +fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[5] = CDiffusedVertex(XMFLOAT3(fx, +fy, +fz), XMFLOAT4(1, 1, 1, 1));
-		}
-	}
-	else if (fHeight == 0.0f)
-	{
-		if (fyPosition > 0.0f)
-		{
-			pVertices[0] = CDiffusedVertex(XMFLOAT3(+fx, fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[2] = CDiffusedVertex(XMFLOAT3(-fx, fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, fy, -fz), XMFLOAT4(1, 1, 1, 1));
-		}
-		else
-		{
-			pVertices[0] = CDiffusedVertex(XMFLOAT3(+fx, fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[2] = CDiffusedVertex(XMFLOAT3(-fx, fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, fy, -fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, fy, +fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, fy, +fz), XMFLOAT4(1, 1, 1, 1));
-		}
-	}
-	else if (fDepth == 0.0f)
-	{
-		if (fzPosition > 0.0f)
-		{
-			pVertices[0] = CDiffusedVertex(XMFLOAT3(+fx, +fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, -fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[2] = CDiffusedVertex(XMFLOAT3(-fx, -fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, -fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, +fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, +fy, fz), XMFLOAT4(1, 1, 1, 1));
-		}
-		else
-		{
-			pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx, +fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[1] = CDiffusedVertex(XMFLOAT3(-fx, -fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx, -fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[3] = CDiffusedVertex(XMFLOAT3(+fx, -fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[4] = CDiffusedVertex(XMFLOAT3(+fx, +fy, fz), XMFLOAT4(1, 1, 1, 1));
-			pVertices[5] = CDiffusedVertex(XMFLOAT3(-fx, +fy, fz), XMFLOAT4(1, 1, 1, 1));
-		}
-	}
+	pVertices[0] = CDiffusedVertex(XMFLOAT3(fx, fy, 0), XMFLOAT4(1, 1, 1, 1));
+	pVertices[1] = CDiffusedVertex(XMFLOAT3(0, fy, 0), XMFLOAT4(1, 1, 1, 1));
+	pVertices[2] = CDiffusedVertex(XMFLOAT3(fx, 0, 0), XMFLOAT4(1, 1, 1, 1));
+	pVertices[3] = CDiffusedVertex(XMFLOAT3(0, 0, 0), XMFLOAT4(1, 1, 1, 1));
+
+	pVertices[4] = CDiffusedVertex(XMFLOAT3(fx, 0, 0), XMFLOAT4(1, 1, 1, 1));
+
+	pVertices[5] = CDiffusedVertex(XMFLOAT3(fx, 0, 0), XMFLOAT4(1, 1, 1, 1));
+	pVertices[6] = CDiffusedVertex(XMFLOAT3(2 * fx, 0, 0), XMFLOAT4(1, 1, 1, 1));
+	pVertices[7] = CDiffusedVertex(XMFLOAT3(fx, fy, 0), XMFLOAT4(1, 1, 1, 1));
+	pVertices[8] = CDiffusedVertex(XMFLOAT3(2 * fx, fy, 0), XMFLOAT4(1, 1, 1, 1));
 
 	m_pd3dVertexBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,
 		m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT,

@@ -36,6 +36,9 @@
     <Filter Include="소스 파일\Frame">
       <UniqueIdentifier>{83a2dbfc-37d6-4762-877a-5ced844babce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Exception">
+      <UniqueIdentifier>{e9c70463-4e83-45d6-ac38-91c3fba4507b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -71,6 +74,9 @@
     <ClInclude Include="GameFramework.h">
       <Filter>소스 파일\Frame</Filter>
     </ClInclude>
+    <ClInclude Include="ExptProcess.h">
+      <Filter>소스 파일\Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader.cpp">
@@ -99,6 +105,9 @@
     </ClCompile>
     <ClCompile Include="GameFramework.cpp">
       <Filter>소스 파일\Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="ExptProcess.cpp">
+      <Filter>소스 파일\Exception</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
