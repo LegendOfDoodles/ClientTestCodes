@@ -67,13 +67,34 @@ void CUIObjectShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 
-	m_ppMaterials[0]->UpdateShaderVariable(0);
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if(j==1) m_ppMaterials[0]->UpdateShaderVariable(1);
+		UIFrameType type = (UIFrameType)((CUIFrameObject*)m_ppObjects[j])->GetType();
+
+		switch (type)
+		{
+		case Minimap:
+			m_ppMaterials[0]->UpdateShaderVariable(0);
+			break;
+		case Character:
+			m_ppMaterials[0]->UpdateShaderVariable(2);
+			break;
+		case Status:
+		case KDA:
+		case Skill:
+		case HPGauge:
+		case MPGauge:
+		case Special:
+			m_ppMaterials[0]->UpdateShaderVariable(1);
+			break;
+		default:
+			break;
+		}
+
 		if (j == 3 && OnOFF) { m_ppObjects[j]->Render(pCamera);	}
 		else if (j != 3)	 m_ppObjects[j]->Render(pCamera);
+
 	}
 }
 

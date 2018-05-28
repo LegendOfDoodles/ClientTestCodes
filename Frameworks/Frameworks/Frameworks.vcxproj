@@ -187,6 +187,7 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\00.PlayerGaugeShader\PlayerGaugeShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\01.MinionGaugeShader\MinionGaugeShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader\NexusAndTowerGaugeShader.h" />
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader\CharacterFrameGaugeShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\02.IconShader\00.MinimapIconShader\MinimapIconShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.h" />
@@ -251,6 +252,7 @@
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\00.PlayerGaugeShader\PlayerGaugeShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\01.MinionGaugeShader\MinionGaugeShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\02.NexusAndTowerGaugeShader\NexusAndTowerGaugeShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader\CharacterFrameGaugeShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\02.IconShader\00.MinimapIconShader\MinimapIconShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.cpp" />
