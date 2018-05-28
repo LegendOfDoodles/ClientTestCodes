@@ -53,6 +53,14 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
+	case UIFrameType::CharacterFrameHP:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 426.6f, FRAME_BUFFER_HEIGHT / 240.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case UIFrameType::CharacterFrameMP:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
 	}
 
 	m_type = type;
@@ -104,9 +112,67 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 288.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
 		break;
+	case UIFrameType::CharacterFrameHP:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
+		break;
+	case UIFrameType::CharacterFrameMP:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
+		break;
 	}
 
 	m_xmf4x4World._41 = newPos.x;
 	m_xmf4x4World._42 = newPos.y;
 	m_xmf4x4World._43 = newPos.z;
+}
+
+void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
+{
+
+	switch (m_type)
+	{
+	case UIFrameType::Minimap:
+	case UIFrameType::KDA:
+	case UIFrameType::Skill:
+	case UIFrameType::Status:
+	case UIFrameType::HPGauge:
+	case UIFrameType::MPGauge:
+	case UIFrameType::Special:
+	case UIFrameType::Character:
+		CBillboardObject::Render(pCamera, istanceCnt);
+		break;
+	case UIFrameType::CharacterFrameHP:
+	case UIFrameType::CharacterFrameMP:
+		OnPrepareRender();
+
+		if (m_pMaterial)
+		{
+			m_pMaterial->Render(pCamera);
+			m_pMaterial->UpdateShaderVariables();
+		}
+
+		if (m_cbvGPUDescriptorHandle.ptr)
+			m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
+
+		if (m_pShader)
+		{
+			UpdateShaderVariables();
+			m_pShader->Render(pCamera);
+		}
+
+		if (m_ppMeshes)
+		{
+			for (int i = 0; i < m_nMeshes; i++)
+			{
+				if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
+			}
+		}
+		break;
+	}
+}
+
+float CUIFrameObject::GetCurrentHP()
+{
+	return (m_pMasterObject->GetPlayerStatus()->HP / m_pMasterObject->GetPlayerStatus()->maxHP);
 }

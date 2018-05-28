@@ -1,0 +1,275 @@
+#include "stdafx.h"
+#include "CharacterFrameGaugeShader.h"
+#include "02.Framework/01.CreateMgr/CreateMgr.h"
+#include "05.Objects/99.Material/Material.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
+#include "05.Objects/96.Billboard/02.GaugeObject/GaugeObject.h"
+#include "05.Objects/96.Billboard/01.FrameObject/UIFrameObject.h"
+
+/// <summary>
+/// 목적: Character Frame UI HP, MP Gauge 쉐이더
+/// 최종 수정자:  이용선
+/// 수정자 목록:  이용선
+/// 최종 수정 날짜: 2018-05-28
+/// </summary>
+
+
+CharacterFrameGaugeShader::CharacterFrameGaugeShader(CCreateMgr * pCreateMgr)
+	: CShader(pCreateMgr)
+{
+}
+
+CharacterFrameGaugeShader::~CharacterFrameGaugeShader()
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+
+void CharacterFrameGaugeShader::ReleaseUploadBuffers()
+{
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
+	}
+
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
+#endif
+}
+
+void CharacterFrameGaugeShader::UpdateShaderVariables()
+{
+	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
+		pMappedObject->m_fCurrentHP = ((CUIFrameObject*)m_ppObjects[i])->GetCurrentHP();
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+	}
+}
+
+void CharacterFrameGaugeShader::AnimateObjects(float timeElapsed)
+{
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		m_ppObjects[j]->Animate(timeElapsed);
+	}
+}
+
+void CharacterFrameGaugeShader::Render(CCamera * pCamera)
+{
+	CShader::Render(pCamera);
+	
+	CCollisionObject* master = ((CUIFrameObject*)m_ppObjects[0])->GetMasterObject();
+
+	switch (master->GetType())
+	{
+	case ObjectType::StickPlayer:
+		if		(master->GetTeam() == TeamType::Blue)		m_ppMaterials[0]->UpdateShaderVariable(0);
+		else if (master->GetTeam() == TeamType::Red)		m_ppMaterials[1]->UpdateShaderVariable(0);
+		break;
+	case ObjectType::SwordPlayer:
+		if		(master->GetTeam() == TeamType::Blue)		m_ppMaterials[0]->UpdateShaderVariable(1);
+		else if (master->GetTeam() == TeamType::Red)		m_ppMaterials[1]->UpdateShaderVariable(1);
+		break;
+	case ObjectType::BowPlayer:
+		if		(master->GetTeam() == TeamType::Blue)		m_ppMaterials[0]->UpdateShaderVariable(3);
+		else if (master->GetTeam() == TeamType::Red) 		m_ppMaterials[1]->UpdateShaderVariable(3);
+		break;
+	case ObjectType::StaffPlayer:
+		if		(master->GetTeam() == TeamType::Blue) 		m_ppMaterials[0]->UpdateShaderVariable(2);
+		else if (master->GetTeam() == TeamType::Red)		m_ppMaterials[1]->UpdateShaderVariable(2);
+		break;
+	}
+	if (m_ppObjects[0]) m_ppObjects[0]->Render(pCamera);
+	
+	CShader::Render(pCamera, 2);
+	m_ppMaterials[2]->UpdateShaderVariable(0);
+	if (m_ppObjects[1]) m_ppObjects[1]->Render(pCamera);
+}
+
+void CharacterFrameGaugeShader::GetCamera(CCamera * pCamera)
+{
+	m_pCamera = pCamera;
+
+	for (int i = 0; i < m_nObjects; ++i) {
+		static_cast<CUIFrameObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
+	}
+}
+
+bool CharacterFrameGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
+{
+	return false;
+}
+
+bool CharacterFrameGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
+{
+	return false;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+D3D12_INPUT_LAYOUT_DESC CharacterFrameGaugeShader::CreateInputLayout()
+{
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	pd3dInputElementDescs[0] = {
+		"POSITION",
+		0,
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
+		0,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
+		0 };
+	pd3dInputElementDescs[1] = {
+		"TEXCOORD",
+		0,
+		DXGI_FORMAT_R32G32_FLOAT,
+		0,
+		12,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
+		0 };
+
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	return(d3dInputLayoutDesc);
+}
+
+D3D12_BLEND_DESC CharacterFrameGaugeShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC blendDesc;
+	::ZeroMemory(&blendDesc, sizeof(D3D12_BLEND_DESC));
+
+	blendDesc.AlphaToCoverageEnable = TRUE;
+	blendDesc.IndependentBlendEnable = FALSE;
+	blendDesc.RenderTarget[0].BlendEnable = FALSE;
+	blendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return(blendDesc);
+}
+
+D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"VSTexturedGauge",
+		"vs_5_1",
+		ppShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"PSTexturedIconGauge",
+		"ps_5_1",
+		ppShaderBlob));
+}
+
+void CharacterFrameGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
+{
+	m_nPipelineStates = 1;
+	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
+
+	m_nHeaps = 3;
+	CreateDescriptorHeaps();
+
+	CShader::CreateShader(pCreateMgr, nRenderTargets);
+}
+
+void CharacterFrameGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
+{
+	HRESULT hResult;
+	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
+
+	m_pConstBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		elementBytes * nBuffers,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		NULL);
+
+	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
+	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+}
+
+void CharacterFrameGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+{
+	m_pCamera = (CCamera*)pContext;
+
+	m_nObjects = 2;
+	m_ppObjects = new CBaseObject*[m_nObjects];
+
+	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
+
+	CreateShaderVariables(pCreateMgr, m_nObjects);
+	for (int i = 0; i < m_nHeaps; ++i) {
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
+	}
+
+	m_nMaterials = m_nHeaps;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+
+	m_ppMaterials[0] = Materials::CreatePlayerBlueIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreatePlayerRedIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreatePlayerMPGagueMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+
+	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+	CUIFrameObject *pGaugeObject = NULL;
+
+	for (int i = 0; i < m_nObjects; ++i) {
+		pGaugeObject = new CUIFrameObject(pCreateMgr, (UIFrameType)(i + 8));
+
+		pGaugeObject->SetCamera(m_pCamera);
+		pGaugeObject->SetDistance(FRAME_BUFFER_WIDTH / (128.0128f - (i * 0.001f)));	 // distance 9.9
+		pGaugeObject->SetObject(m_pPlayer);
+		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+
+		m_ppObjects[i] = pGaugeObject;
+	}
+}
+
+void CharacterFrameGaugeShader::ReleaseObjects()
+{
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			delete m_ppObjects[j];
+		}
+		Safe_Delete_Array(m_ppObjects);
+	}
+
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+		}
+		Safe_Delete(m_ppMaterials);
+	}
+#endif
+}

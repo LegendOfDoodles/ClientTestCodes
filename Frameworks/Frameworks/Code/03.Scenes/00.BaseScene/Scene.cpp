@@ -12,6 +12,7 @@
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/02.NexusAndTowerGaugeShader/NexusAndTowerGaugeShader.h"
+#include "04.Shaders/98.BillboardShader/01.GaugeShader/03.CharacterGaugeShader/CharacterFrameGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/02.IconShader/00.MinimapIconShader/MinimapIconShader.h"
 #include "04.Shaders/98.BillboardShader/02.IconShader/01.BuildingMinimapIconShader/BuildingMinimapIconShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
@@ -314,7 +315,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 11;
+	m_nShaders = 12;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -330,13 +331,15 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[8] = new CMinionHPGaugeShader(pCreateMgr);
 	m_ppShaders[9] = new CMinimapIconShader(pCreateMgr);
 	m_ppShaders[10] = new CBuildingMinimapIconShader(pCreateMgr);
+	m_ppShaders[11] = new CharacterFrameGaugeShader(pCreateMgr);
+
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 5; ++i)
+	for (int i = 2; i < m_nShaders - 6; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -353,11 +356,16 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
 	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
 
+	m_ppObjects = ((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects();
+
+	((CharacterFrameGaugeShader*)m_ppShaders[11])->SetPlayer(m_ppObjects[0]);
+
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[9]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[10]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[11]->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = new CWayFinder();
@@ -522,7 +530,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 	}
 	else {
 		//이 전에 ppObejct 받아오기만 하면 됌.
-		//m_pSelectedObject = (CAnimatedObject*)m_ppObjects[m_pNetwork->m_myid];
+		m_pSelectedObject = (CAnimatedObject*)m_ppObjects[m_pNetwork->m_myid];
 
 	}
 }
