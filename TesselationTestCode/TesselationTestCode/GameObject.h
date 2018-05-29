@@ -10,8 +10,10 @@ public:
 	CGameObject();
 	virtual ~CGameObject();
 
-private:
+public:
 	int m_nReferences = 0;
+	CMesh	**m_ppMeshes{ NULL };
+	int m_nMeshes{ 0 };
 
 public:
 	void AddRef() { m_nReferences++; }
@@ -24,6 +26,7 @@ protected:
 
 public:
 	void ReleaseUploadBuffers();
+	virtual void SetMesh(int nIndex, CMesh *pMesh);
 	virtual void SetMesh(CMesh *pMesh);
 	virtual void SetShader(CShader *pShader);
 	virtual void Animate(float fTimeElapsed);
@@ -78,4 +81,26 @@ public:
 	}
 
 	virtual void Animate(float fTimeElapsed);
+};
+
+
+class CHeightMapTerrain : public CGameObject
+{
+public: // 생성자, 소멸자
+	CHeightMapTerrain(ID3D12Device *pd3dDevice,
+		ID3D12GraphicsCommandList *pd3dCommandList,
+		int nWidth, int nLength, int nBlockWidth, int nBlockLength,
+		XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
+	virtual ~CHeightMapTerrain();
+
+public: // 공개 함수
+
+protected: // 내부 함수
+
+private:	 // 변수
+	//높이 맵의 가로와 세로 크기이다.
+	int m_nWidth;
+	int m_nLength;
+	//지형을 실제로 몇 배 확대할 것인가를 나타내는 스케일 벡터이다.
+	XMFLOAT3 m_xmf3Scale;
 };

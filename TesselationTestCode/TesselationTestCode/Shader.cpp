@@ -358,15 +358,43 @@ void CObjectsShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature
 
 void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	CDiffusedRectMesh *pRectMesh = new CDiffusedRectMesh(pd3dDevice, pd3dCommandList, 177.6, 99.8, 0, 0);
+	CDiffusedRectMesh *pRectMesh = new CDiffusedRectMesh(pd3dDevice, pd3dCommandList, 88.8, 49.9, 0, 0);
+
+	//m_nObjects = 10000;
+
+	//m_ppObjects = new CGameObject*[m_nObjects];
+
+	//for (int i = 0; i < m_nObjects; ++i)
+	//{
+	//	m_ppObjects[i] = new CGameObject();
+	//	m_ppObjects[i]->SetMesh(pRectMesh);
+	//	switch (i % 4)
+	//	{
+	//	case 0:
+	//		m_ppObjects[i]->SetPosition(-88.8, -50, 0);
+	//		break;
+	//	case 1:
+	//		m_ppObjects[i]->SetPosition(0, -50, 0);
+	//		break;
+	//	case 2:
+	//		m_ppObjects[i]->SetPosition(-88.8, 0, 0);
+	//		break;
+	//	case 3:
+	//		m_ppObjects[i]->SetPosition(0, 0, 0);
+	//		break;
+	//	}
+	//}
 
 	m_nObjects = 1;
 
 	m_ppObjects = new CGameObject*[m_nObjects];
 
-	m_ppObjects[0] = new CGameObject();
-	m_ppObjects[0]->SetMesh(pRectMesh);
-	m_ppObjects[0]->SetPosition(-88.8, -50, 0);
+	CHeightMapTerrain *pHeightMapTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, 500, 250,
+		500, 250,
+		XMFLOAT3(20, 0.7, 20), XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
+
+	m_ppObjects[0] = pHeightMapTerrain;
+	m_ppObjects[0]->SetPosition(-300, 0, 0);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }

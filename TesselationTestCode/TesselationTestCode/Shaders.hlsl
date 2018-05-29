@@ -34,6 +34,7 @@ VS_OUTPUT VSDiffused(VS_INPUT input)
 {
 	VS_OUTPUT output;
     output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
+    //output.position = float4(input.position, 1);
 	output.color = input.color;
 	return(output);
 }
@@ -67,7 +68,7 @@ struct HullOut
 
 [domain("quad")]
 [partitioning("integer")]
-[outputtopology("triangle_cw")]
+[outputtopology("triangle_ccw")]
 [outputcontrolpoints(4)]
 [patchconstantfunc("ConstantHSDiffused")]
 [maxtessfactor(64.0f)]
@@ -95,7 +96,7 @@ DomainOut DSDiffused(PatchTess patchTess, float2 uv : SV_DomainLocation, const O
     float4 v2 = lerp(quad[2].position, quad[3].position, 1 - uv.y);
     float4 p = lerp(v1, v2, 1 - uv.x);
 
-    //p.y = 0.3f * (p.z * sin(p.x) + p.x * cos(p.z));
+    //p.y += 0.3f * (p.z * sin(p.x) + p.x * cos(p.z));
 
     float4 v3 = lerp(quad[0].color, quad[1].color, 1 - uv.y);
     float4 v4 = lerp(quad[2].color, quad[3].color, 1 - uv.y);
@@ -103,6 +104,7 @@ DomainOut DSDiffused(PatchTess patchTess, float2 uv : SV_DomainLocation, const O
 
     dout.color = c;
     dout.position = p;
+    //dout.position = mul(mul(mul(float4(p), gmtxWorld), gmtxView), gmtxProjection);
 
     return dout;
 }
