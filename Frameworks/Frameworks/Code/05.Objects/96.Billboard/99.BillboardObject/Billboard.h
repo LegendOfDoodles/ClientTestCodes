@@ -18,13 +18,15 @@ enum UIFrameType {
 	Character	,
 	HPGauge		,
 	MPGauge		,
-	Special		
+	Special		,
+	CharacterFrameHP,
+	CharacterFrameMP
 };
 
 enum GagueUIType {
 	PlayerGauge,
 	MinionGauge,
-	NexusAndTower
+	NexusAndTower,
 };
 
 enum IconUIType {

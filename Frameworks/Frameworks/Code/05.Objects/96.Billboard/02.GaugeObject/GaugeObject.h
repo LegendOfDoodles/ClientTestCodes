@@ -19,9 +19,8 @@ public: // 공개함수
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
-
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
-	GagueUIType		  m_Type;
 	ObjectType		  m_MasterObjectType;
+	GagueUIType		  m_Type;
 };
