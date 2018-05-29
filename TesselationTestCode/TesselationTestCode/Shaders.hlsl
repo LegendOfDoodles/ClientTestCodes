@@ -24,7 +24,7 @@ struct VS_INPUT
 //정점 셰이더의 출력(픽셀 셰이더의 입력)을 위한 구조체를 선언한다.
 struct VS_OUTPUT
 {
-    float3 position : POSITION;
+    float4 position : POSITION;
 	float4 color : COLOR;
 };
 
@@ -33,7 +33,7 @@ struct VS_OUTPUT
 VS_OUTPUT VSDiffused(VS_INPUT input)
 {
 	VS_OUTPUT output;
-    output.position = input.position;
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
 	output.color = input.color;
 	return(output);
 }
@@ -61,7 +61,7 @@ PatchTess ConstantHSDiffused(InputPatch<VS_OUTPUT, 4> patch, uint patchID : SV_P
 
 struct HullOut
 {
-    float3 position : POSITION;
+    float4 position : POSITION;
     float4 color : COLOR;
 };
 
@@ -91,18 +91,18 @@ DomainOut DSDiffused(PatchTess patchTess, float2 uv : SV_DomainLocation, const O
 {
     DomainOut dout;
 
-    float3 v1 = lerp(quad[0].position, quad[1].position, 1 - uv.y);
-    float3 v2 = lerp(quad[2].position, quad[3].position, 1 - uv.y);
-    float3 p = lerp(v1, v2, 1 - uv.x);
+    float4 v1 = lerp(quad[0].position, quad[1].position, 1 - uv.y);
+    float4 v2 = lerp(quad[2].position, quad[3].position, 1 - uv.y);
+    float4 p = lerp(v1, v2, 1 - uv.x);
 
     //p.y = 0.3f * (p.z * sin(p.x) + p.x * cos(p.z));
 
-    float3 v3 = lerp(quad[0].color, quad[1].color, 1 - uv.y);
-    float3 v4 = lerp(quad[2].color, quad[3].color, 1 - uv.y);
-    float3 c = lerp(v3, v4, 1 - uv.x);
+    float4 v3 = lerp(quad[0].color, quad[1].color, 1 - uv.y);
+    float4 v4 = lerp(quad[2].color, quad[3].color, 1 - uv.y);
+    float4 c = lerp(v3, v4, 1 - uv.x);
 
-    dout.color = float4(c, 1);
-    dout.position = mul(mul(mul(float4(p, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
+    dout.color = c;
+    dout.position = p;
 
     return dout;
 }

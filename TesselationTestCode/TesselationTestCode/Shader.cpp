@@ -358,7 +358,7 @@ void CObjectsShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature
 
 void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	CDiffusedRectMesh *pRectMesh = new CDiffusedRectMesh(pd3dDevice, pd3dCommandList, 5000, 5000, 0, 0);
+	CDiffusedRectMesh *pRectMesh = new CDiffusedRectMesh(pd3dDevice, pd3dCommandList, 177.6, 99.8, 0, 0);
 
 	m_nObjects = 1;
 
@@ -366,7 +366,7 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 
 	m_ppObjects[0] = new CGameObject();
 	m_ppObjects[0]->SetMesh(pRectMesh);
-	m_ppObjects[0]->SetPosition(-60, -40, 0);
+	m_ppObjects[0]->SetPosition(-88.8, -50, 0);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
