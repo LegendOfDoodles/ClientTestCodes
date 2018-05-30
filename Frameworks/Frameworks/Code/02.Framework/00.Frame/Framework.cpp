@@ -23,10 +23,9 @@ CFramework::~CFramework()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd, Network pNetwork)
+bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
 	m_hWnd = hWnd;
-	m_pNetwork = pNetwork;
 
 	m_createMgr.Initialize(hInstance, hWnd);
 	m_pRenderMgr = m_createMgr.GetRenderMgr();
@@ -40,10 +39,8 @@ bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd, Network pNetwork)
 
 void CFramework::Finalize()
 {
-	//m_pNetwork.Finalize();
 	ReleaseObjects();
 	m_createMgr.Release();
-	
 }
 
 void CFramework::FrameAdvance(float timeElapsed)
@@ -74,30 +71,10 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 		break;
 	case WM_KEYDOWN:
 	case WM_KEYUP:
-	{
 		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
-		
 		break;
 	}
-	case WM_SOCKET:
-		{
-			if (WSAGETSELECTERROR(lParam)) {
-				closesocket((SOCKET)wParam);
-				exit(-1);
-				break;
-			}
-			switch (WSAGETSELECTEVENT(lParam)) {
-			case FD_READ:
-				m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
-				break;
-			case FD_CLOSE:
-				closesocket((SOCKET)wParam);
-				exit(-1);
-				break;
-			}
-		}
-	}
-	return(0);
+	return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,7 +84,7 @@ void CFramework::BuildObjects()
 	m_pRenderMgr->ResetCommandList();
 
 	m_pScene = new CScene();
-	m_pScene->Initialize(&m_createMgr,&m_pNetwork);
+	m_pScene->Initialize(&m_createMgr);
 
 	m_pRenderMgr->ExecuteCommandList();
 

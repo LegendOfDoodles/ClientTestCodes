@@ -7,7 +7,7 @@ class CCollisionManager;
 class CPlayerShader : public CShader
 {
 public:
-	CPlayerShader(CCreateMgr *pCreateMgr, Network* network);
+	CPlayerShader(CCreateMgr *pCreateMgr);
 	~CPlayerShader();
 
 public: // 공개 함수
@@ -69,8 +69,6 @@ protected: // 변수
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
-
-	Network* m_pNetwork;
 
 	int m_FrameCheck = 0;
 };

@@ -17,10 +17,9 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CAniShader::CAniShader(CCreateMgr *pCreateMgr, Network* pNetwork) : CShader(pCreateMgr)
+CAniShader::CAniShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
-	//m_pNetwork = pNetwork;
 }
 
 CAniShader::~CAniShader()
@@ -625,12 +624,5 @@ void CAniShader::SpawnMinion()
 			m_pGaugeManger->AddMinionObject((*redBegin));
 			if (redBegin != m_redObjects.rbegin()) --redBegin;
 		}
-
-		//미니언 생성 패킷 조립, 전송
-		CS_MsgMoCreate p;
-		p.type = CS_PUT_MINION;
-		p.size = sizeof(p);
-		//m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-		//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL);
 	}
 }

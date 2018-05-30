@@ -23,7 +23,7 @@
     <ProjectGuid>{21B6CDED-6B82-470D-B9E4-4B33320DDC6D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Frameworks</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectName>Framework01</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -73,17 +73,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>.\Code;.\Code\00.Global\00.Standard;.\Resource;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\Code\00.Global\00.Standard;.\Code;.\Resource;$(IncludePath)</IncludePath>
+    <IncludePath>.\Code;.\Code\00.Global\00.Standard;.\Resource;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>.\Code;.\Code\00.Global\00.Standard;.\Resource;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\Code\00.Global\00.Standard;.\Code;.\Resource;$(IncludePath)</IncludePath>
+    <IncludePath>.\Code;.\Code\00.Global\00.Standard;.\Resource;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,6 +94,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,6 +110,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,6 +130,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,6 +148,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -213,8 +221,6 @@
     <ClInclude Include="Code\06.Meshes\00.Vertex\Vertex.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\Mesh.h" />
     <ClInclude Include="Code\06.Meshes\01.Mesh\MeshImporter.h" />
-    <ClInclude Include="Code\07.Network\Network.h" />
-    <ClInclude Include="Code\07.Network\protocol.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -278,7 +284,6 @@
     <ClCompile Include="Code\06.Meshes\00.Vertex\Vertex.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\Mesh.cpp" />
     <ClCompile Include="Code\06.Meshes\01.Mesh\MeshImporter.cpp" />
-    <ClCompile Include="Code\07.Network\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Framework01.ico" />

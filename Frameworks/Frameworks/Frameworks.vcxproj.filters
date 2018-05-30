@@ -117,9 +117,6 @@
     <Filter Include="소스 파일\00.Global\01.Utility\04.WayFinder\00.Node">
       <UniqueIdentifier>{3b2c4782-862f-4857-bf53-f03183ca879b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\07.Network">
-      <UniqueIdentifier>{ed8f421a-dea7-4a21-92b7-629cad64076d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\00.Global\02.AI">
       <UniqueIdentifier>{187ca8d2-9c69-422e-b104-1446eb1cb44d}</UniqueIdentifier>
     </Filter>
@@ -314,12 +311,6 @@
     <ClInclude Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.h">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
     </ClInclude>
-    <ClInclude Include="Code\07.Network\protocol.h">
-      <Filter>소스 파일\07.Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\07.Network\Network.h">
-      <Filter>소스 파일\07.Network</Filter>
-    </ClInclude>
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.h">
       <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>
     </ClInclude>
@@ -489,9 +480,6 @@
     </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\04.WayFinder\02.Astar\Astar.cpp">
       <Filter>소스 파일\00.Global\01.Utility\04.WayFinder\02.Astar</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\07.Network\Network.cpp">
-      <Filter>소스 파일\07.Network</Filter>
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.cpp">
       <Filter>소스 파일\04.Shaders\01.ObjectShader</Filter>

@@ -15,7 +15,7 @@ class CFSMMgr;
 class CAniShader : public CShader
 {
 public: // 생성자, 소멸자
-	CAniShader(CCreateMgr *pCreateMgr, Network* pNetwork);
+	CAniShader(CCreateMgr *pCreateMgr);
 	virtual ~CAniShader();
 
 public: // 공개 함수
@@ -92,8 +92,6 @@ protected: // 변수
 
 	CCreateMgr* m_pCreateMgr{ NULL };
 	CFSMMgr * m_pFSMMgr{ NULL };
-
-	Network* m_pNetwork{ NULL };
 
 	float m_spawnTime{ 10.1f };
 	float m_preSpawnTime{ 0.0f };

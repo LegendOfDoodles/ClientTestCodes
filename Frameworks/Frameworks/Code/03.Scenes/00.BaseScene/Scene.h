@@ -38,7 +38,7 @@ public:	// 생성자, 소멸자
 	virtual ~CScene();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, Network* pNetwork);
+	virtual void Initialize(CCreateMgr *pCreateMgr);
 	virtual void Finalize();
 
 	void ReleaseUploadBuffers();
@@ -111,10 +111,6 @@ protected: // 변수
 	CUIObjectManager *m_pUIObjectsManager{NULL};
 
 	CFSMMgr * m_pFSMMgr{ NULL };
-
-	Network* m_pNetwork{ NULL };
-	
-	int m_FrameCheck{ 0 };
 
 	const int	m_nHeaps{ 2 };
 	ID3D12DescriptorHeap			*m_pCbvSrvDescriptorHeaps[2];

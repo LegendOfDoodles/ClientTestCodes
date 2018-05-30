@@ -196,17 +196,17 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.o
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\03.animatedobject\animatedobject.h(55): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\04.wayfinder\wayfinder.h(34): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(94): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(198): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(221): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(460): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(510): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
-  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(510): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(494): warning C4101: 'my_packet' :참조되지 않은 지역 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(495): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(531): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(534): warning C4189: 'y': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(534): warning C4189: 'x': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(95): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(199): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(222): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(468): warning C4189: 'nIntersected': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(518): warning C4239: 비표준 확장이 사용됨: '인수': 'DirectX::XMFLOAT2'에서 'DirectX::XMFLOAT2 &'(으)로의 변환입니다.
+  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(518): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(502): warning C4101: 'my_packet' :참조되지 않은 지역 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(503): warning C4189: 'ret': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(539): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(542): warning C4189: 'y': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\03.scenes\00.basescene\scene.cpp(542): warning C4189: 'x': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   Shader.cpp
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(61): warning C4100: 'pxmf4x4World': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\00.baseshader\shader.cpp(69): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
@@ -512,10 +512,10 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.o
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(98): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(101): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(136): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(138): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(119): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(122): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(157): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\00.uishader\uishader.cpp(159): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   PlayerGaugeShader.cpp
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
@@ -603,6 +603,19 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.o
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\02.nexusandtowergaugeshader\nexusandtowergaugeshader.cpp(91): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\02.nexusandtowergaugeshader\nexusandtowergaugeshader.cpp(96): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+  CharacterFrameGaugeShader.cpp
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(17): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(18): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'pWayFinder': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(19): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(20): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(21): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(22): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\02.collisionobject\collisionobject.h(29): warning C4100: 'Damage': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\03.charactergaugeshader\characterframegaugeshader.cpp(110): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\01.gaugeshader\03.charactergaugeshader\characterframegaugeshader.cpp(115): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
   MinimapIconShader.cpp
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
@@ -629,32 +642,32 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.s
               _Ty=CIconObject *
           ]
   d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(74): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(143): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(134): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
           with
           [
               _Ty=CIconObject *
           ]
-  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(143): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(153): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
+  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(134): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(144): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>'에서 'std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &'(으)로의 변환입니다.
           with
           [
               _Ty=CIconObject *
           ]
-  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(153): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(169): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(174): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(382): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
+  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(144): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(160): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(165): warning C4100: 'pKeyBuffer': 참조되지 않은 정식 매개 변수입니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(373): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
           with
           [
               _Ty=CIconObject *
           ]
-  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(382): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(383): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
+  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(373): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(374): warning C4239: 비표준 확장이 사용됨: '초기화 중': 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>'에서 'std::reverse_iterator<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>> &'(으)로의 변환입니다.
           with
           [
               _Ty=CIconObject *
           ]
-  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(383): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
+  d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\04.shaders\98.billboardshader\02.iconshader\00.minimapiconshader\minimapiconshader.cpp(374): note: 비const 참조는 lvalue에만 바인딩할 수 있습니다.
   BuildingMinimapIconShader.cpp
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
@@ -773,9 +786,9 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.o
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\06.minion\minion.cpp(140): warning C4100: 'timeElapsed': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\06.minion\minion.cpp(193): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\06.minion\minion.cpp(211): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-  Obstacle.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  Obstacle.cpp
   Player.cpp
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'atk': 참조되지 않은 정식 매개 변수입니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\00.global\01.utility\05.collisionmanager\collisionmanager.h(8): warning C4100: 'hp': 참조되지 않은 정식 매개 변수입니다.
@@ -864,8 +877,8 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.o
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(70): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\97.skeleton\skeleton.cpp(23): warning C4101: 'IDindex' :참조되지 않은 지역 변수입니다.
   Prefabs.cpp
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(827): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(834): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(847): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\98.prefabs\prefabs.cpp(854): warning C4245: '=': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
   Texture.cpp
   Material.cpp
   Vertex.cpp
@@ -918,4 +931,5 @@ d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\07.n
   코드를 생성하고 있습니다...
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\96.billboard\03.iconobject\iconobject.cpp(109): warning C4715: 'CIconObject::GetCurrentHP': 모든 제어 경로에서 값을 반환하지는 않습니다.
 d:\study\project\graduateproject\clienttestcodes\frameworks\frameworks\code\05.objects\96.billboard\02.gaugeobject\gaugeobject.cpp(120): warning C4715: 'CGaugeObject::GetCurrentHP': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  LINK : D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
   Frameworks.vcxproj -> D:\Study\Project\GraduateProject\ClientTestCodes\Frameworks\x64\Debug\Framework01.exe

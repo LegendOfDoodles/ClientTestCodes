@@ -40,12 +40,10 @@ CScene::~CScene()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CScene::Initialize(CCreateMgr *pCreateMgr, Network* pNetwork)
+void CScene::Initialize(CCreateMgr *pCreateMgr)
 {
-	m_pNetwork = pNetwork;
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
-	//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, NULL );
 }
 
 void CScene::Finalize()
@@ -92,20 +90,6 @@ void CScene::ProcessInput()
 
 void CScene::AnimateObjects(float timeElapsed)
 {
-	m_FrameCheck += 1.0f / timeElapsed;
-	//if (m_pSelectedObject) {
-	//	if (m_FrameCheck % 20 == 0) {
-	//		//printf("now time is = %d\n", m_FrameCheck);
-	//		CS_MsgChMove p;
-	//		p.Character_id = m_pNetwork->m_myid;
-	//		p.size = sizeof(p);
-	//		p.type = CS_MOVE_PLAYER;
-	//		p.x = m_pSelectedObject->GetPosition().x;
-	//		p.y = m_pSelectedObject->GetPosition().z;
-
-	//		m_pNetwork->SendPacket(m_pNetwork->m_myid, &p);
-	//	}
-	//}
 	m_pCamera->Update(timeElapsed);
 
 	UpdateShaderVariables();
@@ -225,8 +209,6 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	if (nMessageID == WM_KEYUP)
 	{
 		OnProcessKeyUp(wParam, lParam);
-		/*if(m_pSelectedObject != NULL && wParam >= 37 && wParam <=40)
-			m_Network.ReadPacket(m_Network.m_mysocket, m_pSelectedObject);*/
 	}
 
 }
@@ -320,8 +302,8 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
-	m_ppShaders[2] = new CAniShader(pCreateMgr, m_pNetwork);
-	m_ppShaders[3] = new CPlayerShader(pCreateMgr, m_pNetwork);
+	m_ppShaders[2] = new CAniShader(pCreateMgr);
+	m_ppShaders[3] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CNexusTowerShader(pCreateMgr);
 	
@@ -483,8 +465,6 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			// 현재 6번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
 			// 그 해당 오브젝트에 대한 정보를 출력
 			m_ppShaders[6]->OnStatus(pIntersectedObject->GetType());
-
-			//m_Network.StartRecv(m_pSelectedObject);
 		}
 	}
 
@@ -499,7 +479,6 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 
 void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View)
 {
-	CS_MsgChMove my_packet; //= reinterpret_cast<CS_MsgChMove *>(m_Network.m_send_buffer);
 	int ret = 0;
 	XMFLOAT4X4  inverseArr = Matrix4x4::Inverse(xmf4x4View);
 	XMFLOAT3 camPosition = m_pCamera->GetPosition();
@@ -516,21 +495,8 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
 			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z),
 			m_pSelectedObject->GetCollisionSize()));
-		//my_packet.Character_id = m_pNetwork->m_myid;
-
-		//my_packet.size = sizeof(my_packet);
-		//my_packet.x = m_pickWorldPosition.x;
-		//my_packet.y = m_pickWorldPosition.z;
-		//m_pNetwork->m_send_wsabuf.len = sizeof(my_packet);
-		//DWORD iobyte;
-		//my_packet.type = CS_MOVE_PLAYER;
-		//memcpy(m_pNetwork->m_send_buffer, &my_packet, sizeof(my_packet));
-		//m_pNetwork->SendPacket(m_pNetwork->m_myid, &my_packet);
-		//m_pNetwork->ReadPacket(m_pNetwork->m_mysocket, (CBaseObject**)m_pSelectedObject);
 	}
 	else {
-		//이 전에 ppObejct 받아오기만 하면 됌.
-		m_pSelectedObject = (CAnimatedObject*)m_ppObjects[m_pNetwork->m_myid];
 
 	}
 }
