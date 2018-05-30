@@ -88,9 +88,7 @@ class CHeightMapTerrain : public CGameObject
 {
 public: // 생성자, 소멸자
 	CHeightMapTerrain(ID3D12Device *pd3dDevice,
-		ID3D12GraphicsCommandList *pd3dCommandList,
-		int nWidth, int nLength, int nBlockWidth, int nBlockLength,
-		XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
+		ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
 	virtual ~CHeightMapTerrain();
 
 public: // 공개 함수

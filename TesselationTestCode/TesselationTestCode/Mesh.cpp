@@ -77,7 +77,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsC
 	nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color) : CMesh(pd3dDevice, pd3dCommandList)
 {
 	//격자의 교점(정점)의 개수는 (nWidth * nLength)이다.
-	m_nVertices = nWidth * nLength;
+	m_nVertices = nWidth * nLength * 0.01;
 	m_nStride = sizeof(CDiffusedVertex);
 
 	//격자는 삼각형 스트립으로 구성한다.

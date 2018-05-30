@@ -389,8 +389,7 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 
 	m_ppObjects = new CGameObject*[m_nObjects];
 
-	CHeightMapTerrain *pHeightMapTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, 500, 250,
-		500, 250,
+	CHeightMapTerrain *pHeightMapTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList,
 		XMFLOAT3(20, 0.7, 20), XMFLOAT4(0.6f, 0.6f, 0.6f, 0.0f));
 
 	m_ppObjects[0] = pHeightMapTerrain;
