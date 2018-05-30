@@ -236,8 +236,7 @@ CHeightMapTerrain::CHeightMapTerrain(ID3D12Device *pd3dDevice,
 	//지형의 일부분을 나타내는 격자 메쉬를 생성하여 지형 메쉬에 저장한다.
 	CHeightMapGridMesh *pHeightMapGridMesh = new CHeightMapGridMesh(
 		pd3dDevice, pd3dCommandList,
-		0, 0, m_nWidth * 0.1, m_nLength * 0.1, 
-		xmf3Scale, xmf4Color);
+		0, 0, TERRAIN_IMAGE_CELL_WIDTH, TERRAIN_IMAGE_CELL_HEIGHT, xmf4Color);
 	SetMesh(0, pHeightMapGridMesh);
 }
 

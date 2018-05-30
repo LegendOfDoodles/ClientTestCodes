@@ -26,14 +26,6 @@ public: // 공개 함수
 			m_xmf3Scale.z)));
 	}
 
-	int GetHeightMapWidth() { return(m_pHeightMapImage->GetHeightMapWidth()); }
-	int GetHeightMapLength() { return(m_pHeightMapImage->GetHeightMapLength()); }
-	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
-
-	//지형의 크기(가로/세로)를 반환한다. 높이 맵의 크기에 스케일을 곱한 값이다.
-	float GetWidth() { return(m_nWidth * m_xmf3Scale.x); }
-	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
-
 protected: // 내부 함수
 
 private:	 // 변수

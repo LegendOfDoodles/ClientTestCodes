@@ -49,13 +49,13 @@ PatchTess ConstantHSDiffused(InputPatch<VS_OUTPUT, 4> patch, uint patchID : SV_P
 {
     PatchTess pt;
 
-    pt.EdgeTess[0] = 64;
-    pt.EdgeTess[1] = 64;
-    pt.EdgeTess[2] = 64;
-    pt.EdgeTess[3] = 64;
+    pt.EdgeTess[0] = 32;
+    pt.EdgeTess[1] = 32;
+    pt.EdgeTess[2] = 32;
+    pt.EdgeTess[3] = 32;
 
-    pt.InsideTess[0] = 64;
-    pt.InsideTess[1] = 64;
+    pt.InsideTess[0] = 32;
+    pt.InsideTess[1] = 32;
 
     return pt;
 }
@@ -68,10 +68,10 @@ struct HullOut
 
 [domain("quad")]
 [partitioning("integer")]
-[outputtopology("triangle_ccw")]
+[outputtopology("triangle_cw")]
 [outputcontrolpoints(4)]
 [patchconstantfunc("ConstantHSDiffused")]
-[maxtessfactor(64.0f)]
+[maxtessfactor(32.0f)]
 HullOut HSDiffused(InputPatch<VS_OUTPUT, 4> P, uint i : SV_OutputControlPointID, uint patchId : SV_PrimitiveID)
 {
     HullOut hout;

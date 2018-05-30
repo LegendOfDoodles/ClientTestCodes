@@ -414,10 +414,7 @@ void CObjectsShader::ReleaseObjects()
 
 void CObjectsShader::AnimateObjects(float fTimeElapsed)
 {
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(fTimeElapsed);
-	}
+	m_ppObjects[0]->SetPosition(m_ppObjects[0]->GetPosition().x, 0, m_ppObjects[0]->GetPosition().z - 0.4);
 }
 
 
