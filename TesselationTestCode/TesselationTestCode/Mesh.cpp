@@ -84,7 +84,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsC
 	//격자는 삼각형 스트립으로 구성한다.
 	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST;
 
-	m_nIndices = (nWidth * 2) * (nLength - 1) * 3;
+	m_nIndices = (nWidth * 2) * (nLength - 1) * 2 - 4;
 	CDiffusedVertex *pVertices = new CDiffusedVertex[m_nVertices];
 
 	for (int i = 0, z = zStart; z < (zStart + nLength); z++)

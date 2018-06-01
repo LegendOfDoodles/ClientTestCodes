@@ -16,7 +16,7 @@ CWayFinder::CWayFinder()
 {
 	// 충돌 맵 읽어오기
 	m_pCollisionMapImage = new CCollisionMapImage(_T("Resource/Terrain/TerrainCollision.raw"),
-		TERRAIN_IMAGE_WIDTH, TERRAIN_IMAGE_HEIGHT, TERRAIN_IMAGE_SCALE);
+		TETRRAIN_COLLISION_WIDTH, TETRRAIN_COLLISION_HEIGHT, TERRAIN_COLLISION_SCALE);
 
 	// 노드 읽어오기
 	std::ifstream nodeIn("Resource/Data/AStar/nodesData.txt", std::ios::in, std::ios::binary);

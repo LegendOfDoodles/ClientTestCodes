@@ -9,7 +9,7 @@
 /// 목적: Nexus Tower HP Gauge 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-05-13
+/// 최종 수정 날짜: 2018-06-01
 /// </summary>
 
 CNexusAndTowerHPGaugeShader::CNexusAndTowerHPGaugeShader(CCreateMgr * pCreateMgr)
@@ -103,9 +103,9 @@ bool CNexusAndTowerHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 D3D12_INPUT_LAYOUT_DESC CNexusAndTowerHPGaugeShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 2;
-	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
-	pd3dInputElementDescs[0] = {
+	pInputElementDescs[0] = {
 		"POSITION",
 		0,
 		DXGI_FORMAT_R32G32B32_FLOAT,
@@ -113,7 +113,7 @@ D3D12_INPUT_LAYOUT_DESC CNexusAndTowerHPGaugeShader::CreateInputLayout()
 		0,
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
 		0 };
-	pd3dInputElementDescs[1] = {
+	pInputElementDescs[1] = {
 		"TEXCOORD",
 		0,
 		DXGI_FORMAT_R32G32_FLOAT,
@@ -123,7 +123,7 @@ D3D12_INPUT_LAYOUT_DESC CNexusAndTowerHPGaugeShader::CreateInputLayout()
 		0 };
 
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.pInputElementDescs = pInputElementDescs;
 	d3dInputLayoutDesc.NumElements = nInputElementDescs;
 
 	return(d3dInputLayoutDesc);

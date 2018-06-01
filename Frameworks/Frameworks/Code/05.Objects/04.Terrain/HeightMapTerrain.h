@@ -9,9 +9,7 @@ struct CB_TERRAIN_INFO
 class CHeightMapTerrain : public CBaseObject
 {
 public: // 생성자, 소멸자
-	CHeightMapTerrain(CCreateMgr *pCreateMgr, LPCTSTR pFileName,
-		int nWidth, int nLength, int nBlockWidth, int nBlockLength, 
-		XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
+	CHeightMapTerrain(CCreateMgr *pCreateMgr, LPCTSTR pFileName, XMFLOAT3 xmf3Scale);
 	virtual ~CHeightMapTerrain();
 
 public: // 공개 함수
@@ -22,8 +20,7 @@ public: // 공개 함수
 
 	//지형의 법선 벡터를 계산하는 함수이다(월드 좌표계). 높이 맵의 법선 벡터를 사용한다.
 	XMFLOAT3 GetNormal(float x, float z) {
-		return(m_pHeightMapImage->GetHeightMapNormal(int(x / m_xmf3Scale.x), int(z /
-			m_xmf3Scale.z)));
+		return(m_pHeightMapImage->GetHeightMapNormal(int(x / m_xmf3Scale.x), int(z / m_xmf3Scale.z)));
 	}
 
 protected: // 내부 함수

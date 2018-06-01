@@ -15,9 +15,6 @@
     <Filter Include="소스 파일\Scene">
       <UniqueIdentifier>{862ddb8f-d4f9-451d-b332-124a343ebc54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Camera">
-      <UniqueIdentifier>{9c3dddcc-f41f-41e5-844e-563c50b9b593}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object">
       <UniqueIdentifier>{b95a8e34-59a2-46ec-9039-9c2d594c4d4b}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     <Filter Include="소스 파일\Exception">
       <UniqueIdentifier>{e9c70463-4e83-45d6-ac38-91c3fba4507b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{9c3dddcc-f41f-41e5-844e-563c50b9b593}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -48,7 +48,7 @@
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>소스 파일\Camera</Filter>
+      <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>소스 파일\Object</Filter>
@@ -86,7 +86,7 @@
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일\Camera</Filter>
+      <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>소스 파일\Object</Filter>
