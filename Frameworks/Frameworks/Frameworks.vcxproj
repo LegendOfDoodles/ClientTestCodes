@@ -23,7 +23,7 @@
     <ProjectGuid>{21B6CDED-6B82-470D-B9E4-4B33320DDC6D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Frameworks</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <ProjectName>Framework01</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -198,6 +198,7 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader\CharacterFrameGaugeShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\02.IconShader\00.MinimapIconShader\MinimapIconShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.h" />
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\03.MinimapUIShader\MinimapShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.h" />
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader\CharacterFrameGaugeShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\02.IconShader\00.MinimapIconShader\MinimapIconShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\03.MinimapUIShader\MinimapShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.cpp" />
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp" />

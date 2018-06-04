@@ -213,6 +213,9 @@
     <Filter Include="소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader">
       <UniqueIdentifier>{0df5d3ea-ac4c-4650-9d26-4627a48efdc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.BillboardShader\03.MinimapShader">
+      <UniqueIdentifier>{23090412-4466-4aae-96f1-04dbfeb7ae7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -398,6 +401,9 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader\CharacterFrameGaugeShader.h">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\03.MinimapUIShader\MinimapShader.h">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\03.MinimapShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -564,6 +570,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader\CharacterFrameGaugeShader.cpp">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\03.CharacterGaugeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\03.MinimapUIShader\MinimapShader.cpp">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\03.MinimapShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

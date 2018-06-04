@@ -21,35 +21,27 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 
 	switch (type)
 	{
-	case UIFrameType::Minimap:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
+	case UIFrameType::MinimapFrame:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 140.f, FRAME_BUFFER_HEIGHT / 160.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::KDA:
+	case UIFrameType::KDAFrame:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 458.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::Skill:
+	case UIFrameType::SkillFrame:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 200.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::Status:
+	case UIFrameType::StatusFrame:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 276.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::Character:
+	case UIFrameType::CharacterFrame:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::HPGauge:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 256.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
-		SetMesh(0, pRectMesh);
-		break;
-	case UIFrameType::MPGauge:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 256.f, FRAME_BUFFER_HEIGHT / 1440.f, 0.f);
-		SetMesh(0, pRectMesh);
-		break;
-	case UIFrameType::Special:
+	case UIFrameType::SpecialFrame:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
@@ -59,6 +51,10 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 		break;
 	case UIFrameType::CharacterFrameMP:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case UIFrameType::Minimap:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	}
@@ -80,35 +76,28 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 
 	switch (m_type)
 	{
+	case UIFrameType::MinimapFrame:
 	case UIFrameType::Minimap:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 102.85f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 94.8f)));
 		break;
-	case UIFrameType::KDA:
+	case UIFrameType::KDAFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 80.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 82.5f)));
 		break;
-	case UIFrameType::Skill:
+	case UIFrameType::SkillFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 1280.f)));
 		break;
-	case UIFrameType::Status:
+	case UIFrameType::StatusFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 91.4f)));
 		break;
-	case UIFrameType::Character:
+	case UIFrameType::CharacterFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
 		break;
-	case UIFrameType::HPGauge:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 128.f)));
-		break;
-	case UIFrameType::MPGauge:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 80.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 128.f)));
-		break;
-	case UIFrameType::Special:
+	case UIFrameType::SpecialFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 288.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
 		break;
@@ -132,14 +121,13 @@ void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
 
 	switch (m_type)
 	{
+	case UIFrameType::MinimapFrame:
+	case UIFrameType::KDAFrame:
+	case UIFrameType::SkillFrame:
+	case UIFrameType::StatusFrame:
+	case UIFrameType::SpecialFrame:
+	case UIFrameType::CharacterFrame:
 	case UIFrameType::Minimap:
-	case UIFrameType::KDA:
-	case UIFrameType::Skill:
-	case UIFrameType::Status:
-	case UIFrameType::HPGauge:
-	case UIFrameType::MPGauge:
-	case UIFrameType::Special:
-	case UIFrameType::Character:
 		CBillboardObject::Render(pCamera, istanceCnt);
 		break;
 	case UIFrameType::CharacterFrameHP:

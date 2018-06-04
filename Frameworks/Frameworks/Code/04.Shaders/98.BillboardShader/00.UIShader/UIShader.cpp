@@ -5,10 +5,10 @@
 #include "05.Objects/99.Material/Material.h"
 
 /// <summary>
-/// 목적: UI 테스트 쉐이더
-/// 최종 수정자:  김나단
+/// 목적: UI Frame 쉐이더 (틀만 생성)
+/// 최종 수정자:  이용선
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-06-01
+/// 최종 수정 날짜: 2018-06-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -74,18 +74,16 @@ void CUIObjectShader::Render(CCamera * pCamera)
 
 		switch (type)
 		{
-		case Minimap:
+		case MinimapFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(0);
 			break;
-		case Character:
+		case CharacterFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(2);
 			break;
-		case Status:
-		case KDA:
-		case Skill:
-		case HPGauge:
-		case MPGauge:
-		case Special:
+		case StatusFrame:
+		case KDAFrame:
+		case SkillFrame:
+		case SpecialFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(1);
 			break;
 		default:
@@ -168,19 +166,6 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 			printf("StatusArea Area\n");
 		}
 	}
-
-	else if (pKeyBuffer == MK_RBUTTON)
-	{
-		// 미니맵 우 클릭
-		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
-			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
-		{
-			// 플레이어 이동
-
-		}
-
-	}
-
 
 	return true;
 }
@@ -288,7 +273,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 8;
+	m_nObjects = 6;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
