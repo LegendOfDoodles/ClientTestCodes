@@ -29,8 +29,11 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 458.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::SkillFrame:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 200.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
+	case UIFrameType::SkillFrameQ:
+	case UIFrameType::SkillFrameW:
+	case UIFrameType::SkillFrameE:
+	case UIFrameType::SkillFrameR:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 640.f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::StatusFrame:
@@ -85,9 +88,21 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 80.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 82.5f)));
 		break;
-	case UIFrameType::SkillFrame:
+	case UIFrameType::SkillFrameQ:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 1280.f)));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 296.f)));
+		break;
+	case UIFrameType::SkillFrameW:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 914.2f)));
+		break;
+	case UIFrameType::SkillFrameE:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 914.2f)));
+		break;
+	case UIFrameType::SkillFrameR:
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 296.f)));
 		break;
 	case UIFrameType::StatusFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
@@ -123,7 +138,10 @@ void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
 	{
 	case UIFrameType::MinimapFrame:
 	case UIFrameType::KDAFrame:
-	case UIFrameType::SkillFrame:
+	case UIFrameType::SkillFrameQ:
+	case UIFrameType::SkillFrameW:
+	case UIFrameType::SkillFrameE:
+	case UIFrameType::SkillFrameR:
 	case UIFrameType::StatusFrame:
 	case UIFrameType::SpecialFrame:
 	case UIFrameType::CharacterFrame:

@@ -75,14 +75,17 @@ void CUIObjectShader::Render(CCamera * pCamera)
 		switch (type)
 		{
 		case MinimapFrame:
+		case SkillFrameQ:
+		case SkillFrameW:
+		case SkillFrameE:
+		case SkillFrameR:
 			m_ppMaterials[0]->UpdateShaderVariable(0);
 			break;
 		case CharacterFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(2);
 			break;
-		case StatusFrame:
+		 case StatusFrame:
 		case KDAFrame:
-		case SkillFrame:
 		case SpecialFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(1);
 			break;
@@ -90,9 +93,7 @@ void CUIObjectShader::Render(CCamera * pCamera)
 			break;
 		}
 
-		if (j == 3 && OnOFF) { m_ppObjects[j]->Render(pCamera);	}
-		else if (j != 3)	 m_ppObjects[j]->Render(pCamera);
-
+		m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -102,18 +103,6 @@ void CUIObjectShader::GetCamera(CCamera * pCamera)
 
 	for (int i = 0; i < m_nObjects; ++i) {
 		static_cast<CUIFrameObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
-	}
-}
-
-void CUIObjectShader::OnStatus(int  ObjectType)
-{
-
-	if (OnOFF == false) OnOFF = true;
-
-	switch (ObjectType)
-	{
-	default:
-		break;
 	}
 }
 
@@ -273,7 +262,7 @@ void CUIObjectShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 6;
+	m_nObjects = 9;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);

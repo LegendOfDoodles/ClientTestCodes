@@ -13,13 +13,16 @@ struct CB_GAUGE_INFO
 enum UIFrameType {
 	MinimapFrame	,
 	KDAFrame		,
-	SkillFrame		,
+	SkillFrameQ		,
+	SkillFrameW		,
+	SkillFrameE		,
+	SkillFrameR		,
 	StatusFrame		,
 	CharacterFrame	,
 	SpecialFrame	,
 	CharacterFrameHP,
 	CharacterFrameMP,
-	Minimap
+	Minimap,
 };
 
 enum GagueUIType {

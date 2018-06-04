@@ -240,7 +240,7 @@ void CharacterFrameGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pCo
 	CUIFrameObject *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CUIFrameObject(pCreateMgr, (UIFrameType)(i + 6));
+		pGaugeObject = new CUIFrameObject(pCreateMgr, (UIFrameType)(CharacterFrameHP + (i * 1)));
 
 		pGaugeObject->SetCamera(m_pCamera);
 		pGaugeObject->SetDistance(FRAME_BUFFER_WIDTH / (128.0128f - (i * 0.001f)));	 // distance 9.9
