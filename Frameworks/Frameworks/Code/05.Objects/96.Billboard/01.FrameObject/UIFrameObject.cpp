@@ -12,7 +12,6 @@
 // 持失切, 社瑚切
 CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr) : CBillboardObject(pCreateMgr)
 {
-	m_xmf3Position = XMFLOAT3(0, 0, 0);
 }
 
 CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBillboardObject(pCreateMgr)

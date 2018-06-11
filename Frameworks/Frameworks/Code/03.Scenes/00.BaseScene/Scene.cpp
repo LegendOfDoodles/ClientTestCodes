@@ -16,6 +16,7 @@
 #include "04.Shaders/98.BillboardShader/02.IconShader/00.MinimapIconShader/MinimapIconShader.h"
 #include "04.Shaders/98.BillboardShader/02.IconShader/01.BuildingMinimapIconShader/BuildingMinimapIconShader.h"
 #include "04.Shaders/98.BillboardShader/03.MinimapUIShader/MinimapShader.h"
+#include "04.Shaders/98.BillboardShader/04.SkillShader/SkillShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
@@ -298,7 +299,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 13;
+	m_nShaders = 14;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -316,14 +317,14 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[10] = new CBuildingMinimapIconShader(pCreateMgr);
 	m_ppShaders[11] = new CharacterFrameGaugeShader(pCreateMgr);
 	m_ppShaders[12] = new CMinimapShader(pCreateMgr);
-
+	m_ppShaders[13] = new CSkillShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 7; ++i)
+	for (int i = 2; i < m_nShaders - 8; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -352,6 +353,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[10]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[11]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[12]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[13]->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = new CWayFinder();

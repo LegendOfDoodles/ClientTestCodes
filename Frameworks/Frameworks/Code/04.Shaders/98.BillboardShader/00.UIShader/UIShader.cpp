@@ -67,7 +67,6 @@ void CUIObjectShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 
-
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		UIFrameType type = (UIFrameType)((CUIFrameObject*)m_ppObjects[j])->GetType();
@@ -119,13 +118,7 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
 
 	// 나중에 Define 하는 형식으로 변형
-	XMFLOAT4 MinimapArea;
 	XMFLOAT4 StatusArea;
-
-	MinimapArea.x = FRAME_BUFFER_WIDTH  / 1.3034f;
-	MinimapArea.y = FRAME_BUFFER_WIDTH  / 1.0078f;
-	MinimapArea.z = FRAME_BUFFER_HEIGHT / 1.3333f;
-	MinimapArea.w = FRAME_BUFFER_HEIGHT / 1.0526f;
 
 	StatusArea.x = FRAME_BUFFER_WIDTH  / 2.2824f;
 	StatusArea.y = FRAME_BUFFER_WIDTH  / 1.6177f;
@@ -134,20 +127,6 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 
 	if(pKeyBuffer == MK_LBUTTON)
 	{
-		//printf("%d, %d\n", cursorPos.x, cursorPos.y);
-
-		// 미니맵 좌 클릭
-		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
-			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
-		{
-			XMFLOAT3 newCameraPos;
-			newCameraPos.x = (MinimapArea.x - cursorPos.x) * -1.736 * 20;
-			newCameraPos.y = m_pCamera->GetPosition().y;
-			newCameraPos.z = (MinimapArea.w - cursorPos.y) * 1.736 * 20;
-			
-			m_pCamera->SetPosition(newCameraPos);
-		}
-
 		// 스테이터스 클릭
 		if ((cursorPos.x > StatusArea.x  && cursorPos.x < StatusArea.y)
 			&& (cursorPos.y > StatusArea.z && cursorPos.y < StatusArea.w))

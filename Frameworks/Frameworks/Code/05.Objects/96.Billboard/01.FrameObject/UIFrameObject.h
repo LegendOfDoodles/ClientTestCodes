@@ -25,7 +25,6 @@ public: // 공개함수
 	CCollisionObject* GetMasterObject() { return m_pMasterObject; };
 
 protected: // 변수
-	XMFLOAT3	m_xmf3Position;
 	float		m_fDistance;
 	UIFrameType		m_type;
 

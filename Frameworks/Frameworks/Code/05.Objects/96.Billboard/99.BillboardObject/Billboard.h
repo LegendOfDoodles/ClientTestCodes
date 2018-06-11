@@ -25,6 +25,17 @@ enum UIFrameType {
 	Minimap,
 };
 
+enum SkillUIType {
+	GreyQSkill,
+	GreyWSkill,
+	GreyESkill,
+	GreyRSkill,
+	QSkill,
+	WSkill,
+	ESkill,
+	RSkill
+};
+
 enum GagueUIType {
 	PlayerGauge,
 	MinionGauge,

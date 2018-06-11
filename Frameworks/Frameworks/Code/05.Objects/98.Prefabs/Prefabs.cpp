@@ -599,6 +599,90 @@ CMaterial * Materials::CreateGreyMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DES
 	return pMaterial;
 }
 
+CMaterial * Materials::CreateStickGreySkillMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture = new CTexture(4, RESOURCE_TEXTURE_2D, 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/QG.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/WG.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/EG.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/RG.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateStickColorSkillMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture = new CTexture(4, RESOURCE_TEXTURE_2D, 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/Q.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/W.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/E.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Stick/R.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateSwordGreySkillMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture = new CTexture(4, RESOURCE_TEXTURE_2D, 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/QG.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/WG.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/EG.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/RG.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateSwordColorSkillMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture = new CTexture(4, RESOURCE_TEXTURE_2D, 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/Q.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/W.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/E.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Skill/Sword/R.dds", 3);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
 CMaterial * Materials::CreateRedGaugeMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
