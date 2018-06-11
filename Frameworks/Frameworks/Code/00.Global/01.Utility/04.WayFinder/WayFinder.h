@@ -10,7 +10,10 @@ typedef std::list<CPathEdge> Path;
 
 class CAstar;
 class CCollisionObject;
-
+struct NodeMap {
+	bool Detected{ false };
+	bool Static{ false };
+};
 class CWayFinder
 {
 public: // 생성자, 소멸자
@@ -34,12 +37,18 @@ public: // 공개 함수
 	int GetNodeCount() const { return m_nodes.size(); }
 	const CNode& GetNodeAt(int idx) const { return m_nodes[idx]; }
 	const EdgeVector& GetEdgesAt(int idx) const { return m_edges[idx]; }
-
+	std::vector<NodeMap> GetNodeMap() { return m_nodeMap; }
+	float GetNodeSize() { return nodeSize; }
+	XMFLOAT2 GetNodeWH() { return m_nodeWH; }
 protected: // 내부 함수
 
 protected: // 변수
 	NodeVector m_nodes;
 	EdgeArray m_edges;
+	
+	std::vector<NodeMap> m_nodeMap;
+	float nodeSize{ 0 };
+	XMFLOAT2 m_nodeWH;
 
 	CAstar* m_pCurSearch{ NULL };
 	CCollisionMapImage *m_pCollisionMapImage{ NULL };

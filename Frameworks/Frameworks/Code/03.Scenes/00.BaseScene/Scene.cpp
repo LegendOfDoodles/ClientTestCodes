@@ -370,6 +370,9 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetUIObjectsManager(m_pUIObjectsManager);
 	static_cast<CMinimapIconShader*>(m_ppShaders[9])->SetUIObjectsManager(m_pUIObjectsManager);
 
+	m_pCollisionManager->SetNodeMap(m_pWayFinder->GetNodeMap(), m_pWayFinder->GetNodeSize(),m_pWayFinder->GetNodeWH());
+
+
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[3];
 	int nColliderObject = pPlayerS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)

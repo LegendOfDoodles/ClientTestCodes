@@ -24,14 +24,26 @@ CWayFinder::CWayFinder()
 	int maxNode{ 0 };
 	nodeIn >> maxNode;
 	m_nodes.reserve(maxNode);
+	m_nodeMap.reserve(maxNode);
 
 	int index{ INVALID_NODE };
+	int w = 0, h = 0;
 	XMFLOAT2 position, size;
 	for (int i = 0; i < maxNode; ++i)
 	{
 		nodeIn >> index >> position.x >> position.y >> size.x >> size.y;
 		m_nodes.emplace_back(index, position, size);
+		NodeMap tmp;
+		tmp.Detected = false;
+		if (index == -1)
+			tmp.Static = true;
+		else
+			tmp.Static = false;
+		m_nodeMap.push_back(tmp);
+		if (position.x == 0)m_nodeWH.y++;
 	}
+	nodeSize = size.x;
+	m_nodeWH.x= maxNode / m_nodeWH.y;
 
 	nodeIn.close();
 
