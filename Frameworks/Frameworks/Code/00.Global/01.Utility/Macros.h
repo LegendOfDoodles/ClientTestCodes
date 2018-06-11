@@ -126,6 +126,11 @@
 #define INCREASE_STATICOBJECT1_DEF 2
 #define INCREASE_STATICOBJECT2_DEF 3
 
+// Minimap Window Screen 범위
+#define MINIMAP_MINIMUM_X FRAME_BUFFER_WIDTH / 1.3034f
+#define MINIMAP_MAXIMUM_X FRAME_BUFFER_WIDTH / 1.0078f
+#define MINIMAP_MINIMUM_Y FRAME_BUFFER_HEIGHT / 1.3333f
+#define MINIMAP_MAXIMUM_Y FRAME_BUFFER_HEIGHT / 1.0526f
 
 // 캡션 FPS 출력 여부 -------------------
 // 항상 캡션에 FPS를 출력		(0 : 비활성 | 1 : 활성)

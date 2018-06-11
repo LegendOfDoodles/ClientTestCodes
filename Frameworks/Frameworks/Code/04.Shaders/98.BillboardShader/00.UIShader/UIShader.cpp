@@ -112,30 +112,29 @@ bool CUIObjectShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 
 bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
-	POINT cursorPos;
+	//POINT cursorPos;
 
-	GetCursorPos(&cursorPos);
-	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
+	//GetCursorPos(&cursorPos);
+	//ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
 
-	// 나중에 Define 하는 형식으로 변형
-	XMFLOAT4 StatusArea;
+	//// 나중에 Define 하는 형식으로 변형
+	//XMFLOAT4 StatusArea;
 
-	StatusArea.x = FRAME_BUFFER_WIDTH  / 2.2824f;
-	StatusArea.y = FRAME_BUFFER_WIDTH  / 1.6177f;
-	StatusArea.z = FRAME_BUFFER_HEIGHT / 1.2578f;
-	StatusArea.w = FRAME_BUFFER_HEIGHT / 1.0471f;
+	//StatusArea.x = FRAME_BUFFER_WIDTH  / 2.2824f;
+	//StatusArea.y = FRAME_BUFFER_WIDTH  / 1.6177f;
+	//StatusArea.z = FRAME_BUFFER_HEIGHT / 1.2578f;
+	//StatusArea.w = FRAME_BUFFER_HEIGHT / 1.0471f;
 
-	if(pKeyBuffer == MK_LBUTTON)
-	{
-		// 스테이터스 클릭
-		if ((cursorPos.x > StatusArea.x  && cursorPos.x < StatusArea.y)
-			&& (cursorPos.y > StatusArea.z && cursorPos.y < StatusArea.w))
-		{
-			printf("StatusArea Area\n");
-		}
-	}
+	//if(pKeyBuffer == MK_LBUTTON)
+	//{
+	//	// 스테이터스 클릭
+	//	if ((cursorPos.x > StatusArea.x  && cursorPos.x < StatusArea.y)
+	//		&& (cursorPos.y > StatusArea.z && cursorPos.y < StatusArea.w))
+	//	{
+	//	}
+	//}
 
-	return true;
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 	switch (type)
 	{
 	case UIFrameType::MinimapFrame:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 140.f, FRAME_BUFFER_HEIGHT / 160.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 150.58f, FRAME_BUFFER_HEIGHT / 160.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::KDAFrame:

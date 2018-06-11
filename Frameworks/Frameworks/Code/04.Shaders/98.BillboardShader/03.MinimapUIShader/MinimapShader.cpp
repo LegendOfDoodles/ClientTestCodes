@@ -94,27 +94,18 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	GetCursorPos(&cursorPos);
 	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
 
-	XMFLOAT4 MinimapArea;
-
-	// x Min x Max
-	// y Min y Max
-	MinimapArea.x = FRAME_BUFFER_WIDTH / 1.3034f;
-	MinimapArea.y = FRAME_BUFFER_WIDTH / 1.0078f;
-	MinimapArea.z = FRAME_BUFFER_HEIGHT / 1.3333f;
-	MinimapArea.w = FRAME_BUFFER_HEIGHT / 1.0526f;
-
 	if (pKeyBuffer == MK_LBUTTON)
 	{
 		//printf("%d, %d\n", cursorPos.x, cursorPos.y);
 
 		// 미니맵 좌 클릭
-		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
-			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
+		if ((cursorPos.x > MINIMAP_MINIMUM_X  && cursorPos.x < MINIMAP_MAXIMUM_X)
+			&& (cursorPos.y > MINIMAP_MINIMUM_Y && cursorPos.y < MINIMAP_MAXIMUM_Y))
 		{
 			XMFLOAT3 newCameraPos;
-			newCameraPos.x = (MinimapArea.x - cursorPos.x) * -1.736 * 20;
+			newCameraPos.x = (MINIMAP_MINIMUM_X - cursorPos.x) * -1.736 * 20;
 			newCameraPos.y = m_pCamera->GetPosition().y;
-			newCameraPos.z = (MinimapArea.w - cursorPos.y) * 1.736 * 20;
+			newCameraPos.z = (MINIMAP_MAXIMUM_Y - cursorPos.y) * 1.736 * 20;
 
 			m_pCamera->SetPosition(newCameraPos);
 		}
@@ -123,14 +114,13 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	else if (pKeyBuffer == MK_RBUTTON)
 	{
 		// 미니맵 우 클릭
-		if ((cursorPos.x > MinimapArea.x  && cursorPos.x < MinimapArea.y)
-			&& (cursorPos.y > MinimapArea.z && cursorPos.y < MinimapArea.w))
+		if ((cursorPos.x > MINIMAP_MINIMUM_X  && cursorPos.x < MINIMAP_MAXIMUM_X)
+			&& (cursorPos.y > MINIMAP_MINIMUM_Y && cursorPos.y < MINIMAP_MAXIMUM_Y))
 		{
-			// 플레이어 이동
 			XMFLOAT3 PlayerDestination;
-			PlayerDestination.x = (MinimapArea.x - cursorPos.x) * -1.736 * 20;
+			PlayerDestination.x = (MINIMAP_MINIMUM_X - cursorPos.x) * -1.736 * 20;
 			PlayerDestination.y = m_pCamera->GetPosition().y;
-			PlayerDestination.z = (MinimapArea.w - cursorPos.y) * 1.736 * 20;
+			PlayerDestination.z = (MINIMAP_MAXIMUM_Y - cursorPos.y) * 1.736 * 20;
 
 			m_pPlayer->LookAt(PlayerDestination);
 			m_pPlayer->SetPathToGo(m_pWayFinder->GetPathToPosition(
@@ -138,7 +128,6 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 				XMFLOAT2(PlayerDestination.x, PlayerDestination.z),
 				m_pPlayer->GetCollisionSize()));
 		}
-
 	}
 
 	return true;

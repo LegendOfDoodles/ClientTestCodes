@@ -124,7 +124,47 @@ bool CSkillShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 
 bool CSkillShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
-	return false;
+	POINT cursorPos;
+
+	GetCursorPos(&cursorPos);
+	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
+
+	// W - E 사이는 104.4 , 94.4
+	// E - Q 사이는 104.4 , 114.4
+	// 윈도우 좌표계 기준
+
+	XMFLOAT4 q;
+
+	// Q
+	//q.x = FRAME_BUFFER_WIDTH  / 2.8495f;	//449.2f;
+	//q.y = FRAME_BUFFER_WIDTH  / 2.5039f;	//511.2f;
+
+	// W
+	//q.x = FRAME_BUFFER_WIDTH  / 2.3121f;	//553.6f;
+	//q.y = FRAME_BUFFER_WIDTH  / 2.0460f;	//625.6f;
+
+	// E
+	//q.x = FRAME_BUFFER_WIDTH / 1.9452f;	//658.f;
+	//q.y = FRAME_BUFFER_WIDTH / 1.7777f;	//720.f;
+
+	// R
+	q.x = FRAME_BUFFER_WIDTH / 1.6789f;	//762.4f;
+	q.y = FRAME_BUFFER_WIDTH / 1.5340f;	//834.4f;
+
+	// Y 공용
+	q.z = FRAME_BUFFER_HEIGHT / 1.2121f;	//594.f;
+	q.w = FRAME_BUFFER_HEIGHT / 1.0810f;	//666.f;
+
+
+	if (pKeyBuffer == MK_LBUTTON) {
+
+		if ((cursorPos.x > q.x  && cursorPos.x < q.y)
+			&& (cursorPos.y > q.z && cursorPos.y < q.w) ) {
+			printf("%d, %d\n", cursorPos.x, cursorPos.y);
+		}
+	}
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////
