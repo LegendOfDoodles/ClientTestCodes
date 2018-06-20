@@ -181,3 +181,8 @@ float CUIFrameObject::GetCurrentHP()
 {
 	return (m_pMasterObject->GetPlayerStatus()->HP / m_pMasterObject->GetPlayerStatus()->maxHP);
 }
+
+float CUIFrameObject::GetCurrentMP()
+{
+	return (m_pMasterObject->GetPlayerStatus()->MP / m_pMasterObject->GetPlayerStatus()->maxMP);
+}
