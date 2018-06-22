@@ -6,7 +6,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-22
+/// 최종 수정 날짜: 2018-06-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -39,6 +39,14 @@ void CRenderMgr::Release()
 
 void CRenderMgr::Render(CScene* pScene)
 {
+	RenderColor(pScene);
+	RenderLight(pScene);
+
+	MoveToNextFrame();
+}
+
+void CRenderMgr::RenderColor(CScene * pScene)
+{
 	HRESULT hResult;
 	// Reset Command List
 	hResult = m_pCommandAllocator->Reset();
@@ -70,7 +78,7 @@ void CRenderMgr::Render(CScene* pScene)
 		D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	// Set Render Target and Depth Stencil
-	m_pCommandList->OMSetRenderTargets(RENDER_TARGET_BUFFER_CNT,  m_pRtvRenderTargetBufferCPUHandles,
+	m_pCommandList->OMSetRenderTargets(RENDER_TARGET_BUFFER_CNT, m_pRtvRenderTargetBufferCPUHandles,
 		TRUE, &m_dsvDepthStencilBufferCPUHandle);
 
 	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
@@ -90,9 +98,11 @@ void CRenderMgr::Render(CScene* pScene)
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 
 	WaitForGpuComplete();
+}
 
-	//------------------------------------------------------
-	// ↓↓↓↓↓↓ Light Rendering ↓↓↓↓↓↓↓
+void CRenderMgr::RenderLight(CScene * pScene)
+{
+	HRESULT hResult;
 
 	hResult = m_pCommandAllocator->Reset();
 	assert(SUCCEEDED(hResult) && "CommandAllocator->Reset Failed");
@@ -111,7 +121,7 @@ void CRenderMgr::Render(CScene* pScene)
 	// Set Viewport and Scissor Rect
 	pScene->SetViewportsAndScissorRects();
 
-	m_pCommandList->ClearDepthStencilView(m_dsvDepthStencilBufferCPUHandle, 
+	m_pCommandList->ClearDepthStencilView(m_dsvDepthStencilBufferCPUHandle,
 		D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_pCommandList->ClearRenderTargetView(m_pRtvSwapChainBackBufferCPUHandles[m_swapChainBufferIndex], Colors::Azure, 0, NULL);
 	m_pCommandList->OMSetRenderTargets(1, &m_pRtvSwapChainBackBufferCPUHandles[m_swapChainBufferIndex],
@@ -129,6 +139,7 @@ void CRenderMgr::Render(CScene* pScene)
 	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
 
 	// Excute Command List
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 
 	WaitForGpuComplete();
@@ -137,8 +148,6 @@ void CRenderMgr::Render(CScene* pScene)
 	hResult = m_pSwapChain->Present(0, 0);
 	assert(SUCCEEDED(hResult) && "SwapChain->Present Failed");
 	//ExptProcess::ThrowIfFailed(hResult);
-
-	MoveToNextFrame();
 }
 
 void CRenderMgr::SetDsvDescriptorHeap(ID3D12DescriptorHeap * pDsvDescriptorHeap)

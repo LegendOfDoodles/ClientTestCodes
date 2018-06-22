@@ -15,6 +15,8 @@ public:	// 공개 함수
 	void Release();
 
 	void Render(CScene* pScene = NULL);
+	void RenderColor(CScene* pScene = NULL);
+	void RenderLight(CScene* pScene = NULL);
 
 	// Set Depth Stencil View
 	void SetDsvDescriptorHeap(ID3D12DescriptorHeap *pDsvDescriptorHeap);
