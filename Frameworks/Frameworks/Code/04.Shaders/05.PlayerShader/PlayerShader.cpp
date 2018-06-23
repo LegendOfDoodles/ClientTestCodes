@@ -47,16 +47,6 @@ void CPlayerShader::ReleaseUploadBuffers()
 
 void CPlayerShader::UpdateShaderVariables()
 {
-#if USE_INSTANCING
-	m_pCommandList->SetGraphicsRootShaderResourceView(2,
-		m_pInstanceBuffer->GetGPUVirtualAddress());
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		XMStoreFloat4x4(&m_pMappedObjects[i].m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
-	}
-#else
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)
@@ -69,7 +59,6 @@ void CPlayerShader::UpdateShaderVariables()
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
-#endif
 }
 
 void CPlayerShader::UpdateBoundingBoxShaderVariables()
@@ -100,15 +89,11 @@ void CPlayerShader::Render(CCamera *pCamera)
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 #endif
 
-#if USE_INSTANCING
-	m_ppObjects[0]->Render(pCamera, m_nObjects);
-#else
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		
 		m_ppObjects[j]->Render(pCamera);
 	}
-#endif
 }
 
 void CPlayerShader::RenderBoundingBox(CCamera * pCamera)
@@ -234,12 +219,7 @@ D3D12_INPUT_LAYOUT_DESC CPlayerShader::CreateInputLayout()
 
 D3D12_SHADER_BYTECODE CPlayerShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
-	//./Code/04.Shaders/99.GraphicsShader/
-#if USE_INSTANCING
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "VSTexturedLightingInstancing", "vs_5_1", ppShaderBlob));
-#else
 	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "VSBone", "vs_5_1", ppShaderBlob));
-#endif
 }
 
 D3D12_SHADER_BYTECODE CPlayerShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
@@ -268,17 +248,6 @@ void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
-#if USE_INSTANCING
-	m_pInstanceBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		sizeof(CB_GAMEOBJECT_INFO) * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		NULL);
-
-	hResult = m_pInstanceBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pInstanceBuffer->Map Failed");
-#else
 	UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
@@ -290,7 +259,6 @@ void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
 	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
-#endif
 
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -312,10 +280,6 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 	
-#if USE_INSTANCING
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 0, 2);
-	CreateShaderVariables(pCreateMgr);
-#else
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -326,7 +290,6 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, boundingBoxElementBytes, 1);
 
 	SaveBoundingBoxHeapNumber(1);
-#endif
 
 #if USE_BATCH_MATERIAL
 	m_nMaterials = 1;
@@ -389,12 +352,10 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 			pPlayer = new CPlayer(pCreateMgr, 2);
 
-#if !USE_INSTANCING
-				pPlayer->SetMesh(0, pPlayerMesh);
+			pPlayer->SetMesh(0, pPlayerMesh);
 				
-				pPlayer->SetMesh(1, m_pStick);
-				pPlayer->SetType(ObjectType::StickPlayer);
-#endif
+			pPlayer->SetMesh(1, m_pStick);
+			pPlayer->SetType(ObjectType::StickPlayer);
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
@@ -423,15 +384,9 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 			pPlayer->Rotate(90, 0, 0);
 
-#if !USE_INSTANCING
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
-#endif
 			m_ppObjects[i++] = pPlayer;
-
-#if USE_INSTANCING
-			m_ppObjects[0]->SetMesh(0, pCubeMesh);
-#endif
 		}
 	}
 

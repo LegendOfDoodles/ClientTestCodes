@@ -81,11 +81,5 @@ protected: // º¯¼ö
 	CUIObjectManager * m_pIconManger{ NULL };
 	CCreateMgr* m_pCreateMgr{ NULL };
 
-#if USE_INSTANCING
-	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
-	CMaterial		   *m_pMaterial{ NULL };
-#else
 	UINT8 *m_pMappedObjects{ NULL };
-#endif
-
 };

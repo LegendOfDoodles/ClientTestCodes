@@ -51,11 +51,5 @@ protected: // º¯¼ö
 
 	CCollisionObject *m_pPlayer;
 
-#if USE_INSTANCING
-	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
-	CMaterial		   *m_pMaterial{ NULL };
-#else
 	UINT8 *m_pMappedObjects{ NULL };
-#endif
-
 };

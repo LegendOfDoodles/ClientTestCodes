@@ -54,11 +54,5 @@ protected: // º¯¼ö
 	CCollisionObject **m_ppNexusAndTower{ NULL };
 	int m_nNexusAndTower = 0;
 
-#if USE_INSTANCING
-	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
-	CMaterial		   *m_pMaterial{ NULL };
-#else
 	UINT8 *m_pMappedObjects{ NULL };
-#endif
-
 };

@@ -60,12 +60,7 @@ protected: // º¯¼ö
 
 	bool m_indexArr[MAX_MINION]{ false };
 
-#if USE_INSTANCING
-	CB_GAMEOBJECT_INFO *m_pMappedObjects{ NULL };
-	CMaterial		   *m_pMaterial{ NULL };
-#else
 	UINT8 *m_pMappedObjects{ NULL };
-#endif
 
 	CCreateMgr* m_pCreateMgr{ NULL };
 
