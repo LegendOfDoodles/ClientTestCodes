@@ -117,12 +117,17 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 				int x, y;
 				x = (*i)->GetPosition().x / nodeSize;
 				y = (*i)->GetPosition().z / nodeSize;
-
-				for (int dir = 0; dir < 8; ++dir) {
-					SearchSight(x, y, dir, XMFLOAT2(x,y), 0,(*i)->GetSightRange());
+				int startLength = (*i)->GetSightRange() / nodeSize;
+				if ((*i)->tag == 1) {
+					for (int dir = 0; dir < 8; ++dir) {
+						SearchSight(XMFLOAT2(x, y), dir, 0, startLength);
+					}
 				}
-
-
+				else {
+					for (int dir = 0; dir < 8; ++dir) {
+						SearchSight(XMFLOAT2(x, y), dir, 0, startLength);
+					}
+				}
 			}
 		}
 
@@ -256,60 +261,76 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 	2 ¤± 6
 	3 4  5
 */
-void CCollisionManager::SearchSight(int x, int y, int dir, XMFLOAT2 startpos, float dst, float slength)
+void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int length, int slength)
 {
 	XMFLOAT2 result;
+	XMFLOAT2 direction;
+	XMFLOAT2 next;
+	m_nodeMap[(int)startpos.x][(int)startpos.y].Detected = true;
 	switch (dir) {
 	case 0:
-		result.x = x;
-		result.y = y - 1;
+		direction = XMFLOAT2(0, -1);
+		next = XMFLOAT2(1, 0);
 		break;
 	case 1:
-		result.x = x - 1;
-		result.y = y - 1;
+		direction = XMFLOAT2(-1, -1);
+		next = XMFLOAT2(1, 0);
 		break;
 	case 2:
-		result.x = x - 1;
-		result.y = y;
+		direction = XMFLOAT2(-1, 0);
+		next = XMFLOAT2(0, -1);
 		break;
 	case 3:
-		result.x = x - 1;
-		result.y = y + 1;
+		direction = XMFLOAT2(-1, 1);
+		next = XMFLOAT2(0, -1);
 		break;
 	case 4:
-		result.x = x;
-		result.y = y + 1;
+		direction = XMFLOAT2(0, 1);
+		next = XMFLOAT2(-1, 0);
 		break;
 	case 5:
-		result.x = x + 1;
-		result.y = y + 1;
+		direction = XMFLOAT2(1, 1);
+		next = XMFLOAT2(-1, 0);
 		break;
 	case 6:
-		result.x = x + 1;
-		result.y = y;
+		direction = XMFLOAT2(1, 0);
+		next = XMFLOAT2(0, 1);
 		break;
 	case 7:
-		result.x = x - 1;
-		result.y = y + 1;
+		direction = XMFLOAT2(1, -1);
+		next = XMFLOAT2(0, 1);
 		break;
-
 	default:
-		result.x = -1;
-		result.y = -1;
+		direction = XMFLOAT2(0, 0);
+		next = XMFLOAT2(0, 0);
 		break;
 	}
-	if (result.x != -1) {
-		if (Vector2::Distance(startpos, result)*nodeSize <= slength) {
-			m_nodeMap[(int)result.x][(int)result.y].Detected = true;
-			if (m_nodeMap[(int)result.x][(int)result.y].Static != true) {
-				//if ((dst + Vector2::Distance(result, XMFLOAT2(x, y)) + 1)*nodeSize < slength) {
-				//	for (int i = 0; i < 8; ++i) {
-						SearchSight(result.x, result.y,dir, startpos, dst + Vector2::Distance(result, XMFLOAT2(x, y)), slength);
-				//	}
-				//}
+	for (int i = 0; i < slength; ++i) {
+		XMFLOAT2 nNext = Vector2::Normalize(XMFLOAT2(direction.x*slength + (next.x * i), direction.y*slength + (next.y * i)));
+		for (int j = 1; j < slength; ++j) {
+			result = startpos;
+			if (next.x == 0) {
+				result.x += j* direction.x;
+				result.y += roundf((j* direction.x*nNext.y / nNext.x));
 			}
+			else if (next.y == 0) {
+				result.y += j* direction.y;
+				result.x += roundf((j* direction.y*nNext.x / nNext.y));
+			}
+
+			if (result.x < 0 || result.y < 0 || result.x >= nodeWH.x || result.y >= nodeWH.y)
+				break;
+			float dst = Vector2::Distance(startpos, result);
+			if (dst <= slength) {
+				m_nodeMap[(int)result.x][(int)result.y].Detected = true;
+				if (m_nodeMap[(int)result.x][(int)result.y].Static == true) {
+					break;
+				}
+			}
+			else break;
 		}
 	}
+
 }
 
 
