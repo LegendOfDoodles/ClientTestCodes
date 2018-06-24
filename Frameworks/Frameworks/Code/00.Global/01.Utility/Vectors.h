@@ -15,6 +15,8 @@ using namespace DirectX;
 
 #define CLAMP(x, low, high) max(low, min(high, x))
 
+
+
 static int Wrap(int x, int low, int high)
 {
 	assert(low < high);

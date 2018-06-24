@@ -11,6 +11,7 @@ public:	// 생성자, 소멸자
 	virtual ~CCollisionObject();
 
 public: // 공개 함수
+	int tag{ 0 };
 	bool CheckEnemyState(CCollisionObject* other);
 	virtual bool Attackable(CCollisionObject* other);
 

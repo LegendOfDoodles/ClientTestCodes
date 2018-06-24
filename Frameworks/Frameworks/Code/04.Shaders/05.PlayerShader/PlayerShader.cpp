@@ -400,6 +400,9 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 #endif
 			pPlayer->SetBoundingMesh(pBoundingBoxMesh);
 			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
+			if (x == 0 && z == 0) {
+				pPlayer->tag = 1;
+			}
 			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*1000));
 			if (z == 1) {
 				pPlayer->SetTeam(TeamType::Red);

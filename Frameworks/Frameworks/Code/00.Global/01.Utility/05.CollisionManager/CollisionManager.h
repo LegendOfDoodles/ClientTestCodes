@@ -26,6 +26,9 @@ public:
 	CCollisionObject* RequestNearObject(CCollisionObject* pCol,float lengh);
 	~CCollisionManager();
 	
+
+	NodeMap** GetNodeMap() { return m_nodeMap; }
+	float GetnodeSize() { return nodeSize; }
 protected:
 	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b) {
 		if (Vector2::Distance(a, b) < 2)
@@ -34,7 +37,7 @@ protected:
 			return false;
 	}
 
-	void SearchSight(int x, int y, int dir, XMFLOAT2 startpos, float dst, float slength);
+	void SearchSight(XMFLOAT2 startpos, int dir, int length, int slength);
 
 
 protected:
