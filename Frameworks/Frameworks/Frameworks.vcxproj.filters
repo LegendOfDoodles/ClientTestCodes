@@ -614,4 +614,9 @@
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\PostProcessShaders.hlsl">
+      <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
