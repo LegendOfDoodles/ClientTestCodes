@@ -222,8 +222,8 @@
     <Filter Include="소스 파일\04.Shaders\98.BillboardShader\04.SkillShader">
       <UniqueIdentifier>{d1f64e7f-f872-401f-a458-67afe0aca04b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\00.Global\01.Utility\07.ShadowMap">
-      <UniqueIdentifier>{85fdb030-8cd8-471c-8a04-8fa440b3a003}</UniqueIdentifier>
+    <Filter Include="소스 파일\05.Objects\95.ShadowMap">
+      <UniqueIdentifier>{0646c1f6-0266-44a0-991d-de3231ac2655}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -419,8 +419,8 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\04.SkillShader\SkillShader.h">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\04.SkillShader</Filter>
     </ClInclude>
-    <ClInclude Include="Code\00.Global\01.Utility\07.ShadowMap\ShadowMap.h">
-      <Filter>소스 파일\00.Global\01.Utility\07.ShadowMap</Filter>
+    <ClInclude Include="Code\05.Objects\95.ShadowMap\ShadowMap.h">
+      <Filter>소스 파일\05.Objects\95.ShadowMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -598,8 +598,8 @@
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\04.SkillShader\SkillShader.cpp">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\04.SkillShader</Filter>
     </ClCompile>
-    <ClCompile Include="Code\00.Global\01.Utility\07.ShadowMap\ShadowMap.cpp">
-      <Filter>소스 파일\00.Global\01.Utility\07.ShadowMap</Filter>
+    <ClCompile Include="Code\05.Objects\95.ShadowMap\ShadowMap.cpp">
+      <Filter>소스 파일\05.Objects\95.ShadowMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -622,6 +622,8 @@
     <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\Shaders.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
     </CustomBuild>
-    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\PostProcessShaders.hlsl" />
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\PostProcessShaders.hlsl">
+      <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
