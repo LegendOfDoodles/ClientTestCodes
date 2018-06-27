@@ -469,7 +469,6 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 		{
 			nearestHitDistance = hitDistance;
 			m_pSelectedObject = reinterpret_cast<CAnimatedObject*>(pIntersectedObject);
-			printf("selected!\n");
 
 			// Status 창 띄우기 수도 코드
 			// 현재 6번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서

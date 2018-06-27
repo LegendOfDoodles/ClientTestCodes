@@ -10,7 +10,7 @@
 /// 목적: 미니언 HP Gauge 쉐이더
 /// 최종 수정자:  이용선(Shader Code 변경 hlsl)
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-06-01
+/// 최종 수정 날짜: 2018-06-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreatePixelShader(ID3DBlob **ppShade
 		ppShaderBlob));
 }
 
-void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets)
+void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -162,7 +162,7 @@ void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTarg
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
 }
 
 void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)

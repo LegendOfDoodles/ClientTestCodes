@@ -9,7 +9,7 @@
 /// 목적: 미니맵 건물 Icon 쉐이더
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-06-01
+/// 최종 수정 날짜: 2018-06-27
 /// </summary>
 
 CBuildingMinimapIconShader::CBuildingMinimapIconShader(CCreateMgr *pCreateMgr)
@@ -187,7 +187,7 @@ D3D12_SHADER_BYTECODE CBuildingMinimapIconShader::CreatePixelShader(ID3DBlob ** 
 		ppShaderBlob));
 }
 
-void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
+void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -195,7 +195,7 @@ void CBuildingMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRen
 	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
 }
 
 void CBuildingMinimapIconShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

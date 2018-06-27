@@ -9,7 +9,7 @@
 /// 목적: Skill UI Icon Shader (틀만 생성)
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-06-11
+/// 최종 수정 날짜: 2018-06-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ D3D12_SHADER_BYTECODE CSkillShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 		ppShaderBlob));
 }
 
-void CSkillShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
+void CSkillShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -231,7 +231,7 @@ void CSkillShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
 	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
 }
 
 void CSkillShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

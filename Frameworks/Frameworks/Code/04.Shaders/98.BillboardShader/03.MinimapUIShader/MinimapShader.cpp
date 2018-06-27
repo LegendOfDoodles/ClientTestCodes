@@ -10,7 +10,7 @@
 /// 목적: Minimap Ui Shader (FrameShader와의 분리)
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-06-04
+/// 최종 수정 날짜: 2018-06-27
 /// </summary>
 
 CMinimapShader::CMinimapShader(CCreateMgr * pCreateMgr)
@@ -205,7 +205,7 @@ D3D12_SHADER_BYTECODE CMinimapShader::CreatePixelShader(ID3DBlob ** ppShaderBlob
 		ppShaderBlob));
 }
 
-void CMinimapShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
+void CMinimapShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -213,7 +213,7 @@ void CMinimapShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets)
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
 }
 
 void CMinimapShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
