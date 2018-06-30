@@ -200,6 +200,7 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\03.MinimapUIShader\MinimapShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\04.SkillShader\SkillShader.h" />
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\98.NumberShader\NumberShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.h" />
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Code\05.Objects\96.Billboard\02.GaugeObject\GaugeObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\03.IconObject\IconObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\04.SkillObject\SkillObject.h" />
+    <ClInclude Include="Code\05.Objects\96.Billboard\98.NumberObject\NumberObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\99.BillboardObject\Billboard.h" />
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h" />
     <ClInclude Include="Code\05.Objects\98.Prefabs\Prefabs.h" />
@@ -267,6 +269,7 @@
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\02.IconShader\01.BuildingMinimapIconShader\BuildingMinimapIconShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\03.MinimapUIShader\MinimapShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\04.SkillShader\SkillShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\98.NumberShader\NumberShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.cpp" />
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp" />
@@ -284,6 +287,7 @@
     <ClCompile Include="Code\05.Objects\96.Billboard\02.GaugeObject\GaugeObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\03.IconObject\IconObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\04.SkillObject\SkillObject.cpp" />
+    <ClCompile Include="Code\05.Objects\96.Billboard\98.NumberObject\NumberObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\99.BillboardObject\Billboard.cpp" />
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp" />
     <ClCompile Include="Code\05.Objects\98.Prefabs\Prefabs.cpp" />

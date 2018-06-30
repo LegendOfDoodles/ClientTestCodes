@@ -137,6 +137,10 @@ namespace Materials
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
+	CMaterial* CreateNumberMaterial(CCreateMgr *pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
 		//Skill
 	CMaterial* CreateStickGreySkillMaterial(CCreateMgr *pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,

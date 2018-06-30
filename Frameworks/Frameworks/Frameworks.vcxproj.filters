@@ -228,6 +228,9 @@
     <Filter Include="소스 파일\04.Shaders\98.BillboardShader\98.NumberShader">
       <UniqueIdentifier>{0d230c55-1fc6-4567-aa90-41cf5a6708c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard\98.NumberObject">
+      <UniqueIdentifier>{1d4f285b-a2da-43b3-bdf0-1e7df73cdd90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -425,6 +428,12 @@
     <ClInclude Include="Code\05.Objects\95.ShadowMap\ShadowMap.h">
       <Filter>소스 파일\05.Objects\95.ShadowMap</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\98.NumberShader\NumberShader.h">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\98.NumberShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\96.Billboard\98.NumberObject\NumberObject.h">
+      <Filter>소스 파일\05.Objects\96.Billboard\98.NumberObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -603,6 +612,12 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\95.ShadowMap\ShadowMap.cpp">
       <Filter>소스 파일\05.Objects\95.ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\98.NumberShader\NumberShader.cpp">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\98.NumberShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\96.Billboard\98.NumberObject\NumberObject.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard\98.NumberObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

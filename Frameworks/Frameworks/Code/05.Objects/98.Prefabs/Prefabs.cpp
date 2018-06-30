@@ -600,6 +600,24 @@ CMaterial * Materials::CreateGreyMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DES
 	return pMaterial;
 }
 
+CMaterial * Materials::CreateNumberMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Number/Number.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
 CMaterial * Materials::CreateStickGreySkillMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
