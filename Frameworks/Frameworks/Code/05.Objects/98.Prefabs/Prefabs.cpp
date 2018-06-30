@@ -546,10 +546,11 @@ CMaterial * Materials::CreateSketchMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_D
 CMaterial * Materials::CreateUIMaterial(CCreateMgr * pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture = new CTexture(3, RESOURCE_TEXTURE_2D, 0);
+	CTexture *pTexture = new CTexture(4, RESOURCE_TEXTURE_2D, 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Frame/SquareFrame.dds", 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Frame/Grey.dds", 1);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Frame/CircleFrame.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Frame/GameStatus.dds", 3);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

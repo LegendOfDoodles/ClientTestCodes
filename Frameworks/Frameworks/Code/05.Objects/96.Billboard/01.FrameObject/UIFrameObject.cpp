@@ -36,7 +36,7 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::StatusFrame:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 276.f, FRAME_BUFFER_HEIGHT / 225.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 256.f, FRAME_BUFFER_HEIGHT / 288.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::CharacterFrame:
@@ -105,7 +105,7 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		break;
 	case UIFrameType::StatusFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 91.4f)));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 84.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / FRAME_BUFFER_WIDTH)));
 		break;
 	case UIFrameType::CharacterFrame:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));

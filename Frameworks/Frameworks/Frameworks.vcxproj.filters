@@ -225,6 +225,9 @@
     <Filter Include="소스 파일\05.Objects\95.ShadowMap">
       <UniqueIdentifier>{0646c1f6-0266-44a0-991d-de3231ac2655}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.BillboardShader\98.NumberShader">
+      <UniqueIdentifier>{0d230c55-1fc6-4567-aa90-41cf5a6708c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
