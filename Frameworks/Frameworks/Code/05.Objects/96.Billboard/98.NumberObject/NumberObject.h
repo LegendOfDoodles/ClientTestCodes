@@ -5,6 +5,7 @@ class CNumberOjbect : public CBillboardObject
 {
 public:
 	CNumberOjbect(CCreateMgr *pCreateMgr);
+	CNumberOjbect(CCreateMgr *pCreateMgr, NumberType type);
 	virtual ~CNumberOjbect();
 
 public: // 공개함수
@@ -17,12 +18,12 @@ public: // 공개함수
 		m_fDistance = x;
 	}
 
-	virtual void SetNum(int i) { if (i >= 0) m_iNum = i; }
-
-	virtual void Num();
+	void SetTexCoord(int cnt) { InputNum = cnt; }
+	int GetNum() { return InputNum; }
 
 protected: // 변수
 	float		m_fDistance;
-	int			m_iNum;
+	NumberType  m_type;
 
+	int InputNum;
 };

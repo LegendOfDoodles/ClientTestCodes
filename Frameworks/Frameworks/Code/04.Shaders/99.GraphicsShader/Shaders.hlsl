@@ -193,6 +193,21 @@ VS_GAUGE_OUTPUT VSTexturedGauge(VS_GAUGE_INPUT input)
 	return(output);
 }
 
+PS_MULTIPLE_RENDER_TARGETS_OUTPUT_DEFAULT PSTexturedNumber(VS_GAUGE_OUTPUT input)
+{
+	PS_MULTIPLE_RENDER_TARGETS_OUTPUT_DEFAULT output;
+
+	float2 newUV = input.uv;
+
+	newUV.x = (input.uv.x / 10.f) + ((float)CurrentHP / 10.f);
+
+	output.color = gtxtTexture.Sample(wrapSampler, newUV);
+	output.normal = float4(0, 0, 0, 0);
+	output.roughMetalFresnel = float4(0, 0, 0, 0);
+
+	return (output);
+}
+
 PS_MULTIPLE_RENDER_TARGETS_OUTPUT_DEFAULT PSTexturedGauge(VS_GAUGE_OUTPUT input)
 {
     PS_MULTIPLE_RENDER_TARGETS_OUTPUT_DEFAULT output;

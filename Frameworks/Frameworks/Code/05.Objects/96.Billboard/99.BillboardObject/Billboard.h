@@ -25,6 +25,16 @@ enum UIFrameType {
 	Minimap,
 };
 
+enum NumberType {
+	BlueTeamKill,
+	RedTeamKill,
+	TimeMinute,
+	TimeSec,
+	PersonalKill,
+	PersonalDeath,
+	PersonalAssist,
+};
+
 enum SkillUIType {
 	GreyQSkill,
 	GreyWSkill,

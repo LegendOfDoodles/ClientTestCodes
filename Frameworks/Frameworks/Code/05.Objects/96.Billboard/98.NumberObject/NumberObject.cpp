@@ -4,8 +4,42 @@
 CNumberOjbect::CNumberOjbect(CCreateMgr * pCreateMgr) 
 	: CBillboardObject(pCreateMgr)
 {
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 85.3f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
+	// 일자로 길게 전부 찍을때
+	//CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 85.3f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
+	
+	// 하나
+	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 640.f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
 	SetMesh(0, pRectMesh);
+}
+
+CNumberOjbect::CNumberOjbect(CCreateMgr * pCreateMgr, NumberType type)
+	: CBillboardObject(pCreateMgr)
+{
+	CTexturedRectMesh *pRectMesh = NULL;
+
+	switch (type)
+	{
+	case BlueTeamKill:
+	case RedTeamKill:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 640.f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case TimeMinute:
+	case TimeSec:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 85.3f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case PersonalKill:
+	case PersonalDeath:
+	case PersonalAssist:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 85.3f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	default:
+		break;
+	}
+
+	m_type = type;
 }
 
 CNumberOjbect::~CNumberOjbect()
@@ -16,10 +50,40 @@ void CNumberOjbect::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 
+	// Texture Animation UV 이동
+
+	// 위치
 	XMFLOAT3 newPos{ 0, 0, 0 };
 
+	float UpVectorMoveWeight = 1.f;
+	float RightVectorMoveWeight = 1.f;
+
+	switch (m_type)
+	{
+	case BlueTeamKill:
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 2560.f);
+		break;
+	case RedTeamKill:
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
+		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 512.f);
+		break;
+	case TimeMinute:
+		break;
+	case TimeSec:
+		break;
+	case PersonalKill:
+		break;
+	case PersonalDeath:
+		break;
+	case PersonalAssist:
+		break;
+	default:
+		break;
+	}
+
 	newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-	newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), 1.f)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), 1.f));
+	newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), UpVectorMoveWeight)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), RightVectorMoveWeight));
 
 	m_xmf4x4World._41 = newPos.x;
 	m_xmf4x4World._42 = newPos.y;
@@ -28,21 +92,30 @@ void CNumberOjbect::Animate(float fTimeElapsed)
 
 void CNumberOjbect::Render(CCamera * pCamera, UINT istanceCnt)
 {
-	CBillboardObject::Render(pCamera, istanceCnt);
-}
+	//CBillboardObject::Render(pCamera, istanceCnt);
 
-void CNumberOjbect::Num()
-{
-	int cnt;		// 자리수
-	int Num[4];		// 일단 최대 4로 지정
+	OnPrepareRender();
 
-	// 자리수 검색
-	for (cnt = 0; m_iNum > 0; m_iNum /= 10, cnt++) /* NULL */;
+	if (m_pMaterial)
+	{
+		m_pMaterial->Render(pCamera);
+		m_pMaterial->UpdateShaderVariables();
+	}
 
-	// Num[0] 부터 1의 자리 10의 자리 증가
-	for (int i = 0; i < cnt; ++i) {
-		Num[i] = m_iNum % 10;
+	if (m_cbvGPUDescriptorHandle.ptr)
+		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
 
-		m_iNum /= 10;
+	if (m_pShader)
+	{
+		UpdateShaderVariables();
+		m_pShader->Render(pCamera);
+	}
+
+	if (m_ppMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(istanceCnt);
+		}
 	}
 }

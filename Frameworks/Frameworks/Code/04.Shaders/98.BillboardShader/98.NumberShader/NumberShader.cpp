@@ -45,11 +45,12 @@ void CNumberShader::ReleaseUploadBuffers()
 
 void CNumberShader::UpdateShaderVariables()
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)
 	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
+		pMappedObject->m_fCurrentHP = ((CNumberOjbect*)m_ppObjects[i])->GetNum();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -67,9 +68,9 @@ void CNumberShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera);
 
+	m_ppMaterials[0]->UpdateShaderVariables();
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppMaterials[0]->UpdateShaderVariable(0);
 		m_ppObjects[j]->Render(pCamera);
 	}
 }
@@ -137,7 +138,7 @@ D3D12_SHADER_BYTECODE CNumberShader::CreateVertexShader(ID3DBlob ** ppShaderBlob
 	//./Code/04.Shaders/99.GraphicsShader/
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTextured",
+		"VSTexturedGauge",
 		"vs_5_1",
 		ppShaderBlob));
 }
@@ -146,7 +147,7 @@ D3D12_SHADER_BYTECODE CNumberShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedNumber",
 		"ps_5_1",
 		ppShaderBlob));
 }
@@ -166,7 +167,7 @@ void CNumberShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
 	HRESULT hResult;
 
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL,
@@ -183,10 +184,29 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = 1;
+	// K 표시
+	// 플레이어 4명을 받아와서
+	//for (int i = 0; i < 4; ++i) {
+	//	// 플레이어의 스테이터스의 Kill을 팀별로 더한다.
+	//}
+
+	//int cnt;		// 자리수
+	//int Num[4];		// 일단 최대 4로 지정
+
+	//// 자리수 검색
+	//for (cnt = 0; m_iNum > 0; m_iNum /= 10, cnt++) ;
+
+	//// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
+	//for (int i = 0; i < cnt; ++i) {
+	//	Num[i] = m_iNum % 10;
+
+	//	m_iNum /= 10;
+	//}
+
+	m_nObjects = 2;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
 	CreateShaderVariables(pCreateMgr, m_nObjects);
@@ -201,10 +221,10 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		pNumber = new CNumberOjbect(pCreateMgr);
+		pNumber = new CNumberOjbect(pCreateMgr, (NumberType)i);
 		pNumber->SetCamera(m_pCamera);
 		pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
-		pNumber->SetNum(9);
+		pNumber->SetTexCoord(i + 2);
 		pNumber->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
 		m_ppObjects[i] = pNumber;
