@@ -6,7 +6,7 @@
 /// 목적: 지형 출력용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -21,6 +21,12 @@ CTerrainShader::~CTerrainShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
+void CTerrainShader::Initialize(CCreateMgr * pCreateMgr, void * pContext)
+{
+	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, false, true);
+	BuildObjects(pCreateMgr, pContext);
+}
+
 void CTerrainShader::ReleaseUploadBuffers()
 {
 	if (m_pTerrain)  m_pTerrain->ReleaseUploadBuffers();
@@ -45,6 +51,13 @@ void CTerrainShader::Render(CCamera * pCamera)
 	CShader::Render(pCamera);
 
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
+	if (m_pTerrain) m_pTerrain->Render(pCamera);
+}
+
+void CTerrainShader::RenderShadow(CCamera * pCamera)
+{
+	CShader::Render(pCamera, 0, 1);
+
 	if (m_pTerrain) m_pTerrain->Render(pCamera);
 }
 
@@ -114,15 +127,51 @@ D3D12_SHADER_BYTECODE CTerrainShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 		ppShaderBlob));
 }
 
-void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
 {
-	m_nPipelineStates = 1;
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"VSTerrain",
+		"vs_5_1",
+		ppShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowHullShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"HSTerrain",
+		"hs_5_1",
+		ppShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowDomainShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"DSTerrain",
+		"ds_5_1",
+		ppShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowPixelShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"PSTerrain",
+		"ps_5_1",
+		ppShaderBlob));
+}
+
+void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+{
+	m_nPipelineStates = 2;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShaderWithTess(pCreateMgr, nRenderTargets);
+	CShader::CreateShaderWithTess(pCreateMgr, nRenderTargets, isRenderShadow);
 }
 
 void CTerrainShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

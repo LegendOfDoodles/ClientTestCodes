@@ -12,7 +12,7 @@
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ CAniShader::~CAniShader()
 // 공개 함수
 void CAniShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
 {
-	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true);
+	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true, true);
 	BuildObjects(pCreateMgr, pContext);
 }
 
@@ -177,6 +177,20 @@ void CAniShader::RenderBoundingBox(CCamera * pCamera)
 	}
 }
 
+void CAniShader::RenderShadow(CCamera * pCamera)
+{
+	CShader::Render(pCamera, 0, 2);
+
+	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	{
+		(*iter)->Render(pCamera);
+	}
+	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	{
+		(*iter)->Render(pCamera);
+	}
+}
+
 CBaseObject *CAniShader::PickObjectByRayIntersection(
 	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance)
 {
@@ -302,9 +316,18 @@ D3D12_SHADER_BYTECODE CAniShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSBone", "ps_5_1", ppShaderBlob));
 }
 
-void CAniShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+D3D12_SHADER_BYTECODE CAniShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
 {
-	m_nPipelineStates = 2;
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"VSBone",
+		"vs_5_1",
+		ppShaderBlob));
+}
+
+void CAniShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+{
+	m_nPipelineStates = 3;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; ++i)
@@ -315,7 +338,7 @@ void CAniShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool 
 	m_nHeaps = 3;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
 void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)

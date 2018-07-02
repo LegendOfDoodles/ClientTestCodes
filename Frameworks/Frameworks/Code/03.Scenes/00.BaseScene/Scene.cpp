@@ -19,6 +19,7 @@
 #include "04.Shaders/98.BillboardShader/04.SkillShader/SkillShader.h"
 #include "04.Shaders/98.BillboardShader/98.NumberShader/NumberShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
+#include "05.Objects/01.Camera/02.LightCamera/LightCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
@@ -28,7 +29,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-28
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -83,12 +84,6 @@ void CScene::ProcessInput()
 		if(continual)
 			continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
-
-	if (m_pSelectedObject && GetAsyncKeyState('K') & 0x0001)
-	{
-		if(m_pSelectedObject->GetState() != States::Die)
-			m_pSelectedObject->SetState(States::Die);
-	}
 }
 
 void CScene::AnimateObjects(float timeElapsed)
@@ -125,6 +120,17 @@ void CScene::Render()
 	}
 }
 
+void CScene::RenderShadow()
+{
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	m_pCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
+
+	for (int i = 0; i < m_nShaders; i++)
+	{
+		m_ppShaders[i]->RenderShadow(m_pLightCamera);
+	}
+}
+
 void CScene::RenderWithLights()
 {
 	UpdateShaderVariables();
@@ -151,6 +157,11 @@ void CScene::SetViewportsAndScissorRects()
 	m_pCamera->SetViewportsAndScissorRects();
 }
 
+void CScene::SetShadowViewportsAndScissorRects()
+{
+	m_pLightCamera->SetViewportsAndScissorRects();
+}
+
 void CScene::UpdateCamera()
 {
 	if (m_bCamChanged)
@@ -173,16 +184,19 @@ void CScene::UpdateCamera()
 		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[7])->GetCamera(m_pCamera);
 		static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->GetCamera(m_pCamera);
 
-
 		m_bCamChanged = false;
 	}
 	m_pCamera->UpdateShaderVariables();
 }
 
+void CScene::UpdateShadowCamera()
+{
+	m_pLightCamera->UpdateShaderVariables();
+}
+
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	WPARAM wParam, LPARAM lParam)
 {
-
 	int ret = 0;
 	switch (nMessageID)
 	{
@@ -213,7 +227,6 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	{
 		OnProcessKeyUp(wParam, lParam);
 	}
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -244,49 +257,27 @@ void CScene::BuildLights()
 
 	m_pLights->m_pLights[0].m_bEnable = true;
 	m_pLights->m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.3f, 1.0f));
+	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
+	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.3f, -0.5f, 0.7f));
 
 	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[1].m_direction = Vector3::Normalize(XMFLOAT3(1.0f, -0.6f, 0.0f));
+	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	m_pLights->m_pLights[1].m_direction = Vector3::Normalize(XMFLOAT3(0.0, -0.6f, 1.0f));
 
 	m_pLights->m_pLights[2].m_bEnable = true;
 	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -0.6f, -1.0f));
-
-	m_pLights->m_pLights[3].m_bEnable = true;
-	m_pLights->m_pLights[3].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[3].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[3].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.6f, 0.0f));
-
-	m_pLights->m_pLights[4].m_bEnable = true;
-	m_pLights->m_pLights[4].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[4].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[4].m_direction = Vector3::Normalize(XMFLOAT3(-1.0f, -0.3f, -1.0f));
-
-	m_pLights->m_pLights[5].m_bEnable = true;
-	m_pLights->m_pLights[5].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[5].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[5].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -0.6f, 1.0f));
-
-	m_pLights->m_pLights[6].m_bEnable = true;
-	m_pLights->m_pLights[6].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[6].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[6].m_direction = Vector3::Normalize(XMFLOAT3(1.0f, -0.3f, -1.0f));
-
-	m_pLights->m_pLights[7].m_bEnable = true;
-	m_pLights->m_pLights[7].m_nType = DIRECTIONAL_LIGHT;
-	m_pLights->m_pLights[7].m_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLights->m_pLights[7].m_direction = Vector3::Normalize(XMFLOAT3(1.0f, -0.3f, 1.0f));
+	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(0.8, -0.4f, 0.7f));
 
 	CreateCbvAndSrvDescriptorHeap(m_pCreateMgr, 0, 1, 0);
 	m_pCubeMap = Materials::CreateCubeMapMaterial(m_pCreateMgr, &m_srvCPUDescriptorStartHandles[0], &m_srvGPUDescriptorStartHandles[0]);
 
 	CreateCbvAndSrvDescriptorHeap(m_pCreateMgr, 0, 1, 1);
 	m_pSketchEffect = Materials::CreateSketchMaterial(m_pCreateMgr, &m_srvCPUDescriptorStartHandles[1], &m_srvGPUDescriptorStartHandles[1]);
+
+	m_pLightCamera = new CLightCamera(m_pLights->m_pLights[0].m_direction);
+	m_pLightCamera->Initialize(m_pCreateMgr);
 }
 
 void CScene::BuildObjects(CCreateMgr *pCreateMgr)
@@ -408,6 +399,11 @@ void CScene::ReleaseObjects()
 		m_pCamera->Finalize();
 		Safe_Delete(m_pCamera);
 	}
+	if (m_pLightCamera)
+	{
+		m_pLightCamera->Finalize();
+		Safe_Delete(m_pLightCamera);
+	}
 	if (m_ppShaders)
 	{
 		for (int i = 0; i < m_nShaders; i++)
@@ -521,7 +517,6 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 // Process Keyboard Input
 void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
-
 	int x = 0, y = 0;
 	if (wParam == VK_ESCAPE)
 		::PostQuitMessage(0);

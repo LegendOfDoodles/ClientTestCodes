@@ -190,7 +190,7 @@ D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreatePixelShader(ID3DBlob ** p
 		ppShaderBlob));
 }
 
-void CharacterFrameGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+void CharacterFrameGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -198,7 +198,7 @@ void CharacterFrameGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRend
 	m_nHeaps = 3;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
 void CharacterFrameGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -80,9 +80,18 @@ void CShader::Render(CCamera *pCamera, int opt)
 	OnPrepareRender(opt);
 }
 
+void CShader::Render(CCamera * pCamera, int opt, int index)
+{
+	OnPrepareRender(opt, index);
+}
+
 void CShader::RenderBoundingBox(CCamera * pCamera)
 {
 	OnPrepareRenderForBB();
+}
+
+void CShader::RenderShadow(CCamera * pCamera)
+{
 }
 
 CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float &nearHitDistance)
@@ -130,6 +139,26 @@ D3D12_RASTERIZER_DESC CShader::CreateRasterizerState()
 	rasterizerDesc.DepthBias = 0;
 	rasterizerDesc.DepthBiasClamp = 0.0f;
 	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	rasterizerDesc.DepthClipEnable = TRUE;
+	rasterizerDesc.MultisampleEnable = FALSE;
+	rasterizerDesc.AntialiasedLineEnable = FALSE;
+	rasterizerDesc.ForcedSampleCount = 0;
+	rasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+
+	return(rasterizerDesc);
+}
+
+D3D12_RASTERIZER_DESC CShader::CreateShadowRasterizerState()
+{
+	D3D12_RASTERIZER_DESC rasterizerDesc;
+	::ZeroMemory(&rasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
+
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc.FrontCounterClockwise = FALSE;
+	rasterizerDesc.DepthBias = 100000;
+	rasterizerDesc.DepthBiasClamp = 0;
+	rasterizerDesc.SlopeScaledDepthBias = 1;
 	rasterizerDesc.DepthClipEnable = TRUE;
 	rasterizerDesc.MultisampleEnable = FALSE;
 	rasterizerDesc.AntialiasedLineEnable = FALSE;
@@ -278,9 +307,9 @@ void CShader::CreateConstantBufferViews(
 	}
 }
 
-void GetShaderResourceViewDesc(
-	D3D12_RESOURCE_DESC resourceDesc, 
-	UINT nTextureType, 
+void CShader::GetShaderResourceViewDesc(
+	D3D12_RESOURCE_DESC resourceDesc,
+	UINT nTextureType,
 	D3D12_SHADER_RESOURCE_VIEW_DESC *pShaderResourceViewDesc)
 {
 	pShaderResourceViewDesc->Format = resourceDesc.Format;
@@ -397,7 +426,43 @@ D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxPixelShader(ID3DBlob ** ppShader
 		ppShaderBlob));
 }
 
-void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets)
+D3D12_SHADER_BYTECODE CShader::CreateShadowHullShader(ID3DBlob ** ppd3dShaderBlob)
+{
+	D3D12_SHADER_BYTECODE shaderByteCode;
+	shaderByteCode.BytecodeLength = 0;
+	shaderByteCode.pShaderBytecode = NULL;
+
+	return(shaderByteCode);
+}
+
+D3D12_SHADER_BYTECODE CShader::CreateShadowDomainShader(ID3DBlob ** ppd3dShaderBlob)
+{
+	D3D12_SHADER_BYTECODE shaderByteCode;
+	shaderByteCode.BytecodeLength = 0;
+	shaderByteCode.pShaderBytecode = NULL;
+
+	return(shaderByteCode);
+}
+
+D3D12_SHADER_BYTECODE CShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
+{
+	D3D12_SHADER_BYTECODE shaderByteCode;
+	shaderByteCode.BytecodeLength = 0;
+	shaderByteCode.pShaderBytecode = NULL;
+
+	return(shaderByteCode);
+}
+
+D3D12_SHADER_BYTECODE CShader::CreateShadowPixelShader(ID3DBlob ** ppShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"PSMain",
+		"ps_5_1",
+		ppShaderBlob));
+}
+
+void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderShadow)
 {
 	int index{ 0 };
 	HRESULT hResult;
@@ -431,9 +496,26 @@ void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets)
 		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
 	assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
 	//ExptProcess::ThrowIfFailed(hResult);
+
+	if (isRenderShadow)
+	{
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC ShadowPipelineStateDesc{ pipelineStateDesc };
+		ShadowPipelineStateDesc.VS = CreateShadowVertexShader(&pVertexShaderBlob);
+		ShadowPipelineStateDesc.HS = CreateShadowHullShader(&pHullShaderBlob);
+		ShadowPipelineStateDesc.DS = CreateShadowDomainShader(&pDomainShaderBlob);
+		ShadowPipelineStateDesc.PS = CreateShadowPixelShader(&pPixelShaderBlob);
+		pipelineStateDesc.RasterizerState = CreateShadowRasterizerState();
+		pipelineStateDesc.NumRenderTargets = 0;
+		pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
+		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+			&ShadowPipelineStateDesc,
+			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+		assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
+		//ExptProcess::ThrowIfFailed(hResult);
+	}
 }
 
-void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	int index{ 0 };
 	HRESULT hResult;
@@ -475,6 +557,21 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 		BBPipelineStateDesc.InputLayout = CreateBoundingBoxInputLayout();
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&BBPipelineStateDesc,
+			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+		assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
+		//ExptProcess::ThrowIfFailed(hResult);
+	}
+
+	if (isRenderShadow)
+	{
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC ShadowPipelineStateDesc{ pipelineStateDesc };
+		ShadowPipelineStateDesc.VS = CreateShadowVertexShader(&pVertexShaderBlob);
+		ShadowPipelineStateDesc.PS = CreateShadowPixelShader(&pPixelShaderBlob);
+		pipelineStateDesc.RasterizerState = CreateShadowRasterizerState();
+		pipelineStateDesc.NumRenderTargets = 0;
+		pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
+		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+			&ShadowPipelineStateDesc,
 			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
 		assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
 		//ExptProcess::ThrowIfFailed(hResult);
@@ -558,10 +655,10 @@ void CShader::ReleaseObjects()
 {
 }
 
-void CShader::OnPrepareRender(int opt)
+void CShader::OnPrepareRender(int opt, int index)
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
-	m_pCommandList->SetPipelineState(m_ppPipelineStates[0]);
+	m_pCommandList->SetPipelineState(m_ppPipelineStates[index]);
 	if(m_ppCbvSrvDescriptorHeaps) m_pCommandList->SetDescriptorHeaps(1, &m_ppCbvSrvDescriptorHeaps[opt]);
 
 	UpdateShaderVariables();

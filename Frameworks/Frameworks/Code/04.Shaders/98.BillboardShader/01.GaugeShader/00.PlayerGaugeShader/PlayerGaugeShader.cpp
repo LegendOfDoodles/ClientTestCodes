@@ -7,9 +7,9 @@
 
 /// <summary>
 /// 목적: Player HP Gague 쉐이더
-/// 최종 수정자:  이용선 (Shader Code 변경 hlsl)
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정자:  김나단 (Shader Code 변경 hlsl)
+/// 수정자 목록:  이용선, 김나단
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -86,12 +86,10 @@ void CPlayerHPGaugeShader::GetCamera(CCamera * pCamera)
 	for (int i = 0; i < m_nObjects; ++i) {
 		static_cast<CGaugeObject*>(m_ppObjects[i])->SetCamera(m_pCamera);
 	}
-
 }
 
 bool CPlayerHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
-	
 	return true;
 }
 
@@ -170,7 +168,7 @@ D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreatePixelShader(ID3DBlob ** ppShad
 		ppShaderBlob));
 }
 
-void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -178,7 +176,7 @@ void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTar
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
 void CPlayerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

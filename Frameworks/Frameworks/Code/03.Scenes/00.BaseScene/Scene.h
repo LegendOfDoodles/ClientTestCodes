@@ -46,10 +46,13 @@ public: // 공개 함수
 	void ProcessInput();
 	void AnimateObjects(float timeElapsed);
 	void Render();
+	void RenderShadow();
 	void RenderWithLights();
 
 	void SetViewportsAndScissorRects();
+	void SetShadowViewportsAndScissorRects();
 	void UpdateCamera();
+	void UpdateShadowCamera();
 
 	// Message Process
 	void OnProcessingMouseMessage(HWND hWnd, UINT messageID,
@@ -78,9 +81,10 @@ protected: // 내부 함수
 
 protected: // 변수
 	HWND m_hWnd{ NULL };
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
 	CCamera *m_pCamera{ NULL };
+	CCamera *m_pLightCamera{ NULL };
 
 	CShader **m_ppShaders{ NULL };
 	int m_nShaders{ 0 };

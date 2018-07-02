@@ -11,7 +11,7 @@
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ CNexusTowerShader::~CNexusTowerShader()
 // 공개 함수
 void CNexusTowerShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
 {
-	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true);
+	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true, true);
 	BuildObjects(pCreateMgr, pContext);
 }
 
@@ -109,6 +109,22 @@ void CNexusTowerShader::RenderBoundingBox(CCamera * pCamera)
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->RenderBoundingBox(pCamera);
+	}
+}
+
+void CNexusTowerShader::RenderShadow(CCamera * pCamera)
+{
+	int cnt{ 0 };
+	for (int i = 0; i < m_nMaterials; ++i)
+	{
+		for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
+		{
+			if (j == 0)
+			{
+				CShader::Render(pCamera, i, 2);
+			}
+			if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
+		}
 	}
 }
 
@@ -201,17 +217,34 @@ D3D12_INPUT_LAYOUT_DESC CNexusTowerShader::CreateInputLayout()
 
 D3D12_SHADER_BYTECODE CNexusTowerShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "VSTexturedLighting", "vs_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"VSTexturedLighting",
+		"vs_5_1",
+		ppShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE CNexusTowerShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLightingEmissive", "ps_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"PSTexturedLightingEmissive",
+		"ps_5_1",
+		ppShaderBlob));
 }
 
-void CNexusTowerShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+D3D12_SHADER_BYTECODE CNexusTowerShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
 {
-	m_nPipelineStates = 2;
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"VSTexturedLighting",
+		"vs_5_1",
+		ppShaderBlob));
+}
+
+void CNexusTowerShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+{
+	m_nPipelineStates = 3;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; ++i)
@@ -222,7 +255,7 @@ void CNexusTowerShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets
 	m_nHeaps = 5;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
 void CNexusTowerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)

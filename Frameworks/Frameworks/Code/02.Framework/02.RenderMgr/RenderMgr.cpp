@@ -6,7 +6,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-29
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -39,26 +39,55 @@ void CRenderMgr::Release()
 
 void CRenderMgr::Render(CScene* pScene)
 {
+	RenderDepth(pScene);
 	RenderColor(pScene);
 	RenderLight(pScene);
 
 	MoveToNextFrame();
 }
 
-void CRenderMgr::RenderColor(CScene * pScene)
+void CRenderMgr::RenderDepth(CScene * pScene)
 {
 	HRESULT hResult;
 	// Reset Command List
 	hResult = m_pCommandAllocator->Reset();
 	assert(SUCCEEDED(hResult) && "CommandAllocator->Reset Failed");
 
-	hResult = m_pCommandList->Reset(m_pCommandAllocator, NULL);
+	hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
 	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
 
+	// Change to DEPTH_WRITE
+	SynchronizeResourceTransition(m_pShadowDepthBuffer.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+
+	// Set Viewport and Scissor Rect
+	pScene->SetShadowViewportsAndScissorRects();
+
+	// Clear Depth Stencil View
+	m_pCommandList->ClearDepthStencilView(m_dsvShadowBufferCPUHandle,
+		D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+
+	// Set Render Target and Depth Stencil
+	m_pCommandList->OMSetRenderTargets(0, NULL, FALSE, &m_dsvShadowBufferCPUHandle);
+
+	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
+
+	// Set Camera Matrices
+	pScene->UpdateShadowCamera();
+
+	// Render Scene
+	pScene->RenderShadow();
+
+	// Change back to GENERIC_READ to read it by texture
+	SynchronizeResourceTransition(m_pShadowDepthBuffer.Get(), D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+}
+
+void CRenderMgr::RenderColor(CScene * pScene)
+{
+	HRESULT hResult;
 	// Set Barrier
 	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
 	{
-		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i].Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	}
 
 	// Set Viewport and Scissor Rect
@@ -89,12 +118,18 @@ void CRenderMgr::RenderColor(CScene * pScene)
 	// Render Scene
 	pScene->Render();
 
+	// Set Barrier
+	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
+	{
+		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+	}
+
 	// Close Command List
 	hResult = m_pCommandList->Close();
 	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
 
 	// Excute Command List
-	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 
 	WaitForGpuComplete();
@@ -107,16 +142,10 @@ void CRenderMgr::RenderLight(CScene * pScene)
 	hResult = m_pCommandAllocator->Reset();
 	assert(SUCCEEDED(hResult) && "CommandAllocator->Reset Failed");
 
-	hResult = m_pCommandList->Reset(m_pCommandAllocator, NULL);
+	hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
 	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
 
-	// Set Barrier
-	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
-	{
-		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
-	}
-
-	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	// Set Viewport and Scissor Rect
 	pScene->SetViewportsAndScissorRects();
@@ -130,16 +159,19 @@ void CRenderMgr::RenderLight(CScene * pScene)
 	m_pTextureToFullScreenShader->SetGraphicsRootSignature();
 
 	pScene->RenderWithLights();
-	m_pTextureToFullScreenShader->Render(m_pCamera);
 
-	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	pScene->UpdateShadowCamera();
+
+	m_pTextureToFullScreenShader->Render(NULL);
+
+	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
 	// Close Command List
 	hResult = m_pCommandList->Close();
 	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
 
 	// Excute Command List
-	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 
 	WaitForGpuComplete();
@@ -150,10 +182,9 @@ void CRenderMgr::RenderLight(CScene * pScene)
 	//ExptProcess::ThrowIfFailed(hResult);
 }
 
-void CRenderMgr::SetDsvDescriptorHeap(ID3D12DescriptorHeap * pDsvDescriptorHeap, UINT incrementSize)
+void CRenderMgr::SetDsvCPUHandleWithDsvHeap(ComPtr<ID3D12DescriptorHeap> pDsvDescriptorHeap, UINT incrementSize)
 {
-	m_pDsvDescriptorHeap = pDsvDescriptorHeap;
-	m_dsvDepthStencilBufferCPUHandle = m_pDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	m_dsvDepthStencilBufferCPUHandle = pDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	m_dsvShadowBufferCPUHandle.ptr = m_dsvDepthStencilBufferCPUHandle.ptr + incrementSize;
 }
 
@@ -162,7 +193,7 @@ void CRenderMgr::WaitForGpuComplete()
 	HRESULT hResult;
 	UINT64 fenceValue = ++m_fenceValues[m_swapChainBufferIndex];
 	
-	hResult = m_pCommandQueue->Signal(m_pFence, fenceValue);
+	hResult = m_pCommandQueue->Signal(m_pFence.Get(), fenceValue);
 	assert(SUCCEEDED(hResult) && "CommandQueue->Signal Failed");
 
 	//GPU가 펜스의 값을 설정하는 명령을 명령 큐에 추가한다.
@@ -185,7 +216,7 @@ void CRenderMgr::MoveToNextFrame()
 
 void CRenderMgr::ResetCommandList()
 {
-	m_pCommandList->Reset(m_pCommandAllocator, NULL);
+	m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
 }
 
 void CRenderMgr::ExecuteCommandList()
@@ -195,7 +226,7 @@ void CRenderMgr::ExecuteCommandList()
 	hResult = m_pCommandList->Close();
 	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
 
-	ID3D12CommandList *ppCommandLists[] = { m_pCommandList };
+	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 
 	WaitForGpuComplete();

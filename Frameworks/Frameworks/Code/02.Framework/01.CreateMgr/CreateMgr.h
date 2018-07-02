@@ -1,5 +1,6 @@
 #pragma once
 #include "02.Framework/02.RenderMgr/RenderMgr.h"
+#include "05.Objects/99.Material/00.Texture/Texture.h"
 #include "04.Shaders/97.TextureToFullScreenShader/TextureToFullScreenShader.h"
 
 class CCreateMgr
@@ -41,8 +42,8 @@ public:	// 공개 함수
 
 	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
 
-	ID3D12Device* GetDevice() { return m_pDevice; }
-	ID3D12GraphicsCommandList* GetCommandList() { return m_pCommandList; }
+	ComPtr<ID3D12Device> GetDevice() { return m_pDevice; }
+	ComPtr<ID3D12GraphicsCommandList> GetCommandList() { return m_pCommandList; }
 
 	ID3D12RootSignature* GetGraphicsRootSignature() { return m_pGraphicsRootSignature; }
 
@@ -59,10 +60,10 @@ private:
 	void CreateSwapChain();
 	void CreateRtvAndDsvDescriptorHeaps();
 	void CreateSwapChainRenderTargetViews();
-	void CreateDepthStencilView();
 	void CreateRenderTargetViews();
+	void CreateDepthStencilView();
+	void CreatePostprocessShader();
 	void CreateGraphicsRootSignature();
-	void CreateShadowMapDescriptorHeap();
 
 private:	 // 변수
 	HINSTANCE m_hInstance;
@@ -73,46 +74,49 @@ private:	 // 변수
 	int m_nWndClientHeight{ FRAME_BUFFER_HEIGHT };
 
 	// Factory and Device
-	IDXGIFactory4 *m_pFactory{ NULL };
-	ID3D12Device *m_pDevice{ NULL };
+	ComPtr<IDXGIFactory4> m_pFactory;
+	ComPtr<ID3D12Device> m_pDevice;
 
 	// Swap Chain
-	IDXGISwapChain3 *m_pSwapChain{ NULL };
+	ComPtr<IDXGISwapChain3> m_pSwapChain;
+
+	// BackBuffer Format
+	DXGI_FORMAT m_backBufferFormat{ DXGI_FORMAT_R8G8B8A8_UNORM };
 
 	// MSAA Set
 	bool m_bMsaa4xEnable{ false };
 	UINT m_nMsaa4xQualityLevels{ 0 };
 
-	// Render Target View
-	ID3D12Resource *m_ppRenderTargetBuffers[RENDER_TARGET_BUFFER_CNT];
+	// Descriptor Heaps
+	ComPtr<ID3D12DescriptorHeap> m_pRtvDescriptorHeap;
+	ComPtr<ID3D12DescriptorHeap> m_pDsvDescriptorHeap;
+
+	// RTV / DSV 버퍼 생성용
+	shared_ptr<CTexture> m_pTexture;
+
+	// Resources
+	ComPtr<ID3D12Resource> m_ppRenderTargetBuffers[RENDER_TARGET_BUFFER_CNT];
+	ComPtr<ID3D12Resource> m_ppSwapChainBackBuffers[SWAP_CHAIN_BUFFER_CNT];
+	ComPtr<ID3D12Resource> m_pDepthStencilBuffer;
+	ComPtr<ID3D12Resource> m_pShadowDepthBuffer;
+
 	D3D12_CPU_DESCRIPTOR_HANDLE m_pRtvRenderTargetBufferCPUHandles[RENDER_TARGET_BUFFER_CNT];
-
-	ID3D12Resource					*m_ppSwapChainBackBuffers[SWAP_CHAIN_BUFFER_CNT];
-	ID3D12DescriptorHeap *m_pRtvDescriptorHeap{ NULL };
-	UINT m_nRtvDescriptorIncrementSize{ 0 };
-	D3D12_CPU_DESCRIPTOR_HANDLE		m_pRtvSwapChainBackBufferCPUHandles[SWAP_CHAIN_BUFFER_CNT];
-
-	// Depth Stencil View
-	ID3D12Resource *m_pDepthStencilBuffer{ NULL };
-	ID3D12Resource *m_pShadowDepthBuffer{ NULL };
-	ID3D12DescriptorHeap *m_pDsvDescriptorHeap{ NULL };
+	D3D12_CPU_DESCRIPTOR_HANDLE	m_pRtvSwapChainBackBufferCPUHandles[SWAP_CHAIN_BUFFER_CNT];
 
 	// Command Queue
-	ID3D12CommandQueue *m_pCommandQueue{ NULL };
-	ID3D12CommandAllocator *m_pCommandAllocator{ NULL };
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12CommandQueue> m_pCommandQueue;
+	ComPtr<ID3D12CommandAllocator> m_pCommandAllocator;
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
 	// Fence
-	ID3D12Fence *m_pFence{ NULL };
+	ComPtr<ID3D12Fence> m_pFence;
 
-#ifdef _DEBUG
-	ID3D12Debug *m_pDebugController{ NULL };
-#endif
-
+	UINT m_rtvDescriptorIncrementSize{ 0 };
 	UINT m_cbvSrvDescriptorIncrementSize{ 0 };
 	UINT m_dsvDescriptorIncrementSize{ 0 };
 
-	CTextureToFullScreenShader *m_pTextureToFullScreenShader{ NULL };
+	// PostProcessing Shader
+	shared_ptr<CTextureToFullScreenShader> m_pTextureToFullScreenShader;
 
 	// Root Signature
 	ID3D12RootSignature *m_pGraphicsRootSignature{ NULL };
@@ -120,8 +124,7 @@ private:	 // 변수
 	// Render Manager
 	CRenderMgr m_renderMgr;
 
-	// ShadowMap Resources
-	ID3D12DescriptorHeap			*m_pShadowMapDescriptorHeap{ NULL };
-	D3D12_CPU_DESCRIPTOR_HANDLE		m_shadowMapCPUDescriptorStartHandle;
-	D3D12_GPU_DESCRIPTOR_HANDLE		m_shadowMapGPUDescriptorStartHandle;
+#ifdef _DEBUG
+	ComPtr<ID3D12Debug> m_pDebugController;
+#endif
 };

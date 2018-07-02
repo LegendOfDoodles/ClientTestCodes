@@ -10,9 +10,10 @@ public: // 생성자, 소멸자
 public: // 공개 함수
 	virtual void CreateGraphicsRootSignature(CCreateMgr *pCreateMgr);
 
+	void CreateShaderResourceViews(CCreateMgr *pCreateMgr, shared_ptr<CTexture> pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index = 0);
 	virtual void CreateShader(CCreateMgr *pCreateMgr, ID3D12RootSignature *pd3dGraphicsRootSignature, UINT nRenderTargets = 1);
 
-	virtual void BuildObjects(CCreateMgr * pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(CCreateMgr * pCreateMgr, shared_ptr<CTexture> pContext = NULL);
 
 	virtual void Render(CCamera *pCamera);
 
@@ -27,6 +28,6 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CTexture * m_pTexture{ NULL };
+	shared_ptr<CTexture> m_pTexture;
 };
 

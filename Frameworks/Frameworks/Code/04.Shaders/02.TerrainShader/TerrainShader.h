@@ -9,11 +9,14 @@ public:	// 생성자, 소멸자
 	virtual ~CTerrainShader();
 
 public: // 공개 함수
+	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);
+
 	virtual void ReleaseUploadBuffers();
 
 	virtual void UpdateShaderVariables();
 
 	virtual void Render(CCamera *pCamera);
+	virtual void RenderShadow(CCamera *pCamera);
 
 	CHeightMapTerrain * GetTerrain() { return m_pTerrain; }
 
@@ -25,7 +28,12 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateDomainShader(ID3DBlob **ppd3dShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false);
+	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ID3DBlob **ppShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowHullShader(ID3DBlob **ppd3dShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ID3DBlob **ppd3dShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ID3DBlob **ppShaderBlob);
+
+	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);

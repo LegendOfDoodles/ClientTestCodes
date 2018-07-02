@@ -23,6 +23,7 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 	virtual void RenderBoundingBox(CCamera *pCamera);
+	virtual void RenderShadow(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
@@ -39,7 +40,9 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false);
+	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ID3DBlob **ppShaderBlob);
+
+	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
 
 	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);

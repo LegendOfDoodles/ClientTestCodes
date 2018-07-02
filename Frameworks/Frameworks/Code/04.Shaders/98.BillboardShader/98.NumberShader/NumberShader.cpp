@@ -9,9 +9,9 @@
 
 /// <summary>
 /// 목적: Number Billboard 쉐이더 (시간, Kill Dead, Assist )
-/// 최종 수정자:  이용선
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-07-01
+/// 최종 수정자:  김나단
+/// 수정자 목록:  이용선, 김나단
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ D3D12_SHADER_BYTECODE CNumberShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
 		ppShaderBlob));
 }
 
-void CNumberShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+void CNumberShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -161,7 +161,7 @@ void CNumberShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, b
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
 void CNumberShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)

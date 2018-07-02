@@ -57,6 +57,6 @@ protected: // º¯¼ö
 
 	CShader							*m_pShader{ NULL };
 
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 };
 

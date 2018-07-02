@@ -27,5 +27,6 @@ void ExptProcess::ThrowIfFailed(HRESULT hr)
 	if (FAILED(hr))
 	{
 		throw std::exception();
+		exit(EXIT_FAILURE);
 	}
 }

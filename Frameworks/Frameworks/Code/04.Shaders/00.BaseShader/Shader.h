@@ -28,7 +28,9 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 	void Render(CCamera *pCamera, int opt);
+	void Render(CCamera *pCamera, int opt, int index);
 	virtual void RenderBoundingBox(CCamera *pCamera);
+	virtual void RenderShadow(CCamera *pCamera);
 
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
@@ -36,7 +38,7 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
-	bool HasBoundingBox() { return m_nPipelineStates > 1; }
+	bool HasBoundingBox() { return m_isRenderBB; }
 
 	virtual void OnStatus(int ObjectType);
 	virtual void OffStatus();
@@ -54,6 +56,7 @@ public: // 공개 함수
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_RASTERIZER_DESC CreateRasterizerState();
+	virtual D3D12_RASTERIZER_DESC CreateShadowRasterizerState();
 	virtual D3D12_BLEND_DESC CreateBlendState();
 	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
 
@@ -63,6 +66,7 @@ protected: // 내부 함수
 	void CreateDescriptorHeaps();
 	void CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index = 0);
 	void CreateConstantBufferViews(CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index = 0);
+	void GetShaderResourceViewDesc(D3D12_RESOURCE_DESC resourceDesc, UINT nTextureType, D3D12_SHADER_RESOURCE_VIEW_DESC *pShaderResourceViewDesc);
 	void CreateShaderResourceViews(CCreateMgr *pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index = 0);
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
@@ -73,8 +77,13 @@ protected: // 내부 함수
 	D3D12_SHADER_BYTECODE CreateBoundingBoxVertexShader(ID3DBlob **ppShaderBlob);
 	D3D12_SHADER_BYTECODE CreateBoundingBoxPixelShader(ID3DBlob **ppShaderBlob);
 
-	virtual void CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1);
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false);
+	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ID3DBlob **ppShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowHullShader(ID3DBlob **ppd3dShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ID3DBlob **ppd3dShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ID3DBlob **ppShaderBlob);
+
+	virtual void CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderShadow = false);
+	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 	virtual void CreateShader(CCreateMgr *pCreateMgr, ID3D12RootSignature *pGraphicsRootSignature, UINT nRenderTargets = 1);
 
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
@@ -84,7 +93,7 @@ protected: // 내부 함수
 	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
 
-	virtual void OnPrepareRender(int opt = 0);
+	virtual void OnPrepareRender(int opt = 0, int index = 0);
 	void OnPrepareRenderForBB();
 
 	D3D12_SHADER_BYTECODE CompileShaderFromFile(WCHAR *pszFileName, LPCSTR pszShaderName,
@@ -92,6 +101,8 @@ protected: // 내부 함수
 
 protected: // 변수
 	int m_nReferences{ 0 };
+
+	bool m_isRenderBB{ false };
 
 	ID3D12PipelineState **m_ppPipelineStates{ NULL };
 	int m_nPipelineStates{ 0 };
@@ -114,7 +125,7 @@ protected: // 변수
 	D3D12_CPU_DESCRIPTOR_HANDLE		*m_psrvCPUDescriptorStartHandle{ NULL };
 	D3D12_GPU_DESCRIPTOR_HANDLE		*m_psrvGPUDescriptorStartHandle{ NULL };
 
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
 	ID3D12RootSignature				*m_pGraphicsRootSignature{ NULL };
 };

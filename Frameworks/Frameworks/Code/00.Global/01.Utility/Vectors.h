@@ -7,14 +7,13 @@ using namespace DirectX;
 /// 목적: 벡터 연산을 간략화 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-09
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 #define	PI		3.141593
 #define	EPSILON		1.0e-10f
 
 #define CLAMP(x, low, high) max(low, min(high, x))
-
 
 
 static int Wrap(int x, int low, int high)
@@ -40,8 +39,8 @@ inline int RandInt(int x, int y)
 	return rand() % (y - x + 1) + x;
 }
 
-inline float RandFloat() 
-{ 
+inline float RandFloat()
+{
 	return ((rand()) / (RAND_MAX + 1.0f));
 }
 
@@ -58,8 +57,8 @@ inline bool   RandBool()
 }
 
 inline double RandomClamped()
-{ 
-	return RandFloat() - RandFloat(); 
+{
+	return RandFloat() - RandFloat();
 }
 
 inline float RandGaussian(float mean = 0.0f, float standard_deviation = 1.0f)
@@ -135,7 +134,7 @@ namespace Vector2
 	{
 		XMFLOAT2 xmf2Result;
 		if (bNormalize)
-			XMStoreFloat2(&xmf2Result, 
+			XMStoreFloat2(&xmf2Result,
 				XMVector2Normalize(XMLoadFloat2(&xmf2Vector1) - XMLoadFloat2(&xmf2Vector2)));
 		else
 			XMStoreFloat2(&xmf2Result, XMLoadFloat2(&xmf2Vector1) - XMLoadFloat2(&xmf2Vector2));
@@ -430,7 +429,7 @@ namespace Matrix4x4
 		XMStoreFloat4x4(&xmmtx4x4Result, XMMatrixInverse(NULL, XMLoadFloat4x4(&xmmtx4x4Matrix)));
 		return(xmmtx4x4Result);
 	}
-	inline XMFLOAT4X4 Lerp(XMFLOAT4X4& xmmtx4x4Matrix1, XMFLOAT4X4& xmmtx4x4Matrix2,float single)
+	inline XMFLOAT4X4 Lerp(XMFLOAT4X4& xmmtx4x4Matrix1, XMFLOAT4X4& xmmtx4x4Matrix2, float single)
 	{
 		XMFLOAT4X4 xmmtx4x4Result;
 
@@ -465,11 +464,24 @@ namespace Matrix4x4
 		return(xmmtx4x4Result);
 	}
 
-	inline XMFLOAT4X4 PerspectiveFovLH(float FovAngleY, float AspectRatio, float NearZ,
-		float FarZ)
+	inline XMFLOAT4X4 PerspectiveFovLH(float FovAngleY, float AspectRatio, float NearZ, float FarZ)
 	{
 		XMFLOAT4X4 xmmtx4x4Result;
 		XMStoreFloat4x4(&xmmtx4x4Result, XMMatrixPerspectiveFovLH(FovAngleY, AspectRatio, NearZ, FarZ));
+		return(xmmtx4x4Result);
+	}
+
+	inline XMFLOAT4X4 OrthographicLH(float width, float height, float NearZ, float FarZ)
+	{
+		XMFLOAT4X4 xmmtx4x4Result;
+		XMStoreFloat4x4(&xmmtx4x4Result, XMMatrixOrthographicLH(width, height, NearZ, FarZ));
+		return(xmmtx4x4Result);
+	}
+
+	inline XMFLOAT4X4 OrthographicOffCenterLH(float left, float right, float top, float bottom, float NearZ, float FarZ)
+	{
+		XMFLOAT4X4 xmmtx4x4Result;
+		XMStoreFloat4x4(&xmmtx4x4Result, XMMatrixOrthographicOffCenterLH(left, right, bottom, top, NearZ, FarZ));
 		return(xmmtx4x4Result);
 	}
 
@@ -477,10 +489,10 @@ namespace Matrix4x4
 		XMFLOAT3& xmf3UpDirection)
 	{
 		XMFLOAT4X4 xmmtx4x4Result;
-		XMStoreFloat4x4(&xmmtx4x4Result, 
+		XMStoreFloat4x4(&xmmtx4x4Result,
 			XMMatrixLookAtLH(
 				XMLoadFloat3(&xmf3EyePosition),
-				XMLoadFloat3(&xmf3LookAtPosition), 
+				XMLoadFloat3(&xmf3LookAtPosition),
 				XMLoadFloat3(&xmf3UpDirection)
 			)
 		);

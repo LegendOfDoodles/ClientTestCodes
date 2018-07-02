@@ -53,6 +53,6 @@ protected: // º¯¼ö
 	int								m_nSamplers{ 0 };
 	D3D12_GPU_DESCRIPTOR_HANDLE		*m_pSamplerGpuDescriptorHandles{ NULL };
 
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 };
 

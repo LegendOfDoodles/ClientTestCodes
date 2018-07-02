@@ -112,5 +112,5 @@ protected: // º¯¼ö
 
 	ObjectType m_ObjectType{ ObjectType::StickPlayer };
 
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 };

@@ -23,6 +23,7 @@ struct VS_CB_CAMERA_INFO
 {
 	XMFLOAT4X4 m_xmf4x4View;
 	XMFLOAT4X4 m_xmf4x4Projection;
+	XMFLOAT4X4 m_xmf4x4ShadowViewProjTex;
 	XMFLOAT3	   m_xmf3Position;
 };
 
@@ -50,9 +51,18 @@ public:	// 공개 함수
 
 	void RegenerateViewMatrix();
 
-	void GenerateProjectionMatrix(
+	void GeneratePerspectiveProjectionMatrix(
 		float fNearPlaneDistance, float fFarPlaneDistance,
 		float fAspectRatio, float fFOVAngle);
+
+	void GenerateOrthographicProjectionMatrix(
+		float fWidth, float fHeight,
+		float fNearPlaneDistance, float fFarPlaneDistance);
+
+	void GenerateOrthographicOffCenterProjectionMatrix(
+		float left, float right,
+		float top, float bottom,
+		float fNearPlaneDistance, float fFarPlaneDistance);
 
 	void SavePickedPos();
 
@@ -122,6 +132,7 @@ protected: // 변수
 
 	XMFLOAT4X4 m_xmf4x4View;
 	XMFLOAT4X4 m_xmf4x4Projection;
+	XMFLOAT4X4 m_xmf4x4ShadowViewProjTex;
 
 	D3D12_VIEWPORT m_viewport;
 	D3D12_RECT m_scissorRect;
@@ -137,7 +148,7 @@ protected: // 변수
 	VS_CB_CAMERA_INFO	 *m_pMappedCamera{ NULL };
 
 	HWND m_hWnd{ NULL };
-	ID3D12GraphicsCommandList *m_pCommandList{ NULL };
+	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
 	BoundingFrustum m_xmFrustum;
 };

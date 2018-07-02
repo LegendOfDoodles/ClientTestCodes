@@ -10,7 +10,7 @@
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ CStaticObjectShader::~CStaticObjectShader()
 // 공개 함수
 void CStaticObjectShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
 {
-	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true);
+	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true, true);
 	BuildObjects(pCreateMgr, pContext);
 }
 
@@ -111,6 +111,22 @@ void CStaticObjectShader::RenderBoundingBox(CCamera * pCamera)
 	}
 }
 
+void CStaticObjectShader::RenderShadow(CCamera * pCamera)
+{
+	int cnt{ 0 };
+	for (int i = 0; i < m_nMaterials; ++i)
+	{
+		for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
+		{
+			if (j == 0)
+			{
+				CShader::Render(pCamera, i, 2);
+			}
+			if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
+		}
+	}
+}
+
 bool CStaticObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
 	//if (pKeyBuffer['U'] & 0xF0)
@@ -181,9 +197,18 @@ D3D12_SHADER_BYTECODE CStaticObjectShader::CreatePixelShader(ID3DBlob **ppShader
 	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLightingDetail", "ps_5_1", ppShaderBlob));
 }
 
-void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB)
+D3D12_SHADER_BYTECODE CStaticObjectShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
 {
-	m_nPipelineStates = 2;
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
+		"VSTexturedLighting",
+		"vs_5_1",
+		ppShaderBlob));
+}
+
+void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+{
+	m_nPipelineStates = 3;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; ++i)
@@ -194,7 +219,7 @@ void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTarge
 	m_nHeaps = 18;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB);
+	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
 void CStaticObjectShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)

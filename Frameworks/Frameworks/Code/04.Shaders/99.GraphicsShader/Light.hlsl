@@ -168,7 +168,7 @@ float4 SpotLight(int nIndex, float3 vPosition, float3 vNormal, float3 vCamera, f
     return (float4(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
-float4 Lighting(float3 vPosition, float3 vNormal, float4 albedo, float4 baseColor, float4 roughnessMetallicFresnel)
+float4 Lighting(float3 vPosition, float3 vNormal, float4 albedo, float4 baseColor, float4 roughnessMetallicFresnel, float shadowFactor)
 {
     float3 vCameraPosition = float3(gvCameraPosition.x, gvCameraPosition.y, gvCameraPosition.z);
     float3 vCamera = vCameraPosition - vPosition;
@@ -179,7 +179,7 @@ float4 Lighting(float3 vPosition, float3 vNormal, float4 albedo, float4 baseColo
         {
             if (gLights[i].m_nType == DIRECTIONAL_LIGHT)
             {
-                cColor += DirectionalLight(i, vNormal, vCamera, baseColor, roughnessMetallicFresnel);
+                cColor += DirectionalLight(i, vNormal, vCamera, baseColor, roughnessMetallicFresnel) * ((i == 0) ? shadowFactor : 1);
             }
             else if (gLights[i].m_nType == POINT_LIGHT)
             {

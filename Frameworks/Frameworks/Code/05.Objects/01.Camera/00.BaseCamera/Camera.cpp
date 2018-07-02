@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-22
+/// 최종 수정 날짜: 2018-07-02
 /// </summary>
 
 
@@ -36,7 +36,7 @@ void CCamera::Initialize(CCreateMgr *pCreateMgr)
 
 	SetViewport(0, 0, width, height, 0.0f, 1.0f);
 	SetScissorRect(0, 0, width, height);
-	GenerateProjectionMatrix(1.0f, 50000.0f, float(width) / 	float(height), 90.0f);
+	GeneratePerspectiveProjectionMatrix(1.0f, 50000.0f, float(width) / 	float(height), 90.0f);
 	GenerateViewMatrix(
 		XMFLOAT3(0.0f, 70.0f, 0.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
@@ -165,12 +165,27 @@ void CCamera::RegenerateViewMatrix()
 	GenerateFrustum();
 }
 
-void CCamera::GenerateProjectionMatrix(
+void CCamera::GeneratePerspectiveProjectionMatrix(
 	float fNearPlaneDistance, float fFarPlaneDistance,
 	float fAspectRatio, float fFOVAngle)
 {
 	m_xmf4x4Projection = Matrix4x4::PerspectiveFovLH(XMConvertToRadians(fFOVAngle),
 		fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
+}
+
+void CCamera::GenerateOrthographicProjectionMatrix(
+	float fWidth, float fHeight,
+	float fNearPlaneDistance, float fFarPlaneDistance)
+{
+	m_xmf4x4Projection = Matrix4x4::OrthographicLH(fWidth, fHeight, fNearPlaneDistance, fFarPlaneDistance);
+}
+
+void CCamera::GenerateOrthographicOffCenterProjectionMatrix(
+	float left, float right,
+	float top, float bottom, 
+	float fNearPlaneDistance, float fFarPlaneDistance)
+{
+	m_xmf4x4Projection = Matrix4x4::OrthographicOffCenterLH(left, right, top, bottom, fNearPlaneDistance, fFarPlaneDistance);
 }
 
 void CCamera::SavePickedPos()

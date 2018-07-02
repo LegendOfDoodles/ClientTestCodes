@@ -1,40 +1,4 @@
-#define TERRAIN_SIZE_WIDTH 10000
-#define TERRAIN_SIZE_HEIGHT 5000
-#define TERRAIN_SIZE_BORDER 1000
-
-#define	FRAME_BUFFER_WIDTH		1280
-#define	FRAME_BUFFER_HEIGHT		720
-
-#define gnDiffuse 0
-#define gnNormal 1
-#define gnMix3Data 2
-#define gnSpecular 3
-#define gnEmissive 4
-
-#define EMISSIVE_POWER 20
-#define REFLECTION_POWER 0.25
-#define OUTLINE_POWER 1
-
-Texture2D gtxtTexture : register(t0);
-Texture2DArray gtxtTextures : register(t1);
-TextureCube gtxtTextureCube : register(t2);
-
-SamplerState wrapSampler : register(s0);
-SamplerState mirrorSampler : register(s1);
-
-//카메라의 정보를 위한 상수 버퍼를 선언한다.
-cbuffer cbCameraInfo : register(b0)
-{
-	matrix gmtxView : packoffset(c0);
-	matrix gmtxProjection : packoffset(c4);
-    float3 gvCameraPosition : packoffset(c8);
-};
-
-cbuffer cbGameObjectInfo : register(b1)
-{
-	matrix		gmtxGameObject : packoffset(c0);
-};
-
+#include "./Common.hlsl"
 #include "./Light.hlsl"
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -117,17 +81,17 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_DEFAULT PSDiffused(VS_OUTPUT input)
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 //
-    struct VS_TEXTURED_INPUT
-    {
-        float3 position : POSITION;
-        float2 uv : TEXCOORD;
-    };
+struct VS_TEXTURED_INPUT
+{
+    float3 position : POSITION;
+    float2 uv : TEXCOORD;
+};
 
-    struct VS_TEXTURED_OUTPUT
-    {
-        float4 position : SV_POSITION;
-        float2 uv : TEXCOORD;
-    };
+struct VS_TEXTURED_OUTPUT
+{
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
+};
 
 VS_TEXTURED_OUTPUT VSTextured(VS_TEXTURED_INPUT input)
 {
@@ -165,12 +129,6 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_DEFAULT PSTexturedRepeat(VS_TEXTURED_OUTPUT in
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Gauge Object 
-cbuffer cbGaugeObjectInfo : register(b5)
-{
-	matrix		gmtxGaugeObject : packoffset(c0);
-	float		CurrentHP : packoffset(c4);
-};
-
 struct VS_GAUGE_INPUT
 {
 	float3 position : POSITION;
@@ -384,6 +342,7 @@ struct VS_TERRAIN_INPUT
 struct VS_TERRAIN_OUTPUT
 {
     float4 position : POSITION;
+    float4 positionW : POSITIONW;
     float2 uv : TEXCOORD;
 };
 
@@ -391,7 +350,8 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 {
     VS_TERRAIN_OUTPUT output;
 
-    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+    output.positionW = mul(float4(input.position, 1.0f), gmtxGameObject);
+    output.position = mul(mul(output.positionW, gmtxView), gmtxProjection);
     output.uv = input.uv;
 
     return (output);
@@ -421,6 +381,7 @@ PatchTess ConstantHSTerrain(InputPatch<VS_TERRAIN_OUTPUT, 4> patch, uint patchID
 struct HS_TERRAIN_OUTPUT
 {
     float4 position : POSITION;
+    float4 positionW : POSITIONW;
     float2 uv : TEXCOORD;
 };
 
@@ -434,6 +395,7 @@ HS_TERRAIN_OUTPUT HSTerrain(InputPatch<VS_TERRAIN_OUTPUT, 4> P, uint i : SV_Outp
 {
     HS_TERRAIN_OUTPUT output;
     output.position = P[i].position;
+    output.positionW = P[i].positionW;
     output.uv = P[i].uv;
 
     return output;
@@ -442,6 +404,7 @@ HS_TERRAIN_OUTPUT HSTerrain(InputPatch<VS_TERRAIN_OUTPUT, 4> P, uint i : SV_Outp
 struct DS_TERRAIN_OUTPUT
 {
     float4 position : SV_POSITION;
+    float4 positionW : POSITIONW;
     float2 uv : TEXCOORD;
 };
 
@@ -454,6 +417,10 @@ DS_TERRAIN_OUTPUT DSTerrain(PatchTess patchTess, float2 uv : SV_DomainLocation, 
     float4 v2 = lerp(quad[2].position, quad[3].position, 1 - uv.y);
     float4 p = lerp(v1, v2, 1 - uv.x);
 
+    float4 vW1 = lerp(quad[0].positionW, quad[1].positionW, 1 - uv.y);
+    float4 vW2 = lerp(quad[2].positionW, quad[3].positionW, 1 - uv.y);
+    float4 pW = lerp(vW1, vW2, 1 - uv.x);
+
     float2 uv1 = lerp(quad[0].uv, quad[1].uv, 1 - uv.y);
     float2 uv2 = lerp(quad[2].uv, quad[3].uv, 1 - uv.y);
     float2 uvResult = lerp(uv1, uv2, 1 - uv.x);
@@ -462,6 +429,7 @@ DS_TERRAIN_OUTPUT DSTerrain(PatchTess patchTess, float2 uv : SV_DomainLocation, 
     p.y += gtxtTextures.SampleLevel(wrapSampler, float3(uvResult, gnMix3Data), 0).a * 255 * 2;
 
     output.position = p;
+    output.positionW = pW;
     output.uv = uvResult;
 
     return output;
@@ -477,7 +445,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
     output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
-    output.position = input.position;
+    output.position = input.positionW;
     output.position.x /= TERRAIN_SIZE_WIDTH;
     output.position.y /= TERRAIN_SIZE_BORDER;
     output.position.z /= TERRAIN_SIZE_HEIGHT;
@@ -504,12 +472,6 @@ struct VS_TEXTURED_LIGHTING_TOON_OUTPUT
     float2 uv : TEXCOORD;
     float3 tangentW : TANGENT;
     float3 toonPower : TOONPOWER;
-};
-
-cbuffer cbSkinnedInfo: register(b4)
-{
-	float4x4 gmtxBoneWorld: packoffset(c0);
-	float4x4 gmtxBoneTransforms[128]: packoffset(c4);
 };
 
 VS_TEXTURED_LIGHTING_TOON_OUTPUT VSBone(VS_BONEINPUT input)

@@ -32,8 +32,6 @@ bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd)
 
 	BuildObjects();
 
-	m_pRenderMgr->SetCamera(m_pScene->GetCamera());
-
 	return(true);
 }
 
