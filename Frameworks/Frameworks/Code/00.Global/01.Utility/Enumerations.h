@@ -103,6 +103,10 @@ struct PlayerInfo
 	float Atk{ 50 };
 	float Def{ 20 };
 
+	UINT Kill{0};
+	UINT Death{0};
+	UINT Assist{0};
+
 	UINT Level{ 0 };
 
 	UINT MaxExp{ 170 };

@@ -19,11 +19,13 @@ public: // 공개함수
 	}
 
 	void SetTexCoord(int cnt) { InputNum = cnt; }
+	void SetOffset(int cnt) { m_fOffset = cnt * 1.f; }
 	int GetNum() { return InputNum; }
 
 protected: // 변수
-	float		m_fDistance;
+	float		m_fDistance = 0.0f;
 	NumberType  m_type;
 
-	int InputNum;
+	int InputNum = 0;
+	float m_fOffset = 0;
 };

@@ -62,7 +62,7 @@ void CNumberOjbect::Animate(float fTimeElapsed)
 	{
 	case BlueTeamKill:
 		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
-		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 2560.f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 2560.f) + m_fOffset;
 		break;
 	case RedTeamKill:
 		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);

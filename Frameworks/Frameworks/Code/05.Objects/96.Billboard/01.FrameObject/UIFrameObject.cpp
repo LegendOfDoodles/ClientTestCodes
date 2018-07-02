@@ -25,7 +25,7 @@ CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBil
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::KDAFrame:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 458.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 213.3f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::SkillFrameQ:
@@ -76,54 +76,60 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 
 	XMFLOAT3 newPos{ 0, 0, 0 };
 
+	float UpVectorMoveWeight = 1.f;
+	float RightVectorMoveWeight = 1.f;
+
 	switch (m_type)
 	{
 	case UIFrameType::MinimapFrame:
 	case UIFrameType::Minimap:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 102.85f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 94.8f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 102.85f);
+		RightVectorMoveWeight	= (FRAME_BUFFER_WIDTH / 94.8f);
 		break;
 	case UIFrameType::KDAFrame:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 80.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 82.5f)));
+		UpVectorMoveWeight		= (FRAME_BUFFER_HEIGHT / 75.7f);
+		RightVectorMoveWeight	= (FRAME_BUFFER_WIDTH / 85.3f);
 		break;
 	case UIFrameType::SkillFrameQ:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 296.f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 296.f);
 		break;
 	case UIFrameType::SkillFrameW:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 914.2f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 914.2f);
 		break;
 	case UIFrameType::SkillFrameE:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 914.2f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= (FRAME_BUFFER_WIDTH / 914.2f);
 		break;
 	case UIFrameType::SkillFrameR:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 296.f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= (FRAME_BUFFER_WIDTH / 296.f);
 		break;
 	case UIFrameType::StatusFrame:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), (FRAME_BUFFER_HEIGHT / 84.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / FRAME_BUFFER_WIDTH)));
+		UpVectorMoveWeight		= (FRAME_BUFFER_HEIGHT / 84.f);
+		RightVectorMoveWeight	= (FRAME_BUFFER_WIDTH / 1280.f);
 		break;
 	case UIFrameType::CharacterFrame:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
 		break;
 	case UIFrameType::SpecialFrame:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 288.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 288.f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
 		break;
 	case UIFrameType::CharacterFrameHP:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
 		break;
 	case UIFrameType::CharacterFrameMP:
-		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
-		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 85.3f)));
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
 		break;
 	}
+
+	newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
+	newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), UpVectorMoveWeight)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), RightVectorMoveWeight));
 
 	m_xmf4x4World._41 = newPos.x;
 	m_xmf4x4World._42 = newPos.y;

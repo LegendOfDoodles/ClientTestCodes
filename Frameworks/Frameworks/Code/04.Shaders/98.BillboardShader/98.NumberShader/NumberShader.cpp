@@ -4,6 +4,7 @@
 #include "05.Objects/96.Billboard/98.NumberObject/NumberObject.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
+#include "05.Objects/08.Player/Player.h"
 
 
 /// <summary>
@@ -186,24 +187,43 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	// K 표시
 	// 플레이어 4명을 받아와서
-	//for (int i = 0; i < 4; ++i) {
-	//	// 플레이어의 스테이터스의 Kill을 팀별로 더한다.
-	//}
+	for (int i = 0; i < m_nPlayer; ++i) {
+		// 플레이어의 스테이터스의 Kill을 팀별로 더한다.
+		if (m_ppPlayers[i]->GetTeam() == TeamType::Blue)
+			m_iTeamKill[TeamKILL::BlueTeam] += m_ppPlayers[i]->GetPlayerStatus()->Kill;
+		else if (m_ppPlayers[i]->GetTeam() == TeamType::Red)
+			m_iTeamKill[TeamKILL::RedTeam] += m_ppPlayers[i]->GetPlayerStatus()->Kill;
+	}
 
-	//int cnt;		// 자리수
-	//int Num[4];		// 일단 최대 4로 지정
+	m_iPlayerKDA[0] = m_ppPlayers[0]->GetPlayerStatus()->Kill;
+	m_iPlayerKDA[1] = m_ppPlayers[0]->GetPlayerStatus()->Death;
+	m_iPlayerKDA[2] = m_ppPlayers[0]->GetPlayerStatus()->Assist;
+	
+	int cnt = 0;				// 자리수
+	int *Num;					// 자리수 값만큼 배열
 
-	//// 자리수 검색
-	//for (cnt = 0; m_iNum > 0; m_iNum /= 10, cnt++) ;
+	int m_iNum = 22;			// Input Num (출력할 숫자)
 
-	//// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
-	//for (int i = 0; i < cnt; ++i) {
-	//	Num[i] = m_iNum % 10;
+	// 자리수 구하는 함수는 SignificantDigit에서 진행
+	//PositionalNumber(inputNum, cnt);
+	
+	// Num 반환함수
+	//SignificantDigit(inputNum, cnt);
 
-	//	m_iNum /= 10;
-	//}
+	int checkNum = m_iNum;		// 자리 수 확인에서 사용할 변수
+	for (cnt = 0; checkNum > 0; checkNum /= 10, cnt++);
 
-	m_nObjects = 2;
+	Num = new int[cnt];
+
+	// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
+	// 30이면 0, 3 저장 (출력은 반대로 해야 함)
+	for (int i = 0; i < cnt; ++i) {
+		Num[i] = m_iNum % 10;
+
+		m_iNum /= 10;
+	}
+
+	m_nObjects = cnt;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
@@ -221,10 +241,11 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		pNumber = new CNumberOjbect(pCreateMgr, (NumberType)i);
+		pNumber = new CNumberOjbect(pCreateMgr, NumberType::BlueTeamKill);
 		pNumber->SetCamera(m_pCamera);
 		pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
-		pNumber->SetTexCoord(i + 2);
+		pNumber->SetTexCoord(Num[(cnt-1) - i]);
+		pNumber->SetOffset(i);
 		pNumber->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
 		m_ppObjects[i] = pNumber;

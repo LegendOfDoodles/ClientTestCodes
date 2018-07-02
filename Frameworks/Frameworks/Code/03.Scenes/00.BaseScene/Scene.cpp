@@ -349,6 +349,9 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	((CharacterFrameGaugeShader*)m_ppShaders[11])->SetPlayer(m_ppObjects[0]);
 	((CMinimapShader*)m_ppShaders[12])->SetPlayer(m_ppObjects[0]);
 
+	((CPlayerHPGaugeShader*)m_ppShaders[14])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CPlayerHPGaugeShader*)m_ppShaders[14])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
+
 	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
