@@ -17,6 +17,7 @@ struct PS_MULTIPLE_RENDER_TARGETS_OUTPUT
     float4 roughMetalFresnel : SV_TARGET2;
     float4 albedo : SV_TARGET3;
     float4 position : SV_TARGET4;
+    float4 toonPower : SV_TARGET6;
 };
 
 struct PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE
@@ -27,6 +28,7 @@ struct PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE
     float4 albedo : SV_TARGET3;
     float4 position : SV_TARGET4;
     float4 emissive : SV_TARGET5;
+    float4 toonPower : SV_TARGET6;
     float4 uv : SV_TARGET7;
 };
 
@@ -236,6 +238,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSLighting(VS_LIGHTING_OUTPUT input)
     output.position.x /= TERRAIN_SIZE_WIDTH;
     output.position.y /= TERRAIN_SIZE_BORDER;
     output.position.z /= TERRAIN_SIZE_HEIGHT;
+    output.toonPower = float4(1, 1, 1, 1);
 
     return (output);
 }
@@ -296,6 +299,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTexturedLightingDetail(VS_TEXTURED_LIGHTING_
     output.position.x /= TERRAIN_SIZE_WIDTH;
     output.position.y /= TERRAIN_SIZE_BORDER;
     output.position.z /= TERRAIN_SIZE_HEIGHT;
+    output.toonPower = float4(1, 1, 1, 1);
 
     return output;
 }
@@ -327,6 +331,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSTexturedLightingEmissive(VS_TEXTURE
     output.uv.x = frac(input.uv.x * TERRAIN_SIZE_WIDTH / FRAME_BUFFER_WIDTH);
     output.uv.y = frac(input.uv.y * TERRAIN_SIZE_HEIGHT / FRAME_BUFFER_HEIGHT);
     output.uv.z = 1;
+    output.toonPower = float4(1, 1, 1, 1);
 
     return output;
 }
@@ -449,6 +454,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
     output.position.x /= TERRAIN_SIZE_WIDTH;
     output.position.y /= TERRAIN_SIZE_BORDER;
     output.position.z /= TERRAIN_SIZE_HEIGHT;
+    output.toonPower = float4(1, 1, 1, 1);
 
     return output;
 }
