@@ -60,6 +60,7 @@ void CShader::UpdateShaderVariables()
 
 void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
 {
+	UNREFERENCED_PARAMETER(pxmf4x4World);
 }
 
 void CShader::UpdateBoundingBoxShaderVariables()
@@ -68,49 +69,61 @@ void CShader::UpdateBoundingBoxShaderVariables()
 
 void CShader::AnimateObjects(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 }
 
 void CShader::Render(CCamera *pCamera)
 {
+	UNREFERENCED_PARAMETER(pCamera);
 	OnPrepareRender();
 }
 
 void CShader::Render(CCamera *pCamera, int opt)
 {
+	UNREFERENCED_PARAMETER(pCamera);
 	OnPrepareRender(opt);
 }
 
 void CShader::Render(CCamera * pCamera, int opt, int index)
 {
+	UNREFERENCED_PARAMETER(pCamera);
 	OnPrepareRender(opt, index);
 }
 
 void CShader::RenderBoundingBox(CCamera * pCamera)
 {
+	UNREFERENCED_PARAMETER(pCamera);
 	OnPrepareRenderForBB();
 }
 
 void CShader::RenderShadow(CCamera * pCamera)
 {
+	UNREFERENCED_PARAMETER(pCamera);
 }
 
 CBaseObject * CShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float &nearHitDistance)
 {
+	UNREFERENCED_PARAMETER(pickPosition);
+	UNREFERENCED_PARAMETER(xmf4x4View);
+	UNREFERENCED_PARAMETER(nearHitDistance);
 	return nullptr;
 }
 
 bool CShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
 	return true;
 }
 
 bool CShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
 	return false;
 }
 
 void CShader::OnStatus(int ObjectType)
 {
+	UNREFERENCED_PARAMETER(ObjectType);
 }
 
 void CShader::OffStatus()
@@ -319,14 +332,14 @@ void CShader::GetShaderResourceViewDesc(
 	case RESOURCE_TEXTURE_2D: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize == 1)
 	case RESOURCE_TEXTURE_2D_ARRAY:
 		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		pShaderResourceViewDesc->Texture2D.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2D.MipLevels = static_cast<UINT>(-1);
 		pShaderResourceViewDesc->Texture2D.MostDetailedMip = 0;
 		pShaderResourceViewDesc->Texture2D.PlaneSlice = 0;
 		pShaderResourceViewDesc->Texture2D.ResourceMinLODClamp = 0.0f;
 		break;
 	case RESOURCE_TEXTURE_2DARRAY: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize != 1)
 		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
-		pShaderResourceViewDesc->Texture2DArray.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2DArray.MipLevels = static_cast<UINT>(-1);
 		pShaderResourceViewDesc->Texture2DArray.MostDetailedMip = 0;
 		pShaderResourceViewDesc->Texture2DArray.PlaneSlice = 0;
 		pShaderResourceViewDesc->Texture2DArray.ResourceMinLODClamp = 0.0f;
@@ -374,6 +387,8 @@ void CShader::CreateShaderResourceViews(
 
 D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
 	shaderByteCode.pShaderBytecode = NULL;
@@ -383,6 +398,8 @@ D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 
 D3D12_SHADER_BYTECODE CShader::CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
 	shaderByteCode.pShaderBytecode = NULL;
@@ -392,6 +409,8 @@ D3D12_SHADER_BYTECODE CShader::CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 
 D3D12_SHADER_BYTECODE CShader::CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
 	shaderByteCode.pShaderBytecode = NULL;
@@ -401,6 +420,8 @@ D3D12_SHADER_BYTECODE CShader::CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 
 D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = 0;
 	d3dShaderByteCode.pShaderBytecode = NULL;
@@ -428,6 +449,8 @@ D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxPixelShader(ComPtr<ID3DBlob>& pS
 
 D3D12_SHADER_BYTECODE CShader::CreateShadowHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
 	shaderByteCode.pShaderBytecode = NULL;
@@ -437,6 +460,8 @@ D3D12_SHADER_BYTECODE CShader::CreateShadowHullShader(ComPtr<ID3DBlob>& pShaderB
 
 D3D12_SHADER_BYTECODE CShader::CreateShadowDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
 	shaderByteCode.pShaderBytecode = NULL;
@@ -446,6 +471,8 @@ D3D12_SHADER_BYTECODE CShader::CreateShadowDomainShader(ComPtr<ID3DBlob>& pShade
 
 D3D12_SHADER_BYTECODE CShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
+	UNREFERENCED_PARAMETER(pShaderBlob);
+
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
 	shaderByteCode.pShaderBytecode = NULL;
@@ -608,10 +635,14 @@ void CShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID3D12RootSignature> 
 
 void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 {
+	UNREFERENCED_PARAMETER(pCreateMgr);
+	UNREFERENCED_PARAMETER(nBuffers);
 }
 
 void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
+	UNREFERENCED_PARAMETER(pCreateMgr);
+	UNREFERENCED_PARAMETER(pContext);
 }
 
 void CShader::ReleaseShaderVariables()

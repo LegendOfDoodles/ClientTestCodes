@@ -67,7 +67,7 @@ bool CMesh::CheckRayIntersection(XMFLOAT3& xmf3RayOrigin, XMFLOAT3& xmf3RayDirec
 	return(bIntersected);
 }
 
-void CMesh::SetBoundingBox(XMFLOAT3& center, XMFLOAT3 & extents)
+void CMesh::SetBoundingBox(const XMFLOAT3& center, const XMFLOAT3 & extents)
 {
 	m_pBoundingBox = new BoundingOrientedBox(center, extents, XMFLOAT4(0, 0, 0, 1));
 }
@@ -188,7 +188,7 @@ void CMeshIlluminated::CalculateVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *
 void CMeshIlluminated::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangents, XMFLOAT3 *pxmf3Positions, UINT nVertices,
 	XMFLOAT2 *xmf2TexCoord, UINT *pnIndices, UINT nIndices)
 {
-	int nPrimitives = (pnIndices) ? (nIndices / 3) : (nVertices / 3);
+	UINT nPrimitives = (pnIndices) ? (nIndices / 3) : (nVertices / 3);
 	XMFLOAT3 xmf3SumOfTangent(0.0f, 0.0f, 0.0f);
 	UINT nIndex0, nIndex1, nIndex2;
 	float deltaU0, deltaU1;
@@ -239,7 +239,7 @@ void CMeshIlluminated::CalculateTriangleListVertexTangents(XMFLOAT3 *pxmf3Tangen
 	}
 	else
 	{
-		for (int i = 0; i < nPrimitives; i++)
+		for (UINT i = 0; i < nPrimitives; i++)
 		{
 			for (int j = 0, k = 1, l = 2; j < 3; ++j, ++k, ++l)
 			{
@@ -387,9 +387,9 @@ CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminated
 	UINT* pnIndices = new UINT[m_nIndices];
 	int indicesCount = 0;
 	for (auto d : importer.m_xmTriIndex) {
-		pnIndices[indicesCount] = d.x;
-		pnIndices[indicesCount + 1] = d.y;
-		pnIndices[indicesCount + 2] = d.z;
+		pnIndices[indicesCount] = static_cast<UINT>(d.x);
+		pnIndices[indicesCount + 1] = static_cast<UINT>(d.y);
+		pnIndices[indicesCount + 2] = static_cast<UINT>(d.z);
 		indicesCount += 3;
 	}
 
@@ -421,7 +421,7 @@ CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminated
 	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords, pnIndices, m_nIndices);
 
 	CSkinnedVertex *pVertices = new CSkinnedVertex[m_nVertices];
-	for (int i = 0; i < m_nVertices; i++) {
+	for (UINT i = 0; i < m_nVertices; i++) {
 		BYTE index[4];
 
 		index[0] = (BYTE)pxmf4SkinIndex[i].x;
@@ -468,9 +468,9 @@ CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in,XMFLOAT3 scalevalue)
 	UINT* pnIndices = new UINT[m_nIndices];
 	int indicesCount = 0;
 	for (auto d : importer.m_xmTriIndex) {
-		pnIndices[indicesCount] = d.x;
-		pnIndices[indicesCount + 1] = d.y;
-		pnIndices[indicesCount + 2] = d.z;
+		pnIndices[indicesCount] = static_cast<UINT>(d.x);
+		pnIndices[indicesCount + 1] = static_cast<UINT>(d.y);
+		pnIndices[indicesCount + 2] = static_cast<UINT>(d.z);
 		indicesCount += 3;
 	}
 
@@ -497,7 +497,7 @@ CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in,XMFLOAT3 scalevalue)
 	CalculateTriangleListVertexTangents(pxmf3Tangents, pxmf3Positions, m_nVertices, pxmf2TexCoords, pnIndices, m_nIndices);
 
 	CIlluminatedTexturedVertex *pVertices = new CIlluminatedTexturedVertex[m_nVertices];
-	for (int i = 0; i < m_nVertices; i++) {
+	for (UINT i = 0; i < m_nVertices; i++) {
 		pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i]);
 	}
 	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
@@ -1015,8 +1015,6 @@ bool CCollisionMapImage::GetCollision(float fx, float fz)
 	//높이 맵의 좌표의 정수 부분과 소수 부분을 계산한다.
 	int x = (int)fx;
 	int z = (int)fz;
-	float fxPercent = fx - x;
-	float fzPercent = fz - z;
 
 	float fBottomLeft = (float)m_pCollisionMapPixels[x + (z*m_nWidth)];
 	float fBottomRight = (float)m_pCollisionMapPixels[(x + 1) + (z*m_nWidth)];

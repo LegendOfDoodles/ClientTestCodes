@@ -165,6 +165,8 @@ D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowPixelShader(ComPtr<ID3DBlob>& 
 
 void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
+	UNREFERENCED_PARAMETER(isRenderBB);
+
 	m_nPipelineStates = 2;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
@@ -176,6 +178,8 @@ void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, b
 
 void CTerrainShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
+	UNREFERENCED_PARAMETER(nBuffers);
+
 	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
@@ -191,6 +195,8 @@ void CTerrainShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers
 
 void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
+	UNREFERENCED_PARAMETER(pContext);
+
 	m_pTerrain = new CHeightMapTerrain(pCreateMgr, _T("Resource/Terrain/HeightMap.raw"), TERRAIN_IMAGE_SCALE);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);

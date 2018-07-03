@@ -144,6 +144,8 @@ void CSkyBoxShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bo
 
 void CSkyBoxShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 {
+	UNREFERENCED_PARAMETER(nBuffers);
+
 	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
@@ -159,6 +161,8 @@ void CSkyBoxShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
 
 void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
+	UNREFERENCED_PARAMETER(pContext);
+
 	//m_pSkyBox = new CSkyBox(pCreateMgr);
 	m_pFloor = new CFloor(pCreateMgr);
 

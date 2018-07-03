@@ -225,6 +225,8 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 
 bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	static float R = 0.0f;
 	static float M = 0.0f;
 
@@ -248,7 +250,6 @@ D3D12_INPUT_LAYOUT_DESC CAniShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 6;
 	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-	UINT cnt = 0;
 	pInputElementDescs[0] = {
 		"POSITION",
 		0,
@@ -402,10 +403,10 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	// Blue
 	m_ppMaterials[0] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.6, 0.6, 1.0, 1.0));
+	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.6f, 0.6f, 1.0f, 1.0f));
 	// Red
 	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0, 0.6, 0.6, 1.0));
+	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0f, 0.6f, 0.6f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -483,8 +484,8 @@ void CAniShader::SpawnMinion()
 	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 
 	static CCubeMesh boundingBoxMesh(m_pCreateMgr,
-		CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(7),
-		0, 0, -CONVERT_PaperUnit_to_InG(4));
+		CONVERT_PaperUnit_to_InG(3.0f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(7.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(4.0f));
 	boundingBoxMesh.AddRef();
 
 	static CSkeleton SIdle("Resource//3D//Minion//Animation//Sword//Minion_S_Idle.aniinfo");
@@ -509,8 +510,8 @@ void CAniShader::SpawnMinion()
 	if (!dataPrepared)
 	{
 		minionMesh.SetBoundingBox(
-			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4)),
-			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(1.5), CONVERT_PaperUnit_to_InG(3.5)));
+			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
+			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
 		minionMesh.AddRef();
 		dataPrepared = true;
 		return;

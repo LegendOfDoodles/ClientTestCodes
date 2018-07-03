@@ -111,12 +111,15 @@ void CUIObjectShader::GetCamera(CCamera * pCamera)
 
 bool CUIObjectShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return true;
 }
 
 bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
-	
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 

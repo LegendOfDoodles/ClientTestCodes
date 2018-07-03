@@ -21,20 +21,20 @@ public: // 생성자, 소멸자
 	~CWayFinder();
 
 public: // 공개 함수
-	bool CanGoDirectly(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize);
-	bool CanGoDirectly(XMFLOAT3 &source, XMFLOAT3 &target, float collisionSize);
-	XMFLOAT2 GetClosestNotCollidePos(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize);
-	XMFLOAT3 GetClosestNotCollidePos(XMFLOAT3 &source, XMFLOAT3 &target, float collisionSize);
-	Path *GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize);
+	bool CanGoDirectly(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
+	bool CanGoDirectly(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
+	XMFLOAT2 GetClosestNotCollidePos(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
+	XMFLOAT3 GetClosestNotCollidePos(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
+	Path *GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
 
 	void SmoothPath(Path *path, float collisionSize);
 	void SmoothPathDetail(Path *path, float collisionSize);
 
 	int FindClosestNodeIndexWithPosition(const XMFLOAT2 &position);
 
-	void AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3& dir, float val);
+	void AdjustValueByWallCollision(CCollisionObject* collider, const XMFLOAT3& dir, float val);
 
-	int GetNodeCount() const { return m_nodes.size(); }
+	int GetNodeCount() const { return static_cast<int>(m_nodes.size()); }
 	const CNode& GetNodeAt(int idx) const { return m_nodes[idx]; }
 	const EdgeVector& GetEdgesAt(int idx) const { return m_edges[idx]; }
 	std::vector<NodeMap> GetNodeMap() { return m_nodeMap; }
@@ -50,6 +50,6 @@ protected: // 변수
 	float nodeSize{ 0 };
 	XMFLOAT2 m_nodeWH;
 
-	CAstar* m_pCurSearch{ NULL };
+	shared_ptr<CAstar> m_pCurSearch;
 	CCollisionMapImage *m_pCollisionMapImage{ NULL };
 };

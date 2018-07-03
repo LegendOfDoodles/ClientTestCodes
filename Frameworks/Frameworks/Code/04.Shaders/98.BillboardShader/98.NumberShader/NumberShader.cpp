@@ -51,7 +51,7 @@ void CNumberShader::UpdateShaderVariables()
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
-		pMappedObject->m_fCurrentHP = ((CNumberOjbect*)m_ppObjects[i])->GetNum();
+		pMappedObject->m_fCurrentHP = static_cast<float>(((CNumberOjbect*)m_ppObjects[i])->GetNum());
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -84,12 +84,15 @@ void CNumberShader::GetCamera(CCamera * pCamera)
 
 void CNumberShader::PositionalNumber(int inputNum, int PositionalNumber)
 {
-	
+	UNREFERENCED_PARAMETER(inputNum);
+	UNREFERENCED_PARAMETER(PositionalNumber);
 }
 
 void CNumberShader::SignificantDigit(int InputNum, int PositionalNumber, int *Num)
 {
-	
+	UNREFERENCED_PARAMETER(InputNum);
+	UNREFERENCED_PARAMETER(PositionalNumber);
+	UNREFERENCED_PARAMETER(Num);
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -17,7 +17,7 @@ public: // 공개 함수
 
 	bool CheckRayIntersection(XMFLOAT3& rayPosition, XMFLOAT3& rayDirection, float &nearHitDistance);
 
-	void SetBoundingBox(XMFLOAT3& center, XMFLOAT3& extents);
+	void SetBoundingBox(const XMFLOAT3& center, const XMFLOAT3& extents);
 	
 	ID3D12Resource* GetVertexBuffer() { return m_pVertexBuffer; }
 	ID3D12Resource* GetVertexUploadBuffer() { 	return m_pVertexUploadBuffer; }

@@ -90,11 +90,15 @@ void CPlayerHPGaugeShader::GetCamera(CCamera * pCamera)
 
 bool CPlayerHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return true;
 }
 
 bool CPlayerHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 

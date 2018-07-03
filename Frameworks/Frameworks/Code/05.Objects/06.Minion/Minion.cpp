@@ -14,7 +14,7 @@ CMinion::CMinion(CCreateMgr * pCreateMgr, int nMeshes) : CAnimatedObject(pCreate
 {
 	//m_sightRange = CONVERT_PaperUnit_to_InG(80.0f);
 	m_detectRange = CONVERT_PaperUnit_to_InG(40.0f);
-	m_speed = CONVERT_cm_to_InG(1.805);
+	m_speed = CONVERT_cm_to_InG(1.805f);
 }
 
 CMinion::~CMinion()
@@ -108,6 +108,8 @@ void CMinion::SetState(StatesType newState)
 
 void CMinion::PlayIdle(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
+
 	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
 
 	if (!enemy) return;
@@ -140,6 +142,8 @@ void CMinion::PlayChase(float timeElapsed, CWayFinder* pWayFinder)
 
 void CMinion::PlayAttack(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
+
 	if (!CheckEnemyState(m_pEnemy))
 	{
 		SetEnemy(NULL);

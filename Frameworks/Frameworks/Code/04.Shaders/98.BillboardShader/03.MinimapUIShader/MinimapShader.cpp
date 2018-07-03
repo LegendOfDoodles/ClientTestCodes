@@ -84,6 +84,8 @@ void CMinimapShader::GetCamera(CCamera * pCamera)
 
 bool CMinimapShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 
@@ -103,9 +105,9 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 			&& (cursorPos.y > MINIMAP_MINIMUM_Y && cursorPos.y < MINIMAP_MAXIMUM_Y))
 		{
 			XMFLOAT3 newCameraPos;
-			newCameraPos.x = (MINIMAP_MINIMUM_X - cursorPos.x) * -1.736 * 20;
+			newCameraPos.x = (MINIMAP_MINIMUM_X - cursorPos.x) * -1.736f * 20;
 			newCameraPos.y = m_pCamera->GetPosition().y;
-			newCameraPos.z = (MINIMAP_MAXIMUM_Y - cursorPos.y) * 1.736 * 20;
+			newCameraPos.z = (MINIMAP_MAXIMUM_Y - cursorPos.y) * 1.736f * 20;
 
 			m_pCamera->SetPosition(newCameraPos);
 		}
@@ -118,12 +120,13 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 			&& (cursorPos.y > MINIMAP_MINIMUM_Y && cursorPos.y < MINIMAP_MAXIMUM_Y))
 		{
 			XMFLOAT3 PlayerDestination;
-			PlayerDestination.x = (MINIMAP_MINIMUM_X - cursorPos.x) * -1.736 * 20;
+			PlayerDestination.x = (MINIMAP_MINIMUM_X - cursorPos.x) * -1.736f * 20;
 			PlayerDestination.y = m_pCamera->GetPosition().y;
-			PlayerDestination.z = (MINIMAP_MAXIMUM_Y - cursorPos.y) * 1.736 * 20;
+			PlayerDestination.z = (MINIMAP_MAXIMUM_Y - cursorPos.y) * 1.736f * 20;
 
 			m_pPlayer->LookAt(PlayerDestination);
-			m_pPlayer->SetPathToGo(m_pWayFinder->GetPathToPosition(
+			m_pPlayer->SetPathToGo(
+				m_pWayFinder->GetPathToPosition(
 				XMFLOAT2(m_pPlayer->GetPosition().x, m_pPlayer->GetPosition().z),
 				XMFLOAT2(PlayerDestination.x, PlayerDestination.z),
 				m_pPlayer->GetCollisionSize()));

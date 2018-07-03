@@ -96,12 +96,15 @@ void CMinionHPGaugeShader::SetUIObjectsManager(CUIObjectManager * pManger)
 
 bool CMinionHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
 
 	return true;
 }
 
 bool CMinionHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 

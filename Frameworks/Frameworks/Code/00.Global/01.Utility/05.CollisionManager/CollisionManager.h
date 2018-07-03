@@ -6,7 +6,7 @@ struct CharacterStatus {
 	int HP;
 	int Atk;
 	CharacterStatus(int hp, int atk) {
-
+		hp; atk;
 	}
 };
 

@@ -30,8 +30,8 @@ public: // 생성자, 소멸자
 
 public: // 공개 함수
 	int GetAnimationLength() { return m_iAnimationLegth; }
-	Bone GetBone(float id) { return m_vBone.at(id); }
-	int GetBoneCount() { return m_vBone.size(); }
+	Bone GetBone(float id) { return m_vBone.at(static_cast<size_t>(id)); }
+	int GetBoneCount() { return static_cast<int>(m_vBone.size()); }
 
 private:	 // 변수
 	int m_iAnimationLegth;

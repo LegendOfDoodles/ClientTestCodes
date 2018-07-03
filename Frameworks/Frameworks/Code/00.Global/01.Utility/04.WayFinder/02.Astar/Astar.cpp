@@ -5,7 +5,7 @@
 /// 목적: 길찾기 용 Astar 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-20
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -224,7 +224,7 @@ double CAstar::Heuristic_NoisyEuclidean(int from, int to)
 	return 10.0f * Vector2::Distance(fromDividIndex, toDividIndex) * RandInRange(0.9f, 1.1f);
 }
 
-double CAstar::Heuristic_Dijkstra(int from, int to)
+double CAstar::Heuristic_Dijkstra()
 {
 	return 0.0;
 }

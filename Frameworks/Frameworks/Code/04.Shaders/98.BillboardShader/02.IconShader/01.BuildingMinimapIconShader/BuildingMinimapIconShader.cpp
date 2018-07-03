@@ -109,11 +109,15 @@ void CBuildingMinimapIconShader::GetCamera(CCamera * pCamera)
 
 bool CBuildingMinimapIconShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 
 bool CBuildingMinimapIconShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 

@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-16
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -15,8 +15,11 @@
 CWayFinder::CWayFinder()
 {
 	// 충돌 맵 읽어오기
-	m_pCollisionMapImage = new CCollisionMapImage(_T("Resource/Terrain/TerrainCollision.raw"),
-		TETRRAIN_COLLISION_WIDTH, TETRRAIN_COLLISION_HEIGHT, TERRAIN_COLLISION_SCALE);
+	m_pCollisionMapImage = new CCollisionMapImage(
+		_T("Resource/Terrain/TerrainCollision.raw"),
+		static_cast<int>(TETRRAIN_COLLISION_WIDTH), 
+		static_cast<int>(TETRRAIN_COLLISION_HEIGHT),
+		TERRAIN_COLLISION_SCALE);
 
 	// 노드 읽어오기
 	std::ifstream nodeIn("Resource/Data/AStar/nodesData.txt", std::ios::in, std::ios::binary);
@@ -27,8 +30,8 @@ CWayFinder::CWayFinder()
 	m_nodeMap.reserve(maxNode);
 
 	int index{ INVALID_NODE };
-	int w = 0, h = 0;
-	XMFLOAT2 position, size;
+
+	XMFLOAT2 position, size{ 0, 0 };
 	for (int i = 0; i < maxNode; ++i)
 	{
 		nodeIn >> index >> position.x >> position.y >> size.x >> size.y;
@@ -85,7 +88,7 @@ CWayFinder::~CWayFinder()
 }
 
 // 직선 이동 가능한지 파악하기 위한 함수
-bool CWayFinder::CanGoDirectly(XMFLOAT2 & source, XMFLOAT2 & target, float collisionSize)
+bool CWayFinder::CanGoDirectly(const XMFLOAT2 & source, const XMFLOAT2 & target, float collisionSize)
 {
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
@@ -103,13 +106,13 @@ bool CWayFinder::CanGoDirectly(XMFLOAT2 & source, XMFLOAT2 & target, float colli
 	return true;
 }
 
-bool CWayFinder::CanGoDirectly(XMFLOAT3 & source, XMFLOAT3 & target, float collisionSize)
+bool CWayFinder::CanGoDirectly(const XMFLOAT3 & source, const XMFLOAT3 & target, float collisionSize)
 {
 	return CanGoDirectly(XMFLOAT2(source.x, source.z), XMFLOAT2(target.x, target.z), collisionSize);
 }
 
 // 충돌 지점에서 충돌이 없는 가장 가까운 지점을 찾는 함수
-XMFLOAT2 CWayFinder::GetClosestNotCollidePos(XMFLOAT2 & source, XMFLOAT2 & target, float collisionSize)
+XMFLOAT2 CWayFinder::GetClosestNotCollidePos(const XMFLOAT2 & source, const XMFLOAT2 & target, float collisionSize)
 {
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
@@ -131,15 +134,17 @@ XMFLOAT2 CWayFinder::GetClosestNotCollidePos(XMFLOAT2 & source, XMFLOAT2 & targe
 	return target;
 }
 
-XMFLOAT3 CWayFinder::GetClosestNotCollidePos(XMFLOAT3 & source, XMFLOAT3 & target, float collisionSize)
+XMFLOAT3 CWayFinder::GetClosestNotCollidePos(const XMFLOAT3 & source, const XMFLOAT3 & target, float collisionSize)
 {
 	XMFLOAT2 result{ GetClosestNotCollidePos(XMFLOAT2(source.x, source.z), XMFLOAT2(target.x, target.z), collisionSize) };
 	return XMFLOAT3(result.x, 0, result.y);
 }
 
-Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float collisionSize)
+Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize)
 {
 	Path *path{ nullptr };
+
+	XMFLOAT2 adjTarget{ target };
 
 	// 시작지와 끝 지점에서 가장 가까운 노드 검색
 	int srcIndex = FindClosestNodeIndexWithPosition(source);
@@ -149,21 +154,21 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float co
 
 	// 도착지가 충돌체 위인 경우 도착지를 충돌이 없는 가장 가까운 위치로 변경한다.
 	if (m_pCollisionMapImage->GetCollision(target.x, target.y))
-		target = GetClosestNotCollidePos(target, m_nodes[dstIndex].Position(), collisionSize);
+		adjTarget = GetClosestNotCollidePos(target, m_nodes[dstIndex].Position(), collisionSize);
 
 	// 직선으로 이동 가능한 경우
-	if (CanGoDirectly(source, target, collisionSize))
+	if (CanGoDirectly(source, adjTarget, collisionSize))
 	{
 		// 목적지만 패스에 넣고 종료
 		path = new Path;
-		path->push_back(CPathEdge(source, target));
+		path->push_back(CPathEdge(source, adjTarget));
 		return path;
 	}
 	else
 	{
 		// 길찾기 수행
-		if(source.x < target.x) m_pCurSearch = new CAstar(this, srcIndex, dstIndex);
-		else m_pCurSearch = new CAstar(this, dstIndex, srcIndex);
+		if (source.x < adjTarget.x) m_pCurSearch = shared_ptr<CAstar>(new CAstar(this, srcIndex, dstIndex));
+		else m_pCurSearch = shared_ptr<CAstar>(new CAstar(this, dstIndex, srcIndex));
 
 		int result;
 		for (int i = 0; i < 10000; ++i)
@@ -177,7 +182,7 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float co
 			// 찾은 패스 저장
 			path = m_pCurSearch->GetPath();
 			// 소스가 오른쪽 이었으면 패스를 뒤집는다.
-			if (source.x < target.x)
+			if (source.x < adjTarget.x)
 			{
 				// 패스에 도착지를 추가로 연결하고 종료한다.
 				if (!path->empty()) path->push_back(CPathEdge(path->back().To(), target));
@@ -190,7 +195,7 @@ Path *CWayFinder::GetPathToPosition(XMFLOAT2 &source, XMFLOAT2 &target, float co
 			}
 		}
 	
-		delete m_pCurSearch;
+		m_pCurSearch.reset();
 	}
 
 	// 직선 상으로 갈 수 있는 길 돌아가지 않도록 설정
@@ -269,7 +274,7 @@ int CWayFinder::FindClosestNodeIndexWithPosition(const XMFLOAT2 & position)
 	return closestIndex;
 }
 
-void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3 & dir, float val)
+void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, const XMFLOAT3 & dir, float val)
 {
 	XMFLOAT3 pos{ collider->GetPosition() };
 	XMFLOAT3 velocity{ Vector3::ScalarProduct(dir, val) };
@@ -283,7 +288,8 @@ void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, XMFLOAT3
 	else
 	{
 		XMFLOAT3 newDir{ Vector3::Subtract(GetClosestNotCollidePos(pos, newPos, collider->GetCollisionSize()), newPos, true) };
-		collider->Translate(&Vector3::ScalarProduct(newDir, val));
+		XMFLOAT3 axis{ Vector3::ScalarProduct(newDir, val) };
+		collider->Translate(&axis);
 	}
 }
 

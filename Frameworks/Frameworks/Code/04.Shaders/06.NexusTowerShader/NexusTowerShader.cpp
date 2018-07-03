@@ -152,6 +152,8 @@ CBaseObject *CNexusTowerShader::PickObjectByRayIntersection(
 
 bool CNexusTowerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	if (GetAsyncKeyState('U') & 0x0001)
 	{
 		((CCollisionObject*)m_ppObjects[0])->SetState(States::Die);
@@ -289,6 +291,7 @@ void CNexusTowerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffe
 
 void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
+	UNREFERENCED_PARAMETER(pContext);
 
 	CTransformImporter transformInporter;
 
@@ -298,7 +301,6 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateShaderVariables(pCreateMgr, m_nObjects);
 	for (int i = 0; i < m_nHeaps- 1; ++i)

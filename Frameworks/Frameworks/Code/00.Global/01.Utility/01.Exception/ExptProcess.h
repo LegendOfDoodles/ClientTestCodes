@@ -27,7 +27,6 @@ inline std::wstring AnsiToWString(const std::string& str)
 
 void PrintErrorBlob(ComPtr<ID3DBlob> pErrorBlob);
 
-#ifndef ThrowIfFailed
 #define ThrowIfFailed(x)										\
 {																\
 	HRESULT _hResult = (x);										\
@@ -37,4 +36,3 @@ void PrintErrorBlob(ComPtr<ID3DBlob> pErrorBlob);
 		throw DxException(_hResult, L#x, wfn, __LINE__);		\
 	}															\
 }
-#endif

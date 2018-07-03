@@ -965,14 +965,14 @@ void Materials::GetShaderResourceViewDesc(
 	case RESOURCE_TEXTURE_2D: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize == 1)
 	case RESOURCE_TEXTURE_2D_ARRAY:
 		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		pShaderResourceViewDesc->Texture2D.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2D.MipLevels = static_cast<UINT>(-1);
 		pShaderResourceViewDesc->Texture2D.MostDetailedMip = 0;
 		pShaderResourceViewDesc->Texture2D.PlaneSlice = 0;
 		pShaderResourceViewDesc->Texture2D.ResourceMinLODClamp = 0.0f;
 		break;
 	case RESOURCE_TEXTURE_2DARRAY: //(d3dResourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)(d3dResourceDesc.DepthOrArraySize != 1)
 		pShaderResourceViewDesc->ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
-		pShaderResourceViewDesc->Texture2DArray.MipLevels = -1;
+		pShaderResourceViewDesc->Texture2DArray.MipLevels = static_cast<UINT>(-1);
 		pShaderResourceViewDesc->Texture2DArray.MostDetailedMip = 0;
 		pShaderResourceViewDesc->Texture2DArray.PlaneSlice = 0;
 		pShaderResourceViewDesc->Texture2DArray.ResourceMinLODClamp = 0.0f;

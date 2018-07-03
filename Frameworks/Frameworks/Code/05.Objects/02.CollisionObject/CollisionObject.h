@@ -15,19 +15,19 @@ public: // 공개 함수
 	bool CheckEnemyState(CCollisionObject* other);
 	virtual bool Attackable(CCollisionObject* other);
 
-	virtual void PlayIdle(float timeElapsed) {}
-	virtual void PlayWalk(float timeElapsed) {}
-	virtual void PlayChase(float timeElapsed, CWayFinder* pWayFinder) {}
-	virtual void PlayAttack(float timeElapsed) {}
-	virtual void PlayDie(float timeElapsed) {}
-	virtual void PlayRemove(float timeElapsed) {}
+	virtual void PlayIdle(float timeElapsed) { timeElapsed; }
+	virtual void PlayWalk(float timeElapsed) { timeElapsed; }
+	virtual void PlayChase(float timeElapsed, CWayFinder* pWayFinder) { timeElapsed; pWayFinder; }
+	virtual void PlayAttack(float timeElapsed) { timeElapsed; }
+	virtual void PlayDie(float timeElapsed) { timeElapsed; }
+	virtual void PlayRemove(float timeElapsed) { timeElapsed; }
 
 	virtual void RegenerateLookAt() {}
 
 	virtual void SetCollisionSize(float size) { m_fCollisionSize = size; }
-	virtual float GetCollisionSize() { return m_fCollisionSize; }
+	virtual float GetCollisionSize() const { return m_fCollisionSize; }
 	virtual XMFLOAT2 GetCollisionLevel() { return m_xmf2CollisionLevel; }
-	virtual void ReceiveDamage(float Damage) {}
+	virtual void ReceiveDamage(float Damage) { Damage; }
 
 	virtual TeamType GetTeam() { return m_TeamType; }
 	virtual void SetTeam(TeamType type) { m_TeamType = type; }

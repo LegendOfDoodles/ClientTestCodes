@@ -69,6 +69,8 @@ void CCamera::SetViewportsAndScissorRects()
 
 void CCamera::Move(float fTimeElapsed, bool bVelocity)
 {
+	UNREFERENCED_PARAMETER(bVelocity);
+
 	if (m_direction)
 	{
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
@@ -138,6 +140,7 @@ void CCamera::Update(float fTimeElapsed)
 
 void CCamera::SetLookAt(XMFLOAT3& xmf3LookAt)
 {
+	UNREFERENCED_PARAMETER(xmf3LookAt);
 }
 
 void CCamera::SetOffset(XMFLOAT3 xmf3Offset) {
@@ -195,6 +198,8 @@ void CCamera::SavePickedPos()
 
 bool CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
+	UNREFERENCED_PARAMETER(lParam);
+
 	m_speed += GET_WHEEL_DELTA_WPARAM(wParam);
 
 	if (m_speed < MIN_CAMERA_SPEED) m_speed = MIN_CAMERA_SPEED;

@@ -10,7 +10,6 @@ CCollisionManager::CCollisionManager()
 
 void CCollisionManager::GameOver(TeamType type)
 {
-	TeamType m_Defeat = type;
 	if (type == TeamType::Blue) {
 		m_Winner = TeamType::Red;
 	}
@@ -30,10 +29,9 @@ void CCollisionManager::GameOver(TeamType type)
 
 void CCollisionManager::SetNodeMap(std::vector<NodeMap> map, float size, XMFLOAT2 wh)
 {
-
-	m_nodeMap = new NodeMap*[wh.x];
+	m_nodeMap = new NodeMap*[static_cast<int>(wh.x)];
 	for (int i = 0; i < wh.x; ++i) {
-		m_nodeMap[i] = new NodeMap[wh.y];
+		m_nodeMap[i] = new NodeMap[static_cast<int>(wh.y)];
 	}
 	for (int i = 0; i < wh.y; ++i) {
 		for (int j = 0; j < wh.x; ++j) {
@@ -83,7 +81,7 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
 			if ((*i)->GetStaticType() != StaticType::Static) {
-
+				
 				for (auto& j = m_lstColliders.begin(); j != m_lstColliders.end(); ++j)
 				{
 					if (i != j && (*j)->GetStaticType() != StaticType::Static) {
@@ -113,19 +111,18 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 
 
 			if (m_User == (*i)->GetTeam()) {
-				float neardst = 999;
 				int x, y;
-				x = (*i)->GetPosition().x / nodeSize;
-				y = (*i)->GetPosition().z / nodeSize;
-				int startLength = (*i)->GetSightRange() / nodeSize;
+				x = static_cast<int>((*i)->GetPosition().x / nodeSize);
+				y = static_cast<int>((*i)->GetPosition().z / nodeSize);
+				int startLength = static_cast<int>((*i)->GetSightRange() / nodeSize);
 				if ((*i)->tag == 1) {
 					for (int dir = 0; dir < 8; ++dir) {
-						SearchSight(XMFLOAT2(x, y), dir, 0, startLength);
+						SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, 0, startLength);
 					}
 				}
 				else {
 					for (int dir = 0; dir < 8; ++dir) {
-						SearchSight(XMFLOAT2(x, y), dir, 0, startLength);
+						SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, 0, startLength);
 					}
 				}
 			}
@@ -153,6 +150,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 		{
 			//8:1..
 		case CollisionType::SPHERE:
+		{
 			for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 			{
 				if ((*i) != pCol) {
@@ -178,7 +176,9 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 			}
 
 			break;
+		}
 		case CollisionType::SECTERFORM:
+		{
 			for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 			{
 				if ((*i) != pCol) {
@@ -197,13 +197,13 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 							{
 								XMFLOAT3 result = Vector3::Add(apos, bpos, -1.0f);
 
-								float a = Vector3::DotProduct(pCol->GetLook(), Vector3::Normalize(result));
+								float angle = Vector3::DotProduct(pCol->GetLook(), Vector3::Normalize(result));
 
-								a = acos(a);
-								a = a * 360 / PI;
+								angle = acos(angle);
+								angle = angle * 360 / PI;
 
 								// 시야 각 안에 들어오는가
-								if (a <= data2)
+								if (angle <= data2)
 								{
 									//std::cout << "col\n";
 									(*i)->ReceiveDamage(damage);
@@ -213,8 +213,8 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					}
 				}
 			}
-
 			break;
+		}
 		default:
 			break;
 		}

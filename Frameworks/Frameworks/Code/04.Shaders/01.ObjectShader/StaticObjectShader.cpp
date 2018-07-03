@@ -129,13 +129,7 @@ void CStaticObjectShader::RenderShadow(CCamera * pCamera)
 
 bool CStaticObjectShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
-	//if (pKeyBuffer['U'] & 0xF0)
-	//{
-	//	R -= 0.1f;
-	//	if (R < 0.0f) R = 0.0f;
-	//	m_pMaterial->SetRoughness(R);
-	//	return true;
-	//}
+	UNREFERENCED_PARAMETER(pKeyBuffer);
 
 	return true;
 }
@@ -311,88 +305,88 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	CStaticMesh *pMeshes[17];
 	pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Eraser.meshinfo");
 	pMeshes[0]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(13)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(26.5), CONVERT_PaperUnit_to_InG(7), CONVERT_PaperUnit_to_InG(13)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(13.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(26.5f), CONVERT_PaperUnit_to_InG(7.0f), CONVERT_PaperUnit_to_InG(13.0f)));
 
 	pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Duck.meshinfo");
 	pMeshes[1]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(14)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(14), CONVERT_PaperUnit_to_InG(14), CONVERT_PaperUnit_to_InG(14)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(14.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(14.0f), CONVERT_PaperUnit_to_InG(14.0f), CONVERT_PaperUnit_to_InG(14.0f)));
 
 	pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//KeumWonBo.meshinfo");
 	pMeshes[2]->SetBoundingBox(
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(12.5)));
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(18.0f), CONVERT_PaperUnit_to_InG(18.0f), CONVERT_PaperUnit_to_InG(12.5f)));
 
 	pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//PencilCase.meshinfo");//***
 	pMeshes[3]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(12)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(13.5), CONVERT_PaperUnit_to_InG(47), CONVERT_PaperUnit_to_InG(12)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(12.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(13.5f), CONVERT_PaperUnit_to_InG(47.0f), CONVERT_PaperUnit_to_InG(12.0f)));
 
 	pMeshes[4] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Nail.meshinfo");//***
 	pMeshes[4]->SetBoundingBox(
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(12), 0.0f, -CONVERT_PaperUnit_to_InG(8)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(21), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(8)));
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(12.0f), 0.0f, -CONVERT_PaperUnit_to_InG(8.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(21.0f), CONVERT_PaperUnit_to_InG(3.0f), CONVERT_PaperUnit_to_InG(8.0f)));
 
 	pMeshes[5] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//BlueHead.meshinfo");//***
 	pMeshes[5]->SetBoundingBox(
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(65), CONVERT_PaperUnit_to_InG(17), CONVERT_PaperUnit_to_InG(65)));
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(65.0f), CONVERT_PaperUnit_to_InG(17.0f), CONVERT_PaperUnit_to_InG(65.0f)));
 
 	pMeshes[6] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//ShortPencil.meshinfo");
 	pMeshes[6]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(25)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(7.5), CONVERT_PaperUnit_to_InG(7.5), CONVERT_PaperUnit_to_InG(25)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(25.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(7.5f), CONVERT_PaperUnit_to_InG(7.5f), CONVERT_PaperUnit_to_InG(25.0f)));
 
 	pMeshes[7] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//LongPencil.meshinfo");
 	pMeshes[7]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(45)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(45)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(45.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(45.0f)));
 
 	pMeshes[8] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Cup.meshinfo");
 	pMeshes[8]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(18)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(13), CONVERT_PaperUnit_to_InG(13), CONVERT_PaperUnit_to_InG(18)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(18.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(13.0f), CONVERT_PaperUnit_to_InG(13.0f), CONVERT_PaperUnit_to_InG(18.0f)));
 
 	pMeshes[9] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//RedHead.meshinfo");
 	pMeshes[9]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(10)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(65), CONVERT_PaperUnit_to_InG(17), CONVERT_PaperUnit_to_InG(50)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(10.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(65.0f), CONVERT_PaperUnit_to_InG(17.0f), CONVERT_PaperUnit_to_InG(50.0f)));
 
 	pMeshes[10] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//PenCover.meshinfo");
 	pMeshes[10]->SetBoundingBox(
-		XMFLOAT3(0.0f, CONVERT_PaperUnit_to_InG(30), 0.0f),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(30), CONVERT_PaperUnit_to_InG(8)));
+		XMFLOAT3(0.0f, CONVERT_PaperUnit_to_InG(30.0f), 0.0f),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(8.0f), CONVERT_PaperUnit_to_InG(30.0f), CONVERT_PaperUnit_to_InG(8.0f)));
 
 	pMeshes[11] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Pen.meshinfo");
 	pMeshes[11]->SetBoundingBox(
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(45), 0.0f, -CONVERT_PaperUnit_to_InG(9)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(45), CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(9)));
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(45.0f), 0.0f, -CONVERT_PaperUnit_to_InG(9.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(45.0f), CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(9.0f)));
 
 	pMeshes[12] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Dice.meshinfo");
 	pMeshes[12]->SetBoundingBox(
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(12.5), CONVERT_PaperUnit_to_InG(12.5), CONVERT_PaperUnit_to_InG(12.5)));
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(12.5f), CONVERT_PaperUnit_to_InG(12.5f), CONVERT_PaperUnit_to_InG(12.5f)));
 
 	pMeshes[13] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[0]);
 	pMeshes[13]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(48)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(37), CONVERT_PaperUnit_to_InG(3.75), CONVERT_PaperUnit_to_InG(96)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(48.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(37.0f), CONVERT_PaperUnit_to_InG(3.75f), CONVERT_PaperUnit_to_InG(96.0f)));
 
 	pMeshes[14] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[1]);
 	pMeshes[14]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(32.5)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(27), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(32.5)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(32.5f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(27.0f), CONVERT_PaperUnit_to_InG(3.0f), CONVERT_PaperUnit_to_InG(32.5f)));
 
 	pMeshes[15] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[2]);
 	pMeshes[15]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(32.5)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(27), CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(32.5)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(32.5f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(27.0f), CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(32.5f)));
 
 	pMeshes[16] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//Book.meshinfo", transformInporter.BookScale[3]);
 	pMeshes[16]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(32.5)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(27), CONVERT_PaperUnit_to_InG(6), CONVERT_PaperUnit_to_InG(32.5)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(32.5f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(27.0f), CONVERT_PaperUnit_to_InG(6.0f), CONVERT_PaperUnit_to_InG(32.5f)));
 
 	int cnt = 0;
 	for (int i = 0; i < m_nMaterials; ++i) {
@@ -403,7 +397,7 @@ void CStaticObjectShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			m_ppObjects[cnt] = new CObstacle(pCreateMgr);
 			m_ppObjects[cnt]->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
 
-			m_ppObjects[cnt]->Rotate(0, 180, 0);
+			m_ppObjects[cnt]->Rotate(0.0f, 180.0f, 0.0f);
 			m_ppObjects[cnt]->Rotate(-rot.x, rot.y, -rot.z);
 
 			m_ppObjects[cnt]->SetMesh(0, pMeshes[i]);
@@ -442,72 +436,72 @@ void CStaticObjectShader::ReleaseObjects()
 void CStaticObjectShader::SetBoundingBoxMeshByIndex(CCreateMgr *pCreateMgr, CBaseObject * target, int index)
 {
 	static CCubeMesh eraserBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(53), CONVERT_PaperUnit_to_InG(7), CONVERT_PaperUnit_to_InG(26),
-		0, 0, -CONVERT_PaperUnit_to_InG(13));
+		CONVERT_PaperUnit_to_InG(53.0f), CONVERT_PaperUnit_to_InG(7.0f), CONVERT_PaperUnit_to_InG(26.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(13.0f));
 	eraserBBMesh.AddRef();
 	static CCubeMesh duckBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(28), CONVERT_PaperUnit_to_InG(14), CONVERT_PaperUnit_to_InG(28),
-		0, 0, -CONVERT_PaperUnit_to_InG(14));
+		CONVERT_PaperUnit_to_InG(28.0f), CONVERT_PaperUnit_to_InG(14.0f), CONVERT_PaperUnit_to_InG(28.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(14.0f));
 	duckBBMesh.AddRef();
 	static CCubeMesh keumWonBoBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(36), CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(25),
+		CONVERT_PaperUnit_to_InG(36.0f), CONVERT_PaperUnit_to_InG(18.0f), CONVERT_PaperUnit_to_InG(25.0f),
 		0, 0, 0);
 	keumWonBoBBMesh.AddRef();
 	static CCubeMesh pencilCaseBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(27), CONVERT_PaperUnit_to_InG(47), CONVERT_PaperUnit_to_InG(24),
-		0, 0, -CONVERT_PaperUnit_to_InG(12));
+		CONVERT_PaperUnit_to_InG(27.0f), CONVERT_PaperUnit_to_InG(47.0f), CONVERT_PaperUnit_to_InG(24.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(12.0f));
 	pencilCaseBBMesh.AddRef();
 	static CCubeMesh nailBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(42), CONVERT_PaperUnit_to_InG(4), CONVERT_PaperUnit_to_InG(16),
-		CONVERT_PaperUnit_to_InG(12), 0, -CONVERT_PaperUnit_to_InG(8));
+		CONVERT_PaperUnit_to_InG(42.0f), CONVERT_PaperUnit_to_InG(4.0f), CONVERT_PaperUnit_to_InG(16.0f),
+		CONVERT_PaperUnit_to_InG(12.0f), 0, -CONVERT_PaperUnit_to_InG(8.0f));
 	nailBBMesh.AddRef();
 	static CCubeMesh blueHeadBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(130), CONVERT_PaperUnit_to_InG(17), CONVERT_PaperUnit_to_InG(130),
+		CONVERT_PaperUnit_to_InG(130.0f), CONVERT_PaperUnit_to_InG(17.0f), CONVERT_PaperUnit_to_InG(130.0f),
 		0, 0, 0);
 	blueHeadBBMesh.AddRef();
 	static CCubeMesh shortPencilBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(15), CONVERT_PaperUnit_to_InG(7.5), CONVERT_PaperUnit_to_InG(50),
-		0, 0, -CONVERT_PaperUnit_to_InG(25));
+		CONVERT_PaperUnit_to_InG(15.0f), CONVERT_PaperUnit_to_InG(7.5f), CONVERT_PaperUnit_to_InG(50.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(25.0f));
 	shortPencilBBMesh.AddRef();
 	static CCubeMesh longPencilBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(90),
-		0, 0, -CONVERT_PaperUnit_to_InG(45));
+		CONVERT_PaperUnit_to_InG(18.0f), CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(90.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(45.0f));
 	longPencilBBMesh.AddRef();
 	static CCubeMesh cupBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(26), CONVERT_PaperUnit_to_InG(13), CONVERT_PaperUnit_to_InG(36),
-		0, 0, -CONVERT_PaperUnit_to_InG(18));
+		CONVERT_PaperUnit_to_InG(26.0f), CONVERT_PaperUnit_to_InG(13.0f), CONVERT_PaperUnit_to_InG(36.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(18.0f));
 	cupBBMesh.AddRef();
 	static CCubeMesh redHeadBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(130), CONVERT_PaperUnit_to_InG(17), CONVERT_PaperUnit_to_InG(100),
-		0, 0, -CONVERT_PaperUnit_to_InG(10));
+		CONVERT_PaperUnit_to_InG(130.0f), CONVERT_PaperUnit_to_InG(17.0f), CONVERT_PaperUnit_to_InG(100.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(10.0f));
 	redHeadBBMesh.AddRef();
 	static CCubeMesh penCapBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(16), CONVERT_PaperUnit_to_InG(30), CONVERT_PaperUnit_to_InG(16),
-		0, CONVERT_PaperUnit_to_InG(30), 0);
+		CONVERT_PaperUnit_to_InG(16.0f), CONVERT_PaperUnit_to_InG(30.0f), CONVERT_PaperUnit_to_InG(16.0f),
+		0, CONVERT_PaperUnit_to_InG(30.0f), 0);
 	penCapBBMesh.AddRef();
 	static CCubeMesh penBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(90), CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(18),
-		CONVERT_PaperUnit_to_InG(45), 0, -CONVERT_PaperUnit_to_InG(9));
+		CONVERT_PaperUnit_to_InG(90.0f), CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(18.0f),
+		CONVERT_PaperUnit_to_InG(45.0f), 0, -CONVERT_PaperUnit_to_InG(9.0f));
 	penBBMesh.AddRef();
 	static CCubeMesh diceBBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(25), CONVERT_PaperUnit_to_InG(12.5), CONVERT_PaperUnit_to_InG(25),
+		CONVERT_PaperUnit_to_InG(25.0f), CONVERT_PaperUnit_to_InG(12.5f), CONVERT_PaperUnit_to_InG(25.0f),
 		0, 0, 0);
 	diceBBMesh.AddRef();
 	static CCubeMesh book1BBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(74), CONVERT_PaperUnit_to_InG(3.75), CONVERT_PaperUnit_to_InG(96),
-		0, 0, -CONVERT_PaperUnit_to_InG(48));
+		CONVERT_PaperUnit_to_InG(74.0f), CONVERT_PaperUnit_to_InG(3.75f), CONVERT_PaperUnit_to_InG(96.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(48.0f));
 	book1BBMesh.AddRef();
 	static CCubeMesh book2BBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(54), CONVERT_PaperUnit_to_InG(3), CONVERT_PaperUnit_to_InG(65),
-		0, 0, -CONVERT_PaperUnit_to_InG(32.5));
+		CONVERT_PaperUnit_to_InG(54.0f), CONVERT_PaperUnit_to_InG(3.0f), CONVERT_PaperUnit_to_InG(65.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(32.5f));
 	book2BBMesh.AddRef();
 	static CCubeMesh book3BBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(54), CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(65),
-		0, 0, -CONVERT_PaperUnit_to_InG(32.5));
+		CONVERT_PaperUnit_to_InG(54.0f), CONVERT_PaperUnit_to_InG(9.0f), CONVERT_PaperUnit_to_InG(65.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(32.5f));
 	book3BBMesh.AddRef();
 	static CCubeMesh book4BBMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(54), CONVERT_PaperUnit_to_InG(6), CONVERT_PaperUnit_to_InG(65),
-		0, 0, -CONVERT_PaperUnit_to_InG(32.5));
+		CONVERT_PaperUnit_to_InG(54.0f), CONVERT_PaperUnit_to_InG(6.0f), CONVERT_PaperUnit_to_InG(65.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(32.5f));
 	book4BBMesh.AddRef();
 
 	switch (index)

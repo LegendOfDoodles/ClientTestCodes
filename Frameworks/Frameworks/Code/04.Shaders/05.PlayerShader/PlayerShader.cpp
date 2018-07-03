@@ -146,6 +146,8 @@ CBaseObject *CPlayerShader::PickObjectByRayIntersection(
 
 bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	static float R = 0.0f;
 	static float M = 0.0f;
 
@@ -175,7 +177,6 @@ D3D12_INPUT_LAYOUT_DESC CPlayerShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 6;
 	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-	UINT cnt = 0;
 	pInputElementDescs[0] = {
 		"POSITION",
 		0,
@@ -335,8 +336,8 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 	m_pStick = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(2), CONVERT_PaperUnit_to_InG(1), CONVERT_PaperUnit_to_InG(10),
-		0, 0, -CONVERT_PaperUnit_to_InG(6.5));
+		CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(10.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(6.5f));
 	
 	m_nSword = 3;
 
@@ -359,8 +360,8 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 
 	pPlayerMesh->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(6.5)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(1), CONVERT_PaperUnit_to_InG(1), CONVERT_PaperUnit_to_InG(5)));
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(6.5f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(5.0f)));
 
 	int i = 0;
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -396,7 +397,7 @@ void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 			if (x == 0 && z == 0) {
 				pPlayer->tag = 1;
 			}
-			pPlayer->CBaseObject::SetPosition(500+(z*9000), 0, 2000+(x*1000));
+			pPlayer->CBaseObject::SetPosition(500.0f + (z * 9000.0f), 0.0f, 2000.0f + (x * 1000.0f));
 			if (z == 1) {
 				pPlayer->SetTeam(TeamType::Red);
 			}

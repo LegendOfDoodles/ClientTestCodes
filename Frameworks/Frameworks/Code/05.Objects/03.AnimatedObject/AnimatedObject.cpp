@@ -7,7 +7,7 @@
 /// 목적: 움직이는 오브젝트 처리용 기본 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-22
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -25,12 +25,14 @@ CAnimatedObject::~CAnimatedObject()
 // 공개 함수
 void CAnimatedObject::Animate(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
+
 	ResetCollisionLevel();
 
 	int Bcnt = m_pSkeleton[m_nAniIndex].GetBoneCount();
 
 	for (int i = 0; i < Bcnt; ++i) {
-		m_xmf4x4Frame[i] = m_pSkeleton[m_nAniIndex].GetBone(i).GetFrame((int)m_fFrameTime);
+		m_xmf4x4Frame[i] = m_pSkeleton[m_nAniIndex].GetBone(static_cast<float>(i)).GetFrame(static_cast<int>(m_fFrameTime));
 	}
 }
 
@@ -218,7 +220,7 @@ bool CAnimatedObject::Chaseable(CCollisionObject * other)
 bool CAnimatedObject::IsArrive(float dst)
 {
 	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
-	int distanceSqr = Vector2::DistanceSquare(curPos, m_destination);
+	int distanceSqr = static_cast<int>(Vector2::DistanceSquare(curPos, m_destination));
 	// 정확히 도착 하는 경우
 	if (distanceSqr < dst * dst) return true;
 	if (m_pathToGo->empty()) return false;

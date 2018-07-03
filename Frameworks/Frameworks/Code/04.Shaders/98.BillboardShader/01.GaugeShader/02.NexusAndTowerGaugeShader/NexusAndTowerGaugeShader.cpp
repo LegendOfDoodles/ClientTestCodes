@@ -90,11 +90,15 @@ void CNexusAndTowerHPGaugeShader::GetCamera(CCamera * pCamera)
 
 bool CNexusAndTowerHPGaugeShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 
 bool CNexusAndTowerHPGaugeShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 

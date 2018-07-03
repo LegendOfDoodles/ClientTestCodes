@@ -32,7 +32,7 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateGraphicsRootSignature();
 
-	m_renderMgr.Initialize(m_nWndClientWidth, m_nWndClientHeight);
+	m_renderMgr.Initialize();
 }
 
 void CCreateMgr::Release()
@@ -170,10 +170,13 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 	HRESULT hResult;
 	ID3D12Resource *pBuffer = NULL;
 
+	D3D12_HEAP_PROPERTIES heapProperties{ CreateBufferHeapProperties(heapType) };
+	D3D12_RESOURCE_DESC	resourceDesc{ CreateBufferResourceDesc(nBytes) };
+
 	hResult = m_pDevice->CreateCommittedResource(
-		&CreateBufferHeapProperties(heapType),
+		&heapProperties,
 		D3D12_HEAP_FLAG_NONE, 
-		&CreateBufferResourceDesc(nBytes),
+		&resourceDesc,
 		CreateBufferInitialStates(heapType),
 		NULL,
 		IID_PPV_ARGS(&pBuffer));
@@ -187,9 +190,10 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 		{
 			if (ppUploadBuffer)
 			{
+				D3D12_HEAP_PROPERTIES uploadHeapProperties{ CreateBufferHeapProperties(D3D12_HEAP_TYPE_UPLOAD) };
 				//업로드 버퍼를 생성한다.
-				hResult = m_pDevice->CreateCommittedResource(&CreateBufferHeapProperties(D3D12_HEAP_TYPE_UPLOAD),
-					D3D12_HEAP_FLAG_NONE, &CreateBufferResourceDesc(nBytes), D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
+				hResult = m_pDevice->CreateCommittedResource(&uploadHeapProperties,
+					D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
 					IID_PPV_ARGS(ppUploadBuffer));
 				ThrowIfFailed(hResult);
 
@@ -205,7 +209,8 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 				//업로드 버퍼의 내용을 디폴트 버퍼에 복사한다.
 				m_pCommandList->CopyResource(pBuffer, *ppUploadBuffer);
 
-				m_pCommandList->ResourceBarrier(1, &CreateResourceBarrier(pBuffer, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates));
+				D3D12_RESOURCE_BARRIER barrierSet{ CreateResourceBarrier(pBuffer, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates) };
+				m_pCommandList->ResourceBarrier(1, &barrierSet);
 			}
 			break;
 		}
@@ -287,7 +292,8 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 
 	::UpdateSubresources(m_pCommandList.Get() , pTexture, *ppUploadBuffer, 0, 0, nSubResources, &vSubresources[0]);
 
-	m_pCommandList->ResourceBarrier(1, &CreateResourceBarrier(pTexture, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates));
+	D3D12_RESOURCE_BARRIER barrierSet{ CreateResourceBarrier(pTexture, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates) };
+	m_pCommandList->ResourceBarrier(1, &barrierSet);
 
 	return(pTexture);
 }
@@ -375,7 +381,7 @@ void CCreateMgr::CreateDirect3dDevice()
 		pAdapter->GetDesc1(&adapterDesc);
 
 		if (adapterDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
-		if ((hResult = SUCCEEDED(D3D12CreateDevice(pAdapter.Get(), D3D_FEATURE_LEVEL_12_0,
+		if (SUCCEEDED((hResult = D3D12CreateDevice(pAdapter.Get(), D3D_FEATURE_LEVEL_12_0,
 			IID_PPV_ARGS(m_pDevice.GetAddressOf()))))) break;
 		ThrowIfFailed(hResult);
 	}
@@ -546,7 +552,8 @@ void CCreateMgr::CreateSwapChainRenderTargetViews()
 	for (UINT i = 0; i <SWAP_CHAIN_BUFFER_CNT; i++)
 	{
 		m_pRtvSwapChainBackBufferCPUHandles[i] = rtvCPUDescriptorHandle;
-		m_pSwapChain->GetBuffer(i, __uuidof(ID3D12Resource), (void **)&m_ppSwapChainBackBuffers[i]);
+		hResult = m_pSwapChain->GetBuffer(i, __uuidof(ID3D12Resource), (void **)&m_ppSwapChainBackBuffers[i]);
+		ThrowIfFailed(hResult);
 		m_pDevice->CreateRenderTargetView(m_ppSwapChainBackBuffers[i].Get(), &renderTargetViewDesc, m_pRtvSwapChainBackBufferCPUHandles[i]);
 		rtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
@@ -633,8 +640,6 @@ void CCreateMgr::CreateDepthStencilView()
 
 void CCreateMgr::CreateRenderTargetViews()
 {
-	HRESULT hResult;
-
 	m_pTexture.reset();
 	m_pTexture = shared_ptr<CTexture>(new CTexture(RENDER_TARGET_BUFFER_CNT + 1, RESOURCE_TEXTURE_2D_ARRAY, 0));
 

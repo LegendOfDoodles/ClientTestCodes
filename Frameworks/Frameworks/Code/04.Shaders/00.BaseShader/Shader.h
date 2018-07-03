@@ -43,7 +43,7 @@ public: // 공개 함수
 	virtual void OnStatus(int ObjectType);
 	virtual void OffStatus();
 
-	virtual void CreateGraphicsRootSignature(CCreateMgr *pCreateMgr) { }
+	virtual void CreateGraphicsRootSignature(CCreateMgr *pCreateMgr) { pCreateMgr; }
 
 	virtual CBaseObject * * GetCollisionObjects() { return nullptr; }
 

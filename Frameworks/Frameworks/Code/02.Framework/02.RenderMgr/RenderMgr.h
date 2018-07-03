@@ -11,7 +11,7 @@ public:	// 생성자, 소멸자
 	~CRenderMgr();
 
 public:	// 공개 함수
-	void Initialize(int width, int height);
+	void Initialize();
 	void Release();
 
 	void Render(CScene* pScene = NULL);

@@ -25,7 +25,7 @@ CRenderMgr::~CRenderMgr()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CRenderMgr::Initialize(int width, int height)
+void CRenderMgr::Initialize()
 {
 	// Fence
 	m_hFenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);

@@ -159,11 +159,15 @@ void CMinimapIconShader::SetUIObjectsManager(CUIObjectManager * pManger)
 
 bool CMinimapIconShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return true;
 }
 
 bool CMinimapIconShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 

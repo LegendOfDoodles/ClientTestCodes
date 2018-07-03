@@ -14,16 +14,15 @@ CSkeleton::CSkeleton(char * in)
 	}
 	getline(ifs, line);
 	int skcount;
-	char *end = NULL;
-	skcount = strtof(line.c_str(), &end);
+	char *end{ NULL };
+	skcount = static_cast<int>(strtof(line.c_str(), &end));
 	m_vBone.reserve(skcount);
 	for (int i = 0; i < skcount; ++i) {
 		Bone skeleton;
 		getline(ifs, line);
-		float IDindex[2];
-		char *end = NULL;
-		skeleton.m_iID = strtof(line.c_str(), &end);
-		skeleton.m_iParentID = strtof(end, NULL);
+		end = NULL;
+		skeleton.m_iID = static_cast<int>(strtof(line.c_str(), &end));
+		skeleton.m_iParentID = static_cast<int>(strtof(end, NULL));
 
 		char *Matend = NULL;
 		getline(ifs, line);
@@ -55,19 +54,19 @@ CSkeleton::CSkeleton(char * in)
 	getline(ifs, line);
 
 	end = NULL;
-	m_iAnimationLegth = strtof(line.c_str(), &end);
+	m_iAnimationLegth = static_cast<int>(strtof(line.c_str(), &end));
 
 	auto it = m_vBone.begin();
 	for (int i = 0; i < skcount; ++i) {
 		getline(ifs, line);
 		end = NULL;
 		KeyFrame aniMatrix;
-		aniMatrix.m_iframe = strtof(line.c_str(), &end);
+		aniMatrix.m_iframe = static_cast<int>(strtof(line.c_str(), &end));
 
 		while (getline(ifs, line) && line.find("</Joint>", 0) == -1)
 		{
 			end = NULL;
-			aniMatrix.m_iframe = strtof(line.c_str(), &end);
+			aniMatrix.m_iframe = static_cast<int>(strtof(line.c_str(), &end));
 			getline(ifs, line);
 			
 			aniMatrix.m_m4x4Matrix._11 = strtof(line.c_str(), &end);

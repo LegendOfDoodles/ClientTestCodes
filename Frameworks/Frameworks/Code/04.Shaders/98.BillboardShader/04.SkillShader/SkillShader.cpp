@@ -119,6 +119,8 @@ void CSkillShader::GetCamera(CCamera * pCamera)
 
 bool CSkillShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	return false;
 }
 
@@ -134,16 +136,16 @@ bool CSkillShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 		if (cursorPos.y > SKILL_MINIMUM_Y && cursorPos.y < SKILL_MAXIMUM_Y) {
 		
 			if ((cursorPos.x > QSKILL_MINIMUM_X  && cursorPos.x < QSKILL_MAXIMUM_X)) {
-				printf("Q\n", cursorPos.x, cursorPos.y);
+				printf("Q\n");
 			}
 			if ((cursorPos.x > WSKILL_MINIMUM_X  && cursorPos.x < WSKILL_MAXIMUM_X)) {
-				printf("W\n", cursorPos.x, cursorPos.y);
+				printf("W\n");
 			}
 			if ((cursorPos.x > ESKILL_MINIMUM_X  && cursorPos.x < ESKILL_MAXIMUM_X)) {
-				printf("E\n", cursorPos.x, cursorPos.y);
+				printf("E\n");
 			}
 			if ((cursorPos.x > RSKILL_MINIMUM_X  && cursorPos.x < RSKILL_MAXIMUM_X)) {
-				printf("R\n", cursorPos.x, cursorPos.y);
+				printf("R\n");
 			}
 		}
 

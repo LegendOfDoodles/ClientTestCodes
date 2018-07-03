@@ -12,7 +12,7 @@ public:	// 공개 함수
 
 	virtual void UpdateShaderVariables();
 
-	virtual bool IsInFrustum(BoundingOrientedBox& xmBoundingBox) { return true; }
+	virtual bool IsInFrustum(BoundingOrientedBox& xmBoundingBox) { xmBoundingBox; return true; }
 
 protected: // 내부 함수
 

@@ -45,7 +45,7 @@ protected: // 내부 함수
 	double Heuristic_Euclidean(int from, int to);
 	double Heuristic_EuclideanSquare(int from, int to);
 	double Heuristic_NoisyEuclidean(int from, int to);
-	double Heuristic_Dijkstra(int from, int to);
+	double Heuristic_Dijkstra();
 
 protected: // 변수
 	const CWayFinder *m_pFinder;

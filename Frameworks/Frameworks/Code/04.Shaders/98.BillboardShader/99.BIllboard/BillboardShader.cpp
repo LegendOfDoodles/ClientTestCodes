@@ -78,12 +78,16 @@ void CBillboardShader::Render(CCamera *pCamera)
 
 void CBillboardShader::OnProcessKeyUp(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
-
+	UNREFERENCED_PARAMETER(wParam);
+	UNREFERENCED_PARAMETER(lParam);
+	UNREFERENCED_PARAMETER(timeElapsed);
 }
 
 void CBillboardShader::OnProcessKeyDown(WPARAM wParam, LPARAM lParam, float timeElapsed)
 {
-
+	UNREFERENCED_PARAMETER(wParam);
+	UNREFERENCED_PARAMETER(lParam);
+	UNREFERENCED_PARAMETER(timeElapsed);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -164,7 +168,8 @@ void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffer
 
 void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 {
-
+	UNREFERENCED_PARAMETER(pCreateMgr);
+	UNREFERENCED_PARAMETER(pContext);
 }
 
 void CBillboardShader::ReleaseObjects()

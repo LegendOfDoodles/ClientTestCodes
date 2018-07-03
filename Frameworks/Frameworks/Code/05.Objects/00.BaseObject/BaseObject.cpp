@@ -48,6 +48,7 @@ CBaseObject::~CBaseObject()
 // 공개 함수
 void CBaseObject::Initialize(CCreateMgr *pCreateMgr)
 {
+	UNREFERENCED_PARAMETER(pCreateMgr);
 }
 
 void CBaseObject::Finalize()
@@ -111,6 +112,7 @@ void CBaseObject::SetMaterial(CMaterial *pMaterial)
 
 void CBaseObject::Animate(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 }
 
 void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)

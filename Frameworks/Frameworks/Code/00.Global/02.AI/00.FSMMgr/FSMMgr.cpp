@@ -7,7 +7,7 @@
 /// 목적: FSM을 하나의 클래스로 관리하여 처리하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-11
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -57,26 +57,3 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CFSMMgr::PlayIdle(float timeElapsed, CCollisionObject * obj)
-{
-}
-
-void CFSMMgr::PlayWalk(float timeElapsed, CCollisionObject * obj)
-{
-}
-
-void CFSMMgr::PlayChase(float timeElapsed, CCollisionObject * obj)
-{
-}
-
-void CFSMMgr::PlayAttack(float timeElapsed, CCollisionObject * obj)
-{
-}
-
-void CFSMMgr::PlayDie(float timeElapsed, CCollisionObject * obj)
-{
-}
-
-void CFSMMgr::PlayRemove(float timeElapsed, CCollisionObject * obj)
-{
-}

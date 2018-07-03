@@ -22,6 +22,8 @@ CBillboardObject::~CBillboardObject()
 // 공개 함수
 void CBillboardObject::Animate(float fTimeElapsed)
 {
+	UNREFERENCED_PARAMETER(fTimeElapsed);
+
 	if (m_pCamera != NULL) {
 		SetLookAt();
 	}

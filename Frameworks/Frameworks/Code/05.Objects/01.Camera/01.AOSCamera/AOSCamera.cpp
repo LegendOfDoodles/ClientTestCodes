@@ -46,6 +46,8 @@ void CAOSCamera::Initialize(CCreateMgr * pCreateMgr)
 
 void CAOSCamera::Move(float fTimeElapsed, bool bVelocity)
 {
+	UNREFERENCED_PARAMETER(bVelocity);
+
 	if (m_direction)
 	{
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
@@ -64,6 +66,8 @@ void CAOSCamera::Move(float fTimeElapsed, bool bVelocity)
 
 bool CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
+	UNREFERENCED_PARAMETER(lParam);
+
 	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 
 	XMFLOAT3 pos{ GetPosition() };
@@ -88,6 +92,8 @@ bool CAOSCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 
 bool CAOSCamera::OnProcessMouseInput(UCHAR * pKeyBuffer)
 {
+	UNREFERENCED_PARAMETER(pKeyBuffer);
+
 	POINT cursorPos;
 
 	GetCursorPos(&cursorPos);

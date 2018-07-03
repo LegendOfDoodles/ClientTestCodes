@@ -197,7 +197,6 @@ void CScene::UpdateShadowCamera()
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 	WPARAM wParam, LPARAM lParam)
 {
-	int ret = 0;
 	switch (nMessageID)
 	{
 	case WM_LBUTTONDOWN:
@@ -223,6 +222,7 @@ void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
 void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 	WPARAM wParam, LPARAM lParam)
 {
+	UNREFERENCED_PARAMETER(hWnd);
 	if (nMessageID == WM_KEYUP)
 	{
 		OnProcessKeyUp(wParam, lParam);
@@ -268,7 +268,7 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[2].m_bEnable = true;
 	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(0.8, -0.4f, 0.7f));
+	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(0.8f, -0.4f, 0.7f));
 
 	CreateCbvAndSrvDescriptorHeap(m_pCreateMgr, 0, 1, 0);
 	m_pCubeMap = Materials::CreateCubeMapMaterial(m_pCreateMgr, &m_srvCPUDescriptorStartHandles[0], &m_srvGPUDescriptorStartHandles[0]);
@@ -460,7 +460,6 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 	pickPosition.y = -(((2.0f * yClient) / viewport.Height) - 1) / xmf4x4Projection._22;
 	pickPosition.z = 1.0f;
 
-	int nIntersected{ 0 };
 	float hitDistance{ FLT_MAX }, nearestHitDistance{ FLT_MAX };
 	CBaseObject *pIntersectedObject{ NULL };
 	//m_pSelectedObject = NULL;
@@ -491,7 +490,6 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 
 void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xmf4x4View)
 {
-	int ret = 0;
 	XMFLOAT4X4  inverseArr = Matrix4x4::Inverse(xmf4x4View);
 	XMFLOAT3 camPosition = m_pCamera->GetPosition();
 	XMFLOAT3 layWorldPosition = Vector3::TransformCoord(pickPosition, inverseArr);
@@ -517,7 +515,8 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 // Process Keyboard Input
 void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
-	int x = 0, y = 0;
+	UNREFERENCED_PARAMETER(lParam);
+
 	if (wParam == VK_ESCAPE)
 		::PostQuitMessage(0);
 	else if (wParam == VK_F1)
