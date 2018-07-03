@@ -82,6 +82,16 @@ void CNumberShader::GetCamera(CCamera * pCamera)
 
 }
 
+void CNumberShader::PositionalNumber(int inputNum, int PositionalNumber)
+{
+	
+}
+
+void CNumberShader::SignificantDigit(int InputNum, int PositionalNumber, int *Num)
+{
+	
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부함수
 D3D12_INPUT_LAYOUT_DESC CNumberShader::CreateInputLayout()
@@ -185,7 +195,7 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
-	// K 표시
+	/* Team K */
 	// 플레이어 4명을 받아와서
 	for (int i = 0; i < m_nPlayer; ++i) {
 		// 플레이어의 스테이터스의 Kill을 팀별로 더한다.
@@ -195,35 +205,52 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 			m_iTeamKill[TeamKILL::RedTeam] += m_ppPlayers[i]->GetPlayerStatus()->Kill;
 	}
 
+	for (int i = 0; i < TeamKILL::EnumCnt; ++i) {
+		int checkNum = m_iTeamKill[i];		// 자리 수 확인에서 사용할 변수
+
+		if (checkNum == 0)
+			m_iTeamKillPositionalNum[i] = 1;		// 0 이면 자리수는 1개
+		else
+			for (m_iTeamKillPositionalNum[i] = 0; checkNum > 0; checkNum /= 10, m_iTeamKillPositionalNum[i]++);
+
+		m_iTeamKillSignificantNum[i] = new int[m_iTeamKillPositionalNum[i]];
+
+		// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
+		// 30이면 0, 3 저장 (출력은 반대로 해야 함)
+		for (int j = 0; j < m_iTeamKillPositionalNum[i]; ++j) {
+			m_iTeamKillSignificantNum[i][j] = m_iTeamKill[i] % 10;
+
+			m_iTeamKill[i] /= 10;
+		}
+	}
+	
+	/* KDA */
 	m_iPlayerKDA[0] = m_ppPlayers[0]->GetPlayerStatus()->Kill;
 	m_iPlayerKDA[1] = m_ppPlayers[0]->GetPlayerStatus()->Death;
 	m_iPlayerKDA[2] = m_ppPlayers[0]->GetPlayerStatus()->Assist;
 	
-	int cnt = 0;				// 자리수
-	int *Num;					// 자리수 값만큼 배열
+	for (int i = 0; i < 3; ++i) {
+		int checkNum = m_iPlayerKDA[i];		// 자리 수 확인에서 사용할 변수
 
-	int m_iNum = 22;			// Input Num (출력할 숫자)
+		if (checkNum == 0)
+			m_iKDAPositionalNum[i] = 1;		// 0 이면 자리수는 1개
+		else
+			for (m_iKDAPositionalNum[i] = 0; checkNum > 0; checkNum /= 10, m_iKDAPositionalNum[i]++);
 
-	// 자리수 구하는 함수는 SignificantDigit에서 진행
-	//PositionalNumber(inputNum, cnt);
-	
-	// Num 반환함수
-	//SignificantDigit(inputNum, cnt);
+		m_iKDASignificantNum[i] = new int[m_iKDAPositionalNum[i]];
 
-	int checkNum = m_iNum;		// 자리 수 확인에서 사용할 변수
-	for (cnt = 0; checkNum > 0; checkNum /= 10, cnt++);
+		// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
+		// 30이면 0, 3 저장 (출력은 반대로 해야 함)
+		for (int j = 0; j < m_iKDAPositionalNum[i]; ++j) {
+			m_iKDASignificantNum[i][j] = m_iPlayerKDA[i] % 10;
 
-	Num = new int[cnt];
-
-	// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
-	// 30이면 0, 3 저장 (출력은 반대로 해야 함)
-	for (int i = 0; i < cnt; ++i) {
-		Num[i] = m_iNum % 10;
-
-		m_iNum /= 10;
+			m_iPlayerKDA[i] /= 10;
+		}
 	}
 
-	m_nObjects = cnt;
+	for (int i = 0; i < 2; ++i) m_nObjects += m_iTeamKillPositionalNum[i];
+	for (int i = 0; i < 3; ++i) m_nObjects += m_iKDAPositionalNum[i];
+
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
@@ -239,18 +266,41 @@ void CNumberShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreateNumberMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
-	for (int i = 0; i < m_nObjects; ++i)
-	{
-		pNumber = new CNumberOjbect(pCreateMgr, NumberType::BlueTeamKill);
-		pNumber->SetCamera(m_pCamera);
-		pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
-		pNumber->SetTexCoord(Num[(cnt-1) - i]);
-		pNumber->SetOffset(i);
-		pNumber->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+	int objectCnt = 0;
 
-		m_ppObjects[i] = pNumber;
+	for (int j = 0; j < TeamKILL::EnumCnt;++j) {
+		for (int i = 0; i < m_iTeamKillPositionalNum[j]; ++i)
+		{
+			pNumber = new CNumberOjbect(pCreateMgr, NumberType(j));
+			pNumber->SetCamera(m_pCamera);
+			pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
+			pNumber->SetTexCoord(m_iTeamKillSignificantNum[j][(m_iTeamKillPositionalNum[j] - 1) - i]);
+			pNumber->SetOffset(i);
+
+			pNumber->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * (objectCnt)));
+			m_ppObjects[objectCnt] = pNumber;
+
+			++objectCnt;
+		}
 	}
 
+	for (int j = 0; j < 3; ++j) {
+		for (int i = 0; i < m_iKDAPositionalNum[j]; ++i)
+		{
+			pNumber = new CNumberOjbect(pCreateMgr, NumberType(j+4));
+			pNumber->SetCamera(m_pCamera);
+			pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
+			pNumber->SetTexCoord(m_iKDASignificantNum[j][(m_iKDAPositionalNum[j] - 1) - i]);
+			pNumber->SetOffset(i);
+			
+			pNumber->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * (objectCnt)));
+			m_ppObjects[objectCnt] = pNumber;
+
+			++objectCnt;
+		}
+	}
+
+	
 
 }
 

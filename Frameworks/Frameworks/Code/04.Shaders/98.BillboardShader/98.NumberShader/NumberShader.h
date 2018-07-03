@@ -30,6 +30,9 @@ public: // 공개 함수
 
 	virtual void SetPlayer(CBaseObject **ppPlayer) { m_ppPlayers = (CPlayer**)ppPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
+	
+	void PositionalNumber(int inputNum, int PositionalNumber);
+	void SignificantDigit(int InputNum, int PositionalNumber, int *Num);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -56,8 +59,14 @@ protected: // 변수
 	// Team Kill Sum Value
 	/* 0 - Blue 1 - Red  */
 	int m_iTeamKill[TeamKILL::EnumCnt] = {0};
+	int m_iTeamKillPositionalNum[2];
+	int *m_iTeamKillSignificantNum[2];
 
-	int m_iPlayerKDA[3] = {0};
+	// Personal KDA
+	/* KILL Death Assist */
+	int m_iPlayerKDA[3] = { 0 };
+	int m_iKDAPositionalNum[3] = { 0 };
+	int *m_iKDASignificantNum[3];
 
 	CMaterial	**m_ppMaterials{ NULL };
 	CCamera *m_pCamera;
