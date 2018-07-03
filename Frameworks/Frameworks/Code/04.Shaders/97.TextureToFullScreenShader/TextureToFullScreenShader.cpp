@@ -6,7 +6,7 @@
 /// 목적: 디퍼드 쉐이딩 적용하기 위한 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -129,8 +129,8 @@ void CTextureToFullScreenShader::CreateGraphicsRootSignature(CCreateMgr *pCreate
 		pSignatureBlob->GetBufferPointer(),
 		pSignatureBlob->GetBufferSize(),
 		IID_PPV_ARGS(&m_pGraphicsRootSignature));
-	assert(SUCCEEDED(hResult) && "CreateRootSignature Failed");
-	// ExptProcess::PrintErrorBlob(pErrorBlob);
+	if (pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
+	ThrowIfFailed(hResult);
 }
 
 void CTextureToFullScreenShader::CreateShaderResourceViews(CCreateMgr * pCreateMgr, shared_ptr<CTexture> pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index)

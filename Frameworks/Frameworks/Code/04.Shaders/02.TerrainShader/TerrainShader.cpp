@@ -6,7 +6,7 @@
 /// 목적: 지형 출력용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -186,7 +186,7 @@ void CTerrainShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers
 		NULL);
 
 	HRESULT hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedTerrain);
-	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)

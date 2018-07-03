@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 
@@ -336,7 +336,7 @@ void CCamera::CreateShaderVariables(CCreateMgr *pCreateMgr)
 		NULL);
 
 	HRESULT hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedCamera);
-	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CCamera::ReleaseShaderVariables()

@@ -6,7 +6,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -51,10 +51,10 @@ void CRenderMgr::RenderDepth(CScene * pScene)
 	HRESULT hResult;
 	// Reset Command List
 	hResult = m_pCommandAllocator->Reset();
-	assert(SUCCEEDED(hResult) && "CommandAllocator->Reset Failed");
+	ThrowIfFailed(hResult);
 
 	hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
-	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
+	ThrowIfFailed(hResult);
 
 	// Change to DEPTH_WRITE
 	SynchronizeResourceTransition(m_pShadowDepthBuffer.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
@@ -124,7 +124,7 @@ void CRenderMgr::RenderColor(CScene * pScene)
 
 	// Close Command List
 	hResult = m_pCommandList->Close();
-	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+	ThrowIfFailed(hResult);
 
 	// Excute Command List
 	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
@@ -138,10 +138,10 @@ void CRenderMgr::RenderLight(CScene * pScene)
 	HRESULT hResult;
 
 	hResult = m_pCommandAllocator->Reset();
-	assert(SUCCEEDED(hResult) && "CommandAllocator->Reset Failed");
+	ThrowIfFailed(hResult);
 
 	hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
-	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
+	ThrowIfFailed(hResult);
 
 	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
@@ -166,7 +166,7 @@ void CRenderMgr::RenderLight(CScene * pScene)
 
 	// Close Command List
 	hResult = m_pCommandList->Close();
-	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+	ThrowIfFailed(hResult);
 
 	// Excute Command List
 	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
@@ -176,8 +176,7 @@ void CRenderMgr::RenderLight(CScene * pScene)
 
 	// Present
 	hResult = m_pSwapChain->Present(0, 0);
-	assert(SUCCEEDED(hResult) && "SwapChain->Present Failed");
-	//ExptProcess::ThrowIfFailed(hResult);
+	ThrowIfFailed(hResult);
 }
 
 void CRenderMgr::SetDsvCPUHandleWithDsvHeap(ComPtr<ID3D12DescriptorHeap> pDsvDescriptorHeap, UINT incrementSize)
@@ -192,14 +191,14 @@ void CRenderMgr::WaitForGpuComplete()
 	UINT64 fenceValue = ++m_fenceValues[m_swapChainBufferIndex];
 	
 	hResult = m_pCommandQueue->Signal(m_pFence.Get(), fenceValue);
-	assert(SUCCEEDED(hResult) && "CommandQueue->Signal Failed");
+	ThrowIfFailed(hResult);
 
 	//GPU가 펜스의 값을 설정하는 명령을 명령 큐에 추가한다.
 	if (m_pFence->GetCompletedValue() < fenceValue)
 	{
 		//펜스의 현재 값이 설정한 값보다 작으면 펜스의 현재 값이 설정한 값이 될 때까지 기다린다.
 		hResult = m_pFence->SetEventOnCompletion(fenceValue, m_hFenceEvent);
-		assert(SUCCEEDED(hResult) && "SetEventOnCompletion Failed");
+		ThrowIfFailed(hResult);
 
 		::WaitForSingleObject(m_hFenceEvent, INFINITE);
 	}
@@ -222,7 +221,7 @@ void CRenderMgr::ExecuteCommandList()
 	HRESULT hResult;
 
 	hResult = m_pCommandList->Close();
-	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+	ThrowIfFailed(hResult);
 
 	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);

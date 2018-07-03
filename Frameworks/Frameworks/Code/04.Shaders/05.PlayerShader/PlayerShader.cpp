@@ -12,7 +12,7 @@
 /// 목적: 플레이어 관리 및 렌더링 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,7 +290,7 @@ void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 		NULL);
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -302,7 +302,7 @@ void CPlayerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
 		NULL);
 
 	hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
-	assert(SUCCEEDED(hResult) && "m_pBoundingBoxBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CPlayerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)

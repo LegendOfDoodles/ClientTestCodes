@@ -7,9 +7,9 @@
 
 /// <summary>
 /// 목적: 미니맵 Icon 쉐이더
-/// 최종 수정자:  이용선
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정자:  김나단
+/// 수정자 목록:  이용선, 김나단
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 CMinimapIconShader::CMinimapIconShader(CCreateMgr *pCreateMgr)
@@ -262,7 +262,7 @@ void CMinimapIconShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuf
 		NULL);
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)

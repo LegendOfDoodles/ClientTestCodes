@@ -11,7 +11,7 @@
 /// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -272,7 +272,7 @@ void CNexusTowerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffe
 		NULL);
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -284,7 +284,7 @@ void CNexusTowerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffe
 		NULL);
 
 	hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
-	assert(SUCCEEDED(hResult) && "m_pBoundingBoxBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)

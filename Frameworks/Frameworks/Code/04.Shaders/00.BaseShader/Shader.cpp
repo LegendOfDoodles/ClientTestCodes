@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -283,7 +283,7 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConsta
 	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	descriptorHeapDesc.NodeMask = 0;
 	HRESULT hResult = pCreateMgr->GetDevice()->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&m_ppCbvSrvDescriptorHeaps[index]));
-	assert(SUCCEEDED(hResult) && "pCreateMgr->GetDevice()->CreateDescriptorHeap Failed");
+	ThrowIfFailed(hResult);
 
 	m_pcbvCPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetCPUDescriptorHandleForHeapStart();
 	m_pcbvGPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetGPUDescriptorHandleForHeapStart();
@@ -494,8 +494,7 @@ void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, 
 	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
 		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
-	assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
-	//ExptProcess::ThrowIfFailed(hResult);
+	ThrowIfFailed(hResult);
 
 	if (isRenderShadow)
 	{
@@ -510,8 +509,7 @@ void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, 
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&ShadowPipelineStateDesc,
 			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
-		assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
-		//ExptProcess::ThrowIfFailed(hResult);
+		ThrowIfFailed(hResult);
 	}
 }
 
@@ -545,8 +543,7 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
 		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
-	assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
-	//ExptProcess::ThrowIfFailed(hResult);
+	ThrowIfFailed(hResult);
 
 	if (isRenderBB)
 	{
@@ -558,8 +555,7 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&BBPipelineStateDesc,
 			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
-		assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
-		//ExptProcess::ThrowIfFailed(hResult);
+		ThrowIfFailed(hResult);
 	}
 
 	if (isRenderShadow)
@@ -573,8 +569,7 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&ShadowPipelineStateDesc,
 			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
-		assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
-		//ExptProcess::ThrowIfFailed(hResult);
+		ThrowIfFailed(hResult);
 	}
 }
 
@@ -608,8 +603,7 @@ void CShader::CreateShader(CCreateMgr * pCreateMgr, ID3D12RootSignature * pGraph
 	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
 		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
-	assert(SUCCEEDED(hResult) && "Device->CreateGraphicsPipelineState Failed");
-	//ExptProcess::ThrowIfFailed(hResult);
+	ThrowIfFailed(hResult);
 }
 
 void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
@@ -683,7 +677,7 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 	nCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	ComPtr<ID3DBlob> pErrorBlob{ NULL };
+	ComPtr<ID3DBlob> pErrorBlob{ nullptr };
 	hResult = D3DCompileFromFile(
 		  pszFileName
 		, NULL
@@ -694,9 +688,8 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 		, 0
 		, ppShaderBlob
 		, &pErrorBlob);
-	assert(SUCCEEDED(hResult) && "D3DCompileFromFile Failed");
-	//ExptProcess::PrintErrorBlob(pErrorBlob);
-	//ExptProcess::ThrowIfFailed(hResult);
+	if(pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
+	ThrowIfFailed(hResult);
 
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = (*ppShaderBlob)->GetBufferSize();

@@ -8,9 +8,9 @@
 
 /// <summary>
 /// 목적: Character Frame UI HP, MP Gauge 쉐이더
-/// 최종 수정자:  이용선
-/// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-06-27
+/// 최종 수정자:  김나단
+/// 수정자 목록:  이용선, 김나단
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 
@@ -214,7 +214,7 @@ void CharacterFrameGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, i
 		NULL);
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CharacterFrameGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)

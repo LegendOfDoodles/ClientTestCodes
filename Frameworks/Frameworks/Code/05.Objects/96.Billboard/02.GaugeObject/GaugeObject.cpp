@@ -3,9 +3,9 @@
 
 /// <summary>
 /// 목적: GaugeObject 
-/// 최종 수정자:  이용선
+/// 최종 수정자:  김나단
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-05-23
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -116,5 +116,5 @@ float CGaugeObject::GetCurrentHP()
 	else if (m_Type == GagueUIType::NexusAndTower) {
 		return (m_pMasterObject->GetNexusAndTowerStatus()->HP / m_pMasterObject->GetNexusAndTowerStatus()->maxHP);
 	}
-
+	return 0;
 }

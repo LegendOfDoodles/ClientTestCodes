@@ -8,7 +8,7 @@
 /// 목적: Billboard 테스트 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffer
 		NULL);
 
 	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	assert(SUCCEEDED(hResult) && "m_pConstBuffer->Map Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)

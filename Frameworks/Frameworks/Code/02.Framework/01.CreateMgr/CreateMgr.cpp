@@ -40,7 +40,7 @@ void CCreateMgr::Release()
 	HRESULT hResult;
 
 	hResult = m_pSwapChain->SetFullscreenState(FALSE, NULL);
-	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
+	ThrowIfFailed(hResult);
 
 	// Root Signature
 	Safe_Release(m_pGraphicsRootSignature);
@@ -77,11 +77,11 @@ void CCreateMgr::OnResizeBackBuffers()
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	hResult = m_pSwapChain->GetDesc(&swapChainDesc);
-	assert(SUCCEEDED(hResult) && "SwapChain->GetDesc Failed");
+	ThrowIfFailed(hResult);
 
 	hResult = m_pSwapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_CNT, m_nWndClientWidth,
 		m_nWndClientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags);
-	assert(SUCCEEDED(hResult) && "ResizeBuffers Failed");
+	ThrowIfFailed(hResult);
 
 	m_renderMgr.SetSwapChainBufferIndex(0);
 
@@ -99,7 +99,7 @@ void CCreateMgr::ChangeScreenMode()
 	BOOL fullScreenState = FALSE;
 
 	hResult = m_pSwapChain->GetFullscreenState(&fullScreenState, NULL);
-	assert(SUCCEEDED(hResult) && "GetFullscreenState Failed");
+	ThrowIfFailed(hResult);
 
 	if (!fullScreenState)
 	{
@@ -113,10 +113,10 @@ void CCreateMgr::ChangeScreenMode()
 		targetParameters.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 
 		hResult = m_pSwapChain->ResizeTarget(&targetParameters);
-		assert(SUCCEEDED(hResult) && "ResizeTarget Failed");
+		ThrowIfFailed(hResult);
 	}
 	hResult = m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
-	assert(SUCCEEDED(hResult) && "SetFullscreenState Failed");
+	ThrowIfFailed(hResult);
 
 	m_renderMgr.WaitForGpuComplete();
 	OnResizeBackBuffers();
@@ -180,7 +180,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 		CreateBufferInitialStates(heapType),
 		NULL,
 		IID_PPV_ARGS(&pBuffer));
-	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
+	ThrowIfFailed(hResult);
 
 	if (pData)
 	{
@@ -194,13 +194,13 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 				hResult = m_pDevice->CreateCommittedResource(&CreateBufferHeapProperties(D3D12_HEAP_TYPE_UPLOAD),
 					D3D12_HEAP_FLAG_NONE, &CreateBufferResourceDesc(nBytes), D3D12_RESOURCE_STATE_GENERIC_READ, NULL,
 					IID_PPV_ARGS(ppUploadBuffer));
-				assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
+				ThrowIfFailed(hResult);
 
 				//업로드 버퍼를 매핑하여 초기화 데이터를 업로드 버퍼에 복사한다.
 				D3D12_RANGE readRange = { 0, 0 };
 				UINT8 *pBufferDataBegin = NULL;
 				hResult = (*ppUploadBuffer)->Map(0, &readRange, (void **)&pBufferDataBegin);
-				assert(SUCCEEDED(hResult) && "(*ppUploadBuffer)->Map Failed");
+				ThrowIfFailed(hResult);
 
 				memcpy(pBufferDataBegin, pData, nBytes);
 				(*ppUploadBuffer)->Unmap(0, NULL);
@@ -217,7 +217,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 			D3D12_RANGE readRange = { 0, 0 };
 			UINT8 *pBufferDataBegin = NULL;
 			hResult = pBuffer->Map(0, &readRange, (void **)&pBufferDataBegin);
-			assert(SUCCEEDED(hResult) && "pBuffer->Map Failed");
+			ThrowIfFailed(hResult);
 
 			memcpy(pBufferDataBegin, pData, nBytes);
 			pBuffer->Unmap(0, NULL);
@@ -252,7 +252,7 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 		vSubresources, 
 		&ddsAlphaMode, 
 		&bIsCubeMap);
-	assert(SUCCEEDED(hResult) && "LoadDDSTextureFromFileEx Failed");
+	ThrowIfFailed(hResult);
 
 	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
 	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
@@ -286,7 +286,7 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		NULL, 
 		IID_PPV_ARGS(ppUploadBuffer));
-	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
+	ThrowIfFailed(hResult);
 
 	::UpdateSubresources(m_pCommandList.Get() , pTexture, *ppUploadBuffer, 0, 0, nSubResources, &vSubresources[0]);
 
@@ -328,7 +328,7 @@ ID3D12Resource * CCreateMgr::CreateTexture2DResource(UINT nWidth, UINT nHeight, 
 		resourceStates,
 		pClearValue,
 		IID_PPV_ARGS(&pTexture));
-	assert(SUCCEEDED(hResult) && "m_pd3dDevice->CreateCommittedResource Failed");
+	ThrowIfFailed(hResult);
 
 	return(pTexture);
 }
@@ -338,13 +338,13 @@ void CCreateMgr::ResetCommandList()
 	m_renderMgr.WaitForGpuComplete();
 
 	HRESULT hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
-	assert(SUCCEEDED(hResult) && "CommandList->Reset Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CCreateMgr::ExecuteCommandList()
 {
 	HRESULT hResult = m_pCommandList->Close();
-	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+	ThrowIfFailed(hResult);
 
 	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
@@ -360,13 +360,13 @@ void CCreateMgr::CreateDirect3dDevice()
 	HRESULT hResult;
 #if defined(_DEBUG)
 	hResult = D3D12GetDebugInterface(IID_PPV_ARGS(m_pDebugController.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "D3D12GetDebugInterface Failed");
+	ThrowIfFailed(hResult);
 
 	m_pDebugController->EnableDebugLayer();
 #endif
 
 	hResult = ::CreateDXGIFactory1(IID_PPV_ARGS(m_pFactory.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateDXGIFactory1 Failed");
+	ThrowIfFailed(hResult);
 
 	//모든 하드웨어 어댑터 대하여 특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성한다.
 	ComPtr<IDXGIAdapter1> pAdapter;
@@ -380,17 +380,17 @@ void CCreateMgr::CreateDirect3dDevice()
 		if (adapterDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
 		if ((hResult = SUCCEEDED(D3D12CreateDevice(pAdapter.Get(), D3D_FEATURE_LEVEL_12_0,
 			IID_PPV_ARGS(m_pDevice.GetAddressOf()))))) break;
-		assert(SUCCEEDED(hResult) && "CreateDevice Failed");
+		ThrowIfFailed(hResult);
 	}
 
 	//특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성할 수 없으면 WARP 디바이스를 생성한다.
 	if (FAILED(hResult))
 	{
 		hResult = m_pFactory->EnumWarpAdapter(IID_PPV_ARGS(pAdapter.GetAddressOf()));
-		assert(SUCCEEDED(hResult) && "EnumWarpAdapter Failed");
+		ThrowIfFailed(hResult);
 		hResult = D3D12CreateDevice(pAdapter.Get(), D3D_FEATURE_LEVEL_11_0,
 			IID_PPV_ARGS(m_pDevice.GetAddressOf()));
-		assert(SUCCEEDED(hResult) && "CreateDevice Failed");
+		ThrowIfFailed(hResult);
 	}
 
 	// MSAA Check
@@ -401,7 +401,7 @@ void CCreateMgr::CreateDirect3dDevice()
 	d3dMsaaQualityLevels.NumQualityLevels = 0;
 	hResult = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS,
 		&d3dMsaaQualityLevels, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
-	assert(SUCCEEDED(hResult) && "CheckFeatureSupport Failed");
+	ThrowIfFailed(hResult);
 
 	m_nMsaa4xQualityLevels = d3dMsaaQualityLevels.NumQualityLevels;
 
@@ -413,7 +413,7 @@ void CCreateMgr::CreateDirect3dDevice()
 		0, 
 		D3D12_FENCE_FLAG_NONE,
 		IID_PPV_ARGS(m_pFence.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateFence Failed");
+	ThrowIfFailed(hResult);
 
 	m_renderMgr.SetFence(m_pFence);
 
@@ -436,7 +436,7 @@ void CCreateMgr::CreateCommandQueueAndList()
 	hResult = m_pDevice->CreateCommandQueue(
 		&commandQueueDesc,
 		IID_PPV_ARGS(m_pCommandQueue.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateCommandQueue Failed");
+	ThrowIfFailed(hResult);
 
 	m_renderMgr.SetCommandQueue(m_pCommandQueue);
 
@@ -444,7 +444,7 @@ void CCreateMgr::CreateCommandQueueAndList()
 	hResult = m_pDevice->CreateCommandAllocator(
 		D3D12_COMMAND_LIST_TYPE_DIRECT,
 		IID_PPV_ARGS(m_pCommandAllocator.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateCommandAllocator Failed");
+	ThrowIfFailed(hResult);
 	
 	m_renderMgr.SetCommandAllocator(m_pCommandAllocator);
 
@@ -456,10 +456,10 @@ void CCreateMgr::CreateCommandQueueAndList()
 		NULL,
 		IID_PPV_ARGS(m_pCommandList.GetAddressOf()));
 	m_renderMgr.SetCommandList(m_pCommandList);
-	assert(SUCCEEDED(hResult) && "CreateCommandList Failed");
+	ThrowIfFailed(hResult);
 
 	hResult = m_pCommandList->Close();
-	assert(SUCCEEDED(hResult) && "CommandList->Close Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CCreateMgr::CreateSwapChain()
@@ -496,13 +496,13 @@ void CCreateMgr::CreateSwapChain()
 		m_pCommandQueue.Get(),
 		&swapChainDesc, 
 		(IDXGISwapChain **)m_pSwapChain.GetAddressOf());
-	assert(SUCCEEDED(hResult) && "CreateSwapChain Failed");
+	ThrowIfFailed(hResult);
 
 	m_renderMgr.SetSwapChain(m_pSwapChain);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
 	hResult = m_pFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
-	assert(SUCCEEDED(hResult) && "MakeWindowAssociation Failed");
+	ThrowIfFailed(hResult);
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
 	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
@@ -523,7 +523,7 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	hResult = m_pDevice->CreateDescriptorHeap(
 		&descriptorHeapDesc,
 		IID_PPV_ARGS(m_pRtvDescriptorHeap.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateDescriptorHeap Failed");
+	ThrowIfFailed(hResult);
 
 	// Create Depth Stencil View Descriptor Heap
 	descriptorHeapDesc.NumDescriptors = 2;
@@ -532,7 +532,7 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	hResult = m_pDevice->CreateDescriptorHeap(
 		&descriptorHeapDesc,
 		IID_PPV_ARGS(m_pDsvDescriptorHeap.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateDescriptorHeap Failed");
+	ThrowIfFailed(hResult);
 }
 
 void CCreateMgr::CreateSwapChainRenderTargetViews()
@@ -596,7 +596,7 @@ void CCreateMgr::CreateDepthStencilView()
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
 		&clearValue,
 		IID_PPV_ARGS(m_pDepthStencilBuffer.GetAddressOf()));
-	assert(SUCCEEDED(hResult) && "CreateCommittedResource Failed");
+	ThrowIfFailed(hResult);
 
 	// Create Depth Stencil View
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUDescriptorHandle =
@@ -815,8 +815,8 @@ void CCreateMgr::CreateGraphicsRootSignature()
 		pSignatureBlob->GetBufferPointer(),
 		pSignatureBlob->GetBufferSize(),
 		IID_PPV_ARGS(&m_pGraphicsRootSignature));
-	assert(SUCCEEDED(hResult) && "CreateRootSignature Failed");
-	// ExptProcess::PrintErrorBlob(pErrorBlob);
+	if (pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
+	ThrowIfFailed(hResult);
 
 	m_renderMgr.SaveGraphicsRootSignature(m_pGraphicsRootSignature);
 }
