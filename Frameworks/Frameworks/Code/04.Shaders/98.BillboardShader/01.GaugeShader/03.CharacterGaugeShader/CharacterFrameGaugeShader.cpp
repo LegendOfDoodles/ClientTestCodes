@@ -172,22 +172,22 @@ D3D12_BLEND_DESC CharacterFrameGaugeShader::CreateBlendState()
 	return(blendDesc);
 }
 
-D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"VSTexturedGauge",
 		"vs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CharacterFrameGaugeShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"PSTexturedIconGauge",
 		"ps_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
 void CharacterFrameGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)

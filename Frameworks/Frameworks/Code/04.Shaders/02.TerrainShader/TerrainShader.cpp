@@ -91,76 +91,76 @@ D3D12_INPUT_LAYOUT_DESC CTerrainShader::CreateInputLayout()
 	return(inputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
 		"VSTerrain", 
 		"vs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateHullShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"HSTerrain",
 		"hs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateDomainShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"DSTerrain",
 		"ds_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
 		"PSTerrain", 
 		"ps_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
 		"VSTerrain",
 		"vs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowHullShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
 		"HSTerrain",
 		"hs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowDomainShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
 		"DSTerrain",
 		"ds_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowPixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowPixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
 		"PSTerrain",
 		"ps_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
 void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)

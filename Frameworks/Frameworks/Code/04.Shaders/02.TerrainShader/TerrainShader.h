@@ -23,15 +23,15 @@ public: // 공개 함수
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
-	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateHullShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateDomainShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ID3DBlob **ppShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateShadowHullShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ID3DBlob **ppShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowHullShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
 	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);

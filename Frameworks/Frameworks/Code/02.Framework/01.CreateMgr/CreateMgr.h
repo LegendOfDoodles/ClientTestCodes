@@ -45,7 +45,7 @@ public:	// 공개 함수
 	ComPtr<ID3D12Device> GetDevice() { return m_pDevice; }
 	ComPtr<ID3D12GraphicsCommandList> GetCommandList() { return m_pCommandList; }
 
-	ID3D12RootSignature* GetGraphicsRootSignature() { return m_pGraphicsRootSignature; }
+	ComPtr<ID3D12RootSignature> GetGraphicsRootSignature() { return m_pGraphicsRootSignature; }
 
 	HWND GetHwnd() { return m_hWnd; }
 
@@ -119,7 +119,7 @@ private:	 // 변수
 	shared_ptr<CTextureToFullScreenShader> m_pTextureToFullScreenShader;
 
 	// Root Signature
-	ID3D12RootSignature *m_pGraphicsRootSignature{ NULL };
+	ComPtr<ID3D12RootSignature> m_pGraphicsRootSignature;
 
 	// Render Manager
 	CRenderMgr m_renderMgr;

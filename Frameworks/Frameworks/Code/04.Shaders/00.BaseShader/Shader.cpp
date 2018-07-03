@@ -372,7 +372,7 @@ void CShader::CreateShaderResourceViews(
 	}
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
@@ -381,7 +381,7 @@ D3D12_SHADER_BYTECODE CShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
 	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateHullShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
@@ -390,7 +390,7 @@ D3D12_SHADER_BYTECODE CShader::CreateHullShader(ID3DBlob ** ppd3dShaderBlob)
 	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateDomainShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
@@ -399,7 +399,7 @@ D3D12_SHADER_BYTECODE CShader::CreateDomainShader(ID3DBlob ** ppd3dShaderBlob)
 	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = 0;
@@ -408,25 +408,25 @@ D3D12_SHADER_BYTECODE CShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
 	return(d3dShaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"VSDiffused",
 		"vs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxPixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateBoundingBoxPixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"PSDiffused",
 		"ps_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateShadowHullShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateShadowHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
@@ -435,7 +435,7 @@ D3D12_SHADER_BYTECODE CShader::CreateShadowHullShader(ID3DBlob ** ppd3dShaderBlo
 	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateShadowDomainShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateShadowDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
@@ -444,7 +444,7 @@ D3D12_SHADER_BYTECODE CShader::CreateShadowDomainShader(ID3DBlob ** ppd3dShaderB
 	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	D3D12_SHADER_BYTECODE shaderByteCode;
 	shaderByteCode.BytecodeLength = 0;
@@ -453,29 +453,29 @@ D3D12_SHADER_BYTECODE CShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob
 	return(shaderByteCode);
 }
 
-D3D12_SHADER_BYTECODE CShader::CreateShadowPixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CShader::CreateShadowPixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
 		"PSMain",
 		"ps_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
 void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderShadow)
 {
 	int index{ 0 };
 	HRESULT hResult;
-	ComPtr<ID3DBlob> pVertexShaderBlob{ NULL }, pHullShaderBlob{ NULL }, pDomainShaderBlob{ NULL }, pPixelShaderBlob{ NULL };
+	ComPtr<ID3DBlob> pVertexShaderBlob, pHullShaderBlob, pDomainShaderBlob, pPixelShaderBlob;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
 	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 
-	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature();
-	pipelineStateDesc.VS = CreateVertexShader(&pVertexShaderBlob);
-	pipelineStateDesc.HS = CreateHullShader(&pHullShaderBlob);
-	pipelineStateDesc.DS = CreateDomainShader(&pDomainShaderBlob);
-	pipelineStateDesc.PS = CreatePixelShader(&pPixelShaderBlob);
+	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature().Get();
+	pipelineStateDesc.VS = CreateVertexShader(pVertexShaderBlob);
+	pipelineStateDesc.HS = CreateHullShader(pHullShaderBlob);
+	pipelineStateDesc.DS = CreateDomainShader(pDomainShaderBlob);
+	pipelineStateDesc.PS = CreatePixelShader(pPixelShaderBlob);
 	pipelineStateDesc.RasterizerState = CreateRasterizerState();
 	pipelineStateDesc.BlendState = CreateBlendState();
 	pipelineStateDesc.DepthStencilState = CreateDepthStencilState();
@@ -499,10 +499,10 @@ void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, 
 	if (isRenderShadow)
 	{
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC ShadowPipelineStateDesc{ pipelineStateDesc };
-		ShadowPipelineStateDesc.VS = CreateShadowVertexShader(&pVertexShaderBlob);
-		ShadowPipelineStateDesc.HS = CreateShadowHullShader(&pHullShaderBlob);
-		ShadowPipelineStateDesc.DS = CreateShadowDomainShader(&pDomainShaderBlob);
-		ShadowPipelineStateDesc.PS = CreateShadowPixelShader(&pPixelShaderBlob);
+		ShadowPipelineStateDesc.VS = CreateShadowVertexShader(pVertexShaderBlob);
+		ShadowPipelineStateDesc.HS = CreateShadowHullShader(pHullShaderBlob);
+		ShadowPipelineStateDesc.DS = CreateShadowDomainShader(pDomainShaderBlob);
+		ShadowPipelineStateDesc.PS = CreateShadowPixelShader(pPixelShaderBlob);
 		pipelineStateDesc.RasterizerState = CreateShadowRasterizerState();
 		pipelineStateDesc.NumRenderTargets = 0;
 		pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
@@ -517,14 +517,14 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 {
 	int index{ 0 };
 	HRESULT hResult;
-	ComPtr<ID3DBlob> pVertexShaderBlob{ NULL }, pPixelShaderBlob{ NULL };
+	ComPtr<ID3DBlob> pVertexShaderBlob, pPixelShaderBlob;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
 	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 
-	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature();
-	pipelineStateDesc.VS = CreateVertexShader(&pVertexShaderBlob);
-	pipelineStateDesc.PS = CreatePixelShader(&pPixelShaderBlob);
+	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature().Get();
+	pipelineStateDesc.VS = CreateVertexShader(pVertexShaderBlob);
+	pipelineStateDesc.PS = CreatePixelShader(pPixelShaderBlob);
 	pipelineStateDesc.RasterizerState = CreateRasterizerState();
 	pipelineStateDesc.BlendState = CreateBlendState();
 	pipelineStateDesc.DepthStencilState = CreateDepthStencilState();
@@ -548,8 +548,8 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 	if (isRenderBB)
 	{
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC BBPipelineStateDesc{ pipelineStateDesc };
-		BBPipelineStateDesc.VS = CreateBoundingBoxVertexShader(&pVertexShaderBlob);
-		BBPipelineStateDesc.PS = CreateBoundingBoxPixelShader(&pPixelShaderBlob);
+		BBPipelineStateDesc.VS = CreateBoundingBoxVertexShader(pVertexShaderBlob);
+		BBPipelineStateDesc.PS = CreateBoundingBoxPixelShader(pPixelShaderBlob);
 		BBPipelineStateDesc.RasterizerState = CreateBoundingBoxRasterizerState();
 		BBPipelineStateDesc.InputLayout = CreateBoundingBoxInputLayout();
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
@@ -561,8 +561,8 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 	if (isRenderShadow)
 	{
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC ShadowPipelineStateDesc{ pipelineStateDesc };
-		ShadowPipelineStateDesc.VS = CreateShadowVertexShader(&pVertexShaderBlob);
-		ShadowPipelineStateDesc.PS = CreateShadowPixelShader(&pPixelShaderBlob);
+		ShadowPipelineStateDesc.VS = CreateShadowVertexShader(pVertexShaderBlob);
+		ShadowPipelineStateDesc.PS = CreateShadowPixelShader(pPixelShaderBlob);
 		pipelineStateDesc.RasterizerState = CreateShadowRasterizerState();
 		pipelineStateDesc.NumRenderTargets = 0;
 		pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
@@ -573,18 +573,18 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 	}
 }
 
-void CShader::CreateShader(CCreateMgr * pCreateMgr, ID3D12RootSignature * pGraphicsRootSignature, UINT nRenderTargets)
+void CShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets)
 {
 	int index{ 0 };
 	HRESULT hResult;
-	ComPtr<ID3DBlob> pVertexShaderBlob{ NULL }, pPixelShaderBlob{ NULL };
+	ComPtr<ID3DBlob> pVertexShaderBlob, pPixelShaderBlob;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
 	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 
-	pipelineStateDesc.pRootSignature = pGraphicsRootSignature;
-	pipelineStateDesc.VS = CreateVertexShader(&pVertexShaderBlob);
-	pipelineStateDesc.PS = CreatePixelShader(&pPixelShaderBlob);
+	pipelineStateDesc.pRootSignature = pGraphicsRootSignature.Get();
+	pipelineStateDesc.VS = CreateVertexShader(pVertexShaderBlob);
+	pipelineStateDesc.PS = CreatePixelShader(pPixelShaderBlob);
 	pipelineStateDesc.RasterizerState = CreateRasterizerState();
 	pipelineStateDesc.BlendState = CreateBlendState();
 	pipelineStateDesc.DepthStencilState = CreateDepthStencilState();
@@ -668,7 +668,7 @@ void CShader::OnPrepareRenderForBB()
 
 D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 	WCHAR *pszFileName, LPCSTR pszShaderName,
-	LPCSTR pszShaderProfile, ID3DBlob **ppShaderBlob)
+	LPCSTR pszShaderProfile, ComPtr<ID3DBlob>& pShaderBlob)
 {
 	HRESULT hResult;
 	UINT nCompileFlags{ 0 };
@@ -686,14 +686,14 @@ D3D12_SHADER_BYTECODE CShader::CompileShaderFromFile(
 		, pszShaderProfile
 		, nCompileFlags
 		, 0
-		, ppShaderBlob
-		, &pErrorBlob);
+		, pShaderBlob.GetAddressOf()
+		, pErrorBlob.GetAddressOf());
 	if(pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
 	ThrowIfFailed(hResult);
 
 	D3D12_SHADER_BYTECODE shaderByteCode;
-	shaderByteCode.BytecodeLength = (*ppShaderBlob)->GetBufferSize();
-	shaderByteCode.pShaderBytecode = (*ppShaderBlob)->GetBufferPointer();
+	shaderByteCode.BytecodeLength = pShaderBlob->GetBufferSize();
+	shaderByteCode.pShaderBytecode = pShaderBlob->GetBufferPointer();
 
 	return(shaderByteCode);
 }

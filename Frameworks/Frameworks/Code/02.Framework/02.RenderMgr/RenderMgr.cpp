@@ -69,7 +69,7 @@ void CRenderMgr::RenderDepth(CScene * pScene)
 	// Set Render Target and Depth Stencil
 	m_pCommandList->OMSetRenderTargets(0, NULL, FALSE, &m_dsvShadowBufferCPUHandle);
 
-	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
+	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature.Get());
 
 	// Set Camera Matrices
 	pScene->UpdateShadowCamera();
@@ -108,7 +108,7 @@ void CRenderMgr::RenderColor(CScene * pScene)
 	m_pCommandList->OMSetRenderTargets(RENDER_TARGET_BUFFER_CNT, m_pRtvRenderTargetBufferCPUHandles,
 		TRUE, &m_dsvDepthStencilBufferCPUHandle);
 
-	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature);
+	m_pCommandList->SetGraphicsRootSignature(m_pGraphicsRootSignature.Get());
 
 	// Update Camera
 	pScene->UpdateCamera();

@@ -48,7 +48,7 @@ public: // 공개 함수
 	virtual CBaseObject * * GetCollisionObjects() { return nullptr; }
 
 	void SaveBoundingBoxHeapNumber(int n) { m_boundingBoxHeapNumber = n; }
-	ID3D12RootSignature *GetGraphicsRootSignature() { return(m_pGraphicsRootSignature); }
+	ComPtr<ID3D12RootSignature> GetGraphicsRootSignature() { return(m_pGraphicsRootSignature); }
 
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
@@ -69,22 +69,22 @@ protected: // 내부 함수
 	void GetShaderResourceViewDesc(D3D12_RESOURCE_DESC resourceDesc, UINT nTextureType, D3D12_SHADER_RESOURCE_VIEW_DESC *pShaderResourceViewDesc);
 	void CreateShaderResourceViews(CCreateMgr *pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index = 0);
 
-	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateHullShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateDomainShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	D3D12_SHADER_BYTECODE CreateBoundingBoxVertexShader(ID3DBlob **ppShaderBlob);
-	D3D12_SHADER_BYTECODE CreateBoundingBoxPixelShader(ID3DBlob **ppShaderBlob);
+	D3D12_SHADER_BYTECODE CreateBoundingBoxVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
+	D3D12_SHADER_BYTECODE CreateBoundingBoxPixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ID3DBlob **ppShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateShadowHullShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ID3DBlob **ppShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowHullShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ComPtr<ID3DBlob>& pShaderBlob);
+	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
 	virtual void CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderShadow = false);
 	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShader(CCreateMgr *pCreateMgr, ID3D12RootSignature *pGraphicsRootSignature, UINT nRenderTargets = 1);
+	virtual void CreateShader(CCreateMgr *pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets = 1);
 
 	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
 
@@ -97,7 +97,7 @@ protected: // 내부 함수
 	void OnPrepareRenderForBB();
 
 	D3D12_SHADER_BYTECODE CompileShaderFromFile(WCHAR *pszFileName, LPCSTR pszShaderName,
-		LPCSTR pszShaderProfile, ID3DBlob **ppShaderBlob);
+		LPCSTR pszShaderProfile, ComPtr<ID3DBlob>& pShaderBlob);
 
 protected: // 변수
 	int m_nReferences{ 0 };
@@ -127,6 +127,6 @@ protected: // 변수
 
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
-	ID3D12RootSignature				*m_pGraphicsRootSignature{ NULL };
+	ComPtr<ID3D12RootSignature>		m_pGraphicsRootSignature;
 };
 

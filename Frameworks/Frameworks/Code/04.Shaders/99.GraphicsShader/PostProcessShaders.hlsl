@@ -34,6 +34,7 @@ float4 VSTextureToFullScreen(uint nVertexID : SV_VertexID) : SV_POSITION
 float4 CalculateOutlineColor(int2 pos)
 {
     float outlineCnt = 0;
+    float4 color = float4(0, 0, 0, 1);
 
     for (float i = -OUTLINE_POWER; i <= OUTLINE_POWER; ++i)
     {
@@ -47,9 +48,11 @@ float4 CalculateOutlineColor(int2 pos)
         outlineCnt += gtxtSceneRoughMetalFresnel[int2(pos.x + i, pos.y + i)].a * 0.5;
     }
     if (outlineCnt >= 2 && outlineCnt < 6)
-        return float4(1, 1, 1, 1);
+    {
+        color= 1;
+    }
 
-    return float4(0, 0, 0, 1);
+    return color;
 }
 
 float4 CalculateEmissiveColor(int2 pos)

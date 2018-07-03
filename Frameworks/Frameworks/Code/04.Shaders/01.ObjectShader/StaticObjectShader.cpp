@@ -187,23 +187,31 @@ D3D12_INPUT_LAYOUT_DESC CStaticObjectShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CStaticObjectShader::CreateVertexShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CStaticObjectShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "VSTexturedLighting", "vs_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
+		"VSTexturedLighting", 
+		"vs_5_1",
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CStaticObjectShader::CreatePixelShader(ID3DBlob **ppShaderBlob)
+D3D12_SHADER_BYTECODE CStaticObjectShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", "PSTexturedLightingDetail", "ps_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
+		"PSTexturedLightingDetail", 
+		"ps_5_1", 
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CStaticObjectShader::CreateShadowVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CStaticObjectShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
 		"VSTexturedLighting",
 		"vs_5_1",
-		ppShaderBlob));
+		pShaderBlob));
 }
 
 void CStaticObjectShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)

@@ -6,7 +6,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -41,9 +41,6 @@ void CCreateMgr::Release()
 
 	hResult = m_pSwapChain->SetFullscreenState(FALSE, NULL);
 	ThrowIfFailed(hResult);
-
-	// Root Signature
-	Safe_Release(m_pGraphicsRootSignature);
 
 	// Render Manager
 	m_renderMgr.Release();
@@ -814,7 +811,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 		0,
 		pSignatureBlob->GetBufferPointer(),
 		pSignatureBlob->GetBufferSize(),
-		IID_PPV_ARGS(&m_pGraphicsRootSignature));
+		IID_PPV_ARGS(m_pGraphicsRootSignature.GetAddressOf()));
 	if (pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
 	ThrowIfFailed(hResult);
 

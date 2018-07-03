@@ -48,7 +48,7 @@ public:	// 공개 함수
 	void SetFence(ComPtr<ID3D12Fence> pFence) { m_pFence = pFence; }
 
 	// Set GraphicsRootSignature
-	void SaveGraphicsRootSignature(ID3D12RootSignature *pGraphicsRootSignature) { m_pGraphicsRootSignature = pGraphicsRootSignature; }
+	void SaveGraphicsRootSignature(ComPtr<ID3D12RootSignature> pGraphicsRootSignature) { m_pGraphicsRootSignature = pGraphicsRootSignature; }
 	void SetTextureToFullScreenShader(shared_ptr<CTextureToFullScreenShader> pTTFSShader) { m_pTextureToFullScreenShader = pTTFSShader; }
 
 	// Set ShadowMap Texture
@@ -88,6 +88,6 @@ private:	// 변수
 	shared_ptr<CTextureToFullScreenShader> m_pTextureToFullScreenShader;
 
 	// Root Signature
-	ID3D12RootSignature *m_pGraphicsRootSignature{ NULL };
+	ComPtr<ID3D12RootSignature> m_pGraphicsRootSignature;
 };
 

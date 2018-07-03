@@ -168,7 +168,7 @@ void CTextureToFullScreenShader::CreateShaderResourceViews(CCreateMgr * pCreateM
 	pTexture->SetRootArgument(RENDER_TARGET_BUFFER_CNT, nRootParameterStartIndex, srvGPUDescriptorHandle);
 }
 
-void CTextureToFullScreenShader::CreateShader(CCreateMgr * pCreateMgr, ID3D12RootSignature * pGraphicsRootSignature, UINT nRenderTargets)
+void CTextureToFullScreenShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets)
 {
 	m_nPipelineStates = 1;
 	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
@@ -213,17 +213,20 @@ D3D12_INPUT_LAYOUT_DESC CTextureToFullScreenShader::CreateInputLayout()
 	return(inputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CTextureToFullScreenShader::CreateVertexShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTextureToFullScreenShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/PostProcessShaders.hlsl", "VSTextureToFullScreen", "vs_5_1", ppShaderBlob));
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/PostProcessShaders.hlsl",
+		"VSTextureToFullScreen",
+		"vs_5_1",
+		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CTextureToFullScreenShader::CreatePixelShader(ID3DBlob ** ppShaderBlob)
+D3D12_SHADER_BYTECODE CTextureToFullScreenShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"./code/04.Shaders/99.GraphicsShader/PostProcessShaders.hlsl", "PSTextureToFullScreen", "ps_5_1", ppShaderBlob));
-}
-
-void CTextureToFullScreenShader::ReleaseObjects()
-{
-	Safe_Release(m_pGraphicsRootSignature);
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/PostProcessShaders.hlsl",
+		"PSTextureToFullScreen",
+		"ps_5_1",
+		pShaderBlob));
 }
