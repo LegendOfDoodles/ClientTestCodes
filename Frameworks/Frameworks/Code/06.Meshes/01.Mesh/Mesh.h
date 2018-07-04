@@ -7,7 +7,7 @@ class CSkinnedVertex;
 class CMesh
 {
 public: // 생성자, 소멸자
-	CMesh(CCreateMgr *pCreateMgr);
+	CMesh(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CMesh();
 
 public: // 공개 함수
@@ -65,7 +65,7 @@ protected: // 변수
 class CMeshTextured : public CMesh
 {
 public: // 생성자, 소멸자
-	CMeshTextured(CCreateMgr *pCreateMgr);
+	CMeshTextured(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CMeshTextured();
 };
 
@@ -74,7 +74,7 @@ public: // 생성자, 소멸자
 class CMeshIlluminated : public CMesh
 {
 public: // 생성자, 소멸자
-	CMeshIlluminated(CCreateMgr *pCreateMgr);
+	CMeshIlluminated(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CMeshIlluminated();
 
 public: // 공개 함수
@@ -92,8 +92,8 @@ public: // 공개 함수
 class CMeshIlluminatedTextured : public CMeshIlluminated
 {
 public: // 생성자, 소멸자
-	CMeshIlluminatedTextured(CCreateMgr *pCreateMgr);
-	CMeshIlluminatedTextured(CCreateMgr *pCreateMgr, UINT nVertices, XMFLOAT3 *pxmf3Positions, XMFLOAT3 *pxmf3Normals, XMFLOAT2 *pxmf2UVs, UINT nIndices, UINT *pnIndices);
+	CMeshIlluminatedTextured(shared_ptr<CCreateMgr> pCreateMgr);
+	CMeshIlluminatedTextured(shared_ptr<CCreateMgr> pCreateMgr, UINT nVertices, XMFLOAT3 *pxmf3Positions, XMFLOAT3 *pxmf3Normals, XMFLOAT2 *pxmf2UVs, UINT nIndices, UINT *pnIndices);
 	virtual ~CMeshIlluminatedTextured();
 };
 
@@ -102,7 +102,7 @@ public: // 생성자, 소멸자
 class CSkinnedMesh : public CMeshIlluminatedTextured
 {
 public: // 생성자, 소멸자
-	CSkinnedMesh(CCreateMgr* pCreateMgr, char* in);
+	CSkinnedMesh(shared_ptr<CCreateMgr> pCreateMgr, char* in);
 	virtual ~CSkinnedMesh();
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ public: // 생성자, 소멸자
 class CStaticMesh : public CMeshIlluminatedTextured
 {
 public: // 생성자, 소멸자
-	CStaticMesh(CCreateMgr* pCreateMgr, char* in, XMFLOAT3 scalevalue = XMFLOAT3(1,1,1));
+	CStaticMesh(shared_ptr<CCreateMgr> pCreateMgr, char* in, XMFLOAT3 scalevalue = XMFLOAT3(1,1,1));
 	virtual ~CStaticMesh();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ private: // 변수
 class CHeightMapGridMesh : public CMesh
 {
 public: // 생성자, 소멸자
-	CHeightMapGridMesh(CCreateMgr *pCreateMgr, int nWidth, int nLength);
+	CHeightMapGridMesh(shared_ptr<CCreateMgr> pCreateMgr, int nWidth, int nLength);
 	virtual ~CHeightMapGridMesh();
 
 public: // 공개 함수
@@ -166,7 +166,7 @@ protected: // 변수
 class CTexturedRectMesh : public CMesh
 {
 public: // 생성자, 소멸자
-	CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
+	CTexturedRectMesh(shared_ptr<CCreateMgr> pCreateMgr, float fWidth = 20.0f, float fHeight = 20.0f, float fDepth = 20.0f, float fxPosition = 0.0f, float fyPosition = 0.0f, float fzPosition = 0.0f);
 	virtual ~CTexturedRectMesh();
 };
 
@@ -175,7 +175,7 @@ public: // 생성자, 소멸자
 class CArrowMesh : public CMesh
 {
 public: // 생성자, 소멸자
-	CArrowMesh(CCreateMgr *pCreateMgr, float length = 100.0f);
+	CArrowMesh(shared_ptr<CCreateMgr> pCreateMgr, float length = 100.0f);
 	virtual ~CArrowMesh();
 };
 
@@ -185,7 +185,7 @@ class CCubeMesh : public CMesh
 {
 public: // 생성자, 소멸자
 	//직육면체의 가로, 세로, 깊이의 길이를 지정하여 직육면체 메쉬를 생성한다.
-	CCubeMesh(CCreateMgr *pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
+	CCubeMesh(shared_ptr<CCreateMgr> pCreateMgr, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f, float xOffset = 0.0f, float yOffSet = 0.0f, float zOffSet = 0.0f);
 	virtual ~CCubeMesh();
 };
 

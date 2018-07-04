@@ -5,8 +5,8 @@
 class CIconObject :public CUIFrameObject
 {
 public:
-	CIconObject(CCreateMgr *pCreateMgr);
-	CIconObject(CCreateMgr *pCreateMgr, IconUIType type);
+	CIconObject(shared_ptr<CCreateMgr> pCreateMgr);
+	CIconObject(shared_ptr<CCreateMgr> pCreateMgr, IconUIType type);
 	virtual ~CIconObject();
 
 	virtual void Animate(float fTimeElapsed);

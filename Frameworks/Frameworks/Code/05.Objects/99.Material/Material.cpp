@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CMaterial::CMaterial(CCreateMgr *pCreateMgr)
+CMaterial::CMaterial(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 }
@@ -24,7 +24,7 @@ CMaterial::~CMaterial()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CMaterial::Initialize(CCreateMgr *pCreateMgr)
+void CMaterial::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	CreateShaderVariables(pCreateMgr);
 }
@@ -76,7 +76,7 @@ void CMaterial::SetShader(CShader *pShader)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CMaterial::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CMaterial::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	UINT ncbMaterialBytes = ((sizeof(COLOR) + 255) & ~255); //256의 배수
 	m_pcbColor = pCreateMgr->CreateBufferResource(

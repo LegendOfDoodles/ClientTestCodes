@@ -12,7 +12,7 @@ class CUIObjectManager;
 class CMinionHPGaugeShader : public CShader
 {
 public: // 생성자, 소멸자
-	CMinionHPGaugeShader(CCreateMgr *pCreateMgr);
+	CMinionHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CMinionHPGaugeShader();
 
 public: // 공개 함수
@@ -24,9 +24,9 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void GetCamera(CCamera *pCamera);
+	virtual void SetCamera(CCamera *pCamera);
 
-	void SetUIObjectsManager(CUIObjectManager * pManger);
+	void SetUIObjectsManager(shared_ptr<CUIObjectManager> pManger);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -37,10 +37,9 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
@@ -51,7 +50,8 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
 
 protected: // 변수
-	CUIObjectManager * m_pGaugeManger{ NULL };
+	shared_ptr<CCreateMgr> m_pCreateMgr;
+	shared_ptr<CUIObjectManager> m_pGaugeManger;
 
 	CCamera *m_pCamera;
 
@@ -59,10 +59,5 @@ protected: // 변수
 	HPGaugeObjectList m_HPGaugeObjectList;
 
 	bool m_indexArr[MAX_MINION]{ false };
-
-	UINT8 *m_pMappedObjects{ NULL };
-
-	CCreateMgr* m_pCreateMgr{ NULL };
-
 };
 

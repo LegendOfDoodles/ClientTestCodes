@@ -13,7 +13,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CBillboardShader::CBillboardShader(CCreateMgr *pCreateMgr)
+CBillboardShader::CBillboardShader(shared_ptr<CCreateMgr> pCreateMgr)
 	: CShader(pCreateMgr)
 {
 }
@@ -139,34 +139,16 @@ D3D12_SHADER_BYTECODE CBillboardShader::CreatePixelShader(ComPtr<ID3DBlob>& pSha
 		pShaderBlob));
 }
 
-void CBillboardShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CBillboardShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CBillboardShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-}
-
-void CBillboardShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CBillboardShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	UNREFERENCED_PARAMETER(pCreateMgr);
 	UNREFERENCED_PARAMETER(pContext);

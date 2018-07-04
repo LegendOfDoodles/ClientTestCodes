@@ -4,8 +4,8 @@
 class CSkillObject : public CBillboardObject
 {
 public:
-	CSkillObject(CCreateMgr *pCreateMgr);
-	CSkillObject(CCreateMgr *pCreateMgr, SkillUIType type);
+	CSkillObject(shared_ptr<CCreateMgr> pCreateMgr);
+	CSkillObject(shared_ptr<CCreateMgr> pCreateMgr, SkillUIType type);
 	virtual ~CSkillObject();
 
 public: // 공개함수

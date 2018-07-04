@@ -6,7 +6,7 @@
 /// 목적: ShadowMap 생성용 카메라
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-06-29
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ CLightCamera::~CLightCamera()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CLightCamera::Initialize(CCreateMgr * pCreateMgr)
+void CLightCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	float width{ TERRAIN_SIZE_WIDTH / 2 };
 	float height{ TERRAIN_SIZE_HEIGHT / 2 };

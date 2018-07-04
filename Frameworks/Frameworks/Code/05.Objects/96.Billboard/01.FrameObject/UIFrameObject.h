@@ -4,8 +4,8 @@
 class CUIFrameObject : public CBillboardObject
 {
 public:
-	CUIFrameObject(CCreateMgr *pCreateMgr);
-	CUIFrameObject(CCreateMgr *pCreateMgr, UIFrameType type);
+	CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr);
+	CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType type);
 	virtual ~CUIFrameObject();
 
 public: // 공개함수

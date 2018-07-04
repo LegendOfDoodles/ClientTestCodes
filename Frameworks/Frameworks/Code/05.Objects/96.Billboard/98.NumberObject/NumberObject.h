@@ -4,8 +4,8 @@
 class CNumberOjbect : public CBillboardObject
 {
 public:
-	CNumberOjbect(CCreateMgr *pCreateMgr);
-	CNumberOjbect(CCreateMgr *pCreateMgr, NumberType type);
+	CNumberOjbect(shared_ptr<CCreateMgr> pCreateMgr);
+	CNumberOjbect(shared_ptr<CCreateMgr> pCreateMgr, NumberType type);
 	virtual ~CNumberOjbect();
 
 public: // 공개함수

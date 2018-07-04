@@ -7,11 +7,11 @@ class CCollisionManager;
 class CPlayerShader : public CShader
 {
 public:
-	CPlayerShader(CCreateMgr *pCreateMgr);
+	CPlayerShader(shared_ptr<CCreateMgr> pCreateMgr);
 	~CPlayerShader();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseUploadBuffers();
 
@@ -29,7 +29,7 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
-	void SetColManagerToObject(CCollisionManager* manager);
+	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 	
 	virtual CBaseObject **GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() { return m_nObjects; }
@@ -42,17 +42,13 @@ protected: // 내부 함수
 
 	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
-	int m_nObjects = 0;
-
 	int m_nSword{ 0 };
 	int m_nSteff{ 0 };
 	int m_nBow{ 0 };
@@ -63,10 +59,5 @@ protected: // 변수
 	CSkinnedMesh** m_pBow{ NULL };
 	int m_nWeaponState{ 0 };
 
-	UINT8 *m_pMappedObjects{ NULL };
-	UINT8 *m_pMappedBoundingBoxes{ NULL };
-
 	CHeightMapTerrain * m_pTerrain{ NULL };
-
-	int m_FrameCheck = 0;
 };

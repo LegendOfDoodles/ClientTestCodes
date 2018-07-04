@@ -15,11 +15,11 @@ struct COLOR
 class CMaterial
 {
 public:	// 생성자, 소멸자
-	CMaterial(CCreateMgr *pCreateMgr);
+	CMaterial(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CMaterial();
 
 public: // 공개 함수
-	void Initialize(CCreateMgr *pCreateMgr);
+	void Initialize(shared_ptr<CCreateMgr> pCreateMgr);
 	void Finalize();
 
 	void ReleaseUploadBuffers();
@@ -41,7 +41,7 @@ public: // 공개 함수
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 protected: // 내부 함수
-	void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	void CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr);
 	void ReleaseShaderVariables();
 	void UpdateShaderVariable();
 

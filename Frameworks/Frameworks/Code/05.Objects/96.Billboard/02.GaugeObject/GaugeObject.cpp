@@ -10,12 +10,12 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CGaugeObject::CGaugeObject(CCreateMgr * pCreateMgr)
+CGaugeObject::CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr)
 	: CBillboardObject(pCreateMgr)
 {
 }
 
-CGaugeObject::CGaugeObject(CCreateMgr * pCreateMgr, GagueUIType type)
+CGaugeObject::CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GagueUIType type)
 	: CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh * pRectMesh = NULL;
@@ -88,12 +88,6 @@ void CGaugeObject::Render(CCamera * pCamera, UINT istanceCnt)
 
 	if (m_cbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
-
-	if (m_pShader)
-	{
-		UpdateShaderVariables();
-		m_pShader->Render(pCamera);
-	}
 
 	if (m_ppMeshes)
 	{

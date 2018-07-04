@@ -12,7 +12,7 @@
 /// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
-CMinimapIconShader::CMinimapIconShader(CCreateMgr *pCreateMgr)
+CMinimapIconShader::CMinimapIconShader(shared_ptr<CCreateMgr> pCreateMgr)
 	: CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
@@ -137,7 +137,7 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 	}
 }
 
-void CMinimapIconShader::GetCamera(CCamera * pCamera)
+void CMinimapIconShader::SetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
@@ -151,7 +151,7 @@ void CMinimapIconShader::GetCamera(CCamera * pCamera)
 	}
 }
 
-void CMinimapIconShader::SetUIObjectsManager(CUIObjectManager * pManger)
+void CMinimapIconShader::SetUIObjectsManager(shared_ptr<CUIObjectManager> pManger)
 {
 	m_pIconManger = pManger;
 	m_MinionObjectList = m_pIconManger->GetMinionObjectList();
@@ -241,10 +241,9 @@ D3D12_SHADER_BYTECODE CMinimapIconShader::CreatePixelShader(ComPtr<ID3DBlob>& pS
 		pShaderBlob));
 }
 
-void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CMinimapIconShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 3;
 	CreateDescriptorHeaps();
@@ -252,24 +251,7 @@ void CMinimapIconShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTarge
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CMinimapIconShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-}
-
-void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
@@ -278,11 +260,11 @@ void CMinimapIconShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	
-	CreateShaderVariables(pCreateMgr, m_nObjects + MAX_MINION);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects + MAX_MINION);
 
 	for (int i = 0; i < m_nHeaps; ++i) {
 		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects + MAX_MINION, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects + MAX_MINION, m_pConstBuffer, ncbElementBytes, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects + MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, i);
 	}
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;

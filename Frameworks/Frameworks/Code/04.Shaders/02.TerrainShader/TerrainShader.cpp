@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CTerrainShader::CTerrainShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
+CTerrainShader::CTerrainShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
 }
 
@@ -21,7 +21,7 @@ CTerrainShader::~CTerrainShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CTerrainShader::Initialize(CCreateMgr * pCreateMgr, void * pContext)
+void CTerrainShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void * pContext)
 {
 	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, false, true);
 	BuildObjects(pCreateMgr, pContext);
@@ -39,11 +39,11 @@ void CTerrainShader::ReleaseUploadBuffers()
 
 void CTerrainShader::UpdateShaderVariables()
 {
-	if (m_pMappedTerrain)
-	{
-		XMStoreFloat4x4(&m_pMappedTerrain->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_pTerrain->GetWorldMatrix())));
-	}
+	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects);
+
+	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+		XMMatrixTranspose(XMLoadFloat4x4(m_pTerrain->GetWorldMatrix())));
 }
 
 void CTerrainShader::Render(CCamera * pCamera)
@@ -163,12 +163,11 @@ D3D12_SHADER_BYTECODE CTerrainShader::CreateShadowPixelShader(ComPtr<ID3DBlob>& 
 		pShaderBlob));
 }
 
-void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CTerrainShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	UNREFERENCED_PARAMETER(isRenderBB);
 
 	m_nPipelineStates = 2;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
@@ -176,24 +175,7 @@ void CTerrainShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, b
 	CShader::CreateShaderWithTess(pCreateMgr, nRenderTargets, isRenderShadow);
 }
 
-void CTerrainShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
-{
-	UNREFERENCED_PARAMETER(nBuffers);
-
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	HRESULT hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedTerrain);
-	ThrowIfFailed(hResult);
-}
-
-void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CTerrainShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pContext)
 {
 	UNREFERENCED_PARAMETER(pContext);
 
@@ -202,8 +184,8 @@ void CTerrainShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 1);
-	CreateShaderVariables(pCreateMgr);
-	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes);
+	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer.Get(), ncbElementBytes);
 
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];

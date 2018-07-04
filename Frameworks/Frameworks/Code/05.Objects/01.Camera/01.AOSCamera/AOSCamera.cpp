@@ -6,7 +6,7 @@
 /// 목적: In Game 에서 사용할 카메라
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-05-22
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ CAOSCamera::~CAOSCamera()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CAOSCamera::Initialize(CCreateMgr * pCreateMgr)
+void CAOSCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	int width = pCreateMgr->GetWindowWidth();
 	int height = pCreateMgr->GetWindowHeight();

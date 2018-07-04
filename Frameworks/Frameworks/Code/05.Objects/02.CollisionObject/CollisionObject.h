@@ -7,7 +7,7 @@ class CWayFinder;
 class CCollisionObject : public CBaseObject
 {
 public:	// 생성자, 소멸자
-	CCollisionObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
+	CCollisionObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes = 1);
 	virtual ~CCollisionObject();
 
 public: // 공개 함수
@@ -38,7 +38,7 @@ public: // 공개 함수
 	void SetNextState(StatesType newState) { m_nextState = newState; }
 	void SetEnemy(CCollisionObject* enemy) { m_pEnemy = enemy; }
 
-	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
+	virtual void SetCollisionManager(shared_ptr<CCollisionManager> manager) { m_pColManager = manager; }
 	void ResetCollisionLevel() {
 		m_xmf2CollisionLevel.x = floor(GetPosition().x / (TERRAIN_SIZE_WIDTH / 50));
 		m_xmf2CollisionLevel.y = floor(GetPosition().z / (TERRAIN_SIZE_WIDTH / 50));
@@ -74,6 +74,6 @@ protected: // 변수
 
 	CCollisionObject* m_pEnemy{ NULL };
 	StaticType m_StaticType {StaticType::Move};
-	CCollisionManager * m_pColManager{ NULL };
+	shared_ptr<CCollisionManager> m_pColManager;
 	bool m_GameOver{ false };
 };

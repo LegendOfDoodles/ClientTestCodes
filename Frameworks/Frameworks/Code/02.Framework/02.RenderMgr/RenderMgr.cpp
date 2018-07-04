@@ -6,7 +6,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ void CRenderMgr::Release()
 	::CloseHandle(m_hFenceEvent);
 }
 
-void CRenderMgr::Render(CScene* pScene)
+void CRenderMgr::Render(shared_ptr<CScene> pScene)
 {
 	RenderDepth(pScene);
 	RenderColor(pScene);
@@ -46,7 +46,7 @@ void CRenderMgr::Render(CScene* pScene)
 	MoveToNextFrame();
 }
 
-void CRenderMgr::RenderDepth(CScene * pScene)
+void CRenderMgr::RenderDepth(shared_ptr<CScene> pScene)
 {
 	HRESULT hResult;
 	// Reset Command List
@@ -81,7 +81,7 @@ void CRenderMgr::RenderDepth(CScene * pScene)
 	SynchronizeResourceTransition(m_pShadowDepthBuffer.Get(), D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 }
 
-void CRenderMgr::RenderColor(CScene * pScene)
+void CRenderMgr::RenderColor(shared_ptr<CScene> pScene)
 {
 	HRESULT hResult;
 	// Set Barrier
@@ -133,7 +133,7 @@ void CRenderMgr::RenderColor(CScene * pScene)
 	WaitForGpuComplete();
 }
 
-void CRenderMgr::RenderLight(CScene * pScene)
+void CRenderMgr::RenderLight(shared_ptr<CScene> pScene)
 {
 	HRESULT hResult;
 

@@ -10,11 +10,11 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr) : CBillboardObject(pCreateMgr)
+CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr) : CBillboardObject(pCreateMgr)
 {
 }
 
-CUIFrameObject::CUIFrameObject(CCreateMgr * pCreateMgr, UIFrameType type) : CBillboardObject(pCreateMgr)
+CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType type) : CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
 
@@ -165,12 +165,6 @@ void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
 
 		if (m_cbvGPUDescriptorHandle.ptr)
 			m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
-
-		if (m_pShader)
-		{
-			UpdateShaderVariables();
-			m_pShader->Render(pCamera);
-		}
 
 		if (m_ppMeshes)
 		{

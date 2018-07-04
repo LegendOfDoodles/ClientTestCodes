@@ -7,7 +7,7 @@ class CCollisionManager;
 class CNexusTower : public CCollisionObject
 {
 public:
-	CNexusTower(CCreateMgr *pCreateMgr, int nMeshes = 1);
+	CNexusTower(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes = 1);
 	virtual ~CNexusTower();
 
 	//ObjectType type;

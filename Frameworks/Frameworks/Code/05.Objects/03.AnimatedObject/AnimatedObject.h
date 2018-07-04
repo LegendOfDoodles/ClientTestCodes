@@ -17,7 +17,7 @@ struct CB_ANIOBJECT_INFO
 class CAnimatedObject : public CCollisionObject
 {
 public:	// 생성자, 소멸자
-	CAnimatedObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
+	CAnimatedObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes = 1);
 	virtual ~CAnimatedObject();
 
 public: // 공개 함수

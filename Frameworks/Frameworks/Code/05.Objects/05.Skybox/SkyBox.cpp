@@ -11,7 +11,7 @@
 ////////////////////////////////////////////////////////////////////////
 // CSkyBox
 // 持失切, 社瑚切
-CSkyBox::CSkyBox(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr, 6)
+CSkyBox::CSkyBox(shared_ptr<CCreateMgr> pCreateMgr) : CBaseObject(pCreateMgr, 6)
 {
 	CTexturedRectMesh *pSkyBoxMesh = new CTexturedRectMesh(pCreateMgr, 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, +10.0f);
 	SetMesh(0, pSkyBoxMesh);
@@ -53,7 +53,7 @@ void CSkyBox::Render(CCamera *pCamera, UINT istanceCnt)
 ////////////////////////////////////////////////////////////////////////
 // CFloor
 // 持失切, 社瑚切
-CFloor::CFloor(CCreateMgr * pCreateMgr) : CBaseObject(pCreateMgr)
+CFloor::CFloor(shared_ptr<CCreateMgr> pCreateMgr) : CBaseObject(pCreateMgr)
 {
 	CTexturedRectMesh *pFloorMesh = new CTexturedRectMesh(pCreateMgr, 1.0f, 0.0f, 1.0f, 8000.0f, -100.0f, 4000.0f);
 	SetMesh(0, pFloorMesh);

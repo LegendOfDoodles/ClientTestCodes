@@ -14,7 +14,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CPlayerHPGaugeShader::CPlayerHPGaugeShader(CCreateMgr * pCreateMgr)
+CPlayerHPGaugeShader::CPlayerHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr)
 	: CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
@@ -79,7 +79,7 @@ void CPlayerHPGaugeShader::Render(CCamera * pCamera)
 	}
 }
 
-void CPlayerHPGaugeShader::GetCamera(CCamera * pCamera)
+void CPlayerHPGaugeShader::SetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
@@ -172,10 +172,9 @@ D3D12_SHADER_BYTECODE CPlayerHPGaugeShader::CreatePixelShader(ComPtr<ID3DBlob>& 
 		pShaderBlob));
 }
 
-void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CPlayerHPGaugeShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
@@ -183,24 +182,7 @@ void CPlayerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTar
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CPlayerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-}
-
-void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
@@ -210,8 +192,8 @@ void CPlayerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateShaderVariables(pCreateMgr, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CGaugeObject *pGaugeObject = NULL;

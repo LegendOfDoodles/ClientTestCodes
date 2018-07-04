@@ -8,11 +8,11 @@ class CCollisionManager;
 class CNexusTowerShader : public CShader
 {
 public: // 생성자, 소멸자
-	CNexusTowerShader(CCreateMgr *pCreateMgr);
+	CNexusTowerShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CNexusTowerShader();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseUploadBuffers();
 
@@ -32,7 +32,7 @@ public: // 공개 함수
 
 	int GetObjectCount() { return m_nObjects; }
 	virtual CBaseObject **GetCollisionObjects() { return m_ppObjects; }
-	void SetColManagerToObject(CCollisionManager* manager);
+	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -42,24 +42,16 @@ protected: // 내부 함수
 
 	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
-	void SetBoundingBoxMeshByIndex(CCreateMgr *pCreateMgr, CBaseObject* target, int index);
+	void SetBoundingBoxMeshByIndex(shared_ptr<CCreateMgr> pCreateMgr, CBaseObject* target, int index);
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
-	int m_nObjects{ 0 };
 	int m_meshCounts[4];
-
-	ID3D12Resource *m_myConstBuffer{ NULL };
-
-	UINT8 *m_pMappedObjects{ NULL };
-	UINT8 *m_pMappedBoundingBoxes{ NULL };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
 };

@@ -8,7 +8,7 @@ class CPlayer;
 class CPlayerHPGaugeShader : public CShader
 {
 public:
-	CPlayerHPGaugeShader(CCreateMgr *pCreateMgr);
+	CPlayerHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CPlayerHPGaugeShader();
 
 public: // 공개 함수
@@ -20,7 +20,7 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 	
-	virtual void GetCamera(CCamera *pCamera);
+	virtual void SetCamera(CCamera *pCamera);
 
 	virtual void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
@@ -38,20 +38,13 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBaseObject **m_ppObjects{ NULL };
-	int m_nObjects = 0;
-
-	CMaterial	**m_ppMaterials{ NULL };
-	int m_nMaterials = 0;
-
 	CCamera *m_pCamera;
 
 	CPlayer **m_pPlayer;
@@ -60,6 +53,5 @@ protected: // 변수
 	CCollisionObject **m_ppNexusAndTower{ NULL };
 	int m_nNexusAndTower = 0;
 
-	CCreateMgr* m_pCreateMgr{ NULL };
-	UINT8 *m_pMappedObjects{ NULL };
+	shared_ptr<CCreateMgr> m_pCreateMgr{ NULL };
 };

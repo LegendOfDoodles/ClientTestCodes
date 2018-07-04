@@ -13,7 +13,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CHeightMapTerrain::CHeightMapTerrain(CCreateMgr *pCreateMgr, LPCTSTR pFileName, 
+CHeightMapTerrain::CHeightMapTerrain(shared_ptr<CCreateMgr> pCreateMgr, LPCTSTR pFileName, 
 	XMFLOAT3 xmf3Scale) : CBaseObject(pCreateMgr, 0)
 {
 	//지형에 사용할 높이 맵의 가로, 세로의 크기이다.

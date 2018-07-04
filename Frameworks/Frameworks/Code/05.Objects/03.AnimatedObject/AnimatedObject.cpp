@@ -12,7 +12,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CAnimatedObject::CAnimatedObject(CCreateMgr * pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
+CAnimatedObject::CAnimatedObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
 {
 }
 
@@ -50,12 +50,6 @@ void CAnimatedObject::Render(CCamera * pCamera, UINT instanceCnt)
 
 	if (m_cbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(6, m_cbvGPUDescriptorHandle);
-
-	if (m_pShader)
-	{
-		UpdateShaderVariables();
-		m_pShader->Render(pCamera);
-	}
 
 	if (m_ppMeshes)
 	{

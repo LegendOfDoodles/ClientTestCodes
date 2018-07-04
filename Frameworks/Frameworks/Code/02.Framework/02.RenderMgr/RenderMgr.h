@@ -14,10 +14,10 @@ public:	// 공개 함수
 	void Initialize();
 	void Release();
 
-	void Render(CScene* pScene = NULL);
-	void RenderDepth(CScene* pScene = NULL);
-	void RenderColor(CScene* pScene = NULL);
-	void RenderLight(CScene* pScene = NULL);
+	void Render(shared_ptr<CScene> pScene);
+	void RenderDepth(shared_ptr<CScene> pScene);
+	void RenderColor(shared_ptr<CScene> pScene);
+	void RenderLight(shared_ptr<CScene> pScene);
 
 	// Set dsvCPUHandle by dsvDescriptorHeap
 	void SetDsvCPUHandleWithDsvHeap(ComPtr<ID3D12DescriptorHeap> pDsvDescriptorHeap, UINT incrementSize);

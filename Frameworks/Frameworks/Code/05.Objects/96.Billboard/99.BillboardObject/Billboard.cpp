@@ -10,7 +10,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CBillboardObject::CBillboardObject(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr)
+CBillboardObject::CBillboardObject(shared_ptr<CCreateMgr> pCreateMgr) : CBaseObject(pCreateMgr)
 {
 }
 

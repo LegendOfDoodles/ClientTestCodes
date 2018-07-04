@@ -94,13 +94,13 @@ void CTexture::UpdateShaderVariable(int nIndex)
 	m_pCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[nIndex].m_nRootParameterIndex, m_pRootArgumentInfos[nIndex].m_srvGpuDescriptorHandle);
 }
 
-void CTexture::LoadTextureFromFile(CCreateMgr *pCreateMgr, wchar_t *pszFileName, UINT nIndex)
+void CTexture::LoadTextureFromFile(shared_ptr<CCreateMgr> pCreateMgr, wchar_t *pszFileName, UINT nIndex)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 	m_ppTextures[nIndex] = pCreateMgr->CreateTextureResourceFromFile(pszFileName, &m_ppTextureUploadBuffers[nIndex], D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }
 
-ID3D12Resource * CTexture::CreateTexture(CCreateMgr *pCreateMgr, UINT nWidth, UINT nHeight, DXGI_FORMAT dxgiFormat, D3D12_RESOURCE_FLAGS resourceFlags, D3D12_RESOURCE_STATES resourceStates, D3D12_CLEAR_VALUE * pClearValue, UINT nIndex)
+ID3D12Resource * CTexture::CreateTexture(shared_ptr<CCreateMgr> pCreateMgr, UINT nWidth, UINT nHeight, DXGI_FORMAT dxgiFormat, D3D12_RESOURCE_FLAGS resourceFlags, D3D12_RESOURCE_STATES resourceStates, D3D12_CLEAR_VALUE * pClearValue, UINT nIndex)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 	m_ppTextures[nIndex] = pCreateMgr->CreateTexture2DResource(nWidth, nHeight, dxgiFormat, resourceFlags, resourceStates, pClearValue);

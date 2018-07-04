@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 
@@ -26,7 +26,7 @@ CCamera::~CCamera()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CCamera::Initialize(CCreateMgr *pCreateMgr)
+void CCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	int width = pCreateMgr->GetWindowWidth();
 	int height = pCreateMgr->GetWindowHeight();
@@ -330,7 +330,7 @@ void CCamera::SetScissorRect(
 	m_scissorRect.bottom = yBottom;
 }
 
-void CCamera::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CCamera::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	UINT ncbElementBytes = ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255); //256의 배수
 

@@ -10,12 +10,12 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CSkillObject::CSkillObject(CCreateMgr * pCreateMgr)
+CSkillObject::CSkillObject(shared_ptr<CCreateMgr> pCreateMgr)
 	: CBillboardObject(pCreateMgr)
 {
 }
 
-CSkillObject::CSkillObject(CCreateMgr * pCreateMgr, SkillUIType type) : CBillboardObject(pCreateMgr)
+CSkillObject::CSkillObject(shared_ptr<CCreateMgr> pCreateMgr, SkillUIType type) : CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
 
@@ -109,12 +109,6 @@ void CSkillObject::Render(CCamera * pCamera, UINT istanceCnt)
 
 		if (m_cbvGPUDescriptorHandle.ptr)
 			m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
-
-		if (m_pShader)
-		{
-			UpdateShaderVariables();
-			m_pShader->Render(pCamera);
-		}
 
 		if (m_ppMeshes)
 		{

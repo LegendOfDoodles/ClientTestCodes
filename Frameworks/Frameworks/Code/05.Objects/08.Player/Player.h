@@ -7,7 +7,7 @@
 class CPlayer : public CAnimatedObject
 {
 public:
-	CPlayer(CCreateMgr *pCreateMgr, int nMeshes = 1);
+	CPlayer(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes = 1);
 	virtual ~CPlayer();
 
 public:	// 외부 함수

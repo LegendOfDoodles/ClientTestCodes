@@ -4,8 +4,8 @@
 class CGaugeObject : public CBillboardObject
 {
 public:	// 생성자, 소멸자
-	CGaugeObject(CCreateMgr *pCreateMgr);
-	CGaugeObject(CCreateMgr *pCreateMgr, GagueUIType type);
+	CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr);
+	CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GagueUIType type);
 	virtual ~CGaugeObject();
 
 public: // 공개함수

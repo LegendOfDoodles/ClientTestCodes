@@ -61,7 +61,7 @@ enum IconUIType {
 class CBillboardObject : public CBaseObject
 {
 public:	// 생성자, 소멸자
-	CBillboardObject(CCreateMgr *pCreateMgr);
+	CBillboardObject(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CBillboardObject();
 
 public: // 공개함수

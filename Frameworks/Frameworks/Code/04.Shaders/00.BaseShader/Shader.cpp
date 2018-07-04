@@ -8,27 +8,18 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CShader::CShader(CCreateMgr *pCreateMgr)
+CShader::CShader(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 }
 
 CShader::~CShader()
-{
-	if (!m_ppPipelineStates) return;
-
-	for (int i = 0; i < m_nPipelineStates; ++i)
-	{
-		Safe_Release(m_ppPipelineStates[i]);
-	}
-	Safe_Delete_Array(m_ppPipelineStates);
-																   
-	Safe_Delete_Array(m_ppCbvSrvDescriptorHeaps);
+{		
 	Safe_Delete_Array(m_pcbvCPUDescriptorStartHandle);
 	Safe_Delete_Array(m_pcbvGPUDescriptorStartHandle);
 	Safe_Delete_Array(m_psrvCPUDescriptorStartHandle);
@@ -37,7 +28,7 @@ CShader::~CShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
+void CShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT);
 	BuildObjects(pCreateMgr, pContext);
@@ -275,19 +266,15 @@ D3D12_RASTERIZER_DESC CShader::CreateBoundingBoxRasterizerState()
 
 void CShader::CreateDescriptorHeaps()
 {
-	m_ppCbvSrvDescriptorHeaps = new ID3D12DescriptorHeap*[m_nHeaps];
+	m_ppCbvSrvDescriptorHeaps.resize(m_nHeaps);
+
 	m_pcbvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nHeaps];
 	m_pcbvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nHeaps];
 	m_psrvCPUDescriptorStartHandle = new D3D12_CPU_DESCRIPTOR_HANDLE[m_nHeaps];
 	m_psrvGPUDescriptorStartHandle = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nHeaps];
-
-	for (int i = 0; i < m_nHeaps; ++i)
-	{
-		m_ppCbvSrvDescriptorHeaps[i] = NULL;
-	}
 }
 
-void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index)
+void CShader::CreateCbvAndSrvDescriptorHeaps(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc;
@@ -295,7 +282,7 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConsta
 	descriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	descriptorHeapDesc.NodeMask = 0;
-	HRESULT hResult = pCreateMgr->GetDevice()->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&m_ppCbvSrvDescriptorHeaps[index]));
+	HRESULT hResult = pCreateMgr->GetDevice()->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(m_ppCbvSrvDescriptorHeaps[index].GetAddressOf()));
 	ThrowIfFailed(hResult);
 
 	m_pcbvCPUDescriptorStartHandle[index] = m_ppCbvSrvDescriptorHeaps[index]->GetCPUDescriptorHandleForHeapStart();
@@ -305,7 +292,7 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConsta
 }
 
 void CShader::CreateConstantBufferViews(
-	CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index)
+	shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pConstantBuffers->GetGPUVirtualAddress();
@@ -363,7 +350,7 @@ void CShader::GetShaderResourceViewDesc(
 }
 
 void CShader::CreateShaderResourceViews(
-	CCreateMgr *pCreateMgr, CTexture *pTexture, 
+	shared_ptr<CCreateMgr> pCreateMgr, CTexture *pTexture,
 	UINT nRootParameterStartIndex, bool bAutoIncrement, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
@@ -489,8 +476,10 @@ D3D12_SHADER_BYTECODE CShader::CreateShadowPixelShader(ComPtr<ID3DBlob>& pShader
 		pShaderBlob));
 }
 
-void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderShadow)
+void CShader::CreateShaderWithTess(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderShadow)
 {
+	m_ppPipelineStates.resize(m_nPipelineStates);
+
 	int index{ 0 };
 	HRESULT hResult;
 	ComPtr<ID3DBlob> pVertexShaderBlob, pHullShaderBlob, pDomainShaderBlob, pPixelShaderBlob;
@@ -520,7 +509,7 @@ void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, 
 
 	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
-		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
 	ThrowIfFailed(hResult);
 
 	if (isRenderShadow)
@@ -535,13 +524,15 @@ void CShader::CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets, 
 		pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&ShadowPipelineStateDesc,
-			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+			IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
 		ThrowIfFailed(hResult);
 	}
 }
 
-void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
+	m_ppPipelineStates.resize(m_nPipelineStates);
+
 	int index{ 0 };
 	HRESULT hResult;
 	ComPtr<ID3DBlob> pVertexShaderBlob, pPixelShaderBlob;
@@ -569,7 +560,7 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 
 	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
-		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
 	ThrowIfFailed(hResult);
 
 	if (isRenderBB)
@@ -581,7 +572,7 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 		BBPipelineStateDesc.InputLayout = CreateBoundingBoxInputLayout();
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&BBPipelineStateDesc,
-			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+			IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
 		ThrowIfFailed(hResult);
 	}
 
@@ -595,13 +586,15 @@ void CShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isR
 		pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
 		hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 			&ShadowPipelineStateDesc,
-			IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+			IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
 		ThrowIfFailed(hResult);
 	}
 }
 
-void CShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets)
+void CShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets)
 {
+	m_ppPipelineStates.resize(m_nPipelineStates);
+
 	int index{ 0 };
 	HRESULT hResult;
 	ComPtr<ID3DBlob> pVertexShaderBlob, pPixelShaderBlob;
@@ -629,17 +622,39 @@ void CShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID3D12RootSignature> 
 
 	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
 		&pipelineStateDesc,
-		IID_PPV_ARGS(&m_ppPipelineStates[index++]));
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
 	ThrowIfFailed(hResult);
 }
 
-void CShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
+void CShader::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr, UINT stride, int nBuffers, bool isRenderBB, UINT BBStride, int BBnBuffers)
 {
-	UNREFERENCED_PARAMETER(pCreateMgr);
-	UNREFERENCED_PARAMETER(nBuffers);
+	HRESULT hResult;
+
+	m_pConstBuffer = pCreateMgr->CreateBufferResource(
+		NULL,
+		stride * nBuffers,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		NULL);
+
+	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
+	ThrowIfFailed(hResult);
+
+	if (isRenderBB)
+	{
+		m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
+			NULL,
+			BBStride * BBnBuffers,
+			D3D12_HEAP_TYPE_UPLOAD,
+			D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+			NULL);
+
+		hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
+		ThrowIfFailed(hResult);
+	}
 }
 
-void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	UNREFERENCED_PARAMETER(pCreateMgr);
 	UNREFERENCED_PARAMETER(pContext);
@@ -647,32 +662,22 @@ void CShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CShader::ReleaseShaderVariables()
 {
-	if (m_ppCbvSrvDescriptorHeaps)
-	{
-		for (int i = 0; i < m_nHeaps; ++i)
-		{
-			if(m_ppCbvSrvDescriptorHeaps[i]) 
-				Safe_Release(m_ppCbvSrvDescriptorHeaps[i]);
-		}
-		Safe_Delete_Array(m_ppCbvSrvDescriptorHeaps);
-	}
-
 	if (m_pInstanceBuffer)
 	{
 		m_pInstanceBuffer->Unmap(0, NULL);
-		Safe_Release(m_pInstanceBuffer);
+		m_pInstanceBuffer.Reset();
 	}
 
 	if (m_pConstBuffer)
 	{
 		m_pConstBuffer->Unmap(0, NULL);
-		Safe_Release(m_pConstBuffer);
+		m_pConstBuffer.Reset();
 	}
 
 	if (m_pBoundingBoxBuffer)
 	{
 		m_pBoundingBoxBuffer->Unmap(0, NULL);
-		Safe_Release(m_pBoundingBoxBuffer);
+		m_pBoundingBoxBuffer.Reset();
 	}
 }
 
@@ -683,8 +688,8 @@ void CShader::ReleaseObjects()
 void CShader::OnPrepareRender(int opt, int index)
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
-	m_pCommandList->SetPipelineState(m_ppPipelineStates[index]);
-	if(m_ppCbvSrvDescriptorHeaps) m_pCommandList->SetDescriptorHeaps(1, &m_ppCbvSrvDescriptorHeaps[opt]);
+	m_pCommandList->SetPipelineState(m_ppPipelineStates[index].Get());
+	if(!m_ppCbvSrvDescriptorHeaps.empty()) m_pCommandList->SetDescriptorHeaps(1, m_ppCbvSrvDescriptorHeaps[opt].GetAddressOf());
 
 	UpdateShaderVariables();
 }
@@ -692,8 +697,8 @@ void CShader::OnPrepareRender(int opt, int index)
 void CShader::OnPrepareRenderForBB()
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
-	m_pCommandList->SetPipelineState(m_ppPipelineStates[BOUNDING_BOX]);
-	if (m_ppCbvSrvDescriptorHeaps) m_pCommandList->SetDescriptorHeaps(1, &m_ppCbvSrvDescriptorHeaps[m_boundingBoxHeapNumber]);
+	m_pCommandList->SetPipelineState(m_ppPipelineStates[BOUNDING_BOX].Get());
+	if (!m_ppCbvSrvDescriptorHeaps.empty()) m_pCommandList->SetDescriptorHeaps(1, m_ppCbvSrvDescriptorHeaps[m_boundingBoxHeapNumber].GetAddressOf());
 	UpdateBoundingBoxShaderVariables();
 }
 

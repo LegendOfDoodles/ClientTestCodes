@@ -16,7 +16,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CNexusTowerShader::CNexusTowerShader(CCreateMgr *pCreateMgr)
+CNexusTowerShader::CNexusTowerShader(shared_ptr<CCreateMgr> pCreateMgr)
 	: CShader(pCreateMgr)
 {
 }
@@ -27,7 +27,7 @@ CNexusTowerShader::~CNexusTowerShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CNexusTowerShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
+void CNexusTowerShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true, true);
 	BuildObjects(pCreateMgr, pContext);
@@ -162,7 +162,7 @@ bool CNexusTowerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	return true;
 }
 
-void CNexusTowerShader::SetColManagerToObject(CCollisionManager * manager)
+void CNexusTowerShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
 {
 	for (int i = 0; i < m_nObjects; ++i) {
 
@@ -244,15 +244,9 @@ D3D12_SHADER_BYTECODE CNexusTowerShader::CreateShadowVertexShader(ComPtr<ID3DBlo
 		pShaderBlob));
 }
 
-void CNexusTowerShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CNexusTowerShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 3;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
-
-	for (int i = 0; i < m_nPipelineStates; ++i)
-	{
-		m_ppPipelineStates[i] = NULL;
-	}
 
 	m_nHeaps = 5;
 	CreateDescriptorHeaps();
@@ -260,36 +254,7 @@ void CNexusTowerShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CNexusTowerShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-
-	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		boundingBoxElementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
-	ThrowIfFailed(hResult);
-}
-
-void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CNexusTowerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	UNREFERENCED_PARAMETER(pContext);
 
@@ -302,14 +267,14 @@ void CNexusTowerShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateShaderVariables(pCreateMgr, m_nObjects);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, ncbElementBytes, m_nObjects);
 	for (int i = 0; i < m_nHeaps- 1; ++i)
 	{
 		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
 	}
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, m_nHeaps - 1);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer, ncbElementBytes, m_nHeaps - 1);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), ncbElementBytes, m_nHeaps - 1);
 
 	SaveBoundingBoxHeapNumber(m_nHeaps - 1);
 
@@ -410,7 +375,7 @@ void CNexusTowerShader::ReleaseObjects()
 #endif
 }
 
-void CNexusTowerShader::SetBoundingBoxMeshByIndex(CCreateMgr * pCreateMgr, CBaseObject * target, int index)
+void CNexusTowerShader::SetBoundingBoxMeshByIndex(shared_ptr<CCreateMgr> pCreateMgr, CBaseObject * target, int index)
 {
 	static CCubeMesh towerBBMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(10), CONVERT_PaperUnit_to_InG(7), CONVERT_PaperUnit_to_InG(20),

@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CObstacle::CObstacle(CCreateMgr *pCreateMgr) : CBaseObject(pCreateMgr)
+CObstacle::CObstacle(shared_ptr<CCreateMgr> pCreateMgr) : CBaseObject(pCreateMgr)
 {
 }
 

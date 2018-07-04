@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "NumberObject.h"
 
-CNumberOjbect::CNumberOjbect(CCreateMgr * pCreateMgr) 
+CNumberOjbect::CNumberOjbect(shared_ptr<CCreateMgr> pCreateMgr) 
 	: CBillboardObject(pCreateMgr)
 {
 	// 일자로 길게 전부 찍을때
@@ -12,7 +12,7 @@ CNumberOjbect::CNumberOjbect(CCreateMgr * pCreateMgr)
 	SetMesh(0, pRectMesh);
 }
 
-CNumberOjbect::CNumberOjbect(CCreateMgr * pCreateMgr, NumberType type)
+CNumberOjbect::CNumberOjbect(shared_ptr<CCreateMgr> pCreateMgr, NumberType type)
 	: CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
@@ -110,12 +110,6 @@ void CNumberOjbect::Render(CCamera * pCamera, UINT istanceCnt)
 
 	if (m_cbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
-
-	if (m_pShader)
-	{
-		UpdateShaderVariables();
-		m_pShader->Render(pCamera);
-	}
 
 	if (m_ppMeshes)
 	{

@@ -26,11 +26,9 @@ private: // 내부 함수
 private: // 변수
 	HWND m_hWnd{ NULL };
 
-	CCreateMgr m_createMgr;
-	CRenderMgr *m_pRenderMgr{ NULL };
+	shared_ptr<CCreateMgr> m_pCreateMgr;
+	shared_ptr<CRenderMgr> m_pRenderMgr;
 
-	CScene *m_pScene{ NULL };
-	
-	int m_FrameCheck = 0;
+	shared_ptr<CScene> m_pScene;
 };
 

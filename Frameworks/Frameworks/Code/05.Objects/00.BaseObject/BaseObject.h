@@ -15,11 +15,11 @@ struct CB_GAMEOBJECT_INFO
 class CBaseObject
 {
 public:	// 생성자, 소멸자
-	CBaseObject(CCreateMgr *pCreateMgr, int nMeshes = 1);
+	CBaseObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes = 1);
 	virtual ~CBaseObject();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual void Finalize();
 
 	void ReleaseUploadBuffers();
@@ -80,10 +80,6 @@ public: // 공개 함수
 	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
 
 protected: // 내부 함수
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
-	virtual void ReleaseShaderVariables();
-	virtual void UpdateShaderVariables();
-
 	virtual void OnPrepareRender();
 
 	bool IsVisible(CCamera *pCamera = NULL);
@@ -106,9 +102,6 @@ protected: // 변수
 
 	D3D12_GPU_DESCRIPTOR_HANDLE m_cbvGPUDescriptorHandle{ NULL };
 	D3D12_GPU_DESCRIPTOR_HANDLE m_cbvGPUDescriptorHandleForBB{ NULL };
-
-	ID3D12Resource					*m_pcbGameObject{ NULL };
-	UINT8				*m_pMappedObject{ NULL };
 
 	ObjectType m_ObjectType{ ObjectType::StickPlayer };
 

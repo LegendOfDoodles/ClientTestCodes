@@ -10,11 +10,11 @@ class CTexture;
 class CShader	// Warning!  Ani Shader가 오브젝트 쉐이더 상속받으면 적당히 기능 나눌 필요 있음
 {
 public:	// 생성자, 소멸자
-	CShader(CCreateMgr *pCreateMgr);
+	CShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CShader();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 	virtual void Finalize();
 
 	virtual void ReleaseUploadBuffers();
@@ -43,7 +43,7 @@ public: // 공개 함수
 	virtual void OnStatus(int ObjectType);
 	virtual void OffStatus();
 
-	virtual void CreateGraphicsRootSignature(CCreateMgr *pCreateMgr) { pCreateMgr; }
+	virtual void CreateGraphicsRootSignature(shared_ptr<CCreateMgr> pCreateMgr) { pCreateMgr; }
 
 	virtual CBaseObject * * GetCollisionObjects() { return nullptr; }
 
@@ -64,10 +64,10 @@ protected: // 내부 함수
 	D3D12_RASTERIZER_DESC CreateBoundingBoxRasterizerState();
 
 	void CreateDescriptorHeaps();
-	void CreateCbvAndSrvDescriptorHeaps(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index = 0);
-	void CreateConstantBufferViews(CCreateMgr *pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index = 0);
+	void CreateCbvAndSrvDescriptorHeaps(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index = 0);
+	void CreateConstantBufferViews(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index = 0);
 	void GetShaderResourceViewDesc(D3D12_RESOURCE_DESC resourceDesc, UINT nTextureType, D3D12_SHADER_RESOURCE_VIEW_DESC *pShaderResourceViewDesc);
-	void CreateShaderResourceViews(CCreateMgr *pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index = 0);
+	void CreateShaderResourceViews(shared_ptr<CCreateMgr> pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index = 0);
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob);
@@ -82,13 +82,13 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateShadowDomainShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreateShadowPixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShaderWithTess(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderShadow = false);
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShader(CCreateMgr *pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets = 1);
+	virtual void CreateShaderWithTess(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderShadow = false);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets = 1);
 
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr, UINT stride, int nBuffers = 1, bool isRenderBB = false, UINT BBStride = 0, int BBnBuffers = 0);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseShaderVariables();
 	virtual void ReleaseObjects();
@@ -104,19 +104,25 @@ protected: // 변수
 
 	bool m_isRenderBB{ false };
 
-	ID3D12PipelineState **m_ppPipelineStates{ NULL };
+	std::vector<ComPtr<ID3D12PipelineState>> m_ppPipelineStates;
 	int m_nPipelineStates{ 0 };
 
-	ID3D12Resource *m_pInstanceBuffer{ NULL };
-	ID3D12Resource *m_pConstBuffer{ NULL };
-	ID3D12Resource *m_pBoundingBoxBuffer{ NULL };
+	ComPtr<ID3D12Resource> m_pInstanceBuffer;
+	ComPtr<ID3D12Resource> m_pConstBuffer;
+	ComPtr<ID3D12Resource> m_pBoundingBoxBuffer;
 
 #if USE_BATCH_MATERIAL
 	CMaterial			**m_ppMaterials{ NULL };
 	int					m_nMaterials{ 0 };
 #endif
 
-	ID3D12DescriptorHeap			**m_ppCbvSrvDescriptorHeaps{ NULL };
+	CBaseObject **m_ppObjects{ NULL };
+	int m_nObjects{ 0 };
+
+	UINT8 *m_pMappedObjects{ NULL };
+	UINT8 *m_pMappedBoundingBoxes{ NULL };
+
+	std::vector<ComPtr<ID3D12DescriptorHeap>> m_ppCbvSrvDescriptorHeaps;
 	int m_nHeaps{ 0 };
 	int m_boundingBoxHeapNumber{ 0 };
 

@@ -14,7 +14,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CBaseObject::CBaseObject(CCreateMgr *pCreateMgr, int nMeshes)
+CBaseObject::CBaseObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 
@@ -46,14 +46,13 @@ CBaseObject::~CBaseObject()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CBaseObject::Initialize(CCreateMgr *pCreateMgr)
+void CBaseObject::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	UNREFERENCED_PARAMETER(pCreateMgr);
 }
 
 void CBaseObject::Finalize()
 {
-	ReleaseShaderVariables();
 }
 
 void CBaseObject::ReleaseUploadBuffers()
@@ -129,12 +128,6 @@ void CBaseObject::Render(CCamera *pCamera, UINT istanceCnt)
 
 	if (m_cbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(1, m_cbvGPUDescriptorHandle);
-
-	if (m_pShader)
-	{
-		UpdateShaderVariables();
-		m_pShader->Render(pCamera);
-	}
 
 	if (m_ppMeshes)
 	{
@@ -294,30 +287,6 @@ void CBaseObject::SetPosition(XMFLOAT3 xmf3Position)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CBaseObject::CreateShaderVariables(CCreateMgr *pCreateMgr)
-{
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
-	m_pcbGameObject = pCreateMgr->CreateBufferResource(
-		NULL,
-		ncbElementBytes, 
-		D3D12_HEAP_TYPE_UPLOAD, 
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	m_pcbGameObject->Map(0, NULL, (void **)&m_pMappedObject);
-}
-
-void CBaseObject::ReleaseShaderVariables()
-{
-}
-
-void CBaseObject::UpdateShaderVariables()
-{
-	CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObject);
-
-	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4World)));
-}
-
 void CBaseObject::OnPrepareRender()
 {
 }

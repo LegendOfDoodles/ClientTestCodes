@@ -34,7 +34,7 @@ public:	// 생성자, 소멸자
 	virtual ~CCamera();
 
 public:	// 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr);
 	void Finalize();
 
 	virtual void UpdateShaderVariables();
@@ -111,7 +111,7 @@ protected: // 내부 함수
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);
 	void SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom);
 
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	virtual void CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual void ReleaseShaderVariables();
 
 protected: // 변수

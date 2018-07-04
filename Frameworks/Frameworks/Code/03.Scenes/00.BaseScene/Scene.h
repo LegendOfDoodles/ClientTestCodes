@@ -38,7 +38,7 @@ public:	// 생성자, 소멸자
 	virtual ~CScene();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual void Finalize();
 
 	void ReleaseUploadBuffers();
@@ -63,14 +63,14 @@ public: // 공개 함수
 	CCamera * GetCamera() { return m_pCamera; }
 
 protected: // 내부 함수
-	void CreateCbvAndSrvDescriptorHeap(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index);
+	void CreateCbvAndSrvDescriptorHeap(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index);
 
 	void BuildLights();
 
-	void BuildObjects(CCreateMgr *pCreateMgr);
+	void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr);
 	void ReleaseObjects();
 
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr);
+	virtual void CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables();
 
@@ -93,8 +93,8 @@ protected: // 변수
 	CMaterial			*m_pCubeMap{ NULL };
 	LIGHTS	 *m_pLights{ NULL };
 
-	ID3D12Resource	*m_pd3dcbLights{ NULL };
-	LIGHTS *m_pcbMappedLights = NULL;
+	ComPtr<ID3D12Resource>	m_pcbLights;
+	LIGHTS *m_pcbMappedLights{ NULL };
 
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
@@ -107,14 +107,12 @@ protected: // 변수
 
 	XMFLOAT3 m_pickWorldPosition{ 0.f, 0.f, 0.f };
 
+	// 매니저 클래스
 	shared_ptr<CWayFinder> m_pWayFinder;
-
-	CCreateMgr* m_pCreateMgr{ NULL };
-
-	CCollisionManager *m_pCollisionManager{NULL};
-	CUIObjectManager *m_pUIObjectsManager{NULL};
-
-	CFSMMgr * m_pFSMMgr{ NULL };
+	shared_ptr<CCreateMgr> m_pCreateMgr;
+	shared_ptr<CCollisionManager>m_pCollisionManager;
+	shared_ptr<CUIObjectManager> m_pUIObjectsManager;
+	shared_ptr<CFSMMgr> m_pFSMMgr;
 
 	const int	m_nHeaps{ 2 };
 	ID3D12DescriptorHeap			*m_pCbvSrvDescriptorHeaps[2];

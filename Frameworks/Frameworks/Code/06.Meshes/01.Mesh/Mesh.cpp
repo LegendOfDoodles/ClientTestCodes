@@ -15,7 +15,7 @@
 // 奄沙 五習
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CMesh::CMesh(CCreateMgr *pCreateMgr)
+CMesh::CMesh(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	m_pCommandList = pCreateMgr->GetCommandList();
 }
@@ -77,7 +77,7 @@ void CMesh::SetBoundingBox(const XMFLOAT3& center, const XMFLOAT3 & extents)
 // CMeshTextured
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CMeshTextured::CMeshTextured(CCreateMgr *pCreateMgr)
+CMeshTextured::CMeshTextured(shared_ptr<CCreateMgr> pCreateMgr)
 	: CMesh(pCreateMgr)
 {
 }
@@ -90,7 +90,7 @@ CMeshTextured::~CMeshTextured()
 // CMeshIlluminated
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CMeshIlluminated::CMeshIlluminated(CCreateMgr *pCreateMgr) : CMesh(pCreateMgr)
+CMeshIlluminated::CMeshIlluminated(shared_ptr<CCreateMgr> pCreateMgr) : CMesh(pCreateMgr)
 {
 }
 
@@ -334,11 +334,11 @@ void CMeshIlluminated::CalculateTriangleStripVertexTangents(XMFLOAT3 *pxmf3Tange
 // CMeshIlluminatedTextured
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CMeshIlluminatedTextured::CMeshIlluminatedTextured(CCreateMgr *pCreateMgr) : CMeshIlluminated(pCreateMgr)
+CMeshIlluminatedTextured::CMeshIlluminatedTextured(shared_ptr<CCreateMgr> pCreateMgr) : CMeshIlluminated(pCreateMgr)
 {
 }
 
-CMeshIlluminatedTextured::CMeshIlluminatedTextured(CCreateMgr *pCreateMgr, UINT nVertices, XMFLOAT3 *pxmf3Positions, XMFLOAT3 *pxmf3Normals, XMFLOAT2 *pxmf2UVs, UINT nIndices, UINT *pnIndices) : CMeshIlluminated(pCreateMgr)
+CMeshIlluminatedTextured::CMeshIlluminatedTextured(shared_ptr<CCreateMgr> pCreateMgr, UINT nVertices, XMFLOAT3 *pxmf3Positions, XMFLOAT3 *pxmf3Normals, XMFLOAT2 *pxmf2UVs, UINT nIndices, UINT *pnIndices) : CMeshIlluminated(pCreateMgr)
 {
 	m_nStride = sizeof(CIlluminatedTexturedVertex);
 	m_nVertices = nVertices;
@@ -373,7 +373,7 @@ CMeshIlluminatedTextured::~CMeshIlluminatedTextured()
 // CSkinnedMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CSkinnedMesh::CSkinnedMesh(CCreateMgr * pCreateMgr, char* in) : CMeshIlluminatedTextured(pCreateMgr)
+CSkinnedMesh::CSkinnedMesh(shared_ptr<CCreateMgr> pCreateMgr, char* in) : CMeshIlluminatedTextured(pCreateMgr)
 {
 	CMeshImporter importer;
 	importer.LoadMeshData(in);
@@ -454,7 +454,7 @@ CSkinnedMesh::~CSkinnedMesh()
 // CStaticMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CStaticMesh::CStaticMesh(CCreateMgr * pCreateMgr, char * in,XMFLOAT3 scalevalue) : CMeshIlluminatedTextured(pCreateMgr)
+CStaticMesh::CStaticMesh(shared_ptr<CCreateMgr> pCreateMgr, char * in,XMFLOAT3 scalevalue) : CMeshIlluminatedTextured(pCreateMgr)
 {
 	CMeshImporter importer;
 	importer.LoadStaticMeshData(in);
@@ -630,7 +630,7 @@ float CHeightMapImage::GetHeight(float fx, float fz)
 // CHeightMapGridMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CHeightMapGridMesh::CHeightMapGridMesh(CCreateMgr *pCreateMgr, int nWidth, int nLength) : CMesh(pCreateMgr)
+CHeightMapGridMesh::CHeightMapGridMesh(shared_ptr<CCreateMgr> pCreateMgr, int nWidth, int nLength) : CMesh(pCreateMgr)
 {
 	XMFLOAT3 xmf3Scale = TERRAIN_IMAGE_CELL_SCALE;
 
@@ -725,7 +725,7 @@ CHeightMapGridMesh::~CHeightMapGridMesh()
 // CTexturedRectMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CTexturedRectMesh::CTexturedRectMesh(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition) : CMesh(pCreateMgr)
+CTexturedRectMesh::CTexturedRectMesh(shared_ptr<CCreateMgr> pCreateMgr, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition) : CMesh(pCreateMgr)
 {
 	m_nVertices = 6;
 	m_nStride = sizeof(CTexturedVertex);
@@ -814,7 +814,7 @@ CTexturedRectMesh::~CTexturedRectMesh()
 // CArrowMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CArrowMesh::CArrowMesh(CCreateMgr * pCreateMgr, float length) : CMesh(pCreateMgr)
+CArrowMesh::CArrowMesh(shared_ptr<CCreateMgr> pCreateMgr, float length) : CMesh(pCreateMgr)
 {
 	m_nVertices = 24;
 	m_nIndices = 108;
@@ -908,7 +908,7 @@ CArrowMesh::~CArrowMesh()
 // CCubeMesh
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CCubeMesh::CCubeMesh(CCreateMgr *pCreateMgr, float fWidth, float fHeight, float fDepth, float xOffset, float yOffSet, float zOffSet) : CMesh(pCreateMgr)
+CCubeMesh::CCubeMesh(shared_ptr<CCreateMgr> pCreateMgr, float fWidth, float fHeight, float fDepth, float xOffset, float yOffSet, float zOffSet) : CMesh(pCreateMgr)
 {
 	m_nVertices = 8;
 	m_nIndices = 36;

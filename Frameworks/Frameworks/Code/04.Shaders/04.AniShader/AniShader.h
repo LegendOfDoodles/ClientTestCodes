@@ -15,11 +15,11 @@ class CFSMMgr;
 class CAniShader : public CShader
 {
 public: // 생성자, 소멸자
-	CAniShader(CCreateMgr *pCreateMgr);
+	CAniShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CAniShader();
 
 public: // 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseUploadBuffers();
 
@@ -40,9 +40,9 @@ public: // 공개 함수
 	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() {  return m_nObjects; }
 
-	void SetCollisionManager(CCollisionManager* pManger) { m_pColManager = pManger; }
-	void SetGaugeManger(CUIObjectManager *pManger) { m_pGaugeManger = pManger; }
-	void SetFSMManager(CFSMMgr *pManger) { m_pFSMMgr = pManger; }
+	void SetCollisionManager(shared_ptr<CCollisionManager> pManger) { m_pColManager = pManger; }
+	void SetGaugeManger(shared_ptr<CUIObjectManager> pManger) { m_pGaugeManger = pManger; }
+	void SetFSMManager(shared_ptr<CFSMMgr> pManger) { m_pFSMMgr = pManger; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -52,10 +52,9 @@ protected: // 내부 함수
 
 	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
@@ -68,9 +67,6 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
-	int m_nObjects{ 0 };
-
 	ObjectType m_kind{ ObjectType::SwordMinion };
 
 	CollisionObjectList m_blueObjects;
@@ -82,16 +78,13 @@ protected: // 변수
 
 	CSkinnedMesh* m_pWeapons[3];
 	int m_nWeaponState{ 0 };
-
-	UINT8 *m_pMappedObjects{ NULL };
-	UINT8 *m_pMappedBoundingBoxes{ NULL };
 	
-	CCollisionManager* m_pColManager{NULL};
-	CUIObjectManager *m_pGaugeManger{ NULL };
+	shared_ptr<CCollisionManager> m_pColManager;
+	shared_ptr<CUIObjectManager> m_pGaugeManger;
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
-	CCreateMgr* m_pCreateMgr{ NULL };
-	CFSMMgr * m_pFSMMgr{ NULL };
+	shared_ptr<CCreateMgr> m_pCreateMgr{ NULL };
+	shared_ptr<CFSMMgr> m_pFSMMgr;
 
 	float m_spawnTime{ 10.1f };
 	float m_preSpawnTime{ 0.0f };

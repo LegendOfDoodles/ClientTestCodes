@@ -5,7 +5,7 @@
 class CSkyBoxShader : public CShader
 {
 public: // 생성자, 소멸자
-	CSkyBoxShader(CCreateMgr *pCreateMgr);
+	CSkyBoxShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CSkyBoxShader();
 
 public: // 공개 함수
@@ -22,16 +22,14 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
 protected: // 변수
 	CSkyBox *m_pSkyBox{ NULL };
 	CFloor *m_pFloor{ NULL };
-	CB_GAMEOBJECT_INFO *m_pMappedSkyBox{ NULL };
 };
 

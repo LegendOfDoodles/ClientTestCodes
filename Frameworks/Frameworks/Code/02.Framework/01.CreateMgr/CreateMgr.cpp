@@ -26,13 +26,15 @@ void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 	m_hInstance = hInstance;
 	m_hWnd = hWnd;
 
+	m_pRenderMgr = shared_ptr<CRenderMgr>(new CRenderMgr);
+
 	CreateDirect3dDevice();
 	CreateCommandQueueAndList();
 	CreateSwapChain();
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateGraphicsRootSignature();
 
-	m_renderMgr.Initialize();
+	m_pRenderMgr->Initialize();
 }
 
 void CCreateMgr::Release()
@@ -43,7 +45,7 @@ void CCreateMgr::Release()
 	ThrowIfFailed(hResult);
 
 	// Render Manager
-	m_renderMgr.Release();
+	m_pRenderMgr->Release();
 }
 
 void CCreateMgr::Resize(int width, int height)
@@ -80,7 +82,7 @@ void CCreateMgr::OnResizeBackBuffers()
 		m_nWndClientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags);
 	ThrowIfFailed(hResult);
 
-	m_renderMgr.SetSwapChainBufferIndex(0);
+	m_pRenderMgr->SetSwapChainBufferIndex(0);
 
 	CreateSwapChainRenderTargetViews();
 	CreateRenderTargetViews();
@@ -115,9 +117,9 @@ void CCreateMgr::ChangeScreenMode()
 	hResult = m_pSwapChain->SetFullscreenState(!fullScreenState, NULL);
 	ThrowIfFailed(hResult);
 
-	m_renderMgr.WaitForGpuComplete();
+	m_pRenderMgr->WaitForGpuComplete();
 	OnResizeBackBuffers();
-	m_renderMgr.WaitForGpuComplete();
+	m_pRenderMgr->WaitForGpuComplete();
 }
 
 D3D12_HEAP_PROPERTIES CreateBufferHeapProperties(D3D12_HEAP_TYPE heapType)
@@ -338,7 +340,7 @@ ID3D12Resource * CCreateMgr::CreateTexture2DResource(UINT nWidth, UINT nHeight, 
 
 void CCreateMgr::ResetCommandList()
 {
-	m_renderMgr.WaitForGpuComplete();
+	m_pRenderMgr->WaitForGpuComplete();
 
 	HRESULT hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
 	ThrowIfFailed(hResult);
@@ -352,7 +354,7 @@ void CCreateMgr::ExecuteCommandList()
 	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
 	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
 
-	m_renderMgr.WaitForGpuComplete();
+	m_pRenderMgr->WaitForGpuComplete();
 }
 
 
@@ -418,7 +420,7 @@ void CCreateMgr::CreateDirect3dDevice()
 		IID_PPV_ARGS(m_pFence.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
-	m_renderMgr.SetFence(m_pFence);
+	m_pRenderMgr->SetFence(m_pFence);
 
 	// Save Descriptors Increment Size
 	m_rtvDescriptorIncrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -441,7 +443,7 @@ void CCreateMgr::CreateCommandQueueAndList()
 		IID_PPV_ARGS(m_pCommandQueue.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
-	m_renderMgr.SetCommandQueue(m_pCommandQueue);
+	m_pRenderMgr->SetCommandQueue(m_pCommandQueue);
 
 	// Create Allocator
 	hResult = m_pDevice->CreateCommandAllocator(
@@ -449,7 +451,7 @@ void CCreateMgr::CreateCommandQueueAndList()
 		IID_PPV_ARGS(m_pCommandAllocator.GetAddressOf()));
 	ThrowIfFailed(hResult);
 	
-	m_renderMgr.SetCommandAllocator(m_pCommandAllocator);
+	m_pRenderMgr->SetCommandAllocator(m_pCommandAllocator);
 
 	// Create Command List
 	hResult = m_pDevice->CreateCommandList(
@@ -458,7 +460,7 @@ void CCreateMgr::CreateCommandQueueAndList()
 		m_pCommandAllocator.Get(),
 		NULL,
 		IID_PPV_ARGS(m_pCommandList.GetAddressOf()));
-	m_renderMgr.SetCommandList(m_pCommandList);
+	m_pRenderMgr->SetCommandList(m_pCommandList);
 	ThrowIfFailed(hResult);
 
 	hResult = m_pCommandList->Close();
@@ -501,14 +503,14 @@ void CCreateMgr::CreateSwapChain()
 		(IDXGISwapChain **)m_pSwapChain.GetAddressOf());
 	ThrowIfFailed(hResult);
 
-	m_renderMgr.SetSwapChain(m_pSwapChain);
+	m_pRenderMgr->SetSwapChain(m_pSwapChain);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
 	hResult = m_pFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
 	ThrowIfFailed(hResult);
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
-	m_renderMgr.SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
+	m_pRenderMgr->SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
 }
 
 void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
@@ -557,8 +559,8 @@ void CCreateMgr::CreateSwapChainRenderTargetViews()
 		m_pDevice->CreateRenderTargetView(m_ppSwapChainBackBuffers[i].Get(), &renderTargetViewDesc, m_pRtvSwapChainBackBufferCPUHandles[i]);
 		rtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
-	m_renderMgr.SetSwapChainBackBuffers(m_ppSwapChainBackBuffers);
-	m_renderMgr.SetRtvSwapChainBackBufferCPUHandles(m_pRtvSwapChainBackBufferCPUHandles);
+	m_pRenderMgr->SetSwapChainBackBuffers(m_ppSwapChainBackBuffers);
+	m_pRenderMgr->SetRtvSwapChainBackBufferCPUHandles(m_pRtvSwapChainBackBufferCPUHandles);
 }
 
 void CCreateMgr::CreateDepthStencilView()
@@ -612,7 +614,7 @@ void CCreateMgr::CreateDepthStencilView()
 
 	// Create Depth Stencil Buffer For ShadowMap
 	m_pShadowDepthBuffer = m_pTexture->CreateTexture(
-		this,
+		shared_from_this(),
 		SHADOW_MAP_SIZE,
 		SHADOW_MAP_SIZE,
 		DXGI_FORMAT_R24G8_TYPELESS,
@@ -634,8 +636,8 @@ void CCreateMgr::CreateDepthStencilView()
 		&dsvDesc,
 		dsvShadowCPUDescriptorHandle);
 
-	m_renderMgr.SetDsvCPUHandleWithDsvHeap(m_pDsvDescriptorHeap, m_dsvDescriptorIncrementSize);
-	m_renderMgr.SetShadowDepthBuffer(m_pShadowDepthBuffer);
+	m_pRenderMgr->SetDsvCPUHandleWithDsvHeap(m_pDsvDescriptorHeap, m_dsvDescriptorIncrementSize);
+	m_pRenderMgr->SetShadowDepthBuffer(m_pShadowDepthBuffer);
 }
 
 void CCreateMgr::CreateRenderTargetViews()
@@ -647,7 +649,7 @@ void CCreateMgr::CreateRenderTargetViews()
 	for (UINT i = 0; i < RENDER_TARGET_BUFFER_CNT; i++)
 	{
 		m_ppRenderTargetBuffers[i] = m_pTexture->CreateTexture(
-			this,
+			shared_from_this(),
 			m_nWndClientWidth,
 			m_nWndClientHeight,
 			m_backBufferFormat,
@@ -655,7 +657,7 @@ void CCreateMgr::CreateRenderTargetViews()
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			&d3dClearValue, i);
 	}
-	m_renderMgr.SetRenderTargetBuffers(m_ppRenderTargetBuffers);
+	m_pRenderMgr->SetRenderTargetBuffers(m_ppRenderTargetBuffers);
 
 	// 렌더 타겟 SRV설정
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUDescriptorHandle = m_pRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
@@ -673,17 +675,17 @@ void CCreateMgr::CreateRenderTargetViews()
 		m_pDevice->CreateRenderTargetView(m_pTexture->GetTexture(i), &renderTargetViewDesc, m_pRtvRenderTargetBufferCPUHandles[i]);
 		rtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
-	m_renderMgr.SetRtvRenderTargetBufferCPUHandles(m_pRtvRenderTargetBufferCPUHandles);
+	m_pRenderMgr->SetRtvRenderTargetBufferCPUHandles(m_pRtvRenderTargetBufferCPUHandles);
 }
 
 void CCreateMgr::CreatePostprocessShader()
 {
-	m_pTextureToFullScreenShader = shared_ptr<CTextureToFullScreenShader>(new CTextureToFullScreenShader(this));
-	m_pTextureToFullScreenShader->CreateGraphicsRootSignature(this);
-	m_pTextureToFullScreenShader->CreateShader(this, m_pTextureToFullScreenShader->GetGraphicsRootSignature());
-	m_pTextureToFullScreenShader->BuildObjects(this, m_pTexture);
+	m_pTextureToFullScreenShader = shared_ptr<CTextureToFullScreenShader>(new CTextureToFullScreenShader(shared_from_this()));
+	m_pTextureToFullScreenShader->CreateGraphicsRootSignature(shared_from_this());
+	m_pTextureToFullScreenShader->CreateShader(shared_from_this(), m_pTextureToFullScreenShader->GetGraphicsRootSignature());
+	m_pTextureToFullScreenShader->BuildObjects(shared_from_this(), m_pTexture);
 
-	m_renderMgr.SetTextureToFullScreenShader(m_pTextureToFullScreenShader);
+	m_pRenderMgr->SetTextureToFullScreenShader(m_pTextureToFullScreenShader);
 }
 
 void CCreateMgr::CreateGraphicsRootSignature()
@@ -820,5 +822,5 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	if (pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
 	ThrowIfFailed(hResult);
 
-	m_renderMgr.SaveGraphicsRootSignature(m_pGraphicsRootSignature);
+	m_pRenderMgr->SaveGraphicsRootSignature(m_pGraphicsRootSignature);
 }

@@ -8,7 +8,7 @@ public:	// 생성자, 소멸자
 	virtual ~CLightCamera();
 
 public:	// 공개 함수
-	virtual void Initialize(CCreateMgr *pCreateMgr) override;
+	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr) override;
 
 	virtual void UpdateShaderVariables();
 

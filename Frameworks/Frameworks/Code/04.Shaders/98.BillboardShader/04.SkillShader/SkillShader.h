@@ -9,7 +9,7 @@ class CPlayer;
 class CSkillShader : public CShader
 {
 public: // 생성자, 소멸자
-	CSkillShader(CCreateMgr *pCreateMgr);
+	CSkillShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CSkillShader();
 
 public: // 공개 함수
@@ -21,7 +21,7 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void GetCamera(CCamera *pCamera);
+	virtual void SetCamera(CCamera *pCamera);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -33,23 +33,15 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CBaseObject * *m_ppObjects{ NULL };
-	int m_nObjects = 0;
-
-	CMaterial	**m_ppMaterials{ NULL };
-
 	CCamera *m_pCamera;
 
 	CPlayer *m_pPlayer;
-
-	UINT8 *m_pMappedObjects{ NULL };
 };
 

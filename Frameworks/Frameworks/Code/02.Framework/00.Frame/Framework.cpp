@@ -1,14 +1,11 @@
 #include "stdafx.h"
-
 #include "Framework.h"
-
-
 
 /// <summary>
 /// 목적: 테
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-04-14
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -27,8 +24,10 @@ bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
 	m_hWnd = hWnd;
 
-	m_createMgr.Initialize(hInstance, hWnd);
-	m_pRenderMgr = m_createMgr.GetRenderMgr();
+	m_pCreateMgr = shared_ptr<CCreateMgr>(new CCreateMgr);
+
+	m_pCreateMgr->Initialize(hInstance, hWnd);
+	m_pRenderMgr = m_pCreateMgr->GetRenderMgr();
 
 	BuildObjects();
 
@@ -38,7 +37,7 @@ bool CFramework::Initialize(HINSTANCE hInstance, HWND hWnd)
 void CFramework::Finalize()
 {
 	ReleaseObjects();
-	m_createMgr.Release();
+	m_pCreateMgr->Release();
 }
 
 void CFramework::FrameAdvance(float timeElapsed)
@@ -55,7 +54,7 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 	{
 	case WM_SIZE:
 	{
-		m_createMgr.Resize(LOWORD(lParam), HIWORD(lParam));
+		m_pCreateMgr->Resize(LOWORD(lParam), HIWORD(lParam));
 		// m_createMgr.ChangeScreenMode();
 		break;
 	}
@@ -81,8 +80,8 @@ void CFramework::BuildObjects()
 {
 	m_pRenderMgr->ResetCommandList();
 
-	m_pScene = new CScene();
-	m_pScene->Initialize(&m_createMgr);
+	m_pScene = shared_ptr<CScene>(new CScene());
+	m_pScene->Initialize(m_pCreateMgr);
 
 	m_pRenderMgr->ExecuteCommandList();
 
@@ -91,8 +90,8 @@ void CFramework::BuildObjects()
 
 void CFramework::ReleaseObjects()
 {
-	if (!m_pScene) return;
-
-	m_pScene->Finalize();
-	Safe_Delete(m_pScene);
+	if (m_pScene)
+	{
+		m_pScene->Finalize();
+	}
 }

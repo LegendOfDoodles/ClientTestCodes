@@ -44,7 +44,7 @@ CScene::~CScene()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CScene::Initialize(CCreateMgr *pCreateMgr)
+void CScene::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	BuildObjects(pCreateMgr);
 	CreateShaderVariables(pCreateMgr);
@@ -102,7 +102,7 @@ void CScene::AnimateObjects(float timeElapsed)
 
 void CScene::Render()
 {
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
 
 	for (int i = 0; i < m_nShaders; i++)
@@ -122,7 +122,7 @@ void CScene::Render()
 
 void CScene::RenderShadow()
 {
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
 
 	for (int i = 0; i < m_nShaders; i++)
@@ -148,7 +148,7 @@ void CScene::RenderWithLights()
 		m_pSketchEffect->UpdateShaderVariables();
 	}
 
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
 }
 
@@ -171,7 +171,7 @@ void CScene::UpdateCamera()
 
 		if (m_bCurCamIsAOS)
 		{
-			m_pCamera = new  CAOSCamera();
+			m_pCamera = new CAOSCamera();
 		}
 		else
 		{
@@ -180,9 +180,9 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
-		static_cast<CUIObjectShader*>(m_ppShaders[6])->GetCamera(m_pCamera);
-		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[7])->GetCamera(m_pCamera);
-		static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->GetCamera(m_pCamera);
+		static_cast<CUIObjectShader*>(m_ppShaders[6])->SetCamera(m_pCamera);
+		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[7])->SetCamera(m_pCamera);
+		static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetCamera(m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -231,7 +231,7 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CScene::CreateCbvAndSrvDescriptorHeap(CCreateMgr *pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index)
+void CScene::CreateCbvAndSrvDescriptorHeap(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc;
@@ -280,7 +280,7 @@ void CScene::BuildLights()
 	m_pLightCamera->Initialize(m_pCreateMgr);
 }
 
-void CScene::BuildObjects(CCreateMgr *pCreateMgr)
+void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
 
@@ -355,9 +355,9 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
-	m_pCollisionManager = new CCollisionManager();
-	m_pUIObjectsManager = new CUIObjectManager();
-	m_pFSMMgr = new CFSMMgr(m_pWayFinder);
+	m_pCollisionManager = shared_ptr<CCollisionManager>(new CCollisionManager());
+	m_pUIObjectsManager = shared_ptr<CUIObjectManager>(new CUIObjectManager());
+	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)m_ppShaders[12])->SetWayFinder(m_pWayFinder);
 
 	 //Manager Shaders Setting
@@ -412,26 +412,23 @@ void CScene::ReleaseObjects()
 		}
 		Safe_Delete_Array(m_ppShaders);
 	}
-	if (m_pCollisionManager) Safe_Delete(m_pCollisionManager);
-	if (m_pUIObjectsManager) Safe_Delete(m_pUIObjectsManager);
-	if (m_pFSMMgr) Safe_Delete(m_pFSMMgr);
 	if (m_pCubeMap) Safe_Delete(m_pCubeMap);
 }
 
-void CScene::CreateShaderVariables(CCreateMgr *pCreateMgr)
+void CScene::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
-	m_pd3dcbLights = pCreateMgr->CreateBufferResource(NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	m_pcbLights = pCreateMgr->CreateBufferResource(NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+	m_pcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
 }
 
 void CScene::ReleaseShaderVariables()
 {
-	if (m_pd3dcbLights)
+	if (m_pcbLights)
 	{
-		m_pd3dcbLights->Unmap(0, NULL);
-		Safe_Release(m_pd3dcbLights);
+		m_pcbLights->Unmap(0, NULL);
+		m_pcbLights.Reset();
 	}
 
 	for (int i = 0; i < m_nHeaps; ++i)

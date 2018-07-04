@@ -17,7 +17,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CAniShader::CAniShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
+CAniShader::CAniShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
 }
@@ -28,7 +28,7 @@ CAniShader::~CAniShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CAniShader::Initialize(CCreateMgr *pCreateMgr, void *pContext)
+void CAniShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true, true);
 	BuildObjects(pCreateMgr, pContext);
@@ -334,15 +334,9 @@ D3D12_SHADER_BYTECODE CAniShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pSh
 		pShaderBlob));
 }
 
-void CAniShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CAniShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 3;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
-
-	for (int i = 0; i < m_nPipelineStates; ++i)
-	{
-		m_ppPipelineStates[i] = NULL;
-	}
 
 	m_nHeaps = 3;
 	CreateDescriptorHeaps();
@@ -350,51 +344,22 @@ void CAniShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CAniShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-
-	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pBoundingBoxBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		boundingBoxElementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pBoundingBoxBuffer->Map(0, NULL, (void **)&m_pMappedBoundingBoxes);
-	ThrowIfFailed(hResult);
-}
-
-void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CAniShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateShaderVariables(pCreateMgr, MAX_MINION);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, MAX_MINION, true, boundingBoxElementBytes, MAX_MINION);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 0);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 1);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 2);
 
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 0);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes, 1);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer, boundingBoxElementBytes, 2);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, 0);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, 1);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 2);
 
 	SaveBoundingBoxHeapNumber(2);
 

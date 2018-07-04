@@ -12,7 +12,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CSkyBoxShader::CSkyBoxShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
+CSkyBoxShader::CSkyBoxShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
 }
 
@@ -35,16 +35,16 @@ void CSkyBoxShader::ReleaseUploadBuffers()
 
 void CSkyBoxShader::UpdateShaderVariables()
 {
-	if (m_pMappedSkyBox)
-	{
-		if(m_pSkyBox)
-			XMStoreFloat4x4(&m_pMappedSkyBox->m_xmf4x4World, 
-				XMMatrixTranspose(XMLoadFloat4x4(m_pSkyBox->GetWorldMatrix())));
+	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects);
 
-		if (m_pFloor)
-			XMStoreFloat4x4(&m_pMappedSkyBox->m_xmf4x4World, 
-				XMMatrixTranspose(XMLoadFloat4x4(m_pFloor->GetWorldMatrix())));
-	}
+	if (m_pSkyBox)
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4(m_pSkyBox->GetWorldMatrix())));
+
+	if (m_pFloor)
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+			XMMatrixTranspose(XMLoadFloat4x4(m_pFloor->GetWorldMatrix())));
 }
 
 void CSkyBoxShader::Render(CCamera * pCamera)
@@ -131,10 +131,9 @@ D3D12_SHADER_BYTECODE CSkyBoxShader::CreatePixelShader(ComPtr<ID3DBlob>& pShader
 		pShaderBlob));
 }
 
-void CSkyBoxShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CSkyBoxShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
@@ -142,24 +141,7 @@ void CSkyBoxShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bo
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CSkyBoxShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
-{
-	UNREFERENCED_PARAMETER(nBuffers);
-
-	UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	HRESULT hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedSkyBox);
-	ThrowIfFailed(hResult);
-}
-
-void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CSkyBoxShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pContext)
 {
 	UNREFERENCED_PARAMETER(pContext);
 
@@ -171,8 +153,8 @@ void CSkyBoxShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 	if (m_pSkyBox) CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 6);
 	if (m_pFloor) CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 1);
 
-	CreateShaderVariables(pCreateMgr);
-	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer, ncbElementBytes);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes);
+	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer.Get(), ncbElementBytes);
 
 	if (m_pSkyBox)
 	{

@@ -3,7 +3,7 @@
 #include "05.Objects/99.Material/00.Texture/Texture.h"
 #include "04.Shaders/97.TextureToFullScreenShader/TextureToFullScreenShader.h"
 
-class CCreateMgr
+class CCreateMgr : public std::enable_shared_from_this<CCreateMgr>
 {
 public:	// 생성자, 소멸자
 	CCreateMgr();
@@ -40,7 +40,7 @@ public:	// 공개 함수
 	void ResetCommandList();
 	void ExecuteCommandList();
 
-	CRenderMgr* GetRenderMgr() { return &m_renderMgr; }
+	shared_ptr<CRenderMgr> GetRenderMgr() { return m_pRenderMgr; }
 
 	ComPtr<ID3D12Device> GetDevice() { return m_pDevice; }
 	ComPtr<ID3D12GraphicsCommandList> GetCommandList() { return m_pCommandList; }
@@ -122,7 +122,7 @@ private:	 // 변수
 	ComPtr<ID3D12RootSignature> m_pGraphicsRootSignature;
 
 	// Render Manager
-	CRenderMgr m_renderMgr;
+	shared_ptr<CRenderMgr> m_pRenderMgr;
 
 #ifdef _DEBUG
 	ComPtr<ID3D12Debug> m_pDebugController;

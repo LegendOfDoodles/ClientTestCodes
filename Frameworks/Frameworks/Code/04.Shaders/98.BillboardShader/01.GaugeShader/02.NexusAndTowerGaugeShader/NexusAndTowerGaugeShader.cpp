@@ -12,7 +12,7 @@
 /// 최종 수정 날짜: 2018-07-03
 /// </summary>
 
-CNexusAndTowerHPGaugeShader::CNexusAndTowerHPGaugeShader(CCreateMgr * pCreateMgr)
+CNexusAndTowerHPGaugeShader::CNexusAndTowerHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr)
 	:CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
@@ -172,10 +172,9 @@ D3D12_SHADER_BYTECODE CNexusAndTowerHPGaugeShader::CreatePixelShader(ComPtr<ID3D
 		pShaderBlob));
 }
 
-void CNexusAndTowerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CNexusAndTowerHPGaugeShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
@@ -183,23 +182,7 @@ void CNexusAndTowerHPGaugeShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRe
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CNexusAndTowerHPGaugeShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-}
-
-void CNexusAndTowerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CNexusAndTowerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
@@ -209,8 +192,8 @@ void CNexusAndTowerHPGaugeShader::BuildObjects(CCreateMgr * pCreateMgr, void * p
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateShaderVariables(pCreateMgr, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CGaugeObject *pGaugeObject = NULL;

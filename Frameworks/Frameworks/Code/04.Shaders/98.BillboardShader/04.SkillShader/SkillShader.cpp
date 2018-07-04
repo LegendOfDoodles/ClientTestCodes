@@ -14,7 +14,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CSkillShader::CSkillShader(CCreateMgr * pCreateMgr)
+CSkillShader::CSkillShader(shared_ptr<CCreateMgr> pCreateMgr)
 	: CShader(pCreateMgr)
 {
 }
@@ -108,7 +108,7 @@ void CSkillShader::Render(CCamera * pCamera)
 	}
 }
 
-void CSkillShader::GetCamera(CCamera * pCamera)
+void CSkillShader::SetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
@@ -225,10 +225,9 @@ D3D12_SHADER_BYTECODE CSkillShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderB
 		pShaderBlob));
 }
 
-void CSkillShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CSkillShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 2;
 	CreateDescriptorHeaps();
@@ -236,24 +235,7 @@ void CSkillShader::CreateShader(CCreateMgr * pCreateMgr, UINT nRenderTargets, bo
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CSkillShader::CreateShaderVariables(CCreateMgr * pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-}
-
-void CSkillShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
+void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
@@ -262,11 +244,11 @@ void CSkillShader::BuildObjects(CCreateMgr * pCreateMgr, void * pContext)
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
-	CreateShaderVariables(pCreateMgr, m_nObjects);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	
 	for (int i = 0; i < m_nHeaps; ++i) {
 		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer, ncbElementBytes, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
 	}
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };

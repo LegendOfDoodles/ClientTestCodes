@@ -15,7 +15,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CMinionHPGaugeShader::CMinionHPGaugeShader(CCreateMgr *pCreateMgr)
+CMinionHPGaugeShader::CMinionHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr)
 	: CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
@@ -79,7 +79,7 @@ void CMinionHPGaugeShader::Render(CCamera *pCamera)
 	}
 }
 
-void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
+void CMinionHPGaugeShader::SetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
@@ -88,7 +88,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 	}
 }
 
-void CMinionHPGaugeShader::SetUIObjectsManager(CUIObjectManager * pManger)
+void CMinionHPGaugeShader::SetUIObjectsManager(shared_ptr<CUIObjectManager> pManger)
 {
 	m_pGaugeManger = pManger;
 	m_MinionObjectList = m_pGaugeManger->GetMinionObjectList();
@@ -157,10 +157,9 @@ D3D12_SHADER_BYTECODE CMinionHPGaugeShader::CreatePixelShader(ComPtr<ID3DBlob>& 
 		pShaderBlob));
 }
 
-void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CMinionHPGaugeShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
@@ -168,34 +167,17 @@ void CMinionHPGaugeShader::CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTarg
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CMinionHPGaugeShader::CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers)
-{
-	HRESULT hResult;
-
-	UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
-
-	m_pConstBuffer = pCreateMgr->CreateBufferResource(
-		NULL,
-		elementBytes * nBuffers,
-		D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		NULL);
-
-	hResult = m_pConstBuffer->Map(0, NULL, (void **)&m_pMappedObjects);
-	ThrowIfFailed(hResult);
-}
-
-void CMinionHPGaugeShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
+void CMinionHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	m_pCamera = (CCamera*)pContext;
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
-	CreateShaderVariables(pCreateMgr, MAX_MINION);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, MAX_MINION);
 
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1);
 
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer, ncbElementBytes);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes);
 
 #if USE_BATCH_MATERIAL
 	m_nMaterials = 1;

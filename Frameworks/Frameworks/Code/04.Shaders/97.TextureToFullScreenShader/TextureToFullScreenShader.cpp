@@ -12,7 +12,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 
-CTextureToFullScreenShader::CTextureToFullScreenShader(CCreateMgr *pCreateMgr) : CShader(pCreateMgr)
+CTextureToFullScreenShader::CTextureToFullScreenShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
 }
 
@@ -24,7 +24,7 @@ CTextureToFullScreenShader::~CTextureToFullScreenShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CTextureToFullScreenShader::CreateGraphicsRootSignature(CCreateMgr *pCreateMgr)
+void CTextureToFullScreenShader::CreateGraphicsRootSignature(shared_ptr<CCreateMgr> pCreateMgr)
 {
 	HRESULT hResult;
 	D3D12_DESCRIPTOR_RANGE pDescriptorRanges[4];
@@ -133,7 +133,7 @@ void CTextureToFullScreenShader::CreateGraphicsRootSignature(CCreateMgr *pCreate
 	ThrowIfFailed(hResult);
 }
 
-void CTextureToFullScreenShader::CreateShaderResourceViews(CCreateMgr * pCreateMgr, shared_ptr<CTexture> pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index)
+void CTextureToFullScreenShader::CreateShaderResourceViews(shared_ptr<CCreateMgr> pCreateMgr, shared_ptr<CTexture> pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_CPU_DESCRIPTOR_HANDLE srvCPUDescriptorHandle = m_psrvCPUDescriptorStartHandle[index];
@@ -168,15 +168,9 @@ void CTextureToFullScreenShader::CreateShaderResourceViews(CCreateMgr * pCreateM
 	pTexture->SetRootArgument(RENDER_TARGET_BUFFER_CNT, nRootParameterStartIndex, srvGPUDescriptorHandle);
 }
 
-void CTextureToFullScreenShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets)
+void CTextureToFullScreenShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, ComPtr<ID3D12RootSignature> pGraphicsRootSignature, UINT nRenderTargets)
 {
 	m_nPipelineStates = 1;
-	m_ppPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
-
-	for (int i = 0; i < m_nPipelineStates; ++i)
-	{
-		m_ppPipelineStates[i] = NULL;
-	}
 
 	m_nHeaps = 1;
 	CreateDescriptorHeaps();
@@ -184,7 +178,7 @@ void CTextureToFullScreenShader::CreateShader(CCreateMgr * pCreateMgr, ComPtr<ID
 	CShader::CreateShader(pCreateMgr, pGraphicsRootSignature, nRenderTargets);
 }
 
-void CTextureToFullScreenShader::BuildObjects(CCreateMgr * pCreateMgr, shared_ptr<CTexture> pContext)
+void CTextureToFullScreenShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, shared_ptr<CTexture> pContext)
 {
 	m_pTexture = pContext;
 

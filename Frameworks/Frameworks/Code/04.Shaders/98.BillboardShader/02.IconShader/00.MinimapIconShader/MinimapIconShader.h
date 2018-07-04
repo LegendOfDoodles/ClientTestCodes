@@ -14,7 +14,7 @@ class CUIObjectManager;
 class CMinimapIconShader : public CShader
 {
 public:
-	CMinimapIconShader(CCreateMgr *pCreateMgr);
+	CMinimapIconShader(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual ~CMinimapIconShader();
 
 public: // 공개 함수
@@ -26,12 +26,12 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	virtual void GetCamera(CCamera *pCamera);
+	virtual void SetCamera(CCamera *pCamera);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 	
-	void SetUIObjectsManager(CUIObjectManager * pManger);
+	void SetUIObjectsManager(shared_ptr<CUIObjectManager> pManger);
 
 	virtual void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CCollisionObject**)pPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
@@ -43,10 +43,9 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
-	virtual void CreateShader(CCreateMgr *pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
-	virtual void CreateShaderVariables(CCreateMgr *pCreateMgr, int nBuffers = 1);
+	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
-	virtual void BuildObjects(CCreateMgr *pCreateMgr, void *pContext = NULL);
+	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
 	virtual void ReleaseObjects();
 
@@ -57,14 +56,6 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
 
 protected: // 변수
-	// Players Icon & Static Objects
-	CBaseObject **m_ppObjects{ NULL };
-	int m_nObjects = 0;
-
-	// Materials
-	CMaterial	**m_ppMaterials{ NULL };
-	int m_nMaterials = 0;
-
 	// 카메라
 	CCamera *m_pCamera;
 
@@ -78,8 +69,6 @@ protected: // 변수
 	CollisionObjectList *m_MinionObjectList;
 	MinionIconObjectList m_MinionIconObjectList;
 
-	CUIObjectManager * m_pIconManger{ NULL };
-	CCreateMgr* m_pCreateMgr{ NULL };
-
-	UINT8 *m_pMappedObjects{ NULL };
+	shared_ptr<CUIObjectManager> m_pIconManger;
+	shared_ptr<CCreateMgr> m_pCreateMgr;
 };

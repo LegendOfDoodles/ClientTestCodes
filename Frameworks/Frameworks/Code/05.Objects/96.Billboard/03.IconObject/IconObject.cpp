@@ -10,12 +10,12 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CIconObject::CIconObject(CCreateMgr * pCreateMgr)
+CIconObject::CIconObject(shared_ptr<CCreateMgr> pCreateMgr)
 	: CUIFrameObject(pCreateMgr)
 {
 }
 
-CIconObject::CIconObject(CCreateMgr * pCreateMgr, IconUIType type)
+CIconObject::CIconObject(shared_ptr<CCreateMgr> pCreateMgr, IconUIType type)
 	: CUIFrameObject(pCreateMgr)
 {
 	CTexturedRectMesh *pRectMesh = NULL;
@@ -83,12 +83,6 @@ void CIconObject::Render(CCamera *pCamera, UINT istanceCnt)
 
 		if (m_cbvGPUDescriptorHandle.ptr)
 			m_pCommandList->SetGraphicsRootDescriptorTable(7, m_cbvGPUDescriptorHandle);
-
-		if (m_pShader)
-		{
-			UpdateShaderVariables();
-			m_pShader->Render(pCamera);
-		}
 
 		if (m_ppMeshes)
 		{
