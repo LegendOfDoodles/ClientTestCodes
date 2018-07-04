@@ -12,7 +12,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CFSMMgr::CFSMMgr(CWayFinder* pWayFinder)
+CFSMMgr::CFSMMgr(shared_ptr<CWayFinder> pWayFinder)
 {
 	m_pWayFinder = pWayFinder;
 }

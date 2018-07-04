@@ -101,7 +101,7 @@ void IndexedPriorityQLow<KeyType>::ReorderDownwards(int nd, int HeapSize)
 // Astar
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
-CAstar::CAstar(const CWayFinder *pFinder, int source, int target)
+CAstar::CAstar(const shared_ptr<CWayFinder> pFinder, int source, int target)
 	: m_pFinder(pFinder), m_source(source), m_target(target),
 	m_GCosts(pFinder->GetNodeCount(), 0.0), m_FCosts(pFinder->GetNodeCount(), 0.0),
 	m_shortestPathTree(pFinder->GetNodeCount()), m_searchFrontier(pFinder->GetNodeCount())

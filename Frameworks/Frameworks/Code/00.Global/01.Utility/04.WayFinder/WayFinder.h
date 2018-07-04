@@ -14,7 +14,7 @@ struct NodeMap {
 	bool Detected{ false };
 	bool Static{ false };
 };
-class CWayFinder
+class CWayFinder : public std::enable_shared_from_this<CWayFinder>
 {
 public: // 생성자, 소멸자
 	CWayFinder();
@@ -51,5 +51,5 @@ protected: // 변수
 	XMFLOAT2 m_nodeWH;
 
 	shared_ptr<CAstar> m_pCurSearch;
-	CCollisionMapImage *m_pCollisionMapImage{ NULL };
+	shared_ptr<CCollisionMapImage> m_pCollisionMapImage;
 };

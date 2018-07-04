@@ -42,7 +42,7 @@ void CMinionHPGaugeShader::UpdateShaderVariables()
 {
 	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
+	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
 		pMappedObject->m_fCurrentHP = (*iter)->GetCurrentHP();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
@@ -62,7 +62,7 @@ void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 		return false;
 	});
 
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
+	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		(*iter)->Animate(timeElapsed);
 	}
 
@@ -74,7 +74,7 @@ void CMinionHPGaugeShader::Render(CCamera *pCamera)
 	CShader::Render(pCamera);
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
+	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		(*iter)->Render(pCamera);
 	}
 }
@@ -83,7 +83,7 @@ void CMinionHPGaugeShader::GetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
+	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
 		static_cast<CGaugeObject*>(*iter)->SetCamera(m_pCamera);
 	}
 }
@@ -261,8 +261,8 @@ void CMinionHPGaugeShader::SpawnGauge()
 
 	if (!cnt) return;
 
-	HPGaugeObjectList::reverse_iterator &gaugeBegin{ m_HPGaugeObjectList.rbegin() };
-	HPGaugeObjectList::reverse_iterator &gaugeEnd{ m_HPGaugeObjectList.rbegin() };
+	HPGaugeObjectList::reverse_iterator gaugeBegin{ m_HPGaugeObjectList.rbegin() };
+	HPGaugeObjectList::reverse_iterator gaugeEnd{ m_HPGaugeObjectList.rbegin() };
 
 	for (int i = 0; i < cnt - 1; ++i) ++gaugeBegin;
 
@@ -277,7 +277,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 
 void CMinionHPGaugeShader::ReleaseObjects()
 {
-	for (auto& iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end();)
+	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end();)
 	{
 		iter = m_HPGaugeObjectList.erase(iter);
 	}

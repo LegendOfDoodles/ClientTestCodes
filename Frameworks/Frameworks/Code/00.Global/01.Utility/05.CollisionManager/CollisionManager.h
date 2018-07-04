@@ -21,7 +21,7 @@ public:
 	void GameOver(TeamType type);
 	void SetNodeMap(std::vector<NodeMap> map,float size, XMFLOAT2 wh);
 	void AddCollider(CCollisionObject* pcol);
-	void Update(CWayFinder* pWayFinder);
+	void Update(shared_ptr<CWayFinder> pWayFinder);
 	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0,float damage=0);
 	CCollisionObject* RequestNearObject(CCollisionObject* pCol,float lengh);
 	~CCollisionManager();

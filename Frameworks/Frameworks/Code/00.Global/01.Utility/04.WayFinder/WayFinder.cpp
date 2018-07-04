@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -15,11 +15,11 @@
 CWayFinder::CWayFinder()
 {
 	// 충돌 맵 읽어오기
-	m_pCollisionMapImage = new CCollisionMapImage(
+	m_pCollisionMapImage = shared_ptr<CCollisionMapImage>(new CCollisionMapImage(
 		_T("Resource/Terrain/TerrainCollision.raw"),
 		static_cast<int>(TETRRAIN_COLLISION_WIDTH), 
 		static_cast<int>(TETRRAIN_COLLISION_HEIGHT),
-		TERRAIN_COLLISION_SCALE);
+		TERRAIN_COLLISION_SCALE));
 
 	// 노드 읽어오기
 	std::ifstream nodeIn("Resource/Data/AStar/nodesData.txt", std::ios::in, std::ios::binary);
@@ -84,7 +84,6 @@ CWayFinder::~CWayFinder()
 		m_edges[i].clear();
 	}
 	m_edges.clear();
-	if (m_pCollisionMapImage) Safe_Delete(m_pCollisionMapImage);
 }
 
 // 직선 이동 가능한지 파악하기 위한 함수
@@ -167,8 +166,8 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 	else
 	{
 		// 길찾기 수행
-		if (source.x < adjTarget.x) m_pCurSearch = shared_ptr<CAstar>(new CAstar(this, srcIndex, dstIndex));
-		else m_pCurSearch = shared_ptr<CAstar>(new CAstar(this, dstIndex, srcIndex));
+		if (source.x < adjTarget.x) m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), srcIndex, dstIndex));
+		else m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), dstIndex, srcIndex));
 
 		int result;
 		for (int i = 0; i < 10000; ++i)

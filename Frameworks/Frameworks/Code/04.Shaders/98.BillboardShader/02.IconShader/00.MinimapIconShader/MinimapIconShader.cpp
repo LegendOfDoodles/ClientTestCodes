@@ -52,7 +52,7 @@ void CMinimapIconShader::UpdateShaderVariables()
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
 
-	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
@@ -71,7 +71,7 @@ void CMinimapIconShader::AnimateObjects(float timeElapsed)
 		return false;
 	});
 
-	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
 		(*iter)->Animate(timeElapsed);
 	}
 
@@ -131,7 +131,7 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 
 	m_ppMaterials[2]->UpdateShaderVariable(0);
 	// ¹Ì´Ï¾ð
-	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
 		
 		(*iter)->Render(pCamera);
 	}
@@ -141,7 +141,7 @@ void CMinimapIconShader::GetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
 
-	for (auto& iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
 		static_cast<CIconObject*>(*iter)->SetCamera(m_pCamera);
 	}
 
@@ -374,8 +374,8 @@ void CMinimapIconShader::SpawnMinionIcon()
 
 	if (!cnt) return;
 
-	MinionIconObjectList::reverse_iterator &IconBegin{ m_MinionIconObjectList.rbegin() };
-	MinionIconObjectList::reverse_iterator &IconEnd{ m_MinionIconObjectList.rbegin() };
+	MinionIconObjectList::reverse_iterator IconBegin{ m_MinionIconObjectList.rbegin() };
+	MinionIconObjectList::reverse_iterator IconEnd{ m_MinionIconObjectList.rbegin() };
 
 	for (int i = 0; i < cnt - 1; ++i) ++IconBegin;
 

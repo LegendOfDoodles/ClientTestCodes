@@ -6,7 +6,7 @@ class CCollisionObject;
 class CFSMMgr
 {
 public:	// 생성자, 소멸자
-	CFSMMgr(CWayFinder* pWayFinder);
+	CFSMMgr(shared_ptr<CWayFinder> pWayFinder);
 	virtual ~CFSMMgr();
 
 public: // 공개 함수
@@ -21,6 +21,6 @@ protected: // 내부 함수
 	void PlayRemove(float timeElapsed, CCollisionObject* obj) { timeElapsed;	obj; }
 
 protected:	// 변수
-	CWayFinder * m_pWayFinder{ NULL };
+	shared_ptr<CWayFinder> m_pWayFinder;
 };
 

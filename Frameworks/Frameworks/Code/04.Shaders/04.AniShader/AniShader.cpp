@@ -49,7 +49,7 @@ void CAniShader::UpdateShaderVariables()
 {
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
 		XMFLOAT4X4 tmp[128];
@@ -60,7 +60,7 @@ void CAniShader::UpdateShaderVariables()
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
 
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
 		XMFLOAT4X4 tmp[128];
@@ -76,14 +76,14 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 {
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
 
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
 
@@ -113,7 +113,7 @@ void CAniShader::AnimateObjects(float timeElapsed)
 		m_preSpawnTime = -0.25f;
 	}
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
 	{
 		if ((*iter)->GetState() == States::Remove)
 		{
@@ -130,7 +130,7 @@ void CAniShader::AnimateObjects(float timeElapsed)
 		}
 	}
 
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end();)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end();)
 	{
 		if ((*iter)->GetState() == States::Remove)
 		{
@@ -153,12 +153,12 @@ void CAniShader::Render(CCamera *pCamera)
 	CShader::Render(pCamera);
 
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
 	if (m_ppMaterials) m_ppMaterials[1]->UpdateShaderVariables();
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
@@ -167,11 +167,11 @@ void CAniShader::Render(CCamera *pCamera)
 void CAniShader::RenderBoundingBox(CCamera * pCamera)
 {
 	CShader::RenderBoundingBox(pCamera);
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->RenderBoundingBox(pCamera);
 	}
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->RenderBoundingBox(pCamera);
 	}
@@ -181,11 +181,11 @@ void CAniShader::RenderShadow(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0, 2);
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
@@ -200,7 +200,7 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 	float hitDistance = FLT_MAX;
 	CCollisionObject *pSelectedObject{ NULL };
 
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
 		if (intersected && (hitDistance < nearHitDistance))
@@ -210,7 +210,7 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 		}
 	}
 
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
 		if (intersected && (hitDistance < nearHitDistance))
@@ -425,12 +425,12 @@ void CAniShader::BuildObjects(CCreateMgr *pCreateMgr, void *pContext)
 
 void CAniShader::ReleaseObjects()
 {
-	for (auto& iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
 	{
 		iter = m_blueObjects.erase(iter);
 	}
 	m_blueObjects.clear();
-	for (auto& iter = m_redObjects.begin(); iter != m_redObjects.end(); )
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); )
 	{
 		iter = m_redObjects.erase(iter);
 	}
@@ -616,8 +616,8 @@ void CAniShader::SpawnMinion()
 
 	if (!makeCnt) return;
 	
-	CollisionObjectList::reverse_iterator &blueBegin{ m_blueObjects.rbegin() };
-	CollisionObjectList::reverse_iterator &redBegin{ m_redObjects.rbegin() };
+	CollisionObjectList::reverse_iterator blueBegin{ m_blueObjects.rbegin() };
+	CollisionObjectList::reverse_iterator redBegin{ m_redObjects.rbegin() };
 
 	if (makeCnt > 1) blueBegin++;
 	if (makeCnt > 3) redBegin++;

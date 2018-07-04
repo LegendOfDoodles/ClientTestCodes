@@ -354,7 +354,7 @@ void CScene::BuildObjects(CCreateMgr *pCreateMgr)
 	m_ppShaders[14]->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
-	m_pWayFinder = new CWayFinder();
+	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
 	m_pCollisionManager = new CCollisionManager();
 	m_pUIObjectsManager = new CUIObjectManager();
 	m_pFSMMgr = new CFSMMgr(m_pWayFinder);
@@ -412,7 +412,6 @@ void CScene::ReleaseObjects()
 		}
 		Safe_Delete_Array(m_ppShaders);
 	}
-	if (m_pWayFinder) Safe_Delete(m_pWayFinder);
 	if (m_pCollisionManager) Safe_Delete(m_pCollisionManager);
 	if (m_pUIObjectsManager) Safe_Delete(m_pUIObjectsManager);
 	if (m_pFSMMgr) Safe_Delete(m_pFSMMgr);

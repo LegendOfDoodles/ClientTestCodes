@@ -58,7 +58,7 @@ void CCollisionManager::AddCollider(CCollisionObject* pcol)
 }
 
 
-void CCollisionManager::Update(CWayFinder* pWayFinder)
+void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 {
 	if (m_Winner == TeamType::None)
 	{
@@ -82,7 +82,7 @@ void CCollisionManager::Update(CWayFinder* pWayFinder)
 		{
 			if ((*i)->GetStaticType() != StaticType::Static) {
 				
-				for (auto& j = m_lstColliders.begin(); j != m_lstColliders.end(); ++j)
+				for (auto j = m_lstColliders.begin(); j != m_lstColliders.end(); ++j)
 				{
 					if (i != j && (*j)->GetStaticType() != StaticType::Static) {
 						if (NearLevel((*i)->GetCollisionLevel(), (*j)->GetCollisionLevel()))

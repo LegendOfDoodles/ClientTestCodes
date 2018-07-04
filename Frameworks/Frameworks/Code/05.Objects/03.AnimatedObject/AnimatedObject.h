@@ -39,7 +39,7 @@ public: // 공개 함수
 
 	void SetPathToGo(Path *path);
 	ProcessType MoveToDestination(float timeElapsed);
-	void MoveToEnemy(float timeElapsed, CWayFinder* pWayFinder);
+	void MoveToEnemy(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 
 	virtual void RegenerateLookAt();
 

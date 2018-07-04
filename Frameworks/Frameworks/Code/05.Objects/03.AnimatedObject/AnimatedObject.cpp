@@ -178,7 +178,7 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 	return States::Processing;
 }
 
-void CAnimatedObject::MoveToEnemy(float timeElapsed, CWayFinder* pWayFinder)
+void CAnimatedObject::MoveToEnemy(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (!m_pEnemy) return;
 

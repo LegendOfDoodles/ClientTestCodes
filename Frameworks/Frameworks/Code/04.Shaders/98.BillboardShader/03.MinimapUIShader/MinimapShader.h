@@ -23,7 +23,7 @@ public: // 공개 함수
 
 	virtual void GetCamera(CCamera *pCamera);
 	virtual void SetPlayer(CBaseObject *pPlayer) { m_pPlayer = (CPlayer*)pPlayer; };
-	virtual void SetWayFinder(CWayFinder *pWayFinder) { m_pWayFinder = pWayFinder; };
+	virtual void SetWayFinder(shared_ptr<CWayFinder> pWayFinder) { m_pWayFinder = pWayFinder; };
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -51,7 +51,7 @@ protected: // 변수
 	CCamera *m_pCamera;
 
 	CPlayer *m_pPlayer;
-	CWayFinder *m_pWayFinder;
+	shared_ptr<CWayFinder> m_pWayFinder;
 
 	bool OnOFF = false;
 

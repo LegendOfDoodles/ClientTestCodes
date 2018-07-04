@@ -127,7 +127,7 @@ void CMinion::PlayWalk(float timeElapsed)
 	PlayIdle(timeElapsed);
 }
 
-void CMinion::PlayChase(float timeElapsed, CWayFinder* pWayFinder)
+void CMinion::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (!Chaseable(m_pEnemy))
 	{

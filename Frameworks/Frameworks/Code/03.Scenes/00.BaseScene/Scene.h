@@ -107,7 +107,7 @@ protected: // º¯¼ö
 
 	XMFLOAT3 m_pickWorldPosition{ 0.f, 0.f, 0.f };
 
-	CWayFinder* m_pWayFinder{ NULL };
+	shared_ptr<CWayFinder> m_pWayFinder;
 
 	CCreateMgr* m_pCreateMgr{ NULL };
 
