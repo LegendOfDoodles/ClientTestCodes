@@ -230,15 +230,17 @@ void CStaticObjectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	int accCnt{ 0 };
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, ncbElementBytes, m_nObjects);
 	for (int i = 0; i < m_nHeaps - 1; ++i)
 	{
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, transformInporter.m_iKindMeshCnt[i], 4, i);
+		CreateConstantBufferViews(pCreateMgr, transformInporter.m_iKindMeshCnt[i], m_pConstBuffer.Get(), ncbElementBytes, accCnt, i);
+		accCnt += transformInporter.m_iKindMeshCnt[i];
 	}
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, m_nHeaps - 1);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), ncbElementBytes, m_nHeaps - 1);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), ncbElementBytes, 0, m_nHeaps - 1);
 
 	SaveBoundingBoxHeapNumber(m_nHeaps - 1);
 
@@ -368,7 +370,7 @@ void CStaticObjectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *
 			m_ppObjects[cnt]->SetMesh(0, pMeshes[i]);
 			SetBoundingBoxMeshByIndex(pCreateMgr, m_ppObjects[cnt], i);
 
-			m_ppObjects[cnt]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
+			m_ppObjects[cnt]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[i].ptr + (incrementSize * j));
 			m_ppObjects[cnt]->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps - 1].ptr + (incrementSize * cnt));
 			++cnt;
 		}

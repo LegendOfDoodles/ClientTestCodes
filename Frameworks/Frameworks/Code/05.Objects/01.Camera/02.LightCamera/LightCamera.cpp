@@ -53,19 +53,19 @@ void CLightCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 	m_xmf4x4ShadowViewProjTex = Matrix4x4::Identity();
 	m_xmf4x4ShadowViewProjTex = Matrix4x4::Multiply(Matrix4x4::Multiply(m_xmf4x4View, m_xmf4x4Projection), Tex);
 
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, ((sizeof(VS_CB_LIGHT_CAMERA_INFO) + 255) & ~255));
 }
 
-void CLightCamera::UpdateShaderVariables()
+void CLightCamera::UpdateShaderVariables(int rootSignatureIndex)
 {
-	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
-	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
-	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4ShadowViewProjTex, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4ShadowViewProjTex)));
+	static VS_CB_LIGHT_CAMERA_INFO *pMappedCamera = (VS_CB_LIGHT_CAMERA_INFO *)(m_pMappedCamera);
 
-	memcpy(&m_pMappedCamera->m_xmf3Position, &m_xmf3Position, sizeof(XMFLOAT3));
+	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4ShadowViewProjTex, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4ShadowViewProjTex)));
 
 	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = m_pConstBuffer->GetGPUVirtualAddress();
-	m_pCommandList->SetGraphicsRootConstantBufferView(0, gpuVirtualAddress);
+	m_pCommandList->SetGraphicsRootConstantBufferView(rootSignatureIndex, gpuVirtualAddress);
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -66,8 +66,6 @@ void CSkillShader::AnimateObjects(float timeElapsed)
 
 void CSkillShader::Render(CCamera * pCamera)
 {
-	CShader::Render(pCamera);
-
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		SkillUIType type = (SkillUIType)((CSkillObject*)m_ppObjects[j])->GetType();
@@ -79,12 +77,15 @@ void CSkillShader::Render(CCamera * pCamera)
 			m_ppMaterials[0]->UpdateShaderVariable(0);
 			break;
 		case GreyWSkill:
+			CShader::Render(pCamera, 0);
 			m_ppMaterials[0]->UpdateShaderVariable(1);
 			break;
 		case GreyESkill:
+			CShader::Render(pCamera, 0);
 			m_ppMaterials[0]->UpdateShaderVariable(2);
 			break;
 		case GreyRSkill:
+			CShader::Render(pCamera, 0);
 			m_ppMaterials[0]->UpdateShaderVariable(3);
 			break;
 		case QSkill:
@@ -92,12 +93,15 @@ void CSkillShader::Render(CCamera * pCamera)
 			m_ppMaterials[1]->UpdateShaderVariable(0);
 			break;
 		case WSkill:
+			CShader::Render(pCamera, 1);
 			m_ppMaterials[1]->UpdateShaderVariable(1);
 			break;
 		case ESkill:
+			CShader::Render(pCamera, 1);
 			m_ppMaterials[1]->UpdateShaderVariable(2);
 			break;
 		case RSkill:
+			CShader::Render(pCamera, 1);
 			m_ppMaterials[1]->UpdateShaderVariable(3);
 			break;
 		default:
@@ -247,8 +251,8 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects / 2, 4, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects / 2, m_pConstBuffer.Get(), ncbElementBytes, m_nObjects / 2 * i, i);
 	}
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -263,9 +267,16 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 	{
 		pUIObject = new CSkillObject(pCreateMgr, (SkillUIType)i);
 		pUIObject->SetCamera(m_pCamera);
-		if (i >= 4) pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.0128f);	 // distance 10
-		else	   pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.00128f);
-		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		if (i < 4)
+		{
+			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.00128f);
+			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		}
+		else 
+		{
+			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.0128f);	 // distance 10	
+			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * (i - 4)));
+		}
 
 		m_ppObjects[i] = pUIObject;
 	}

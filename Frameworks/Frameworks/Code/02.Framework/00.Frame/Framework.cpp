@@ -45,6 +45,8 @@ void CFramework::FrameAdvance(float timeElapsed)
 	m_pScene->ProcessInput();
 	m_pScene->AnimateObjects(timeElapsed);
 	m_pRenderMgr->Render(m_pScene);
+	// 임시 종료 확인
+	m_running = !(GetAsyncKeyState(VK_ESCAPE) & 0x8000);
 }
 
 LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,

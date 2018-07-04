@@ -158,7 +158,7 @@ void CRenderMgr::RenderLight(shared_ptr<CScene> pScene)
 
 	pScene->RenderWithLights();
 
-	pScene->UpdateShadowCamera();
+	pScene->UpdateShadowCamera(2);
 
 	m_pTextureToFullScreenShader->Render(NULL);
 

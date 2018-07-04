@@ -6,7 +6,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -373,6 +373,10 @@ void CCreateMgr::CreateDirect3dDevice()
 	hResult = ::CreateDXGIFactory1(IID_PPV_ARGS(m_pFactory.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
+	const char factoryName[]{ "m_pFactory" };
+	hResult = m_pFactory->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(factoryName), factoryName);
+	ThrowIfFailed(hResult);
+
 	//모든 하드웨어 어댑터 대하여 특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성한다.
 	ComPtr<IDXGIAdapter1> pAdapter;
 	for (UINT i = 0;
@@ -420,12 +424,18 @@ void CCreateMgr::CreateDirect3dDevice()
 		IID_PPV_ARGS(m_pFence.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
+	hResult = m_pFence->SetName(L"m_pFence");
+	ThrowIfFailed(hResult);
+
 	m_pRenderMgr->SetFence(m_pFence);
 
 	// Save Descriptors Increment Size
 	m_rtvDescriptorIncrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	m_cbvSrvDescriptorIncrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	m_dsvDescriptorIncrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+	
+	hResult = m_pDevice->SetName(L"m_pDevice");
+	ThrowIfFailed(hResult);
 }
 
 void CCreateMgr::CreateCommandQueueAndList()
@@ -443,12 +453,18 @@ void CCreateMgr::CreateCommandQueueAndList()
 		IID_PPV_ARGS(m_pCommandQueue.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
+	hResult = m_pCommandQueue->SetName(L"m_pCommandQueue");
+	ThrowIfFailed(hResult);
+
 	m_pRenderMgr->SetCommandQueue(m_pCommandQueue);
 
 	// Create Allocator
 	hResult = m_pDevice->CreateCommandAllocator(
 		D3D12_COMMAND_LIST_TYPE_DIRECT,
 		IID_PPV_ARGS(m_pCommandAllocator.GetAddressOf()));
+	ThrowIfFailed(hResult);
+
+	hResult = m_pCommandAllocator->SetName(L"m_pCommandAllocator");
 	ThrowIfFailed(hResult);
 	
 	m_pRenderMgr->SetCommandAllocator(m_pCommandAllocator);
@@ -460,8 +476,12 @@ void CCreateMgr::CreateCommandQueueAndList()
 		m_pCommandAllocator.Get(),
 		NULL,
 		IID_PPV_ARGS(m_pCommandList.GetAddressOf()));
-	m_pRenderMgr->SetCommandList(m_pCommandList);
 	ThrowIfFailed(hResult);
+
+	hResult = m_pCommandList->SetName(L"m_pCommandList");
+	ThrowIfFailed(hResult);
+
+	m_pRenderMgr->SetCommandList(m_pCommandList);
 
 	hResult = m_pCommandList->Close();
 	ThrowIfFailed(hResult);
@@ -511,6 +531,10 @@ void CCreateMgr::CreateSwapChain()
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
 	m_pRenderMgr->SetSwapChainBufferIndex(m_pSwapChain->GetCurrentBackBufferIndex());
+
+	const char swapChainName[]{ "m_pSwapChain" };
+	hResult = m_pSwapChain->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(swapChainName), swapChainName);
+	ThrowIfFailed(hResult);
 }
 
 void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
@@ -529,6 +553,9 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 		&descriptorHeapDesc,
 		IID_PPV_ARGS(m_pRtvDescriptorHeap.GetAddressOf()));
 	ThrowIfFailed(hResult);
+	
+	hResult = m_pRtvDescriptorHeap->SetName(L"m_pRtvDescriptorHeap");
+	ThrowIfFailed(hResult);
 
 	// Create Depth Stencil View Descriptor Heap
 	descriptorHeapDesc.NumDescriptors = 2;
@@ -537,6 +564,9 @@ void CCreateMgr::CreateRtvAndDsvDescriptorHeaps()
 	hResult = m_pDevice->CreateDescriptorHeap(
 		&descriptorHeapDesc,
 		IID_PPV_ARGS(m_pDsvDescriptorHeap.GetAddressOf()));
+	ThrowIfFailed(hResult);
+
+	hResult = m_pDsvDescriptorHeap->SetName(L"m_pDsvDescriptorHeap");
 	ThrowIfFailed(hResult);
 }
 
@@ -558,6 +588,8 @@ void CCreateMgr::CreateSwapChainRenderTargetViews()
 		ThrowIfFailed(hResult);
 		m_pDevice->CreateRenderTargetView(m_ppSwapChainBackBuffers[i].Get(), &renderTargetViewDesc, m_pRtvSwapChainBackBufferCPUHandles[i]);
 		rtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
+		hResult = m_ppSwapChainBackBuffers[i]->SetName(L"m_ppSwapChainBackBuffers");
+		ThrowIfFailed(hResult);
 	}
 	m_pRenderMgr->SetSwapChainBackBuffers(m_ppSwapChainBackBuffers);
 	m_pRenderMgr->SetRtvSwapChainBackBufferCPUHandles(m_pRtvSwapChainBackBufferCPUHandles);
@@ -604,6 +636,9 @@ void CCreateMgr::CreateDepthStencilView()
 		IID_PPV_ARGS(m_pDepthStencilBuffer.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
+	hResult = m_pDepthStencilBuffer->SetName(L"m_pDepthStencilBuffer");
+	ThrowIfFailed(hResult);
+
 	// Create Depth Stencil View
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUDescriptorHandle =
 		m_pDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
@@ -621,6 +656,9 @@ void CCreateMgr::CreateDepthStencilView()
 		D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		&clearValue, RENDER_TARGET_BUFFER_CNT);
+
+	hResult = m_pShadowDepthBuffer->SetName(L"m_pShadowDepthBuffer");
+	ThrowIfFailed(hResult);
 
 	// Depth DSV 설정
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
@@ -642,6 +680,7 @@ void CCreateMgr::CreateDepthStencilView()
 
 void CCreateMgr::CreateRenderTargetViews()
 {
+	HRESULT hResult;
 	m_pTexture.reset();
 	m_pTexture = shared_ptr<CTexture>(new CTexture(RENDER_TARGET_BUFFER_CNT + 1, RESOURCE_TEXTURE_2D_ARRAY, 0));
 
@@ -656,6 +695,8 @@ void CCreateMgr::CreateRenderTargetViews()
 			D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET,
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			&d3dClearValue, i);
+		hResult = m_ppRenderTargetBuffers[i]->SetName(L"m_ppRenderTargetBuffers");
+		ThrowIfFailed(hResult);
 	}
 	m_pRenderMgr->SetRenderTargetBuffers(m_ppRenderTargetBuffers);
 
@@ -724,7 +765,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pDescriptorRanges[4].RegisterSpace = 0;
 	pDescriptorRanges[4].OffsetInDescriptorsFromTableStart = 0;
 
-	D3D12_ROOT_PARAMETER pRootParameters[8];
+	D3D12_ROOT_PARAMETER pRootParameters[9];
 
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[0].Descriptor.ShaderRegister = 0; //Camera
@@ -765,6 +806,11 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
 	pRootParameters[7].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[4];  //UI Gauge Textures
 	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pRootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[8].Descriptor.ShaderRegister = 6; //Light Camera
+	pRootParameters[8].Descriptor.RegisterSpace = 0;
+	pRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	D3D12_STATIC_SAMPLER_DESC samplerDesc[2];
 	::ZeroMemory(&samplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
@@ -820,6 +866,9 @@ void CCreateMgr::CreateGraphicsRootSignature()
 		pSignatureBlob->GetBufferSize(),
 		IID_PPV_ARGS(m_pGraphicsRootSignature.GetAddressOf()));
 	if (pErrorBlob != nullptr) PrintErrorBlob(pErrorBlob);
+	ThrowIfFailed(hResult);
+
+	hResult = m_pGraphicsRootSignature->SetName(L"m_pGraphicsRootSignature");
 	ThrowIfFailed(hResult);
 
 	m_pRenderMgr->SaveGraphicsRootSignature(m_pGraphicsRootSignature);

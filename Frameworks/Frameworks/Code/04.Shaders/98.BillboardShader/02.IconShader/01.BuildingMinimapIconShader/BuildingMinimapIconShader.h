@@ -25,8 +25,8 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
-	virtual void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
-	virtual void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
+	virtual void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; }
+	virtual void SetNexusAndTowerCnt(int nexusCnt, int towerCnt) { m_nNexus = nexusCnt; m_nTower = towerCnt; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -47,5 +47,6 @@ protected: // 변수
 
 	// Tower And Nexus
 	CCollisionObject **m_ppNexusAndTower{ NULL };
-	int m_nNexusAndTower = 0;
+	int m_nNexus{ 0 };
+	int m_nTower{ 0 };
 };

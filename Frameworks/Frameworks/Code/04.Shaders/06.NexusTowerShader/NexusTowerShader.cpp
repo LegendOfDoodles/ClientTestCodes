@@ -266,15 +266,17 @@ void CNexusTowerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	int accCnt{ 0 };
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, ncbElementBytes, m_nObjects);
 	for (int i = 0; i < m_nHeaps- 1; ++i)
 	{
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, transformInporter.m_iKindMeshCnt[i], 1, i);
+		CreateConstantBufferViews(pCreateMgr, transformInporter.m_iKindMeshCnt[i], m_pConstBuffer.Get(), ncbElementBytes, accCnt, i);
+		accCnt += transformInporter.m_iKindMeshCnt[i];
 	}
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, m_nHeaps - 1);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), ncbElementBytes, m_nHeaps - 1);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), ncbElementBytes, 0, m_nHeaps - 1);
 
 	SaveBoundingBoxHeapNumber(m_nHeaps - 1);
 
@@ -312,7 +314,9 @@ void CNexusTowerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		XMFLOAT3(CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(7), CONVERT_PaperUnit_to_InG(10)));
 	CNexusTower *pBuild = NULL;
 
-	
+	m_nNexus = transformInporter.m_iKindMeshCnt[0] + transformInporter.m_iKindMeshCnt[1];
+	m_nTower = transformInporter.m_iKindMeshCnt[2] + transformInporter.m_iKindMeshCnt[3];
+
 	int cnt = 0;
 	for (int i = 0; i < m_nMaterials; ++i) {
 		m_meshCounts[i] = transformInporter.m_iKindMeshCnt[i];
@@ -345,7 +349,7 @@ void CNexusTowerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 			pBuild->ResetCollisionLevel();
 			pBuild->SetStatic(StaticType::Static);
 
-			pBuild->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
+			pBuild->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[i].ptr + (incrementSize * j));
 			pBuild->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps - 1].ptr + (incrementSize * cnt));
 			m_ppObjects[cnt++] = pBuild;
 		}

@@ -35,7 +35,6 @@ void CSkyBoxShader::ReleaseUploadBuffers()
 
 void CSkyBoxShader::UpdateShaderVariables()
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	static CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects);
 
 	if (m_pSkyBox)

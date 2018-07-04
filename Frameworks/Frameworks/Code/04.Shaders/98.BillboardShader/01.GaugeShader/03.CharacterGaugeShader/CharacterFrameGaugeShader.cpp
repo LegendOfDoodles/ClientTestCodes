@@ -70,35 +70,53 @@ void CharacterFrameGaugeShader::AnimateObjects(float timeElapsed)
 }
 
 void CharacterFrameGaugeShader::Render(CCamera * pCamera)
-{
-	CShader::Render(pCamera);
-	
+{	
 	CCollisionObject* master = ((CUIFrameObject*)m_ppObjects[0])->GetMasterObject();
 
-	switch (master->GetType())
+	if (master->GetTeam() == TeamType::Blue)
 	{
-	case ObjectType::StickPlayer:
-		if		(master->GetTeam() == TeamType::Blue)		m_ppMaterials[0]->UpdateShaderVariable(0);
-		else if (master->GetTeam() == TeamType::Red)		m_ppMaterials[1]->UpdateShaderVariable(0);
-		break;
-	case ObjectType::SwordPlayer:
-		if		(master->GetTeam() == TeamType::Blue)		m_ppMaterials[0]->UpdateShaderVariable(1);
-		else if (master->GetTeam() == TeamType::Red)		m_ppMaterials[1]->UpdateShaderVariable(1);
-		break;
-	case ObjectType::BowPlayer:
-		if		(master->GetTeam() == TeamType::Blue)		m_ppMaterials[0]->UpdateShaderVariable(3);
-		else if (master->GetTeam() == TeamType::Red) 		m_ppMaterials[1]->UpdateShaderVariable(3);
-		break;
-	case ObjectType::StaffPlayer:
-		if		(master->GetTeam() == TeamType::Blue) 		m_ppMaterials[0]->UpdateShaderVariable(2);
-		else if (master->GetTeam() == TeamType::Red)		m_ppMaterials[1]->UpdateShaderVariable(2);
-		break;
+		CShader::Render(pCamera, 0);
+		switch (master->GetType())
+		{
+		case ObjectType::StickPlayer:
+			m_ppMaterials[0]->UpdateShaderVariable(0);
+			break;
+		case ObjectType::SwordPlayer:
+			m_ppMaterials[0]->UpdateShaderVariable(1);
+			break;
+		case ObjectType::BowPlayer:
+			m_ppMaterials[0]->UpdateShaderVariable(3);
+			break;
+		case ObjectType::StaffPlayer:
+			m_ppMaterials[0]->UpdateShaderVariable(2);
+			break;
+		}
+		if (m_ppObjects[0]) m_ppObjects[0]->Render(pCamera);
 	}
-	if (m_ppObjects[0]) m_ppObjects[0]->Render(pCamera);
+	else if (master->GetTeam() == TeamType::Red)
+	{
+		CShader::Render(pCamera, 1);
+		switch (master->GetType())
+		{
+		case ObjectType::StickPlayer:
+			m_ppMaterials[1]->UpdateShaderVariable(0);
+			break;
+		case ObjectType::SwordPlayer:
+			m_ppMaterials[1]->UpdateShaderVariable(1);
+			break;
+		case ObjectType::BowPlayer:
+			m_ppMaterials[1]->UpdateShaderVariable(3);
+			break;
+		case ObjectType::StaffPlayer:
+			m_ppMaterials[1]->UpdateShaderVariable(2);
+			break;
+		}
+		if (m_ppObjects[1]) m_ppObjects[1]->Render(pCamera);
+	}
 	
 	CShader::Render(pCamera, 2);
 	m_ppMaterials[2]->UpdateShaderVariable(0);
-	if (m_ppObjects[1]) m_ppObjects[1]->Render(pCamera);
+	if (m_ppObjects[2]) m_ppObjects[2]->Render(pCamera);
 }
 
 void CharacterFrameGaugeShader::GetCamera(CCamera * pCamera)
@@ -208,15 +226,15 @@ void CharacterFrameGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, 
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = 2;
+	m_nObjects = 3;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
-	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
+	for (int i = 0; i < m_nObjects; ++i) {
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 4, i);
+		CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer.Get(), ncbElementBytes, i, i);
 	}
 
 	m_nMaterials = m_nHeaps;
@@ -226,16 +244,15 @@ void CharacterFrameGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, 
 	m_ppMaterials[1] = Materials::CreatePlayerRedIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
 	m_ppMaterials[2] = Materials::CreatePlayerMPGagueMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
 
-	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CUIFrameObject *pGaugeObject = NULL;
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CUIFrameObject(pCreateMgr, (UIFrameType)(CharacterFrameHP + (i * 1)));
+		pGaugeObject = new CUIFrameObject(pCreateMgr, (UIFrameType)(CharacterFrameHP + CLAMP(i - 1, 0, 1)));
 
 		pGaugeObject->SetCamera(m_pCamera);
 		pGaugeObject->SetDistance(FRAME_BUFFER_WIDTH / (128.0128f - (i * 0.001f)));	 // distance 9.9
 		pGaugeObject->SetObject(m_pPlayer);
-		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[i].ptr);
 
 		m_ppObjects[i] = pGaugeObject;
 	}

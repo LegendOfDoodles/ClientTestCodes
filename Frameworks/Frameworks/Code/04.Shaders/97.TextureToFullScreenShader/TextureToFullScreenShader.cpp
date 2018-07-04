@@ -49,11 +49,11 @@ void CTextureToFullScreenShader::CreateGraphicsRootSignature(shared_ptr<CCreateM
 
 	pDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pDescriptorRanges[3].NumDescriptors = 1;
-	pDescriptorRanges[3].BaseShaderRegister = 0; //Textures
+	pDescriptorRanges[3].BaseShaderRegister = 0; //Texture
 	pDescriptorRanges[3].RegisterSpace = 0;
 	pDescriptorRanges[3].OffsetInDescriptorsFromTableStart = 0;
 
-	D3D12_ROOT_PARAMETER pRootParameters[6];
+	D3D12_ROOT_PARAMETER pRootParameters[7];
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pRootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
 	pRootParameters[0].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[0]; //Textures By Render Target
@@ -83,6 +83,11 @@ void CTextureToFullScreenShader::CreateGraphicsRootSignature(shared_ptr<CCreateM
 	pRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
 	pRootParameters[5].DescriptorTable.pDescriptorRanges = &pDescriptorRanges[3]; //Texture
 	pRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	pRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[6].Descriptor.ShaderRegister = 6; //Light Camera
+	pRootParameters[6].Descriptor.RegisterSpace = 0;
+	pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	D3D12_STATIC_SAMPLER_DESC samplerDesc[2];
 	::ZeroMemory(&samplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));

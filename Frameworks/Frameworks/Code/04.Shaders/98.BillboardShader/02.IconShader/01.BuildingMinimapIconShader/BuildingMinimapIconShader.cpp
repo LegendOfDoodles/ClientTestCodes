@@ -63,8 +63,6 @@ void CBuildingMinimapIconShader::AnimateObjects(float timeElapsed)
 
 void CBuildingMinimapIconShader::Render(CCamera * pCamera)
 {
-	CShader::Render(pCamera);
-
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		CCollisionObject* master = ((CIconObject*)m_ppObjects[j])->GetMasterObject();
@@ -205,31 +203,35 @@ void CBuildingMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMgr
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = m_nNexusAndTower;
+	m_nObjects = m_nNexus + m_nTower;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 
-	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, i);
-	}
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nTower, 2, 0);
+	CreateConstantBufferViews(pCreateMgr, m_nTower, m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
+
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nNexus, 2, 1);
+	CreateConstantBufferViews(pCreateMgr, m_nNexus, m_pConstBuffer.Get(), ncbElementBytes, m_nTower, 1);
+
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
+
 	// Tower
 	/* 0. Blue 1. Red */
 	m_ppMaterials[0] = Materials::CreateTowerIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);/*
 	m_ppMaterials[1] = Materials::CreateRedTowerIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);*/
-
+	
 	// Nexus
 	/* 0. Blue 1. Red */
 	m_ppMaterials[1] = Materials::CreateNexusIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-/*
+	/*
 	m_ppMaterials[2] = Materials::CreateBoxNexusIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
 	m_ppMaterials[3] = Materials::CreateShellNexusIconMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);*/
+
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -238,6 +240,7 @@ void CBuildingMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMgr
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CIconObject *pIconObject = NULL;
 
+	int nexusCnt{ 0 }, towerCnt{ 0 };
 	for (int i = 0; i < m_nObjects; ++i) {
 		pIconObject = new CIconObject(pCreateMgr, IconUIType::NexusAndTowerIcon);
 
@@ -245,8 +248,14 @@ void CBuildingMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMgr
 		pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
 		pIconObject->SetObject(m_ppNexusAndTower[i]);
 		pIconObject->WorldToMinimap();
-
-		pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		if (m_ppNexusAndTower[i]->GetType() == ObjectType::FirstTower)
+		{
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * nexusCnt++));
+		}
+		else if (m_ppNexusAndTower[i]->GetType() == ObjectType::Nexus)
+		{
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * towerCnt++));
+		}
 
 		m_ppObjects[i] = pIconObject;
 	}

@@ -118,7 +118,7 @@ void CAniShader::AnimateObjects(float timeElapsed)
 		if ((*iter)->GetState() == States::Remove)
 		{
 			CCollisionObject* temp{ *iter };
-			ResetPossibleIndex(temp->GetIndex());
+			ResetBluePossibleIndex(temp->GetIndex());
 			Safe_Delete(temp);
 
 			iter = m_blueObjects.erase(iter);
@@ -135,7 +135,7 @@ void CAniShader::AnimateObjects(float timeElapsed)
 		if ((*iter)->GetState() == States::Remove)
 		{
 			CCollisionObject* temp{ *iter };
-			ResetPossibleIndex(temp->GetIndex());
+			ResetRedPossibleIndex(temp->GetIndex());
 			Safe_Delete(temp);
 
 			iter = m_redObjects.erase(iter);
@@ -150,13 +150,13 @@ void CAniShader::AnimateObjects(float timeElapsed)
 
 void CAniShader::Render(CCamera *pCamera)
 {
-	CShader::Render(pCamera);
-
+	CShader::Render(pCamera, 0);
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
+	CShader::Render(pCamera, 1);
 	if (m_ppMaterials) m_ppMaterials[1]->UpdateShaderVariables();
 	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
@@ -353,13 +353,13 @@ void CAniShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, MAX_MINION, true, boundingBoxElementBytes, MAX_MINION);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 0);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION / 2, 1, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION / 2, 1, 1);
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 2);
 
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, 0);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, 1);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 2);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION / 2, m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION / 2, m_pConstBuffer.Get(), ncbElementBytes, MAX_MINION / 2, 1);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, 2);
 
 	SaveBoundingBoxHeapNumber(2);
 
@@ -429,13 +429,26 @@ void CAniShader::CreatePathes()
 	}
 }
 
-int CAniShader::GetPossibleIndex()
+int CAniShader::GetRedPossibleIndex()
 {
-	for (int idx = 0; idx < MAX_MINION; ++idx)
+	for (int idx = 0; idx < MAX_MINION / 2; ++idx)
 	{
-		if (!m_indexArr[idx])
+		if (!m_redIndexArr[idx])
 		{
-			m_indexArr[idx] = true;
+			m_redIndexArr[idx] = true;
+			return idx;
+		}
+	}
+	return NONE;
+}
+
+int CAniShader::GetBluePossibleIndex()
+{
+	for (int idx = 0; idx < MAX_MINION / 2; ++idx)
+	{
+		if (!m_blueIndexArr[idx])
+		{
+			m_blueIndexArr[idx] = true;
 			return idx;
 		}
 	}
@@ -488,7 +501,15 @@ void CAniShader::SpawnMinion()
 	int makeCnt{ 0 };
 	for (; kind < 4; ++kind)
 	{
-		int index = GetPossibleIndex();
+		int index;
+		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
+		{
+			index = GetBluePossibleIndex();
+		}
+		else
+		{
+			index = GetRedPossibleIndex();
+		}
 
 		if (index == NONE) break;
 		CMinion *pMinionObject{ NULL };
@@ -552,9 +573,6 @@ void CAniShader::SpawnMinion()
 
 		pMinionObject->Rotate(90, 0, 0);
 
-		pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
-		pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * index));
-
 		pMinionObject->SaveIndex(index);
 
 		pMinionObject->SetPathToGo(new Path(m_pathes[kind]));
@@ -566,11 +584,15 @@ void CAniShader::SpawnMinion()
 
 		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
 		{
+			pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+			pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * index));
 			pMinionObject->SetTeam(TeamType::Blue);
 			m_blueObjects.emplace_back(pMinionObject);
 		}
 		else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
 		{
+			pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
+			pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * (index + MAX_MINION / 2)));
 			pMinionObject->SetTeam(TeamType::Red);
 			m_redObjects.emplace_back(pMinionObject);
 		}

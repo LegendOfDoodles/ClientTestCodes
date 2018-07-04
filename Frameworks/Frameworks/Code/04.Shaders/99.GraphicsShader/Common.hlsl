@@ -28,8 +28,7 @@ cbuffer cbCameraInfo : register(b0)
 {
     matrix gmtxView : packoffset(c0);
     matrix gmtxProjection : packoffset(c4);
-    matrix gmtxShadowViewProjTex : packoffset(c8);
-    float3 gvCameraPosition : packoffset(c12);
+    float3 gvCameraPosition : packoffset(c8);
 };
 
 cbuffer cbGameObjectInfo : register(b1)
@@ -47,4 +46,11 @@ cbuffer cbGaugeObjectInfo : register(b5)
 {
     matrix gmtxGaugeObject : packoffset(c0);
     float CurrentHP : packoffset(c4);
+};
+
+cbuffer cbCameraInfo : register(b6)
+{
+    matrix gmtxLightView : packoffset(c0);
+    matrix gmtxLightProjection : packoffset(c4);
+    matrix gmtxShadowViewProjTex : packoffset(c8);
 };

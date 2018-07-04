@@ -85,50 +85,52 @@ void CMinimapIconShader::AnimateObjects(float timeElapsed)
 
 void CMinimapIconShader::Render(CCamera * pCamera)
 {
-	CShader::Render(pCamera);
-
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		CCollisionObject* master = ((CIconObject*)m_ppObjects[j])->GetMasterObject();
 		
-		switch (master->GetType())
+		if (master->GetTeam() == TeamType::Blue) 
 		{
+			CShader::Render(pCamera, 0);
+			switch (master->GetType())
+			{
 			case ObjectType::StickPlayer:
-				if (master->GetTeam() == TeamType::Blue) {
-					m_ppMaterials[0]->UpdateShaderVariable(0);
-				}
-				else if (master->GetTeam() == TeamType::Red) {
-					m_ppMaterials[1]->UpdateShaderVariable(0);
-				}
+				m_ppMaterials[0]->UpdateShaderVariable(0);
 				break;
 			case ObjectType::SwordPlayer:
-				if (master->GetTeam() == TeamType::Blue) {
-					m_ppMaterials[0]->UpdateShaderVariable(1);
-				}
-				else if (master->GetTeam() == TeamType::Red) {
-					m_ppMaterials[1]->UpdateShaderVariable(1);
-				}
+				m_ppMaterials[0]->UpdateShaderVariable(1);
 				break;
 			case ObjectType::BowPlayer:
-				if (master->GetTeam() == TeamType::Blue) {
-					m_ppMaterials[0]->UpdateShaderVariable(3);
-				}
-				else if (master->GetTeam() == TeamType::Red) {
-					m_ppMaterials[1]->UpdateShaderVariable(3);
-				}
+				m_ppMaterials[0]->UpdateShaderVariable(3);
 				break;
 			case ObjectType::StaffPlayer:
-				if (master->GetTeam() == TeamType::Blue) {
-					m_ppMaterials[0]->UpdateShaderVariable(2);
-				}
-				else if (master->GetTeam() == TeamType::Red) {
-					m_ppMaterials[1]->UpdateShaderVariable(2);
-				}
+				m_ppMaterials[0]->UpdateShaderVariable(2);
 				break;
+			}
+		}
+		else if (master->GetTeam() == TeamType::Red)
+		{
+			CShader::Render(pCamera, 1);
+			switch (master->GetType())
+			{
+			case ObjectType::StickPlayer:
+				m_ppMaterials[1]->UpdateShaderVariable(0);
+				break;
+			case ObjectType::SwordPlayer:
+				m_ppMaterials[1]->UpdateShaderVariable(1);
+				break;
+			case ObjectType::BowPlayer:
+				m_ppMaterials[1]->UpdateShaderVariable(3);
+				break;
+			case ObjectType::StaffPlayer:
+				m_ppMaterials[1]->UpdateShaderVariable(2);
+				break;
+			}
 		}
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 
+	CShader::Render(pCamera, 2);
 	m_ppMaterials[2]->UpdateShaderVariable(0);
 	// 미니언
 	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
@@ -262,10 +264,15 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 	
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects + MAX_MINION);
 
+	// 플레이어 아이콘 세팅
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects + MAX_MINION, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects + MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects / 2, 4, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects / 2, m_pConstBuffer.Get(), ncbElementBytes, m_nObjects / 2 *i, i);
 	}
+	// 미니언 아이콘 세팅
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 4, 2);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, m_nObjects, 2);
+
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
@@ -288,7 +295,7 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 	// Player Icon 생성
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CIconObject *pIconObject = NULL;
-	
+	int blueIdx{ 0 }, redIdx{ 0 };
 	for (int i = 0; i < m_nObjects; ++i) {
 		if (i < m_nPlayer) {
 			pIconObject = new CIconObject(pCreateMgr, IconUIType::PlayerIcon);
@@ -298,7 +305,14 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 			pIconObject->SetObject(m_pPlayer[i]);
 			pIconObject->WorldToMinimap();
 
-			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+			if (m_pPlayer[i]->GetTeam() == TeamType::Blue)
+			{
+				pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * blueIdx++));
+			}
+			else
+			{
+				pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * redIdx++));
+			}
 		}
 
 		m_ppObjects[i] = pIconObject;
@@ -308,7 +322,7 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 
 int CMinimapIconShader::GetPossibleIndex()
 {
-	for (int idx = m_nObjects; idx < MAX_MINION + m_nObjects; ++idx)
+	for (int idx = 0; idx < MAX_MINION; ++idx)
 	{
 		if (!m_indexArr[idx])
 		{
@@ -344,7 +358,7 @@ void CMinimapIconShader::SpawnMinionIcon()
 		pMinionIcon->SetCamera(m_pCamera);
 		pMinionIcon->WorldToMinimap();
 
-		pMinionIcon->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+		pMinionIcon->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * index));
 
 		pMinionIcon->SaveIndex(index);
 

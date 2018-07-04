@@ -39,7 +39,6 @@ void CTerrainShader::ReleaseUploadBuffers()
 
 void CTerrainShader::UpdateShaderVariables()
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	static CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects);
 
 	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,

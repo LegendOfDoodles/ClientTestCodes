@@ -109,7 +109,6 @@ void CScene::Render()
 	{
 		m_ppShaders[i]->Render(m_pCamera);
 	}
-
 	if (m_bRenderBoundingBox)
 	{
 		for (int i = 0; i < m_nShaders; i++)
@@ -134,18 +133,18 @@ void CScene::RenderShadow()
 void CScene::RenderWithLights()
 {
 	UpdateShaderVariables();
-	m_pCamera->UpdateShaderVariables();
+	m_pCamera->UpdateShaderVariables(1);
 
 	if (m_pCubeMap)
 	{
 		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeaps[0]);
-		m_pCubeMap->UpdateShaderVariables();
+		m_pCubeMap->UpdateShaderVariable(0);
 	}
 
 	if (m_pSketchEffect)
 	{
 		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeaps[1]);
-		m_pSketchEffect->UpdateShaderVariables();
+		m_pSketchEffect->UpdateShaderVariable(0);
 	}
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pcbLights->GetGPUVirtualAddress();
@@ -189,9 +188,16 @@ void CScene::UpdateCamera()
 	m_pCamera->UpdateShaderVariables();
 }
 
-void CScene::UpdateShadowCamera()
+void CScene::UpdateShadowCamera(int renderStage)
 {
-	m_pLightCamera->UpdateShaderVariables();
+	if (renderStage == 0)
+	{
+		m_pLightCamera->UpdateShaderVariables(8);
+	}
+	else
+	{
+		m_pLightCamera->UpdateShaderVariables(6);
+	}
 }
 
 void CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
@@ -258,17 +264,17 @@ void CScene::BuildLights()
 	m_pLights->m_pLights[0].m_bEnable = true;
 	m_pLights->m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[0].m_color = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
-	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.3f, -0.5f, 0.7f));
+	m_pLights->m_pLights[0].m_direction = Vector3::Normalize(XMFLOAT3(0.5f, -0.7f, 0.5f));
 
 	m_pLights->m_pLights[1].m_bEnable = true;
 	m_pLights->m_pLights[1].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[1].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLights->m_pLights[1].m_direction = Vector3::Normalize(XMFLOAT3(0.0, -0.6f, 1.0f));
+	m_pLights->m_pLights[1].m_direction = Vector3::Normalize(XMFLOAT3(0.0f, -0.5f, -1.0f));
 
 	m_pLights->m_pLights[2].m_bEnable = true;
 	m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
 	m_pLights->m_pLights[2].m_color = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(0.8f, -0.4f, 0.7f));
+	m_pLights->m_pLights[2].m_direction = Vector3::Normalize(XMFLOAT3(0.5f, -0.3f, 0.5f));
 
 	CreateCbvAndSrvDescriptorHeap(m_pCreateMgr, 0, 1, 0);
 	m_pCubeMap = Materials::CreateCubeMapMaterial(m_pCreateMgr, &m_srvCPUDescriptorStartHandles[0], &m_srvGPUDescriptorStartHandles[0]);
@@ -332,7 +338,10 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	((CMinimapIconShader*)m_ppShaders[9])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CMinimapIconShader*)m_ppShaders[9])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
-	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
+	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(
+		((CNexusTowerShader *)m_ppShaders[5])->GetNexusCount(),
+		((CNexusTowerShader *)m_ppShaders[5])->GetTowerCount()
+	);
 	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
 
 	m_ppObjects = ((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects();
@@ -513,9 +522,7 @@ void CScene::OnProcessKeyUp(WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
 
-	if (wParam == VK_ESCAPE)
-		::PostQuitMessage(0);
-	else if (wParam == VK_F1)
+	if (wParam == VK_F1)
 	{
 		if (!m_bCurCamIsAOS)
 		{

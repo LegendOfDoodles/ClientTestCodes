@@ -31,6 +31,8 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	int GetObjectCount() { return m_nObjects; }
+	int GetNexusCount() { return m_nNexus; }
+	int GetTowerCount() { return m_nTower; }
 	virtual CBaseObject **GetCollisionObjects() { return m_ppObjects; }
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 
@@ -51,6 +53,9 @@ protected: // 내부 함수
 	void SetBoundingBoxMeshByIndex(shared_ptr<CCreateMgr> pCreateMgr, CBaseObject* target, int index);
 
 protected: // 변수
+	int m_nNexus{ 0 };
+	int m_nTower{ 0 };
+
 	int m_meshCounts[4];
 
 	CHeightMapTerrain * m_pTerrain{ NULL };

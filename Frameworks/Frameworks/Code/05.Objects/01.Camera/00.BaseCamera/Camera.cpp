@@ -42,7 +42,7 @@ void CCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
 		XMFLOAT3(0.0f, 1.0f, 0.0f));
 
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255));
 }
 
 void CCamera::Finalize()
@@ -50,15 +50,17 @@ void CCamera::Finalize()
 	ReleaseShaderVariables();
 }
 
-void CCamera::UpdateShaderVariables()
+void CCamera::UpdateShaderVariables(int rootSignatureIndex)
 {
-	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
-	XMStoreFloat4x4(&m_pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	static VS_CB_CAMERA_INFO *pMappedCamera = (VS_CB_CAMERA_INFO *)(m_pMappedCamera);
 
-	memcpy(&m_pMappedCamera->m_xmf3Position, &m_xmf3Position, sizeof(XMFLOAT3));
+	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+
+	memcpy(&pMappedCamera->m_xmf3Position, &m_xmf3Position, sizeof(XMFLOAT3));
 
 	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = m_pConstBuffer->GetGPUVirtualAddress();
-	m_pCommandList->SetGraphicsRootConstantBufferView(0, gpuVirtualAddress);
+	m_pCommandList->SetGraphicsRootConstantBufferView(rootSignatureIndex, gpuVirtualAddress);
 }
 
 void CCamera::SetViewportsAndScissorRects()
@@ -330,13 +332,11 @@ void CCamera::SetScissorRect(
 	m_scissorRect.bottom = yBottom;
 }
 
-void CCamera::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
+void CCamera::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr, UINT stride)
 {
-	UINT ncbElementBytes = ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255); //256ÀÇ ¹è¼ö
-
 	m_pConstBuffer = pCreateMgr->CreateBufferResource(
 		NULL, 
-		ncbElementBytes, 
+		stride,
 		D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
 		NULL);
 
@@ -346,8 +346,9 @@ void CCamera::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 
 void CCamera::ReleaseShaderVariables()
 {
-	if (!m_pConstBuffer) return;
-
-	m_pConstBuffer->Unmap(0, NULL);
-	Safe_Release(m_pConstBuffer);
+	if (m_pConstBuffer)
+	{
+		m_pConstBuffer->Unmap(0, NULL);
+		m_pConstBuffer.Reset();
+	}
 }

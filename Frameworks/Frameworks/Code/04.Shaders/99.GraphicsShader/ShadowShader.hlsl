@@ -16,7 +16,7 @@ struct VS_LIGHTING_INPUT
 VS_OUTPUT VSLighting(VS_LIGHTING_INPUT input)
 {
     VS_OUTPUT output;
-    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxLightView), gmtxLightProjection);
     return (output);
 }
 
@@ -33,7 +33,7 @@ struct VS_TEXTURED_LIGHTING_INPUT
 VS_OUTPUT VSTexturedLighting(VS_TEXTURED_LIGHTING_INPUT input)
 {
     VS_OUTPUT output;
-    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxLightView), gmtxLightProjection);
     return (output);
 }
 
@@ -55,7 +55,7 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 {
     VS_TERRAIN_OUTPUT output;
 
-    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxLightView), gmtxLightProjection);
     output.uv = input.uv;
 
     return (output);
@@ -163,7 +163,7 @@ VS_OUTPUT VSBone(VS_BONEINPUT input)
         position += fWeights[i] * mul(float4(input.position, 1.0f), gmtxBoneTransforms[input.boneIndices[i]]).xyz;
     }
 
-    output.position = mul(mul(mul(float4(position, 1.0f), gmtxBoneWorld), gmtxView), gmtxProjection);
+    output.position = mul(mul(mul(float4(position, 1.0f), gmtxBoneWorld), gmtxLightView), gmtxLightProjection);
 
     return (output);
 }

@@ -65,7 +65,7 @@ protected: // 내부 함수
 
 	void CreateDescriptorHeaps();
 	void CreateCbvAndSrvDescriptorHeaps(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index = 0);
-	void CreateConstantBufferViews(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index = 0);
+	void CreateConstantBufferViews(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int startNum = 0, int heapIndex = 0);
 	void GetShaderResourceViewDesc(D3D12_RESOURCE_DESC resourceDesc, UINT nTextureType, D3D12_SHADER_RESOURCE_VIEW_DESC *pShaderResourceViewDesc);
 	void CreateShaderResourceViews(shared_ptr<CCreateMgr> pCreateMgr, CTexture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, int index = 0);
 

@@ -41,7 +41,7 @@ void CAOSCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 		XMFLOAT3(0.0f, 500.0f, -200.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f));
 
-	CreateShaderVariables(pCreateMgr);
+	CreateShaderVariables(pCreateMgr, ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255));
 }
 
 void CAOSCamera::Move(float fTimeElapsed, bool bVelocity)

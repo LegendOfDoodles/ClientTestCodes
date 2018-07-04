@@ -52,7 +52,7 @@ public: // 공개 함수
 	void SetViewportsAndScissorRects();
 	void SetShadowViewportsAndScissorRects();
 	void UpdateCamera();
-	void UpdateShadowCamera();
+	void UpdateShadowCamera(int renderStage = 0);
 
 	// Message Process
 	void OnProcessingMouseMessage(HWND hWnd, UINT messageID,

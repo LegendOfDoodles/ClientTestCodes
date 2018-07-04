@@ -292,10 +292,10 @@ void CShader::CreateCbvAndSrvDescriptorHeaps(shared_ptr<CCreateMgr> pCreateMgr, 
 }
 
 void CShader::CreateConstantBufferViews(
-	shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int index)
+	shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, ID3D12Resource *pConstantBuffers, UINT nStride, int startNum, int index)
 {
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
-	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pConstantBuffers->GetGPUVirtualAddress();
+	D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress = pConstantBuffers->GetGPUVirtualAddress() + (startNum * nStride);
 	D3D12_CONSTANT_BUFFER_VIEW_DESC CBVDesc;
 	CBVDesc.SizeInBytes = nStride;
 	for (int j = 0; j < nConstantBufferViews; j++)
@@ -532,6 +532,8 @@ void CShader::CreateShaderWithTess(shared_ptr<CCreateMgr> pCreateMgr, UINT nRend
 void CShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_ppPipelineStates.resize(m_nPipelineStates);
+
+	m_isRenderBB = isRenderBB;
 
 	int index{ 0 };
 	HRESULT hResult;
