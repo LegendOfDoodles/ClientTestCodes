@@ -90,6 +90,9 @@ void CUIObjectShader::Render(CCamera * pCamera)
 		case KDAFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(4);
 			break;
+		case TimerFrame:
+			m_ppMaterials[0]->UpdateShaderVariable(5);
+			break;
 		case SpecialFrame:
 			m_ppMaterials[0]->UpdateShaderVariable(1);
 			break;
@@ -209,12 +212,12 @@ void CUIObjectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCo
 {
 	m_pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 9;
+	m_nObjects = 10;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 5);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 6);
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 

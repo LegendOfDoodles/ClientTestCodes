@@ -60,6 +60,15 @@ void CNumberShader::UpdateShaderVariables(int opt)
 
 void CNumberShader::AnimateObjects(float timeElapsed)
 {
+	if (m_iTimer[0] <= 60) {
+	
+		m_iTimer[0] += timeElapsed;
+	}
+	else {
+		m_iTimer[1] += 1;
+		m_iTimer[0] = 0;
+	}
+
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
@@ -215,6 +224,26 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	m_iPlayerKDA[2] = m_ppPlayers[0]->GetPlayerStatus()->Assist;
 	
 	for (int i = 0; i < 3; ++i) {
+		int checkNum = m_iPlayerKDA[i];		// 자리 수 확인에서 사용할 변수
+
+		if (checkNum == 0)
+			m_iKDAPositionalNum[i] = 1;		// 0 이면 자리수는 1개
+		else
+			for (m_iKDAPositionalNum[i] = 0; checkNum > 0; checkNum /= 10, m_iKDAPositionalNum[i]++);
+
+		m_iKDASignificantNum[i] = new int[m_iKDAPositionalNum[i]];
+
+		// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
+		// 30이면 0, 3 저장 (출력은 반대로 해야 함)
+		for (int j = 0; j < m_iKDAPositionalNum[i]; ++j) {
+			m_iKDASignificantNum[i][j] = m_iPlayerKDA[i] % 10;
+
+			m_iPlayerKDA[i] /= 10;
+		}
+	}
+
+	/* Timer */
+	for (int i = 0; i < 2; ++i) {
 		int checkNum = m_iPlayerKDA[i];		// 자리 수 확인에서 사용할 변수
 
 		if (checkNum == 0)

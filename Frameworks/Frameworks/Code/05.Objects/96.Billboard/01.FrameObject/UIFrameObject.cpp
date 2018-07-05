@@ -28,6 +28,10 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 213.3f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
+	case UIFrameType::TimerFrame:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
 	case UIFrameType::SkillFrameQ:
 	case UIFrameType::SkillFrameW:
 	case UIFrameType::SkillFrameE:
@@ -36,7 +40,7 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::StatusFrame:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 256.f, FRAME_BUFFER_HEIGHT / 288.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 232.7f, FRAME_BUFFER_HEIGHT / 288.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::CharacterFrame:
@@ -89,6 +93,10 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 	case UIFrameType::KDAFrame:
 		UpVectorMoveWeight		= (FRAME_BUFFER_HEIGHT / 75.7f);
 		RightVectorMoveWeight	= (FRAME_BUFFER_WIDTH / 85.3f);
+		break;
+	case UIFrameType::TimerFrame:
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 75.7f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 81.f);
 		break;
 	case UIFrameType::SkillFrameQ:
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
@@ -143,6 +151,7 @@ void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
 	{
 	case UIFrameType::MinimapFrame:
 	case UIFrameType::KDAFrame:
+	case UIFrameType::TimerFrame:
 	case UIFrameType::SkillFrameQ:
 	case UIFrameType::SkillFrameW:
 	case UIFrameType::SkillFrameE:
