@@ -129,5 +129,5 @@ void CNumberOjbect::SetOffset(int cnt)
 		m_fOffset = cnt * 0.4f;
 	}
 	else 
-		m_fOffset = cnt * 0.8;
+		m_fOffset = cnt * 0.8f;
 }
