@@ -75,7 +75,7 @@ void CCreateMgr::Release()
 	m_pDevice.Reset();
 	m_pFactory.Reset();
 
-	m_pDebugController.Reset();
+	//m_pDebugController.Reset();
 }
 
 void CCreateMgr::Resize(int width, int height)
