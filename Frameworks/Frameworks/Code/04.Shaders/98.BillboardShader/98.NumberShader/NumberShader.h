@@ -59,14 +59,20 @@ protected: // º¯¼ö
 	// Team Kill Sum Value
 	/* 0 - Blue 1 - Red  */
 	int m_iTeamKill[TeamKILL::EnumCnt] = {0};
-	int m_iTeamKillPositionalNum[2];
-	int *m_iTeamKillSignificantNum[2];
+	int m_iTeamKillPositionalNum[2] = { 0 };
+	int *m_iTeamKillSignificantNum[2] = { 0 };
 
 	// Personal KDA
 	/* KILL Death Assist */
 	int m_iPlayerKDA[3] = { 0 };
 	int m_iKDAPositionalNum[3] = { 0 };
-	int *m_iKDASignificantNum[3];
+	int *m_iKDASignificantNum[3] = { 0 };
+	
+	// Timer
+	/* Min Sec */
+	int m_iTimer[2] = { 0 };
+	int m_iTimerPositionalNum[2] = { 0 };
+	int *m_iTimerSignificnatNum[2] = { 0 };
 
 	CMaterial	**m_ppMaterials{ NULL };
 	CCamera *m_pCamera;

@@ -26,9 +26,6 @@ CNumberOjbect::CNumberOjbect(CCreateMgr * pCreateMgr, NumberType type)
 		break;
 	case TimeMinute:
 	case TimeSec:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 85.3f, FRAME_BUFFER_HEIGHT / 360.f, 0.f);
-		SetMesh(0, pRectMesh);
-		break;
 	case PersonalKill:
 	case PersonalDeath:
 	case PersonalAssist:
@@ -62,15 +59,20 @@ void CNumberOjbect::Animate(float fTimeElapsed)
 	{
 	case BlueTeamKill:
 		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
-		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 2560.f) + m_fOffset;
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 1422.f) + m_fOffset;
 		break;
 	case RedTeamKill:
 		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
-		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 512.f) + m_fOffset;
+		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 640.f) + m_fOffset;
 		break;
 	case TimeMinute:
+		// center 15.8
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 76.19f) + m_fOffset;
 		break;
 	case TimeSec:
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 86.4f) + m_fOffset;
 		break;
 	case PersonalKill:
 		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 75.78f);
@@ -128,9 +130,10 @@ void CNumberOjbect::Render(CCamera * pCamera, UINT istanceCnt)
 
 void CNumberOjbect::SetOffset(int cnt)
 {
-	if (m_type == NumberType::PersonalKill || m_type == NumberType::PersonalDeath || m_type == NumberType::PersonalAssist) {
+	if (m_type == NumberType::PersonalKill || m_type == NumberType::PersonalDeath || m_type == NumberType::PersonalAssist 
+		|| m_type == NumberType::TimeMinute || m_type == NumberType::TimeSec) {
 		m_fOffset = cnt * 0.4f;
 	}
 	else 
-		m_fOffset = cnt * 1.f;
+		m_fOffset = cnt * 0.8;
 }
