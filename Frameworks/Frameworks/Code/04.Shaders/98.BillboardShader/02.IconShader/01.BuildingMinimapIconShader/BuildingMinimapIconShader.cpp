@@ -40,16 +40,36 @@ void CBuildingMinimapIconShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CBuildingMinimapIconShader::UpdateShaderVariables()
+void CBuildingMinimapIconShader::UpdateShaderVariables(int opt)
 {
 	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
+	int cnt{ 0 };
 
-	for (int i = 0; i < m_nObjects; i++)
+	if (opt == 0)
 	{
-		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
-		pMappedObject->m_fCurrentHP = ((CIconObject*)m_ppObjects[i])->GetCurrentHP();
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+		for (int i = 0; i < m_nObjects; i++)
+		{
+			if (m_ppNexusAndTower[i]->GetType() == ObjectType::FirstTower)
+			{
+				CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (cnt++ * elementBytes));
+				pMappedObject->m_fCurrentHP = ((CIconObject*)m_ppObjects[i])->GetCurrentHP();
+				XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+					XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+			}
+		}
+	}
+	else if (opt == 1)
+	{
+		for (int i = 0; i < m_nObjects; i++)
+		{
+			if (m_ppNexusAndTower[i]->GetType() == ObjectType::Nexus)
+			{
+				CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + ((cnt++ +  m_nTower) * elementBytes));
+				pMappedObject->m_fCurrentHP = ((CIconObject*)m_ppObjects[i])->GetCurrentHP();
+				XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+					XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
+			}
+		}
 	}
 }
 
@@ -250,11 +270,11 @@ void CBuildingMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMgr
 		pIconObject->WorldToMinimap();
 		if (m_ppNexusAndTower[i]->GetType() == ObjectType::FirstTower)
 		{
-			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * nexusCnt++));
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * towerCnt++));
 		}
 		else if (m_ppNexusAndTower[i]->GetType() == ObjectType::Nexus)
 		{
-			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * towerCnt++));
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * nexusCnt++));
 		}
 
 		m_ppObjects[i] = pIconObject;

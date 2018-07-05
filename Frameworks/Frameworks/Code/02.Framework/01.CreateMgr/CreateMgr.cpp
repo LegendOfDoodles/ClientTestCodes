@@ -46,6 +46,36 @@ void CCreateMgr::Release()
 
 	// Render Manager
 	m_pRenderMgr->Release();
+
+	m_pCommandQueue.Reset();
+	m_pCommandAllocator.Reset();
+	m_pCommandList.Reset();
+
+	m_pRtvDescriptorHeap.Reset();
+	m_pDsvDescriptorHeap.Reset();
+
+	m_pDepthStencilBuffer.Reset();
+	m_pShadowDepthBuffer.Reset();
+
+	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
+	{
+		m_ppRenderTargetBuffers->Reset();
+	}
+
+	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; ++i)
+	{
+		m_ppSwapChainBackBuffers->Reset();
+	}
+
+	m_pGraphicsRootSignature.Reset();
+
+	m_pFence.Reset();
+
+	m_pSwapChain.Reset();
+	m_pDevice.Reset();
+	m_pFactory.Reset();
+
+	m_pDebugController.Reset();
 }
 
 void CCreateMgr::Resize(int width, int height)

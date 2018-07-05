@@ -45,8 +45,9 @@ void CShader::ReleaseUploadBuffers()
 {
 }
 
-void CShader::UpdateShaderVariables()
+void CShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 }
 
 void CShader::UpdateShaderVariable(XMFLOAT4X4 *pxmf4x4World)
@@ -681,6 +682,12 @@ void CShader::ReleaseShaderVariables()
 		m_pBoundingBoxBuffer->Unmap(0, NULL);
 		m_pBoundingBoxBuffer.Reset();
 	}
+
+	for (int i = 0; i < m_nHeaps; ++i)
+	{
+		m_ppCbvSrvDescriptorHeaps[i].Reset();
+	}
+	m_ppCbvSrvDescriptorHeaps.clear();
 }
 
 void CShader::ReleaseObjects()
@@ -693,7 +700,7 @@ void CShader::OnPrepareRender(int opt, int index)
 	m_pCommandList->SetPipelineState(m_ppPipelineStates[index].Get());
 	if(!m_ppCbvSrvDescriptorHeaps.empty()) m_pCommandList->SetDescriptorHeaps(1, m_ppCbvSrvDescriptorHeaps[opt].GetAddressOf());
 
-	UpdateShaderVariables();
+	UpdateShaderVariables(opt);
 }
 
 void CShader::OnPrepareRenderForBB()

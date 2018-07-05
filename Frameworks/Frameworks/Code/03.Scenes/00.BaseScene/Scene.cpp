@@ -137,13 +137,13 @@ void CScene::RenderWithLights()
 
 	if (m_pCubeMap)
 	{
-		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeaps[0]);
+		m_pCommandList->SetDescriptorHeaps(1, m_pCbvSrvDescriptorHeaps[0].GetAddressOf());
 		m_pCubeMap->UpdateShaderVariable(0);
 	}
 
 	if (m_pSketchEffect)
 	{
-		m_pCommandList->SetDescriptorHeaps(1, &m_pCbvSrvDescriptorHeaps[1]);
+		m_pCommandList->SetDescriptorHeaps(1, m_pCbvSrvDescriptorHeaps[1].GetAddressOf());
 		m_pSketchEffect->UpdateShaderVariable(0);
 	}
 
@@ -239,6 +239,8 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID,
 // 내부 함수
 void CScene::CreateCbvAndSrvDescriptorHeap(shared_ptr<CCreateMgr> pCreateMgr, int nConstantBufferViews, int nShaderResourceViews, int index)
 {
+	m_pCbvSrvDescriptorHeaps.resize(m_nHeaps);
+
 	UINT incrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc;
 	descriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
@@ -442,9 +444,9 @@ void CScene::ReleaseShaderVariables()
 
 	for (int i = 0; i < m_nHeaps; ++i)
 	{
-		if (m_pCbvSrvDescriptorHeaps[i])
-			Safe_Release(m_pCbvSrvDescriptorHeaps[i]);
+		m_pCbvSrvDescriptorHeaps[i].Reset();
 	}
+	m_pCbvSrvDescriptorHeaps.clear();
 }
 
 void CScene::UpdateShaderVariables()

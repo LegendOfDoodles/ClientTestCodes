@@ -45,30 +45,35 @@ void CAniShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CAniShader::UpdateShaderVariables()
+void CAniShader::UpdateShaderVariables(int opt)
 {
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	if (opt == 0)
 	{
-		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
-		XMFLOAT4X4 tmp[128];
-		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+		for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+		{
+			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+			XMFLOAT4X4 tmp[128];
+			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
 
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+		}
 	}
-
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	else if (opt == 1)
 	{
-		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
-		XMFLOAT4X4 tmp[128];
-		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+		for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+		{
+			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + (((*iter)->GetIndex() + MAX_MINION / 2) * elementBytes));
+			XMFLOAT4X4 tmp[128];
+			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
 
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+		}
 	}
 }
 

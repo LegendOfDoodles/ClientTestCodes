@@ -48,7 +48,7 @@ protected: // 내부 함수
 protected: // 변수
 	int	m_nReferences{ 0 };
 
-	ID3D12Resource				*m_pcbColor{ NULL };
+	ID3D12Resource					*m_pcbColor{ NULL };
 	COLOR							*m_pcbMappedColor{ NULL };
 
 	COLOR							m_color;

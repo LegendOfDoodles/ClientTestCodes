@@ -44,8 +44,9 @@ void CNexusAndTowerHPGaugeShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CNexusAndTowerHPGaugeShader::UpdateShaderVariables()
+void CNexusAndTowerHPGaugeShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)

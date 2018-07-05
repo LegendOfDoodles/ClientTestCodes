@@ -45,8 +45,9 @@ void CPlayerHPGaugeShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CPlayerHPGaugeShader::UpdateShaderVariables()
+void CPlayerHPGaugeShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)

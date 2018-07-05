@@ -15,7 +15,7 @@ public: // 생성자, 소멸자
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
 
-	virtual void UpdateShaderVariables();
+	virtual void UpdateShaderVariables(int opt = 0);
 
 	virtual void AnimateObjects(float timeElapsed);
 

@@ -37,8 +37,9 @@ void CTerrainShader::ReleaseUploadBuffers()
 	}
 }
 
-void CTerrainShader::UpdateShaderVariables()
+void CTerrainShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects);
 
 	XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,

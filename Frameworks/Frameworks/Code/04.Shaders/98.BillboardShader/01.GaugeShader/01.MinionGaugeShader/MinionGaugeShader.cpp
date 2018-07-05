@@ -38,8 +38,9 @@ void CMinionHPGaugeShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CMinionHPGaugeShader::UpdateShaderVariables()
+void CMinionHPGaugeShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
 	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {

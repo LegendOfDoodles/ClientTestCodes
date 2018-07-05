@@ -115,7 +115,7 @@ protected: // º¯¼ö
 	shared_ptr<CFSMMgr> m_pFSMMgr;
 
 	const int	m_nHeaps{ 2 };
-	ID3D12DescriptorHeap			*m_pCbvSrvDescriptorHeaps[2];
+	std::vector<ComPtr<ID3D12DescriptorHeap>>	m_pCbvSrvDescriptorHeaps;
 	D3D12_CPU_DESCRIPTOR_HANDLE		m_cbvCPUDescriptorStartHandles[2];
 	D3D12_GPU_DESCRIPTOR_HANDLE		m_cbvGPUDescriptorStartHandles[2];
 	D3D12_CPU_DESCRIPTOR_HANDLE		m_srvCPUDescriptorStartHandles[2];

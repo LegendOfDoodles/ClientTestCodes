@@ -41,8 +41,9 @@ void CMinimapShader::ReleaseUploadBuffers()
 	}
 }
 
-void CMinimapShader::UpdateShaderVariables()
+void CMinimapShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	for (int i = 0; i < m_nObjects; i++)

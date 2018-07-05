@@ -33,8 +33,9 @@ void CSkyBoxShader::ReleaseUploadBuffers()
 	}
 }
 
-void CSkyBoxShader::UpdateShaderVariables()
+void CSkyBoxShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects);
 
 	if (m_pSkyBox)
