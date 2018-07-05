@@ -795,7 +795,7 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pDescriptorRanges[4].RegisterSpace = 0;
 	pDescriptorRanges[4].OffsetInDescriptorsFromTableStart = 0;
 
-	D3D12_ROOT_PARAMETER pRootParameters[9];
+	D3D12_ROOT_PARAMETER pRootParameters[10];
 
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[0].Descriptor.ShaderRegister = 0; //Camera
@@ -841,6 +841,12 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[8].Descriptor.ShaderRegister = 6; //Light Camera
 	pRootParameters[8].Descriptor.RegisterSpace = 0;
 	pRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+
+	pRootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	pRootParameters[9].Descriptor.ShaderRegister = 12; //t12
+	pRootParameters[9].Descriptor.RegisterSpace = 0;
+	pRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	D3D12_STATIC_SAMPLER_DESC samplerDesc[2];
 	::ZeroMemory(&samplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));

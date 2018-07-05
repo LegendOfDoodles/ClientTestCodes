@@ -81,7 +81,7 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
 			if ((*i)->GetStaticType() != StaticType::Static) {
-				
+
 				for (auto j = m_lstColliders.begin(); j != m_lstColliders.end(); ++j)
 				{
 					if (i != j && (*j)->GetStaticType() != StaticType::Static) {
@@ -115,15 +115,8 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 				x = static_cast<int>((*i)->GetPosition().x / nodeSize);
 				y = static_cast<int>((*i)->GetPosition().z / nodeSize);
 				int startLength = static_cast<int>((*i)->GetSightRange() / nodeSize);
-				if ((*i)->tag == 1) {
-					for (int dir = 0; dir < 8; ++dir) {
-						SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, 0, startLength);
-					}
-				}
-				else {
-					for (int dir = 0; dir < 8; ++dir) {
-						SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, 0, startLength);
-					}
+				for (int dir = 0; dir < 8; ++dir) {
+					SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, startLength);
 				}
 			}
 		}
@@ -261,7 +254,7 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 	2 ¤± 6
 	3 4  5
 */
-void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int length, int slength)
+void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int slength)
 {
 	XMFLOAT2 result;
 	XMFLOAT2 direction;
@@ -310,11 +303,11 @@ void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int length, int 
 		for (int j = 1; j < slength; ++j) {
 			result = startpos;
 			if (next.x == 0) {
-				result.x += j* direction.x;
+				result.x += j * direction.x;
 				result.y += roundf((j* direction.x*nNext.y / nNext.x));
 			}
 			else if (next.y == 0) {
-				result.y += j* direction.y;
+				result.y += j * direction.y;
 				result.x += roundf((j* direction.y*nNext.x / nNext.y));
 			}
 
@@ -336,4 +329,18 @@ void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int length, int 
 
 CCollisionManager::~CCollisionManager()
 {
+}
+
+int(*CCollisionManager::GetFoW(void))[NODE_HEIGHT]
+{
+	int Fow[NODE_WIDTH][NODE_HEIGHT];
+	for (int i = 0; i < NODE_WIDTH; ++i) {
+		for (int j = 0; j < NODE_HEIGHT; ++j) {
+			if(!m_nodeMap[i][j].Detected)
+				Fow[i][j] = 0;
+			else
+				Fow[i][j] = 1;
+		}
+	}
+	return Fow;
 }

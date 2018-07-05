@@ -25,7 +25,8 @@ public:
 	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0,float damage=0);
 	CCollisionObject* RequestNearObject(CCollisionObject* pCol,float lengh);
 	~CCollisionManager();
-	
+	int(*GetFoW(void))[NODE_HEIGHT];
+
 
 	NodeMap** GetNodeMap() { return m_nodeMap; }
 	float GetnodeSize() { return nodeSize; }
@@ -37,7 +38,7 @@ protected:
 			return false;
 	}
 
-	void SearchSight(XMFLOAT2 startpos, int dir, int length, int slength);
+	void SearchSight(XMFLOAT2 startpos, int dir, int slength);
 
 
 protected:
