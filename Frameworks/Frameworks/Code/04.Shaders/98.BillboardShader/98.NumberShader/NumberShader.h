@@ -31,9 +31,6 @@ public: // 공개 함수
 	virtual void SetPlayer(CBaseObject **ppPlayer) { m_ppPlayers = (CPlayer**)ppPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 	
-	void PositionalNumber(int inputNum, int PositionalNumber);
-	void SignificantDigit(int InputNum, int PositionalNumber, int *Num);
-
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_BLEND_DESC CreateBlendState();
@@ -66,7 +63,7 @@ protected: // 변수
 	
 	// Timer
 	/* Min Sec */
-	int m_iTimer[2] = { 0 };
+	float m_iTimer[2] = { 0 };
 	int m_iTimerPositionalNum[2] = { 0 };
 	int *m_iTimerSignificnatNum[2] = { 0 };
 

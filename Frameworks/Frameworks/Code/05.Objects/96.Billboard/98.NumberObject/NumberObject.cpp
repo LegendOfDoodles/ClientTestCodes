@@ -67,11 +67,11 @@ void CNumberOjbect::Animate(float fTimeElapsed)
 		break;
 	case TimeMinute:
 		// center 15.8
-		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
-		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 76.19f) + m_fOffset;
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 75.78f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 78.5f) + m_fOffset;
 		break;
 	case TimeSec:
-		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 84.f);
+		UpVectorMoveWeight = (FRAME_BUFFER_HEIGHT / 75.78f);
 		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 86.4f) + m_fOffset;
 		break;
 	case PersonalKill:
@@ -124,9 +124,11 @@ void CNumberOjbect::Render(CCamera * pCamera, UINT istanceCnt)
 
 void CNumberOjbect::SetOffset(int cnt)
 {
-	if (m_type == NumberType::PersonalKill || m_type == NumberType::PersonalDeath || m_type == NumberType::PersonalAssist 
-		|| m_type == NumberType::TimeMinute || m_type == NumberType::TimeSec) {
+	if (m_type == NumberType::PersonalKill || m_type == NumberType::PersonalDeath || m_type == NumberType::PersonalAssist) {
 		m_fOffset = cnt * 0.4f;
+	}
+	else if ( m_type == NumberType::TimeMinute || m_type == NumberType::TimeSec) {
+		m_fOffset = cnt * 0.5f;
 	}
 	else 
 		m_fOffset = cnt * 0.8f;
