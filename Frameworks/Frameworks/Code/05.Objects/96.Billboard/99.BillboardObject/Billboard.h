@@ -13,6 +13,7 @@ struct CB_GAUGE_INFO
 enum UIFrameType {
 	MinimapFrame	,
 	KDAFrame		,
+	TimerFrame		,
 	SkillFrameQ		,
 	SkillFrameW		,
 	SkillFrameE		,

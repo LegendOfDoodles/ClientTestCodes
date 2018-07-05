@@ -67,11 +67,9 @@ void CNexusAndTowerHPGaugeShader::AnimateObjects(float timeElapsed)
 
 void CNexusAndTowerHPGaugeShader::Render(CCamera * pCamera)
 {
-	CShader::Render(pCamera);
+	CShader::Render(pCamera, 0);
 
-#if USE_BATCH_MATERIAL
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-#endif
 	
 	for (int j = 0; j < m_nObjects; j++)
 	{
