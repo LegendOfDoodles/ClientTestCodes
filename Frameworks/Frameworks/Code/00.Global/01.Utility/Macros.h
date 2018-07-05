@@ -158,6 +158,12 @@
 // Character Info Window Screen 범위
 
 
+// FoW 243 122 41.4
+#define NODE_WIDTH 243
+#define NODE_HEIGHT 122
+#define NODE_LENGTH NODE_WIDTH*NODE_HEIGHT
+
+
 // 캡션 FPS 출력 여부 -------------------
 // 항상 캡션에 FPS를 출력		(0 : 비활성 | 1 : 활성)
 #define USE_CAPTIONFPS_ALWAYS	 1

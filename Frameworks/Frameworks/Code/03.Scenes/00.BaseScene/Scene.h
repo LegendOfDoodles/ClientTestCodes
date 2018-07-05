@@ -31,6 +31,12 @@ struct LIGHTS
 	XMFLOAT4				m_xmf4GlobalAmbient;
 };
 
+
+struct FOW
+{
+	int m_bFoW[256];
+};
+
 class CScene	// Warning! 인 게임 씬이랑 공백 씬이랑 분리할 필요 있음
 {
 public:	// 생성자, 소멸자
@@ -95,6 +101,11 @@ protected: // 변수
 
 	ComPtr<ID3D12Resource>	m_pcbLights;
 	LIGHTS *m_pcbMappedLights{ NULL };
+
+	FOW		 *m_pFoW{ NULL };
+	ComPtr<ID3D12Resource>	m_pcbbFoW;
+	FOW *m_pcbMappedFoW = NULL;
+
 
 	CBaseObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };

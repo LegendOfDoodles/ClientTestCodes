@@ -79,9 +79,9 @@ void CScene::ProcessInput()
 	GetKeyboardState(pKeyBuffer);
 
 	bool continual = m_pCamera->OnProcessMouseInput(pKeyBuffer);
-	if(continual) continual = m_pCamera->OnProcessKeyInput(pKeyBuffer);
+	if (continual) continual = m_pCamera->OnProcessKeyInput(pKeyBuffer);
 	for (int i = 0; i < m_nShaders; ++i) {
-		if(continual)
+		if (continual)
 			continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
 }
@@ -97,13 +97,25 @@ void CScene::AnimateObjects(float timeElapsed)
 		m_ppShaders[i]->AnimateObjects(timeElapsed);
 	}
 
-	if(m_pCollisionManager) m_pCollisionManager->Update(m_pWayFinder);
+	if (m_pCollisionManager) {
+		m_pCollisionManager->Update(m_pWayFinder);
+
+		int(*fow)[NODE_HEIGHT] = m_pCollisionManager->GetFoW();
+		for (int i = 0; i < NODE_WIDTH; ++i)
+			for (int j = 0; j < NODE_HEIGHT; ++j)
+			{
+				m_pFoW[i].m_bFoW[j] = fow[i][j];
+			}
+	}
 }
 
 void CScene::Render()
 {
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pcbLights->GetGPUVirtualAddress();
 	m_pCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
+
+	d3dcbLightsGpuVirtualAddress = m_pcbbFoW->GetGPUVirtualAddress();
+	m_pCommandList->SetGraphicsRootShaderResourceView(9, d3dcbLightsGpuVirtualAddress);
 
 	for (int i = 0; i < m_nShaders; i++)
 	{
@@ -259,6 +271,9 @@ void CScene::BuildLights()
 	m_pLights = new LIGHTS;
 	::ZeroMemory(m_pLights, sizeof(LIGHTS));
 
+	m_pFoW = new FOW[NODE_WIDTH];
+	::ZeroMemory(m_pFoW, sizeof(FOW)*NODE_WIDTH);
+
 	m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	m_pLights->m_pLights[0].m_bEnable = true;
@@ -306,7 +321,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[3] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CNexusTowerShader(pCreateMgr);
-	
+
 	//UI Shader
 	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
 	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
@@ -328,7 +343,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
-	
+
 	// UI Shaders Initialize
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
@@ -369,9 +384,9 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)m_ppShaders[12])->SetWayFinder(m_pWayFinder);
 
-	 //Manager Shaders Setting
+	//Manager Shaders Setting
 	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
-	
+
 	pAniS->SetCollisionManager(m_pCollisionManager);
 	pAniS->SetGaugeManger(m_pUIObjectsManager);
 	pAniS->SetFSMManager(m_pFSMMgr);
@@ -379,7 +394,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetUIObjectsManager(m_pUIObjectsManager);
 	static_cast<CMinimapIconShader*>(m_ppShaders[9])->SetUIObjectsManager(m_pUIObjectsManager);
 
-	m_pCollisionManager->SetNodeMap(m_pWayFinder->GetNodeMap(), m_pWayFinder->GetNodeSize(),m_pWayFinder->GetNodeWH());
+	m_pCollisionManager->SetNodeMap(m_pWayFinder->GetNodeMap(), m_pWayFinder->GetNodeSize(), m_pWayFinder->GetNodeWH());
 
 
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[3];
@@ -389,7 +404,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
-	
+
 	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[5];
 	nColliderObject = pNTS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
@@ -397,7 +412,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_pCollisionManager->AddCollider(((CCollisionObject * *)pNTS->GetCollisionObjects())[i]);
 	}
 	pNTS->SetColManagerToObject(m_pCollisionManager);
-	
+
 	BuildLights();
 }
 
@@ -430,6 +445,11 @@ void CScene::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pcbLights = pCreateMgr->CreateBufferResource(NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+
+
+	ncbElementBytes = ((sizeof(FOW) + 255) & ~255); //256ÀÇ ¹è¼ö
+	m_pcbbFoW = pCreateMgr->CreateBufferResource(NULL, ncbElementBytes*NODE_WIDTH, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+	m_pcbbFoW->Map(0, NULL, (void **)&m_pcbMappedFoW);
 }
 
 void CScene::ReleaseShaderVariables()
@@ -438,6 +458,12 @@ void CScene::ReleaseShaderVariables()
 	{
 		m_pcbLights->Unmap(0, NULL);
 		m_pcbLights.Reset();
+	}
+
+	if (m_pcbbFoW)
+	{
+		m_pcbbFoW->Unmap(0, NULL);
+		m_pcbbFoW.Reset();
 	}
 
 	for (int i = 0; i < m_nHeaps; ++i)
@@ -450,6 +476,9 @@ void CScene::ReleaseShaderVariables()
 void CScene::UpdateShaderVariables()
 {
 	::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
+
+	::memcpy(m_pcbMappedFoW, m_pFoW, sizeof(FOW)*NODE_WIDTH);
+	m_pcbMappedFoW[0].m_bFoW[0] = 0;
 }
 
 void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
@@ -489,7 +518,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 		GenerateLayEndWorldPosition(pickPosition, xmf4x4View);
 	}
 	else if (wParam == MK_LBUTTON) {
-		
+
 	}
 }
 
