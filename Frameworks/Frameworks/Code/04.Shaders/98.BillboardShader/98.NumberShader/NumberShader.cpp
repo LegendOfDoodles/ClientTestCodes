@@ -61,47 +61,47 @@ void CNumberShader::UpdateShaderVariables(int opt)
 void CNumberShader::AnimateObjects(float timeElapsed)
 {
 	m_iTimer[0] += timeElapsed;
+	if (m_iTimer[0] > 60.f) {
+		m_iTimer[0] = 0.0f;
+		m_iTimer[1] += 1.0f;
+	}
+
+	int nSec{ 0 };
+	int nMin{ 0 };
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		//if (((CNumberOjbect*)m_ppObjects[j])->GetType() == TimeMinute || ((CNumberOjbect*)m_ppObjects[j])->GetType() == TimeSec) {
-		//	
-		//	for (int i = 0; i < 2; ++i) {
-		//		/* Timer */
-		//		for (int n = 0; n < 2; ++n) {
-		//			int checkNum = static_cast<int>(m_iTimer[n]);		// 자리 수 확인에서 사용할 변수
+		if (((CNumberOjbect*)m_ppObjects[j])->GetType() == TimeSec) {
 
-		//			if (checkNum == 0)
-		//				m_iTimerPositionalNum[n] = 2;		// 0 이면 자리수는 1개
-		//			else
-		//				for (m_iTimerPositionalNum[n] = 0; checkNum > 0; checkNum /= 10, m_iTimerPositionalNum[n]++);
-		//			
-		//			checkNum = static_cast<int>(m_iTimer[n]);		// 자리 수 확인에서 사용할 변수
+			int checkNum = static_cast<int>(m_iTimer[0]);		// 자리 수 확인에서 사용할 변수
 
-		//			m_iTimerSignificnatNum[n] = new int[m_iTimerPositionalNum[n]];
+			m_iTimerPositionalNum[0] = 2;		
+			
+			for (int k = 0; k < m_iTimerPositionalNum[0]; ++k) {
+				m_iTimerSignificnatNum[0][k] = checkNum % 10;
+				checkNum /= 10;
+			}
 
-		//			// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
-		//			// 30이면 0, 3 저장 (출력은 반대로 해야 함)
-		//			for (int k = 0; k < m_iTimerPositionalNum[n]; ++k) {
-		//				m_iTimerSignificnatNum[n][k] = checkNum % 10;
+			((CNumberOjbect*)m_ppObjects[j])->SetTexCoord(m_iTimerSignificnatNum[0][(m_iTimerPositionalNum[0] - 1) - nSec]);
+			((CNumberOjbect*)m_ppObjects[j])->SetOffset(nSec++);
+		}
 
-		//				checkNum /= 10;
-		//			}
-		//		}
+		if (((CNumberOjbect*)m_ppObjects[j])->GetType() == TimeMinute) {
 
-		//		for (int k = 0; k < m_iTimerPositionalNum[i]; ++k)
-		//		{
-		//			((CNumberOjbect*)m_ppObjects[j])->SetTexCoord(m_iTimerSignificnatNum[i][(m_iTimerPositionalNum[i] - 1) - k]);
-		//			((CNumberOjbect*)m_ppObjects[j])->SetOffset(k);
-		//		}
-		//	}
-		//	
-		//	if (m_iTimer[0] > 10.f) {
-		//		m_iTimer[1] += 1.f;
-		//		m_iTimer[0] = 0.0f;
-		//	}
+			int checkNum = static_cast<int>(m_iTimer[1]);		// 자리 수 확인에서 사용할 변수
 
-		//}
+			m_iTimerPositionalNum[1] = 2;
+
+			for (int k = 0; k < m_iTimerPositionalNum[1]; ++k) {
+				m_iTimerSignificnatNum[1][k] = checkNum % 10;
+				checkNum /= 10;
+			}
+
+			((CNumberOjbect*)m_ppObjects[j])->SetTexCoord(m_iTimerSignificnatNum[1][(m_iTimerPositionalNum[1] - 1) - nMin]);
+			((CNumberOjbect*)m_ppObjects[j])->SetOffset(nMin++);
+		}
+
+		
 
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
@@ -265,12 +265,7 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	for (int i = 0; i < 2; ++i) {
 		int checkNum = static_cast<int>(m_iTimer[i]);		// 자리 수 확인에서 사용할 변수
 
-		if (checkNum == 0)
-			m_iTimerPositionalNum[i] = 2;		// 0 이면 자리수는 1개
-		else
-			for (m_iTimerPositionalNum[i] = 0; checkNum > 0; checkNum /= 10, m_iTimerPositionalNum[i]++);
-
-		m_iTimerSignificnatNum[i] = new int[m_iTimerPositionalNum[i]];
+		m_iTimerPositionalNum[i] = 2;
 
 		// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
 		// 30이면 0, 3 저장 (출력은 반대로 해야 함)

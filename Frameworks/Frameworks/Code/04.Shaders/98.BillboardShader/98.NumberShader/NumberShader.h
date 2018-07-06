@@ -49,6 +49,8 @@ protected: // 변수
 	CPlayer **m_ppPlayers{NULL};
 	int m_nPlayer = 0;
 
+	int UpdateTime = 0;
+
 	// Team Kill Sum Value
 	/* 0 - Blue 1 - Red  */
 	int m_iTeamKill[TeamKILL::EnumCnt] = {0};
@@ -65,7 +67,7 @@ protected: // 변수
 	/* Min Sec */
 	float m_iTimer[2] = { 0 };
 	int m_iTimerPositionalNum[2] = { 0 };
-	int *m_iTimerSignificnatNum[2] = { 0 };
+	int m_iTimerSignificnatNum[2][2] = { 0 };
 
 	CCamera *m_pCamera;
 };
