@@ -181,12 +181,11 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
 	// 그림자
     float4 shadowPos = mul(float4(pos.xyz, 1), gmtxShadowViewProjTex);
     float shadowFactor = CalculateShadowFactor(shadowPos);
-
+	
 	// 환경 매핑 처리
     float3 viewDir = normalize(pos.xyz - gvCameraPosition);
     float3 viewReflectDir = reflect(viewDir, normal.xyz);
     float4 cubeMapColor = gtxtTextureCube.Sample(wrapSampler, viewReflectDir);
-
     float4 reflectColor = roughMetalFresnel.g * cubeMapColor + (1 - roughMetalFresnel.g) * baseColor;
     float4 totalReflectColor = (roughMetalFresnel.r * albedo + (1 - roughMetalFresnel.r) * reflectColor) * REFLECTION_POWER;
 
@@ -194,8 +193,7 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
     float4 lightColor = Lighting(pos.xyz, normal.xyz, albedo, baseColor, roughMetalFresnel, shadowFactor);
 
 	// 스케치 이펙트 처리
-    float4 finalColor = (lightColor + totalReflectColor * shadowFactor) * gtxtSceneToonPower.Sample(wrapSampler, uv);
-
+    float4 finalColor = (lightColor + totalReflectColor) * gtxtSceneToonPower.Sample(wrapSampler, uv);
     if (gtxtUVBuffer.Sample(wrapSampler, uv).z == 1)
     {
         float intensity = dot(finalColor.rgb, float3(0.2326, 0.7152, 0.0722));
@@ -203,6 +201,7 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
     }
     //return shadowPos.z;
     //return gtxtShadowBuffer.SampleCmpLevelZero(shadowSampler, shadowPos.xy, 1).r;
+    //return gtxtShadowBuffer.Sample(wrapSampler, uv).r;
     //return shadowFactor;
     return (finalColor + emissiveColor) + outlineColor;
 }

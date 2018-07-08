@@ -23,6 +23,12 @@ CCreateMgr::~CCreateMgr()
 // 공개 함수
 void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
+#if defined(_DEBUG) || defined(USE_DEBUG_CONTROLLER)
+	ComPtr<ID3D12Debug> pDebugController;
+	ThrowIfFailed(D3D12GetDebugInterface(IID_PPV_ARGS(&pDebugController)));
+	pDebugController->EnableDebugLayer();
+#endif
+
 	m_hInstance = hInstance;
 	m_hWnd = hWnd;
 
@@ -74,10 +80,6 @@ void CCreateMgr::Release()
 	m_pSwapChain.Reset();
 	m_pDevice.Reset();
 	m_pFactory.Reset();
-
-#ifdef _DEBUG
-	m_pDebugController.Reset();
-#endif
 }
 
 void CCreateMgr::Resize(int width, int height)
@@ -395,12 +397,6 @@ void CCreateMgr::ExecuteCommandList()
 void CCreateMgr::CreateDirect3dDevice()
 {
 	HRESULT hResult;
-#ifdef _DEBUG
-	hResult = D3D12GetDebugInterface(IID_PPV_ARGS(m_pDebugController.GetAddressOf()));
-	ThrowIfFailed(hResult);
-
-	m_pDebugController->EnableDebugLayer();
-#endif
 
 	hResult = ::CreateDXGIFactory1(IID_PPV_ARGS(m_pFactory.GetAddressOf()));
 	ThrowIfFailed(hResult);
@@ -436,7 +432,7 @@ void CCreateMgr::CreateDirect3dDevice()
 
 	// MSAA Check
 	D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS d3dMsaaQualityLevels;
-	d3dMsaaQualityLevels.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	d3dMsaaQualityLevels.Format = m_backBufferFormat;
 	d3dMsaaQualityLevels.SampleCount = 4; //Msaa4x 다중 샘플링
 	d3dMsaaQualityLevels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
 	d3dMsaaQualityLevels.NumQualityLevels = 0;
@@ -843,7 +839,6 @@ void CCreateMgr::CreateGraphicsRootSignature()
 	pRootParameters[8].Descriptor.ShaderRegister = 6; //Light Camera
 	pRootParameters[8].Descriptor.RegisterSpace = 0;
 	pRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-
 
 	pRootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
 	pRootParameters[9].Descriptor.ShaderRegister = 12; //t12

@@ -50,6 +50,8 @@ public: // 공개 함수
 	void SaveBoundingBoxHeapNumber(int n) { m_boundingBoxHeapNumber = n; }
 	ComPtr<ID3D12RootSignature> GetGraphicsRootSignature() { return(m_pGraphicsRootSignature); }
 
+	virtual void SetCamera(CCamera *pCamera) { pCamera; }
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 

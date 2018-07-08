@@ -98,7 +98,6 @@ void CPlayerShader::Render(CCamera *pCamera)
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		
 		m_ppObjects[j]->Render(pCamera);
 	}
 }

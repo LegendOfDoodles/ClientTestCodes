@@ -34,7 +34,7 @@ void CLightCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 	SetViewport(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0.0f, 1.0f);
 	SetScissorRect(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
 
-	GenerateOrthographicProjectionMatrix(length * 2, length* 2, 1, TERRAIN_SIZE_HEIGHT / 2 + 2 * length);
+	GenerateOrthographicProjectionMatrix(length * 2, length* 2, 1, TERRAIN_SIZE_HEIGHT + 2 * length);
 
 	XMFLOAT3 lightTarget{ TERRAIN_SIZE_WIDTH / 2, 0, TERRAIN_SIZE_HEIGHT / 2 };
 	XMFLOAT3 lightDirRev{ Vector3::ScalarProduct(m_lightDirection, - 2 * length, false) };
@@ -42,7 +42,8 @@ void CLightCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 
 	GenerateViewMatrix(
 		lightPos,
-		lightTarget);
+		lightTarget,
+		XMFLOAT3(0.0f, 1.0f ,0.0f));
 
 	XMFLOAT4X4 Tex(
 		0.5f, 0.0f, 0.0f, 0.0f,
