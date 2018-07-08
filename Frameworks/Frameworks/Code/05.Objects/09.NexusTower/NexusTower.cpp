@@ -11,7 +11,8 @@ CNexusTower::CNexusTower(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CColl
 	m_StatusInfo.Atk = 0;
 	m_StatusInfo.Def= 0;
 	m_StatusInfo.Exp = 0;
-	m_sightRange = CONVERT_PaperUnit_to_InG(80.0f);
+	m_sightRange = CONVERT_PaperUnit_to_InG(160.0f);
+	m_detectRange = CONVERT_PaperUnit_to_InG(80.0f);
 
 }
 

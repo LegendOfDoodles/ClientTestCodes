@@ -14,8 +14,6 @@ struct CharacterStatus {
 
 class CCollisionManager
 {
-	std::list<CCollisionObject*> m_lstColliders;
-	int m_nCollisers;
 public:
 	CCollisionManager();
 	void GameOver(TeamType type);
@@ -30,6 +28,9 @@ public:
 
 	NodeMap** GetNodeMap() { return m_nodeMap; }
 	float GetnodeSize() { return nodeSize; }
+	int GetEnemyCout() {
+		return static_cast<int>(m_lstBlueSight.size());
+	}
 protected:
 	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b) {
 		if (Vector2::Distance(a, b) < 2)
@@ -38,7 +39,7 @@ protected:
 			return false;
 	}
 
-	void SearchSight(XMFLOAT2 startpos, int dir, int slength);
+	void SearchSight(XMFLOAT2 startpos, int dir, int slength,bool UserTeam = true);
 
 
 protected:
@@ -47,5 +48,12 @@ protected:
 	NodeMap** m_nodeMap;
 	float nodeSize{0};
 	XMFLOAT2 nodeWH;
+	int Fow[NODE_WIDTH][NODE_HEIGHT];
+
+
+	std::list<CCollisionObject*> m_lstColliders;
+	
+	std::list<CCollisionObject*> m_lstBlueSight;
+	std::list<CCollisionObject*> m_lstRedSight;
 };
 

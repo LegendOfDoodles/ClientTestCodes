@@ -456,6 +456,15 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
 
     output.normal = float4(normal, 1);
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
+	
+	int indexI = clamp((int)((input.positionW.x) / 41.4), 0, 243);//243
+	int indexJ = clamp((int)((input.positionW.z) / 41.4), 0, 122);//122
+
+	if (gFogOfWar[indexI].m_bFoW[indexJ] == 0)
+	{
+		output.color = float4(0, 0, 0, 0);
+	}
+
     output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = input.positionW;

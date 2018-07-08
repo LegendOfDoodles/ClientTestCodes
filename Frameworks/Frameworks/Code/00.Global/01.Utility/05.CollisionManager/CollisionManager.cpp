@@ -53,7 +53,6 @@ void CCollisionManager::AddCollider(CCollisionObject* pcol)
 			pcol->SetDetected(false);
 
 		m_lstColliders.push_back(pcol);
-		m_nCollisers++;
 	}
 }
 
@@ -108,26 +107,37 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 					}
 				}
 			}
-
-
-			if (m_User == (*i)->GetTeam()) {
-				int x, y;
-				x = static_cast<int>((*i)->GetPosition().x / nodeSize);
-				y = static_cast<int>((*i)->GetPosition().z / nodeSize);
-				int startLength = static_cast<int>((*i)->GetSightRange() / nodeSize);
-				for (int dir = 0; dir < 8; ++dir) {
-					SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, startLength);
+		}
+		//m_User
+		TeamType searchType = Blue;
+		{
+			for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+			{
+				if (searchType == (*i)->GetTeam()) {
+					int x, y;
+					x = static_cast<int>((*i)->GetPosition().x / nodeSize);
+					y = static_cast<int>((*i)->GetPosition().z / nodeSize);
+					int startLength = static_cast<int>((*i)->GetSightRange() / nodeSize);
+					for (int dir = 0; dir < 8; ++dir) {
+						SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, startLength);
+					}
 				}
 			}
-		}
 
-		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
-		{
-			XMFLOAT2 pos;
-			pos.x = (*i)->GetPosition().x / nodeSize;
-			pos.y = (*i)->GetPosition().z / nodeSize;
-			if (m_nodeMap[(int)pos.x][(int)pos.y].Detected) {
-				(*i)->SetDetected(true);
+			for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+			{
+				XMFLOAT2 pos;
+				pos.x = (*i)->GetPosition().x / nodeSize;
+				pos.y = (*i)->GetPosition().z / nodeSize;
+				if (m_nodeMap[(int)pos.x][(int)pos.y].Detected) {
+					(*i)->SetDetected(true);
+					if (searchType == Blue&&(*i)->GetTeam()!=searchType) {
+						m_lstBlueSight.push_back((*i));
+					}
+					else if (searchType == Red && (*i)->GetTeam() != searchType) {
+						m_lstRedSight.push_back((*i));
+					}
+				}
 			}
 		}
 
@@ -254,7 +264,7 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 	2 ¤± 6
 	3 4  5
 */
-void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int slength)
+void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int slength, bool UserTeam )
 {
 	XMFLOAT2 result;
 	XMFLOAT2 direction;
@@ -317,6 +327,17 @@ void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int slength)
 			if (dst <= slength) {
 				m_nodeMap[(int)result.x][(int)result.y].Detected = true;
 				if (m_nodeMap[(int)result.x][(int)result.y].Static == true) {
+					for (int x = -2; x < 3; ++x) {
+						for (int y = -2; y < 3; ++y) {
+							if (result.x + x < 0 || result.y + y < 0 || result.x + x >= nodeWH.x || result.y + y >= nodeWH.y)
+							{
+								continue;
+							}
+							else if (m_nodeMap[(int)result.x + x][(int)result.y + y].Static == true) {
+								m_nodeMap[(int)result.x + x][(int)result.y + y].Detected = true;
+							}
+						}
+					}
 					break;
 				}
 			}
@@ -333,10 +354,9 @@ CCollisionManager::~CCollisionManager()
 
 int(*CCollisionManager::GetFoW(void))[NODE_HEIGHT]
 {
-	int Fow[NODE_WIDTH][NODE_HEIGHT];
 	for (int i = 0; i < NODE_WIDTH; ++i) {
 		for (int j = 0; j < NODE_HEIGHT; ++j) {
-			if(!m_nodeMap[i][j].Detected)
+			if (!m_nodeMap[i][j].Detected)
 				Fow[i][j] = 0;
 			else
 				Fow[i][j] = 1;
