@@ -185,11 +185,11 @@ void CAniShader::RenderBoundingBox(CCamera * pCamera)
 void CAniShader::RenderShadow(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0, 2);
-
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
+	CShader::Render(pCamera, 1, 2);
 	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);

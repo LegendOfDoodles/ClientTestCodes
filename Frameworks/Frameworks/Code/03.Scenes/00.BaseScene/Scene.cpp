@@ -134,9 +134,6 @@ void CScene::Render()
 
 void CScene::RenderShadow()
 {
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pcbLights->GetGPUVirtualAddress();
-	m_pCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
-
 	for (int i = 0; i < m_nShaders; i++)
 	{
 		m_ppShaders[i]->RenderShadow(m_pLightCamera);
@@ -311,7 +308,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_hWnd = pCreateMgr->GetHwnd();
 	m_pCommandList = pCreateMgr->GetCommandList();
 
-	m_pCamera = new  CAOSCamera();
+	m_pCamera = new CAOSCamera();
 
 	m_pCamera->Initialize(pCreateMgr);
 

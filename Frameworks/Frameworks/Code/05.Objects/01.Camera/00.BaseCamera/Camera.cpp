@@ -36,7 +36,7 @@ void CCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 
 	SetViewport(0, 0, width, height, 0.0f, 1.0f);
 	SetScissorRect(0, 0, width, height);
-	GeneratePerspectiveProjectionMatrix(1.0f, 50000.0f, float(width) / 	float(height), 90.0f);
+	GeneratePerspectiveProjectionMatrix(1.0f, 50000.0f, float(width) / float(height), 90.0f);
 	GenerateViewMatrix(
 		XMFLOAT3(0.0f, 70.0f, 0.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f),

@@ -71,7 +71,7 @@ public:	// 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void GenerateFrustum();
-	bool IsInFrustum(BoundingOrientedBox& xmBoundingBox);
+	virtual bool IsInFrustum(BoundingOrientedBox& xmBoundingBox);
 
 	void SetPosition(float x, float y, float z);
 
