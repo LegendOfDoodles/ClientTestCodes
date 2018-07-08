@@ -60,17 +60,49 @@ void CNumberShader::UpdateShaderVariables(int opt)
 
 void CNumberShader::AnimateObjects(float timeElapsed)
 {
-	if (m_iTimer[0] <= 60) {
-	
-		m_iTimer[0] += timeElapsed;
+	m_iTimer[0] += timeElapsed;
+	if (m_iTimer[0] > 60.f) {
+		m_iTimer[0] = 0.0f;
+		m_iTimer[1] += 1.0f;
 	}
-	else {
-		m_iTimer[1] += 1;
-		m_iTimer[0] = 0;
-	}
+
+	int nSec{ 0 };
+	int nMin{ 0 };
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
+		if (((CNumberOjbect*)m_ppObjects[j])->GetType() == TimeSec) {
+
+			int checkNum = static_cast<int>(m_iTimer[0]);		// 자리 수 확인에서 사용할 변수
+
+			m_iTimerPositionalNum[0] = 2;		
+			
+			for (int k = 0; k < m_iTimerPositionalNum[0]; ++k) {
+				m_iTimerSignificnatNum[0][k] = checkNum % 10;
+				checkNum /= 10;
+			}
+
+			((CNumberOjbect*)m_ppObjects[j])->SetTexCoord(m_iTimerSignificnatNum[0][(m_iTimerPositionalNum[0] - 1) - nSec]);
+			((CNumberOjbect*)m_ppObjects[j])->SetOffset(nSec++);
+		}
+
+		if (((CNumberOjbect*)m_ppObjects[j])->GetType() == TimeMinute) {
+
+			int checkNum = static_cast<int>(m_iTimer[1]);		// 자리 수 확인에서 사용할 변수
+
+			m_iTimerPositionalNum[1] = 2;
+
+			for (int k = 0; k < m_iTimerPositionalNum[1]; ++k) {
+				m_iTimerSignificnatNum[1][k] = checkNum % 10;
+				checkNum /= 10;
+			}
+
+			((CNumberOjbect*)m_ppObjects[j])->SetTexCoord(m_iTimerSignificnatNum[1][(m_iTimerPositionalNum[1] - 1) - nMin]);
+			((CNumberOjbect*)m_ppObjects[j])->SetOffset(nMin++);
+		}
+
+		
+
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
 }
@@ -89,19 +121,6 @@ void CNumberShader::Render(CCamera * pCamera)
 void CNumberShader::SetCamera(CCamera * pCamera)
 {
 	m_pCamera = pCamera;
-}
-
-void CNumberShader::PositionalNumber(int inputNum, int PositionalNumber)
-{
-	UNREFERENCED_PARAMETER(inputNum);
-	UNREFERENCED_PARAMETER(PositionalNumber);
-}
-
-void CNumberShader::SignificantDigit(int InputNum, int PositionalNumber, int *Num)
-{
-	UNREFERENCED_PARAMETER(InputNum);
-	UNREFERENCED_PARAMETER(PositionalNumber);
-	UNREFERENCED_PARAMETER(Num);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -244,26 +263,22 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 	/* Timer */
 	for (int i = 0; i < 2; ++i) {
-		int checkNum = m_iPlayerKDA[i];		// 자리 수 확인에서 사용할 변수
+		int checkNum = static_cast<int>(m_iTimer[i]);		// 자리 수 확인에서 사용할 변수
 
-		if (checkNum == 0)
-			m_iKDAPositionalNum[i] = 1;		// 0 이면 자리수는 1개
-		else
-			for (m_iKDAPositionalNum[i] = 0; checkNum > 0; checkNum /= 10, m_iKDAPositionalNum[i]++);
-
-		m_iKDASignificantNum[i] = new int[m_iKDAPositionalNum[i]];
+		m_iTimerPositionalNum[i] = 2;
 
 		// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장
 		// 30이면 0, 3 저장 (출력은 반대로 해야 함)
-		for (int j = 0; j < m_iKDAPositionalNum[i]; ++j) {
-			m_iKDASignificantNum[i][j] = m_iPlayerKDA[i] % 10;
+		for (int j = 0; j < m_iTimerPositionalNum[i]; ++j) {
+			m_iTimerSignificnatNum[i][j] = static_cast<int>(m_iTimer[i]) % 10;
 
-			m_iPlayerKDA[i] /= 10;
+			m_iTimer[i] /= 10;
 		}
 	}
 
 	for (int i = 0; i < 2; ++i) m_nObjects += m_iTeamKillPositionalNum[i];
 	for (int i = 0; i < 3; ++i) m_nObjects += m_iKDAPositionalNum[i];
+	for (int i = 0; i < 2; ++i) m_nObjects += m_iTimerPositionalNum[i];
 
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
@@ -282,10 +297,11 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 	int objectCnt = 0;
 
+	/* Team K */
 	for (int j = 0; j < TeamKILL::EnumCnt;++j) {
 		for (int i = 0; i < m_iTeamKillPositionalNum[j]; ++i)
 		{
-			pNumber = new CNumberOjbect(pCreateMgr, NumberType(j));
+			pNumber = new CNumberOjbect(pCreateMgr, NumberType(BlueTeam + j));
 			pNumber->SetCamera(m_pCamera);
 			pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
 			pNumber->SetTexCoord(m_iTeamKillSignificantNum[j][(m_iTeamKillPositionalNum[j] - 1) - i]);
@@ -298,10 +314,11 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 		}
 	}
 
+	/* Persoanl KDA */
 	for (int j = 0; j < 3; ++j) {
 		for (int i = 0; i < m_iKDAPositionalNum[j]; ++i)
 		{
-			pNumber = new CNumberOjbect(pCreateMgr, NumberType(j+4));
+			pNumber = new CNumberOjbect(pCreateMgr, NumberType(PersonalKill + j));
 			pNumber->SetCamera(m_pCamera);
 			pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
 			pNumber->SetTexCoord(m_iKDASignificantNum[j][(m_iKDAPositionalNum[j] - 1) - i]);
@@ -314,7 +331,22 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 		}
 	}
 
-	
+	/* Game Timer */
+	for (int j = 0; j < 2; ++j) {
+		for (int i = 0; i < m_iTimerPositionalNum[j]; ++i)
+		{
+			pNumber = new CNumberOjbect(pCreateMgr, NumberType(TimeMinute + j));
+			pNumber->SetCamera(m_pCamera);
+			pNumber->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
+			pNumber->SetTexCoord(m_iTimerSignificnatNum[j][(m_iTimerPositionalNum[j] - 1) - i]);
+			pNumber->SetOffset(i);
+
+			pNumber->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * (objectCnt)));
+			m_ppObjects[objectCnt] = pNumber;
+
+			++objectCnt;
+		}
+	}
 
 }
 

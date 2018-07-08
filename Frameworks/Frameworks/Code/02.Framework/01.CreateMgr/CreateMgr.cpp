@@ -75,7 +75,9 @@ void CCreateMgr::Release()
 	m_pDevice.Reset();
 	m_pFactory.Reset();
 
-	//m_pDebugController.Reset();
+#ifdef _DEBUG
+	m_pDebugController.Reset();
+#endif
 }
 
 void CCreateMgr::Resize(int width, int height)
@@ -393,7 +395,7 @@ void CCreateMgr::ExecuteCommandList()
 void CCreateMgr::CreateDirect3dDevice()
 {
 	HRESULT hResult;
-#if defined(_DEBUG)
+#ifdef _DEBUG
 	hResult = D3D12GetDebugInterface(IID_PPV_ARGS(m_pDebugController.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
