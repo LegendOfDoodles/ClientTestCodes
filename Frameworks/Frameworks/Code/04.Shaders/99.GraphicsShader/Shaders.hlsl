@@ -233,9 +233,6 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSLighting(VS_LIGHTING_OUTPUT input)
     output.roughMetalFresnel = float4(1, 0, 1, 0);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = float4(input.positionW, 0);
-    output.position.x /= TERRAIN_SIZE_WIDTH;
-    output.position.y /= TERRAIN_SIZE_BORDER;
-    output.position.z /= TERRAIN_SIZE_HEIGHT;
     output.toonPower = float4(1, 1, 1, 1);
 
     return (output);
@@ -309,9 +306,6 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTexturedLightingDetail(VS_TEXTURED_LIGHTING_
 	output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = float4(input.positionW, 0);
-    output.position.x /= TERRAIN_SIZE_WIDTH;
-    output.position.y /= TERRAIN_SIZE_BORDER;
-    output.position.z /= TERRAIN_SIZE_HEIGHT;
     output.toonPower = float4(1, 1, 1, 1);
 
     return output;
@@ -334,9 +328,6 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSTexturedLightingEmissive(VS_TEXTURE
     output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = float4(input.positionW, 0);
-    output.position.x /= TERRAIN_SIZE_WIDTH;
-    output.position.y /= TERRAIN_SIZE_BORDER;
-    output.position.z /= TERRAIN_SIZE_HEIGHT;
     output.emissive = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnEmissive));
     output.uv = float4(frac(input.uv.x * TERRAIN_SIZE_WIDTH / FRAME_BUFFER_WIDTH), frac(input.uv.y * TERRAIN_SIZE_HEIGHT / FRAME_BUFFER_HEIGHT), 1, 0);
     output.toonPower = float4(1, 1, 1, 1);
@@ -468,9 +459,6 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
     output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = input.positionW;
-    output.position.x /= TERRAIN_SIZE_WIDTH;
-    output.position.y /= TERRAIN_SIZE_BORDER;
-    output.position.z /= TERRAIN_SIZE_HEIGHT;
     output.toonPower = float4(1, 1, 1, 1);
 
     return output;
@@ -548,9 +536,6 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_TOON PSBone(VS_TEXTURED_LIGHTING_TOON_OUTPUT i
     output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = float4(input.positionW, 0);
-    output.position.x /= TERRAIN_SIZE_WIDTH;
-    output.position.y /= TERRAIN_SIZE_BORDER;
-    output.position.z /= TERRAIN_SIZE_HEIGHT;
     output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
     output.uv = float4(frac(input.uv.x * TERRAIN_SIZE_WIDTH / FRAME_BUFFER_WIDTH), frac(input.uv.y * TERRAIN_SIZE_HEIGHT / FRAME_BUFFER_HEIGHT), 1, 0);
 

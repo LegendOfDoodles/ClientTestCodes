@@ -23,17 +23,11 @@ CCreateMgr::~CCreateMgr()
 // 공개 함수
 void CCreateMgr::Initialize(HINSTANCE hInstance, HWND hWnd)
 {
-#if defined(_DEBUG) || defined(USE_DEBUG_CONTROLLER)
-	ComPtr<ID3D12Debug> pDebugController;
-	ThrowIfFailed(D3D12GetDebugInterface(IID_PPV_ARGS(&pDebugController)));
-	pDebugController->EnableDebugLayer();
-#endif
-
 	m_hInstance = hInstance;
 	m_hWnd = hWnd;
 
 	m_pRenderMgr = shared_ptr<CRenderMgr>(new CRenderMgr);
-
+	
 	CreateDirect3dDevice();
 	CreateCommandQueueAndList();
 	CreateSwapChain();
@@ -712,14 +706,15 @@ void CCreateMgr::CreateRenderTargetViews()
 	m_pTexture.reset();
 	m_pTexture = shared_ptr<CTexture>(new CTexture(RENDER_TARGET_BUFFER_CNT + 1, RESOURCE_TEXTURE_2D_ARRAY, 0));
 
-	D3D12_CLEAR_VALUE d3dClearValue = { m_backBufferFormat,{ 0.0f, 0.0f, 0.0f, 1.0f } };
+	// Warning! 랜더 타겟 버퍼 포맷 변경 필요
+	D3D12_CLEAR_VALUE d3dClearValue = { m_renderBufferFormat,{ 0.0f, 0.0f, 0.0f, 1.0f } };
 	for (UINT i = 0; i < RENDER_TARGET_BUFFER_CNT; i++)
 	{
 		m_ppRenderTargetBuffers[i] = m_pTexture->CreateTexture(
 			shared_from_this(),
 			m_nWndClientWidth,
 			m_nWndClientHeight,
-			m_backBufferFormat,
+			m_renderBufferFormat,
 			D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET,
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			&d3dClearValue, i);
@@ -732,8 +727,9 @@ void CCreateMgr::CreateRenderTargetViews()
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUDescriptorHandle = m_pRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	rtvCPUDescriptorHandle.ptr += (SWAP_CHAIN_BUFFER_CNT * m_rtvDescriptorIncrementSize);
 
+	// Warning! RTV 포맷 변경 필요
 	D3D12_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
-	renderTargetViewDesc.Format = m_backBufferFormat;
+	renderTargetViewDesc.Format = m_renderBufferFormat;
 	renderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 	renderTargetViewDesc.Texture2D.PlaneSlice = 0;

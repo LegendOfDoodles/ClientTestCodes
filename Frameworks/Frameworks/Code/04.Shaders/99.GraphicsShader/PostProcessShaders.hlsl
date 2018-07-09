@@ -171,9 +171,6 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
         return baseColor + outlineColor;
 
     float4 pos = gtxtScenePosition.Sample(wrapSampler, uv);
-    pos.x *= TERRAIN_SIZE_WIDTH;
-    pos.y *= TERRAIN_SIZE_BORDER;
-    pos.z *= TERRAIN_SIZE_HEIGHT;
 
 	// Emissive Ã³¸®
     float4 emissiveColor = CalculateEmissiveColor(position.xy);

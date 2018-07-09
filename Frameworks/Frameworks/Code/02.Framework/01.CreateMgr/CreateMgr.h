@@ -83,6 +83,7 @@ private:	 // º¯¼ö
 
 	// BackBuffer Format
 	DXGI_FORMAT m_backBufferFormat{ DXGI_FORMAT_R8G8B8A8_UNORM };
+	DXGI_FORMAT m_renderBufferFormat{ DXGI_FORMAT_R32G32B32A32_FLOAT };
 
 	// MSAA Set
 	bool m_bMsaa4xEnable{ false };

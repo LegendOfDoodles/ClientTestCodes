@@ -500,9 +500,10 @@ void CShader::CreateShaderWithTess(shared_ptr<CCreateMgr> pCreateMgr, UINT nRend
 	pipelineStateDesc.SampleMask = UINT_MAX;
 	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
 	pipelineStateDesc.NumRenderTargets = nRenderTargets;
+	// Warning! RTV 포맷 변경 필요
 	for (UINT i = 0; i < nRenderTargets; i++)
 	{
-		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	}
 	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	pipelineStateDesc.SampleDesc.Count = 1;
@@ -553,9 +554,10 @@ void CShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTarget
 	pipelineStateDesc.SampleMask = UINT_MAX;
 	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pipelineStateDesc.NumRenderTargets = nRenderTargets;
+	// Warning! RTV 포맷 변경 필요
 	for (UINT i = 0; i < nRenderTargets; i++)
 	{
-		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	}
 	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	pipelineStateDesc.SampleDesc.Count = 1;
