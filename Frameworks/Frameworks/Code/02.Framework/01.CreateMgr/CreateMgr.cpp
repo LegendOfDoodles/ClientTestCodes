@@ -391,8 +391,21 @@ void CCreateMgr::ExecuteCommandList()
 void CCreateMgr::CreateDirect3dDevice()
 {
 	HRESULT hResult;
+	DWORD debugFactoryFlags{ 0 };
 
-	hResult = ::CreateDXGIFactory1(IID_PPV_ARGS(m_pFactory.GetAddressOf()));
+#if defined(_DEBUG) || defined(USE_DEBUG_CONTROLLER)
+	ComPtr<ID3D12Debug> pDebugController;
+	ThrowIfFailed(D3D12GetDebugInterface(IID_PPV_ARGS(pDebugController.GetAddressOf())));
+	pDebugController->EnableDebugLayer();
+
+	ComPtr<IDXGIInfoQueue> pDxgiInfoQueue;
+	ThrowIfFailed(DXGIGetDebugInterface1(0, IID_PPV_ARGS(pDxgiInfoQueue.GetAddressOf())));
+	debugFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
+	pDxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
+	pDxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+#endif
+
+	hResult = ::CreateDXGIFactory2(debugFactoryFlags, IID_PPV_ARGS(m_pFactory.ReleaseAndGetAddressOf()));
 	ThrowIfFailed(hResult);
 
 	const char factoryName[]{ "m_pFactory" };
