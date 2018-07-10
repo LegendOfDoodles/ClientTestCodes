@@ -125,7 +125,7 @@ float CalculateShadowFactor(float4 shadowPosH)
     //shadowPosH.xyz /= shadowPosH.w;
 
     // Depth in NDC space.
-    float depth = shadowPosH.z;
+    float depth = shadowPosH.z * 0.999;
 
     uint width, height, numMips;
     gtxtShadowBuffer.GetDimensions(0, width, height, numMips);

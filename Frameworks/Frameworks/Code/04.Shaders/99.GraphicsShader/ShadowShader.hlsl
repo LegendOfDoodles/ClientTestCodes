@@ -55,7 +55,7 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 {
     VS_TERRAIN_OUTPUT output;
 
-    output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxLightView), gmtxLightProjection);
+	output.position = mul(float4(input.position, 1.0f), gmtxGameObject);
     output.uv = input.uv;
 
     return (output);
@@ -123,9 +123,7 @@ DS_TERRAIN_OUTPUT DSTerrain(PatchTess patchTess, float2 uv : SV_DomainLocation, 
     float2 uvResult = lerp(uv1, uv2, 1 - uv.x);
 
 // Displacement Mapping
-    p.y += gtxtTextures.SampleLevel(wrapSampler, float3(uvResult, gnMix3Data), 0).a * 255 * 2;
-
-    output.position = p;
+    output.position = mul(mul(p, gmtxLightView), gmtxLightProjection);;
     output.uv = uvResult;
 
     return output;

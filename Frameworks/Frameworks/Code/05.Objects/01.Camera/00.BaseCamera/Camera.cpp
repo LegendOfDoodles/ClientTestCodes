@@ -52,7 +52,7 @@ void CCamera::Finalize()
 
 void CCamera::UpdateShaderVariables(int rootSignatureIndex)
 {
-	static VS_CB_CAMERA_INFO *pMappedCamera = (VS_CB_CAMERA_INFO *)(m_pMappedCamera);
+	VS_CB_CAMERA_INFO *pMappedCamera = (VS_CB_CAMERA_INFO *)(m_pMappedCamera);
 
 	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
 	XMStoreFloat4x4(&pMappedCamera->m_xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
