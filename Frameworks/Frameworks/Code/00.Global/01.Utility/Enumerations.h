@@ -134,3 +134,62 @@ struct StaticInfo
 
 	UINT Exp;
 };
+
+
+enum UIFrameType {
+	MinimapFrame,
+	KDAFrame,
+	TimerFrame,
+	SkillFrameQ,
+	SkillFrameW,
+	SkillFrameE,
+	SkillFrameR,
+	StatusFrame,
+	CharacterFrame,
+	SpecialFrame,
+	SelectSpecial_7,
+	SelectSpecial_12,
+	SelectSpecial_17,
+	SelectSpecial_21,
+	CharacterFrameHP,
+	CharacterFrameMP,
+	Minimap,
+};
+
+enum SpecialType {
+
+
+};
+
+enum NumberType {
+	BlueTeamKill,
+	RedTeamKill,
+	TimeMinute,
+	TimeSec,
+	PersonalKill,
+	PersonalDeath,
+	PersonalAssist,
+};
+
+enum SkillUIType {
+	GreyQSkill,
+	GreyWSkill,
+	GreyESkill,
+	GreyRSkill,
+	QSkill,
+	WSkill,
+	ESkill,
+	RSkill
+};
+
+enum GagueUIType {
+	PlayerGauge,
+	MinionGauge,
+	NexusAndTower,
+};
+
+enum IconUIType {
+	PlayerIcon,
+	MinionIcon,
+	NexusAndTowerIcon
+};

@@ -2,15 +2,14 @@
 #include "04.Shaders/00.BaseShader/Shader.h"
 
 class CBillboardObject;
-class CSkillObject;
 class CMaterial;
 class CPlayer;
 
-class CSkillShader : public CShader
+class CSelectedSpecialShader : public CShader
 {
 public: // 생성자, 소멸자
-	CSkillShader(shared_ptr<CCreateMgr> pCreateMgr);
-	virtual ~CSkillShader();
+	CSelectedSpecialShader(shared_ptr<CCreateMgr> pCreateMgr);
+	virtual ~CSelectedSpecialShader();
 
 public: // 공개 함수
 	virtual void ReleaseUploadBuffers();
@@ -20,8 +19,6 @@ public: // 공개 함수
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
-
-	virtual void SetCamera(CCamera *pCamera);
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -40,6 +37,8 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	CCamera *m_pCamera;
+	CCamera * m_pCamera;
+
+	CPlayer *m_pPlayer;
 };
 

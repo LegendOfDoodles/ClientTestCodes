@@ -231,6 +231,15 @@
     <Filter Include="소스 파일\05.Objects\01.Camera\02.LightCamera">
       <UniqueIdentifier>{d19444b6-dc0b-44fd-9411-da49b3bae54e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader">
+      <UniqueIdentifier>{f52940a6-ecb1-4ba6-af18-d1c6ace505fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader">
+      <UniqueIdentifier>{b52ade70-db4f-491c-9660-67cab968a38f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader">
+      <UniqueIdentifier>{2d42b064-7236-4447-9043-c1836e72ac5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -434,6 +443,9 @@
     <ClInclude Include="Code\05.Objects\01.Camera\02.LightCamera\LightCamera.h">
       <Filter>소스 파일\05.Objects\01.Camera\02.LightCamera</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader\SelectedSpecialShader.h">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -618,6 +630,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\01.Camera\02.LightCamera\LightCamera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\02.LightCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader\SelectedSpecialShader.cpp">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
