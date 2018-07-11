@@ -51,6 +51,13 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
+	case UIFrameType::SelectSpecial_7:
+	case UIFrameType::SelectSpecial_12:
+	case UIFrameType::SelectSpecial_17:
+	case UIFrameType::SelectSpecial_21:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 1280.f, FRAME_BUFFER_HEIGHT / 720.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
 	case UIFrameType::CharacterFrameHP:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 426.6f, FRAME_BUFFER_HEIGHT / 240.f, 0.f);
 		SetMesh(0, pRectMesh);
@@ -126,6 +133,22 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 288.f);
 		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
 		break;
+	case UIFrameType::SelectSpecial_7:
+		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 130.9f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 75.29f);
+		break;
+	case UIFrameType::SelectSpecial_12:
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 163.6f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 75.29f);
+		break;
+	case UIFrameType::SelectSpecial_17:
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 218.18f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 75.29f);
+		break;
+	case UIFrameType::SelectSpecial_21:
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 327.27f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 75.29f);
+		break;
 	case UIFrameType::CharacterFrameHP:
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
 		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
@@ -160,6 +183,10 @@ void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
 	case UIFrameType::SpecialFrame:
 	case UIFrameType::CharacterFrame:
 	case UIFrameType::Minimap:
+	case UIFrameType::SelectSpecial_7:
+	case UIFrameType::SelectSpecial_12:
+	case UIFrameType::SelectSpecial_17:
+	case UIFrameType::SelectSpecial_21:
 		CBillboardObject::Render(pCamera, istanceCnt);
 		break;
 	case UIFrameType::CharacterFrameHP:

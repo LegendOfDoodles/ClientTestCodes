@@ -41,6 +41,6 @@ protected: // 내부 함수
 protected: // 변수
 	CCamera *m_pCamera;
 
-	bool OnOFF{ false };
+	bool isRendering{ true };
 };
 

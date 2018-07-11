@@ -79,28 +79,41 @@ void CUIObjectShader::Render(CCamera * pCamera)
 		case SkillFrameW:
 		case SkillFrameE:
 		case SkillFrameR:
+			isRendering = true;
 			m_ppMaterials[0]->UpdateShaderVariable(0);
 			break;
 		case CharacterFrame:
+			isRendering = true;
 			m_ppMaterials[0]->UpdateShaderVariable(2);
 			break;
+		case SelectSpecial_7:
+		case SelectSpecial_12:
+		case SelectSpecial_17:
+		case SelectSpecial_21:
+			isRendering = true;
+			m_ppMaterials[0]->UpdateShaderVariable(6);
+			break;
 		case StatusFrame:
+			isRendering = true;
 			m_ppMaterials[0]->UpdateShaderVariable(3);
 			break;
 		case KDAFrame:
+			isRendering = true;
 			m_ppMaterials[0]->UpdateShaderVariable(4);
 			break;
 		case TimerFrame:
+			isRendering = true;
 			m_ppMaterials[0]->UpdateShaderVariable(5);
 			break;
 		case SpecialFrame:
+			isRendering = false;
 			m_ppMaterials[0]->UpdateShaderVariable(1);
 			break;
 		default:
 			break;
 		}
 
-		m_ppObjects[j]->Render(pCamera);
+		if(isRendering) m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -212,12 +225,12 @@ void CUIObjectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCo
 {
 	m_pCamera = (CCamera*)pContext;
 	
-	m_nObjects = 10;
+	m_nObjects = 14;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 6);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 7);
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 
