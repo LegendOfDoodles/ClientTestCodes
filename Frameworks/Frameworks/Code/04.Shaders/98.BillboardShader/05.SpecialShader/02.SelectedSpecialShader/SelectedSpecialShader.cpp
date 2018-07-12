@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "SelectedSpecialShader.h"
 #include "05.Objects/96.Billboard/01.FrameObject/UIFrameObject.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 #include "05.Objects/08.Player/Player.h"
+#include "05.Objects/96.Billboard/05.SpecialObject/SpecialObject.h"
 
 /// <summary>
 /// 목적: 선택된 특성
 /// 최종 수정자:  이용선
 /// 수정자 목록:  이용선
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-11
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -66,9 +68,32 @@ void CSelectedSpecialShader::AnimateObjects(float timeElapsed)
 
 void CSelectedSpecialShader::Render(CCamera * pCamera)
 {
+	CShader::Render(pCamera, 0);
+
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Render(pCamera);
+		switch (m_pPlayer->GetPlayerStatus()->Special[j])
+		{
+		case SpecialType::AttackSpecial:
+			isRendering = true;
+			m_ppMaterials[0]->UpdateShaderVariable(0);
+			break;
+		case SpecialType::DefenceSpecial:
+			isRendering = true;
+			m_ppMaterials[0]->UpdateShaderVariable(1);
+			break;
+		case SpecialType::TechnicSpecial:
+			isRendering = true;
+			m_ppMaterials[0]->UpdateShaderVariable(2);
+			break;
+		case SpecialType::NoSelected:
+			isRendering = false;
+			break;
+		default:
+			break;
+		}
+
+		if(isRendering) m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -171,30 +196,30 @@ void CSelectedSpecialShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, voi
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = 0;
+	m_nObjects = 4;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 7);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 3);
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CUIFrameObject *pUIObject{ NULL };
+	CSpecialObejct *pUIObject{ NULL };
 
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateUIMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateSpecialMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		//pUIObject = new CUIFrameObject(pCreateMgr, (SpecialType)i);
-		//pUIObject->SetCamera(m_pCamera);
-		//pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
-		//pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-		//
-		//m_ppObjects[i] = pUIObject;
+		pUIObject = new CSpecialObejct(pCreateMgr, (UIFrameType)(SelectSpecial_7 + i));
+		pUIObject->SetCamera(m_pCamera);
+		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128);	 // distance 10
+		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+		
+		m_ppObjects[i] = pUIObject;
 	}
 }
 

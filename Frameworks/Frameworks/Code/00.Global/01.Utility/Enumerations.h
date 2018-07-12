@@ -92,27 +92,6 @@ enum ObjectType {
 	Nexus
 };
 
-struct PlayerInfo
-{
-	float maxHP{ 500 };
-	float HP{ maxHP };
-
-	float maxMP{ 500 };
-	float MP{ 150 };
-
-	float Atk{ 50 };
-	float Def{ 20 };
-
-	UINT Kill{10};
-	UINT Death{2};
-	UINT Assist{8};
-
-	UINT Level{ 0 };
-
-	UINT MaxExp{ 170 };
-	UINT Exp{ 0 };
-};
-
 struct CommonInfo
 {
 	float maxHP;
@@ -157,9 +136,37 @@ enum UIFrameType {
 };
 
 enum SpecialType {
-
-
+	AttackSpecial,
+	DefenceSpecial,
+	TechnicSpecial,
+	NoSelected
 };
+
+
+struct PlayerInfo
+{
+	float maxHP{ 500 };
+	float HP{ maxHP };
+
+	float maxMP{ 500 };
+	float MP{ 150 };
+
+	float Atk{ 50 };
+	float Def{ 20 };
+
+	UINT Kill{ 10 };
+	UINT Death{ 2 };
+	UINT Assist{ 8 };
+
+	UINT Level{ 0 };
+
+	UINT MaxExp{ 170 };
+	UINT Exp{ 0 };
+
+	// Æ¯¼º 7 ~ 21 4°³
+	SpecialType Special[4] = { SpecialType::AttackSpecial, SpecialType::DefenceSpecial, SpecialType::TechnicSpecial, SpecialType::NoSelected };
+};
+
 
 enum NumberType {
 	BlueTeamKill,

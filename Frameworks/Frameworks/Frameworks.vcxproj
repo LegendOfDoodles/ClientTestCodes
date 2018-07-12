@@ -220,6 +220,7 @@
     <ClInclude Include="Code\05.Objects\96.Billboard\02.GaugeObject\GaugeObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\03.IconObject\IconObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\04.SkillObject\SkillObject.h" />
+    <ClInclude Include="Code\05.Objects\96.Billboard\05.SpecialObject\SpecialObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\98.NumberObject\NumberObject.h" />
     <ClInclude Include="Code\05.Objects\96.Billboard\99.BillboardObject\Billboard.h" />
     <ClInclude Include="Code\05.Objects\97.Skeleton\Skeleton.h" />
@@ -290,6 +291,7 @@
     <ClCompile Include="Code\05.Objects\96.Billboard\02.GaugeObject\GaugeObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\03.IconObject\IconObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\04.SkillObject\SkillObject.cpp" />
+    <ClCompile Include="Code\05.Objects\96.Billboard\05.SpecialObject\SpecialObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\98.NumberObject\NumberObject.cpp" />
     <ClCompile Include="Code\05.Objects\96.Billboard\99.BillboardObject\Billboard.cpp" />
     <ClCompile Include="Code\05.Objects\97.Skeleton\Skeleton.cpp" />

@@ -18,6 +18,7 @@
 #include "04.Shaders/98.BillboardShader/03.MinimapUIShader/MinimapShader.h"
 #include "04.Shaders/98.BillboardShader/04.SkillShader/SkillShader.h"
 #include "04.Shaders/98.BillboardShader/98.NumberShader/NumberShader.h"
+#include "04.Shaders/98.BillboardShader/05.SpecialShader/02.SelectedSpecialShader/SelectedSpecialShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "05.Objects/01.Camera/02.LightCamera/LightCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
@@ -312,7 +313,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 15;
+	m_nShaders = 16;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -332,6 +333,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[12] = new CMinimapShader(pCreateMgr);
 	m_ppShaders[13] = new CSkillShader(pCreateMgr);
 	m_ppShaders[14] = new CNumberShader(pCreateMgr);
+	m_ppShaders[15] = new CSelectedSpecialShader(pCreateMgr);
 
 
 	for (int i = 0; i < 2; ++i)
@@ -339,7 +341,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 9; ++i)
+	for (int i = 2; i < m_nShaders - 10; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -364,6 +366,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	((CharacterFrameGaugeShader*)m_ppShaders[11])->SetPlayer(m_ppObjects[0]);
 	((CMinimapShader*)m_ppShaders[12])->SetPlayer(m_ppObjects[0]);
 
+	((CSelectedSpecialShader*)m_ppShaders[15])->SetPlayer(m_ppObjects[0]);
+
 	((CPlayerHPGaugeShader*)m_ppShaders[14])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CPlayerHPGaugeShader*)m_ppShaders[14])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
@@ -376,6 +380,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[12]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[13]->Initialize(pCreateMgr, m_pCamera);
 	m_ppShaders[14]->Initialize(pCreateMgr, m_pCamera);
+	m_ppShaders[15]->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
