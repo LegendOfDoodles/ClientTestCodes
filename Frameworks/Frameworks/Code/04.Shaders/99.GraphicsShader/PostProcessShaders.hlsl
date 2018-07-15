@@ -188,7 +188,7 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
 
 	// 라이트 처리
     float4 lightColor = Lighting(pos.xyz, normal.xyz, albedo, baseColor, roughMetalFresnel, shadowFactor);
-
+	
 	// 스케치 이펙트 처리
     float4 finalColor = (lightColor + totalReflectColor) * gtxtSceneToonPower.Sample(wrapSampler, uv);
     if (gtxtUVBuffer.Sample(wrapSampler, uv).z == 1)
@@ -196,9 +196,6 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
         float intensity = dot(finalColor.rgb, float3(0.2326, 0.7152, 0.0722));
         finalColor = finalColor * CalculateSketchEffect(gtxtUVBuffer.Sample(wrapSampler, uv).xy * 2, intensity);
     }
-    //return shadowPos.z;
-    //return gtxtShadowBuffer.SampleCmpLevelZero(shadowSampler, shadowPos.xy, 1).r;
-    //return gtxtShadowBuffer.Sample(wrapSampler, uv).r;
-    //return shadowFactor;
+
     return (finalColor + emissiveColor) + outlineColor;
 }

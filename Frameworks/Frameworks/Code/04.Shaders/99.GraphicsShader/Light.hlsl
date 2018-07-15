@@ -187,7 +187,7 @@ float4 Lighting(float3 vPosition, float3 vNormal, float4 albedo, float4 baseColo
         {
             if (gLights[i].m_nType == DIRECTIONAL_LIGHT)
             {
-                cColor += DirectionalLight(i, vNormal, vCamera, baseColor, roughnessMetallicFresnel) * ((i == 0) ? shadowFactor : 1);
+                cColor += DirectionalLight(i, vNormal, vCamera, baseColor, roughnessMetallicFresnel) * shadowFactor;
             }
             else if (gLights[i].m_nType == POINT_LIGHT)
             {
