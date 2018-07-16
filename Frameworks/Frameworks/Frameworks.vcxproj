@@ -188,7 +188,7 @@
     <ClInclude Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.h" />
     <ClInclude Include="Code\04.Shaders\02.TerrainShader\TerrainShader.h" />
     <ClInclude Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.h" />
-    <ClInclude Include="Code\04.Shaders\04.AniShader\AniShader.h" />
+    <ClInclude Include="Code\04.Shaders\04.AniShader\MinionShader.h" />
     <ClInclude Include="Code\04.Shaders\05.PlayerShader\PlayerShader.h" />
     <ClInclude Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.h" />
     <ClInclude Include="Code\04.Shaders\97.TextureToFullScreenShader\TextureToFullScreenShader.h" />
@@ -259,7 +259,7 @@
     <ClCompile Include="Code\04.Shaders\01.ObjectShader\StaticObjectShader.cpp" />
     <ClCompile Include="Code\04.Shaders\02.TerrainShader\TerrainShader.cpp" />
     <ClCompile Include="Code\04.Shaders\03.SkyBoxShader\SkyBoxShader.cpp" />
-    <ClCompile Include="Code\04.Shaders\04.AniShader\AniShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\04.AniShader\MinionShader.cpp" />
     <ClCompile Include="Code\04.Shaders\05.PlayerShader\PlayerShader.cpp" />
     <ClCompile Include="Code\04.Shaders\06.NexusTowerShader\NexusTowerShader.cpp" />
     <ClCompile Include="Code\04.Shaders\97.TextureToFullScreenShader\TextureToFullScreenShader.cpp" />

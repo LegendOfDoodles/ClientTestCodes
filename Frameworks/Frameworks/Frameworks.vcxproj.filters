@@ -350,9 +350,6 @@
     <ClInclude Include="Code\00.Global\01.Utility\Enumerations.h">
       <Filter>소스 파일\00.Global\01.Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Code\04.Shaders\04.AniShader\AniShader.h">
-      <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
-    </ClInclude>
     <ClInclude Include="Code\05.Objects\03.AnimatedObject\AnimatedObject.h">
       <Filter>소스 파일\05.Objects\03.AnimatedObject</Filter>
     </ClInclude>
@@ -452,6 +449,9 @@
     <ClInclude Include="Code\05.Objects\96.Billboard\05.SpecialObject\SpecialObject.h">
       <Filter>소스 파일\05.Objects\96.Billboard\05.SpecialObject</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\04.AniShader\MinionShader.h">
+      <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -540,9 +540,6 @@
     </ClCompile>
     <ClCompile Include="Code\00.Global\02.AI\00.FSMMgr\FSMMgr.cpp">
       <Filter>소스 파일\00.Global\02.AI\00.FSMMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\04.Shaders\04.AniShader\AniShader.cpp">
-      <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
     </ClCompile>
     <ClCompile Include="Code\05.Objects\03.AnimatedObject\AnimatedObject.cpp">
       <Filter>소스 파일\05.Objects\03.AnimatedObject</Filter>
@@ -642,6 +639,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\96.Billboard\05.SpecialObject\SpecialObject.cpp">
       <Filter>소스 파일\05.Objects\96.Billboard\05.SpecialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\04.AniShader\MinionShader.cpp">
+      <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

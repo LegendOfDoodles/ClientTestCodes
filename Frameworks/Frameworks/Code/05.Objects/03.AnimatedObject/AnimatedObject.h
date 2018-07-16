@@ -84,6 +84,7 @@ protected: // º¯¼ö
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	XMFLOAT2 m_destination{ NONE, NONE };
-	Path *m_pathToGo{ NULL };
+	Path *m_mainPath{ NULL };
+	Path *m_subPath{ NULL };
 };
 

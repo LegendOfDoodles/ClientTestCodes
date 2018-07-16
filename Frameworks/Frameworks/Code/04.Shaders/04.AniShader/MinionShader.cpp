@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "AniShader.h"
+#include "MinionShader.h"
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
@@ -17,24 +17,24 @@
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
-CAniShader::CAniShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
+CMinionShader::CMinionShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
 }
 
-CAniShader::~CAniShader()
+CMinionShader::~CMinionShader()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-void CAniShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
+void CMinionShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	CreateShader(pCreateMgr, RENDER_TARGET_BUFFER_CNT, true, true);
 	BuildObjects(pCreateMgr, pContext);
 }
 
-void CAniShader::ReleaseUploadBuffers()
+void CMinionShader::ReleaseUploadBuffers()
 {
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
@@ -45,7 +45,7 @@ void CAniShader::ReleaseUploadBuffers()
 #endif
 }
 
-void CAniShader::UpdateShaderVariables(int opt)
+void CMinionShader::UpdateShaderVariables(int opt)
 {
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
@@ -77,7 +77,7 @@ void CAniShader::UpdateShaderVariables(int opt)
 	}
 }
 
-void CAniShader::UpdateBoundingBoxShaderVariables()
+void CMinionShader::UpdateBoundingBoxShaderVariables()
 {
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -97,7 +97,7 @@ void CAniShader::UpdateBoundingBoxShaderVariables()
 	}
 }
 
-void CAniShader::AnimateObjects(float timeElapsed)
+void CMinionShader::AnimateObjects(float timeElapsed)
 {
 	m_spawnTime += timeElapsed;
 
@@ -153,7 +153,7 @@ void CAniShader::AnimateObjects(float timeElapsed)
 	}
 }
 
-void CAniShader::Render(CCamera *pCamera)
+void CMinionShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera, 0);
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
@@ -169,7 +169,7 @@ void CAniShader::Render(CCamera *pCamera)
 	}
 }
 
-void CAniShader::RenderBoundingBox(CCamera * pCamera)
+void CMinionShader::RenderBoundingBox(CCamera * pCamera)
 {
 	CShader::RenderBoundingBox(pCamera);
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
@@ -182,7 +182,7 @@ void CAniShader::RenderBoundingBox(CCamera * pCamera)
 	}
 }
 
-void CAniShader::RenderShadow(CCamera * pCamera)
+void CMinionShader::RenderShadow(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0, 2);
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
@@ -196,7 +196,7 @@ void CAniShader::RenderShadow(CCamera * pCamera)
 	}
 }
 
-CBaseObject *CAniShader::PickObjectByRayIntersection(
+CBaseObject *CMinionShader::PickObjectByRayIntersection(
 	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance)
 {
 	bool intersected = 0;
@@ -228,7 +228,7 @@ CBaseObject *CAniShader::PickObjectByRayIntersection(
 	return(pSelectedObject);
 }
 
-bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
+bool CMinionShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
 	UNREFERENCED_PARAMETER(pKeyBuffer);
 
@@ -251,7 +251,7 @@ bool CAniShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-D3D12_INPUT_LAYOUT_DESC CAniShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC CMinionShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 6;
 	D3D12_INPUT_ELEMENT_DESC *pInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
@@ -312,7 +312,7 @@ D3D12_INPUT_LAYOUT_DESC CAniShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CAniShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
+D3D12_SHADER_BYTECODE CMinionShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
@@ -321,7 +321,7 @@ D3D12_SHADER_BYTECODE CAniShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBl
 		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CAniShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
+D3D12_SHADER_BYTECODE CMinionShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
@@ -330,7 +330,7 @@ D3D12_SHADER_BYTECODE CAniShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlo
 		pShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CAniShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
+D3D12_SHADER_BYTECODE CMinionShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/ShadowShader.hlsl",
@@ -339,7 +339,7 @@ D3D12_SHADER_BYTECODE CAniShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& pSh
 		pShaderBlob));
 }
 
-void CAniShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
+void CMinionShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
 	m_nPipelineStates = 3;
 
@@ -349,7 +349,7 @@ void CAniShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTar
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
 }
 
-void CAniShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
+void CMinionShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
@@ -393,7 +393,7 @@ void CAniShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 	SpawnMinion();
 }
 
-void CAniShader::ReleaseObjects()
+void CMinionShader::ReleaseObjects()
 {
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
 	{
@@ -418,7 +418,7 @@ void CAniShader::ReleaseObjects()
 #endif
 }
 
-void CAniShader::CreatePathes()
+void CMinionShader::CreatePathes()
 {
 	CTransformImporter transformInporter;
 	transformInporter.LoadMeshData("Resource/Data/Pathes.txt");
@@ -434,7 +434,7 @@ void CAniShader::CreatePathes()
 	}
 }
 
-int CAniShader::GetRedPossibleIndex()
+int CMinionShader::GetRedPossibleIndex()
 {
 	for (int idx = 0; idx < MAX_MINION / 2; ++idx)
 	{
@@ -447,7 +447,7 @@ int CAniShader::GetRedPossibleIndex()
 	return NONE;
 }
 
-int CAniShader::GetBluePossibleIndex()
+int CMinionShader::GetBluePossibleIndex()
 {
 	for (int idx = 0; idx < MAX_MINION / 2; ++idx)
 	{
@@ -460,7 +460,7 @@ int CAniShader::GetBluePossibleIndex()
 	return NONE;
 }
 
-void CAniShader::SpawnMinion()
+void CMinionShader::SpawnMinion()
 {
 	static bool dataPrepared{ false };
 	static CSkinnedMesh minionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");

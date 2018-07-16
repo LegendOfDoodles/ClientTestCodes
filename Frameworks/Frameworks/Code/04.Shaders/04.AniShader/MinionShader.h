@@ -12,11 +12,11 @@ class CCollisionManager;
 class CUIObjectManager;
 class CFSMMgr;
 
-class CAniShader : public CShader
+class CMinionShader : public CShader
 {
 public: // 생성자, 소멸자
-	CAniShader(shared_ptr<CCreateMgr> pCreateMgr);
-	virtual ~CAniShader();
+	CMinionShader(shared_ptr<CCreateMgr> pCreateMgr);
+	virtual ~CMinionShader();
 
 public: // 공개 함수
 	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);

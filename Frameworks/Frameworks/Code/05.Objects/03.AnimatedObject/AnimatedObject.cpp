@@ -18,7 +18,7 @@ CAnimatedObject::CAnimatedObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes)
 
 CAnimatedObject::~CAnimatedObject()
 {
-	if (m_pathToGo) Safe_Delete(m_pathToGo);
+	if (m_mainPath) Safe_Delete(m_mainPath);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -132,12 +132,12 @@ void CAnimatedObject::SetPosition(float x, float z)
 
 void CAnimatedObject::SetPathToGo(Path * path)
 {
-	if (m_pathToGo)
+	if (m_mainPath)
 	{
-		m_pathToGo->clear();
-		Safe_Delete(m_pathToGo);
+		m_mainPath->clear();
+		Safe_Delete(m_mainPath);
 	}
-	m_pathToGo = path;
+	m_mainPath = path;
 	ResetDestination();
 	if(Walkable()) SetState(States::Walk);
 }
@@ -145,20 +145,20 @@ void CAnimatedObject::SetPathToGo(Path * path)
 ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 {
 	if (m_curState != States::Walk) return States::Processing;
-	if (!m_pathToGo) return States::Done;
+	if (!m_mainPath) return States::Done;
 
 	if (NoneDestination() || IsArrive(m_speed * timeElapsed))	//  도착 한 경우
 	{
-		if (m_pathToGo->empty())
+		if (m_mainPath->empty())
 		{
-			Safe_Delete(m_pathToGo);
+			Safe_Delete(m_mainPath);
 			ResetDestination();
 			return States::Done;
 		}
 		else
 		{
-			m_destination = m_pathToGo->front().To();
-			m_pathToGo->pop_front();
+			m_destination = m_mainPath->front().To();
+			m_mainPath->pop_front();
 			LookAt(m_destination);
 		}
 	}
@@ -172,6 +172,7 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 	return States::Processing;
 }
 
+// Warning! 업데이트 필요 -> 단순히 그 적 방향으로 가는 게 아니라 길 따라서 가도록 해야함
 void CAnimatedObject::MoveToEnemy(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (!m_pEnemy) return;
@@ -217,9 +218,9 @@ bool CAnimatedObject::IsArrive(float dst)
 	int distanceSqr = static_cast<int>(Vector2::DistanceSquare(curPos, m_destination));
 	// 정확히 도착 하는 경우
 	if (distanceSqr < dst * dst) return true;
-	if (m_pathToGo->empty()) return false;
+	if (m_mainPath->empty()) return false;
 
-	XMFLOAT2 next = m_pathToGo->front().To();
+	XMFLOAT2 next = m_mainPath->front().To();
 	XMFLOAT2 dstToNext = Vector2::Subtract(next, m_destination, true);
 	float dstToNextLengthSqr = Vector2::DistanceSquare(next, m_destination);
 	float curPosToNextLength = Vector2::DotProduct(Vector2::Subtract(next, curPos), dstToNext);

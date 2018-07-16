@@ -29,7 +29,7 @@ void CPlayer::Animate(float timeElapsed)
 	switch (m_curState) {
 	case States::Idle:
 		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
-		if (m_pathToGo) SetState(States::Walk);
+		if (m_mainPath) SetState(States::Walk);
 		break;
 	case States::Attack:
 		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)

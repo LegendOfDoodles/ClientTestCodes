@@ -5,7 +5,7 @@
 #include "04.Shaders/01.ObjectShader/StaticObjectShader.h"
 #include "04.Shaders/02.TerrainShader/TerrainShader.h"
 #include "04.Shaders/03.SkyBoxShader/SkyBoxShader.h"
-#include "04.Shaders/04.AniShader/AniShader.h"
+#include "04.Shaders/04.AniShader/MinionShader.h"
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/06.NexusTowerShader/NexusTowerShader.h"
 #include "04.Shaders/98.BillboardShader/00.UIShader/UIShader.h"
@@ -318,7 +318,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
 	m_ppShaders[1] = pTerrainShader;
-	m_ppShaders[2] = new CAniShader(pCreateMgr);
+	m_ppShaders[2] = new CMinionShader(pCreateMgr);
 	m_ppShaders[3] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CNexusTowerShader(pCreateMgr);
@@ -390,7 +390,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	((CMinimapShader*)m_ppShaders[12])->SetWayFinder(m_pWayFinder);
 
 	//Manager Shaders Setting
-	CAniShader* pAniS = (CAniShader *)m_ppShaders[2];
+	CMinionShader* pAniS = (CMinionShader *)m_ppShaders[2];
 
 	pAniS->SetCollisionManager(m_pCollisionManager);
 	pAniS->SetGaugeManger(m_pUIObjectsManager);
