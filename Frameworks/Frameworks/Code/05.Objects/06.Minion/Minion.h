@@ -19,7 +19,7 @@ public:	// 외부 함수
 	virtual void PlayIdle(float timeElapsed);
 	virtual void PlayWalk(float timeElapsed);
 	virtual void PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
-	virtual void PlayAttack(float timeElapsed);
+	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 
 	virtual void ReceiveDamage(float damage)
 	{

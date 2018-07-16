@@ -173,26 +173,70 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 }
 
 // Warning! 업데이트 필요 -> 단순히 그 적 방향으로 가는 게 아니라 길 따라서 가도록 해야함
-void CAnimatedObject::MoveToEnemy(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
+void CAnimatedObject::MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
-	if (!m_pEnemy) return;
+	m_availableTime -= timeElapsed;
+	if (pWayFinder != NULL)
+	{
+		if (m_availableTime <= 0.0f)
+		{
+			m_availableTime = TIME_AVAILABILITY_CHECK;
+			ResetSubPath();
+			m_subPath = pWayFinder->GetPathToPosition(GetPosition(), m_pEnemy->GetPosition(), GetCollisionSize());
+		}
+	}
 
-	XMFLOAT3 pos = m_pEnemy->GetPosition();
-	LookAt(XMFLOAT2(pos.x, pos.z));
-	MoveForward(m_speed * timeElapsed);
+	if (NoneDestination(PathType::Sub) || IsArrive(m_speed * timeElapsed, PathType::Sub))	//  도착 한 경우
+	{
+		if (m_subPath == NULL || m_subPath->empty())
+		{
+			Safe_Delete(m_subPath);
+			ResetDestination(PathType::Sub);
+			LookAt(m_destination);
+		}
+		else
+		{
+			m_subDestination = m_subPath->front().To();
+			m_subPath->pop_front();
+			LookAt(m_subDestination);
+		}
+	}
+	else  // 아직 도착하지 않은 경우
+	{
+		MoveForward(m_speed * timeElapsed);
+		XMFLOAT3 position = GetPosition();
+		position.y = m_pTerrain->GetHeight(position.x, position.z);
+		CBaseObject::SetPosition(position);
+	}
 
-	pWayFinder->AdjustValueByWallCollision(this, GetLook(), m_speed * timeElapsed);
+	//XMFLOAT3 pos = m_pEnemy->GetPosition();
+	//LookAt(XMFLOAT2(pos.x, pos.z));
+	//MoveForward(m_speed * timeElapsed);
 
-	XMFLOAT3 position = GetPosition();
-	position.y = m_pTerrain->GetHeight(position.x, position.z);
-	CBaseObject::SetPosition(position);
+	//pWayFinder->AdjustValueByWallCollision(this, GetLook(), m_speed * timeElapsed);
+
+	//XMFLOAT3 position = GetPosition();
+	//position.y = m_pTerrain->GetHeight(position.x, position.z);
+	//CBaseObject::SetPosition(position);
+}
+
+void CAnimatedObject::GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinder)
+{
+	ResetSubPath();
+	m_subPath = pWayFinder->GetPathToPosition(GetPosition(), m_destination, GetCollisionSize());
+	m_subDestination = m_subPath->front().To();
+	m_subPath->pop_front();
+	LookAt(m_subDestination);
 }
 
 void CAnimatedObject::RegenerateLookAt()
 {
-	if (NoneDestination()) return;
+	if (NoneDestination(PathType::Sub)) 
+	{
+		if (NoneDestination()) return;
 
-	LookAt(m_destination);
+		LookAt(m_destination);
+	}
 }
 
 bool CAnimatedObject::Attackable(CCollisionObject * other)
@@ -212,17 +256,34 @@ bool CAnimatedObject::Chaseable(CCollisionObject * other)
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-bool CAnimatedObject::IsArrive(float dst)
+bool CAnimatedObject::IsArrive(float dst, PathType type)
 {
 	XMFLOAT2 curPos{ GetPosition().x, GetPosition().z };
-	int distanceSqr = static_cast<int>(Vector2::DistanceSquare(curPos, m_destination));
+	Path* curPath{ NULL };
+	XMFLOAT2 curDestination;
+	if (type == PathType::Main)
+	{
+		curPath = m_mainPath;
+		curDestination = m_destination;
+	}
+	else if (type == PathType::Sub)
+	{
+		curPath = m_subPath;
+		curDestination = m_subDestination;
+	}
+
+	int distanceSqr = static_cast<int>(Vector2::DistanceSquare(curPos, curDestination));
 	// 정확히 도착 하는 경우
 	if (distanceSqr < dst * dst) return true;
-	if (m_mainPath->empty()) return false;
+	if (curPath->empty()) 
+	{
+		if (m_availableTime < NONE) return true;
+		return false;
+	}
 
-	XMFLOAT2 next = m_mainPath->front().To();
-	XMFLOAT2 dstToNext = Vector2::Subtract(next, m_destination, true);
-	float dstToNextLengthSqr = Vector2::DistanceSquare(next, m_destination);
+	XMFLOAT2 next = curPath->front().To();
+	XMFLOAT2 dstToNext = Vector2::Subtract(next, curDestination, true);
+	float dstToNextLengthSqr = Vector2::DistanceSquare(next, curDestination);
 	float curPosToNextLength = Vector2::DotProduct(Vector2::Subtract(next, curPos), dstToNext);
 
 	return dstToNextLengthSqr > curPosToNextLength * curPosToNextLength;
@@ -236,4 +297,38 @@ bool CAnimatedObject::Walkable()
 	if (m_curState == States::Win) return false;
 	if (m_curState == States::Defeat) return false;
 	return true;
+}
+
+bool CAnimatedObject::NoneDestination(PathType type)
+{
+	if (type == PathType::Main)
+	{
+		return m_destination.x == NONE;
+	}
+	else if (type == PathType::Sub)
+	{
+		return m_subDestination.x == NONE;
+	}
+	return false;
+}
+
+void CAnimatedObject::ResetDestination(PathType type)
+{
+	if (type == PathType::Main)
+	{
+		m_destination.x = NONE;
+	}
+	else if (type == PathType::Sub)
+	{
+		m_subDestination.x = NONE;
+	}
+}
+
+void CAnimatedObject::ResetSubPath()
+{
+	if (m_subPath)
+	{
+		Safe_Delete(m_subPath);
+		ResetDestination(PathType::Sub);
+	}
 }

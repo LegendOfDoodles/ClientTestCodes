@@ -39,8 +39,9 @@ public: // 공개 함수
 
 	void SetPathToGo(Path *path);
 	ProcessType MoveToDestination(float timeElapsed);
-	void MoveToEnemy(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
+	void MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder = NULL);
 
+	void GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinder);
 	virtual void RegenerateLookAt();
 
 	virtual bool Attackable(CCollisionObject* other);
@@ -56,14 +57,14 @@ public: // 공개 함수
 	float GetAnimTimeRemainRatio() { return (m_nAniLength[m_nCurrAnimation] - m_fFrameTime) / (float)m_nAniLength[m_nCurrAnimation]; }
 
 protected: // 내부 함수
-	bool IsArrive(float dst);
+	bool IsArrive(float dst, PathType type = PathType::Main);
 
 	virtual void AdjustAnimationIndex() = 0;
 
 	bool Walkable();
-
-	void ResetDestination() { m_destination.x = NONE; }
-	bool NoneDestination() { return m_destination.x == NONE;	}
+	bool NoneDestination(PathType type = PathType::Main);
+	void ResetDestination(PathType type = PathType::Main);
+	void ResetSubPath();
 
 protected: // 변수
 	CSkeleton	m_pSkeleton[20];
@@ -84,7 +85,10 @@ protected: // 변수
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	XMFLOAT2 m_destination{ NONE, NONE };
+	XMFLOAT2 m_subDestination{ NONE, NONE };
 	Path *m_mainPath{ NULL };
 	Path *m_subPath{ NULL };
+
+	float m_availableTime{ 0.0f };	// subPath가 유효한 시간 체크
 };
 

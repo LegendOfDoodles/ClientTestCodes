@@ -26,6 +26,8 @@ public: // 공개 함수
 	XMFLOAT2 GetClosestNotCollidePos(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
 	XMFLOAT3 GetClosestNotCollidePos(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
 	Path *GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
+	Path *GetPathToPosition(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
+	Path *GetPathToPosition(const XMFLOAT3 &source, const XMFLOAT2 &target, float collisionSize);
 
 	void SmoothPath(Path *path, float collisionSize);
 	void SmoothPathDetail(Path *path, float collisionSize);

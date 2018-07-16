@@ -500,7 +500,6 @@ void CShader::CreateShaderWithTess(shared_ptr<CCreateMgr> pCreateMgr, UINT nRend
 	pipelineStateDesc.SampleMask = UINT_MAX;
 	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
 	pipelineStateDesc.NumRenderTargets = nRenderTargets;
-	// Warning! RTV 포맷 변경 필요
 	for (UINT i = 0; i < nRenderTargets; i++)
 	{
 		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -554,7 +553,6 @@ void CShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTarget
 	pipelineStateDesc.SampleMask = UINT_MAX;
 	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pipelineStateDesc.NumRenderTargets = nRenderTargets;
-	// Warning! RTV 포맷 변경 필요
 	for (UINT i = 0; i < nRenderTargets; i++)
 	{
 		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;

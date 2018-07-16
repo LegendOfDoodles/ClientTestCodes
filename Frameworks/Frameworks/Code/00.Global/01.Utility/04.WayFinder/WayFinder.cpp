@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-04
+/// 최종 수정 날짜: 2018-07-16
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -201,6 +201,16 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 	SmoothPathDetail(path, collisionSize);
 
 	return path;
+}
+
+Path * CWayFinder::GetPathToPosition(const XMFLOAT3 & source, const XMFLOAT3 & target, float collisionSize)
+{
+	return GetPathToPosition(XMFLOAT2(source.x, source.z), XMFLOAT2(target.x, target.z), collisionSize);
+}
+
+Path * CWayFinder::GetPathToPosition(const XMFLOAT3 & source, const XMFLOAT2 & target, float collisionSize)
+{
+	return GetPathToPosition(XMFLOAT2(source.x, source.z), target, collisionSize);
 }
 
 void CWayFinder::SmoothPath(Path *path, float collisionSize)

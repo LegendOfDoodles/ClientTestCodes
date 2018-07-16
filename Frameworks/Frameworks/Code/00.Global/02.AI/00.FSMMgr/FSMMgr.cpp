@@ -37,7 +37,7 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 		obj->PlayChase(timeElapsed, m_pWayFinder);
 		break;
 	case States::Attack:
-		obj->PlayAttack(timeElapsed);
+		obj->PlayAttack(timeElapsed, m_pWayFinder);
 		break;
 	case States::Die:
 		obj->PlayDie(timeElapsed);

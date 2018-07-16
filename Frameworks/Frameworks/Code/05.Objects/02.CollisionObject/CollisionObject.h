@@ -18,7 +18,7 @@ public: // 공개 함수
 	virtual void PlayIdle(float timeElapsed) { timeElapsed; }
 	virtual void PlayWalk(float timeElapsed) { timeElapsed; }
 	virtual void PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
-	virtual void PlayAttack(float timeElapsed) { timeElapsed; }
+	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
 	virtual void PlayDie(float timeElapsed) { timeElapsed; }
 	virtual void PlayRemove(float timeElapsed) { timeElapsed; }
 

@@ -101,22 +101,22 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 {
 	m_spawnTime += timeElapsed;
 
-	if (m_spawnTime >= 0.0f && m_spawnTime <= 5.0f)
-	{
-		bool spawned{ false };
-		for (float time = m_spawnTime - m_preSpawnTime; time >= 0.25; time -= 0.25)
-		{
-			spawned = true;
-			SpawnMinion();
-		}
-		if(spawned) m_preSpawnTime = m_spawnTime;
-	}
+	//if (m_spawnTime >= 0.0f && m_spawnTime <= 5.0f)
+	//{
+	//	bool spawned{ false };
+	//	for (float time = m_spawnTime - m_preSpawnTime; time >= 0.25; time -= 0.25)
+	//	{
+	//		spawned = true;
+	//		SpawnMinion();
+	//	}
+	//	if(spawned) m_preSpawnTime = m_spawnTime;
+	//}
 
-	if (m_spawnTime >= 30.0f)
-	{
-		m_spawnTime -= 30.0f;
-		m_preSpawnTime = -0.25f;
-	}
+	//if (m_spawnTime >= 30.0f)
+	//{
+	//	m_spawnTime -= 30.0f;
+	//	m_preSpawnTime = -0.25f;
+	//}
 
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
 	{

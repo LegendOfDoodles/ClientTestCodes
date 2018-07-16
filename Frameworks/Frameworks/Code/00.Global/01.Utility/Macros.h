@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-07-16
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -31,6 +31,7 @@
 
 #define SHADOW_MAP_SIZE 8192
 
+// 지형(Terrain) 관련
 #define TERRAIN_SIZE_WIDTH 10000.0f
 #define TERRAIN_SIZE_HEIGHT 5000.0f
 #define TERRAIN_SIZE_DIAGONAL sqrt((TERRAIN_SIZE_WIDTH * TERRAIN_SIZE_WIDTH) + (TERRAIN_SIZE_HEIGHT * TERRAIN_SIZE_HEIGHT))
@@ -48,11 +49,15 @@
 #define TETRRAIN_COLLISION_HEIGHT 250.0f
 #define TERRAIN_COLLISION_SCALE XMFLOAT3(TERRAIN_SIZE_WIDTH / TETRRAIN_COLLISION_WIDTH, 1.4f, TERRAIN_SIZE_HEIGHT / TETRRAIN_COLLISION_HEIGHT)
 
+// 시간(Time) 관련
+#define TIME_AVAILABILITY_CHECK 1.5f	// subPath가 유효한 시간
+
+// 높이(Height) 관련
 #define REVISE_HEIGHT 100.0f
 #define REVISE_HEIGHT_FOR_OBJECT REVISE_HEIGHT + 7.0f
 
+// 노드(Node) 관련
 #define NODE_SIZE 41.4.0f
-
 #define NONE -1
 
 // 최대, 최소 수치

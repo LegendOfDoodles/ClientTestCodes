@@ -5,7 +5,7 @@
 /// 목적: 미니언 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-22
+/// 최종 수정 날짜: 2018-07-16
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -78,6 +78,7 @@ void CMinion::SetState(StatesType newState)
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:
+		m_availableTime = 0.0f;
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Attack:
@@ -117,7 +118,14 @@ void CMinion::PlayIdle(float timeElapsed)
 
 void CMinion::PlayWalk(float timeElapsed)
 {
-	if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle); 
+	if (NoneDestination(PathType::Sub))
+	{
+		if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
+	}
+	else
+	{
+		MoveToSubDestination(timeElapsed);
+	}
 	PlayIdle(timeElapsed);
 }
 
@@ -126,24 +134,27 @@ void CMinion::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	if (!Chaseable(m_pEnemy))
 	{
 		SetEnemy(NULL);
+		GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
 	}
-
-	MoveToEnemy(timeElapsed, pWayFinder);
+	else
+	{
+		MoveToSubDestination(timeElapsed, pWayFinder);
+	}
 
 	if (Attackable(m_pEnemy)) SetState(States::Attack);
 }
 
-void CMinion::PlayAttack(float timeElapsed)
+void CMinion::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
 
 	if (!CheckEnemyState(m_pEnemy))
 	{
 		SetEnemy(NULL);
+		GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
 	}
-
 	else if (!Attackable(m_pEnemy))
 	{
 		SetNextState(States::Chase);
@@ -238,6 +249,7 @@ void CSwordMinion::Animate(float timeElapsed)
 			}
 			break;
 		case States::Walk:
+		case States::Chase:
 			if(m_nCurrAnimation!= Animations::StartWalk&&
 				m_nCurrAnimation != Animations::Walking)
 				m_nCurrAnimation = Animations::StartWalk;

@@ -6,7 +6,7 @@
 /// 목적: 생성 관련 함수를 모아 두어 헷갈리는 일 없이 생성 가능하도록 함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-05
+/// 최종 수정 날짜: 2018-07-16
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -719,7 +719,6 @@ void CCreateMgr::CreateRenderTargetViews()
 	m_pTexture.reset();
 	m_pTexture = shared_ptr<CTexture>(new CTexture(RENDER_TARGET_BUFFER_CNT + 1, RESOURCE_TEXTURE_2D_ARRAY, 0));
 
-	// Warning! 랜더 타겟 버퍼 포맷 변경 필요
 	D3D12_CLEAR_VALUE d3dClearValue = { m_renderBufferFormat,{ 0.0f, 0.0f, 0.0f, 1.0f } };
 	for (UINT i = 0; i < RENDER_TARGET_BUFFER_CNT; i++)
 	{
@@ -740,7 +739,6 @@ void CCreateMgr::CreateRenderTargetViews()
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUDescriptorHandle = m_pRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	rtvCPUDescriptorHandle.ptr += (SWAP_CHAIN_BUFFER_CNT * m_rtvDescriptorIncrementSize);
 
-	// Warning! RTV 포맷 변경 필요
 	D3D12_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 	renderTargetViewDesc.Format = m_renderBufferFormat;
 	renderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
