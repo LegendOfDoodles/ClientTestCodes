@@ -123,9 +123,6 @@
     <Filter Include="소스 파일\00.Global\02.AI\00.FSMMgr">
       <UniqueIdentifier>{e37989c4-9fda-4973-9d9f-f7789d0fcb53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\04.Shaders\04.AniShader">
-      <UniqueIdentifier>{dc752d63-37aa-4e94-9f45-9cd6ad7d721c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\05.Objects\03.AnimatedObject">
       <UniqueIdentifier>{be3fc130-7dbf-4272-9abf-efccf81d9bf4}</UniqueIdentifier>
     </Filter>
@@ -254,6 +251,9 @@
     </Filter>
     <Filter Include="소스 파일\05.Objects\10.Neutrality\01.Golem">
       <UniqueIdentifier>{26e4b781-277f-4fa7-909a-94bf23de8666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\04.MinionShader">
+      <UniqueIdentifier>{dc752d63-37aa-4e94-9f45-9cd6ad7d721c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -462,7 +462,7 @@
       <Filter>소스 파일\05.Objects\96.Billboard\05.SpecialObject</Filter>
     </ClInclude>
     <ClInclude Include="Code\04.Shaders\04.AniShader\MinionShader.h">
-      <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
+      <Filter>소스 파일\04.Shaders\04.MinionShader</Filter>
     </ClInclude>
     <ClInclude Include="Code\04.Shaders\07.NeutralityShader\NeutralityShader.h">
       <Filter>소스 파일\04.Shaders\07.NeutralityShader</Filter>
@@ -662,7 +662,7 @@
       <Filter>소스 파일\05.Objects\96.Billboard\05.SpecialObject</Filter>
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\04.AniShader\MinionShader.cpp">
-      <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
+      <Filter>소스 파일\04.Shaders\04.MinionShader</Filter>
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\07.NeutralityShader\NeutralityShader.cpp">
       <Filter>소스 파일\04.Shaders\07.NeutralityShader</Filter>

@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-16
+/// 최종 수정 날짜: 2018-07-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -180,17 +180,24 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 		{
 			// 찾은 패스 저장
 			path = m_pCurSearch->GetPath();
-			// 소스가 오른쪽 이었으면 패스를 뒤집는다.
-			if (source.x < adjTarget.x)
+			if (!path->empty())
 			{
-				// 패스에 도착지를 추가로 연결하고 종료한다.
-				if (!path->empty()) path->push_back(CPathEdge(path->back().To(), target));
-			}
-			else
-			{
-				// 패스에 도착지를 추가로 연결하고 종료한다.
-				if (!path->empty()) path->push_back(CPathEdge(path->back().To(), source));
-				path->reverse();
+				// 소스가 오른쪽 이었으면 패스를 뒤집는다.
+				if (source.x < adjTarget.x)
+				{
+					// 패스에 도착지를 추가로 연결하고 종료한다.
+					path->push_back(CPathEdge(path->back().To(), target));
+				}
+				else
+				{
+					// 패스에 도착지를 추가로 연결하고 종료한다.
+					path->push_back(CPathEdge(path->back().To(), source));
+					path->reverse();
+				}
+				if (!IsInTerrain(path->back().To()))
+				{
+					path->pop_back();
+				}
 			}
 		}
 	
@@ -300,6 +307,15 @@ void CWayFinder::AdjustValueByWallCollision(CCollisionObject* collider, const XM
 		XMFLOAT3 axis{ Vector3::ScalarProduct(newDir, val) };
 		collider->Translate(&axis);
 	}
+}
+
+bool CWayFinder::IsInTerrain(const XMFLOAT2 & target)
+{
+	if (target.x < 0) return false;
+	if (target.x > TERRAIN_SIZE_WIDTH) return false;
+	if (target.y < 0) return false;
+	if (target.y > TERRAIN_SIZE_HEIGHT) return false;
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////

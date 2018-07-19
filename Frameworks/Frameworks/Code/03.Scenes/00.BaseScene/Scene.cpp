@@ -8,6 +8,7 @@
 #include "04.Shaders/04.AniShader/MinionShader.h"
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/06.NexusTowerShader/NexusTowerShader.h"
+#include "04.Shaders/07.NeutralityShader/NeutralityShader.h"
 #include "04.Shaders/98.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
@@ -30,8 +31,19 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-20
 /// </summary>
+
+#define UI_Shader m_ppShaders[7]
+#define PlayerHP_Shader m_ppShaders[8]
+#define MinionHP_Shader m_ppShaders[9]
+#define MinimapIco_Shader m_ppShaders[10]
+#define BuildingMapIco_Shader m_ppShaders[11]
+#define CharFrame_Shader m_ppShaders[12]
+#define Minimap_Shader m_ppShaders[13]
+#define Skill_Shader m_ppShaders[14]
+#define Number_Shader m_ppShaders[15]
+#define SelectedSpecial_Shader m_ppShaders[16]
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
@@ -190,9 +202,9 @@ void CScene::UpdateCamera()
 
 		m_pCamera->Initialize(m_pCreateMgr);
 
-		static_cast<CUIObjectShader*>(m_ppShaders[6])->SetCamera(m_pCamera);
-		static_cast<CPlayerHPGaugeShader*>(m_ppShaders[7])->SetCamera(m_pCamera);
-		static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetCamera(m_pCamera);
+		static_cast<CUIObjectShader*>(UI_Shader)->SetCamera(m_pCamera);
+		static_cast<CPlayerHPGaugeShader*>(PlayerHP_Shader)->SetCamera(m_pCamera);
+		static_cast<CMinionHPGaugeShader*>(MinionHP_Shader)->SetCamera(m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -313,7 +325,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 16;
+	m_nShaders = 17;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -322,18 +334,19 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[3] = new CPlayerShader(pCreateMgr);
 	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[5] = new CNexusTowerShader(pCreateMgr);
+	m_ppShaders[6] = new CNeutralityShader(pCreateMgr);
 
 	//UI Shader
-	m_ppShaders[6] = new CUIObjectShader(pCreateMgr);
-	m_ppShaders[7] = new CPlayerHPGaugeShader(pCreateMgr);
-	m_ppShaders[8] = new CMinionHPGaugeShader(pCreateMgr);
-	m_ppShaders[9] = new CMinimapIconShader(pCreateMgr);
-	m_ppShaders[10] = new CBuildingMinimapIconShader(pCreateMgr);
-	m_ppShaders[11] = new CharacterFrameGaugeShader(pCreateMgr);
-	m_ppShaders[12] = new CMinimapShader(pCreateMgr);
-	m_ppShaders[13] = new CSkillShader(pCreateMgr);
-	m_ppShaders[14] = new CNumberShader(pCreateMgr);
-	m_ppShaders[15] = new CSelectedSpecialShader(pCreateMgr);
+	UI_Shader = new CUIObjectShader(pCreateMgr);
+	PlayerHP_Shader = new CPlayerHPGaugeShader(pCreateMgr);
+	MinionHP_Shader = new CMinionHPGaugeShader(pCreateMgr);
+	MinimapIco_Shader = new CMinimapIconShader(pCreateMgr);
+	BuildingMapIco_Shader = new CBuildingMinimapIconShader(pCreateMgr);
+	CharFrame_Shader = new CharacterFrameGaugeShader(pCreateMgr);
+	Minimap_Shader = new CMinimapShader(pCreateMgr);
+	Skill_Shader = new CSkillShader(pCreateMgr);
+	Number_Shader = new CNumberShader(pCreateMgr);
+	SelectedSpecial_Shader = new CSelectedSpecialShader(pCreateMgr);
 
 
 	for (int i = 0; i < 2; ++i)
@@ -347,47 +360,47 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 
 	// UI Shaders Initialize
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
-	((CPlayerHPGaugeShader*)m_ppShaders[7])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
+	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
+	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
+	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
 
-	((CMinimapIconShader*)m_ppShaders[9])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
-	((CMinimapIconShader*)m_ppShaders[9])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
+	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
-	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTowerCnt(
+	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTowerCnt(
 		((CNexusTowerShader *)m_ppShaders[5])->GetNexusCount(),
 		((CNexusTowerShader *)m_ppShaders[5])->GetTowerCount()
 	);
-	((CBuildingMinimapIconShader*)m_ppShaders[10])->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
+	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
 
 	m_ppObjects = ((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects();
 
-	((CharacterFrameGaugeShader*)m_ppShaders[11])->SetPlayer(m_ppObjects[0]);
-	((CMinimapShader*)m_ppShaders[12])->SetPlayer(m_ppObjects[0]);
+	((CharacterFrameGaugeShader*)CharFrame_Shader)->SetPlayer(m_ppObjects[0]);
+	((CMinimapShader*)Minimap_Shader)->SetPlayer(m_ppObjects[0]);
 
-	((CSelectedSpecialShader*)m_ppShaders[15])->SetPlayer(m_ppObjects[0]);
+	((CSelectedSpecialShader*)SelectedSpecial_Shader)->SetPlayer(m_ppObjects[0]);
 
-	((CPlayerHPGaugeShader*)m_ppShaders[14])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
-	((CPlayerHPGaugeShader*)m_ppShaders[14])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
+	((CPlayerHPGaugeShader*)Number_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CPlayerHPGaugeShader*)Number_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
-	m_ppShaders[6]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[7]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[8]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[9]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[10]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[11]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[12]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[13]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[14]->Initialize(pCreateMgr, m_pCamera);
-	m_ppShaders[15]->Initialize(pCreateMgr, m_pCamera);
+	UI_Shader->Initialize(pCreateMgr, m_pCamera);
+	PlayerHP_Shader->Initialize(pCreateMgr, m_pCamera);
+	MinionHP_Shader->Initialize(pCreateMgr, m_pCamera);
+	MinimapIco_Shader->Initialize(pCreateMgr, m_pCamera);
+	BuildingMapIco_Shader->Initialize(pCreateMgr, m_pCamera);
+	CharFrame_Shader->Initialize(pCreateMgr, m_pCamera);
+	Minimap_Shader->Initialize(pCreateMgr, m_pCamera);
+	Skill_Shader->Initialize(pCreateMgr, m_pCamera);
+	Number_Shader->Initialize(pCreateMgr, m_pCamera);
+	SelectedSpecial_Shader->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
 	m_pCollisionManager = shared_ptr<CCollisionManager>(new CCollisionManager());
 	m_pUIObjectsManager = shared_ptr<CUIObjectManager>(new CUIObjectManager());
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
-	((CMinimapShader*)m_ppShaders[12])->SetWayFinder(m_pWayFinder);
+	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
 
 	//Manager Shaders Setting
 	CMinionShader* pAniS = (CMinionShader *)m_ppShaders[2];
@@ -396,8 +409,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	pAniS->SetGaugeManger(m_pUIObjectsManager);
 	pAniS->SetFSMManager(m_pFSMMgr);
 
-	static_cast<CMinionHPGaugeShader*>(m_ppShaders[8])->SetUIObjectsManager(m_pUIObjectsManager);
-	static_cast<CMinimapIconShader*>(m_ppShaders[9])->SetUIObjectsManager(m_pUIObjectsManager);
+	static_cast<CMinionHPGaugeShader*>(MinionHP_Shader)->SetUIObjectsManager(m_pUIObjectsManager);
+	static_cast<CMinimapIconShader*>(MinimapIco_Shader)->SetUIObjectsManager(m_pUIObjectsManager);
 
 	m_pCollisionManager->SetNodeMap(m_pWayFinder->GetNodeMap(), m_pWayFinder->GetNodeSize(), m_pWayFinder->GetNodeWH());
 
@@ -514,7 +527,7 @@ void CScene::PickObjectPointedByCursor(WPARAM wParam, LPARAM lParam)
 			// Status 창 띄우기 수도 코드
 			// 현재 6번 쉐이더가 UI 이므로 상호작용하는 Object의 타입을 받아와서
 			// 그 해당 오브젝트에 대한 정보를 출력
-			m_ppShaders[6]->OnStatus(pIntersectedObject->GetType());
+			UI_Shader->OnStatus(pIntersectedObject->GetType());
 		}
 	}
 

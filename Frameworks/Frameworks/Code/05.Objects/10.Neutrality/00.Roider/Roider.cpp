@@ -5,7 +5,7 @@
 /// 목적: 중립 몬스터(로이더) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-19
+/// 최종 수정 날짜: 2018-07-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -25,6 +25,7 @@ CRoider::~CRoider()
 // 공개 함수
 void CRoider::Animate(float timeElapsed)
 {
+	AnimateByCurState();
 	AdjustAnimationIndex();
 
 	m_fPreFrameTime = m_fFrameTime;
@@ -35,7 +36,7 @@ void CRoider::Animate(float timeElapsed)
 			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
 
-	if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
+	// if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
 
 	CAnimatedObject::Animate(timeElapsed);
 }
@@ -199,7 +200,7 @@ void CRoider::AdjustAnimationIndex()
 	}
 }
 
-void CRoider::AnimateByCurState(float timeElapsed)
+void CRoider::AnimateByCurState()
 {
 	switch (m_curState) {
 	case States::Idle:

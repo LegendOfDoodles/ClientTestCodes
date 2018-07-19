@@ -35,7 +35,7 @@ public:	// 외부 함수
 
 protected:	// 내부 함수
 	virtual void AdjustAnimationIndex();
-	void AnimateByCurState(float timeElapsed);
+	void AnimateByCurState();
 	void ReadyToAtk();
 
 protected:	// 변수

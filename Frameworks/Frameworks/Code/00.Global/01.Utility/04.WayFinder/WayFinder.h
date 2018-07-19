@@ -36,6 +36,8 @@ public: // 공개 함수
 
 	void AdjustValueByWallCollision(CCollisionObject* collider, const XMFLOAT3& dir, float val);
 
+	bool IsInTerrain(const XMFLOAT2& target);
+
 	int GetNodeCount() const { return static_cast<int>(m_nodes.size()); }
 	const CNode& GetNodeAt(int idx) const { return m_nodes[idx]; }
 	const EdgeVector& GetEdgesAt(int idx) const { return m_edges[idx]; }
