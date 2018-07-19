@@ -243,6 +243,18 @@
     <Filter Include="소스 파일\05.Objects\96.Billboard\05.SpecialObject">
       <UniqueIdentifier>{9eaa8af4-cb54-4287-b5d2-66708885ea86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\07.NeutralityShader">
+      <UniqueIdentifier>{2a7a045a-e6d0-48aa-929c-089baf5fa7e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\10.Neutrality">
+      <UniqueIdentifier>{5f2946b6-8b31-4b63-8151-ac42cbd52065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\10.Neutrality\00.Roider">
+      <UniqueIdentifier>{e9e066a4-6eca-4b24-86d0-5aed0011a391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\10.Neutrality\01.Golem">
+      <UniqueIdentifier>{26e4b781-277f-4fa7-909a-94bf23de8666}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -452,6 +464,15 @@
     <ClInclude Include="Code\04.Shaders\04.AniShader\MinionShader.h">
       <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\07.NeutralityShader\NeutralityShader.h">
+      <Filter>소스 파일\04.Shaders\07.NeutralityShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\10.Neutrality\00.Roider\Roider.h">
+      <Filter>소스 파일\05.Objects\10.Neutrality\00.Roider</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\10.Neutrality\01.Golem\Golem.h">
+      <Filter>소스 파일\05.Objects\10.Neutrality\01.Golem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -642,6 +663,15 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\04.AniShader\MinionShader.cpp">
       <Filter>소스 파일\04.Shaders\04.AniShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\07.NeutralityShader\NeutralityShader.cpp">
+      <Filter>소스 파일\04.Shaders\07.NeutralityShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\10.Neutrality\00.Roider\Roider.cpp">
+      <Filter>소스 파일\05.Objects\10.Neutrality\00.Roider</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\10.Neutrality\01.Golem\Golem.cpp">
+      <Filter>소스 파일\05.Objects\10.Neutrality\01.Golem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
