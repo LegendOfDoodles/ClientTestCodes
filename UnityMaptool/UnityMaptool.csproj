@@ -289,6 +289,10 @@
   <ItemGroup>
     <None Include="Assets\NexusTowerSetting.txt" />
     <None Include="Assets\ObjectSetting.txt" />
+    <None Include="Assets\Resources\MonsterSetting.txt" />
+    <None Include="Assets\Resources\NexusTowerSetting.txt" />
+    <None Include="Assets\Resources\ObjectSetting.txt" />
+    <None Include="Assets\Resources\WayPointSetting.txt" />
     <None Include="Assets\WayPointSetting.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

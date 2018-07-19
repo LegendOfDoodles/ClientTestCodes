@@ -10,14 +10,58 @@ public class TranformExporter : MonoBehaviour {
     public GameObject[] Objects;
     public GameObject[] Waypoint;
     public GameObject[] NexusTower;
+    public GameObject[] Monster;
 
-    string m_strPath = "Assets/Resources/";
+    string m_strPath = "/Resources/";
 
 	// Use this for initialization
 	void Start () {
         WriteObjectData();
         WriteWayPointData();
         WriteNecusTowerData();
+        MonsterData();
+    }
+    public void MonsterData()
+    {
+        DirectoryInfo dtif = new DirectoryInfo(m_strPath);
+        if (!dtif.Exists)
+        {
+            dtif.Create();
+        }
+        FileInfo file = new FileInfo(Application.dataPath + m_strPath + "MonsterSetting.txt");
+        if (!file.Exists)
+        {
+            FileStream fs = file.Create();
+            fs.Close();
+        }
+
+        FileStream fileStream = file.OpenWrite();
+
+        TextWriter tw = new StreamWriter(fileStream);
+        for (int i = 0; i < Monster.Length; ++i)
+        {
+            Transform[] tempTransforms = Monster[i].GetComponentsInChildren<Transform>();
+            tw.WriteLine(Monster[i].name);
+            tw.WriteLine(tempTransforms.Length - 1);
+            int n = 0;
+            foreach (Transform child in tempTransforms)
+            {
+                if (n != 0)
+                {
+
+                    tw.WriteLine(child.position.x + " " + child.position.y + " " + child.position.z);
+                    tw.WriteLine(child.rotation.eulerAngles.x + " " + child.rotation.eulerAngles.y + " " + child.rotation.eulerAngles.z);
+                    tw.WriteLine(child.lossyScale.x + " " + child.lossyScale.y + " " + child.lossyScale.z);
+                }
+                n++;
+            }
+            tw.WriteLine("<end>");
+        }
+        tw.Close();
+        fileStream.Close();
+
+        Debug.Log("succese-Monster");
+
     }
     public void WriteNecusTowerData()
     {
@@ -26,7 +70,7 @@ public class TranformExporter : MonoBehaviour {
         {
             dtif.Create();
         }
-        FileInfo file = new FileInfo(Application.dataPath + "/NexusTowerSetting.txt");
+        FileInfo file = new FileInfo(Application.dataPath + m_strPath + "NexusTowerSetting.txt");
         if (!file.Exists)
         {
             FileStream fs = file.Create();
@@ -68,7 +112,7 @@ public class TranformExporter : MonoBehaviour {
         {
             dtif.Create();
         }
-        FileInfo file = new FileInfo(Application.dataPath+"/ObjectSetting.txt");
+        FileInfo file = new FileInfo(Application.dataPath+ m_strPath + "ObjectSetting.txt");
         if (!file.Exists)
         {
             FileStream fs = file.Create();
@@ -110,7 +154,7 @@ public class TranformExporter : MonoBehaviour {
         {
             dtif.Create();
         }
-        FileInfo file = new FileInfo(Application.dataPath + "/WayPointSetting.txt");
+        FileInfo file = new FileInfo(Application.dataPath+ m_strPath + "WayPointSetting.txt");
         if (!file.Exists)
         {
             FileStream fs = file.Create();

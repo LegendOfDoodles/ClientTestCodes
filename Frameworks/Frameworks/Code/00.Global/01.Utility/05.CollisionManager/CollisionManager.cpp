@@ -115,8 +115,8 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 			{
 				if (searchType == (*i)->GetTeam()) {
 					int x, y;
-					x = static_cast<int>((*i)->GetPosition().x / nodeSize);
-					y = static_cast<int>((*i)->GetPosition().z / nodeSize);
+					x = static_cast<int>(CLAMP((*i)->GetPosition().x / nodeSize, 0, nodeWH.x-1));
+					y = static_cast<int>(CLAMP((*i)->GetPosition().z / nodeSize, 0, nodeWH.y-1));
 					int startLength = static_cast<int>((*i)->GetSightRange() / nodeSize);
 					for (int dir = 0; dir < 8; ++dir) {
 						SearchSight(XMFLOAT2(static_cast<float>(x), static_cast<float>(y)), dir, startLength);
@@ -127,8 +127,8 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 			for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 			{
 				XMFLOAT2 pos;
-				pos.x = (*i)->GetPosition().x / nodeSize;
-				pos.y = (*i)->GetPosition().z / nodeSize;
+				pos.x = CLAMP((*i)->GetPosition().x / nodeSize,0, nodeWH.x-1);
+				pos.y = CLAMP((*i)->GetPosition().z / nodeSize,0, nodeWH.y-1);
 				if (m_nodeMap[(int)pos.x][(int)pos.y].Detected) {
 					(*i)->SetDetected(true);
 					if (searchType == Blue&&(*i)->GetTeam()!=searchType) {
