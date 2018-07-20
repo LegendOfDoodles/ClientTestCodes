@@ -36,7 +36,7 @@ void CRoider::Animate(float timeElapsed)
 			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
 
-	// if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
+	if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
 
 	CAnimatedObject::Animate(timeElapsed);
 }
@@ -45,7 +45,7 @@ void CRoider::Render(CCamera * pCamera, UINT instanceCnt)
 {
 	OnPrepareRender();
 
-	if (!IsVisible(pCamera)||!m_Detected) return;
+	if (!IsVisible(pCamera)) return;
 
 	if (m_pMaterial)
 	{
@@ -183,16 +183,16 @@ void CRoider::AdjustAnimationIndex()
 		m_nAniIndex = 0;
 		break;
 	case Animations::Attack1:
-		m_nAniIndex = 1;
-		break;
-	case Animations::Attack2:
-		m_nAniIndex = 2;
-		break;
-	case Animations::StartWalk:
 		m_nAniIndex = 3;
 		break;
-	case Animations::Walking:
+	case Animations::Attack2:
 		m_nAniIndex = 4;
+		break;
+	case Animations::StartWalk:
+		m_nAniIndex = 1;
+		break;
+	case Animations::Walking:
+		m_nAniIndex = 2;
 		break;
 	case Animations::Die:
 		m_nAniIndex = 5;

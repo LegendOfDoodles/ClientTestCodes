@@ -12,7 +12,7 @@
 /// 목적: 중립 몬스터 관리 및 렌더링용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-19
+/// 최종 수정 날짜: 2018-07-20
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,14 @@ void CNeutralityShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pCon
 
 void CNeutralityShader::ReleaseUploadBuffers()
 {
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
+	}
+
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
 	{
@@ -114,6 +122,27 @@ void CNeutralityShader::RenderShadow(CCamera * pCamera)
 	{
 		m_ppObjects[j]->Render(pCamera);
 	}
+}
+
+CBaseObject * CNeutralityShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float & nearHitDistance)
+{
+	bool intersected = 0;
+
+	nearHitDistance = FLT_MAX;
+	float hitDistance = FLT_MAX;
+	CBaseObject *pSelectedObject{ NULL };
+
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+		if (intersected && (hitDistance < nearHitDistance))
+		{
+			nearHitDistance = hitDistance;
+			pSelectedObject = m_ppObjects[j];
+		}
+	}
+
+	return(pSelectedObject);
 }
 
 bool CNeutralityShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
@@ -304,7 +333,7 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 
 		pRoider->SetTerrain(m_pTerrain);
 
-		//pRoider->Rotate(0, 180, 0);
+		pRoider->Rotate(0, 180, 0);
 		pRoider->Rotate(-rot.x, rot.y, -rot.z);
 
 		pRoider->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
@@ -322,6 +351,15 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 
 void CNeutralityShader::ReleaseObjects()
 {
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			delete m_ppObjects[j];
+		}
+		Safe_Delete_Array(m_ppObjects);
+	}
+
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
 	{

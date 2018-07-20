@@ -332,9 +332,9 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[1] = pTerrainShader;
 	m_ppShaders[2] = new CMinionShader(pCreateMgr);
 	m_ppShaders[3] = new CPlayerShader(pCreateMgr);
-	m_ppShaders[4] = new CStaticObjectShader(pCreateMgr);
-	m_ppShaders[5] = new CNexusTowerShader(pCreateMgr);
-	m_ppShaders[6] = new CNeutralityShader(pCreateMgr);
+	m_ppShaders[4] = new CNeutralityShader(pCreateMgr);
+	m_ppShaders[5] = new CStaticObjectShader(pCreateMgr);
+	m_ppShaders[6] = new CNexusTowerShader(pCreateMgr);
 
 	//UI Shader
 	UI_Shader = new CUIObjectShader(pCreateMgr);
@@ -362,17 +362,17 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	// UI Shaders Initialize
 	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
-	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[5])->GetObjectCount());
-	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
+	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
+	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
 
 	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
 	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTowerCnt(
-		((CNexusTowerShader *)m_ppShaders[5])->GetNexusCount(),
-		((CNexusTowerShader *)m_ppShaders[5])->GetTowerCount()
+		((CNexusTowerShader *)m_ppShaders[6])->GetNexusCount(),
+		((CNexusTowerShader *)m_ppShaders[6])->GetTowerCount()
 	);
-	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[5])->GetCollisionObjects());
+	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
 
 	m_ppObjects = ((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects();
 
@@ -423,7 +423,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
 
-	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[5];
+	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[6];
 	nColliderObject = pNTS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
