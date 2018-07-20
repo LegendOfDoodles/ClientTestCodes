@@ -79,6 +79,9 @@ public: // 공개 함수
 	int GetType() {	return m_ObjectType; };
 	void SetType(ObjectType newObjectType) {m_ObjectType = newObjectType;};
 
+	virtual TeamType GetTeam() { return m_TeamType; }
+	virtual void SetTeam(TeamType type) { m_TeamType = type; }
+
 protected: // 내부 함수
 	virtual void OnPrepareRender();
 
@@ -104,6 +107,7 @@ protected: // 변수
 	D3D12_GPU_DESCRIPTOR_HANDLE m_cbvGPUDescriptorHandleForBB{ NULL };
 
 	ObjectType m_ObjectType{ ObjectType::StickPlayer };
+	TeamType m_TeamType{ None };
 
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 };

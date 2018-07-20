@@ -60,14 +60,11 @@ protected: // 내부 함수
 
 	void CreatePathes();
 
-	int GetRedPossibleIndex();
-	int GetBluePossibleIndex();
+	int GetPossibleIndex();
 	void SpawnMinion();
 
-	void SetRedPossibleIndex(int idx) { m_redIndexArr[idx] = true; }
-	void ResetRedPossibleIndex(int idx) { m_redIndexArr[idx] = false; }
-	void SetBluePossibleIndex(int idx) { m_blueIndexArr[idx] = true; }
-	void ResetBluePossibleIndex(int idx) { m_blueIndexArr[idx] = false; }
+	void SetPossibleIndex(int idx) { m_indexArr[idx] = true; }
+	void ResetPossibleIndex(int idx) { m_indexArr[idx] = false; }
 
 protected: // 변수
 	ObjectType m_kind{ ObjectType::SwordMinion };
@@ -75,8 +72,7 @@ protected: // 변수
 	CollisionObjectList m_blueObjects;
 	CollisionObjectList m_redObjects;
 
-	bool m_redIndexArr[MAX_MINION / 2];
-	bool m_blueIndexArr[MAX_MINION / 2];
+	bool m_indexArr[MAX_MINION];
 
 	Path m_pathes[4];
 

@@ -47,33 +47,28 @@ void CMinionShader::ReleaseUploadBuffers()
 
 void CMinionShader::UpdateShaderVariables(int opt)
 {
+	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
-	if (opt == 0)
+	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
-		for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
-		{
-			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
-			XMFLOAT4X4 tmp[128];
-			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		XMFLOAT4X4 tmp[128];
+		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
 
-			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
-		}
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
-	else if (opt == 1)
+	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
-		for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-		{
-			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + (((*iter)->GetIndex() + MAX_MINION / 2) * elementBytes));
-			XMFLOAT4X4 tmp[128];
-			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+		XMFLOAT4X4 tmp[128];
+		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
 
-			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
-		}
+		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
 	}
 }
 
@@ -123,7 +118,7 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 		if ((*iter)->GetState() == States::Remove)
 		{
 			CCollisionObject* temp{ *iter };
-			ResetBluePossibleIndex(temp->GetIndex());
+			ResetPossibleIndex(temp->GetIndex());
 			Safe_Delete(temp);
 
 			iter = m_blueObjects.erase(iter);
@@ -140,7 +135,7 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 		if ((*iter)->GetState() == States::Remove)
 		{
 			CCollisionObject* temp{ *iter };
-			ResetRedPossibleIndex(temp->GetIndex());
+			ResetPossibleIndex(temp->GetIndex());
 			Safe_Delete(temp);
 
 			iter = m_redObjects.erase(iter);
@@ -156,12 +151,13 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 void CMinionShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera, 0);
+
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
-	CShader::Render(pCamera, 1);
+
 	if (m_ppMaterials) m_ppMaterials[1]->UpdateShaderVariables();
 	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
@@ -343,7 +339,7 @@ void CMinionShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRender
 {
 	m_nPipelineStates = 3;
 
-	m_nHeaps = 3;
+	m_nHeaps = 2;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
@@ -358,25 +354,23 @@ void CMinionShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, MAX_MINION, true, boundingBoxElementBytes, MAX_MINION);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION / 2, 1, 0);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION / 2, 1, 1);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 2);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 0, 1);
 
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION / 2, m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION / 2, m_pConstBuffer.Get(), ncbElementBytes, MAX_MINION / 2, 1);
-	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, 2);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
+	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, 1);
 
-	SaveBoundingBoxHeapNumber(2);
+	SaveBoundingBoxHeapNumber(1);
 
 #if USE_BATCH_MATERIAL
 	m_nMaterials = 2;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	// Blue
 	m_ppMaterials[0] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.6f, 0.6f, 1.0f, 1.0f));
+	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 	// Red
-	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0f, 0.6f, 0.6f, 1.0f));
+	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -434,26 +428,13 @@ void CMinionShader::CreatePathes()
 	}
 }
 
-int CMinionShader::GetRedPossibleIndex()
+int CMinionShader::GetPossibleIndex()
 {
-	for (int idx = 0; idx < MAX_MINION / 2; ++idx)
+	for (int idx = 0; idx < MAX_MINION; ++idx)
 	{
-		if (!m_redIndexArr[idx])
+		if (!m_indexArr[idx])
 		{
-			m_redIndexArr[idx] = true;
-			return idx;
-		}
-	}
-	return NONE;
-}
-
-int CMinionShader::GetBluePossibleIndex()
-{
-	for (int idx = 0; idx < MAX_MINION / 2; ++idx)
-	{
-		if (!m_blueIndexArr[idx])
-		{
-			m_blueIndexArr[idx] = true;
+			m_indexArr[idx] = true;
 			return idx;
 		}
 	}
@@ -506,15 +487,7 @@ void CMinionShader::SpawnMinion()
 	int makeCnt{ 0 };
 	for (; kind < 4; ++kind)
 	{
-		int index;
-		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
-		{
-			index = GetBluePossibleIndex();
-		}
-		else
-		{
-			index = GetRedPossibleIndex();
-		}
+		int index{ GetPossibleIndex() };
 
 		if (index == NONE) break;
 		CMinion *pMinionObject{ NULL };
@@ -587,17 +560,16 @@ void CMinionShader::SpawnMinion()
 
 		pMinionObject->SetCollisionManager(m_pColManager);
 
+		pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
+		pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
+
 		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
 		{
-			pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
-			pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * index));
 			pMinionObject->SetTeam(TeamType::Blue);
 			m_blueObjects.emplace_back(pMinionObject);
 		}
 		else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
 		{
-			pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
-			pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * (index + MAX_MINION / 2)));
 			pMinionObject->SetTeam(TeamType::Red);
 			m_redObjects.emplace_back(pMinionObject);
 		}

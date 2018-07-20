@@ -29,9 +29,6 @@ public: // 공개 함수
 	virtual XMFLOAT2 GetCollisionLevel() { return m_xmf2CollisionLevel; }
 	virtual void ReceiveDamage(float Damage) { Damage; }
 
-	virtual TeamType GetTeam() { return m_TeamType; }
-	virtual void SetTeam(TeamType type) { m_TeamType = type; }
-
 	StatesType GetState() { return m_curState; }
 	virtual void SetState(StatesType newState) { m_curState = newState; }
 
@@ -65,7 +62,6 @@ protected: // 변수
 
 	StatesType m_curState{ States::Idle };
 	StatesType m_nextState{ States::Idle };
-	TeamType m_TeamType{ None };
 	bool m_Detected{ false };
 
 	float m_sightRange{ 10.0f };

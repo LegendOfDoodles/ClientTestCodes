@@ -15,6 +15,10 @@
 /// 최종 수정 날짜: 2018-07-20
 /// </summary>
 
+#define NetralMaterial m_ppMaterials[0]
+#define BlueMaterial m_ppMaterials[1]
+#define RedMaterial m_ppMaterials[2]
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CNeutralityShader::CNeutralityShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
@@ -94,13 +98,32 @@ void CNeutralityShader::AnimateObjects(float timeElapsed)
 void CNeutralityShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
-	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-#endif
 
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials) NetralMaterial->UpdateShaderVariables();
+#endif
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Render(pCamera);
+		if(m_ppObjects[j]->GetTeam() == TeamType::Neutral)
+			m_ppObjects[j]->Render(pCamera);
+	}
+
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials) BlueMaterial->UpdateShaderVariables();
+#endif
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		if (m_ppObjects[j]->GetTeam() == TeamType::Blue)
+			m_ppObjects[j]->Render(pCamera);
+	}
+
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials) RedMaterial->UpdateShaderVariables();
+#endif
+	for (int j = 0; j < m_nObjects; j++)
+	{
+		if (m_ppObjects[j]->GetTeam() == TeamType::Red)
+			m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -275,9 +298,15 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	SaveBoundingBoxHeapNumber(1);
 
 #if USE_BATCH_MATERIAL
-	m_nMaterials = 1;
+	m_nMaterials = 3;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[2] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+
+	NetralMaterial->SetAlbedo(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	BlueMaterial->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	RedMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -321,8 +350,13 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		//	pRoider->tag = 1;	// 이 부분 뭔지 모르겠음
 		//}
 		pRoider->CBaseObject::SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
-		pRoider->SetTeam(TeamType::Neutral);
-
+		if(j< 4)
+			pRoider->SetTeam(TeamType::Neutral);
+		else if (j< 9)
+			pRoider->SetTeam(TeamType::Red);
+		else
+			pRoider->SetTeam(TeamType::Blue);
+		
 		pRoider->SetSkeleton(pSIdle);
 		pRoider->SetSkeleton(pSStartWalk);
 		pRoider->SetSkeleton(pSWalk);

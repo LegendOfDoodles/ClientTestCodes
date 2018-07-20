@@ -49,7 +49,6 @@ void CRoider::Render(CCamera * pCamera, UINT instanceCnt)
 
 	if (m_pMaterial)
 	{
-		m_pMaterial->Render(pCamera);
 		m_pMaterial->UpdateShaderVariables();
 	}
 
