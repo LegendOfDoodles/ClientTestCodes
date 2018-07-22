@@ -39,19 +39,22 @@ void CPlayer::Animate(float timeElapsed)
 		else if (m_nCurrAnimation == Animations::SkillQ) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8),100);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8), 100);
+			}
+		}
+		else if (m_nCurrAnimation == Animations::SkillW) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180, 500);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillE) {
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180,500);
-			}
+			
 		}
 		else if (m_nCurrAnimation == Animations::SkillR) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(12),500);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(12), 500);
 			}
 		}
 		break;
@@ -115,7 +118,7 @@ void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 {
 	OnPrepareRender();
 
-	if (!IsVisible(pCamera)||!m_Detected) return;
+	if (!IsVisible(pCamera) || !m_Detected) return;
 
 	if (m_pMaterial)
 	{
@@ -157,7 +160,7 @@ void CPlayer::SetState(StatesType newState)
 		RegenerateLookAt();
 		if (m_nCurrAnimation != Animations::StartWalk &&
 			m_nCurrAnimation != Animations::Walking)
-		m_nCurrAnimation = Animations::StartWalk;
+			m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:
 		m_nCurrAnimation = Animations::StartWalk;
@@ -187,40 +190,52 @@ void CPlayer::SetState(StatesType newState)
 	}
 }
 
+void CPlayer::ChangeSkillSet(CSkeleton ** ppskill)
+{
+	for (int j = 0; j < 7; j++)
+	{
+		m_nAniLength[j+3] = ppskill[j]->GetAnimationLength();
+		m_pSkeleton[j+3] = *ppskill[j];
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 void CPlayer::AdjustAnimationIndex()
 {
 	switch (m_nCurrAnimation)
 	{
-	case Animations::Idle:
+	case Animations::Win:
 		m_nAniIndex = 0;
 		break;
-	case Animations::StartWalk:
+	case Animations::Defeat:
 		m_nAniIndex = 1;
 		break;
-	case Animations::Walking:
+	case Animations::Defeat2:
 		m_nAniIndex = 2;
 		break;
-	case Animations::SkillQ:
+	case Animations::Idle:
 		m_nAniIndex = 3;
 		break;
-	case Animations::SkillE:
+	case Animations::StartWalk:
 		m_nAniIndex = 4;
 		break;
-	case Animations::SkillR:
+	case Animations::Walking:
 		m_nAniIndex = 5;
 		break;
 
-	case Animations::Win:
+	case Animations::SkillQ:
 		m_nAniIndex = 6;
 		break;
-	case Animations::Defeat:
+	case Animations::SkillW:
 		m_nAniIndex = 7;
 		break;
-	case Animations::Defeat2:
+	case Animations::SkillE:
 		m_nAniIndex = 8;
 		break;
 
+	case Animations::SkillR:
+		m_nAniIndex = 9;
+		break;
 	}
 }

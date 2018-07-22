@@ -4,6 +4,7 @@
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
+class CSkeleton;
 class CPlayerShader : public CShader
 {
 public:
@@ -47,12 +48,19 @@ protected: // 내부 함수
 
 protected: // 변수
 	int m_nSword{ 0 };
-	int m_nSteff{ 0 };
+	int m_nStaff{ 0 };
 	int m_nBow{ 0 };
 
+	//애니메이션 정보
+	CSkeleton** m_ppSwordAni{ NULL };
+	CSkeleton** m_ppStaffAni{ NULL };
+
+	CSkeleton** m_ppBowAni{NULL};
+
+	//메쉬정보
 	CSkinnedMesh* m_pStick{ NULL };
 	CSkinnedMesh** m_pSword{ NULL };
-	CSkinnedMesh** m_pSteff{ NULL };
+	CSkinnedMesh** m_pStaff{ NULL };
 	CSkinnedMesh** m_pBow{ NULL };
 	int m_nWeaponState{ 0 };
 
