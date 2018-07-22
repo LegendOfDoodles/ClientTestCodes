@@ -300,7 +300,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTexturedLightingDetail(VS_TEXTURED_LIGHTING_
 
 	if (gFogOfWar[indexI].m_bFoW[indexJ] == 0)
 	{
-		output.color = float4(0, 0, 0, 0);
+		output.color += float4(-0.5f, -0.5f, -0.5f, 0);
 	}
 	
 	output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
@@ -445,7 +445,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
 
 	if (gFogOfWar[indexI].m_bFoW[indexJ] == 0)
 	{
-		output.color = float4(0, 0, 0, 0);
+		output.color += float4(-0.5f, -0.5f, -0.5f, 0);
 	}
 
     output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);

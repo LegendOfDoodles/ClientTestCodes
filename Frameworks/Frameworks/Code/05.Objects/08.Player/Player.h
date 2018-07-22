@@ -18,16 +18,28 @@ public:	// 외부 함수
 
 	virtual void SetState(StatesType newState);
 
+	virtual void ChangeSkillSet(CSkeleton** ppskill);
+
 	virtual PlayerInfo* GetPlayerStatus() { return &m_StatusInfo; }
 
 	//virtual void SetObjectType(ObjectType type) { m_StatusInfo.WeaponType = type; };
 	virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
+	UINT GetWeaponType() { return m_StatusInfo.Weapon; }
+	UINT GetWeaponNum() { return m_StatusInfo.WeaponNum; }
 
+	void SetWeaponData(UINT type , UINT num){
+		m_StatusInfo.Weapon = type;
+		m_StatusInfo.WeaponNum = num;
+	}
 protected: // 내부 함수
 	virtual void AdjustAnimationIndex();
 	/*
-	0. Idle		1.StartWalk		2.Walking	3.Smash		4.Slash		5.Dispute 
-	6. Win		7.Defeat
+	0. Win		1.Defeat		2.Defeat
+	3. Idle		4.StartWalk		5.Walking	
+	
+	6.Smash		7.Slash		8.Dash		9.Dispute 
+	
+
 	*/
 
 protected: // 변수

@@ -39,6 +39,7 @@ namespace Animations
 		Walking,
 		Die,
 		SkillQ,
+		SkillW,
 		SkillE,
 		SkillR,
 		Win,
@@ -153,6 +154,11 @@ struct PlayerInfo
 
 	float Atk{ 50 };
 	float Def{ 20 };
+
+	//0. ¸ùµÕÀÌ	1. °Ë	2. ¸¶¹ý	3.	È°
+	UINT Weapon{ 0 };
+	
+	UINT WeaponNum{ 0 };
 
 	UINT Kill{ 10 };
 	UINT Death{ 2 };

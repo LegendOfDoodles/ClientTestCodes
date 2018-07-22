@@ -118,7 +118,7 @@ void CScene::AnimateObjects(float timeElapsed)
 			for (int j = 0; j < NODE_HEIGHT; ++j)
 			{
 				m_pFoW[i].m_bFoW[j] = fow[i][j];
-				m_pFoW[i].m_bFoW[j] = 1;
+				//m_pFoW[i].m_bFoW[j] = 1;
 			}
 	}
 }
