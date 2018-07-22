@@ -1,12 +1,12 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 
 class CUIFrameObject;
 class CMaterial;
 class CPlayer;
 class CWayFinder;
 
-class CMinimapShader : public CShader
+class CMinimapShader : public CBillboardShader
 {
 public: // 持失切, 社瑚切
 	CMinimapShader(shared_ptr<CCreateMgr> pCreateMgr);

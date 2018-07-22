@@ -107,7 +107,7 @@ protected: // º¯¼ö
 	FOW *m_pcbMappedFoW = NULL;
 
 
-	CBaseObject ** m_ppObjects{ NULL };
+	CCollisionObject ** m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
 
 	CAnimatedObject * m_pSelectedObject{ NULL };

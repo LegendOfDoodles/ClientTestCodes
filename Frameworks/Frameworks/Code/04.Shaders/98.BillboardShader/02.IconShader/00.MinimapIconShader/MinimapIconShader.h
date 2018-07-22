@@ -1,5 +1,5 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 #include "05.Objects/96.Billboard/03.IconObject/IconObject.h"
 
@@ -11,7 +11,7 @@ class CPlayer;
 class CIconObject;
 class CUIObjectManager;
 
-class CMinimapIconShader : public CShader
+class CMinimapIconShader : public CBillboardShader
 {
 public:
 	CMinimapIconShader(shared_ptr<CCreateMgr> pCreateMgr);
@@ -33,7 +33,7 @@ public: // 공개 함수
 	
 	void SetUIObjectsManager(shared_ptr<CUIObjectManager> pManger);
 
-	virtual void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CCollisionObject**)pPlayer; };
+	virtual void SetPlayer(CCollisionObject **pPlayer) { m_pPlayer = pPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 
 protected: // 내부 함수

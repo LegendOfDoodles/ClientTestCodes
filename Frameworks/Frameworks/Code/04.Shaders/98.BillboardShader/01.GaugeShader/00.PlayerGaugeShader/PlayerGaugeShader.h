@@ -1,11 +1,11 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 class CMaterial;
 class CPlayer;
 
-class CPlayerHPGaugeShader : public CShader
+class CPlayerHPGaugeShader : public CBillboardShader
 {
 public:
 	CPlayerHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr);
@@ -22,10 +22,10 @@ public: // 공개 함수
 	
 	virtual void SetCamera(CCamera *pCamera);
 
-	virtual void SetPlayer(CBaseObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
+	virtual void SetPlayer(CCollisionObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 
-	void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
+	void SetNexusAndTower(CCollisionObject **ppObjects) { m_ppNexusAndTower = ppObjects; };
 	void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);

@@ -30,9 +30,6 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
-	
-	virtual CBaseObject **GetCollisionObjects() { return m_ppObjects; }
-	int GetObjectCount() { return m_nObjects; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

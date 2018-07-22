@@ -1,10 +1,10 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 
 class CMaterial;
 class CCollisionObject;
 
-class CharacterFrameGaugeShader : public CShader
+class CharacterFrameGaugeShader : public CBillboardShader
 {
 public:
 	CharacterFrameGaugeShader(shared_ptr<CCreateMgr> pCreateMgr);

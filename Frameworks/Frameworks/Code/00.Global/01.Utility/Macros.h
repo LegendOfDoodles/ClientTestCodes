@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-16
+/// 최종 수정 날짜: 2018-07-22
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -29,7 +29,7 @@
 #define SPOT_LIGHT				2
 #define DIRECTIONAL_LIGHT		3
 
-#define SHADOW_MAP_SIZE 8192
+#define SHADOW_MAP_SIZE 4096
 
 // 지형(Terrain) 관련
 #define TERRAIN_SIZE_WIDTH 10000.0f
@@ -51,13 +51,15 @@
 
 // 시간(Time) 관련
 #define TIME_AVAILABILITY_CHECK 1.5f	// subPath가 유효한 시간
+#define TIME_ACTIVATE_CHECK 3.0f	// 중립 몬스터가 대기 상태로 돌아가는 시간
 
 // 높이(Height) 관련
 #define REVISE_HEIGHT 100.0f
 #define REVISE_HEIGHT_FOR_OBJECT REVISE_HEIGHT + 7.0f
 
 // 노드(Node) 관련
-#define NODE_SIZE 41.4.0f
+#define NODE_SIZE 41.4f
+#define NODE_SIZE_SQR NODE_SIZE * NODE_SIZE
 #define NONE -1
 
 // 최대, 최소 수치
@@ -172,6 +174,13 @@
 #define NODE_WIDTH 243
 #define NODE_HEIGHT 122
 #define NODE_LENGTH NODE_WIDTH*NODE_HEIGHT
+
+// 쿨타임 정보
+// 플레이어 관련
+
+// 몬스터 관련
+#define COOLTIME_SPAWN_ROIDER 10.0f
+#define COOLTIME_SPAWN_GOLEM 10.0f
 
 
 // 캡션 FPS 출력 여부 -------------------

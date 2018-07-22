@@ -15,7 +15,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CUIObjectShader::CUIObjectShader(shared_ptr<CCreateMgr> pCreateMgr)
-	: CShader(pCreateMgr)
+	: CBillboardShader(pCreateMgr)
 {
 
 }

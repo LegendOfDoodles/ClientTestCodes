@@ -44,6 +44,7 @@ protected: // 내부 함수
 
 protected: // 변수
 	int m_meshCounts[17];
+	CBaseObject **m_ppObjects{ NULL };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
 };

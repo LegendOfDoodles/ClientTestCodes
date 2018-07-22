@@ -1,5 +1,5 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 class CMaterial;
@@ -11,7 +11,7 @@ enum TeamKILL {
 	EnumCnt
 };
 
-class CNumberShader : public CShader
+class CNumberShader : public CBillboardShader
 {
 public: // 持失切, 社瑚切
 	CNumberShader(shared_ptr<CCreateMgr> pCreateMgr);

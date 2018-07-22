@@ -31,7 +31,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-20
+/// 최종 수정 날짜: 2018-07-23
 /// </summary>
 
 #define UI_Shader m_ppShaders[7]
@@ -419,15 +419,25 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	int nColliderObject = pPlayerS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
-		m_pCollisionManager->AddCollider(((CCollisionObject * *)pPlayerS->GetCollisionObjects())[i]);
+		m_pCollisionManager->AddCollider((pPlayerS->GetCollisionObjects())[i]);
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
+
+	// 중립 몬스터에 충돌체 부여
+	CNeutralityShader* pNetral = (CNeutralityShader *)m_ppShaders[4];
+	nColliderObject = pNetral->GetObjectCount();
+	for (int i = 0; i < nColliderObject; ++i)
+	{
+		m_pCollisionManager->AddCollider((pNetral->GetCollisionObjects())[i]);
+	}
+	pNetral->SetColManagerToObject(m_pCollisionManager);
+	pNetral->SetFSMManager(m_pFSMMgr);
 
 	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[6];
 	nColliderObject = pNTS->GetObjectCount();
 	for (int i = 0; i < nColliderObject; ++i)
 	{
-		m_pCollisionManager->AddCollider(((CCollisionObject * *)pNTS->GetCollisionObjects())[i]);
+		m_pCollisionManager->AddCollider((pNTS->GetCollisionObjects())[i]);
 	}
 	pNTS->SetColManagerToObject(m_pCollisionManager);
 

@@ -82,6 +82,9 @@ public: // 공개 함수
 	virtual TeamType GetTeam() { return m_TeamType; }
 	virtual void SetTeam(TeamType type) { m_TeamType = type; }
 
+	virtual void SetState(StatesType newState) { newState; }
+	virtual void ActiveSkill(AnimationsType act) { act; }
+
 protected: // 내부 함수
 	virtual void OnPrepareRender();
 

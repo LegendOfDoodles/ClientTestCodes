@@ -12,7 +12,7 @@
 /// 목적: 중립 몬스터 관리 및 렌더링용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-20
+/// 최종 수정 날짜: 2018-07-23
 /// </summary>
 
 #define NetralMaterial m_ppMaterials[0]
@@ -91,7 +91,7 @@ void CNeutralityShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Animate(timeElapsed);
+		m_pFSMMgr->Update(timeElapsed, m_ppObjects[j]);
 	}
 }
 
@@ -173,6 +173,14 @@ bool CNeutralityShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	UNREFERENCED_PARAMETER(pKeyBuffer);
 
 	return true;
+}
+
+void CNeutralityShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
+{
+	for (int i = 0; i < m_nObjects; ++i) {
+
+		m_ppObjects[i]->SetCollisionManager(manager);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -284,7 +292,7 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	transformInporter.LoadMeshData("Resource//Data//MonsterSetting.txt");
 
 	m_nObjects = transformInporter.m_iKindMeshCnt[0];
-	m_ppObjects = new CBaseObject*[m_nObjects];
+	m_ppObjects = new CCollisionObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
@@ -332,6 +340,22 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CRoider *pRoider{ NULL };
 
+	CTransformImporter nexusTransformInporter;
+	nexusTransformInporter.LoadMeshData("Resource//Data//NexusTowerSetting.txt");
+
+	XMFLOAT3 blueNexusPos{ 
+		XMFLOAT3(
+			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[0].pos.x), 
+			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[0].pos.y), 
+			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[0].pos.z)) 
+	};
+	XMFLOAT3 redNexusPos{
+		XMFLOAT3(
+			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[1].pos.x),
+			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[1].pos.y),
+			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[1].pos.z))
+	};
+
 	for (int j = 0; j < m_nObjects; ++j) {
 		XMFLOAT3 pos{ transformInporter.m_Transform[j].pos };
 		XMFLOAT3 rot{ transformInporter.m_Transform[j].rotation };
@@ -346,16 +370,9 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 #endif
 		pRoider->SetBoundingMesh(pBoundingBoxMesh);
 		pRoider->SetCollisionSize(CONVERT_PaperUnit_to_InG(3.5f));
-		//if (j == 0) {
-		//	pRoider->tag = 1;	// 이 부분 뭔지 모르겠음
-		//}
+
 		pRoider->CBaseObject::SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
-		if(j< 4)
-			pRoider->SetTeam(TeamType::Neutral);
-		else if (j< 9)
-			pRoider->SetTeam(TeamType::Red);
-		else
-			pRoider->SetTeam(TeamType::Blue);
+		pRoider->SetTeam(TeamType::Neutral);
 		
 		pRoider->SetSkeleton(pSIdle);
 		pRoider->SetSkeleton(pSStartWalk);
@@ -372,6 +389,10 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 
 		pRoider->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 		pRoider->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+		
+		pRoider->SetNexusPoses(blueNexusPos, redNexusPos);
+		pRoider->SaveCurrentState();
+
 		m_ppObjects[i++] = pRoider;
 	}
 

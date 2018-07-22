@@ -16,7 +16,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CSelectedSpecialShader::CSelectedSpecialShader(shared_ptr<CCreateMgr> pCreateMgr)
-	:CShader(pCreateMgr)
+	:CBillboardShader(pCreateMgr)
 {
 
 }

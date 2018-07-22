@@ -142,7 +142,7 @@ void CAnimatedObject::SetPathToGo(Path * path)
 	if(Walkable()) SetState(States::Walk);
 }
 
-ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
+ProcessType CAnimatedObject::MoveToDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (m_curState != States::Walk) return States::Processing;
 	if (!m_mainPath) return States::Done;
@@ -168,11 +168,11 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed)
 		XMFLOAT3 position = GetPosition();
 		position.y = m_pTerrain->GetHeight(position.x, position.z);
 		CBaseObject::SetPosition(position);
+		CheckRightWay(PathType::Main, pWayFinder);
 	}
 	return States::Processing;
 }
 
-// Warning! 업데이트 필요 -> 단순히 그 적 방향으로 가는 게 아니라 길 따라서 가도록 해야함
 void CAnimatedObject::MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	m_availableTime -= timeElapsed;
@@ -207,17 +207,8 @@ void CAnimatedObject::MoveToSubDestination(float timeElapsed, shared_ptr<CWayFin
 		XMFLOAT3 position = GetPosition();
 		position.y = m_pTerrain->GetHeight(position.x, position.z);
 		CBaseObject::SetPosition(position);
+		CheckRightWay(PathType::Sub, pWayFinder);
 	}
-
-	//XMFLOAT3 pos = m_pEnemy->GetPosition();
-	//LookAt(XMFLOAT2(pos.x, pos.z));
-	//MoveForward(m_speed * timeElapsed);
-
-	//pWayFinder->AdjustValueByWallCollision(this, GetLook(), m_speed * timeElapsed);
-
-	//XMFLOAT3 position = GetPosition();
-	//position.y = m_pTerrain->GetHeight(position.x, position.z);
-	//CBaseObject::SetPosition(position);
 }
 
 void CAnimatedObject::GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinder)
@@ -330,5 +321,24 @@ void CAnimatedObject::ResetSubPath()
 	{
 		Safe_Delete(m_subPath);
 		ResetDestination(PathType::Sub);
+	}
+}
+
+void CAnimatedObject::CheckRightWay(PathType type, shared_ptr<CWayFinder> pWayFinder)
+{
+	XMFLOAT2 destination;
+	if (type == PathType::Main)
+	{
+		destination = m_destination;
+	}
+	else
+	{
+		destination = m_subDestination;
+	}
+
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), XMFLOAT3(destination.x, 0, destination.y));
+	if (dstSqr > (NODE_SIZE_SQR * 1.5f))
+	{
+		LookAt(destination);
 	}
 }

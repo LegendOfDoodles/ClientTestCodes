@@ -160,14 +160,17 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		// 무기에 따라 수정필요
 		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 	}
+	if (GetAsyncKeyState('Q') & 0xFF00)
+	{
+		m_ppObjects[0]->ActiveSkill(AnimationsType::SkillQ);
+	}
 	return true;
 }
 
 void CPlayerShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
 {
 	for (int i = 0; i < 4; ++i) {
-
-	dynamic_cast<CCollisionObject*>(m_ppObjects[i])->SetCollisionManager(manager);
+		m_ppObjects[i]->SetCollisionManager(manager);
 	}
 }
 
@@ -276,7 +279,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
 	m_nObjects = 4;
-	m_ppObjects = new CBaseObject*[m_nObjects];
+	m_ppObjects = new CCollisionObject*[m_nObjects];
 	
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);

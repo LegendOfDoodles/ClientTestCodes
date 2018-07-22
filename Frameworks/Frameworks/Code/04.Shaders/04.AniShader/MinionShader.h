@@ -37,9 +37,6 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
-	virtual CBaseObject * * GetCollisionObjects() { return m_ppObjects; }
-	int GetObjectCount() {  return m_nObjects; }
-
 	void SetCollisionManager(shared_ptr<CCollisionManager> pManger) { m_pColManager = pManger; }
 	void SetGaugeManger(shared_ptr<CUIObjectManager> pManger) { m_pGaugeManger = pManger; }
 	void SetFSMManager(shared_ptr<CFSMMgr> pManger) { m_pFSMMgr = pManger; }

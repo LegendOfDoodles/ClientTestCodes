@@ -35,5 +35,6 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
+	CBaseObject * *m_ppObjects{ NULL };
 };
 

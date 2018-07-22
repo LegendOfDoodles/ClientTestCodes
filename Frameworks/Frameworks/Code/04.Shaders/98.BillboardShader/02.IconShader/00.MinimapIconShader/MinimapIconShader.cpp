@@ -13,7 +13,7 @@
 /// </summary>
 
 CMinimapIconShader::CMinimapIconShader(shared_ptr<CCreateMgr> pCreateMgr)
-	: CShader(pCreateMgr)
+	: CBillboardShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
 }

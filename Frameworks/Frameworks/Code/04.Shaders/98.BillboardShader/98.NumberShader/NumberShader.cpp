@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 
-CNumberShader::CNumberShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
+CNumberShader::CNumberShader(shared_ptr<CCreateMgr> pCreateMgr) : CBillboardShader(pCreateMgr)
 {
 }
 

@@ -15,7 +15,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CPlayerHPGaugeShader::CPlayerHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr)
-	: CShader(pCreateMgr)
+	: CBillboardShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
 }

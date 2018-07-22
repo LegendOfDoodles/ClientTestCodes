@@ -7,7 +7,7 @@
 /// 목적: FSM을 하나의 클래스로 관리하여 처리하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-23
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 		obj->PlayIdle(timeElapsed);
 		break;
 	case States::Walk:
-		obj->PlayWalk(timeElapsed);
+		obj->PlayWalk(timeElapsed, m_pWayFinder);
 		break;
 	case States::Chase:
 		obj->PlayChase(timeElapsed, m_pWayFinder);
@@ -43,7 +43,7 @@ void CFSMMgr::Update(float timeElapsed, CCollisionObject * obj)
 		obj->PlayDie(timeElapsed);
 		break;
 	case States::Remove:
-		obj->PlayRemove(timeElapsed);
+		obj->PlayRemove(timeElapsed, m_pWayFinder);
 		break;
 	case States::Win:
 		break;
