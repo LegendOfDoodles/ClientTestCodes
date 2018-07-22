@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CSpecialSelectShader::CSpecialSelectShader(shared_ptr<CCreateMgr> pCreateMgr)
-	: CShader(pCreateMgr)
+	: CBillboardShader(pCreateMgr)
 {
 }
 
@@ -179,7 +179,7 @@ void CSpecialSelectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 
-	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+	//UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	//CSpecialObejct *pUIObject{ NULL };
 
 	m_nMaterials = 1;
