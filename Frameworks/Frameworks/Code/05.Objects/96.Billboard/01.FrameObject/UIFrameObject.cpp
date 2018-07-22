@@ -127,11 +127,11 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		break;
 	case UIFrameType::CharacterFrame:
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
-		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f); 
 		break;
 	case UIFrameType::SpecialFrame:
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 288.f);
-		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
+		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 87.67f);
 		break;
 	case UIFrameType::SelectSpecial_7:
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 130.9f);
