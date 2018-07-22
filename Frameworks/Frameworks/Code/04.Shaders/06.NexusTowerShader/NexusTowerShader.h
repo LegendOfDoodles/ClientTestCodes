@@ -30,10 +30,9 @@ public: // 공개 함수
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
-	int GetObjectCount() { return m_nObjects; }
 	int GetNexusCount() { return m_nNexus; }
 	int GetTowerCount() { return m_nTower; }
-	virtual CBaseObject **GetCollisionObjects() { return m_ppObjects; }
+
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 
 protected: // 내부 함수

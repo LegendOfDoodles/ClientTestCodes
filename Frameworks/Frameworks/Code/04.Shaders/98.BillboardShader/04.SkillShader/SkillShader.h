@@ -1,12 +1,12 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 
 class CBillboardObject;
 class CSkillObject;
 class CMaterial;
 class CPlayer;
 
-class CSkillShader : public CShader
+class CSkillShader : public CBillboardShader
 {
 public: // 持失切, 社瑚切
 	CSkillShader(shared_ptr<CCreateMgr> pCreateMgr);

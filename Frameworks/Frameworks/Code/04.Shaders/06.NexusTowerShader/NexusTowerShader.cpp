@@ -157,7 +157,7 @@ bool CNexusTowerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 	if (GetAsyncKeyState('U') & 0x0001)
 	{
-		((CCollisionObject*)m_ppObjects[0])->SetState(States::Die);
+		m_ppObjects[0]->SetState(States::Die);
 
 	}
 	return true;
@@ -264,7 +264,7 @@ void CNexusTowerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	transformInporter.LoadMeshData("Resource//Data//NexusTowerSetting.txt");
 
 	m_nObjects = transformInporter.m_iTotalCnt;
-	m_ppObjects = new CBaseObject*[m_nObjects];
+	m_ppObjects = new CCollisionObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	int accCnt{ 0 };

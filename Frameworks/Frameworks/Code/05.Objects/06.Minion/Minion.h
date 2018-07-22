@@ -17,14 +17,17 @@ public:	// 외부 함수
 	virtual 	void SetState(StatesType newState);
 
 	virtual void PlayIdle(float timeElapsed);
-	virtual void PlayWalk(float timeElapsed);
+	virtual void PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 	virtual void PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 
 	virtual void ReceiveDamage(float damage)
 	{
+		// 이미 사망한 상태인 경우 대미지 처리를 하지 않는다.
+		if (m_curState == States::Die || m_curState == States::Remove) { return; }
+
 		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
-		if (m_StatusInfo.HP <= 0&&m_curState!=States::Die) {
+		if (m_StatusInfo.HP <= 0) {
 			SetState(States::Die);
 		}
 

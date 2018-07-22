@@ -35,8 +35,6 @@ void CMinion::Animate(float timeElapsed)
 			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
 
-	if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
-
 	CAnimatedObject::Animate(timeElapsed);
 }
 
@@ -116,11 +114,11 @@ void CMinion::PlayIdle(float timeElapsed)
 	else SetState(States::Chase);
 }
 
-void CMinion::PlayWalk(float timeElapsed)
+void CMinion::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (NoneDestination(PathType::Sub))
 	{
-		if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
+		if (MoveToDestination(timeElapsed, pWayFinder) == States::Done) SetState(States::Idle);
 	}
 	else
 	{

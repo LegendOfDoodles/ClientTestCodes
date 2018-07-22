@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Roider.h"
+#include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 
 /// <summary>
 /// 목적: 중립 몬스터(로이더) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-20
+/// 최종 수정 날짜: 2018-07-23
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -15,6 +16,15 @@ CRoider::CRoider(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObje
 	m_sightRange = CONVERT_PaperUnit_to_InG(80.0f);
 	m_detectRange = CONVERT_PaperUnit_to_InG(40.0f);
 	m_speed = CONVERT_cm_to_InG(3.237f);
+
+	// Warning! 로이더 스테이터스 설정 필요
+	m_StatusInfo.HP = m_StatusInfo.maxHP = 100.0f;
+	m_StatusInfo.Def = 10.0f;
+	m_StatusInfo.Atk = 200.0f;
+	m_StatusInfo.Exp = 100;
+
+	// Warning! 원거리 공격 추가될 경우 공격 범위를 늘려야 함
+	m_attackRange = CONVERT_PaperUnit_to_InG(11);
 }
 
 CRoider::~CRoider()
@@ -28,15 +38,16 @@ void CRoider::Animate(float timeElapsed)
 	AnimateByCurState();
 	AdjustAnimationIndex();
 
-	m_fPreFrameTime = m_fFrameTime;
-	m_fFrameTime += 30 * timeElapsed;
+	if (m_curState != States::Remove)
+	{
+		m_fPreFrameTime = m_fFrameTime;
+		m_fFrameTime += 30 * timeElapsed;
+	}
 
 	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
 		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
 			m_fFrameTime -= m_nAniLength[m_nAniIndex];
 	}
-
-	if(MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
 
 	CAnimatedObject::Animate(timeElapsed);
 }
@@ -91,6 +102,7 @@ void CRoider::SetState(StatesType newState)
 		SetPathToGo(NULL);
 		break;
 	case States::Remove:
+		m_spawnCoolTime = COOLTIME_SPAWN_ROIDER;
 		break;
 	case States::Win:
 	case States::Defeat:
@@ -117,11 +129,22 @@ void CRoider::PlayIdle(float timeElapsed)
 	else SetState(States::Chase);
 }
 
-void CRoider::PlayWalk(float timeElapsed)
+void CRoider::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (NoneDestination(PathType::Sub))
 	{
-		if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
+		if (m_activated && m_TeamType == TeamType::Neutral)
+		{
+			m_deactiveTime += timeElapsed;
+			if (m_deactiveTime > TIME_ACTIVATE_CHECK)
+			{
+				m_activated = false;
+				// Warning! 회복 처리
+				// 방안 1: 전체 회복
+				// 방안 2: 일정 시간동안 몇 %의 체력 회복
+			}
+		}
+		else if(MoveToDestination(timeElapsed, pWayFinder) == States::Done) SetState(States::Idle);
 	}
 	else
 	{
@@ -135,7 +158,10 @@ void CRoider::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	if (!Chaseable(m_pEnemy))
 	{
 		SetEnemy(NULL);
-		GenerateSubPathToMainPath(pWayFinder);
+		if (m_TeamType == TeamType::Neutral)
+			GenerateSubPathToSpawnLocation(pWayFinder);
+		else
+			GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
 	}
 	else
@@ -162,14 +188,24 @@ void CRoider::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	}
 }
 
-void CRoider::PlayRemove(float timeElapsed)
+void CRoider::PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
-	UNREFERENCED_PARAMETER(timeElapsed);
+	m_spawnCoolTime -= timeElapsed;
 
-	// 팀 타입을 중립 상태로 만든다.
-	// 랜더링에서 제외한다.
-	// 이 시기부터 시간을 재서 일정 시간이 지나면 다시 처음 위치에 리스폰한다.
-	// Destination을 처음 위치 인근의 노드로 잡는다.
+	if (m_TeamType == TeamType::Neutral)
+	{
+		ReadyToAtk(pWayFinder);
+	}
+	else if(m_spawnCoolTime < 0.0f)
+	{
+		Respawn();
+	}
+}
+
+void CRoider::SaveCurrentState()
+{
+	m_xmf4x4SpawnWorld = m_xmf4x4World;
+	m_spawnLocation = GetPosition();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -208,32 +244,20 @@ void CRoider::AnimateByCurState()
 	case States::Attack:
 		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 			&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-			m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(8), 180, m_StatusInfo.Atk);
+			m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(11), 180, m_StatusInfo.Atk);
 		}
 		if (m_nCurrAnimation == Animations::Attack1) {
-			if (m_curState == m_nextState)
+			if (m_curState != m_nextState)
 			{
-				if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
-				m_nCurrAnimation = Animations::Attack2;
-				m_fFrameTime = 0;
-			}
-			else
-			{
-				if (GetAnimTimeRemainRatio() > 0.05) break;
+				if (GetAnimTimeRemainRatio() > 0.05f) break;
 				SetState(m_nextState);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::Attack2)
 		{
-			if (m_curState == m_nextState)
+			if (m_curState != m_nextState)
 			{
-				if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
-				m_nCurrAnimation = Animations::Attack1;
-				m_fFrameTime = 0;
-			}
-			else
-			{
-				if (GetAnimTimeRemainRatio() > 0.05) break;
+				if (GetAnimTimeRemainRatio() > 0.05f) break;
 				SetState(m_nextState);
 			}
 		}
@@ -256,14 +280,7 @@ void CRoider::AnimateByCurState()
 		if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
 		if (GetAnimTimeRemainRatio() < 0.05)
 		{
-			if (m_TeamType == TeamType::Neutral)
-			{
-				ReadyToAtk();
-			}
-			else
-			{
-				m_curState = States::Remove;
-			}
+			SetState(States::Remove);
 		}
 		break;
 	default:
@@ -271,15 +288,55 @@ void CRoider::AnimateByCurState()
 	}
 }
 
-void CRoider::ReadyToAtk()
+void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 {
-	// 상태를 Die에서 해당 팀으로 바꾸고 공격가도록 한다.
+	// Warning! 마지막에 친놈 알아야 함
+	if(m_lastDamageTeam == TeamType::Red)
+		SetTeam(TeamType::Red);
+	else if (m_lastDamageTeam == TeamType::Blue)
+		SetTeam(TeamType::Blue);
 
-	// 방안1 현재 이 객체가 포커스 잡고 있는 Enemy의 팀 정보를 가져온다.
-	// 방안2 특정 위치에 있는 오브젝트의 팀 정보를 가져온다.
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
 
-	// Destination을 적 넥서스 위치 인근의 노드로 구해온다.
-	// Main Path를 구성한다.
+	m_pColManager->AddCollider(this);
 
-	// 상태를 Walk상태로 변경한다.
+	if (m_TeamType == TeamType::Blue)
+	{
+		SetPathToGo(pWayFinder->GetPathToPosition(
+			GetPosition(),
+			m_redNexusLoc,
+			GetCollisionSize()));
+	}
+	else if (m_TeamType == TeamType::Red)
+	{
+		SetPathToGo(pWayFinder->GetPathToPosition(
+			GetPosition(),
+			m_blueNexusLoc,
+			GetCollisionSize()));
+	}
+
+	SetState(StatesType::Walk);
+}
+
+void CRoider::Respawn()
+{
+	m_activated = false;
+
+	SetState(StatesType::Idle);
+	SetTeam(TeamType::Neutral);
+
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
+
+	m_pColManager->AddCollider(this);
+
+	m_xmf4x4World = m_xmf4x4SpawnWorld;
+}
+
+void CRoider::GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder)
+{
+	ResetSubPath();
+	m_subPath = pWayFinder->GetPathToPosition(GetPosition(), m_spawnLocation, GetCollisionSize());
+	m_subDestination = m_subPath->front().To();
+	m_subPath->pop_front();
+	LookAt(m_subDestination);
 }

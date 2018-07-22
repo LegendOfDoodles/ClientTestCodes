@@ -16,7 +16,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CMinionHPGaugeShader::CMinionHPGaugeShader(shared_ptr<CCreateMgr> pCreateMgr)
-	: CShader(pCreateMgr)
+	: CBillboardShader(pCreateMgr)
 {
 	m_pCreateMgr = pCreateMgr;
 }
@@ -262,6 +262,7 @@ void CMinionHPGaugeShader::ReleaseObjects()
 {
 	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end();)
 	{
+		delete(*iter);
 		iter = m_HPGaugeObjectList.erase(iter);
 	}
 	m_HPGaugeObjectList.clear();

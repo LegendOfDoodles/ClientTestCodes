@@ -1,11 +1,11 @@
 #pragma once
-#include "04.Shaders/00.BaseShader/Shader.h"
+#include "04.Shaders/98.BillboardShader/99.BIllboard/BillboardShader.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 #include "05.Objects/96.Billboard/99.BillboardObject/Billboard.h"
 
 class CMaterial;
 
-class CBuildingMinimapIconShader : public CShader
+class CBuildingMinimapIconShader : public CBillboardShader
 {
 public:
 	CBuildingMinimapIconShader(shared_ptr<CCreateMgr> pCreateMgr);
@@ -25,7 +25,7 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
-	virtual void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; }
+	virtual void SetNexusAndTower(CCollisionObject **ppObjects) { m_ppNexusAndTower = ppObjects; }
 	virtual void SetNexusAndTowerCnt(int nexusCnt, int towerCnt) { m_nNexus = nexusCnt; m_nTower = towerCnt; }
 
 protected: // 내부 함수

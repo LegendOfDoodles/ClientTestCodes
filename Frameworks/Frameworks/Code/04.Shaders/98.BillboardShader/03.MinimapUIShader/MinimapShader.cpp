@@ -14,7 +14,7 @@
 /// </summary>
 
 CMinimapShader::CMinimapShader(shared_ptr<CCreateMgr> pCreateMgr)
-	:CShader(pCreateMgr)
+	:CBillboardShader(pCreateMgr)
 {
 }
 

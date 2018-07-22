@@ -250,7 +250,7 @@ void CTransformImporter::LoadMeshData(char * in)
 		}
 		++i;
 	}
-
+	ifs.close();
 }
 
 CTransformImporter::~CTransformImporter()

@@ -16,11 +16,11 @@ public: // 공개 함수
 	virtual bool Attackable(CCollisionObject* other);
 
 	virtual void PlayIdle(float timeElapsed) { timeElapsed; }
-	virtual void PlayWalk(float timeElapsed) { timeElapsed; }
+	virtual void PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
 	virtual void PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
 	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
 	virtual void PlayDie(float timeElapsed) { timeElapsed; }
-	virtual void PlayRemove(float timeElapsed) { timeElapsed; }
+	virtual void PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
 
 	virtual void RegenerateLookAt() {}
 
@@ -28,6 +28,8 @@ public: // 공개 함수
 	virtual float GetCollisionSize() const { return m_fCollisionSize; }
 	virtual XMFLOAT2 GetCollisionLevel() { return m_xmf2CollisionLevel; }
 	virtual void ReceiveDamage(float Damage) { Damage; }
+	virtual void NotifyDamager(CCollisionObject* other) { other; }
+	virtual void NotifyDamageTeam(TeamType type) { type; }
 
 	StatesType GetState() { return m_curState; }
 	virtual void SetState(StatesType newState) { m_curState = newState; }

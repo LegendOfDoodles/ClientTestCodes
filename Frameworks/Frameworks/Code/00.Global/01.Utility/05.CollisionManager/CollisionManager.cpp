@@ -172,6 +172,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 							{
 								//std::cout << "col\n";
 								(*i)->ReceiveDamage(damage);
+								(*i)->NotifyDamageTeam(pCol->GetTeam());
 							}
 						}
 					}

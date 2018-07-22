@@ -1,5 +1,5 @@
 #pragma once
-#include "05.Objects/00.BaseObject/BaseObject.h"
+#include "05.Objects/02.CollisionObject/CollisionObject.h"
 
 #define BOUNDING_BOX 1
 
@@ -45,12 +45,13 @@ public: // 공개 함수
 
 	virtual void CreateGraphicsRootSignature(shared_ptr<CCreateMgr> pCreateMgr) { pCreateMgr; }
 
-	virtual CBaseObject * * GetCollisionObjects() { return nullptr; }
-
 	void SaveBoundingBoxHeapNumber(int n) { m_boundingBoxHeapNumber = n; }
 	ComPtr<ID3D12RootSignature> GetGraphicsRootSignature() { return(m_pGraphicsRootSignature); }
 
 	virtual void SetCamera(CCamera *pCamera) { pCamera; }
+
+	CCollisionObject **GetCollisionObjects() { return m_ppObjects; }
+	int GetObjectCount() { return m_nObjects; }
 
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
@@ -118,7 +119,7 @@ protected: // 변수
 	int					m_nMaterials{ 0 };
 #endif
 
-	CBaseObject **m_ppObjects{ NULL };
+	CCollisionObject **m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
 
 	UINT8 *m_pMappedObjects{ NULL };

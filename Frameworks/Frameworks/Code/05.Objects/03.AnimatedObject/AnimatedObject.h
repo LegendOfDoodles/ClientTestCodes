@@ -38,7 +38,7 @@ public: // 공개 함수
 	virtual void SetPosition(float x, float z);
 
 	void SetPathToGo(Path *path);
-	ProcessType MoveToDestination(float timeElapsed);
+	ProcessType MoveToDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder = NULL);
 	void MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder = NULL);
 
 	void GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinder);
@@ -65,6 +65,9 @@ protected: // 내부 함수
 	bool NoneDestination(PathType type = PathType::Main);
 	void ResetDestination(PathType type = PathType::Main);
 	void ResetSubPath();
+
+	// 길 맞게 가고 있는지 확인 제대로 안가면 다시 방향 잡도록 한다.
+	void CheckRightWay(PathType type, shared_ptr<CWayFinder> pWayFinder);
 
 protected: // 변수
 	CSkeleton	m_pSkeleton[20];
