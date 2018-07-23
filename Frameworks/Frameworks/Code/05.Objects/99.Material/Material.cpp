@@ -93,7 +93,7 @@ void CMaterial::ReleaseShaderVariables()
 	if (m_pcbColor)
 	{
 		m_pcbColor->Unmap(0, NULL);
-		m_pcbColor->Release();
+		Safe_Release(m_pcbColor);
 	}
 }
 

@@ -121,7 +121,6 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 			ResetPossibleIndex(temp->GetIndex());
 			Safe_Delete(temp);
 
-			delete(*iter);
 			iter = m_blueObjects.erase(iter);
 		}
 		else
@@ -139,7 +138,6 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 			ResetPossibleIndex(temp->GetIndex());
 			Safe_Delete(temp);
 
-			delete(*iter);
 			iter = m_redObjects.erase(iter);
 		}
 		else
