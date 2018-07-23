@@ -158,58 +158,61 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 		if (LButton == true && m_pPlayer->GetPlayerStatus()->SpecialPoint >= 1) {
 			
 			// Attack
-			if ((cursorPos.x > SPECIAL_MINIMUM_X  && cursorPos.x < SPECIAL_MAXIMUM_X)
-				&& (cursorPos.y > SPECIAL_MINIMUM_Y && cursorPos.y < SPECIAL_MAXIMUM_Y))
+			if ((cursorPos.x > SELECT_SPECIAL_MINIMUM_X  && cursorPos.x < SELECT_SPECIAL_MAXIMUM_X)
+				&& (cursorPos.y > SELECT_ATTACK_SPECIAL_MINIMUM_Y && cursorPos.y < SELECT_ATTACK_SPECIAL_MAXIMUM_Y))
 			{
-				//// 빈곳 찾아서 넣기
-				//for (int i = 0; i < 4; ++i) {
-				//	if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
-				//		m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::AttackSpecial);
-				//	};
-				//}
+				// 빈곳 찾아서 넣기
+				for (int i = 0; i < 4; ++i) {
+					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
+						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::AttackSpecial);
+						break;
+					};
+				}
 
-				//// 특성 포인트 사용
-				//m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
+				// 특성 포인트 사용
+				m_pPlayer->GetPlayerStatus()->SpecialPoint = m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
 
-				//// 특성창 닫기
-				//LButton = false;
+				// 특성창 닫기
+				LButton = false;
 			}
 
-			//// Defence
-			//if ((cursorPos.x > SPECIAL_MINIMUM_X  && cursorPos.x < SPECIAL_MAXIMUM_X)
-			//	&& (cursorPos.y > SPECIAL_MINIMUM_Y && cursorPos.y < SPECIAL_MAXIMUM_Y))
-			//{
-			//	// 빈곳 찾아서 넣기
-			//	for (int i = 0; i < 4; ++i) {
-			//		if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
-			//			m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::DefenceSpecial);
-			//		};
-			//	}
-
-			//	// 특성 포인트 사용
-			//	m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
-
-			//	// 특성창 닫기
-			//	if (LButton == true) LButton = false;
-			//}
-			//
-			//// Tech
-			//if ((cursorPos.x > SPECIAL_MINIMUM_X  && cursorPos.x < SPECIAL_MAXIMUM_X)
-			//	&& (cursorPos.y > SPECIAL_MINIMUM_Y && cursorPos.y < SPECIAL_MAXIMUM_Y))
-			//{
-			//	// 빈곳 찾아서 넣기
-			//	for (int i = 0; i < 4; ++i) {
-			//		if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
-			//			m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::TechnicSpecial);
-			//		};
-			//	}
-
-			//	// 특성 포인트 사용
-			//	m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
-
-			//	// 특성창 닫기
-			//	if (LButton == true) LButton = false;
-			//}
+			// Defence
+			if ((cursorPos.x > SELECT_SPECIAL_MINIMUM_X  && cursorPos.x < SELECT_SPECIAL_MAXIMUM_X)
+				&& (cursorPos.y > SELECT_DEFENCE_SPECIAL_MINIMUM_Y && cursorPos.y < SELECT_DEFENCE_SPECIAL_MAXIMUM_Y))
+			{
+				// 빈곳 찾아서 넣기
+				for (int i = 0; i < 4; ++i) {
+					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
+						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::DefenceSpecial);
+						break;
+					};
+				}
+				
+				// 특성 포인트 사용
+				m_pPlayer->GetPlayerStatus()->SpecialPoint = m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
+				
+				// 특성창 닫기
+				LButton = false;
+			}
+			
+			// Tech
+			if ((cursorPos.x > SELECT_SPECIAL_MINIMUM_X  && cursorPos.x < SELECT_SPECIAL_MAXIMUM_X)
+				&& (cursorPos.y > SELECT_TECHNIC_SPECIAL_MINIMUM_Y && cursorPos.y < SELECT_TECHNIC_SPECIAL_MAXIMUM_Y))
+			{
+				// 빈곳 찾아서 넣기
+				for (int i = 0; i < 4; ++i) {
+					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
+						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::TechnicSpecial);
+						break;
+					};
+				}
+				
+				// 특성 포인트 사용
+				m_pPlayer->GetPlayerStatus()->SpecialPoint = m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
+				
+				// 특성창 닫기
+				LButton = false;
+			}
 
 		}
 

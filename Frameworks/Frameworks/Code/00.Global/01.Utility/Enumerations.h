@@ -169,10 +169,10 @@ struct PlayerInfo
 	UINT MaxExp{ 170 };
 	UINT Exp{ 0 };
 
-	UINT SpecialPoint{ 1 };
+	UINT SpecialPoint{ 4 };
 
 	// Æ¯¼º 7 ~ 21 4°³
-	SpecialType Special[4] = { SpecialType::AttackSpecial, SpecialType::DefenceSpecial, SpecialType::TechnicSpecial, SpecialType::NoSelected };
+	SpecialType Special[4] = { SpecialType::NoSelected, SpecialType::NoSelected, SpecialType::NoSelected, SpecialType::NoSelected };
 };
 
 
