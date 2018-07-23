@@ -116,6 +116,19 @@ void CRoider::SetState(StatesType newState)
 void CRoider::PlayIdle(float timeElapsed)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
+
+	if (m_activated && m_TeamType == TeamType::Neutral)
+	{
+		m_deactiveTime += timeElapsed;
+		if (m_deactiveTime > TIME_ACTIVATE_CHECK)
+		{
+			m_activated = false;
+			// Warning! 회복 처리
+			// 방안 1: 전체 회복
+			// 방안 2: 일정 시간동안 몇 %의 체력 회복
+		}
+	}
+
 	if (!m_activated) return;
 
 	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
@@ -133,22 +146,16 @@ void CRoider::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
 	if (NoneDestination(PathType::Sub))
 	{
-		if (m_activated && m_TeamType == TeamType::Neutral)
-		{
-			m_deactiveTime += timeElapsed;
-			if (m_deactiveTime > TIME_ACTIVATE_CHECK)
-			{
-				m_activated = false;
-				// Warning! 회복 처리
-				// 방안 1: 전체 회복
-				// 방안 2: 일정 시간동안 몇 %의 체력 회복
-			}
-		}
-		else if(MoveToDestination(timeElapsed, pWayFinder) == States::Done) SetState(States::Idle);
+		if(MoveToDestination(timeElapsed, pWayFinder) == States::Done) SetState(States::Idle);
 	}
 	else
 	{
 		MoveToSubDestination(timeElapsed);
+		// 중립인데 원래 위치로 돌아갔으면 상태를 아이들 상태로 전환한다.
+		if(m_TeamType == TeamType::Neutral && NoneDestination(PathType::Sub))
+		{ 
+			SetState(States::Idle);
+		}
 	}
 	PlayIdle(timeElapsed);
 }
@@ -290,7 +297,6 @@ void CRoider::AnimateByCurState()
 
 void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 {
-	// Warning! 마지막에 친놈 알아야 함
 	if(m_lastDamageTeam == TeamType::Red)
 		SetTeam(TeamType::Red);
 	else if (m_lastDamageTeam == TeamType::Blue)
@@ -315,6 +321,7 @@ void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 			GetCollisionSize()));
 	}
 
+	ResetSubPath();
 	SetState(StatesType::Walk);
 }
 

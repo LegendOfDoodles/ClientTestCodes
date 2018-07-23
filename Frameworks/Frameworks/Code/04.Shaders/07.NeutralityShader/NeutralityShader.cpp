@@ -322,7 +322,7 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	CSkinnedMesh *pRoiderMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Royde.meshinfo");
 
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
-		CONVERT_PaperUnit_to_InG(3.5f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(11.0f),
+		CONVERT_PaperUnit_to_InG(4.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(11.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(7.0f));
 
 	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Monster//Animation//Royde_Idle.aniinfo");
@@ -334,7 +334,7 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 
 	pRoiderMesh->SetBoundingBox(
 		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(7.0f)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(1.75f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(5.5f)));
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(5.5f)));
 
 	int i = 0;
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -369,7 +369,7 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 		pRoider->SetBoundingMesh(pBoundingBoxMesh);
-		pRoider->SetCollisionSize(CONVERT_PaperUnit_to_InG(3.5f));
+		pRoider->SetCollisionSize(CONVERT_PaperUnit_to_InG(4));
 
 		pRoider->CBaseObject::SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
 		pRoider->SetTeam(TeamType::Neutral);
