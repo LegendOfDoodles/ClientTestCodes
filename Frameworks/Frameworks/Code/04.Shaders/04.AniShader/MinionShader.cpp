@@ -180,12 +180,12 @@ void CMinionShader::RenderBoundingBox(CCamera * pCamera)
 
 void CMinionShader::RenderShadow(CCamera * pCamera)
 {
-	CShader::Render(pCamera, 0, 2);
+	CShader::Render(pCamera, 0);
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
 	}
-	CShader::Render(pCamera, 1, 2);
+
 	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
@@ -407,9 +407,9 @@ void CMinionShader::ReleaseObjects()
 	{
 		for (int i = 0; i < m_nMaterials; ++i)
 		{
-			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+			Safe_Delete(m_ppMaterials[i]);
 		}
-		Safe_Delete(m_ppMaterials);
+		Safe_Delete_Array(m_ppMaterials);
 	}
 #endif
 }

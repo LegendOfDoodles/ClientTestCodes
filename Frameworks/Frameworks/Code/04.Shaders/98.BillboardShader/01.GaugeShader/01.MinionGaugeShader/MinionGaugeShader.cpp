@@ -224,6 +224,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		pGaugeObject = new CGaugeObject(m_pCreateMgr, GagueUIType::MinionGauge);
 		pMinionObjects = (*minion);
 
+		m_ppMaterials[0]->AddRef();
 		pGaugeObject->SetObject(pMinionObjects);
 		pGaugeObject->SetMaterial(m_ppMaterials[0]);
 		pGaugeObject->SetCamera(m_pCamera);
@@ -272,9 +273,9 @@ void CMinionHPGaugeShader::ReleaseObjects()
 	{
 		for (int i = 0; i < m_nMaterials; ++i)
 		{
-			if (m_ppMaterials[i]) delete m_ppMaterials[i];
+			Safe_Delete(m_ppMaterials[i]);
 		}
-		Safe_Delete(m_ppMaterials);
+		Safe_Delete_Array(m_ppMaterials);
 	}
 #endif
 }
