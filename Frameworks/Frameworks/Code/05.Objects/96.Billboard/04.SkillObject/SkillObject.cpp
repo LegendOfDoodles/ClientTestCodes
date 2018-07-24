@@ -21,10 +21,10 @@ CSkillObject::CSkillObject(shared_ptr<CCreateMgr> pCreateMgr, SkillUIType type) 
 
 	switch (type)
 	{
-	case GreyQSkill:
-	case GreyWSkill:
-	case GreyESkill:
-	case GreyRSkill:
+	case GrayQSkill:
+	case GrayWSkill:
+	case GrayESkill:
+	case GrayRSkill:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 711.1f, FRAME_BUFFER_HEIGHT / 400.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
@@ -56,22 +56,22 @@ void CSkillObject::Animate(float fTimeElapsed)
 
 	switch (m_type)
 	{
-	case GreyQSkill:
+	case GrayQSkill:
 	case QSkill:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 296.f)));
 		break;
-	case GreyWSkill:
+	case GrayWSkill:
 	case WSkill:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), -(FRAME_BUFFER_WIDTH / 914.2f)));
 		break;
-	case GreyESkill:
+	case GrayESkill:
 	case ESkill:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 914.2f)));
 		break;
-	case GreyRSkill:
+	case GrayRSkill:
 	case RSkill:
 		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
 		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), -(FRAME_BUFFER_HEIGHT / 96.f))), Vector3::ScalarProduct(m_pCamera->GetRightVector(), (FRAME_BUFFER_WIDTH / 296.f)));
@@ -89,10 +89,10 @@ void CSkillObject::Render(CCamera * pCamera, UINT istanceCnt)
 {
 	switch (m_type)
 	{
-	case GreyQSkill:
-	case GreyWSkill:
-	case GreyESkill:
-	case GreyRSkill:
+	case GrayQSkill:
+	case GrayWSkill:
+	case GrayESkill:
+	case GrayRSkill:
 		//CBillboardObject::Render(pCamera, istanceCnt);
 		//break;
 	case QSkill:

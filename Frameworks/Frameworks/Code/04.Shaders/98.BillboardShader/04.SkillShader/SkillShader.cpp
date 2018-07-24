@@ -71,39 +71,44 @@ void CSkillShader::Render(CCamera * pCamera)
 	{
 		SkillUIType type = (SkillUIType)((CSkillObject*)m_ppObjects[j])->GetType();
 
+		int WeaponType = m_pPlayer->GetPlayerStatus()->Weapon;
+
+		int GrayIcon = WeaponType * 2;
+		int ColorIcon = WeaponType * 2 + 1;
+
 		switch (type)
 		{
-		case GreyQSkill:
-			CShader::Render(pCamera, 0);
-			m_ppMaterials[0]->UpdateShaderVariable(0);
+		case GrayQSkill:
+			CShader::Render(pCamera, GrayIcon);
+			m_ppMaterials[GrayIcon]->UpdateShaderVariable(0);
 			break;
-		case GreyWSkill:
-			CShader::Render(pCamera, 0);
-			m_ppMaterials[0]->UpdateShaderVariable(1);
+		case GrayWSkill:
+			CShader::Render(pCamera, GrayIcon);
+			m_ppMaterials[GrayIcon]->UpdateShaderVariable(1);
 			break;
-		case GreyESkill:
-			CShader::Render(pCamera, 0);
-			m_ppMaterials[0]->UpdateShaderVariable(2);
+		case GrayESkill:
+			CShader::Render(pCamera, GrayIcon);
+			m_ppMaterials[GrayIcon]->UpdateShaderVariable(2);
 			break;
-		case GreyRSkill:
-			CShader::Render(pCamera, 0);
-			m_ppMaterials[0]->UpdateShaderVariable(3);
+		case GrayRSkill:
+			CShader::Render(pCamera, GrayIcon);
+			m_ppMaterials[GrayIcon]->UpdateShaderVariable(3);
 			break;
 		case QSkill:
-			CShader::Render(pCamera, 1);
-			m_ppMaterials[1]->UpdateShaderVariable(0);
+			CShader::Render(pCamera, ColorIcon);
+			m_ppMaterials[ColorIcon]->UpdateShaderVariable(0);
 			break;
 		case WSkill:
-			CShader::Render(pCamera, 1);
-			m_ppMaterials[1]->UpdateShaderVariable(1);
+			CShader::Render(pCamera, ColorIcon);
+			m_ppMaterials[ColorIcon]->UpdateShaderVariable(1);
 			break;
 		case ESkill:
-			CShader::Render(pCamera, 1);
-			m_ppMaterials[1]->UpdateShaderVariable(2);
+			CShader::Render(pCamera, ColorIcon);
+			m_ppMaterials[ColorIcon]->UpdateShaderVariable(2);
 			break;
 		case RSkill:
-			CShader::Render(pCamera, 1);
-			m_ppMaterials[1]->UpdateShaderVariable(3);
+			CShader::Render(pCamera, ColorIcon);
+			m_ppMaterials[ColorIcon]->UpdateShaderVariable(3);
 			break;
 		default:
 			break;
@@ -234,7 +239,7 @@ void CSkillShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderT
 {
 	m_nPipelineStates = 1;
 
-	m_nHeaps = 2;
+	m_nHeaps = 8;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
@@ -261,8 +266,19 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateStickGreySkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	// Stick
+	m_ppMaterials[0] = Materials::CreateStickGraySkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[1] = Materials::CreateStickColorSkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	// Sword
+	m_ppMaterials[2] = Materials::CreateSwordGraySkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateSwordColorSkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	// Magic
+	m_ppMaterials[4] = Materials::CreateMagicGraySkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreateMagicColorSkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	// Bow
+	m_ppMaterials[6] = Materials::CreateBowGraySkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
+	m_ppMaterials[7] = Materials::CreateBowColorSkillMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
+
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{

@@ -22,6 +22,7 @@ public: // 공개 함수
 	virtual void Render(CCamera *pCamera);
 
 	virtual void SetCamera(CCamera *pCamera);
+	virtual void SetPlayer(CBaseObject *pPlayer) { m_pPlayer = (CPlayer*)pPlayer; };
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -41,5 +42,7 @@ protected: // 내부 함수
 
 protected: // 변수
 	CCamera *m_pCamera;
+
+	CPlayer *m_pPlayer;
 };
 

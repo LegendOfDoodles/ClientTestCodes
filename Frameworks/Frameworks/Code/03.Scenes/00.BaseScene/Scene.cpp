@@ -377,6 +377,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppObjects = ((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects();
 
 	((CMinimapShader*)UI_Shader)->SetPlayer(m_ppObjects[0]);
+	((CSkillShader*)Skill_Shader)->SetPlayer(m_ppObjects[0]);
 	((CMinimapShader*)Minimap_Shader)->SetPlayer(m_ppObjects[0]);
 	((CharacterFrameGaugeShader*)CharFrame_Shader)->SetPlayer(m_ppObjects[0]);
 	((CSelectedSpecialShader*)SelectedSpecial_Shader)->SetPlayer(m_ppObjects[0]);

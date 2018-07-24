@@ -187,10 +187,10 @@ enum NumberType {
 };
 
 enum SkillUIType {
-	GreyQSkill,
-	GreyWSkill,
-	GreyESkill,
-	GreyRSkill,
+	GrayQSkill,
+	GrayWSkill,
+	GrayESkill,
+	GrayRSkill,
 	QSkill,
 	WSkill,
 	ESkill,
