@@ -23,6 +23,7 @@ public: // 공개 함수
 
 	virtual void SetCamera(CCamera *pCamera);
 	virtual void SetPlayer(CBaseObject *pPlayer) { m_pPlayer = (CPlayer*)pPlayer; };
+	void SetChangeWeapon(bool change) { m_Change = change; };
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
@@ -42,7 +43,11 @@ protected: // 내부 함수
 
 protected: // 변수
 	CCamera *m_pCamera;
-
 	CPlayer *m_pPlayer;
+
+	bool m_Change;
+
+	UINT m_incrementSize;
+
 };
 

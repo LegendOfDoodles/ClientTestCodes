@@ -122,6 +122,7 @@ protected: // º¯¼ö
 	CCollisionObject **m_ppObjects{ NULL };
 	int m_nObjects{ 0 };
 
+
 	UINT8 *m_pMappedObjects{ NULL };
 	UINT8 *m_pMappedBoundingBoxes{ NULL };
 

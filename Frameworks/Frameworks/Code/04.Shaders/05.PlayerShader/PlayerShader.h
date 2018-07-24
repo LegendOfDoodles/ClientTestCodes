@@ -31,6 +31,7 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
+	bool GetChangeWeapon() { return m_ChangeWeapon; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -65,4 +66,7 @@ protected: // 변수
 	int m_nWeaponState{ 0 };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
+
+	bool m_ChangeWeapon{ false };
+
 };

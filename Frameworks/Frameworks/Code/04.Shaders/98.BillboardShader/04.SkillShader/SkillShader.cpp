@@ -63,6 +63,21 @@ void CSkillShader::AnimateObjects(float timeElapsed)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
+
+	if (m_Change == true) {
+		int WeaponType = m_pPlayer->GetPlayerStatus()->Weapon;
+
+		int GrayIcon = WeaponType * 2;
+		int ColorIcon = WeaponType * 2 + 1;
+
+		for (int i = 0; i < m_nObjects; ++i)
+		{
+			if (i < 4) m_ppObjects[i]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[GrayIcon].ptr + (m_incrementSize * i));
+			else	   m_ppObjects[i]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[ColorIcon].ptr + (m_incrementSize * (i - 4)));
+		}
+
+		m_Change = false;
+	}
 }
 
 void CSkillShader::Render(CCamera * pCamera)
@@ -74,7 +89,7 @@ void CSkillShader::Render(CCamera * pCamera)
 		int WeaponType = m_pPlayer->GetPlayerStatus()->Weapon;
 
 		int GrayIcon = WeaponType * 2;
-		int ColorIcon = WeaponType * 2 + 1;
+		int ColorIcon = GrayIcon + 1;
 
 		switch (type)
 		{
@@ -146,20 +161,18 @@ bool CSkillShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 		if (cursorPos.y > SKILL_MINIMUM_Y && cursorPos.y < SKILL_MAXIMUM_Y) {
 		
 			if ((cursorPos.x > QSKILL_MINIMUM_X  && cursorPos.x < QSKILL_MAXIMUM_X)) {
-				printf("Q\n");
+				m_pPlayer->ActiveSkill(AnimationsType::SkillQ);
 			}
 			if ((cursorPos.x > WSKILL_MINIMUM_X  && cursorPos.x < WSKILL_MAXIMUM_X)) {
-				printf("W\n");
+				m_pPlayer->ActiveSkill(AnimationsType::SkillW);
 			}
 			if ((cursorPos.x > ESKILL_MINIMUM_X  && cursorPos.x < ESKILL_MAXIMUM_X)) {
-				printf("E\n");
+				m_pPlayer->ActiveSkill(AnimationsType::SkillE);
 			}
 			if ((cursorPos.x > RSKILL_MINIMUM_X  && cursorPos.x < RSKILL_MAXIMUM_X)) {
-				printf("R\n");
+				m_pPlayer->ActiveSkill(AnimationsType::SkillR);
 			}
 		}
-
-		
 	}
 
 	return true;
@@ -257,11 +270,13 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects / 2, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects / 2, m_pConstBuffer.Get(), ncbElementBytes, m_nObjects / 2 * i, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, 0, i);
 	}
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
+	m_incrementSize = incrementSize;
+	
 	CSkillObject *pUIObject{ NULL };
 
 	m_nMaterials = m_nHeaps;
@@ -286,13 +301,13 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 		pUIObject->SetCamera(m_pCamera);
 		if (i < 4)
 		{
-			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.00128f);
+			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.0128f);
 			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 		}
 		else 
 		{
-			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.0128f);	 // distance 10	
-			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * (i - 4)));
+			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.6432f);	 // distance 10	
+			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 		}
 
 		m_ppObjects[i] = pUIObject;

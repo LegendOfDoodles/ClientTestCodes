@@ -190,7 +190,8 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 			m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppSwordAni);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::SwordPlayer, 0);
-
+			
+			m_ChangeWeapon = true;
 		}
 	}
 	else if (GetAsyncKeyState('2') & 0x0001)
@@ -202,7 +203,8 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 			m_ppObjects[0]->SetType(ObjectType::StaffPlayer);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppStaffAni);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::StaffPlayer, 0);
-
+			
+			m_ChangeWeapon = true;
 		}
 	}
 	else if (GetAsyncKeyState('3') & 0x0001)
@@ -214,6 +216,8 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 			m_ppObjects[0]->SetType(ObjectType::BowPlayer);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppBowAni);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::BowPlayer, 0);
+
+			m_ChangeWeapon = true;
 		}
 	}
 	else if (GetAsyncKeyState('Q') & 0x0001)

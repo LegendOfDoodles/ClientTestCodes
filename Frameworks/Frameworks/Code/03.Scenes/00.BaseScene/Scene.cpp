@@ -378,6 +378,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	((CMinimapShader*)UI_Shader)->SetPlayer(m_ppObjects[0]);
 	((CSkillShader*)Skill_Shader)->SetPlayer(m_ppObjects[0]);
+	((CSkillShader*)Skill_Shader)->SetChangeWeapon( ((CPlayerShader*)m_ppShaders[3])->GetChangeWeapon() );
 	((CMinimapShader*)Minimap_Shader)->SetPlayer(m_ppObjects[0]);
 	((CharacterFrameGaugeShader*)CharFrame_Shader)->SetPlayer(m_ppObjects[0]);
 	((CSelectedSpecialShader*)SelectedSpecial_Shader)->SetPlayer(m_ppObjects[0]);
