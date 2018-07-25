@@ -32,25 +32,6 @@ void CStaticObjectShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	BuildObjects(pCreateMgr, pContext);
 }
 
-void CStaticObjectShader::ReleaseUploadBuffers()
-{
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
-	}
-
-#if USE_BATCH_MATERIAL
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i < m_nMaterials; ++i)
-			m_ppMaterials[i]->ReleaseUploadBuffers();
-	}
-#endif
-}
-
 void CStaticObjectShader::UpdateShaderVariables(int opt)
 {
 	UNREFERENCED_PARAMETER(opt);
@@ -376,29 +357,6 @@ void CStaticObjectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *
 			++cnt;
 		}
 	}
-}
-
-void CStaticObjectShader::ReleaseObjects()
-{
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			delete m_ppObjects[j];
-		}
-		Safe_Delete_Array(m_ppObjects);
-	}
-
-#if USE_BATCH_MATERIAL
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i < m_nMaterials; ++i)
-		{
-			Safe_Delete(m_ppMaterials[i]);
-		}
-		Safe_Delete_Array(m_ppMaterials);
-	}
-#endif
 }
 
 void CStaticObjectShader::SetBoundingBoxMeshByIndex(shared_ptr<CCreateMgr> pCreateMgr, CBaseObject * target, int index)

@@ -93,6 +93,22 @@ enum ObjectType {
 	Nexus
 };
 
+enum FlyingObjectType {
+	Roider_Dumbel,
+	Minion_Arrow,
+	Minion_Magic,
+	Player_Arrow,
+	Player_ArrowSkill_Q,
+	Player_ArrowSkill_W,
+	Player_ArrowSkill_E,
+	Player_ArrowSkill_R,
+	Player_Magic,
+	Player_MagicSkill_Q,
+	Player_MagicSkill_W,
+	Player_MagicSkill_E,
+	Player_MagicSkill_R
+};
+
 struct CommonInfo
 {
 	float maxHP;

@@ -14,8 +14,6 @@ public:
 public: // 공개 함수
 	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
-	virtual void ReleaseUploadBuffers();
-
 	virtual void UpdateShaderVariables(int opt = 0);
 	virtual void UpdateBoundingBoxShaderVariables();
 
@@ -48,9 +46,9 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 protected: // 변수
-	int m_nSword{ 0 };
-	int m_nStaff{ 0 };
-	int m_nBow{ 0 };
+	UINT m_nSword{ 0 };
+	UINT m_nStaff{ 0 };
+	UINT m_nBow{ 0 };
 
 	//애니메이션 정보
 	CSkeleton** m_ppSwordAni{ NULL };

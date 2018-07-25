@@ -255,6 +255,12 @@
     <Filter Include="소스 파일\04.Shaders\04.MinionShader">
       <UniqueIdentifier>{dc752d63-37aa-4e94-9f45-9cd6ad7d721c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\08.FlyingShader">
+      <UniqueIdentifier>{e3844fc4-10c8-4a06-b283-54cd94139c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Objects\11.FlyingObject">
+      <UniqueIdentifier>{ef7bd3f1-89c4-4646-b44d-f87086823612}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -476,6 +482,12 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader\SpecialSelectShader.h">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\08.FlyingShader\FlyingShader.h">
+      <Filter>소스 파일\04.Shaders\08.FlyingShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\05.Objects\11.FlyingObject\FlyingObject.h">
+      <Filter>소스 파일\05.Objects\11.FlyingObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -678,6 +690,12 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader\SpecialSelectShader.cpp">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\08.FlyingShader\FlyingShader.cpp">
+      <Filter>소스 파일\04.Shaders\08.FlyingShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\11.FlyingObject\FlyingObject.cpp">
+      <Filter>소스 파일\05.Objects\11.FlyingObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

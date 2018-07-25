@@ -48,7 +48,8 @@ public: // 공개 함수
 	virtual PlayerInfo* GetPlayerStatus()			{ return NULL; }
 	virtual CommonInfo* GetCommonStatus()			{ return NULL; }
 	virtual StaticInfo* GetNexusAndTowerStatus()	{ return NULL; }
-	
+	virtual FlyingObjectType GetFlyingObjectsType() { return FlyingObjectType::Roider_Dumbel; }
+
 	float GetDetectRange() { return m_detectRange; }
 	float GetSightRange() { return m_sightRange;}
 	

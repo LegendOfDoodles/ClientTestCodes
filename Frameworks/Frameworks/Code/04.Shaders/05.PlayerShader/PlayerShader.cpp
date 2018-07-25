@@ -32,25 +32,6 @@ void CPlayerShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext
 	BuildObjects(pCreateMgr, pContext);
 }
 
-void CPlayerShader::ReleaseUploadBuffers()
-{
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
-	}
-
-#if USE_BATCH_MATERIAL
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i < m_nMaterials; ++i)
-			m_ppMaterials[i]->ReleaseUploadBuffers();
-	}
-#endif
-}
-
 void CPlayerShader::UpdateShaderVariables(int opt)
 {
 	UNREFERENCED_PARAMETER(opt);
@@ -453,13 +434,13 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 
 	m_pStick->AddRef();
-	for (int j = 0; j < m_nSword; ++j) {
+	for (UINT j = 0; j < m_nSword; ++j) {
 		m_pSword[j]->AddRef();
 	}
-	for (int j = 0; j < m_nStaff; ++j) {
+	for (UINT j = 0; j < m_nStaff; ++j) {
 		m_pStaff[j]->AddRef();
 	}
-	for (int j = 0; j < m_nBow; ++j) {
+	for (UINT j = 0; j < m_nBow; ++j) {
 		m_pBow[j]->AddRef();
 	}
 
@@ -526,19 +507,19 @@ void CPlayerShader::ReleaseObjects()
 		Safe_Delete_Array(m_ppObjects);
 	}
 	//애니메이션 
-	for (int j = 0; j < 7; j++)
+	for (UINT j = 0; j < 7; j++)
 	{
 		delete m_ppSwordAni[j];
 	}
 	Safe_Delete_Array(m_ppSwordAni);
 
-	for (int j = 0; j < 7; j++)
+	for (UINT j = 0; j < 7; j++)
 	{
 		delete m_ppStaffAni[j];
 	}
 	Safe_Delete_Array(m_ppStaffAni);
 
-	for (int j = 0; j < 4; j++)
+	for (UINT j = 0; j < 4; j++)
 	{
 		delete m_ppBowAni[j];
 	}
@@ -546,21 +527,21 @@ void CPlayerShader::ReleaseObjects()
 	//////////////////////////////////////
 	//메쉬
 	
-	for (int j = 0; j < m_nSword; j++)
+	for (UINT j = 0; j < m_nSword; j++)
 	{
 		delete m_pSword[j];
 	}
 	Safe_Delete_Array(m_pSword);
 
 
-	for (int j = 0; j < m_nStaff; j++)
+	for (UINT j = 0; j < m_nStaff; j++)
 	{
 		delete m_pStaff[j];
 	}
 	Safe_Delete_Array(m_pStaff);
 
 
-	for (int j = 0; j < m_nBow; j++)
+	for (UINT j = 0; j < m_nBow; j++)
 	{
 		delete m_pBow[j];
 	}

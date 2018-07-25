@@ -18,8 +18,6 @@ public: // 생성자, 소멸자
 public: // 공개 함수
 	virtual void Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
-	virtual void ReleaseUploadBuffers();
-
 	virtual void UpdateShaderVariables(int opt = 0);
 	virtual void UpdateBoundingBoxShaderVariables();
 
@@ -51,8 +49,6 @@ protected: // 내부 함수
 	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
-
-	virtual void ReleaseObjects();
 
 protected: // 변수
 	shared_ptr<CCollisionManager> m_pColManager;
