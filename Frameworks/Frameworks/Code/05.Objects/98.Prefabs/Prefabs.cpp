@@ -812,8 +812,9 @@ CMaterial * Materials::CreateBowColorSkillMaterial(shared_ptr<CCreateMgr> pCreat
 CMaterial * Materials::CreateRedGaugeMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Gauge/Red.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Gauge/Blue.dds", 1);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

@@ -19,6 +19,9 @@ public: // 공개함수
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
+	CCollisionObject* GetMasterObject() { return m_pMasterObject; }
+
+
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
 	ObjectType		  m_MasterObjectType;
