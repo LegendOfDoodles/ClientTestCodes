@@ -209,10 +209,7 @@ void CNexusAndTowerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMg
 
 	for (int i = 0; i < m_nObjects; ++i) {
 		pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::NexusAndTower);
-		
-		pGaugeObject->SetMaterial(m_ppMaterials[0]);
 		pGaugeObject->SetCamera(m_pCamera);
-		
 		pGaugeObject->SetObject(m_ppNexusAndTower[i]);
 		
 		XMFLOAT3 HPGaugePosition = m_ppNexusAndTower[i]->GetPosition();

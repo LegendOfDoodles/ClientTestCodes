@@ -75,12 +75,15 @@ void CPlayerHPGaugeShader::Render(CCamera * pCamera)
 	{
 		CCollisionObject* master = ((CGaugeObject*)m_ppObjects[j])->GetMasterObject();
 		
-		if (master->GetTeam() == TeamType::Blue)
+		if (master->GetTeam() == TeamType::Blue) {
 			m_ppMaterials[0]->UpdateShaderVariable(1);
-		else
+			m_ppObjects[j]->Render(pCamera);
+		}
+		else if (master->GetTeam() == TeamType::Red){
 			m_ppMaterials[0]->UpdateShaderVariable(0);
+			m_ppObjects[j]->Render(pCamera);
+		}
 
-		m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -213,7 +216,6 @@ void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 		if (i < m_nPlayer)
 		{
 			pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::PlayerGauge);
-			pGaugeObject->SetMaterial(m_ppMaterials[0]);
 			pGaugeObject->SetCamera(m_pCamera);
 			pGaugeObject->SetObject(m_pPlayer[i]);
 			pGaugeObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
@@ -227,7 +229,6 @@ void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 		else
 		{
 			pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::NexusAndTower);
-			pGaugeObject->SetMaterial(m_ppMaterials[0]);
 			pGaugeObject->SetCamera(m_pCamera);
 			pGaugeObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
 			pGaugeObject->GetmasterObjectType((ObjectType)m_ppNexusAndTower[i - m_nPlayer]->GetType());
