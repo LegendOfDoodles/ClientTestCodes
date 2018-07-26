@@ -33,8 +33,11 @@ public: // 공개 함수
 	
 	void SetUIObjectsManager(shared_ptr<CUIObjectManager> pManger);
 
-	virtual void SetPlayer(CCollisionObject **pPlayer) { m_pPlayer = pPlayer; };
+	virtual void SetPlayer(CCollisionObject **ppPlayer) { m_ppPlayer = ppPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
+
+	void SetRoider(CCollisionObject **ppRoider) { m_ppRoider = ppRoider; };
+	void SetRoiderCnt(int cnt) { m_nRoider = cnt; };
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -60,8 +63,11 @@ protected: // 변수
 	CCamera *m_pCamera;
 
 	// Players
-	CCollisionObject **m_pPlayer;
+	CCollisionObject **m_ppPlayer;
 	int m_nPlayer = 0;
+
+	CCollisionObject **m_ppRoider;
+	int m_nRoider = 0;
 
 	//동적생성
 	bool m_indexArr[MAX_MINION]{ false };

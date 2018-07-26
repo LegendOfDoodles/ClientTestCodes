@@ -75,15 +75,10 @@ void CPlayerHPGaugeShader::Render(CCamera * pCamera)
 	{
 		CCollisionObject* master = ((CGaugeObject*)m_ppObjects[j])->GetMasterObject();
 		
-		if (master->GetTeam() == TeamType::Blue) {
-			m_ppMaterials[0]->UpdateShaderVariable(1);
-			m_ppObjects[j]->Render(pCamera);
-		}
-		else if (master->GetTeam() == TeamType::Red){
-			m_ppMaterials[0]->UpdateShaderVariable(0);
-			m_ppObjects[j]->Render(pCamera);
-		}
+		if (master->GetTeam() == TeamType::Blue) 		m_ppMaterials[0]->UpdateShaderVariable(1);
+		else if (master->GetTeam() == TeamType::Red)	m_ppMaterials[0]->UpdateShaderVariable(0);
 
+		m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -194,7 +189,7 @@ void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 {
 	m_pCamera = (CCamera*)pContext;
 
-	m_nObjects = m_nPlayer + m_nNexusAndTower;
+	m_nObjects = m_nPlayer;
 	m_ppObjects = new CBaseObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
@@ -213,33 +208,16 @@ void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 
 	for (int i = 0; i < m_nObjects; ++i) {
 		
-		if (i < m_nPlayer)
-		{
-			pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::PlayerGauge);
-			pGaugeObject->SetCamera(m_pCamera);
-			pGaugeObject->SetObject(m_pPlayer[i]);
-			pGaugeObject->GetmasterObjectType((ObjectType)m_pPlayer[i]->GetType());
-			
-			XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
-			HPGaugePosition.y += 110.f;
-			pGaugeObject->SetPosition(HPGaugePosition);
-
-			pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-		}
-		else
-		{
-			pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::NexusAndTower);
-			pGaugeObject->SetCamera(m_pCamera);
-			pGaugeObject->SetObject(m_ppNexusAndTower[i - m_nPlayer]);
-			pGaugeObject->GetmasterObjectType((ObjectType)m_ppNexusAndTower[i - m_nPlayer]->GetType());
-
-			XMFLOAT3 HPGaugePosition = m_ppNexusAndTower[i- m_nPlayer]->GetPosition();
-			HPGaugePosition.y += 200.f;
-			pGaugeObject->SetPosition(HPGaugePosition);
-
-			pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-		}
+		pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::PlayerGauge);
+		pGaugeObject->SetCamera(m_pCamera);
+		pGaugeObject->SetObject(m_pPlayer[i]);
 		
+		XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
+		HPGaugePosition.y += 110.f;
+		pGaugeObject->SetPosition(HPGaugePosition);
+
+		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
+	
 		m_ppObjects[i] = pGaugeObject;
 	}
 }

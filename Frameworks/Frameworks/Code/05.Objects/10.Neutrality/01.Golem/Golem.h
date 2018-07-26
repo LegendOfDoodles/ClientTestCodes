@@ -49,7 +49,7 @@ protected:	// º¯¼ö
 	/*
 	0. SwordPlayer, 1. StaffPlayer,   2. BowPlayer,
 	3. SwordMinion,	4. StaffMinion,   5. BowMinion,
-	6. Loyde,   	7. CAM,     	  8. GOLEM,
+	6. Roider,   	7. CAM,     	  8. GOLEM,
 	9. FirstTower,  10. SecnondTower, 11. Nexus
 	*/
 

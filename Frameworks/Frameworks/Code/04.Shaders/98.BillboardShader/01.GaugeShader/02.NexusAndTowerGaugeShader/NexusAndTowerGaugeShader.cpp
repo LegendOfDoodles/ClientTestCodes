@@ -74,11 +74,9 @@ void CNexusAndTowerHPGaugeShader::Render(CCamera * pCamera)
 	{
 		CCollisionObject* master = ((CGaugeObject*)m_ppObjects[j])->GetMasterObject();
 
-		if (master->GetTeam() == TeamType::Blue)
-			m_ppMaterials[0]->UpdateShaderVariable(1);
-		else
-			m_ppMaterials[0]->UpdateShaderVariable(0);
-		
+		if (master->GetTeam() == TeamType::Blue) 		m_ppMaterials[0]->UpdateShaderVariable(1);
+		else if (master->GetTeam() == TeamType::Red)	m_ppMaterials[0]->UpdateShaderVariable(0);
+
 		m_ppObjects[j]->Render(pCamera);
 	}
 }

@@ -44,6 +44,7 @@
 #define Skill_Shader m_ppShaders[14]
 #define Number_Shader m_ppShaders[15]
 #define SelectedSpecial_Shader m_ppShaders[16]
+#define NexusTowerHP_Shader m_ppShaders[17]
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
@@ -325,7 +326,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 17;
+	m_nShaders = 18;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -347,14 +348,14 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	Skill_Shader = new CSkillShader(pCreateMgr);
 	Number_Shader = new CNumberShader(pCreateMgr);
 	SelectedSpecial_Shader = new CSelectedSpecialShader(pCreateMgr);
-
+	NexusTowerHP_Shader = new CNexusAndTowerHPGaugeShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 10; ++i)
+	for (int i = 2; i < m_nShaders - 11; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -362,11 +363,14 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	// UI Shaders Initialize
 	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
-	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
-	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
+
+	((CNexusAndTowerHPGaugeShader*)NexusTowerHP_Shader)->SetNexusAndTowerCnt(((CNexusTowerShader *)m_ppShaders[6])->GetObjectCount());
+	((CNexusAndTowerHPGaugeShader*)NexusTowerHP_Shader)->SetNexusAndTower(((CNexusTowerShader *)m_ppShaders[6])->GetCollisionObjects());
 
 	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
+	((CMinimapIconShader*)MinimapIco_Shader)->SetRoiderCnt(((CPlayerShader *)m_ppShaders[4])->GetObjectCount());
+	((CMinimapIconShader*)MinimapIco_Shader)->SetRoider(((CPlayerShader *)m_ppShaders[4])->GetCollisionObjects());
 
 	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTowerCnt(
 		((CNexusTowerShader *)m_ppShaders[6])->GetNexusCount(),
@@ -396,6 +400,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	Skill_Shader->Initialize(pCreateMgr, m_pCamera);
 	Number_Shader->Initialize(pCreateMgr, m_pCamera);
 	SelectedSpecial_Shader->Initialize(pCreateMgr, m_pCamera);
+	NexusTowerHP_Shader->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());

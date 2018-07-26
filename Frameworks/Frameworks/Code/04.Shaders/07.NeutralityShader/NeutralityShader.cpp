@@ -345,7 +345,7 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 
 		pRoider->SetMesh(0, pRoiderMesh);
 
-		pRoider->SetType(ObjectType::Loyde);
+		pRoider->SetType(ObjectType::Roider);
 #if !USE_BATCH_MATERIAL
 		pRotatingObject->SetMaterial(pCubeMaterial);
 #endif

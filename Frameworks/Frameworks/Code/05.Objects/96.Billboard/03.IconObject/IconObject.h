@@ -19,11 +19,9 @@ public:
 	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 	void GetmasterObjectType(ObjectType type) { m_MasterObjectType = type; };
 
-	CCollisionObject* GetMasterObject() { return m_pMasterObject; };
 	StatesType GetState() { return m_pMasterObject->GetState(); }
 
 protected:
-	CCollisionObject * m_pMasterObject;
 	XMFLOAT3		  m_MinimapPosition;
 	ObjectType		  m_MasterObjectType;
 	IconUIType		  m_type;

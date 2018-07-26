@@ -981,13 +981,13 @@ CMaterial * Materials::CreateCamBossIconMaterial(shared_ptr<CCreateMgr> pCreateM
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateLoydeIconMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreateRoiderIconMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(3, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Common/Loyde.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Loyde.dds",   1);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Loyde.dds",    2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Common/Roider.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Blue/Roider.dds",   1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/UI/Icon/Red/Roider.dds",    2);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

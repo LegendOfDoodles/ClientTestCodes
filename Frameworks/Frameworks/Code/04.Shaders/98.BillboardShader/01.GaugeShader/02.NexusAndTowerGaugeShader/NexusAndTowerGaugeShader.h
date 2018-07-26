@@ -21,8 +21,8 @@ public: // 공개 함수
 
 	virtual void GetCamera(CCamera *pCamera);
 
-	void SetNexusAndTower(CBaseObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
-	void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
+	virtual void SetNexusAndTower(CCollisionObject **ppObjects) { m_ppNexusAndTower = (CCollisionObject**)ppObjects; };
+	virtual void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
 
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);

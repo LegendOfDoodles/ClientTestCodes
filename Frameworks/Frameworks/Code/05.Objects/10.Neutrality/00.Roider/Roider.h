@@ -59,12 +59,12 @@ protected:	// º¯¼ö
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/
 
-	ObjectType m_ObjectType{ ObjectType::Loyde };
+	ObjectType m_ObjectType{ ObjectType::Roider };
 
 	/*
 	0. SwordPlayer, 1. StaffPlayer,   2. BowPlayer,
 	3. SwordMinion,	4. StaffMinion,   5. BowMinion,
-	6. Loyde,   	7. CAM,     	  8. GOLEM,
+	6. Roider,   	7. CAM,     	  8. GOLEM,
 	9. FirstTower,  10. SecnondTower, 11. Nexus
 	*/
 

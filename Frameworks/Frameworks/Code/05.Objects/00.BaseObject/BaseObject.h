@@ -6,6 +6,7 @@ class CCreateMgr;
 class CShader;
 class CCamera;
 class CMaterial;
+class CCollisionObject;
 
 struct CB_GAMEOBJECT_INFO
 {
@@ -81,6 +82,7 @@ public: // 공개 함수
 
 	virtual TeamType GetTeam() { return m_TeamType; }
 	virtual void SetTeam(TeamType type) { m_TeamType = type; }
+	virtual CCollisionObject* GetMasterObject() { return NULL; }
 
 	virtual void SetState(StatesType newState) { newState; }
 	virtual void ActiveSkill(AnimationsType act) { act; }

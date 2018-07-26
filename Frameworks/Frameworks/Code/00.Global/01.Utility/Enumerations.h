@@ -85,7 +85,7 @@ enum ObjectType {
 	SwordMinion,
 	StaffMinion,
 	BowMinion,
-	Loyde,
+	Roider,
 	CAM,
 	GOLEM,
 	FirstTower,
@@ -223,7 +223,8 @@ enum GagueUIType {
 enum IconUIType {
 	PlayerIcon,
 	MinionIcon,
-	NexusAndTowerIcon
+	NexusAndTowerIcon,
+	RoiderIcon
 };
 
 enum class PathType {

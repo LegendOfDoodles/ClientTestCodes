@@ -54,7 +54,7 @@ public: // 공개 함수
 
 	float GetDetectRange() { return m_detectRange; }
 	float GetSightRange() { return m_sightRange;}
-	
+
 	void SetDetected(bool value) { m_Detected = value; }
 	bool GetDetected() { return m_Detected; }
 	

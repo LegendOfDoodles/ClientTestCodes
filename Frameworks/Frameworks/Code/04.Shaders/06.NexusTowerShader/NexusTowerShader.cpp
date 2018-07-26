@@ -148,7 +148,7 @@ void CNexusTowerShader::SetColManagerToObject(shared_ptr<CCollisionManager> mana
 {
 	for (int i = 0; i < m_nObjects; ++i) {
 
-		dynamic_cast<CCollisionObject*>(m_ppObjects[i])->SetCollisionManager(manager);
+		m_ppObjects[i]->SetCollisionManager(manager);
 	}
 }
 

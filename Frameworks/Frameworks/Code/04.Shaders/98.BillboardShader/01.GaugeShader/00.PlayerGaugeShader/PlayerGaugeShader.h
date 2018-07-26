@@ -25,9 +25,6 @@ public: // 공개 함수
 	virtual void SetPlayer(CCollisionObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
 
-	void SetNexusAndTower(CCollisionObject **ppObjects) { m_ppNexusAndTower = ppObjects; };
-	void SetNexusAndTowerCnt(int cnt) { m_nNexusAndTower = cnt; };
-
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
