@@ -70,11 +70,16 @@ void CNexusAndTowerHPGaugeShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0);
 
-	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-	
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
+		CCollisionObject* master = ((CGaugeObject*)m_ppObjects[j])->GetMasterObject();
+
+		if (master->GetTeam() == TeamType::Blue)
+			m_ppMaterials[0]->UpdateShaderVariable(1);
+		else
+			m_ppMaterials[0]->UpdateShaderVariable(0);
+		
+		m_ppObjects[j]->Render(pCamera);
 	}
 }
 
@@ -190,19 +195,21 @@ void CNexusAndTowerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMg
 
 	UINT ncbElementBytes = ((sizeof(CB_GAUGE_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2);
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes);
 
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CGaugeObject *pGaugeObject = NULL;
 
+	m_nMaterials = m_nHeaps;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+
+	m_ppMaterials[0] = Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+
 	for (int i = 0; i < m_nObjects; ++i) {
 		pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::NexusAndTower);
-		
-		pGaugeObject->SetMaterial(Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]));
 		pGaugeObject->SetCamera(m_pCamera);
-		
 		pGaugeObject->SetObject(m_ppNexusAndTower[i]);
 		
 		XMFLOAT3 HPGaugePosition = m_ppNexusAndTower[i]->GetPosition();

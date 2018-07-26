@@ -73,9 +73,17 @@ void CMinionHPGaugeShader::AnimateObjects(float timeElapsed)
 void CMinionHPGaugeShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
-	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
+//	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 
 	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
+
+		CCollisionObject* master = ((CGaugeObject*)*iter)->GetMasterObject();
+
+		if (master->GetTeam() == TeamType::Blue)
+			m_ppMaterials[0]->UpdateShaderVariable(1);
+		else if (master->GetTeam() == TeamType::Red)
+			m_ppMaterials[0]->UpdateShaderVariable(0);
+
 		(*iter)->Render(pCamera);
 	}
 }
@@ -85,6 +93,8 @@ void CMinionHPGaugeShader::SetCamera(CCamera * pCamera)
 	m_pCamera = pCamera;
 
 	for (auto iter = m_HPGaugeObjectList.begin(); iter != m_HPGaugeObjectList.end(); ++iter) {
+
+		
 		static_cast<CGaugeObject*>(*iter)->SetCamera(m_pCamera);
 	}
 }
@@ -176,7 +186,7 @@ void CMinionHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, MAX_MINION);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, MAX_MINION, 2);
 
 	CreateConstantBufferViews(pCreateMgr, MAX_MINION, m_pConstBuffer.Get(), ncbElementBytes);
 
@@ -226,7 +236,6 @@ void CMinionHPGaugeShader::SpawnGauge()
 
 		m_ppMaterials[0]->AddRef();
 		pGaugeObject->SetObject(pMinionObjects);
-		pGaugeObject->SetMaterial(m_ppMaterials[0]);
 		pGaugeObject->SetCamera(m_pCamera);
 
 		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
