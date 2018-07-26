@@ -1,8 +1,9 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
 
+typedef std::list<CCollisionObject*> CollisionObjectList;
+
 class CMaterial;
-class CHeightMapTerrain;
 class CCollisionManager;
 
 struct FlyingObjectIndices
@@ -18,14 +19,15 @@ public: // 생성자, 소멸자
 	virtual ~CFlyingShader();
 
 public: // 공개 함수
+	virtual void ReleaseUploadBuffers();
+
 	virtual void UpdateShaderVariables(int opt = 0);
 
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
 
-	int GetNexusCount() { return m_nNexus; }
-	int GetTowerCount() { return m_nTower; }
+	void SpawnFlyingObject(XMFLOAT3 position, XMFLOAT3 direction, TeamType teamType, FlyingObjectType objectType);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 
@@ -39,17 +41,19 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
+	virtual void ReleaseObjects();
+
 	int GetPossibleIndex(FlyingObjectType type);
 
 protected: // 변수
-	int m_nNexus{ 0 };
-	int m_nTower{ 0 };
+	static const int m_nMesh{ 1 };
+	CStaticMesh * m_pMeshes[m_nMesh];
 
-	int m_meshCounts[4];
+	UINT m_srvIncrementSize{ 0 };
 
 	std::unordered_map<FlyingObjectType, UINT> m_objectsMaxCount;
 	std::unordered_map<FlyingObjectType, FlyingObjectIndices> m_objectsIndices;
 	std::unique_ptr<bool[]> m_objectsPossibleIndices;
 
-	CHeightMapTerrain * m_pTerrain{ NULL };
+	CollisionObjectList m_dumbelList;
 };

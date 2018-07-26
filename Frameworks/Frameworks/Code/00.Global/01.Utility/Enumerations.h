@@ -90,7 +90,8 @@ enum ObjectType {
 	GOLEM,
 	FirstTower,
 	SecnondTower,
-	Nexus
+	Nexus,
+	FlyingObject
 };
 
 enum FlyingObjectType {

@@ -216,7 +216,7 @@ void CSwordMinion::Animate(float timeElapsed)
 		case States::Attack:
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(8), 180, m_StatusInfo.Atk);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, m_attackRange, 180, m_StatusInfo.Atk);
 			}
 			if (m_nCurrAnimation == Animations::Attack1) {
 				if (m_curState == m_nextState)
