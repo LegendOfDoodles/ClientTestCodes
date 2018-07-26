@@ -2,9 +2,7 @@
 #include "FlyingShader.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
-#include "05.Objects/04.Terrain/HeightMapTerrain.h"
-#include "05.Objects/07.StaticObjects/Obstacle.h"
-#include "05.Objects/09.NexusTower/NexusTower.h"
+#include "05.Objects/11.FlyingObject/FlyingObject.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
 
 /// <summary>
@@ -27,6 +25,30 @@ CFlyingShader::~CFlyingShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
+void CFlyingShader::ReleaseUploadBuffers()
+{
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->ReleaseUploadBuffers();
+		}
+	}
+
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i<m_nMaterials; ++i)
+			m_ppMaterials[i]->ReleaseUploadBuffers();
+	}
+#endif
+
+	for (int j = 0; j < m_nMesh; j++)
+	{
+		m_pMeshes[j]->ReleaseUploadBuffers();
+	}
+}
+
 void CFlyingShader::UpdateShaderVariables(int opt)
 {
 	UNREFERENCED_PARAMETER(opt);
@@ -50,18 +72,28 @@ void CFlyingShader::AnimateObjects(float timeElapsed)
 
 void CFlyingShader::Render(CCamera *pCamera)
 {
-	int cnt{ 0 };
-	for (int i = 0; i < m_nMaterials; ++i)
+	UNREFERENCED_PARAMETER(pCamera);
+	//int cnt{ 0 };
+	//for (int i = 0; i < m_nMaterials; ++i)
+	//{
+	//	for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
+	//	{
+	//		if (j == 0)
+	//		{
+	//			CShader::Render(pCamera, i);
+	//			m_ppMaterials[i]->UpdateShaderVariables();
+	//		}
+	//		if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
+	//	}
+	//}
+}
+
+void CFlyingShader::SpawnFlyingObject(XMFLOAT3 position, XMFLOAT3 direction, TeamType teamType, FlyingObjectType objectType)
+{
+	int idx{ GetPossibleIndex(objectType) };
+	if (idx != NONE)
 	{
-		for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
-		{
-			if (j == 0)
-			{
-				CShader::Render(pCamera, i);
-				m_ppMaterials[i]->UpdateShaderVariables();
-			}
-			if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
-		}
+		// Warning! 오브젝트 생성 부분 추가 필요
 	}
 }
 
@@ -142,7 +174,7 @@ void CFlyingShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRender
 {
 	m_nPipelineStates = 1;
 
-	m_nHeaps = 4;
+	m_nHeaps = m_nMesh;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
@@ -168,98 +200,76 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	
 	// 설정된 Possible Indices를 0(false)로 초기화
 	memset(m_objectsPossibleIndices.get(), false, m_nObjects * sizeof(bool));
-	
-	CTransformImporter transformInporter;
-	transformInporter.LoadMeshData("Resource//Data//NexusTowerSetting.txt");
 
 	m_ppObjects = new CCollisionObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	int accCnt{ 0 };
 
-	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, ncbElementBytes, m_nObjects);
-	for (int i = 0; i < m_nHeaps- 1; ++i)
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
+	for (int i = 0; i < m_nHeaps; ++i)
 	{
 		m_objectsIndices[objectOrder[i]].m_begIndex = accCnt;
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, transformInporter.m_iKindMeshCnt[i], 1, i);
-		CreateConstantBufferViews(pCreateMgr, transformInporter.m_iKindMeshCnt[i], m_pConstBuffer.Get(), ncbElementBytes, accCnt, i);
-		accCnt += transformInporter.m_iKindMeshCnt[i];
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_objectsMaxCount[objectOrder[i]], 1, i);
+		CreateConstantBufferViews(pCreateMgr, m_objectsMaxCount[objectOrder[i]], m_pConstBuffer.Get(), ncbElementBytes, accCnt, i);
+		accCnt += m_objectsMaxCount[objectOrder[i]];
 		m_objectsIndices[objectOrder[i]].m_endIndex = accCnt;
 	}
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, m_nHeaps - 1);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), ncbElementBytes, 0, m_nHeaps - 1);
-
+	
 #if USE_BATCH_MATERIAL
-	m_nMaterials = m_nHeaps - 1;
+	m_nMaterials = m_nMesh;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateShellMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[2] = Materials::CreateRoundSoapDispenserMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
-	m_ppMaterials[3] = Materials::CreateSquareSoapDispenserMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
 
-	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CStaticMesh *pMeshes[4];
-	pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Treasure Box Nexus(UV).meshinfo");
-	pMeshes[0]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(16)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(25), CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(16)));
+	m_srvIncrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 
-	pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Shell Nexus (UV).meshinfo");
-	pMeshes[1]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(10)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(18), CONVERT_PaperUnit_to_InG(10)));
+	// 필요한 메쉬 저장
+	m_pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Treasure Box Nexus(UV).meshinfo");
 
-	pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Circle Soap Dispenser (UV).meshinfo");
-	pMeshes[2]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(10)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(7), CONVERT_PaperUnit_to_InG(10)));
+	m_pMeshes[0]->AddRef();
 
-	pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Square Soap Dispenser ver.2 (UV).meshinfo");
-	pMeshes[3]->SetBoundingBox(
-		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(10)),
-		XMFLOAT3(CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(7), CONVERT_PaperUnit_to_InG(10)));
-	CNexusTower *pBuild = NULL;
+	// 오브젝트 생성
+	CFlyingObject *pObject{ NULL };
+	for (int j = 0; j < m_nObjects; ++j) {
+		pObject = new CFlyingObject(pCreateMgr);
 
-	m_nNexus = transformInporter.m_iKindMeshCnt[0] + transformInporter.m_iKindMeshCnt[1];
-	m_nTower = transformInporter.m_iKindMeshCnt[2] + transformInporter.m_iKindMeshCnt[3];
+		pObject->SetTeam(TeamType::None);
+		pObject->Rotate(0, 180, 0);
 
-	int cnt = 0;
-	for (int i = 0; i < m_nMaterials; ++i) {
-		m_meshCounts[i] = transformInporter.m_iKindMeshCnt[i];
-		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i]; ++j) {
-			XMFLOAT3 pos = transformInporter.m_Transform[cnt].pos;
-			XMFLOAT3 rot = transformInporter.m_Transform[cnt].rotation;
-			pBuild = new CNexusTower(pCreateMgr);
-			pBuild->SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
-			if (i == 0 || i == 2)
-			{
-				pBuild->SetTeam(TeamType::Blue);
-			}
-			else {
-				pBuild->SetTeam(TeamType::Red);
-			}
-			if (i < 2) {
-				pBuild->SetCollisionSize(CONVERT_PaperUnit_to_InG(40));
-				pBuild->SetType(ObjectType::Nexus);
-			}
-			else {
-				pBuild->SetCollisionSize(CONVERT_PaperUnit_to_InG(8));
-				pBuild->SetType(ObjectType::FirstTower);
+		pObject->SetStatic(StaticType::Move);
 
-			}
-			pBuild->Rotate(0, 180, 0);
-			pBuild->Rotate(-rot.x, rot.y, -rot.z);
-			pBuild->SetMesh(0, pMeshes[i]);
+		m_ppObjects[j] = pObject;
+	}
+}
 
-			pBuild->ResetCollisionLevel();
-			pBuild->SetStatic(StaticType::Static);
-
-			pBuild->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[i].ptr + (incrementSize * j));
-			m_ppObjects[cnt++] = pBuild;
+void CFlyingShader::ReleaseObjects()
+{
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			delete m_ppObjects[j];
 		}
+		Safe_Delete_Array(m_ppObjects);
+	}
+
+#if USE_BATCH_MATERIAL
+	if (m_ppMaterials)
+	{
+		for (int i = 0; i < m_nMaterials; ++i)
+		{
+			Safe_Delete(m_ppMaterials[i]);
+		}
+		Safe_Delete_Array(m_ppMaterials);
+	}
+#endif
+
+	for (int j = 0; j < m_nMesh; j++)
+	{
+		m_pMeshes[j]->Release();
 	}
 }
 
