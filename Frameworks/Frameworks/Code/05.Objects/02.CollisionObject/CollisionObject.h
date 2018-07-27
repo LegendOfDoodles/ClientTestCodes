@@ -59,6 +59,10 @@ public: // 공개 함수
 	bool GetDetected() { return m_Detected; }
 	
 	void GameOver() { m_GameOver = true; }
+
+	void Activate() { m_Activated = true; }
+	void Deactivate() { m_Activated = false; }
+
 protected: // 내부 함수
 
 protected: // 변수
@@ -77,4 +81,6 @@ protected: // 변수
 	StaticType m_StaticType {StaticType::Move};
 	shared_ptr<CCollisionManager> m_pColManager;
 	bool m_GameOver{ false };
+
+	bool m_Activated{ false };
 };

@@ -261,6 +261,9 @@
     <Filter Include="소스 파일\05.Objects\11.FlyingObject">
       <UniqueIdentifier>{ef7bd3f1-89c4-4646-b44d-f87086823612}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\07.ThrowingManager">
+      <UniqueIdentifier>{71ef734f-05c8-44a3-8c3d-d70465673f89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -488,6 +491,9 @@
     <ClInclude Include="Code\05.Objects\11.FlyingObject\FlyingObject.h">
       <Filter>소스 파일\05.Objects\11.FlyingObject</Filter>
     </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\07.ThrowingManager\ThrowingMgr.h">
+      <Filter>소스 파일\00.Global\01.Utility\07.ThrowingManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -696,6 +702,9 @@
     </ClCompile>
     <ClCompile Include="Code\05.Objects\11.FlyingObject\FlyingObject.cpp">
       <Filter>소스 파일\05.Objects\11.FlyingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\07.ThrowingManager\ThrowingMgr.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\07.ThrowingManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

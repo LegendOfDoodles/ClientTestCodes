@@ -9,7 +9,7 @@
 /// 목적: 날아다니는(화살 등) 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -51,10 +51,18 @@ void CFlyingShader::ReleaseUploadBuffers()
 
 void CFlyingShader::UpdateShaderVariables(int opt)
 {
-	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	int beg{ 0 }, end{ 0 };
 
-	for (int i = 0; i < m_nObjects; i++)
+	switch (opt)
+	{
+	case 0:	// Dumbel Update
+		beg = m_objectsIndices[FlyingObjectType::Roider_Dumbel].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::Roider_Dumbel].m_endIndex;
+		break;
+	}
+
+	for (int i = beg; i < end; i++)
 	{
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
@@ -64,44 +72,67 @@ void CFlyingShader::UpdateShaderVariables(int opt)
 
 void CFlyingShader::AnimateObjects(float timeElapsed)
 {
+	// 리스트에서 제거할 조건 함수
+	static auto removeFunc = [this](CCollisionObject* obj) {
+		if (obj->GetState() == StatesType::Remove)
+		{
+			ResetPossibleIndex(obj->GetIndex());
+			obj->Deactivate();
+			return true;
+		}
+		return false;
+	};
+
+	if (m_Paused) return;
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
+
+	// 더 이상 업데이트 하면 안되는 오브젝트 리스트에서 제거
+	m_dumbelList.remove_if(removeFunc);
 }
 
 void CFlyingShader::Render(CCamera *pCamera)
 {
-	UNREFERENCED_PARAMETER(pCamera);
-	//int cnt{ 0 };
-	//for (int i = 0; i < m_nMaterials; ++i)
-	//{
-	//	for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
-	//	{
-	//		if (j == 0)
-	//		{
-	//			CShader::Render(pCamera, i);
-	//			m_ppMaterials[i]->UpdateShaderVariables();
-	//		}
-	//		if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
-	//	}
-	//}
+	if (!m_dumbelList.empty())
+	{
+		CShader::Render(pCamera, 0);
+		m_ppMaterials[0]->UpdateShaderVariables();
+		for (auto iter = m_dumbelList.begin(); iter != m_dumbelList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 }
 
-void CFlyingShader::SpawnFlyingObject(XMFLOAT3 position, XMFLOAT3 direction, TeamType teamType, FlyingObjectType objectType)
+void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float positionOffset, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType)
 {
 	int idx{ GetPossibleIndex(objectType) };
+
 	if (idx != NONE)
 	{
-		// Warning! 오브젝트 생성 부분 추가 필요
+		m_ppObjects[idx]->SetMesh(0, m_pMeshes[0]);
+		m_ppObjects[idx]->SaveIndex(idx);
+		m_ppObjects[idx]->SetTeam(teamType);
+		m_ppObjects[idx]->SetDirection(direction);
+		m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + positionOffset, position.z));
+		m_ppObjects[idx]->SetFlyingObjectsType(objectType);
+		m_ppObjects[idx]->ResetCollisionLevel();
+		m_ppObjects[idx]->Activate();
+		int adjIdx{ idx - m_objectsIndices[objectType].m_begIndex };
+		if (objectType == FlyingObjectType::Roider_Dumbel)
+		{
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * adjIdx));
+			m_dumbelList.emplace_back(m_ppObjects[idx]);
+		}
 	}
 }
 
 void CFlyingShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
 {
 	for (int i = 0; i < m_nObjects; ++i) {
-
-		dynamic_cast<CCollisionObject*>(m_ppObjects[i])->SetCollisionManager(manager);
+		m_ppObjects[i]->SetCollisionManager(manager);
 	}
 }
 
@@ -165,7 +196,7 @@ D3D12_SHADER_BYTECODE CFlyingShader::CreatePixelShader(ComPtr<ID3DBlob>& pShader
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTexturedLightingEmissive",
+		"PSThrowingObj",
 		"ps_5_1",
 		pShaderBlob));
 }
@@ -209,6 +240,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	for (int i = 0; i < m_nHeaps; ++i)
 	{
+		m_objectsIndices[objectOrder[i]] = FlyingObjectIndices();
 		m_objectsIndices[objectOrder[i]].m_begIndex = accCnt;
 		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_objectsMaxCount[objectOrder[i]], 1, i);
 		CreateConstantBufferViews(pCreateMgr, m_objectsMaxCount[objectOrder[i]], m_pConstBuffer.Get(), ncbElementBytes, accCnt, i);
@@ -219,7 +251,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 #if USE_BATCH_MATERIAL
 	m_nMaterials = m_nMesh;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateTresureBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateDumbbellMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -227,9 +259,12 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_srvIncrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
 
 	// 필요한 메쉬 저장
-	m_pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Building//NexusTower//Treasure Box Nexus(UV).meshinfo");
+	m_pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Dumbbell//Dumbbell.meshinfo");
 
-	m_pMeshes[0]->AddRef();
+	for (int j = 0; j < m_nMesh; j++)
+	{
+		m_pMeshes[j]->AddRef();
+	}
 
 	// 오브젝트 생성
 	CFlyingObject *pObject{ NULL };

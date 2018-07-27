@@ -9,6 +9,7 @@
 #include "04.Shaders/05.PlayerShader/PlayerShader.h"
 #include "04.Shaders/06.NexusTowerShader/NexusTowerShader.h"
 #include "04.Shaders/07.NeutralityShader/NeutralityShader.h"
+#include "04.Shaders/08.FlyingShader/FlyingShader.h"
 #include "04.Shaders/98.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
@@ -25,26 +26,27 @@
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
+#include "00.Global/01.Utility/07.ThrowingManager/ThrowingMgr.h"
 #include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-23
+/// 최종 수정 날짜: 2018-07-27
 /// </summary>
 
-#define UI_Shader m_ppShaders[7]
-#define PlayerHP_Shader m_ppShaders[8]
-#define MinionHP_Shader m_ppShaders[9]
-#define MinimapIco_Shader m_ppShaders[10]
-#define BuildingMapIco_Shader m_ppShaders[11]
-#define CharFrame_Shader m_ppShaders[12]
-#define Minimap_Shader m_ppShaders[13]
-#define Skill_Shader m_ppShaders[14]
-#define Number_Shader m_ppShaders[15]
-#define SelectedSpecial_Shader m_ppShaders[16]
-#define NexusTowerHP_Shader m_ppShaders[17]
+#define UI_Shader m_ppShaders[8]
+#define PlayerHP_Shader m_ppShaders[9]
+#define MinionHP_Shader m_ppShaders[10]
+#define MinimapIco_Shader m_ppShaders[11]
+#define BuildingMapIco_Shader m_ppShaders[12]
+#define CharFrame_Shader m_ppShaders[13]
+#define Minimap_Shader m_ppShaders[14]
+#define Skill_Shader m_ppShaders[15]
+#define Number_Shader m_ppShaders[16]
+#define SelectedSpecial_Shader m_ppShaders[17]
+#define NexusTowerHP_Shader m_ppShaders[18]
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
@@ -88,7 +90,7 @@ void CScene::ReleaseUploadBuffers()
 
 void CScene::ProcessInput()
 {
-	static UCHAR pKeyBuffer[256];
+	UCHAR pKeyBuffer[256];
 
 	GetKeyboardState(pKeyBuffer);
 
@@ -97,6 +99,16 @@ void CScene::ProcessInput()
 	for (int i = 0; i < m_nShaders; ++i) {
 		if (continual)
 			continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
+	}
+	
+	if (GetAsyncKeyState('K') & 0x0001)
+	{
+		m_pThrowingMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetCollisionSize(),
+			m_pSelectedObject->GetLook(),
+			m_pSelectedObject->GetTeam(),
+			FlyingObjectType::Roider_Dumbel);
 	}
 }
 
@@ -326,7 +338,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 18;
+	m_nShaders = 19;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -336,6 +348,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders[4] = new CNeutralityShader(pCreateMgr);
 	m_ppShaders[5] = new CStaticObjectShader(pCreateMgr);
 	m_ppShaders[6] = new CNexusTowerShader(pCreateMgr);
+	m_ppShaders[7] = new CFlyingShader(pCreateMgr);
 
 	//UI Shader
 	UI_Shader = new CUIObjectShader(pCreateMgr);
@@ -406,6 +419,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
 	m_pCollisionManager = shared_ptr<CCollisionManager>(new CCollisionManager());
 	m_pUIObjectsManager = shared_ptr<CUIObjectManager>(new CUIObjectManager());
+	m_pThrowingMgr = shared_ptr<CThrowingMgr>(new CThrowingMgr());
+	m_pThrowingMgr->SetFlyingShader(static_cast<CFlyingShader*>(m_ppShaders[7]));
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
 

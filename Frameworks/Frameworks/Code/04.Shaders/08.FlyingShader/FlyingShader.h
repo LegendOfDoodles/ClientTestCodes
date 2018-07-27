@@ -27,9 +27,12 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	void SpawnFlyingObject(XMFLOAT3 position, XMFLOAT3 direction, TeamType teamType, FlyingObjectType objectType);
+	void SpawnFlyingObject(const XMFLOAT3& position, const float positionOffset, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
+
+	void Pause() { m_Paused = true; }
+	void Resume() { m_Paused = false; };
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -44,6 +47,7 @@ protected: // 내부 함수
 	virtual void ReleaseObjects();
 
 	int GetPossibleIndex(FlyingObjectType type);
+	void ResetPossibleIndex(int idx) { m_objectsPossibleIndices[idx] = false; }
 
 protected: // 변수
 	static const int m_nMesh{ 1 };
@@ -56,4 +60,6 @@ protected: // 변수
 	std::unique_ptr<bool[]> m_objectsPossibleIndices;
 
 	CollisionObjectList m_dumbelList;
+
+	bool m_Paused{ false };
 };

@@ -521,6 +521,24 @@ CMaterial * Materials::CreatePlayerMaterial(shared_ptr<CCreateMgr> pCreateMgr, D
 	return pMaterial;
 }
 
+CMaterial * Materials::CreateDumbbellMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2DARRAY, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Monster/Roider/Textures.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
 ////////////////////////////////////////////////////////////////////////
 // Sketch Effect
 CMaterial * Materials::CreateSketchMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)

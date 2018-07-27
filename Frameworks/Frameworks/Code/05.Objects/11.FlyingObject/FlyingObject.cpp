@@ -17,6 +17,8 @@ CFlyingObject::~CFlyingObject()
 // 공개 함수
 void CFlyingObject::Animate(float timeElapsed)
 {
+	if (!m_Activated) return;
+
 	if (m_flyingObjectType == FlyingObjectType::Roider_Dumbel)
 	{
 		m_distance += timeElapsed * m_speed;
@@ -34,14 +36,15 @@ void CFlyingObject::Animate(float timeElapsed)
 void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 {
 	m_flyingObjectType = type;
+	m_curState = StatesType::Idle;
 
 	if (type == FlyingObjectType::Roider_Dumbel)
 	{
 		m_fCollisionSize = CONVERT_PaperUnit_to_InG(1);
-		m_attackRange = 0.0f;
-		m_damage = 0.0f;
+		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_damage = 400.0f;
 		m_distance = 0.0f;
-		m_maxDistance = 0.0f;
+		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
 		m_speed = CONVERT_cm_to_InG(1.805f);
 	}
 }
@@ -77,24 +80,14 @@ void CFlyingObject::LookAt(XMFLOAT3 target)
 
 	// 회전 방향 결정
 	if (check < 0.0f)
-		Rotate(0.0f, 0.0f, -angle);
+		Rotate(0.0f, -angle, 0.0f);
 	else if (check > 0.0f)
-		Rotate(0.0f, 0.0f, angle);
+		Rotate(0.0f, angle, 0.0f);
 }
 
 void CFlyingObject::LookAt(XMFLOAT2 target)
 {
 	LookAt(XMFLOAT3(target.x, 0, target.y));
-}
-
-XMFLOAT3 CFlyingObject::GetLook()
-{
-	return(Vector3::ScalarProduct(XMFLOAT3(m_xmf4x4World._21, m_xmf4x4World._22, m_xmf4x4World._23), -1));
-}
-
-XMFLOAT3 CFlyingObject::GetUp()
-{
-	return(Vector3::Normalize(XMFLOAT3(m_xmf4x4World._31, m_xmf4x4World._32, m_xmf4x4World._33)));
 }
 
 void CFlyingObject::MoveToDirection(float dist)

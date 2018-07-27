@@ -24,9 +24,6 @@ protected: // 내부 함수
 	void LookAt(XMFLOAT3 objPosition);
 	void LookAt(XMFLOAT2 objPosition);
 
-	XMFLOAT3 GetLook();
-	XMFLOAT3 GetUp();
-
 	void MoveToDirection(float dist);
 
 protected: // 변수

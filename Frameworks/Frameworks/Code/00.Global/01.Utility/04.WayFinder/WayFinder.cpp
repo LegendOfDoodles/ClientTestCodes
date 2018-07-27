@@ -86,6 +86,8 @@ CWayFinder::~CWayFinder()
 	m_edges.clear();
 }
 
+////////////////////////////////////////////////////////////////////////
+// 공개 함수
 // 직선 이동 가능한지 파악하기 위한 함수
 bool CWayFinder::CanGoDirectly(const XMFLOAT2 & source, const XMFLOAT2 & target, float collisionSize)
 {
@@ -317,9 +319,6 @@ bool CWayFinder::IsInTerrain(const XMFLOAT2 & target)
 	if (target.y > TERRAIN_SIZE_HEIGHT) return false;
 	return true;
 }
-
-////////////////////////////////////////////////////////////////////////
-// 공개 함수
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
