@@ -12,7 +12,7 @@
 /// 목적: 중립 몬스터 관리 및 렌더링용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-23
+/// 최종 수정 날짜: 2018-07-29
 /// </summary>
 
 #define NetralMaterial m_ppMaterials[0]
@@ -276,6 +276,8 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 {
 	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
+	CreatePathes();
+
 	CTransformImporter transformInporter;
 
 	transformInporter.LoadMeshData("Resource//Data//MonsterSetting.txt");
@@ -379,6 +381,8 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		pRoider->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 		pRoider->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
 		
+		pRoider->SetPathes(m_pathes);
+
 		pRoider->SetNexusPoses(blueNexusPos, redNexusPos);
 		pRoider->SaveCurrentState();
 
@@ -391,4 +395,21 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 	Safe_Delete(pSThrow);
 	Safe_Delete(pSSmash);
 	Safe_Delete(pSDie);
+}
+
+void CNeutralityShader::CreatePathes()
+{
+	CTransformImporter transformInporter;
+	transformInporter.LoadMeshData("Resource/Data/Pathes.txt");
+	for (int i = 0, cnt = 0; i < 5; ++i)
+	{
+		m_pathes[i].push_back(CPathEdge(XMFLOAT2(0, 0), XMFLOAT2(CONVERT_Unit_to_InG(transformInporter.m_Transform[cnt].pos.x), CONVERT_Unit_to_InG(transformInporter.m_Transform[cnt].pos.z))));
+		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i] - 1; ++j, ++cnt)
+		{
+			XMFLOAT3 from = transformInporter.m_Transform[cnt].pos;
+			XMFLOAT3 to = transformInporter.m_Transform[cnt + 1].pos;
+			m_pathes[i].push_back(CPathEdge(XMFLOAT2(CONVERT_Unit_to_InG(from.x), CONVERT_Unit_to_InG(from.z)), XMFLOAT2(CONVERT_Unit_to_InG(to.x), CONVERT_Unit_to_InG(to.z))));
+		}
+		++cnt;
+	}
 }

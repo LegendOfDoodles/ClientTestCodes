@@ -83,7 +83,6 @@ void CRenderMgr::RenderDepth(shared_ptr<CScene> pScene)
 
 void CRenderMgr::RenderColor(shared_ptr<CScene> pScene)
 {
-	HRESULT hResult;
 	// Set Barrier
 	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
 	{

@@ -383,22 +383,56 @@ void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 
 	m_pColManager->AddCollider(this);
 
+	CPathEdge pathBeg{ m_pathes[Minion_Species::Data_Prepare].front() };
+	XMFLOAT3 curPos{ GetPosition() };
+	float distSqr{ FLT_MAX };
+
+	for (Path::iterator iter = m_pathes[Minion_Species::Data_Prepare].begin(); iter != m_pathes[Minion_Species::Data_Prepare].end(); ++iter)
+	{
+		float curDistSqr{ Vector3::DistanceSquare(curPos, XMFLOAT3((*iter).To().x, curPos.y, (*iter).To().y)) };
+		if (curDistSqr < distSqr)
+		{
+			pathBeg = (*iter);
+			distSqr = curDistSqr;
+		}
+	}
+
+	Path *newPath{ NULL };
 	if (m_TeamType == TeamType::Blue)
 	{
-		SetPathToGo(pWayFinder->GetPathToPosition(
-			GetPosition(),
-			m_redNexusLoc,
-			GetCollisionSize()));
+		// 위로 가야함
+		if (GetPosition().z > TERRAIN_SIZE_HEIGHT * 0.5f)
+		{
+			newPath = new Path(m_pathes[Minion_Species::Blue_Up]);
+		}
+		else
+		{
+			newPath = new Path(m_pathes[Minion_Species::Blue_Down]);
+		}
+		newPath->remove_if([pathBeg](CPathEdge& edge) {
+			return edge.To().x < pathBeg.To().x;
+		});
 	}
 	else if (m_TeamType == TeamType::Red)
 	{
-		SetPathToGo(pWayFinder->GetPathToPosition(
-			GetPosition(),
-			m_blueNexusLoc,
-			GetCollisionSize()));
+		// 위로 가야함
+		if (GetPosition().z > TERRAIN_SIZE_HEIGHT * 0.5f)
+		{
+			newPath = new Path(m_pathes[Minion_Species::Red_Up]);
+		}
+		else
+		{
+			newPath = new Path(m_pathes[Minion_Species::Red_Down]);
+		}
+		newPath->remove_if([pathBeg](CPathEdge& edge) {
+			return edge.To().x > pathBeg.To().x;
+		});
 	}
 
-	ResetSubPath();
+	newPath->push_front(pathBeg);
+
+	SetPathToGo(newPath);
+	GenerateSubPathToPosition(pWayFinder, XMFLOAT3(pathBeg.To().x, curPos.y, pathBeg.To().y));
 	SetState(StatesType::Walk);
 }
 

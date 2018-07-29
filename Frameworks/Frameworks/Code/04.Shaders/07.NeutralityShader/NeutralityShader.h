@@ -3,6 +3,8 @@
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 
+typedef std::list<CPathEdge> Path;
+
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
@@ -52,6 +54,8 @@ protected: // 내부 함수
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
 
+	void CreatePathes();
+
 protected: // 변수
 	shared_ptr<CCollisionManager> m_pColManager;
 	shared_ptr<CUIObjectManager> m_pGaugeManger;
@@ -59,4 +63,6 @@ protected: // 변수
 
 	shared_ptr<CCreateMgr> m_pCreateMgr{ NULL };
 	shared_ptr<CFSMMgr> m_pFSMMgr;
+
+	Path m_pathes[5];
 };

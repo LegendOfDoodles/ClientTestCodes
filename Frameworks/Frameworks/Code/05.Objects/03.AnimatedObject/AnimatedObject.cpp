@@ -220,6 +220,15 @@ void CAnimatedObject::GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinde
 	LookAt(m_subDestination);
 }
 
+void CAnimatedObject::GenerateSubPathToPosition(shared_ptr<CWayFinder> pWayFinder, XMFLOAT3 position)
+{
+	ResetSubPath();
+	m_subPath = pWayFinder->GetPathToPosition(GetPosition(), position, GetCollisionSize());
+	m_subDestination = m_subPath->front().To();
+	m_subPath->pop_front();
+	LookAt(m_subDestination);
+}
+
 void CAnimatedObject::RegenerateLookAt()
 {
 	if (NoneDestination(PathType::Sub)) 

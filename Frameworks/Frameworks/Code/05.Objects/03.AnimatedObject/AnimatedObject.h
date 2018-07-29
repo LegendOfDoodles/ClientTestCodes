@@ -42,6 +42,7 @@ public: // 공개 함수
 	void MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder = NULL);
 
 	void GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinder);
+	void GenerateSubPathToPosition(shared_ptr<CWayFinder> pWayFinder, XMFLOAT3 position);
 	virtual void RegenerateLookAt();
 
 	virtual bool Attackable(CCollisionObject* other);

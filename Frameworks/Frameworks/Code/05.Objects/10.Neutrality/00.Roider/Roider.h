@@ -4,6 +4,8 @@
 #include "05.Objects/97.Skeleton/Skeleton.h"
 #include "00.Global/01.Utility/Enumerations.h"
 
+typedef std::list<CPathEdge> Path;
+
 class CRoider : public CAnimatedObject
 {
 public: // 생성자, 소멸자
@@ -49,6 +51,8 @@ public:	// 외부 함수
 
 	virtual CommonInfo* GetCommonStatus() { return &m_StatusInfo; };
 
+	void SetPathes(Path* pathes) { m_pathes = pathes; }
+
 protected:	// 내부 함수
 	virtual void AdjustAnimationIndex();
 	void AnimateByCurState();
@@ -82,4 +86,6 @@ protected:	// 변수
 	CCollisionObject* m_pDamager{ NULL };
 
 	TeamType m_lastDamageTeam;
+
+	Path* m_pathes;
 };
