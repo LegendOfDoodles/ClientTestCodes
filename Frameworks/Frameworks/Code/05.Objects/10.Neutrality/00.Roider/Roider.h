@@ -22,6 +22,9 @@ public:	// 외부 함수
 	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 	virtual void PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 
+	virtual void LookAt(XMFLOAT3 objPosition);
+	virtual void LookAt(XMFLOAT2 objPosition);
+
 	void SaveCurrentState();
 
 	void SetNexusPoses(const XMFLOAT3& bluePos, const XMFLOAT3& redPos)
@@ -58,8 +61,6 @@ protected:	// 변수
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/
-
-	ObjectType m_ObjectType{ ObjectType::Roider };
 
 	/*
 	0. SwordPlayer, 1. StaffPlayer,   2. BowPlayer,

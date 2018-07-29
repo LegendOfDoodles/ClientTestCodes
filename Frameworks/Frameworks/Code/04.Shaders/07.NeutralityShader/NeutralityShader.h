@@ -6,6 +6,7 @@
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
+class CThrowingMgr;
 class CUIObjectManager;
 class CFSMMgr;
 
@@ -33,6 +34,7 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
+	void SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager);
 
 	void SetCollisionManager(shared_ptr<CCollisionManager> pManger) { m_pColManager = pManger; }
 	void SetGaugeManger(shared_ptr<CUIObjectManager> pManger) { m_pGaugeManger = pManger; }

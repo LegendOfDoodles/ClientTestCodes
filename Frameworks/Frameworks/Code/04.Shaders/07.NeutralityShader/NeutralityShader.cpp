@@ -158,9 +158,17 @@ bool CNeutralityShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 void CNeutralityShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
 {
-	for (int i = 0; i < m_nObjects; ++i) {
-
+	for (int i = 0; i < m_nObjects; ++i) 
+	{
 		m_ppObjects[i]->SetCollisionManager(manager);
+	}
+}
+
+void CNeutralityShader::SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager)
+{
+	for (int i = 0; i < m_nObjects; ++i)
+	{
+		m_ppObjects[i]->SetThrowingManager(manager);
 	}
 }
 

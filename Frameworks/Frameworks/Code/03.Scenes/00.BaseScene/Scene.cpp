@@ -454,6 +454,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 	pNetral->SetColManagerToObject(m_pCollisionManager);
 	pNetral->SetFSMManager(m_pFSMMgr);
+	pNetral->SetThrowingManagerToObject(m_pThrowingMgr);
 
 	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[6];
 	nColliderObject = pNTS->GetObjectCount();
@@ -462,6 +463,9 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_pCollisionManager->AddCollider((pNTS->GetCollisionObjects())[i]);
 	}
 	pNTS->SetColManagerToObject(m_pCollisionManager);
+
+	CFlyingShader* pFS = (CFlyingShader*)m_ppShaders[7];
+	pFS->SetColManagerToObject(m_pCollisionManager);
 
 	BuildLights();
 }

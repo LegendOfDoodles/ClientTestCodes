@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ThrowingMgr.h"
+#include "04.Shaders/08.FlyingShader/FlyingShader.h"
 
 /// <summary>
 /// 목적: 날아가는 오브젝트(화살, 아령 등)의 생성 요청 관리를 위한 클래스

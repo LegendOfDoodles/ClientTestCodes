@@ -234,8 +234,17 @@ bool CAnimatedObject::Attackable(CCollisionObject * other)
 {
 	if (!CheckEnemyState(other)) return false;
 	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
-	// 공격 범위의 절반 안에 적이 있는지 확인 -> 여러 적을 공격하기 위함
-	return (dstSqr < m_attackRange * m_attackRange * 0.5f);
+	// 공격 범위의 70% 안에 적이 있는지 확인 -> 여러 적을 공격하기 위함
+	return (dstSqr < m_attackRange * m_attackRange * 0.7f);
+}
+
+// 원거리 확인 함수
+bool CAnimatedObject::AttackableFarRange(CCollisionObject * other)
+{
+	if (!CheckEnemyState(other)) return false;
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
+	// 공격 범위의 70% 안에 적이 있는지 확인 -> 여러 적을 공격하기 위함
+	return (dstSqr < m_farAttackRange * m_farAttackRange * 0.7f);
 }
 
 bool CAnimatedObject::Chaseable(CCollisionObject * other)

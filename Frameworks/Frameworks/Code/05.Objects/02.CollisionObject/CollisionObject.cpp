@@ -34,3 +34,9 @@ bool CCollisionObject::Attackable(CCollisionObject * other)
 	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
 	return (dstSqr < m_attackRange * m_attackRange);
 }
+
+bool CCollisionObject::AttackableFarRange(CCollisionObject * other)
+{
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
+	return (dstSqr < m_farAttackRange * m_farAttackRange);
+}

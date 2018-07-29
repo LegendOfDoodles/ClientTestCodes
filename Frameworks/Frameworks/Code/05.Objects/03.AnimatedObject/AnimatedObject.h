@@ -29,8 +29,8 @@ public: // 공개 함수
 	virtual void MoveUp(float fDistance = 1.0f);
 	virtual void MoveForward(float fDistance = 1.0f);
 
-	void LookAt(XMFLOAT3 objPosition);
-	void LookAt(XMFLOAT2 objPosition);
+	virtual void LookAt(XMFLOAT3 objPosition);
+	virtual void LookAt(XMFLOAT2 objPosition);
 
 	virtual XMFLOAT3 GetLook();
 	virtual XMFLOAT3 GetUp();
@@ -45,9 +45,11 @@ public: // 공개 함수
 	virtual void RegenerateLookAt();
 
 	virtual bool Attackable(CCollisionObject* other);
+	virtual bool AttackableFarRange(CCollisionObject* other);
 	virtual bool Chaseable(CCollisionObject* other);
 
-	void SetAnimation(AnimationsType newAnimation) { m_nCurrAnimation = newAnimation; }
+	void SetAnimation(AnimationsType newAnimation) { m_nNextAnimation = m_nCurrAnimation = newAnimation; }
+	void SetNextAnimation(AnimationsType newAnimation) { m_nNextAnimation = newAnimation; }
 
 	void SetTerrain(CHeightMapTerrain *pTerrain) { m_pTerrain = pTerrain; }
 
@@ -75,6 +77,7 @@ protected: // 변수
 	int m_nAniLength[20];
 	int m_nAniIndex{ 0 };
 	AnimationsType m_nCurrAnimation{ Animations::Idle };
+	AnimationsType m_nNextAnimation{ Animations::Idle };
 
 	int m_nAniCnt{ 0 };
 

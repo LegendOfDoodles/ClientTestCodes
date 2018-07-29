@@ -198,7 +198,7 @@ CSwordMinion::CSwordMinion(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes): CMin
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
 
-	m_attackRange = CONVERT_PaperUnit_to_InG(8);
+	m_attackRange = CONVERT_PaperUnit_to_InG(10);
 }
 
 CSwordMinion::~CSwordMinion()

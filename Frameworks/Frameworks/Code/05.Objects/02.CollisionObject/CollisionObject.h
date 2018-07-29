@@ -1,6 +1,7 @@
 #pragma once
 #include "05.Objects/00.BaseObject/BaseObject.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
+#include "00.Global/01.Utility/07.ThrowingManager/ThrowingMgr.h"
 
 class CWayFinder;
 
@@ -14,6 +15,7 @@ public: // 공개 함수
 	int tag{ 0 };
 	bool CheckEnemyState(CCollisionObject* other);
 	virtual bool Attackable(CCollisionObject* other);
+	virtual bool AttackableFarRange(CCollisionObject* other);
 
 	virtual void PlayIdle(float timeElapsed) { timeElapsed; }
 	virtual void PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder) { timeElapsed; pWayFinder; }
@@ -42,6 +44,9 @@ public: // 공개 함수
 		m_xmf2CollisionLevel.x = floor(GetPosition().x / (TERRAIN_SIZE_WIDTH / 50));
 		m_xmf2CollisionLevel.y = floor(GetPosition().z / (TERRAIN_SIZE_WIDTH / 50));
 	}
+
+	void SetThrowingManager(shared_ptr<CThrowingMgr> manager) { m_pThrowingMgr = manager; }
+
 	void SetStatic(StaticType type) { m_StaticType = type; }
 	StaticType GetStaticType() { return m_StaticType; }
 
@@ -76,10 +81,13 @@ protected: // 변수
 	float m_sightRange{ 10.0f };
 	float m_detectRange{ 0.0f };
 	float m_attackRange{ 0.0f };
+	float m_farAttackRange{ 0.0f };
 
 	CCollisionObject* m_pEnemy{ NULL };
 	StaticType m_StaticType {StaticType::Move};
 	shared_ptr<CCollisionManager> m_pColManager;
+	shared_ptr<CThrowingMgr> m_pThrowingMgr;
+
 	bool m_GameOver{ false };
 
 	bool m_Activated{ false };

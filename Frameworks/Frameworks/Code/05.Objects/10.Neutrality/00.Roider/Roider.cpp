@@ -6,13 +6,15 @@
 /// 목적: 중립 몬스터(로이더) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-23
+/// 최종 수정 날짜: 2018-07-29
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CRoider::CRoider(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObject(pCreateMgr, nMeshes)
 {
+	m_ObjectType = ObjectType::Roider;
+
 	m_sightRange = CONVERT_PaperUnit_to_InG(80.0f);
 	m_detectRange = CONVERT_PaperUnit_to_InG(40.0f);
 	m_speed = CONVERT_cm_to_InG(3.237f);
@@ -23,8 +25,8 @@ CRoider::CRoider(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObje
 	m_StatusInfo.Atk = 200.0f;
 	m_StatusInfo.Exp = 100;
 
-	// Warning! 원거리 공격 추가될 경우 공격 범위를 늘려야 함
-	m_attackRange = CONVERT_PaperUnit_to_InG(11);
+	m_attackRange = CONVERT_PaperUnit_to_InG(16);
+	m_farAttackRange = CONVERT_PaperUnit_to_InG(30);
 }
 
 CRoider::~CRoider()
@@ -35,8 +37,8 @@ CRoider::~CRoider()
 // 공개 함수
 void CRoider::Animate(float timeElapsed)
 {
-	AnimateByCurState();
 	AdjustAnimationIndex();
+	AnimateByCurState();
 
 	if (m_curState != States::Remove)
 	{
@@ -93,7 +95,7 @@ void CRoider::SetState(StatesType newState)
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Attack:
-		m_nCurrAnimation = Animations::Attack1;
+		SetAnimation(Animations::Attack1);
 		m_fFrameTime = 0;
 		break;
 	case States::Die:
@@ -138,7 +140,14 @@ void CRoider::PlayIdle(float timeElapsed)
 
 	SetEnemy(enemy);
 
-	if (Attackable(enemy)) SetState(States::Attack);
+	if (Attackable(enemy))
+	{
+		SetState(States::Attack);
+	}
+	else if (AttackableFarRange(enemy)) {
+		SetState(States::Attack);
+		SetAnimation(Animations::Attack2);
+	}
 	else SetState(States::Chase);
 }
 
@@ -176,7 +185,14 @@ void CRoider::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 		MoveToSubDestination(timeElapsed, pWayFinder);
 	}
 
-	if (Attackable(m_pEnemy)) SetState(States::Attack);
+	if (Attackable(m_pEnemy))
+	{
+		SetState(States::Attack);
+	}
+	else if (AttackableFarRange(m_pEnemy)) {
+		SetState(States::Attack);
+		SetAnimation(Animations::Attack2);
+	}
 }
 
 void CRoider::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
@@ -189,7 +205,17 @@ void CRoider::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 		GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
 	}
-	else if (!Attackable(m_pEnemy))
+	else if (Attackable(m_pEnemy))
+	{
+		if (m_nCurrAnimation != Animations::Attack1)
+			m_nNextAnimation = Animations::Attack1;
+	}
+	else if (AttackableFarRange(m_pEnemy))
+	{
+		if (m_nCurrAnimation != Animations::Attack2)
+			m_nNextAnimation = Animations::Attack2;
+	}
+	else
 	{
 		SetNextState(States::Chase);
 	}
@@ -207,6 +233,38 @@ void CRoider::PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	{
 		Respawn();
 	}
+}
+
+void CRoider::LookAt(XMFLOAT3 objPosition)
+{
+	if (m_curState == States::Win) return;
+	if (m_curState == States::Defeat) return;
+
+	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
+	XMFLOAT3 playerLook = GetLook();
+	XMFLOAT3 playerPos = GetPosition();
+
+	objPosition.y = playerPos.y;
+
+	XMFLOAT3 towardVector = Vector3::Subtract(objPosition, GetPosition(), true);
+
+	float angle{ Vector3::DotProduct(towardVector, playerLook) };
+	angle = XMConvertToDegrees(acos(angle));
+
+	if (isnan(angle)) return;
+
+	float check{ Vector3::DotProduct(Vector3::CrossProduct(towardVector, playerLook), upVector) };
+
+	// 캐릭터가 선택된 오브젝트 보다 오른쪽 보고 있는 경우
+	if (check < 0.0f)
+		Rotate(0.0f, 0.0f, -angle);
+	else if (check > 0.0f)
+		Rotate(0.0f, 0.0f, angle);
+}
+
+void CRoider::LookAt(XMFLOAT2 objPosition)
+{
+	LookAt(XMFLOAT3(objPosition.x, 0, objPosition.y));
 }
 
 void CRoider::SaveCurrentState()
@@ -249,23 +307,42 @@ void CRoider::AnimateByCurState()
 		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 		break;
 	case States::Attack:
-		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-			&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-			m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(11), 180, m_StatusInfo.Atk);
+		if (GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			LookAt(m_pEnemy->GetPosition());
 		}
-		if (m_nCurrAnimation == Animations::Attack1) {
+		if (m_nCurrAnimation == Animations::Attack1) 
+		{
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(m_attackRange), 180, m_StatusInfo.Atk);
+			}
 			if (m_curState != m_nextState)
 			{
 				if (GetAnimTimeRemainRatio() > 0.05f) break;
 				SetState(m_nextState);
 			}
+			else if (m_nCurrAnimation != m_nNextAnimation)
+			{
+				if (GetAnimTimeRemainRatio() > 0.05f) break;
+				m_nCurrAnimation = m_nNextAnimation;
+			}
 		}
 		else if (m_nCurrAnimation == Animations::Attack2)
 		{
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize, GetLook(), m_TeamType, FlyingObjectType::Roider_Dumbel);
+			}
 			if (m_curState != m_nextState)
 			{
 				if (GetAnimTimeRemainRatio() > 0.05f) break;
 				SetState(m_nextState);
+			}
+			else if (m_nCurrAnimation != m_nNextAnimation)
+			{
+				if (GetAnimTimeRemainRatio() > 0.05f) break;
+				m_nCurrAnimation = m_nNextAnimation;
 			}
 		}
 		break;

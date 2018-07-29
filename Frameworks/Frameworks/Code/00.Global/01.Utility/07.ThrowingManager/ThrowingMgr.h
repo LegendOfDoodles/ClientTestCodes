@@ -1,5 +1,5 @@
 #pragma once
-#include "04.Shaders/08.FlyingShader/FlyingShader.h"
+class CFlyingShader;
 
 class CThrowingMgr
 {

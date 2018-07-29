@@ -2,6 +2,13 @@
 #include "FlyingObject.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 
+/// <summary>
+/// 목적: 날아가는(스킬, 화살 등) 오브젝트 처리 클래스
+/// 최종 수정자:  김나단
+/// 수정자 목록:  김나단
+/// 최종 수정 날짜: 2018-07-16
+/// </summary>
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CFlyingObject::CFlyingObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CCollisionObject(pCreateMgr, nMeshes)
@@ -23,9 +30,7 @@ void CFlyingObject::Animate(float timeElapsed)
 	{
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
-		// Warning! 공격 처리 필요
-		// 매번 검사 할 경우 오래걸리는지 확인 필요
-		// m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_attackRange, m_attackRange, m_damage * timeElapsed);
+		m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_attackRange, m_attackRange, m_damage * timeElapsed);
 		if (m_distance > m_maxDistance)
 		{
 			m_curState = StatesType::Remove;
@@ -40,9 +45,9 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 
 	if (type == FlyingObjectType::Roider_Dumbel)
 	{
-		m_fCollisionSize = CONVERT_PaperUnit_to_InG(1);
+		m_fCollisionSize = CONVERT_PaperUnit_to_InG(3);
 		m_attackRange = CONVERT_PaperUnit_to_InG(2);
-		m_damage = 400.0f;
+		m_damage = 10.0f;
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
 		m_speed = CONVERT_cm_to_InG(1.805f);

@@ -13,7 +13,7 @@ public:
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 
-	virtual void SetCollisionManager(CCollisionManager* manager) { m_pColManager = manager; }
+	virtual void SetCollisionManager(shared_ptr<CCollisionManager> manager) { m_pColManager = manager; }
 
 	virtual void SetFlyingObjectsType(FlyingObjectType type);
 	virtual void SetDirection(const XMFLOAT3& direction);
@@ -34,6 +34,6 @@ protected: // 변수
 	float	m_maxDistance{ 0.0f };
 	XMFLOAT3 m_direction{};
 
-	CCollisionManager * m_pColManager{ NULL };
+	shared_ptr<CCollisionManager> m_pColManager{ NULL };
 };
 
