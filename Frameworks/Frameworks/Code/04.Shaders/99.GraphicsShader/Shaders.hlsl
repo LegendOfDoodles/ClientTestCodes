@@ -256,6 +256,7 @@ struct VS_TEXTURED_LIGHTING_OUTPUT
 	//	nointerpolation float3 normalW : NORMAL;
     float2 uv : TEXCOORD;
     float3 tangentW : TANGENT;
+	float fow : FOW;
 };
 
 struct FOWINFO
@@ -275,6 +276,10 @@ VS_TEXTURED_LIGHTING_OUTPUT VSTexturedLighting(VS_TEXTURED_LIGHTING_INPUT input)
     output.uv = input.uv;
 	output.tangentW = mul(input.tangent, (float3x3)gmtxGameObject);
 
+	int indexI = clamp((int)((output.positionW.x) / 41.4), 0, 243);//243
+	int indexJ = clamp((int)((output.positionW.z) / 41.4), 0, 122);//122
+	
+	output.fow = gFogOfWar[indexI].m_bFoW[indexJ];
     return (output);
 }
 
@@ -295,13 +300,8 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTexturedLightingDetail(VS_TEXTURED_LIGHTING_
 
     output.normal = float4(N, 1);
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-	int indexI = clamp((int)((input.positionW.x) / 41.4), 0, 243);//243
-	int indexJ = clamp((int)((input.positionW.z) / 41.4), 0, 122);//122
+	output.color += float4(-0.5f* input.fow, -0.5f, -0.5f, 0);
 
-	if (gFogOfWar[indexI].m_bFoW[indexJ] == 0)
-	{
-		output.color += float4(-0.5f, -0.5f, -0.5f, 0);
-	}
 	
 	output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
