@@ -194,7 +194,7 @@ void CMinionHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 
-	m_ppMaterials[0] = Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateHPGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateRedMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle[0], &m_srvGPUDescriptorStartHandle[0]);
 #endif
@@ -231,7 +231,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		CGaugeObject *pGaugeObject{ NULL };
 		CCollisionObject *pMinionObjects{ NULL };
 
-		pGaugeObject = new CGaugeObject(m_pCreateMgr, GagueUIType::MinionGauge);
+		pGaugeObject = new CGaugeObject(m_pCreateMgr, GaugeUIType::MinionGauge);
 		pMinionObjects = (*minion);
 
 		m_ppMaterials[0]->AddRef();

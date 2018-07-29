@@ -264,6 +264,9 @@
     <Filter Include="소스 파일\00.Global\01.Utility\07.ThrowingManager">
       <UniqueIdentifier>{71ef734f-05c8-44a3-8c3d-d70465673f89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader">
+      <UniqueIdentifier>{3c8e4587-f4b6-4e52-a4ce-8a270921888f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -494,6 +497,9 @@
     <ClInclude Include="Code\00.Global\01.Utility\07.ThrowingManager\ThrowingMgr.h">
       <Filter>소스 파일\00.Global\01.Utility\07.ThrowingManager</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader\NeutralityGaugeShader.h">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -705,6 +711,9 @@
     </ClCompile>
     <ClCompile Include="Code\00.Global\01.Utility\07.ThrowingManager\ThrowingMgr.cpp">
       <Filter>소스 파일\00.Global\01.Utility\07.ThrowingManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader\NeutralityGaugeShader.cpp">
+      <Filter>소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

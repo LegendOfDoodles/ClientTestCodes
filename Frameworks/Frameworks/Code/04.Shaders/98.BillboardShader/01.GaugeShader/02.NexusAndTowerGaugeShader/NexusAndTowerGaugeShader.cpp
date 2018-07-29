@@ -203,10 +203,10 @@ void CNexusAndTowerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr>  pCreateMg
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 
-	m_ppMaterials[0] = Materials::CreateRedGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateHPGaugeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
 	for (int i = 0; i < m_nObjects; ++i) {
-		pGaugeObject = new CGaugeObject(pCreateMgr, GagueUIType::NexusAndTower);
+		pGaugeObject = new CGaugeObject(pCreateMgr, GaugeUIType::NexusAndTower);
 		pGaugeObject->SetCamera(m_pCamera);
 		pGaugeObject->SetObject(m_ppNexusAndTower[i]);
 		

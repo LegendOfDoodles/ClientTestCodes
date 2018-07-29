@@ -15,6 +15,7 @@
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/02.NexusAndTowerGaugeShader/NexusAndTowerGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/03.CharacterGaugeShader/CharacterFrameGaugeShader.h"
+#include "04.Shaders/98.BillboardShader/01.GaugeShader/04.NeutralityGaugeShader/NeutralityGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/02.IconShader/00.MinimapIconShader/MinimapIconShader.h"
 #include "04.Shaders/98.BillboardShader/02.IconShader/01.BuildingMinimapIconShader/BuildingMinimapIconShader.h"
 #include "04.Shaders/98.BillboardShader/03.MinimapUIShader/MinimapShader.h"
@@ -47,6 +48,7 @@
 #define Number_Shader m_ppShaders[16]
 #define SelectedSpecial_Shader m_ppShaders[17]
 #define NexusTowerHP_Shader m_ppShaders[18]
+#define NeutralityHP_Shader m_ppShaders[19]
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
@@ -338,7 +340,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 19;
+	m_nShaders = 20;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -362,13 +364,14 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	Number_Shader = new CNumberShader(pCreateMgr);
 	SelectedSpecial_Shader = new CSelectedSpecialShader(pCreateMgr);
 	NexusTowerHP_Shader = new CNexusAndTowerHPGaugeShader(pCreateMgr);
+	NeutralityHP_Shader = new CNeutralityGaugeShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 11; ++i)
+	for (int i = 2; i < m_nShaders - 12; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -382,8 +385,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CMinimapIconShader*)MinimapIco_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
-	((CMinimapIconShader*)MinimapIco_Shader)->SetRoiderCnt(((CPlayerShader *)m_ppShaders[4])->GetObjectCount());
-	((CMinimapIconShader*)MinimapIco_Shader)->SetRoider(((CPlayerShader *)m_ppShaders[4])->GetCollisionObjects());
+	((CMinimapIconShader*)MinimapIco_Shader)->SetRoiderCnt(((CNeutralityShader *)m_ppShaders[4])->GetObjectCount());
+	((CMinimapIconShader*)MinimapIco_Shader)->SetRoider(((CNeutralityShader *)m_ppShaders[4])->GetCollisionObjects());
 
 	((CBuildingMinimapIconShader*)BuildingMapIco_Shader)->SetNexusAndTowerCnt(
 		((CNexusTowerShader *)m_ppShaders[6])->GetNexusCount(),
@@ -403,6 +406,9 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	((CPlayerHPGaugeShader*)Number_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CPlayerHPGaugeShader*)Number_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
+	((CNeutralityGaugeShader*)NeutralityHP_Shader)->SetRoiderCnt(((CNeutralityShader *)m_ppShaders[4])->GetObjectCount());
+	((CNeutralityGaugeShader*)NeutralityHP_Shader)->SetRoider(((CNeutralityShader *)m_ppShaders[4])->GetCollisionObjects());
+
 	UI_Shader->Initialize(pCreateMgr, m_pCamera);
 	PlayerHP_Shader->Initialize(pCreateMgr, m_pCamera);
 	MinionHP_Shader->Initialize(pCreateMgr, m_pCamera);
@@ -414,6 +420,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	Number_Shader->Initialize(pCreateMgr, m_pCamera);
 	SelectedSpecial_Shader->Initialize(pCreateMgr, m_pCamera);
 	NexusTowerHP_Shader->Initialize(pCreateMgr, m_pCamera);
+	NeutralityHP_Shader->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());

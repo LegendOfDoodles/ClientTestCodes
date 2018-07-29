@@ -122,6 +122,27 @@ D3D12_INPUT_LAYOUT_DESC CBillboardShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
+D3D12_BLEND_DESC CBillboardShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC blendDesc;
+	::ZeroMemory(&blendDesc, sizeof(D3D12_BLEND_DESC));
+
+	blendDesc.AlphaToCoverageEnable = TRUE;
+	blendDesc.IndependentBlendEnable = FALSE;
+	blendDesc.RenderTarget[0].BlendEnable = FALSE;
+	blendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return(blendDesc);
+}
+
 D3D12_SHADER_BYTECODE CBillboardShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(

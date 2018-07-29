@@ -328,6 +328,7 @@ void CAnimatedObject::ResetSubPath()
 {
 	if (m_subPath)
 	{
+		m_subPath->clear();
 		Safe_Delete(m_subPath);
 		ResetDestination(PathType::Sub);
 	}

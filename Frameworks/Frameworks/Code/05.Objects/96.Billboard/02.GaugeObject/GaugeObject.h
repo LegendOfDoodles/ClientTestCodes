@@ -5,7 +5,7 @@ class CGaugeObject : public CBillboardObject
 {
 public:	// 생성자, 소멸자
 	CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr);
-	CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GagueUIType type);
+	CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GaugeUIType type);
 	virtual ~CGaugeObject();
 
 public: // 공개함수
@@ -25,5 +25,5 @@ public: // 공개함수
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
 	ObjectType		  m_MasterObjectType;
-	GagueUIType		  m_Type;
+	GaugeUIType		  m_Type;
 };

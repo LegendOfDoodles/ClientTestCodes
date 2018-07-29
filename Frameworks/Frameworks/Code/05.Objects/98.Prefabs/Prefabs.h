@@ -184,11 +184,11 @@ namespace Materials
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
 		// HP
-	CMaterial* CreateRedGaugeMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+	CMaterial* CreateHPGaugeMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
-	CMaterial* CreateBlueGaugeMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+	CMaterial* CreateNeutralityGagueMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 

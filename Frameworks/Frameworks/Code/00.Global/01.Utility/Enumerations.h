@@ -214,10 +214,11 @@ enum SkillUIType {
 	RSkill
 };
 
-enum GagueUIType {
+enum GaugeUIType {
 	PlayerGauge,
 	MinionGauge,
 	NexusAndTower,
+	RoiderGauge,
 };
 
 enum IconUIType {

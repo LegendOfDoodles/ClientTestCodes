@@ -188,14 +188,21 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 
 	CShader::Render(pCamera, 2);
 	// ¹Ì´Ï¾ð
+
+	m_ppMaterials[2]->UpdateShaderVariable(0);
 	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
-		
 		CCollisionObject* master = (*iter)->GetMasterObject();
 
-		if (master->GetTeam() == TeamType::Blue)	m_ppMaterials[2]->UpdateShaderVariable(0);
-		else										m_ppMaterials[2]->UpdateShaderVariable(1);
+		if (master->GetTeam() == TeamType::Blue)
+			(*iter)->Render(pCamera);
+	}
 
-		(*iter)->Render(pCamera);
+	m_ppMaterials[2]->UpdateShaderVariable(1);
+	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
+		CCollisionObject* master = (*iter)->GetMasterObject();
+
+		if (master->GetTeam() == TeamType::Red)
+			(*iter)->Render(pCamera);
 	}
 }
 

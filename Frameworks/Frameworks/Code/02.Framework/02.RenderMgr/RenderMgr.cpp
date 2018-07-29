@@ -122,20 +122,14 @@ void CRenderMgr::RenderColor(shared_ptr<CScene> pScene)
 		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
 	}
 
-	// Close Command List
-	hResult = m_pCommandList->Close();
-	ThrowIfFailed(hResult);
-
-	// Excute Command List
-	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
-	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
-
-	WaitForGpuComplete();
+	ExecuteCommandList();
 }
 
 void CRenderMgr::RenderLight(shared_ptr<CScene> pScene)
 {
 	HRESULT hResult;
+
+	WaitForGpuComplete();
 
 	hResult = m_pCommandAllocator->Reset();
 	ThrowIfFailed(hResult);
@@ -164,15 +158,7 @@ void CRenderMgr::RenderLight(shared_ptr<CScene> pScene)
 
 	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
-	// Close Command List
-	hResult = m_pCommandList->Close();
-	ThrowIfFailed(hResult);
-
-	// Excute Command List
-	ID3D12CommandList *ppCommandLists[] = { m_pCommandList.Get() };
-	m_pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
-
-	WaitForGpuComplete();
+	ExecuteCommandList();
 
 	// Present
 	hResult = m_pSwapChain->Present(0, 0);
@@ -188,7 +174,8 @@ void CRenderMgr::SetDsvCPUHandleWithDsvHeap(ComPtr<ID3D12DescriptorHeap> pDsvDes
 void CRenderMgr::WaitForGpuComplete()
 {
 	HRESULT hResult;
-	UINT64 fenceValue = ++m_fenceValues[m_swapChainBufferIndex];
+	++m_fenceValues[m_swapChainBufferIndex];
+	UINT64 fenceValue = m_fenceValues[m_swapChainBufferIndex];
 	
 	hResult = m_pCommandQueue->Signal(m_pFence.Get(), fenceValue);
 	ThrowIfFailed(hResult);

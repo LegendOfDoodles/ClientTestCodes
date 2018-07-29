@@ -15,7 +15,7 @@ CGaugeObject::CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr)
 {
 }
 
-CGaugeObject::CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GagueUIType type)
+CGaugeObject::CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GaugeUIType type)
 	: CBillboardObject(pCreateMgr)
 {
 	CTexturedRectMesh * pRectMesh = NULL;
@@ -25,6 +25,7 @@ CGaugeObject::CGaugeObject(shared_ptr<CCreateMgr> pCreateMgr, GagueUIType type)
 	{
 	case PlayerGauge:
 	case MinionGauge:
+	case RoiderGauge:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 40.f, FRAME_BUFFER_HEIGHT / 144.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
@@ -48,19 +49,19 @@ void CGaugeObject::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 
-	if (m_Type == GagueUIType::PlayerGauge)
+	if (m_Type == GaugeUIType::PlayerGauge || m_Type == GaugeUIType::RoiderGauge)
 	{
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 110.f;
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
-	else if (m_Type == GagueUIType::MinionGauge)
+	else if (m_Type == GaugeUIType::MinionGauge)
 	{
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
-	else if (m_Type == GagueUIType::NexusAndTower) {
+	else if (m_Type == GaugeUIType::NexusAndTower) {
 		if (m_MasterObjectType == ObjectType::Nexus) {
 			m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 			m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 300.f;
@@ -100,14 +101,14 @@ void CGaugeObject::Render(CCamera * pCamera, UINT istanceCnt)
 
 float CGaugeObject::GetCurrentHP()
 {
-	if (m_Type == GagueUIType::PlayerGauge) {
+	if (m_Type == GaugeUIType::PlayerGauge) {
 		return (m_pMasterObject->GetPlayerStatus()->HP / m_pMasterObject->GetPlayerStatus()->maxHP);
 	}
-	else if (m_Type == GagueUIType::MinionGauge)
+	else if (m_Type == GaugeUIType::MinionGauge || m_Type == GaugeUIType::RoiderGauge)
 	{
 		return (m_pMasterObject->GetCommonStatus()->HP / m_pMasterObject->GetCommonStatus()->maxHP);
 	}
-	else if (m_Type == GagueUIType::NexusAndTower) {
+	else if (m_Type == GaugeUIType::NexusAndTower) {
 		return (m_pMasterObject->GetNexusAndTowerStatus()->HP / m_pMasterObject->GetNexusAndTowerStatus()->maxHP);
 	}
 	return 0;
