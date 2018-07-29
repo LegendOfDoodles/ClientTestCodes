@@ -143,6 +143,20 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 					m_lstRedSight.push_back((*i));
 				}
 			}
+			else {
+				if (m_BlueSight[(int)pos.x][(int)pos.y].Detected) {
+					if (m_User == Blue) {
+						(*i)->SetDetected(true);
+					}
+					m_lstBlueSight.push_back((*i));
+				}
+				if (m_RedSight[(int)pos.x][(int)pos.y].Detected) {
+					if (m_User == Red) {
+						(*i)->SetDetected(true);
+					}
+					m_lstRedSight.push_back((*i));
+				}
+			}
 		}
 
 

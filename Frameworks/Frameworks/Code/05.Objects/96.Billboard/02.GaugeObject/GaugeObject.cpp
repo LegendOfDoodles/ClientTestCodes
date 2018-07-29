@@ -80,6 +80,7 @@ void CGaugeObject::Animate(float fTimeElapsed)
 void CGaugeObject::Render(CCamera * pCamera, UINT istanceCnt)
 {
 	OnPrepareRender();
+	if (!IsVisible(pCamera) || !m_pMasterObject->GetDetected()) return;
 
 	if (m_pMaterial)
 	{

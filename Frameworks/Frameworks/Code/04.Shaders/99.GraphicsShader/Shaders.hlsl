@@ -300,7 +300,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTexturedLightingDetail(VS_TEXTURED_LIGHTING_
 
     output.normal = float4(N, 1);
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-	output.color += float4(-0.5f* input.fow, -0.5f, -0.5f, 0);
+	output.color += float4(-0.5f* (1-input.fow), -0.5f*(1-input.fow), -0.5f*(1-input.fow), 0);
 
 	
 	output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
@@ -370,6 +370,7 @@ struct VS_TERRAIN_OUTPUT
 {
     float4 position : POSITION;
     float2 uv : TEXCOORD;
+	float fow : FOW;
 };
 
 VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
@@ -378,6 +379,11 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 
     output.position = mul(float4(input.position, 1.0f), gmtxGameObject);
     output.uv = input.uv;
+
+	int indexI = clamp((int)((output.position.x) / 41.4), 0, 243);//243
+	int indexJ = clamp((int)((output.position.z) / 41.4), 0, 122);//122
+
+	output.fow = gFogOfWar[indexI].m_bFoW[indexJ];
 
     return (output);
 }
@@ -407,6 +413,7 @@ struct HS_TERRAIN_OUTPUT
 {
     float4 position : POSITION;
     float2 uv : TEXCOORD;
+	float fow : FOW;
 };
 
 [domain("quad")]
@@ -420,7 +427,7 @@ HS_TERRAIN_OUTPUT HSTerrain(InputPatch<VS_TERRAIN_OUTPUT, 4> P, uint i : SV_Outp
     HS_TERRAIN_OUTPUT output;
     output.position = P[i].position;
     output.uv = P[i].uv;
-	
+	output.fow = P[i].fow;
     return output;
 }
 
@@ -429,6 +436,7 @@ struct DS_TERRAIN_OUTPUT
     float4 position : SV_POSITION;
     float4 positionW : POSITIONW;
     float2 uv : TEXCOORD;
+	float fow : FOW;
 };
 
 [domain("quad")]
@@ -444,12 +452,17 @@ DS_TERRAIN_OUTPUT DSTerrain(PatchTess patchTess, float2 uv : SV_DomainLocation, 
     float2 uv2 = lerp(quad[2].uv, quad[3].uv, 1 - uv.y);
     float2 uvResult = lerp(uv1, uv2, 1 - uv.x);
 
+	float2 f1 = lerp(quad[0].fow, quad[1].fow, 1 - uv.y);
+	float2 f2 = lerp(quad[2].fow, quad[3].fow, 1 - uv.y);
+	float2 fResult = lerp(f1, f2, 1 - uv.x);
+
 	// Displacement Mapping
     p.y += gtxtTextures.SampleLevel(wrapSampler, float3(uvResult, gnMix3Data), 0).a * 255 * 2;
 
     output.position = mul(mul(p, gmtxView), gmtxProjection);
     output.positionW = p;
     output.uv = uvResult;
+	output.fow = fResult;
 
     return output;
 }
@@ -466,10 +479,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
 	int indexI = clamp((int)((input.positionW.x) / 41.4), 0, 243);//243
 	int indexJ = clamp((int)((input.positionW.z) / 41.4), 0, 122);//122
 
-	if (gFogOfWar[indexI].m_bFoW[indexJ] == 0)
-	{
-		output.color += float4(-0.5f, -0.5f, -0.5f, 0);
-	}
+	output.color += float4(-0.5f* (1-input.fow), -0.5f*(1-input.fow), -0.5f*(1-input.fow), 0);
 
     output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 0);
     output.albedo = gMaterials.m_cAlbedo;
