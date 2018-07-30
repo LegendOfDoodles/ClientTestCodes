@@ -180,7 +180,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					TeamType b = pCol->GetTeam();
 					if (a != b) {
 
-						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
+						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()),true)
 						{
 							XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
 							XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
@@ -208,7 +208,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					TeamType a = (*i)->GetTeam();
 					TeamType b = pCol->GetTeam();
 					if (a != b) {
-						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
+						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()),true)
 						{
 							XMFLOAT3 apos = (*i)->GetPosition();
 							XMFLOAT3 bpos = pCol->GetPosition();
@@ -254,7 +254,7 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 		{
 
 			if ((*i) != pCol && (*i)->GetTeam() != pCol->GetTeam()) {
-				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()))
+				if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()),true)
 				{
 					XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
 					XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);

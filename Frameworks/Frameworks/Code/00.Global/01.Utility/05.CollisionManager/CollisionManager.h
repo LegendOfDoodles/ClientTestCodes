@@ -31,8 +31,9 @@ public:
 		return static_cast<int>(m_lstBlueSight.size());
 	}
 protected:
-	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b) {
-		if (Vector2::Distance(a, b) < 2)
+	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b,bool attack = false) {
+
+		if ((Vector2::Distance(a, b) <10&&!attack)|| (Vector2::Distance(a, b) <20&& attack))
 			return true;
 		else
 			return false;
