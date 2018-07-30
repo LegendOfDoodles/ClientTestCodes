@@ -88,6 +88,7 @@ void CRoider::SetState(StatesType newState)
 		break;
 	case States::Walk:
 		RegenerateLookAt();
+		m_availableTime = 0.0f;
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:
@@ -428,8 +429,8 @@ void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 			return edge.To().x > pathBeg.To().x;
 		});
 	}
-
-	newPath->push_front(pathBeg);
+	
+	m_destination = pathBeg.To();
 
 	SetPathToGo(newPath);
 	GenerateSubPathToPosition(pWayFinder, XMFLOAT3(pathBeg.To().x, curPos.y, pathBeg.To().y));

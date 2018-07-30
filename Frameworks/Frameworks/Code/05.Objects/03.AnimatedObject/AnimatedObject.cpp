@@ -175,9 +175,9 @@ ProcessType CAnimatedObject::MoveToDestination(float timeElapsed, shared_ptr<CWa
 
 void CAnimatedObject::MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
-	m_availableTime -= timeElapsed;
 	if (pWayFinder != NULL)
 	{
+		m_availableTime -= timeElapsed;
 		if (m_availableTime <= 0.0f)
 		{
 			m_availableTime = TIME_AVAILABILITY_CHECK;
@@ -284,18 +284,17 @@ bool CAnimatedObject::IsArrive(float dst, PathType type)
 	int distanceSqr = static_cast<int>(Vector2::DistanceSquare(curPos, curDestination));
 	// 정확히 도착 하는 경우
 	if (distanceSqr < dst * dst) return true;
-	if (curPath->empty()) 
+	if (!curPath->empty()) 
 	{
-		if (m_availableTime < NONE) return true;
-		return false;
+		XMFLOAT2 next = curPath->front().To();
+		XMFLOAT2 dstToNext = Vector2::Subtract(next, curDestination, true);
+		float dstToNextLengthSqr = Vector2::DistanceSquare(next, curDestination);
+		float curPosToNextLength = Vector2::DotProduct(Vector2::Subtract(next, curPos), dstToNext);
+
+		return dstToNextLengthSqr > curPosToNextLength * curPosToNextLength;
 	}
 
-	XMFLOAT2 next = curPath->front().To();
-	XMFLOAT2 dstToNext = Vector2::Subtract(next, curDestination, true);
-	float dstToNextLengthSqr = Vector2::DistanceSquare(next, curDestination);
-	float curPosToNextLength = Vector2::DotProduct(Vector2::Subtract(next, curPos), dstToNext);
-
-	return dstToNextLengthSqr > curPosToNextLength * curPosToNextLength;
+	return false;
 }
 
 bool CAnimatedObject::Walkable()
