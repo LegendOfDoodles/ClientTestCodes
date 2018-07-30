@@ -26,26 +26,27 @@ public:
 	int(*GetFoW(void))[NODE_HEIGHT];
 
 
-	NodeMap** GetNodeMap() { return m_nodeMap; }
 	float GetnodeSize() { return nodeSize; }
 	int GetEnemyCout() {
 		return static_cast<int>(m_lstBlueSight.size());
 	}
 protected:
-	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b) {
-		if (Vector2::Distance(a, b) < 2)
+	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b,bool attack = false) {
+
+		if ((Vector2::Distance(a, b) <10&&!attack)|| (Vector2::Distance(a, b) <20&& attack))
 			return true;
 		else
 			return false;
 	}
 
-	void SearchSight(XMFLOAT2 startpos, int dir, int slength,bool UserTeam = true);
+	void SearchSight(XMFLOAT2 startpos, int dir, int slength, TeamType team);
 
 
 protected:
 	TeamType m_Winner{ TeamType::None };
 	TeamType m_User{ TeamType::Blue };
-	NodeMap** m_nodeMap;
+	NodeMap** m_BlueSight;
+	NodeMap** m_RedSight;
 	float nodeSize{0};
 	XMFLOAT2 nodeWH;
 	int Fow[NODE_WIDTH][NODE_HEIGHT];
