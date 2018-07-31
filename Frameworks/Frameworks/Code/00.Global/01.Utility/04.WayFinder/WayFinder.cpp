@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-20
+/// 최종 수정 날짜: 2018-07-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ bool CWayFinder::CanGoDirectly(const XMFLOAT2 & source, const XMFLOAT2 & target,
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
 	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, collisionSize * 0.5f) };
-	XMFLOAT2 curPos = source;
+	XMFLOAT2 curPos = Vector2::Add(source, addVal);
 
 	do
 	{
@@ -145,7 +145,7 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 {
 	Path *path{ nullptr };
 
-	XMFLOAT2 adjTarget{ target };
+	XMFLOAT2 adjSource{ source }, adjTarget{ target };
 
 	// 시작지와 끝 지점에서 가장 가까운 노드 검색
 	int srcIndex = FindClosestNodeIndexWithPosition(source);
@@ -154,21 +154,23 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 	if (dstIndex == INVALID_NODE) return nullptr;
 
 	// 도착지가 충돌체 위인 경우 도착지를 충돌이 없는 가장 가까운 위치로 변경한다.
+	if (m_pCollisionMapImage->GetCollision(source.x, source.y))
+		adjSource = GetClosestNotCollidePos(source, m_nodes[srcIndex].Position(), collisionSize);
 	if (m_pCollisionMapImage->GetCollision(target.x, target.y))
 		adjTarget = GetClosestNotCollidePos(target, m_nodes[dstIndex].Position(), collisionSize);
 
 	// 직선으로 이동 가능한 경우
-	if (CanGoDirectly(source, adjTarget, collisionSize))
+	if (CanGoDirectly(adjSource, adjTarget, collisionSize))
 	{
 		// 목적지만 패스에 넣고 종료
 		path = new Path;
-		path->push_back(CPathEdge(source, adjTarget));
+		path->push_back(CPathEdge(adjSource, adjTarget));
 		return path;
 	}
 	else
 	{
 		// 길찾기 수행
-		if (source.x < adjTarget.x) m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), srcIndex, dstIndex));
+		if (adjSource.x < adjTarget.x) m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), srcIndex, dstIndex));
 		else m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), dstIndex, srcIndex));
 
 		int result;
@@ -185,7 +187,7 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 			if (!path->empty())
 			{
 				// 소스가 오른쪽 이었으면 패스를 뒤집는다.
-				if (source.x < adjTarget.x)
+				if (adjSource.x < adjTarget.x)
 				{
 					// 패스에 도착지를 추가로 연결하고 종료한다.
 					path->push_back(CPathEdge(path->back().To(), target));

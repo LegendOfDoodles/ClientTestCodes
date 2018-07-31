@@ -263,8 +263,6 @@ void CNumberShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 	/* Timer */
 	for (int i = 0; i < 2; ++i) {
-		int checkNum = static_cast<int>(m_iTimer[i]);		// 자리 수 확인에서 사용할 변수
-
 		m_iTimerPositionalNum[i] = 2;
 
 		// Num[0] 부터 1의 자리 10의 자리 순차적 증가 저장

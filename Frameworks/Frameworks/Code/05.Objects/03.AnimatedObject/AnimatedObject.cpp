@@ -7,7 +7,7 @@
 /// 목적: 움직이는 오브젝트 처리용 기본 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -214,6 +214,14 @@ void CAnimatedObject::MoveToSubDestination(float timeElapsed, shared_ptr<CWayFin
 void CAnimatedObject::GenerateSubPathToMainPath(shared_ptr<CWayFinder> pWayFinder)
 {
 	ResetSubPath();
+	if (NoneDestination(PathType::Main))
+	{
+		if (m_mainPath && !m_mainPath->empty())
+		{
+			m_destination = m_mainPath->front().To();
+			m_mainPath->pop_front();
+		}
+	}
 	m_subPath = pWayFinder->GetPathToPosition(GetPosition(), m_destination, GetCollisionSize());
 	m_subDestination = m_subPath->front().To();
 	m_subPath->pop_front();

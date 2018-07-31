@@ -5,7 +5,7 @@
 /// 목적: 충돌체가 있는 오브젝트 구분용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-20
+/// 최종 수정 날짜: 2018-07-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -26,6 +26,7 @@ bool CCollisionObject::CheckEnemyState(CCollisionObject * other)
 	if (!other) return false;
 	if (other->GetState() == States::Die) return false;
 	if (other->GetState() == States::Remove) return false;
+	if (m_TeamType == other->GetTeam()) return false;
 	return true;
 }
 
