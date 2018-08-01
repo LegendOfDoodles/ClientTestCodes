@@ -103,7 +103,7 @@ void CScene::ProcessInput()
 			continual = m_ppShaders[i]->OnProcessKeyInput(pKeyBuffer);
 	}
 	
-	if (GetAsyncKeyState('K') & 0x0001)
+	if (m_pSelectedObject && GetAsyncKeyState('K') & 0x0001)
 	{
 		m_pThrowingMgr->RequestSpawn(
 			m_pSelectedObject->GetPosition(),

@@ -63,6 +63,8 @@ public: // 공개 함수
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
+	void ResetWorldMatrix() { XMStoreFloat4x4(&m_xmf4x4World, XMMatrixIdentity()); }
+
 	XMFLOAT4X4* GetWorldMatrix() { return &m_xmf4x4World; }
 	XMFLOAT4X4* GetFrameMatrix() { return m_xmf4x4Frame; }
 

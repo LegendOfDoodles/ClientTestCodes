@@ -65,7 +65,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 void CFlyingObject::SetDirection(const XMFLOAT3 & direction)
 {
 	m_direction = direction;
-	LookAt(Vector3::ScalarProduct(direction, 100000, false));
+	LookAt(Vector3::Add(GetPosition(), Vector3::ScalarProduct(direction, 10000, false)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ void CFlyingObject::LookAt(XMFLOAT3 target)
 
 	target.y = objPos.y;
 
-	XMFLOAT3 towardVector = Vector3::Subtract(target, GetPosition(), true);
+	XMFLOAT3 towardVector = Vector3::Subtract(GetPosition(), target, true);
 
 	float angle{ Vector3::DotProduct(towardVector, objLookVector) };
 	angle = XMConvertToDegrees(acos(angle));
@@ -93,9 +93,9 @@ void CFlyingObject::LookAt(XMFLOAT3 target)
 
 	// 회전 방향 결정
 	if (check < 0.0f)
-		Rotate(0.0f, -angle, 0.0f);
-	else if (check > 0.0f)
 		Rotate(0.0f, angle, 0.0f);
+	else if (check > 0.0f)
+		Rotate(0.0f, -angle, 0.0f);
 }
 
 void CFlyingObject::LookAt(XMFLOAT2 target)

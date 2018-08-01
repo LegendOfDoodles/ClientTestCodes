@@ -131,9 +131,9 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float posi
 	{
 		m_ppObjects[idx]->SaveIndex(idx);
 		m_ppObjects[idx]->SetTeam(teamType);
+		m_ppObjects[idx]->SetFlyingObjectsType(objectType);
 		m_ppObjects[idx]->SetDirection(direction);
 		m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + positionOffset, position.z));
-		m_ppObjects[idx]->SetFlyingObjectsType(objectType);
 		m_ppObjects[idx]->ResetCollisionLevel();
 		m_ppObjects[idx]->Activate();
 		int adjIdx{ idx - m_objectsIndices[objectType].m_begIndex };
@@ -141,6 +141,7 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float posi
 		{
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[0]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * adjIdx));
+			m_ppObjects[idx]->Rotate(0, RandInRange(0.0f, 360.0f), 0);
 			m_dumbelList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == FlyingObjectType::Minion_Arrow)
@@ -349,7 +350,6 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 		pObject = new CFlyingObject(pCreateMgr);
 
 		pObject->SetTeam(TeamType::None);
-		pObject->Rotate(0, 180, 0);
 
 		pObject->SetStatic(StaticType::Move);
 
