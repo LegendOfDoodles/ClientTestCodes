@@ -299,6 +299,10 @@ void CMagicMinion::Animate(float timeElapsed)
 			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize, GetLook(), m_TeamType, FlyingObjectType::Minion_Magic);
+			}
 			if (m_nCurrAnimation == Animations::Attack1) {
 				if (m_curState == m_nextState)
 				{
@@ -378,6 +382,10 @@ void CBowMinion::Animate(float timeElapsed)
 			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
 			break;
 		case States::Attack:
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize, GetLook(), m_TeamType, FlyingObjectType::Minion_Arrow);
+			}
 			if (m_nCurrAnimation == Animations::Attack1)
 			{
 				if (m_curState == m_nextState)

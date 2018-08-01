@@ -9,7 +9,7 @@
 /// 목적: 날아다니는(화살 등) 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-27
+/// 최종 수정 날짜: 2018-07-01
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,9 @@ void CFlyingShader::ReleaseUploadBuffers()
 	{
 		m_pMeshes[j]->ReleaseUploadBuffers();
 	}
+
+	if (!m_dumbelList.empty()) m_dumbelList.clear();
+	if (!m_arrowList.empty()) m_arrowList.clear();
 }
 
 void CFlyingShader::UpdateShaderVariables(int opt)
@@ -59,6 +62,10 @@ void CFlyingShader::UpdateShaderVariables(int opt)
 	case 0:	// Dumbel Update
 		beg = m_objectsIndices[FlyingObjectType::Roider_Dumbel].m_begIndex;
 		end = m_objectsIndices[FlyingObjectType::Roider_Dumbel].m_endIndex;
+		break;
+	case 1:	// Minion Arrow Update
+		beg = m_objectsIndices[FlyingObjectType::Minion_Arrow].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::Minion_Arrow].m_endIndex;
 		break;
 	}
 
@@ -91,6 +98,7 @@ void CFlyingShader::AnimateObjects(float timeElapsed)
 
 	// 더 이상 업데이트 하면 안되는 오브젝트 리스트에서 제거
 	m_dumbelList.remove_if(removeFunc);
+	m_arrowList.remove_if(removeFunc);
 }
 
 void CFlyingShader::Render(CCamera *pCamera)
@@ -104,6 +112,15 @@ void CFlyingShader::Render(CCamera *pCamera)
 			(*iter)->Render(pCamera);
 		}
 	}
+	if (!m_arrowList.empty())
+	{
+		CShader::Render(pCamera, 1, 1);
+		m_ppMaterials[1]->UpdateShaderVariables();
+		for (auto iter = m_arrowList.begin(); iter != m_arrowList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 }
 
 void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float positionOffset, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType)
@@ -112,7 +129,6 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float posi
 
 	if (idx != NONE)
 	{
-		m_ppObjects[idx]->SetMesh(0, m_pMeshes[0]);
 		m_ppObjects[idx]->SaveIndex(idx);
 		m_ppObjects[idx]->SetTeam(teamType);
 		m_ppObjects[idx]->SetDirection(direction);
@@ -123,8 +139,15 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float posi
 		int adjIdx{ idx - m_objectsIndices[objectType].m_begIndex };
 		if (objectType == FlyingObjectType::Roider_Dumbel)
 		{
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[0]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * adjIdx));
 			m_dumbelList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::Minion_Arrow)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[1]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * adjIdx));
+			m_arrowList.emplace_back(m_ppObjects[idx]);
 		}
 	}
 }
@@ -196,6 +219,15 @@ D3D12_SHADER_BYTECODE CFlyingShader::CreatePixelShader(ComPtr<ID3DBlob>& pShader
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"PSThrowingObjEmissive",
+		"ps_5_1",
+		pShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CFlyingShader::CreateNonEmissivePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
 		"PSThrowingObj",
 		"ps_5_1",
 		pShaderBlob));
@@ -203,12 +235,53 @@ D3D12_SHADER_BYTECODE CFlyingShader::CreatePixelShader(ComPtr<ID3DBlob>& pShader
 
 void CFlyingShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
-	m_nPipelineStates = 1;
+	UNREFERENCED_PARAMETER(isRenderShadow);
+
+	m_nPipelineStates = 2;
 
 	m_nHeaps = m_nMesh;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
+	m_ppPipelineStates.resize(m_nPipelineStates);
+
+	m_isRenderBB = isRenderBB;
+
+	int index{ 0 };
+	HRESULT hResult;
+	ComPtr<ID3DBlob> pVertexShaderBlob, pPixelShaderBlob;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
+	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+
+	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature().Get();
+	pipelineStateDesc.VS = CreateVertexShader(pVertexShaderBlob);
+	pipelineStateDesc.PS = CreatePixelShader(pPixelShaderBlob);
+	pipelineStateDesc.RasterizerState = CreateRasterizerState();
+	pipelineStateDesc.BlendState = CreateBlendState();
+	pipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	pipelineStateDesc.InputLayout = CreateInputLayout();
+	pipelineStateDesc.SampleMask = UINT_MAX;
+	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	pipelineStateDesc.NumRenderTargets = nRenderTargets;
+	for (UINT i = 0; i < nRenderTargets; i++)
+	{
+		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
+	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	pipelineStateDesc.SampleDesc.Count = 1;
+	pipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+
+	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&pipelineStateDesc,
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
+	ThrowIfFailed(hResult);
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC NonEmissivePipelineStateDesc{ pipelineStateDesc };
+	NonEmissivePipelineStateDesc.PS = CreateNonEmissivePixelShader(pPixelShaderBlob);
+	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&NonEmissivePipelineStateDesc,
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
+	ThrowIfFailed(hResult);
 }
 
 void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
@@ -220,11 +293,13 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	// 오브젝트 순서 설정
 	FlyingObjectType objectOrder[]{
-		FlyingObjectType::Roider_Dumbel
+		FlyingObjectType::Roider_Dumbel,
+		FlyingObjectType::Minion_Arrow
 	};
 
 	// 각 오브젝트의 최대 개수 설정
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Roider_Dumbel] = monsterTransformImporter.m_iKindMeshCnt[0];
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::Minion_Arrow] = MAX_ARROW;
 
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
@@ -252,6 +327,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_nMaterials = m_nMesh;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreateDumbbellMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreateArrowMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -260,6 +336,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	// 필요한 메쉬 저장
 	m_pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Dumbbell//Dumbbell.meshinfo");
+	m_pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//Arrow.meshinfo");
 
 	for (int j = 0; j < m_nMesh; j++)
 	{

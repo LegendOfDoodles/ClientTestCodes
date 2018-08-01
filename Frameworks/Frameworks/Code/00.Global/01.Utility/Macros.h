@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-22
+/// 최종 수정 날짜: 2018-08-01
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -64,6 +64,7 @@
 
 // 최대, 최소 수치
 #define MAX_MINION 300
+#define MAX_ARROW 70
 
 // 최대, 최소 속도
 #define MIN_CAMERA_SPEED 100.0f

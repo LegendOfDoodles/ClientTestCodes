@@ -26,7 +26,8 @@ void CFlyingObject::Animate(float timeElapsed)
 {
 	if (!m_Activated) return;
 
-	if (m_flyingObjectType == FlyingObjectType::Roider_Dumbel)
+	if (m_flyingObjectType == FlyingObjectType::Roider_Dumbel ||
+		m_flyingObjectType == FlyingObjectType::Minion_Arrow)
 	{
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
@@ -45,11 +46,18 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 
 	if (type == FlyingObjectType::Roider_Dumbel)
 	{
-		m_fCollisionSize = CONVERT_PaperUnit_to_InG(3);
-		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_attackRange = CONVERT_PaperUnit_to_InG(3);
 		m_damage = 10.0f;
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
+		m_speed = CONVERT_cm_to_InG(1.805f);
+	}
+	else if (type == FlyingObjectType::Minion_Arrow)
+	{
+		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_damage = 10.0f;
+		m_distance = 0.0f;
+		m_maxDistance = CONVERT_PaperUnit_to_InG(24);
 		m_speed = CONVERT_cm_to_InG(1.805f);
 	}
 }

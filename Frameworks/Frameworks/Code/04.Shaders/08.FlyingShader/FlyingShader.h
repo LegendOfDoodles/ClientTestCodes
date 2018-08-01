@@ -40,6 +40,8 @@ protected: // 내부 함수
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
+	D3D12_SHADER_BYTECODE CreateNonEmissivePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
+
 	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
@@ -50,7 +52,7 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_objectsPossibleIndices[idx] = false; }
 
 protected: // 변수
-	static const int m_nMesh{ 1 };
+	static const int m_nMesh{ 2 };
 	CStaticMesh * m_pMeshes[m_nMesh];
 
 	UINT m_srvIncrementSize{ 0 };
@@ -60,6 +62,7 @@ protected: // 변수
 	std::unique_ptr<bool[]> m_objectsPossibleIndices;
 
 	CollisionObjectList m_dumbelList;
+	CollisionObjectList m_arrowList;
 
 	bool m_Paused{ false };
 };

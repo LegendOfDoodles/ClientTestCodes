@@ -20,6 +20,17 @@ struct PS_MULTIPLE_RENDER_TARGETS_OUTPUT
     float4 toonPower : SV_TARGET6;
 };
 
+struct PS_MULTIPLE_RENDER_TARGETS_OUTPUT_UV
+{
+    float4 color : SV_TARGET0;
+    float4 normal : SV_TARGET1;
+    float4 roughMetalFresnel : SV_TARGET2;
+    float4 albedo : SV_TARGET3;
+    float4 position : SV_TARGET4;
+    float4 toonPower : SV_TARGET6;
+    float4 uv : SV_TARGET7;
+};
+
 struct PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE
 {
     float4 color : SV_TARGET0;
@@ -335,7 +346,29 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSTexturedLightingEmissive(VS_TEXTURE
     return output;
 }
 
-PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSThrowingObj(VS_TEXTURED_LIGHTING_OUTPUT input)
+PS_MULTIPLE_RENDER_TARGETS_OUTPUT_UV PSThrowingObj(VS_TEXTURED_LIGHTING_OUTPUT input)
+{
+    PS_MULTIPLE_RENDER_TARGETS_OUTPUT_UV output;
+    float3 N = normalize(input.normalW);
+    float3 T = normalize(input.tangentW - dot(input.tangentW, N) * N);
+    float3 B = cross(N, T); // 노말과 탄젠트를 외적해서 바이 탄젠트(바이 노말)생성
+    float3x3 TBN = float3x3(T, B, N); // 이를 바탕으로 TBN행렬 생성
+    float3 normal = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnNormal)).xyz; // 노말 맵에서 해당하는 uv에 해당하는 노말 읽기
+    normal = 2.0f * normal - 1.0f; // 노말을 -1에서 1사이의 값으로 변환
+    N = mul(normal, TBN); // 노말을 TBN행렬로 변환
+
+    output.normal = float4(N, 1);
+    output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
+    output.albedo = gMaterials.m_cAlbedo;
+    output.position = float4(input.positionW, 0);
+    output.uv = float4(frac(input.uv.x * TERRAIN_SIZE_WIDTH / FRAME_BUFFER_WIDTH), frac(input.uv.y * TERRAIN_SIZE_HEIGHT / FRAME_BUFFER_HEIGHT), 1, 0);
+    output.toonPower = float4(1, 1, 1, 1);
+
+    return output;
+}
+
+PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSThrowingObjEmissive(VS_TEXTURED_LIGHTING_OUTPUT input)
 {
     PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE output;
     float3 N = normalize(input.normalW);
@@ -452,9 +485,9 @@ DS_TERRAIN_OUTPUT DSTerrain(PatchTess patchTess, float2 uv : SV_DomainLocation, 
     float2 uv2 = lerp(quad[2].uv, quad[3].uv, 1 - uv.y);
     float2 uvResult = lerp(uv1, uv2, 1 - uv.x);
 
-	float2 f1 = lerp(quad[0].fow, quad[1].fow, 1 - uv.y);
-	float2 f2 = lerp(quad[2].fow, quad[3].fow, 1 - uv.y);
-	float2 fResult = lerp(f1, f2, 1 - uv.x);
+	float f1 = lerp(quad[0].fow, quad[1].fow, 1 - uv.y);
+	float f2 = lerp(quad[2].fow, quad[3].fow, 1 - uv.y);
+	float fResult = lerp(f1, f2, 1 - uv.x);
 
 	// Displacement Mapping
     p.y += gtxtTextures.SampleLevel(wrapSampler, float3(uvResult, gnMix3Data), 0).a * 255 * 2;

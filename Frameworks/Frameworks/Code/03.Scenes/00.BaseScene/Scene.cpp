@@ -110,7 +110,7 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetCollisionSize(),
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
-			FlyingObjectType::Roider_Dumbel);
+			FlyingObjectType::Minion_Arrow);
 	}
 }
 

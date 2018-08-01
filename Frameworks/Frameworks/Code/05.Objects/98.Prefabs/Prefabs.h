@@ -124,6 +124,11 @@ namespace Materials
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
+	// Common
+	CMaterial* CreateArrowMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
 	// Sketch Effect
 	CMaterial* CreateSketchMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
