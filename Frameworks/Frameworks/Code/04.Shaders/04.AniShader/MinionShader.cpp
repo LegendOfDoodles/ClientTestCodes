@@ -4,15 +4,16 @@
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
+#include "00.Global/01.Utility/07.ThrowingManager/ThrowingMgr.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
 #include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
 
 /// <summary>
-/// 목적: 움직이는 오브젝트 관리 및 그리기 용도
+/// 목적: 미니언 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-07-31
+/// 최종 수정 날짜: 2018-08-01
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -50,25 +51,41 @@ void CMinionShader::UpdateShaderVariables(int opt)
 	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
-		XMFLOAT4X4 tmp[128];
-		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+		switch (i)
+		{
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
+		}
 
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
-	}
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-	{
-		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
-		XMFLOAT4X4 tmp[128];
-		memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
+		{
+			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
+			XMFLOAT4X4 tmp[128];
+			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
 
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
-			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
+				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+		}
 	}
 }
 
@@ -76,25 +93,55 @@ void CMinionShader::UpdateBoundingBoxShaderVariables()
 {
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
+		switch (i)
+		{
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
+		}
 
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
-	}
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
+		{
+			CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedBoundingBoxes + ((*iter)->GetIndex() * boundingBoxElementBytes));
 
-		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
-			XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
+				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
+		}
 	}
 }
 
 void CMinionShader::AnimateObjects(float timeElapsed)
 {
-	m_spawnTime += timeElapsed;
+	// 리스트에서 제거할 조건 함수
+	static auto removeFunc = [this](CCollisionObject* obj) {
+		if (obj->GetState() == StatesType::Remove)
+		{
+			ResetPossibleIndex(obj->GetIndex());
+			delete obj;
+			return true;
+		}
+		return false;
+	};
+
+	//m_spawnTime += timeElapsed;
 
 	//if (m_spawnTime >= 0.0f && m_spawnTime <= 5.0f)
 	//{
@@ -111,40 +158,39 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 	//{
 	//	m_spawnTime -= 30.0f;
 	//	m_preSpawnTime = -0.25f;
+	//	m_curSpawnCount = 0;
 	//}
 
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		if ((*iter)->GetState() == States::Remove)
+		switch (i)
 		{
-			CCollisionObject* temp{ *iter };
-			ResetPossibleIndex(temp->GetIndex());
-			Safe_Delete(temp);
-
-			iter = m_blueObjects.erase(iter);
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
 		}
-		else
+
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
 		{
 			m_pFSMMgr->Update(timeElapsed, (*iter));
-			++iter;
 		}
-	}
-
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end();)
-	{
-		if ((*iter)->GetState() == States::Remove)
-		{
-			CCollisionObject* temp{ *iter };
-			ResetPossibleIndex(temp->GetIndex());
-			Safe_Delete(temp);
-
-			iter = m_redObjects.erase(iter);
-		}
-		else
-		{
-			m_pFSMMgr->Update(timeElapsed, (*iter));
-			++iter;
-		}
+		curObjectList->remove_if(removeFunc);
 	}
 }
 
@@ -152,43 +198,108 @@ void CMinionShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera, 0);
 
-	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		(*iter)->Render(pCamera);
-	}
+		switch (i)
+		{
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
+		}
 
-	if (m_ppMaterials) m_ppMaterials[1]->UpdateShaderVariables();
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-	{
-		(*iter)->Render(pCamera);
+		if (m_ppMaterials) m_ppMaterials[i]->UpdateShaderVariables();
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
 	}
 }
 
 void CMinionShader::RenderBoundingBox(CCamera * pCamera)
 {
 	CShader::RenderBoundingBox(pCamera);
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		(*iter)->RenderBoundingBox(pCamera);
-	}
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-	{
-		(*iter)->RenderBoundingBox(pCamera);
+		switch (i)
+		{
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
+		}
+
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
+		{
+			(*iter)->RenderBoundingBox(pCamera);
+		}
 	}
 }
 
 void CMinionShader::RenderShadow(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0, 2);
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
-	{
-		(*iter)->Render(pCamera);
-	}
 
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		(*iter)->Render(pCamera);
+		switch (i)
+		{
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
+		}
+
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
 	}
 }
 
@@ -201,23 +312,39 @@ CBaseObject *CMinionShader::PickObjectByRayIntersection(
 	float hitDistance = FLT_MAX;
 	CCollisionObject *pSelectedObject{ NULL };
 
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
+	CollisionObjectList* curObjectList{ NULL };
+	for (int i = 0; i < 6; ++i)
 	{
-		intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
-		if (intersected && (hitDistance < nearHitDistance))
+		switch (i)
 		{
-			nearHitDistance = hitDistance;
-			pSelectedObject = (*iter);
+		case 0: // Blue Sword
+			curObjectList = &m_blueSwordMinions;
+			break;
+		case 1: // Blue Staff
+			curObjectList = &m_blueStaffMinions;
+			break;
+		case 2: // Blue Bow
+			curObjectList = &m_blueBowMinions;
+			break;
+		case 3: // Red Sword
+			curObjectList = &m_redSwordMinions;
+			break;
+		case 4: // Red Staff
+			curObjectList = &m_redStaffMinions;
+			break;
+		case 5: // Red Bow
+			curObjectList = &m_redBowMinions;
+			break;
 		}
-	}
 
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); ++iter)
-	{
-		intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
-		if (intersected && (hitDistance < nearHitDistance))
+		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
 		{
-			nearHitDistance = hitDistance;
-			pSelectedObject = (*iter);
+			intersected = (*iter)->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
+			if (intersected && (hitDistance < nearHitDistance))
+			{
+				nearHitDistance = hitDistance;
+				pSelectedObject = (*iter);
+			}
 		}
 	}
 
@@ -231,12 +358,6 @@ bool CMinionShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	if (GetAsyncKeyState('M') & 0x0001)
-	{
-		m_nWeaponState++;
-		if (m_nWeaponState >= 3)m_nWeaponState = 0;
-
-	}
 	if (GetAsyncKeyState('N') & 0x0001)
 	{
 		SpawnMinion();
@@ -363,25 +484,25 @@ void CMinionShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	SaveBoundingBoxHeapNumber(1);
 
 #if USE_BATCH_MATERIAL
-	m_nMaterials = 2;
+	m_nMaterials = 6;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	// Blue
-	m_ppMaterials[0] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateSwordMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	m_ppMaterials[1] = Materials::CreateStaffMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	m_ppMaterials[2] = Materials::CreateBowMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[2]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 	// Red
-	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[3] = Materials::CreateSwordMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[3]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[4] = Materials::CreateStaffMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[4]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[5] = Materials::CreateBowMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[5]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
-
-	m_pWeapons[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Sword.meshinfo");
-	m_pWeapons[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Staff.meshinfo");
-	m_pWeapons[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Minion//Weapon//Minion_Bow2.meshinfo");
-
-	for (int j = 0; j < 3; ++j) {
-		m_pWeapons[j]->AddRef();
-	}
 
 	CreatePathes();
 	SpawnMinion();
@@ -389,18 +510,45 @@ void CMinionShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 void CMinionShader::ReleaseObjects()
 {
-	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end();)
+	// Blue Minions Release
+	for (auto iter = m_blueSwordMinions.begin(); iter != m_blueSwordMinions.end();)
 	{
 		delete(*iter);
-		iter = m_blueObjects.erase(iter);
+		iter = m_blueSwordMinions.erase(iter);
 	}
-	m_blueObjects.clear();
-	for (auto iter = m_redObjects.begin(); iter != m_redObjects.end(); )
+	m_blueSwordMinions.clear();
+	for (auto iter = m_blueStaffMinions.begin(); iter != m_blueStaffMinions.end();)
 	{
 		delete(*iter);
-		iter = m_redObjects.erase(iter);
+		iter = m_blueStaffMinions.erase(iter);
 	}
-	m_redObjects.clear();
+	m_blueStaffMinions.clear();
+	for (auto iter = m_blueBowMinions.begin(); iter != m_blueBowMinions.end();)
+	{
+		delete(*iter);
+		iter = m_blueBowMinions.erase(iter);
+	}
+	m_blueBowMinions.clear();
+
+	// Red Minions Release
+	for (auto iter = m_redSwordMinions.begin(); iter != m_redSwordMinions.end(); )
+	{
+		delete(*iter);
+		iter = m_redSwordMinions.erase(iter);
+	}
+	m_redSwordMinions.clear();
+	for (auto iter = m_redStaffMinions.begin(); iter != m_redStaffMinions.end(); )
+	{
+		delete(*iter);
+		iter = m_redStaffMinions.erase(iter);
+	}
+	m_redStaffMinions.clear();
+	for (auto iter = m_redBowMinions.begin(); iter != m_redBowMinions.end(); )
+	{
+		delete(*iter);
+		iter = m_redBowMinions.erase(iter);
+	}
+	m_redBowMinions.clear();
 
 #if USE_BATCH_MATERIAL
 	if (m_ppMaterials)
@@ -446,9 +594,10 @@ int CMinionShader::GetPossibleIndex()
 void CMinionShader::SpawnMinion()
 {
 	static bool dataPrepared{ false };
-	static CSkinnedMesh minionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Minion.meshinfo");
+	static CSkinnedMesh swordMinionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Sword Minion.meshinfo");
+	static CSkinnedMesh bowMinionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Bow Minion.meshinfo");
+	static CSkinnedMesh staffMinionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Magic Minion.meshinfo");
 	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-
 	static CCubeMesh boundingBoxMesh(m_pCreateMgr,
 		CONVERT_PaperUnit_to_InG(3.0f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(7.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(4.0f));
@@ -475,19 +624,45 @@ void CMinionShader::SpawnMinion()
 
 	if (!dataPrepared)
 	{
-		minionMesh.SetBoundingBox(
+		swordMinionMesh.SetBoundingBox(
 			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
-		minionMesh.AddRef();
+		swordMinionMesh.AddRef();
+		bowMinionMesh.SetBoundingBox(
+			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
+			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
+		bowMinionMesh.AddRef();
+		staffMinionMesh.SetBoundingBox(
+			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
+			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
+		staffMinionMesh.AddRef();
 		dataPrepared = true;
 		return;
 	}
 
 	m_pCreateMgr->ResetCommandList();
 
-	int kind{ 0 };
-	int makeCnt{ 0 };
-	for (; kind < 4; ++kind)
+	int wayKind{ 0 };
+
+	m_kind = ObjectType::StaffMinion;
+
+	//// 전체 생성되는 수의 절반은 근접 미니언
+	//if (m_curSpawnCount < 10)
+	//{
+	//	m_kind = ObjectType::SwordMinion;
+	//}
+	//// 나머지 절반 마법 / 원기리 미니언
+	//else if (m_curSpawnCount < 15)
+	//{
+	//	m_kind = ObjectType::StaffMinion;
+	//}
+	//else
+	//{
+	//	m_kind = ObjectType::BowMinion;
+	//}
+
+	CollisionObjectList objectAdder;
+	for (; wayKind < 4; ++wayKind)
 	{
 		int index{ GetPossibleIndex() };
 
@@ -497,27 +672,18 @@ void CMinionShader::SpawnMinion()
 		switch (m_kind)
 		{
 		case ObjectType::SwordMinion:
-			pMinionObject = new CSwordMinion(m_pCreateMgr, 2);
+			pMinionObject = new CSwordMinion(m_pCreateMgr);
+			pMinionObject->SetMesh(0, &swordMinionMesh);
 			break;
 		case ObjectType::StaffMinion:
-			pMinionObject = new CMagicMinion(m_pCreateMgr, 2);
+			pMinionObject = new CMagicMinion(m_pCreateMgr);
+			pMinionObject->SetMesh(0, &staffMinionMesh);
+			pMinionObject->SetThrowingManager(m_pThrowingMgr);
 			break;
 		case ObjectType::BowMinion:
-			pMinionObject = new CBowMinion(m_pCreateMgr, 2);
-			break;
-		}
-
-		pMinionObject->SetMesh(0, &minionMesh);
-		switch (m_kind)
-		{
-		case ObjectType::SwordMinion:
-			pMinionObject->SetMesh(1, m_pWeapons[0]);
-			break;
-		case ObjectType::StaffMinion:
-			pMinionObject->SetMesh(1, m_pWeapons[1]);
-			break;
-		case ObjectType::BowMinion:
-			pMinionObject->SetMesh(1, m_pWeapons[2]);
+			pMinionObject = new CBowMinion(m_pCreateMgr);
+			pMinionObject->SetMesh(0, &bowMinionMesh);
+			pMinionObject->SetThrowingManager(m_pThrowingMgr);
 			break;
 		}
 
@@ -555,9 +721,9 @@ void CMinionShader::SpawnMinion()
 
 		pMinionObject->SaveIndex(index);
 
-		pMinionObject->SetPathToGo(new Path(m_pathes[kind]));
+		pMinionObject->SetPathToGo(new Path(m_pathes[wayKind]));
 
-		XMFLOAT2 firstPos{ m_pathes[kind].front().From() };
+		XMFLOAT2 firstPos{ m_pathes[wayKind].front().From() };
 		pMinionObject->CBaseObject::SetPosition(XMFLOAT3(firstPos.x, 0, firstPos.y));
 
 		pMinionObject->SetCollisionManager(m_pColManager);
@@ -565,44 +731,49 @@ void CMinionShader::SpawnMinion()
 		pMinionObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
 		pMinionObject->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * index));
 
-		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down)
+		if (wayKind == Minion_Species::Blue_Up || wayKind == Minion_Species::Blue_Down)
 		{
 			pMinionObject->SetTeam(TeamType::Blue);
-			m_blueObjects.emplace_back(pMinionObject);
+			switch (m_kind)
+			{
+			case ObjectType::SwordMinion:
+				m_blueSwordMinions.emplace_back(pMinionObject);
+				break;
+			case ObjectType::StaffMinion:
+				m_blueStaffMinions.emplace_back(pMinionObject);
+				break;
+			case ObjectType::BowMinion:
+				m_blueBowMinions.emplace_back(pMinionObject);
+				break;
+			}
 		}
-		else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down)
+		else if (wayKind == Minion_Species::Red_Up || wayKind == Minion_Species::Red_Down)
 		{
 			pMinionObject->SetTeam(TeamType::Red);
-			m_redObjects.emplace_back(pMinionObject);
+			switch (m_kind)
+			{
+			case ObjectType::SwordMinion:
+				m_redSwordMinions.emplace_back(pMinionObject);
+				break;
+			case ObjectType::StaffMinion:
+				m_redStaffMinions.emplace_back(pMinionObject);
+				break;
+			case ObjectType::BowMinion:
+				m_redBowMinions.emplace_back(pMinionObject);
+				break;
+			}
 		}
-
-		makeCnt++;
+		objectAdder.emplace_back(pMinionObject);
 	}
 	m_pCreateMgr->ExecuteCommandList();
-
-	if (!makeCnt) return;
 	
-	CollisionObjectList::reverse_iterator blueBegin{ m_blueObjects.rbegin() };
-	CollisionObjectList::reverse_iterator redBegin{ m_redObjects.rbegin() };
-
-	if (makeCnt > 1) blueBegin++;
-	if (makeCnt > 3) redBegin++;
-
-	for (kind = 0; makeCnt > 0; --makeCnt, ++kind)
+	for (auto& d : objectAdder)
 	{
-		if (kind == Minion_Species::Blue_Up || kind == Minion_Species::Blue_Down) {
-			(*blueBegin)->ReleaseUploadBuffers();
-
-			m_pColManager->AddCollider((*blueBegin));
-			m_pGaugeManger->AddMinionObject((*blueBegin));
-			if(blueBegin != m_blueObjects.rbegin()) --blueBegin;
-		}
-		else if (kind == Minion_Species::Red_Up || kind == Minion_Species::Red_Down) {
-			(*redBegin)->ReleaseUploadBuffers();
-
-			m_pColManager->AddCollider((*redBegin));
-			m_pGaugeManger->AddMinionObject((*redBegin));
-			if (redBegin != m_redObjects.rbegin()) --redBegin;
-		}
+		d->ReleaseUploadBuffers();
+		m_pColManager->AddCollider(d);
+		m_pGaugeManger->AddMinionObject(d);
 	}
+
+	// 현재 웨이브에서 미니언이 생성된 개수
+	++m_curSpawnCount;
 }

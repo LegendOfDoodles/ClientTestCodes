@@ -9,6 +9,7 @@ typedef std::list<CCollisionObject*> CollisionObjectList;
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
+class CThrowingMgr;
 class CUIObjectManager;
 class CFSMMgr;
 
@@ -38,6 +39,7 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void SetCollisionManager(shared_ptr<CCollisionManager> pManger) { m_pColManager = pManger; }
+	void SetThrowingManager(shared_ptr<CThrowingMgr> pManger) { m_pThrowingMgr = pManger; }
 	void SetGaugeManger(shared_ptr<CUIObjectManager> pManger) { m_pGaugeManger = pManger; }
 	void SetFSMManager(shared_ptr<CFSMMgr> pManger) { m_pFSMMgr = pManger; }
 
@@ -66,17 +68,19 @@ protected: // 내부 함수
 protected: // 변수
 	ObjectType m_kind{ ObjectType::SwordMinion };
 
-	CollisionObjectList m_blueObjects;
-	CollisionObjectList m_redObjects;
+	CollisionObjectList m_blueSwordMinions;
+	CollisionObjectList m_blueStaffMinions;
+	CollisionObjectList m_blueBowMinions;
+	CollisionObjectList m_redSwordMinions;
+	CollisionObjectList m_redStaffMinions;
+	CollisionObjectList m_redBowMinions;
 
 	bool m_indexArr[MAX_MINION];
 
 	Path m_pathes[4];
-
-	CSkinnedMesh* m_pWeapons[3];
-	int m_nWeaponState{ 0 };
 	
 	shared_ptr<CCollisionManager> m_pColManager;
+	shared_ptr<CThrowingMgr> m_pThrowingMgr;
 	shared_ptr<CUIObjectManager> m_pGaugeManger;
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
@@ -85,4 +89,6 @@ protected: // 변수
 
 	float m_spawnTime{ 10.1f };
 	float m_preSpawnTime{ 0.0f };
+
+	int m_curSpawnCount{ 0 };
 };

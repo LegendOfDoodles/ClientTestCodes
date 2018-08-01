@@ -5,7 +5,7 @@
 /// 목적: 플레이어 관리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-05-22
+/// 최종 수정 날짜: 2018-08-01
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -136,6 +136,18 @@ void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(instanceCnt);
 		}
 	}
+}
+
+void CPlayer::LookAt(XMFLOAT3 objPosition)
+{
+	if (m_curState == States::Attack) return;
+	CAnimatedObject::LookAt(objPosition);
+}
+
+void CPlayer::LookAt(XMFLOAT2 objPosition)
+{
+	if (m_curState == States::Attack) return;
+	CAnimatedObject::LookAt(objPosition);
 }
 
 void CPlayer::ActiveSkill(AnimationsType act)

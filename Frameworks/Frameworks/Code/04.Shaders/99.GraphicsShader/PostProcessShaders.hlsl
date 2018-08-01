@@ -72,28 +72,28 @@ float4 CalculateEmissiveColor(int2 pos)
     }
     for (i = -EMISSIVE_POWER * 0.5; i <= EMISSIVE_POWER * 0.5; ++i)
     {
-        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y)] * 0.03;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y)] * 0.03;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y - i)] * 0.03;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y + i)] * 0.03;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y - i)] * 0.015;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y + i)] * 0.015;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y - i)] * 0.015;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y + i)] * 0.015;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y - i)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y + i)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y - i)] * 0.005;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y + i)] * 0.005;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y - i)] * 0.005;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y + i)] * 0.005;
     }
     for (i = -EMISSIVE_POWER * 0.25; i <= EMISSIVE_POWER * 0.25; ++i)
     {
-        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y)] * 0.05;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y)] * 0.05;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y - i)] * 0.05;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y + i)] * 0.05;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y - i)] * 0.025;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y + i)] * 0.025;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y - i)] * 0.025;
-        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y + i)] * 0.025;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y - i)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x, pos.y + i)] * 0.01;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y - i)] * 0.005;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x - i, pos.y + i)] * 0.005;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y - i)] * 0.005;
+        emissiveColor += gtxtSceneEmissive[int2(pos.x + i, pos.y + i)] * 0.005;
     }
 
-    return emissiveColor;
+    return clamp(emissiveColor, 0, 1);
 }
 
 float4 CalculateSketchEffect(float2 uv, float intensity)

@@ -24,9 +24,6 @@ public:	// 외부 함수
 	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 	virtual void PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 
-	virtual void LookAt(XMFLOAT3 objPosition);
-	virtual void LookAt(XMFLOAT2 objPosition);
-
 	void SaveCurrentState();
 
 	void SetNexusPoses(const XMFLOAT3& bluePos, const XMFLOAT3& redPos)

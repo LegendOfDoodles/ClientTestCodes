@@ -37,6 +37,17 @@ void CFlyingObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
+	else if (m_flyingObjectType == FlyingObjectType::Minion_Magic)
+	{
+		m_distance += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_attackRange, m_attackRange, m_damage * timeElapsed);
+		Rotate(0, 0, 10.0f);
+		if (m_distance > m_maxDistance)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
 }
 
 void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
@@ -56,6 +67,14 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(2);
 		m_damage = 10.0f;
+		m_distance = 0.0f;
+		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
+		m_speed = CONVERT_cm_to_InG(1.805f);
+	}
+	else if (type == FlyingObjectType::Minion_Magic)
+	{
+		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_damage = 12.0f;
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(24);
 		m_speed = CONVERT_cm_to_InG(1.805f);

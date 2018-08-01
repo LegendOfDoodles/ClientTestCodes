@@ -65,6 +65,7 @@
 // 최대, 최소 수치
 #define MAX_MINION 300
 #define MAX_ARROW 70
+#define MAX_MAGIC 70
 
 // 최대, 최소 속도
 #define MIN_CAMERA_SPEED 100.0f

@@ -9,7 +9,7 @@
 /// 목적: 날아다니는(화살 등) 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-01
+/// 최종 수정 날짜: 2018-08-01
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -47,9 +47,6 @@ void CFlyingShader::ReleaseUploadBuffers()
 	{
 		m_pMeshes[j]->ReleaseUploadBuffers();
 	}
-
-	if (!m_dumbelList.empty()) m_dumbelList.clear();
-	if (!m_arrowList.empty()) m_arrowList.clear();
 }
 
 void CFlyingShader::UpdateShaderVariables(int opt)
@@ -66,6 +63,10 @@ void CFlyingShader::UpdateShaderVariables(int opt)
 	case 1:	// Minion Arrow Update
 		beg = m_objectsIndices[FlyingObjectType::Minion_Arrow].m_begIndex;
 		end = m_objectsIndices[FlyingObjectType::Minion_Arrow].m_endIndex;
+		break;
+	case 2:	// Minion Magic Update
+		beg = m_objectsIndices[FlyingObjectType::Minion_Magic].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::Minion_Magic].m_endIndex;
 		break;
 	}
 
@@ -99,6 +100,7 @@ void CFlyingShader::AnimateObjects(float timeElapsed)
 	// 더 이상 업데이트 하면 안되는 오브젝트 리스트에서 제거
 	m_dumbelList.remove_if(removeFunc);
 	m_arrowList.remove_if(removeFunc);
+	m_magicList.remove_if(removeFunc);
 }
 
 void CFlyingShader::Render(CCamera *pCamera)
@@ -121,6 +123,15 @@ void CFlyingShader::Render(CCamera *pCamera)
 			(*iter)->Render(pCamera);
 		}
 	}
+	if (!m_magicList.empty())
+	{
+		CShader::Render(pCamera, 2);
+		m_ppMaterials[2]->UpdateShaderVariables();
+		for (auto iter = m_magicList.begin(); iter != m_magicList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 }
 
 void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float positionOffset, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType)
@@ -129,6 +140,7 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float posi
 
 	if (idx != NONE)
 	{
+		m_ppObjects[idx]->ResetWorldMatrix();
 		m_ppObjects[idx]->SaveIndex(idx);
 		m_ppObjects[idx]->SetTeam(teamType);
 		m_ppObjects[idx]->SetFlyingObjectsType(objectType);
@@ -149,6 +161,12 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const float posi
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[1]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * adjIdx));
 			m_arrowList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::Minion_Magic)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[2]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * adjIdx));
+			m_magicList.emplace_back(m_ppObjects[idx]);
 		}
 	}
 }
@@ -295,12 +313,14 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	// 오브젝트 순서 설정
 	FlyingObjectType objectOrder[]{
 		FlyingObjectType::Roider_Dumbel,
-		FlyingObjectType::Minion_Arrow
+		FlyingObjectType::Minion_Arrow,
+		FlyingObjectType::Minion_Magic
 	};
 
 	// 각 오브젝트의 최대 개수 설정
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Roider_Dumbel] = monsterTransformImporter.m_iKindMeshCnt[0];
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Minion_Arrow] = MAX_ARROW;
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::Minion_Magic] = MAX_MAGIC;
 
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
@@ -329,6 +349,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreateDumbbellMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[1] = Materials::CreateArrowMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateMagicMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -338,6 +359,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	// 필요한 메쉬 저장
 	m_pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Dumbbell//Dumbbell.meshinfo");
 	m_pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//Arrow.meshinfo");
+	m_pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//MagicBall.meshinfo");
 
 	for (int j = 0; j < m_nMesh; j++)
 	{
@@ -359,6 +381,10 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 void CFlyingShader::ReleaseObjects()
 {
+	if (!m_dumbelList.empty()) m_dumbelList.clear();
+	if (!m_arrowList.empty()) m_arrowList.clear();
+	if (!m_magicList.empty()) m_magicList.clear();
+
 	if (m_ppObjects)
 	{
 		for (int j = 0; j < m_nObjects; j++)

@@ -34,7 +34,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-27
+/// 최종 수정 날짜: 2018-08-01
 /// </summary>
 
 #define UI_Shader m_ppShaders[8]
@@ -107,10 +107,10 @@ void CScene::ProcessInput()
 	{
 		m_pThrowingMgr->RequestSpawn(
 			m_pSelectedObject->GetPosition(),
-			m_pSelectedObject->GetCollisionSize(),
+			m_pSelectedObject->GetCollisionSize() * 2,
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
-			FlyingObjectType::Minion_Arrow);
+			FlyingObjectType::Minion_Magic);
 	}
 }
 
@@ -432,11 +432,12 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
 
 	//Manager Shaders Setting
-	CMinionShader* pAniS = (CMinionShader *)m_ppShaders[2];
+	CMinionShader* pMinionS = (CMinionShader *)m_ppShaders[2];
 
-	pAniS->SetCollisionManager(m_pCollisionManager);
-	pAniS->SetGaugeManger(m_pUIObjectsManager);
-	pAniS->SetFSMManager(m_pFSMMgr);
+	pMinionS->SetCollisionManager(m_pCollisionManager);
+	pMinionS->SetGaugeManger(m_pUIObjectsManager);
+	pMinionS->SetFSMManager(m_pFSMMgr);
+	pMinionS->SetThrowingManager(m_pThrowingMgr);
 
 	static_cast<CMinionHPGaugeShader*>(MinionHP_Shader)->SetUIObjectsManager(m_pUIObjectsManager);
 	static_cast<CMinimapIconShader*>(MinimapIco_Shader)->SetUIObjectsManager(m_pUIObjectsManager);

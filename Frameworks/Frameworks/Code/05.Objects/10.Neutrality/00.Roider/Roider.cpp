@@ -6,7 +6,7 @@
 /// 목적: 중립 몬스터(로이더) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-31
+/// 최종 수정 날짜: 2018-08-01
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -236,38 +236,6 @@ void CRoider::PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	}
 }
 
-void CRoider::LookAt(XMFLOAT3 objPosition)
-{
-	if (m_curState == States::Win) return;
-	if (m_curState == States::Defeat) return;
-
-	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
-	XMFLOAT3 playerLook = GetLook();
-	XMFLOAT3 playerPos = GetPosition();
-
-	objPosition.y = playerPos.y;
-
-	XMFLOAT3 towardVector = Vector3::Subtract(objPosition, GetPosition(), true);
-
-	float angle{ Vector3::DotProduct(towardVector, playerLook) };
-	angle = XMConvertToDegrees(acos(angle));
-
-	if (isnan(angle)) return;
-
-	float check{ Vector3::DotProduct(Vector3::CrossProduct(towardVector, playerLook), upVector) };
-
-	// 캐릭터가 선택된 오브젝트 보다 오른쪽 보고 있는 경우
-	if (check < 0.0f)
-		Rotate(0.0f, 0.0f, -angle);
-	else if (check > 0.0f)
-		Rotate(0.0f, 0.0f, angle);
-}
-
-void CRoider::LookAt(XMFLOAT2 objPosition)
-{
-	LookAt(XMFLOAT3(objPosition.x, 0, objPosition.y));
-}
-
 void CRoider::SaveCurrentState()
 {
 	m_xmf4x4SpawnWorld = m_xmf4x4World;
@@ -333,7 +301,7 @@ void CRoider::AnimateByCurState()
 		{
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize, GetLook(), m_TeamType, FlyingObjectType::Roider_Dumbel);
+				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize * 2, GetLook(), m_TeamType, FlyingObjectType::Roider_Dumbel);
 			}
 			if (m_curState != m_nextState)
 			{
