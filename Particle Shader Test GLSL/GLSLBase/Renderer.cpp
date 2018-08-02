@@ -107,7 +107,7 @@ void Renderer::CreateVertexBufferObjects()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	char *imagePath1 = "./Texture/Spirte.bmp";
+	char *imagePath1 = "./Texture/Sprite2.bmp";
 	unsigned int w1, h1;
 	unsigned char *LoadTexture1 = loadBMPRaw(imagePath1, w1, h1);
 
@@ -312,7 +312,7 @@ void Renderer::Particle()
 
 	GLuint id = glGetUniformLocation(shader, "u_Time");
 	glUniform1f(id, m_fTimer);
-	m_fTimer += 0.1f;
+	m_fTimer += 0.01f;
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOParticleRect);
 	glVertexAttribPointer(posID, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);

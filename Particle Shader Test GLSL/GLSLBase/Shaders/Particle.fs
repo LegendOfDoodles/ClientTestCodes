@@ -1,6 +1,5 @@
 #version 330
 
-uniform float u_Time;
 uniform sampler2D uTexSampler;
 
 in vec2 v_TexPos;
@@ -9,13 +8,13 @@ layout(location=0) out vec4 FragColor;
 
 void main()
 {
-
-	vec2 newTexPos = v_TexPos;
-
-	newTexPos.x = v_TexPos.x / 4;
-	newTexPos.y = v_TexPos.y / 3;
-
-	vec4 t1 = texture(uTexSampler, newTexPos).bgra;
-
-	FragColor = t1;
+	
+	FragColor = texture(uTexSampler, v_TexPos).bgra;
 }
+
+//for(int i = col-1; i == 0; --i){
+	//	for (int j = 0; j < row; ++j){
+	//		newTexPos.x = (v_TexPos.x / row) + ((1.f / row * floor(newtime)));
+	//		newTexPos.y = (v_TexPos.y / col) + ((1.f / col) * i);
+	//	}
+	//}
