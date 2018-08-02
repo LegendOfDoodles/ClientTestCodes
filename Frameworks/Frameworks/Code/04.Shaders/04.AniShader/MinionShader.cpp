@@ -12,7 +12,7 @@
 /// 목적: 움직이는 오브젝트 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-07-31
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ void CMinionShader::RenderBoundingBox(CCamera * pCamera)
 
 void CMinionShader::RenderShadow(CCamera * pCamera)
 {
-	CShader::Render(pCamera, 0);
+	CShader::Render(pCamera, 0, 2);
 	for (auto iter = m_blueObjects.begin(); iter != m_blueObjects.end(); ++iter)
 	{
 		(*iter)->Render(pCamera);
