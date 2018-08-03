@@ -6,7 +6,7 @@
 /// 목적: 날아가는(스킬, 화살 등) 오브젝트 처리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-16
+/// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ void CFlyingObject::Animate(float timeElapsed)
 	{
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
-		m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_attackRange, m_attackRange, m_damage * timeElapsed);
+		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
 		if (m_distance > m_maxDistance)
 		{
 			m_curState = StatesType::Remove;
@@ -41,7 +41,7 @@ void CFlyingObject::Animate(float timeElapsed)
 	{
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
-		m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_attackRange, m_attackRange, m_damage * timeElapsed);
+		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
 		Rotate(0, 0, 10.0f);
 		if (m_distance > m_maxDistance)
 		{

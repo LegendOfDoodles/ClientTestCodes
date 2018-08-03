@@ -287,16 +287,6 @@ void CRoider::AnimateByCurState()
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, m_attackRange, 180, m_StatusInfo.Atk);
 			}
-			if (m_curState != m_nextState)
-			{
-				if (GetAnimTimeRemainRatio() > 0.05f) break;
-				SetState(m_nextState);
-			}
-			else if (m_nCurrAnimation != m_nNextAnimation)
-			{
-				if (GetAnimTimeRemainRatio() > 0.05f) break;
-				m_nCurrAnimation = m_nNextAnimation;
-			}
 		}
 		else if (m_nCurrAnimation == Animations::Attack2)
 		{
@@ -304,16 +294,17 @@ void CRoider::AnimateByCurState()
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize * 2, GetLook(), m_TeamType, FlyingObjectType::Roider_Dumbel);
 			}
-			if (m_curState != m_nextState)
-			{
-				if (GetAnimTimeRemainRatio() > 0.05f) break;
-				SetState(m_nextState);
-			}
-			else if (m_nCurrAnimation != m_nNextAnimation)
-			{
-				if (GetAnimTimeRemainRatio() > 0.05f) break;
-				m_nCurrAnimation = m_nNextAnimation;
-			}
+		}
+		if (m_curState != m_nextState)
+		{
+			if (GetAnimTimeRemainRatio() > 0.05f) break;
+			SetState(m_nextState);
+		}
+		else if (m_nCurrAnimation != m_nNextAnimation)
+		{
+			if (GetAnimTimeRemainRatio() > 0.05f) break;
+			m_nCurrAnimation = m_nNextAnimation;
+			m_fFrameTime = 0;
 		}
 		break;
 	case States::Walk:

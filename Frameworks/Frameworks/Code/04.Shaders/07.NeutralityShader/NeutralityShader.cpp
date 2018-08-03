@@ -473,7 +473,10 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 #if !USE_BATCH_MATERIAL
 		pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
-		pGolem->CBaseObject::SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
+		pGolem->CBaseObject::SetPosition(
+			CONVERT_Unit_to_InG(pos.x), 
+			m_pTerrain->GetHeight(CONVERT_Unit_to_InG(pos.x),CONVERT_Unit_to_InG(pos.z)), 
+			CONVERT_Unit_to_InG(pos.z));
 		pGolem->SetTeam(TeamType::Neutral);
 
 		pGolem->SetTerrain(m_pTerrain);

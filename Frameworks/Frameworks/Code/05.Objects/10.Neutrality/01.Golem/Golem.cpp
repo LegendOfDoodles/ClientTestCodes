@@ -43,6 +43,13 @@ void CGolem::Animate(float timeElapsed)
 	AdjustAnimationIndex();
 	AnimateByCurState();
 
+	// 스킬 쿨타임 감소 적용
+	if (m_curState != States::Idle)
+	{
+		m_spAttack1CoolTime -= timeElapsed;
+		m_spAttack2CoolTime -= timeElapsed;
+	}
+
 	if (m_curState != States::Remove)
 	{
 		m_fPreFrameTime = m_fFrameTime;
@@ -209,8 +216,17 @@ void CGolem::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	}
 	else if (Attackable(m_pEnemy))
 	{
-		if (m_nCurrAnimation != Animations::Attack1)
-			m_nNextAnimation = Animations::Attack1;
+		int usingSkill{ rand() % 2 };
+		if (usingSkill == 1 && m_spAttack1CoolTime <= 0.0f)
+		{
+			m_nNextAnimation = Animations::SpecialAttack1;
+			m_spAttack1CoolTime = COOLTIME_SPECIAL_ATTACK1;
+		}
+		else if (usingSkill == 1 && m_spAttack2CoolTime <= 0.0f)
+		{
+			m_nNextAnimation = Animations::SpecialAttack2;
+			m_spAttack2CoolTime = COOLTIME_SPECIAL_ATTACK1;
+		}
 	}
 	else
 	{
@@ -360,18 +376,35 @@ void CGolem::AnimateByCurState()
 		{
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, m_attackRange, 180, m_StatusInfo.Atk);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_fCollisionSize, m_fCollisionSize * 0.5f, m_StatusInfo.Atk);
 			}
-			if (m_curState != m_nextState)
-			{
-				if (GetAnimTimeRemainRatio() > 0.05f) break;
-				SetState(m_nextState);
+		}
+		else if (m_nCurrAnimation == Animations::SpecialAttack1)
+		{
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_StatusInfo.Atk * 2);
+				m_nNextAnimation = Animations::Attack1;
 			}
-			else if (m_nCurrAnimation != m_nNextAnimation)
-			{
-				if (GetAnimTimeRemainRatio() > 0.05f) break;
-				m_nCurrAnimation = m_nNextAnimation;
+		}
+		else if (m_nCurrAnimation == Animations::SpecialAttack2)
+		{
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_StatusInfo.Atk * 3);
+				m_nNextAnimation = Animations::Attack1;
 			}
+		}
+		if (m_curState != m_nextState)
+		{
+			if (GetAnimTimeRemainRatio() > 0.05f) break;
+			SetState(m_nextState);
+		}
+		else if (m_nCurrAnimation != m_nNextAnimation)
+		{
+			if (GetAnimTimeRemainRatio() > 0.05f) break;
+			m_nCurrAnimation = m_nNextAnimation;
+			m_fFrameTime = 0;
 		}
 		break;
 	case States::Walk:

@@ -71,6 +71,9 @@ protected:	// 변수
 	float m_spawnCoolTime{ 0 };	// 죽은 이후 다시 생성할 때 까지 시간
 	float m_deactiveTime{ 0 };	// 대기 시간으로 돌리는 시간
 
+	float m_spAttack1CoolTime{ COOLTIME_SPECIAL_ATTACK1 };
+	float m_spAttack2CoolTime{ COOLTIME_SPECIAL_ATTACK2 };
+
 	CCollisionObject* m_pDamager{ NULL };
 
 	TeamType m_lastDamageTeam;

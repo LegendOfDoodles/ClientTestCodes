@@ -207,6 +207,8 @@
 // 몬스터 관련
 #define COOLTIME_SPAWN_ROIDER 10.0f
 #define COOLTIME_SPAWN_GOLEM 10.0f
+#define COOLTIME_SPECIAL_ATTACK1 16.0f
+#define COOLTIME_SPECIAL_ATTACK2 24.0f
 
 
 // 캡션 FPS 출력 여부 -------------------
