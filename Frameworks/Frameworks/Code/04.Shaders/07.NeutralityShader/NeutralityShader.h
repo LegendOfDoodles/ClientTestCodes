@@ -64,5 +64,5 @@ protected: // º¯¼ö
 	shared_ptr<CCreateMgr> m_pCreateMgr{ NULL };
 	shared_ptr<CFSMMgr> m_pFSMMgr;
 
-	Path m_pathes[5];
+	Path m_pathes[6];
 };

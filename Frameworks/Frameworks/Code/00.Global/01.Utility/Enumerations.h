@@ -4,7 +4,7 @@
 /// 목적: 여러 지점에서 사용할 나열형 데이터를 통합 관리한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-16
+/// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
 namespace States
@@ -76,6 +76,19 @@ enum Minion_Species {
 	Red_Down,
 	Data_Prepare
 };
+
+namespace Way_Species
+{
+	enum Way_Species {
+		Blue_Up,
+		Blue_Down,
+		Red_Up,
+		Red_Down,
+		Roider_Exit,
+		Golem_Exit
+	};
+}
+typedef Way_Species::Way_Species WayType;
 
 enum ObjectType {
 	StickPlayer,

@@ -352,11 +352,11 @@ void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 
 	m_pColManager->AddCollider(this);
 
-	CPathEdge pathBeg{ m_pathes[Minion_Species::Data_Prepare].front() };
+	CPathEdge pathBeg{ m_pathes[WayType::Roider_Exit].front() };
 	XMFLOAT3 curPos{ GetPosition() };
 	float distSqr{ FLT_MAX };
 
-	for (Path::iterator iter = m_pathes[Minion_Species::Data_Prepare].begin(); iter != m_pathes[Minion_Species::Data_Prepare].end(); ++iter)
+	for (Path::iterator iter = m_pathes[WayType::Roider_Exit].begin(); iter != m_pathes[Minion_Species::Data_Prepare].end(); ++iter)
 	{
 		float curDistSqr{ Vector3::DistanceSquare(curPos, XMFLOAT3((*iter).To().x, curPos.y, (*iter).To().y)) };
 		if (curDistSqr < distSqr)
@@ -372,11 +372,11 @@ void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 		// 위로 가야함
 		if (curPos.z > TERRAIN_SIZE_HEIGHT * 0.5f)
 		{
-			newPath = new Path(m_pathes[Minion_Species::Blue_Up]);
+			newPath = new Path(m_pathes[WayType::Blue_Up]);
 		}
 		else
 		{
-			newPath = new Path(m_pathes[Minion_Species::Blue_Down]);
+			newPath = new Path(m_pathes[WayType::Blue_Down]);
 		}
 		newPath->remove_if([pathBeg](CPathEdge& edge) {
 			return edge.To().x < pathBeg.To().x;
@@ -387,11 +387,11 @@ void CRoider::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 		// 위로 가야함
 		if (curPos.z > TERRAIN_SIZE_HEIGHT * 0.5f)
 		{
-			newPath = new Path(m_pathes[Minion_Species::Red_Up]);
+			newPath = new Path(m_pathes[WayType::Red_Up]);
 		}
 		else
 		{
-			newPath = new Path(m_pathes[Minion_Species::Red_Down]);
+			newPath = new Path(m_pathes[WayType::Red_Down]);
 		}
 		newPath->remove_if([pathBeg](CPathEdge& edge) {
 			return edge.To().x > pathBeg.To().x;

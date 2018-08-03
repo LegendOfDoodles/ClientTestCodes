@@ -43,6 +43,7 @@ public:	// 외부 함수
 		}
 		m_activated = true;
 	}
+
 	virtual void NotifyDamager(CCollisionObject* other) { m_pDamager = other; }
 	virtual void NotifyDamageTeam(TeamType type) { m_lastDamageTeam = type; }
 

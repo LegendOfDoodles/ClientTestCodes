@@ -488,18 +488,18 @@ void CMinionShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	// Blue
 	m_ppMaterials[0] = Materials::CreateSwordMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
 	m_ppMaterials[1] = Materials::CreateStaffMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
 	m_ppMaterials[2] = Materials::CreateBowMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[2]->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	m_ppMaterials[2]->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
 	// Red
 	m_ppMaterials[3] = Materials::CreateSwordMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[3]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[3]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
 	m_ppMaterials[4] = Materials::CreateStaffMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[4]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[4]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
 	m_ppMaterials[5] = Materials::CreateBowMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[5]->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[5]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -644,7 +644,7 @@ void CMinionShader::SpawnMinion()
 
 	int wayKind{ 0 };
 
-	m_kind = ObjectType::StaffMinion;
+	m_kind = ObjectType::SwordMinion;
 
 	//// 전체 생성되는 수의 절반은 근접 미니언
 	//if (m_curSpawnCount < 10)

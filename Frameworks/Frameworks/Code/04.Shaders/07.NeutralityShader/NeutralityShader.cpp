@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "NeutralityShader.h"
 #include "05.Objects/10.Neutrality/00.Roider/Roider.h"
+#include "05.Objects/10.Neutrality/01.Golem/Golem.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
 #include "05.Objects/99.Material/Material.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
@@ -12,7 +13,7 @@
 /// 목적: 중립 몬스터 관리 및 렌더링용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-29
+/// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
 #define NetralMaterial m_ppMaterials[0]
@@ -389,6 +390,8 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		m_ppObjects[i++] = pRoider;
 	}
 
+	//CGolem *pGolem{ NULL };
+
 	Safe_Delete(pSIdle);
 	Safe_Delete(pSStartWalk);
 	Safe_Delete(pSWalk);
@@ -401,7 +404,7 @@ void CNeutralityShader::CreatePathes()
 {
 	CTransformImporter transformInporter;
 	transformInporter.LoadMeshData("Resource/Data/Pathes.txt");
-	for (int i = 0, cnt = 0; i < 5; ++i)
+	for (int i = 0, cnt = 0; i < 6; ++i)
 	{
 		m_pathes[i].push_back(CPathEdge(XMFLOAT2(0, 0), XMFLOAT2(CONVERT_Unit_to_InG(transformInporter.m_Transform[cnt].pos.x), CONVERT_Unit_to_InG(transformInporter.m_Transform[cnt].pos.z))));
 		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i] - 1; ++j, ++cnt)

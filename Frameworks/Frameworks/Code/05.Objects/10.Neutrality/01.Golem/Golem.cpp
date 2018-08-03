@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Golem.h"
+#include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 
 /// <summary>
 /// 목적: 중립 몬스터(수호 골렘) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-19
+/// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -14,9 +15,19 @@ CGolem::CGolem(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObject
 {
 	m_ObjectType = ObjectType::GOLEM;
 
-	m_sightRange = CONVERT_PaperUnit_to_InG(80.0f);
+	m_sightRange = CONVERT_PaperUnit_to_InG(100.0f);
 	m_detectRange = CONVERT_PaperUnit_to_InG(80.0f);
 	m_speed = CONVERT_cm_to_InG(7.682f);
+
+	// Warning! 골렘 스테이터스 설정 필요
+	m_StatusInfo.HP = m_StatusInfo.maxHP = 1200.0f;
+	m_StatusInfo.Def = 20.0f;
+	m_StatusInfo.Atk = 200.0f;
+	m_StatusInfo.Exp = 500;
+
+	m_attackRange = CONVERT_PaperUnit_to_InG(30);
+
+	BuildSelf();
 }
 
 CGolem::~CGolem()
@@ -28,9 +39,13 @@ CGolem::~CGolem()
 void CGolem::Animate(float timeElapsed)
 {
 	AdjustAnimationIndex();
+	AnimateByCurState();
 
-	m_fPreFrameTime = m_fFrameTime;
-	m_fFrameTime += 30 * timeElapsed;
+	if (m_curState != States::Remove)
+	{
+		m_fPreFrameTime = m_fFrameTime;
+		m_fFrameTime += 30 * timeElapsed;
+	}
 
 	if (m_fFrameTime > m_nAniLength[m_nAniIndex]) {
 		while (m_fFrameTime > m_nAniLength[m_nAniIndex])
@@ -48,7 +63,6 @@ void CGolem::Render(CCamera * pCamera, UINT instanceCnt)
 
 	if (m_pMaterial)
 	{
-		m_pMaterial->Render(pCamera);
 		m_pMaterial->UpdateShaderVariables();
 	}
 
@@ -75,6 +89,7 @@ void CGolem::SetState(StatesType newState)
 		break;
 	case States::Walk:
 		RegenerateLookAt();
+		m_availableTime = 0.0f;
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Chase:
@@ -82,7 +97,7 @@ void CGolem::SetState(StatesType newState)
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Attack:
-		m_nCurrAnimation = Animations::Attack1;
+		SetAnimation(Animations::Attack1);
 		m_fFrameTime = 0;
 		break;
 	case States::Die:
@@ -91,6 +106,7 @@ void CGolem::SetState(StatesType newState)
 		SetPathToGo(NULL);
 		break;
 	case States::Remove:
+		m_spawnCoolTime = COOLTIME_SPAWN_GOLEM;
 		break;
 	case States::Win:
 	case States::Defeat:
@@ -105,6 +121,20 @@ void CGolem::PlayIdle(float timeElapsed)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
 
+	if (m_activated && m_TeamType == TeamType::Neutral)
+	{
+		m_deactiveTime += timeElapsed;
+		if (m_deactiveTime > TIME_ACTIVATE_CHECK)
+		{
+			m_activated = false;
+			// Warning! 회복 처리
+			// 방안 1: 전체 회복
+			// 방안 2: 일정 시간동안 몇 %의 체력 회복
+		}
+	}
+
+	if (!m_activated) return;
+
 	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
 
 	if (!enemy) return;
@@ -112,7 +142,14 @@ void CGolem::PlayIdle(float timeElapsed)
 
 	SetEnemy(enemy);
 
-	if (Attackable(enemy)) SetState(States::Attack);
+	if (Attackable(enemy))
+	{
+		SetState(States::Attack);
+	}
+	else if (AttackableFarRange(enemy)) {
+		SetState(States::Attack);
+		SetAnimation(Animations::Attack2);
+	}
 	else SetState(States::Chase);
 }
 
@@ -125,6 +162,11 @@ void CGolem::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	else
 	{
 		MoveToSubDestination(timeElapsed);
+		// 중립인데 원래 위치로 돌아갔으면 상태를 아이들 상태로 전환한다.
+		if (m_TeamType == TeamType::Neutral && NoneDestination(PathType::Sub))
+		{
+			SetState(States::Idle);
+		}
 	}
 	PlayIdle(timeElapsed);
 }
@@ -134,7 +176,10 @@ void CGolem::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	if (!Chaseable(m_pEnemy))
 	{
 		SetEnemy(NULL);
-		GenerateSubPathToMainPath(pWayFinder);
+		if (m_TeamType == TeamType::Neutral)
+			GenerateSubPathToSpawnLocation(pWayFinder);
+		else
+			GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
 	}
 	else
@@ -142,7 +187,10 @@ void CGolem::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 		MoveToSubDestination(timeElapsed, pWayFinder);
 	}
 
-	if (Attackable(m_pEnemy)) SetState(States::Attack);
+	if (Attackable(m_pEnemy))
+	{
+		SetState(States::Attack);
+	}
 }
 
 void CGolem::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
@@ -155,10 +203,65 @@ void CGolem::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 		GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
 	}
-	else if (!Attackable(m_pEnemy))
+	else if (Attackable(m_pEnemy))
+	{
+		if (m_nCurrAnimation != Animations::Attack1)
+			m_nNextAnimation = Animations::Attack1;
+	}
+	else
 	{
 		SetNextState(States::Chase);
 	}
+}
+
+void CGolem::PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
+{
+	m_spawnCoolTime -= timeElapsed;
+
+	if (m_TeamType == TeamType::Neutral)
+	{
+		ReadyToAtk(pWayFinder);
+	}
+	else if (m_spawnCoolTime < 0.0f)
+	{
+		Respawn();
+	}
+}
+
+void CGolem::SaveCurrentState()
+{
+	m_xmf4x4SpawnWorld = m_xmf4x4World;
+	m_spawnLocation = GetPosition();
+}
+
+void CGolem::BuildSelf()
+{
+	//CSkinnedMesh *pRoiderMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Royde.meshinfo");
+
+	//CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
+	//	CONVERT_PaperUnit_to_InG(4.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(11.0f),
+	//	0, 0, -CONVERT_PaperUnit_to_InG(7.0f));
+
+	//CSkeleton *pSIdle = new CSkeleton("Resource//3D//Monster//Animation//Royde_Idle.aniinfo");
+	//CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Monster//Animation//Royde_Start_Walk.aniinfo");
+	//CSkeleton *pSWalk = new CSkeleton("Resource//3D//Monster//Animation//Royde_Walk.aniinfo");
+	//CSkeleton *pSSmash = new CSkeleton("Resource//3D//Monster//Animation//Royde_Attack1.aniinfo");
+	//CSkeleton *pSThrow = new CSkeleton("Resource//3D//Monster//Animation//Royde_Attack2.aniinfo");
+	//CSkeleton *pSDie = new CSkeleton("Resource//3D//Monster//Animation//Royde_Die.aniinfo");
+
+	//pRoiderMesh->SetBoundingBox(
+	//	XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(7.0f)),
+	//	XMFLOAT3(CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(5.5f)));
+
+	//SetBoundingMesh(pBoundingBoxMesh);
+	//SetCollisionSize(CONVERT_PaperUnit_to_InG(12));
+
+	//SetSkeleton(pSIdle);
+	//SetSkeleton(pSStartWalk);
+	//SetSkeleton(pSWalk);
+
+	//SetSkeleton(pSSmash);
+	//SetSkeleton(pSThrow);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -186,4 +289,144 @@ void CGolem::AdjustAnimationIndex()
 		m_nAniIndex = 5;
 		break;
 	}
+}
+
+void CGolem::AnimateByCurState()
+{
+	switch (m_curState) {
+	case States::Idle:
+		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
+		break;
+	case States::Attack:
+		if (GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			LookAt(m_pEnemy->GetPosition());
+		}
+		if (m_nCurrAnimation == Animations::Attack1)
+		{
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, m_attackRange, 180, m_StatusInfo.Atk);
+			}
+			if (m_curState != m_nextState)
+			{
+				if (GetAnimTimeRemainRatio() > 0.05f) break;
+				SetState(m_nextState);
+			}
+			else if (m_nCurrAnimation != m_nNextAnimation)
+			{
+				if (GetAnimTimeRemainRatio() > 0.05f) break;
+				m_nCurrAnimation = m_nNextAnimation;
+			}
+		}
+		break;
+	case States::Walk:
+	case States::Chase:
+		if (m_nCurrAnimation != Animations::StartWalk&&
+			m_nCurrAnimation != Animations::Walking)
+			m_nCurrAnimation = Animations::StartWalk;
+
+		if (m_nCurrAnimation == Animations::StartWalk) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)
+			{
+				m_nCurrAnimation = Animations::Walking;
+				m_fFrameTime = 0;
+			}
+		}
+		break;
+	case States::Die:
+		if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
+		if (GetAnimTimeRemainRatio() < 0.05)
+		{
+			SetState(States::Remove);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void CGolem::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
+{
+	if (m_lastDamageTeam == TeamType::Red)
+		SetTeam(TeamType::Red);
+	else if (m_lastDamageTeam == TeamType::Blue)
+		SetTeam(TeamType::Blue);
+
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
+
+	m_pColManager->AddCollider(this);
+
+	CPathEdge pathBeg{ m_pathes[WayType::Golem_Exit].front() };
+	XMFLOAT3 curPos{ GetPosition() };
+
+	int wayKind = rand() % 2; // 0: 아래, 1: 위
+	if (wayKind == 0)
+	{
+		pathBeg = m_pathes[WayType::Golem_Exit].front();
+	}
+	else
+	{
+		pathBeg = m_pathes[WayType::Golem_Exit].back();
+	}
+
+	Path *newPath{ NULL };
+	if (m_TeamType == TeamType::Blue)
+	{
+		// 위로 가야함
+		if (wayKind == 1)
+		{
+			newPath = new Path(m_pathes[WayType::Blue_Up]);
+		}
+		else
+		{
+			newPath = new Path(m_pathes[WayType::Blue_Down]);
+		}
+		newPath->remove_if([pathBeg](CPathEdge& edge) {
+			return edge.To().x < pathBeg.To().x;
+		});
+	}
+	else if (m_TeamType == TeamType::Red)
+	{
+		// 위로 가야함
+		if (wayKind == 1)
+		{
+			newPath = new Path(m_pathes[WayType::Red_Up]);
+		}
+		else
+		{
+			newPath = new Path(m_pathes[WayType::Red_Down]);
+		}
+		newPath->remove_if([pathBeg](CPathEdge& edge) {
+			return edge.To().x > pathBeg.To().x;
+		});
+	}
+
+	SetPathToGo(newPath);
+	GenerateSubPathToPosition(pWayFinder, XMFLOAT3(pathBeg.To().x, curPos.y, pathBeg.To().y));
+
+	SetState(StatesType::Walk);
+}
+
+void CGolem::Respawn()
+{
+	m_activated = false;
+
+	SetState(StatesType::Idle);
+	SetTeam(TeamType::Neutral);
+
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
+
+	m_pColManager->AddCollider(this);
+
+	m_xmf4x4World = m_xmf4x4SpawnWorld;
+}
+
+void CGolem::GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder)
+{
+	ResetSubPath();
+	m_subPath = pWayFinder->GetPathToPosition(GetPosition(), m_spawnLocation, GetCollisionSize());
+	m_subDestination = m_subPath->front().To();
+	m_subPath->pop_front();
+	LookAt(m_subDestination);
 }
