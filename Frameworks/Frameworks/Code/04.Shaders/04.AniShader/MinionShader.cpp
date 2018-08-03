@@ -608,17 +608,20 @@ void CMinionShader::SpawnMinion()
 	static CSkeleton SAtk2("Resource//3D//Minion//Animation//Sword//Minion_S_Attack2.aniinfo");
 	static CSkeleton SWalkStart("Resource//3D//Minion//Animation//Sword//Minion_S_WalkStart.aniinfo");
 	static CSkeleton SWalk("Resource//3D//Minion//Animation//Sword//Minion_S_Walk.aniinfo");
+	static CSkeleton SDie("Resource//3D//Minion//Animation//Sword//Minion_S_Die.aniinfo");
 
 	static CSkeleton BIdle("Resource//3D//Minion//Animation//Bow//Minion_B_Idle.aniinfo");
 	static CSkeleton BAtk("Resource//3D//Minion//Animation//Bow//Minion_B_Attack.aniinfo");
 	static CSkeleton BWalkStart("Resource//3D//Minion//Animation//Bow//Minion_B_WalkStart.aniinfo");
 	static CSkeleton BWalk("Resource//3D//Minion//Animation//Bow//Minion_B_Walk.aniinfo");
+	static CSkeleton BDie("Resource//3D//Minion//Animation//Bow//Minion_B_Die.aniinfo");
 
 	static CSkeleton MIdle("Resource//3D//Minion//Animation//Magic//Minion_M_Idle.aniinfo");
 	static CSkeleton MAtk1("Resource//3D//Minion//Animation//Magic//Minion_M_Attack1.aniinfo");
 	static CSkeleton MAtk2("Resource//3D//Minion//Animation//Magic//Minion_M_Attack2.aniinfo");
 	static CSkeleton MWalkStart("Resource//3D//Minion//Animation//Magic//Minion_M_WalkStart.aniinfo");
 	static CSkeleton MWalk("Resource//3D//Minion//Animation//Magic//Minion_M_Walk.aniinfo");
+	static CSkeleton MDie("Resource//3D//Minion//Animation//Magic//Minion_M_Die.aniinfo");
 
 	static CSkeleton Die("Resource//3D//Minion//Animation//Minion_Die.aniinfo");
 
@@ -644,7 +647,7 @@ void CMinionShader::SpawnMinion()
 
 	int wayKind{ 0 };
 
-	m_kind = ObjectType::SwordMinion;
+	m_kind = ObjectType::BowMinion;
 
 	//// 전체 생성되는 수의 절반은 근접 미니언
 	//if (m_curSpawnCount < 10)
@@ -698,6 +701,7 @@ void CMinionShader::SpawnMinion()
 			pMinionObject->SetSkeleton(&SAtk2);
 			pMinionObject->SetSkeleton(&SWalkStart);
 			pMinionObject->SetSkeleton(&SWalk);
+			pMinionObject->SetSkeleton(&SDie);
 			break;
 		case ObjectType::StaffMinion:
 			pMinionObject->SetSkeleton(&MIdle);
@@ -705,16 +709,18 @@ void CMinionShader::SpawnMinion()
 			pMinionObject->SetSkeleton(&MAtk2);
 			pMinionObject->SetSkeleton(&MWalkStart);
 			pMinionObject->SetSkeleton(&MWalk);
+			pMinionObject->SetSkeleton(&MDie);
 			break;
 		case ObjectType::BowMinion:
 			pMinionObject->SetSkeleton(&BIdle);
 			pMinionObject->SetSkeleton(&BAtk);
+			pMinionObject->SetSkeleton(&BAtk);
 			pMinionObject->SetSkeleton(&BWalkStart);
 			pMinionObject->SetSkeleton(&BWalk);
+			pMinionObject->SetSkeleton(&BDie);
 			break;
 		}
 
-		pMinionObject->SetSkeleton(&Die);
 		pMinionObject->SetTerrain(m_pTerrain);
 
 		pMinionObject->Rotate(90, 0, 0);
