@@ -7,7 +7,7 @@
 /// 목적: 움직이는 오브젝트 처리용 기본 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-08-01
+/// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ bool CAnimatedObject::AttackableFarRange(CCollisionObject * other)
 	if (!CheckEnemyState(other)) return false;
 	float dstSqr = Vector3::DistanceSquare(GetPosition(), other->GetPosition());
 	// 공격 범위의 70% 안에 적이 있는지 확인 -> 여러 적을 공격하기 위함
-	float adjRange = m_attackRange * 0.7f;
+	float adjRange = m_farAttackRange * 0.7f;
 	return (dstSqr < adjRange * adjRange);
 }
 
