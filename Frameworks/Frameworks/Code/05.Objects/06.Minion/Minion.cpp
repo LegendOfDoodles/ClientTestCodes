@@ -42,7 +42,7 @@ void CMinion::Render(CCamera * pCamera, UINT instanceCnt)
 {
 	OnPrepareRender();
 
-	if (!IsVisible(pCamera)||!m_Detected) return;
+	if (!IsVisible(pCamera) || !m_Detected) return;
 
 	if (m_pMaterial)
 	{
@@ -189,7 +189,7 @@ void CMinion::AdjustAnimationIndex()
 //////////////////////////////////////////////////////////////////////////
 //근접 미니언
 // 생성자, 소멸자
-CSwordMinion::CSwordMinion(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes): CMinion(pCreateMgr,nMeshes)
+CSwordMinion::CSwordMinion(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CMinion(pCreateMgr, nMeshes)
 {
 	SetType(ObjectType::SwordMinion);
 	m_StatusInfo.maxHP = 445;
@@ -209,71 +209,71 @@ CSwordMinion::~CSwordMinion()
 // 공개 함수
 void CSwordMinion::Animate(float timeElapsed)
 {
-		switch (m_curState) {
-		case States::Idle:
-			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
-			break;
-		case States::Attack:
-			if (GetAnimTimeRemainRatio() <= 0.05f)
-			{
-				LookAt(m_pEnemy->GetPosition());
-			}
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, m_attackRange, 180, m_StatusInfo.Atk);
-			}
-			if (m_nCurrAnimation == Animations::Attack1) {
-				if (m_curState == m_nextState)
-				{
-					if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
-					m_nCurrAnimation = Animations::Attack2;
-					m_fFrameTime = 0;
-				}
-				else
-				{
-					if (GetAnimTimeRemainRatio() > 0.05) break;
-					SetState(m_nextState);
-				}
-			}
-			else if (m_nCurrAnimation == Animations::Attack2)
-			{
-				if (m_curState == m_nextState)
-				{
-					if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
-					m_nCurrAnimation = Animations::Attack1;
-					m_fFrameTime = 0;
-				}
-				else
-				{
-					if (GetAnimTimeRemainRatio() > 0.05) break;
-					SetState(m_nextState);
-				}
-			}
-			break;
-		case States::Walk:
-		case States::Chase:
-			if(m_nCurrAnimation!= Animations::StartWalk&&
-				m_nCurrAnimation != Animations::Walking)
-				m_nCurrAnimation = Animations::StartWalk;
-
-			if (m_nCurrAnimation == Animations::StartWalk) {
-				if (m_fFrameTime >= m_nAniLength[m_nAniIndex]-1)
-				{
-					m_nCurrAnimation = Animations::Walking;
-					m_fFrameTime = 0;
-				}
-			}
-			break;
-		case States::Die:
-			if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
-			if (GetAnimTimeRemainRatio() < 0.05)
-			{
-				m_curState = States::Remove;
-			}
-			break;
-		default:
-			break;
+	switch (m_curState) {
+	case States::Idle:
+		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
+		break;
+	case States::Attack:
+		if (GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			LookAt(m_pEnemy->GetPosition());
 		}
+		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+			&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+			m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, m_attackRange, 180, m_StatusInfo.Atk);
+		}
+		if (m_nCurrAnimation == Animations::Attack1) {
+			if (m_curState == m_nextState)
+			{
+				if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
+				m_nCurrAnimation = Animations::Attack2;
+				m_fFrameTime = 0;
+			}
+			else
+			{
+				if (GetAnimTimeRemainRatio() > 0.05) break;
+				SetState(m_nextState);
+			}
+		}
+		else if (m_nCurrAnimation == Animations::Attack2)
+		{
+			if (m_curState == m_nextState)
+			{
+				if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
+				m_nCurrAnimation = Animations::Attack1;
+				m_fFrameTime = 0;
+			}
+			else
+			{
+				if (GetAnimTimeRemainRatio() > 0.05) break;
+				SetState(m_nextState);
+			}
+		}
+		break;
+	case States::Walk:
+	case States::Chase:
+		if (m_nCurrAnimation != Animations::StartWalk&&
+			m_nCurrAnimation != Animations::Walking)
+			m_nCurrAnimation = Animations::StartWalk;
+
+		if (m_nCurrAnimation == Animations::StartWalk) {
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] - 1)
+			{
+				m_nCurrAnimation = Animations::Walking;
+				m_fFrameTime = 0;
+			}
+		}
+		break;
+	case States::Die:
+		if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
+		if (GetAnimTimeRemainRatio() < 0.05)
+		{
+			m_curState = States::Remove;
+		}
+		break;
+	default:
+		break;
+	}
 	CMinion::Animate(timeElapsed);
 }
 
@@ -300,69 +300,69 @@ CMagicMinion::~CMagicMinion()
 // 공개 함수
 void CMagicMinion::Animate(float timeElapsed)
 {
-		switch (m_curState) {
-		case States::Idle:
-			if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
-			break;
-		case States::Attack:
-			if (GetAnimTimeRemainRatio() <= 0.05f)
-			{
-				LookAt(m_pEnemy->GetPosition());
-			}
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize * 2, GetLook(), m_TeamType, FlyingObjectType::Minion_Magic);
-			}
-			if (m_nCurrAnimation == Animations::Attack1) {
-				if (m_curState == m_nextState)
-				{
-					if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
-					m_nCurrAnimation = Animations::Attack2;
-					m_fFrameTime = 0;
-				}
-				else
-				{
-					if (GetAnimTimeRemainRatio() > 0.05) break;
-					SetState(m_nextState);
-				}
-			}
-			else if (m_nCurrAnimation == Animations::Attack2)
-			{
-				if (m_curState == m_nextState)
-				{
-					if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
-					m_nCurrAnimation = Animations::Attack1;
-					m_fFrameTime = 0;
-				}
-				else
-				{
-					if (GetAnimTimeRemainRatio() > 0.05) break;
-					SetState(m_nextState);
-				}
-			}
-			break;
-		case States::Walk:
-			if (m_nCurrAnimation != Animations::StartWalk &&
-				m_nCurrAnimation != Animations::Walking)
-				m_nCurrAnimation = Animations::StartWalk;
-			if (m_nCurrAnimation == Animations::StartWalk) {
-				if (m_fFrameTime > m_nAniLength[m_nAniIndex]-1)
-				{
-					m_nCurrAnimation = Animations::Walking;
-					m_fFrameTime = 0;
-				}
-			}
-			break;
-		case States::Die:
-			if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
-			if (GetAnimTimeRemainRatio() < 0.05)
-			{
-				m_curState = States::Remove;
-			}
-			break;
-		default:
-			break;
+	switch (m_curState) {
+	case States::Idle:
+		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
+		break;
+	case States::Attack:
+		if (GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			LookAt(m_pEnemy->GetPosition());
 		}
+		if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+			&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+			m_pThrowingMgr->RequestSpawn(GetPosition(), m_fCollisionSize * 2, GetLook(), m_TeamType, FlyingObjectType::Minion_Magic);
+		}
+		if (m_nCurrAnimation == Animations::Attack1) {
+			if (m_curState == m_nextState)
+			{
+				if (m_fFrameTime < m_nAniLength[m_nAniIndex] / 2) break;
+				m_nCurrAnimation = Animations::Attack2;
+				m_fFrameTime = 0;
+			}
+			else
+			{
+				if (GetAnimTimeRemainRatio() > 0.05) break;
+				SetState(m_nextState);
+			}
+		}
+		else if (m_nCurrAnimation == Animations::Attack2)
+		{
+			if (m_curState == m_nextState)
+			{
+				if (m_fFrameTime < m_nAniLength[m_nAniIndex]) break;
+				m_nCurrAnimation = Animations::Attack1;
+				m_fFrameTime = 0;
+			}
+			else
+			{
+				if (GetAnimTimeRemainRatio() > 0.05) break;
+				SetState(m_nextState);
+			}
+		}
+		break;
+	case States::Walk:
+		if (m_nCurrAnimation != Animations::StartWalk &&
+			m_nCurrAnimation != Animations::Walking)
+			m_nCurrAnimation = Animations::StartWalk;
+		if (m_nCurrAnimation == Animations::StartWalk) {
+			if (m_fFrameTime > m_nAniLength[m_nAniIndex] - 1)
+			{
+				m_nCurrAnimation = Animations::Walking;
+				m_fFrameTime = 0;
+			}
+		}
+		break;
+	case States::Die:
+		if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
+		if (GetAnimTimeRemainRatio() < 0.05)
+		{
+			m_curState = States::Remove;
+		}
+		break;
+	default:
+		break;
+	}
 	CMinion::Animate(timeElapsed);
 }
 
@@ -422,7 +422,7 @@ void CBowMinion::Animate(float timeElapsed)
 			m_nCurrAnimation = Animations::StartWalk;
 
 		if (m_nCurrAnimation == Animations::StartWalk) {
-			if (m_fFrameTime > m_nAniLength[m_nAniIndex]-1)
+			if (m_fFrameTime > m_nAniLength[m_nAniIndex] - 1)
 			{
 				m_nCurrAnimation = Animations::Walking;
 				m_fFrameTime = 0;
@@ -455,13 +455,13 @@ void CBowMinion::AdjustAnimationIndex()
 		m_nAniIndex = 1;
 		break;
 	case Animations::StartWalk:
-		m_nAniIndex = 2;
-		break;
-	case Animations::Walking:
 		m_nAniIndex = 3;
 		break;
-	case Animations::Die:
+	case Animations::Walking:
 		m_nAniIndex = 4;
+		break;
+	case Animations::Die:
+		m_nAniIndex = 5;
 		break;
 	}
 }

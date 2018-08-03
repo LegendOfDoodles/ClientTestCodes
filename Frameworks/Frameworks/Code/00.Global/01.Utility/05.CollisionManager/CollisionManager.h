@@ -33,7 +33,7 @@ public:
 protected:
 	bool NearLevel(XMFLOAT2 a, XMFLOAT2 b,bool attack = false) {
 
-		if ((Vector2::Distance(a, b) <10&&!attack)|| (Vector2::Distance(a, b) <20&& attack))
+		if ((Vector2::Distance(a, b) <15&&!attack)|| (Vector2::Distance(a, b) <20&& attack))
 			return true;
 		else
 			return false;
