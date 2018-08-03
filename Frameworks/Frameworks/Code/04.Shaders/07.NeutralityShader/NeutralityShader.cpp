@@ -16,9 +16,12 @@
 /// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
-#define NetralMaterial m_ppMaterials[0]
-#define BlueMaterial m_ppMaterials[1]
-#define RedMaterial m_ppMaterials[2]
+#define Roider_NetralMaterial m_ppMaterials[0]
+#define Roider_BlueMaterial m_ppMaterials[1]
+#define Roider_RedMaterial m_ppMaterials[2]
+#define Golem_NetralMaterial m_ppMaterials[3]
+#define Golem_BlueMaterial m_ppMaterials[4]
+#define Golem_RedMaterial m_ppMaterials[5]
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
@@ -41,10 +44,22 @@ void CNeutralityShader::Initialize(shared_ptr<CCreateMgr> pCreateMgr, void *pCon
 
 void CNeutralityShader::UpdateShaderVariables(int opt)
 {
-	UNREFERENCED_PARAMETER(opt);
 	static UINT elementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
+	int beg{ 0 }, end{ 0 };
 
-	for (int i = 0; i < m_nObjects; i++)
+	switch (opt)
+	{
+	case 0:	// Roider Update
+		beg = m_objectsIndices[ObjectType::Roider].m_begIndex;
+		end = m_objectsIndices[ObjectType::Roider].m_endIndex;
+		break;
+	case 1:	// Golem Update
+		beg = m_objectsIndices[ObjectType::GOLEM].m_begIndex;
+		end = m_objectsIndices[ObjectType::GOLEM].m_endIndex;
+		break;
+	}
+
+	for (int i = beg; i < end; ++i)
 	{
 		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		XMFLOAT4X4 tmp[128];
@@ -81,31 +96,61 @@ void CNeutralityShader::Render(CCamera *pCamera)
 {
 	CShader::Render(pCamera);
 
+	int beg, end;
+
+	beg = m_objectsIndices[ObjectType::Roider].m_begIndex;
+	end = m_objectsIndices[ObjectType::Roider].m_endIndex;
 #if USE_BATCH_MATERIAL
-	if (m_ppMaterials) NetralMaterial->UpdateShaderVariables();
+	if (m_ppMaterials) Roider_NetralMaterial->UpdateShaderVariables();
 #endif
-	for (int j = 0; j < m_nObjects; j++)
+	for (int j = beg; j < end; j++)
 	{
 		if(m_ppObjects[j]->GetTeam() == TeamType::Neutral)
 			m_ppObjects[j]->Render(pCamera);
 	}
 
 #if USE_BATCH_MATERIAL
-	if (m_ppMaterials) BlueMaterial->UpdateShaderVariables();
+	if (m_ppMaterials) Roider_BlueMaterial->UpdateShaderVariables();
 #endif
-	for (int j = 0; j < m_nObjects; j++)
+	for (int j = beg; j < end; j++)
 	{
 		if (m_ppObjects[j]->GetTeam() == TeamType::Blue)
 			m_ppObjects[j]->Render(pCamera);
 	}
 
 #if USE_BATCH_MATERIAL
-	if (m_ppMaterials) RedMaterial->UpdateShaderVariables();
+	if (m_ppMaterials) Roider_RedMaterial->UpdateShaderVariables();
 #endif
-	for (int j = 0; j < m_nObjects; j++)
+	for (int j = beg; j < end; j++)
 	{
 		if (m_ppObjects[j]->GetTeam() == TeamType::Red)
 			m_ppObjects[j]->Render(pCamera);
+	}
+
+	CShader::Render(pCamera, 1);
+
+	beg = m_objectsIndices[ObjectType::GOLEM].m_begIndex;
+	end = m_objectsIndices[ObjectType::GOLEM].m_endIndex;
+	if (m_ppObjects[beg]->GetTeam() == TeamType::Neutral)
+	{
+#if USE_BATCH_MATERIAL
+		if (m_ppMaterials) Golem_NetralMaterial->UpdateShaderVariables();
+#endif
+		m_ppObjects[beg]->Render(pCamera);
+	}
+	else if (m_ppObjects[beg]->GetTeam() == TeamType::Blue)
+	{
+#if USE_BATCH_MATERIAL
+		if (m_ppMaterials) Golem_BlueMaterial->UpdateShaderVariables();
+#endif
+		m_ppObjects[beg]->Render(pCamera);
+	}
+	else if (m_ppObjects[beg]->GetTeam() == TeamType::Red)
+	{
+#if USE_BATCH_MATERIAL
+		if (m_ppMaterials) Golem_RedMaterial->UpdateShaderVariables();
+#endif
+		m_ppObjects[beg]->Render(pCamera);
 	}
 }
 
@@ -123,10 +168,20 @@ void CNeutralityShader::RenderShadow(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0, 2);
 
-	for (int j = 0; j < m_nObjects; j++)
+	int beg, end;
+
+	beg = m_objectsIndices[ObjectType::Roider].m_begIndex;
+	end = m_objectsIndices[ObjectType::Roider].m_endIndex;
+	for (int j = beg; j < end; j++)
 	{
 		m_ppObjects[j]->Render(pCamera);
 	}
+
+	CShader::Render(pCamera, 1, 2);
+
+	beg = m_objectsIndices[ObjectType::GOLEM].m_begIndex;
+	end = m_objectsIndices[ObjectType::GOLEM].m_endIndex;
+	m_ppObjects[beg]->Render(pCamera);
 }
 
 CBaseObject * CNeutralityShader::PickObjectByRayIntersection(XMFLOAT3 & pickPosition, XMFLOAT4X4 & xmf4x4View, float & nearHitDistance)
@@ -267,7 +322,7 @@ void CNeutralityShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRe
 {
 	m_nPipelineStates = 3;
 
-	m_nHeaps = 2;
+	m_nHeaps = 3;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
@@ -283,30 +338,45 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 
 	transformInporter.LoadMeshData("Resource//Data//MonsterSetting.txt");
 
-	m_nObjects = transformInporter.m_iKindMeshCnt[0];
+	m_objectsIndices[ObjectType::Roider] = NeutralObjectIndices(0, transformInporter.m_iKindMeshCnt[0]);
+	m_objectsIndices[ObjectType::GOLEM] = NeutralObjectIndices(transformInporter.m_iKindMeshCnt[0], transformInporter.m_iKindMeshCnt[0] + 1);
+
+	m_nObjects = transformInporter.m_iKindMeshCnt[0] + 1;
 	m_ppObjects = new CCollisionObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
-	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, boundingBoxElementBytes, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, transformInporter.m_iKindMeshCnt[0], 1, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 1, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 2);
 
-	SaveBoundingBoxHeapNumber(1);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, boundingBoxElementBytes, m_nObjects);
+
+	CreateConstantBufferViews(pCreateMgr, transformInporter.m_iKindMeshCnt[0], m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
+	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer.Get(), ncbElementBytes, transformInporter.m_iKindMeshCnt[0], 1);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, 2);
+
+	SaveBoundingBoxHeapNumber(2);
 
 #if USE_BATCH_MATERIAL
-	m_nMaterials = 3;
+	m_nMaterials = 6;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[1] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[2] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
-	NetralMaterial->SetAlbedo(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	BlueMaterial->SetAlbedo(XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
-	RedMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_ppMaterials[3] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[4] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[5] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+
+	Roider_NetralMaterial->SetAlbedo(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	Roider_BlueMaterial->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
+	Roider_RedMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
+
+	Golem_NetralMaterial->SetAlbedo(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	Golem_BlueMaterial->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
+	Golem_RedMaterial->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -328,7 +398,6 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(7.0f)),
 		XMFLOAT3(CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(5.5f)));
 
-	int i = 0;
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	CRoider *pRoider{ NULL };
 
@@ -348,9 +417,11 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 			CONVERT_Unit_to_InG(nexusTransformInporter.m_Transform[1].pos.z))
 	};
 
-	for (int j = 0; j < m_nObjects; ++j) {
-		XMFLOAT3 pos{ transformInporter.m_Transform[j].pos };
-		XMFLOAT3 rot{ transformInporter.m_Transform[j].rotation };
+	// Roider Setting
+	int cnt{ 0 };
+	for (int j = 0; j < transformInporter.m_iKindMeshCnt[0]; ++j, ++cnt) {
+		XMFLOAT3 pos{ transformInporter.m_Transform[cnt].pos };
+		XMFLOAT3 rot{ transformInporter.m_Transform[cnt].rotation };
 
 		pRoider = new CRoider(pCreateMgr, 1);
 
@@ -379,18 +450,48 @@ void CNeutralityShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pC
 		pRoider->Rotate(0, 180, 0);
 		pRoider->Rotate(-rot.x, rot.y, -rot.z);
 
-		pRoider->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-		pRoider->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+		pRoider->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * cnt));
+		pRoider->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * cnt));
 		
 		pRoider->SetPathes(m_pathes);
 
 		pRoider->SetNexusPoses(blueNexusPos, redNexusPos);
 		pRoider->SaveCurrentState();
 
-		m_ppObjects[i++] = pRoider;
+		m_ppObjects[cnt] = pRoider;
 	}
 
-	//CGolem *pGolem{ NULL };
+	// Golem Setting
+	{
+		CGolem *pGolem{ NULL };
+		XMFLOAT3 pos{ transformInporter.m_Transform[cnt].pos };
+		XMFLOAT3 rot{ transformInporter.m_Transform[cnt].rotation };
+
+		pGolem = new CGolem(pCreateMgr, 1);
+
+		pGolem->SetType(ObjectType::GOLEM);
+#if !USE_BATCH_MATERIAL
+		pRotatingObject->SetMaterial(pCubeMaterial);
+#endif
+		pGolem->CBaseObject::SetPosition(CONVERT_Unit_to_InG(pos.x), CONVERT_Unit_to_InG(pos.y), CONVERT_Unit_to_InG(pos.z));
+		pGolem->SetTeam(TeamType::Neutral);
+
+		pGolem->SetTerrain(m_pTerrain);
+
+		pGolem->Rotate(0, 180, 0);
+		pGolem->Rotate(-rot.x, rot.y, -rot.z);
+
+		pGolem->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr);
+		pGolem->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[2].ptr + (incrementSize * cnt));
+
+		pGolem->SetPathes(m_pathes);
+
+		pGolem->SetNexusPoses(blueNexusPos, redNexusPos);
+		pGolem->SaveCurrentState();
+
+		m_ppObjects[cnt] = pGolem;
+		cnt++;
+	}
 
 	Safe_Delete(pSIdle);
 	Safe_Delete(pSStartWalk);

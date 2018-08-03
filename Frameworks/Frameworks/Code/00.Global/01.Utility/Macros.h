@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-01
+/// 최종 수정 날짜: 2018-08-03
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -52,6 +52,7 @@
 // 시간(Time) 관련
 #define TIME_AVAILABILITY_CHECK 1.5f	// subPath가 유효한 시간
 #define TIME_ACTIVATE_CHECK 3.0f	// 중립 몬스터가 대기 상태로 돌아가는 시간
+#define TIME_ACTIVATE_CHECK_GOLEM 10.0f	// 중립 몬스터가 대기 상태로 돌아가는 시간
 
 // 높이(Height) 관련
 #define REVISE_HEIGHT 100.0f
@@ -80,6 +81,10 @@
 #define CONVERT_PaperUnit_to_InG(val) val * 8.28f
 #define CONVERT_Unit_to_InG(val) val * 1000.0f
 #define CONVERT_cm_to_InG(val) val * 34.5f
+
+// 중립 몬스터 복귀 거리
+#define MAX_RANGE_FROM_SPAWN_ROIDER CONVERT_Unit_to_InG(0.489f)
+#define MAX_RANGE_FROM_SPAWN_GOLEM CONVERT_Unit_to_InG(0.636f)
 
 // 경험치 증가량
 #define INCREASE_STATICOBJECT_EXP 5

@@ -57,6 +57,7 @@ protected:	// 내부 함수
 	void ReadyToAtk(shared_ptr<CWayFinder> pWayFinder);
 	void Respawn();
 	void GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder);
+	bool FarFromSpawnLocation();
 
 protected:	// 변수
 	bool m_activated{ false };

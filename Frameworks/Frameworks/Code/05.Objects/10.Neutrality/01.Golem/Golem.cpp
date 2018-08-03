@@ -13,6 +13,8 @@
 // 생성자, 소멸자
 CGolem::CGolem(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObject(pCreateMgr, nMeshes)
 {
+	srand((unsigned)time(NULL));
+
 	m_ObjectType = ObjectType::GOLEM;
 
 	m_sightRange = CONVERT_PaperUnit_to_InG(100.0f);
@@ -85,7 +87,7 @@ void CGolem::SetState(StatesType newState)
 	switch (newState)
 	{
 	case States::Idle:
-		m_nCurrAnimation = Animations::Idle;
+		SetAnimation(Animations::Idle);
 		break;
 	case States::Walk:
 		RegenerateLookAt();
@@ -121,36 +123,38 @@ void CGolem::PlayIdle(float timeElapsed)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
 
+	if (!m_activated) return;
+
 	if (m_activated && m_TeamType == TeamType::Neutral)
 	{
 		m_deactiveTime += timeElapsed;
-		if (m_deactiveTime > TIME_ACTIVATE_CHECK)
+		if (m_deactiveTime > TIME_ACTIVATE_CHECK_GOLEM)
 		{
 			m_activated = false;
+			m_deactiveTime = 0.0f;
+			m_nCurrAnimation = Animations::IdleToSit;
 			// Warning! 회복 처리
 			// 방안 1: 전체 회복
 			// 방안 2: 일정 시간동안 몇 %의 체력 회복
 		}
 	}
 
-	if (!m_activated) return;
-
-	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
-
-	if (!enemy) return;
-	if (!Chaseable(enemy)) return;
-
-	SetEnemy(enemy);
-
-	if (Attackable(enemy))
+	if (m_nCurrAnimation == Animations::Idle ||
+		m_curState == States::Walk)
 	{
-		SetState(States::Attack);
+		CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
+
+		if (!enemy) return;
+		if (!Chaseable(enemy)) return;
+
+		SetEnemy(enemy);
+
+		if (Attackable(enemy))
+		{
+			SetState(States::Attack);
+		}
+		else SetState(States::Chase);
 	}
-	else if (AttackableFarRange(enemy)) {
-		SetState(States::Attack);
-		SetAnimation(Animations::Attack2);
-	}
-	else SetState(States::Chase);
 }
 
 void CGolem::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
@@ -173,7 +177,7 @@ void CGolem::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 
 void CGolem::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
-	if (!Chaseable(m_pEnemy))
+	if (!Chaseable(m_pEnemy) || FarFromSpawnLocation())
 	{
 		SetEnemy(NULL);
 		if (m_TeamType == TeamType::Neutral)
@@ -234,34 +238,63 @@ void CGolem::SaveCurrentState()
 	m_spawnLocation = GetPosition();
 }
 
+void CGolem::ReceiveDamage(float damage)
+{
+	// 이미 사망한 상태인 경우 데미지 처리를 하지 않는다.
+	if (m_curState == States::Die || m_curState == States::Remove) { return; }
+
+	m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
+	if (m_StatusInfo.HP <= 0 && m_curState != States::Die) {
+		SetState(States::Die);
+	}
+
+	if (!m_activated)
+	{
+		m_activated = true;
+		if (m_nCurrAnimation == Animations::Sit)
+		{
+			m_nCurrAnimation = Animations::SitToIdle;
+		}
+	}
+}
+
 void CGolem::BuildSelf(shared_ptr<CCreateMgr> pCreateMgr)
 {
-	CSkinnedMesh *pRoiderMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Golem//Mesh//GuardGolem.meshinfo");
+	CSkinnedMesh *pGolemMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Golem//Mesh//GuardGolem.meshinfo");
 
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(28.0f), CONVERT_PaperUnit_to_InG(7.0f), CONVERT_PaperUnit_to_InG(20.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(11.0f));
 
-	//CSkeleton *pSIdle = new CSkeleton("Resource//3D//Monster//Animation//Royde_Idle.aniinfo");
-	//CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Monster//Animation//Royde_Start_Walk.aniinfo");
-	//CSkeleton *pSWalk = new CSkeleton("Resource//3D//Monster//Animation//Royde_Walk.aniinfo");
-	//CSkeleton *pSSmash = new CSkeleton("Resource//3D//Monster//Animation//Royde_Attack1.aniinfo");
-	//CSkeleton *pSThrow = new CSkeleton("Resource//3D//Monster//Animation//Royde_Attack2.aniinfo");
-	//CSkeleton *pSDie = new CSkeleton("Resource//3D//Monster//Animation//Royde_Die.aniinfo");
+	CSkeleton *pSIdle = new CSkeleton("Resource//3D//Golem//Animation//Golem_Idle.aniinfo");
+	CSkeleton *pSIdleToSit = new CSkeleton("Resource//3D//Golem//Animation//Golem_Idle_To_Sit.aniinfo");
+	CSkeleton *pSSitToIdle = new CSkeleton("Resource//3D//Golem//Animation//Golem_Sit_To_Idle.aniinfo");
+	CSkeleton *pSSit = new CSkeleton("Resource//3D//Golem//Animation//Golem_Sit.aniinfo");
+	CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Golem//Animation//Golem_Start_Walk.aniinfo");
+	CSkeleton *pSWalk = new CSkeleton("Resource//3D//Golem//Animation//Golem_Walk.aniinfo");
+	CSkeleton *pSSmash = new CSkeleton("Resource//3D//Golem//Animation//Golem_Basic_Attack.aniinfo");
+	CSkeleton *pSpAttack1 = new CSkeleton("Resource//3D//Golem//Animation//Golem_Special_Attack1.aniinfo");
+	CSkeleton *pSpAttack2 = new CSkeleton("Resource//3D//Golem//Animation//Golem_Special_Attack2.aniinfo");
+	CSkeleton *pSDie = new CSkeleton("Resource//3D//Golem//Animation//Golem_Die.aniinfo");
 
-	pRoiderMesh->SetBoundingBox(
+	pGolemMesh->SetBoundingBox(
 		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(11.0f)),
 		XMFLOAT3(CONVERT_PaperUnit_to_InG(14.0f), CONVERT_PaperUnit_to_InG(7.0f), CONVERT_PaperUnit_to_InG(10.0f)));
 
+	SetMesh(0, pGolemMesh);
 	SetBoundingMesh(pBoundingBoxMesh);
 	SetCollisionSize(CONVERT_PaperUnit_to_InG(14));
 
-	//SetSkeleton(pSIdle);
-	//SetSkeleton(pSStartWalk);
-	//SetSkeleton(pSWalk);
-
-	//SetSkeleton(pSSmash);
-	//SetSkeleton(pSThrow);
+	SetSkeleton(pSIdle);
+	SetSkeleton(pSIdleToSit);
+	SetSkeleton(pSSitToIdle);
+	SetSkeleton(pSSit);
+	SetSkeleton(pSStartWalk);
+	SetSkeleton(pSWalk);
+	SetSkeleton(pSSmash);
+	SetSkeleton(pSpAttack1);
+	SetSkeleton(pSpAttack2);
+	SetSkeleton(pSDie);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -273,20 +306,32 @@ void CGolem::AdjustAnimationIndex()
 	case Animations::Idle:
 		m_nAniIndex = 0;
 		break;
-	case Animations::Attack1:
+	case Animations::IdleToSit:
 		m_nAniIndex = 1;
 		break;
-	case Animations::Attack2:
+	case Animations::SitToIdle:
 		m_nAniIndex = 2;
 		break;
-	case Animations::StartWalk:
+	case Animations::Sit:
 		m_nAniIndex = 3;
 		break;
-	case Animations::Walking:
+	case Animations::StartWalk:
 		m_nAniIndex = 4;
 		break;
-	case Animations::Die:
+	case Animations::Walking:
 		m_nAniIndex = 5;
+		break;
+	case Animations::Attack1:
+		m_nAniIndex = 6;
+		break;
+	case Animations::SpecialAttack1:
+		m_nAniIndex = 7;
+		break;
+	case Animations::SpecialAttack2:
+		m_nAniIndex = 8;
+		break;
+	case Animations::Die:
+		m_nAniIndex = 9;
 		break;
 	}
 }
@@ -295,7 +340,16 @@ void CGolem::AnimateByCurState()
 {
 	switch (m_curState) {
 	case States::Idle:
-		if (m_nCurrAnimation != Animations::Idle) m_nCurrAnimation = Animations::Idle;
+		if (m_nCurrAnimation == Animations::IdleToSit &&
+			GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			m_nCurrAnimation = Animations::Sit;
+		}
+		else if (m_nCurrAnimation == Animations::SitToIdle &&
+			GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			m_nCurrAnimation = Animations::Idle;
+		}
 		break;
 	case States::Attack:
 		if (GetAnimTimeRemainRatio() <= 0.05f)
@@ -352,7 +406,7 @@ void CGolem::ReadyToAtk(shared_ptr<CWayFinder> pWayFinder)
 		SetTeam(TeamType::Red);
 	else if (m_lastDamageTeam == TeamType::Blue)
 		SetTeam(TeamType::Blue);
-
+	
 	m_StatusInfo.HP = m_StatusInfo.maxHP;
 
 	m_pColManager->AddCollider(this);
@@ -413,6 +467,7 @@ void CGolem::Respawn()
 	m_activated = false;
 
 	SetState(StatesType::Idle);
+	SetAnimation(Animations::Sit);
 	SetTeam(TeamType::Neutral);
 
 	m_StatusInfo.HP = m_StatusInfo.maxHP;
@@ -431,4 +486,11 @@ void CGolem::GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder)
 	m_subDestination = m_subPath->front().To();
 	m_subPath->pop_front();
 	LookAt(m_subDestination);
+}
+
+bool CGolem::FarFromSpawnLocation()
+{
+	if (m_TeamType != TeamType::Neutral) return false;
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), m_spawnLocation);
+	return (dstSqr > MAX_RANGE_FROM_SPAWN_GOLEM * MAX_RANGE_FROM_SPAWN_GOLEM);
 }

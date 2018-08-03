@@ -120,19 +120,20 @@ void CRoider::PlayIdle(float timeElapsed)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
 
+	if (!m_activated) return;
+
 	if (m_activated && m_TeamType == TeamType::Neutral)
 	{
 		m_deactiveTime += timeElapsed;
 		if (m_deactiveTime > TIME_ACTIVATE_CHECK)
 		{
 			m_activated = false;
+			m_deactiveTime = 0.0f;
 			// Warning! 회복 처리
 			// 방안 1: 전체 회복
 			// 방안 2: 일정 시간동안 몇 %의 체력 회복
 		}
 	}
-
-	if (!m_activated) return;
 
 	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
 
@@ -172,7 +173,7 @@ void CRoider::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 
 void CRoider::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 {
-	if (!Chaseable(m_pEnemy))
+	if (!Chaseable(m_pEnemy) || FarFromSpawnLocation())
 	{
 		SetEnemy(NULL);
 		if (m_TeamType == TeamType::Neutral)
@@ -427,4 +428,11 @@ void CRoider::GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder)
 	m_subDestination = m_subPath->front().To();
 	m_subPath->pop_front();
 	LookAt(m_subDestination);
+}
+
+bool CRoider::FarFromSpawnLocation()
+{
+	if (m_TeamType != TeamType::Neutral) return false;
+	float dstSqr = Vector3::DistanceSquare(GetPosition(), m_spawnLocation);
+	return (dstSqr > MAX_RANGE_FROM_SPAWN_ROIDER * MAX_RANGE_FROM_SPAWN_ROIDER);
 }

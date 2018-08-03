@@ -56,8 +56,8 @@ public: // 공개 함수
 
 	void  SetSpeed(float speed) { m_speed = speed; }
 
-	int GetAnimTimeRemain() { return static_cast<int>(m_nAniLength[m_nCurrAnimation] - m_fFrameTime); }
-	float GetAnimTimeRemainRatio() { return (m_nAniLength[m_nCurrAnimation] - m_fFrameTime) / (float)m_nAniLength[m_nCurrAnimation]; }
+	int GetAnimTimeRemain() { return static_cast<int>(m_nAniLength[m_nAniIndex] - m_fFrameTime); }
+	float GetAnimTimeRemainRatio() { return (m_nAniLength[m_nAniIndex] - m_fFrameTime) / (float)m_nAniLength[m_nAniIndex]; }
 
 protected: // 내부 함수
 	bool IsArrive(float dst, PathType type = PathType::Main);

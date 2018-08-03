@@ -30,17 +30,7 @@ public:	// 외부 함수
 		m_redNexusLoc = redPos;
 	}
 
-	virtual void ReceiveDamage(float damage)
-	{
-		// 이미 사망한 상태인 경우 대미지 처리를 하지 않는다.
-		if (m_curState == States::Die || m_curState == States::Remove) { return; }
-
-		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
-		if (m_StatusInfo.HP <= 0&&m_curState!=States::Die) {
-			SetState(States::Die);
-		}
-
-	}
+	virtual void ReceiveDamage(float damage);
 
 	virtual void NotifyDamager(CCollisionObject* other) { m_pDamager = other; }
 	virtual void NotifyDamageTeam(TeamType type) { m_lastDamageTeam = type; }
@@ -56,9 +46,10 @@ protected:	// 내부 함수
 	void ReadyToAtk(shared_ptr<CWayFinder> pWayFinder);
 	void Respawn();
 	void GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder);
+	bool FarFromSpawnLocation();
 
 protected:	// 변수
-	bool m_activated{ false };
+	bool m_activated{ true };
 	/*
 	0. Idle		1.Attack	2.Attack2	3.StartWalk		4.Walking	5.Die
 	*/

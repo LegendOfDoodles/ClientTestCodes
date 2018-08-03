@@ -44,7 +44,12 @@ namespace Animations
 		SkillR,
 		Win,
 		Defeat,
-		Defeat2
+		Defeat2,
+		SpecialAttack1,
+		SpecialAttack2,
+		IdleToSit,
+		SitToIdle,
+		Sit
 	};
 }
 

@@ -12,6 +12,15 @@ class CThrowingMgr;
 class CUIObjectManager;
 class CFSMMgr;
 
+struct NeutralObjectIndices
+{
+	int m_begIndex;
+	int m_endIndex;
+
+	NeutralObjectIndices() {}
+	NeutralObjectIndices(int a, int b):m_begIndex(a), m_endIndex(b){}
+};
+
 class CNeutralityShader : public CShader
 {
 public: // 생성자, 소멸자
@@ -63,6 +72,8 @@ protected: // 변수
 
 	shared_ptr<CCreateMgr> m_pCreateMgr{ NULL };
 	shared_ptr<CFSMMgr> m_pFSMMgr;
+
+	std::unordered_map<ObjectType, NeutralObjectIndices> m_objectsIndices;
 
 	Path m_pathes[6];
 };

@@ -70,7 +70,7 @@ void CFlyingShader::UpdateShaderVariables(int opt)
 		break;
 	}
 
-	for (int i = beg; i < end; i++)
+	for (int i = beg; i < end; ++i)
 	{
 		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
