@@ -50,7 +50,7 @@ public:	// 외부 함수
 	void SetPathes(Path* pathes) { m_pathes = pathes; }
 
 protected:	// 내부 함수
-	void BuildSelf();
+	void BuildSelf(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual void AdjustAnimationIndex();
 	void AnimateByCurState();
 	void ReadyToAtk(shared_ptr<CWayFinder> pWayFinder);

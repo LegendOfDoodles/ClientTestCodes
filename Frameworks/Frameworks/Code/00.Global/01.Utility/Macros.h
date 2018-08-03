@@ -59,7 +59,9 @@
 
 // 노드(Node) 관련
 #define NODE_SIZE 41.4f
+#define NODE_SIZE_HALF NODE_SIZE * 0.5f
 #define NODE_SIZE_SQR NODE_SIZE * NODE_SIZE
+#define NODE_SIZE_HALF_SQR NODE_SIZE_HALF * NODE_SIZE_HALF
 #define NONE -1
 
 // 최대, 최소 수치

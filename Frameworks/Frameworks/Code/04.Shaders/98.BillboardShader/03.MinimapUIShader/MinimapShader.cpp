@@ -129,8 +129,7 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 			m_pPlayer->SetPathToGo(
 				m_pWayFinder->GetPathToPosition(
 				XMFLOAT2(m_pPlayer->GetPosition().x, m_pPlayer->GetPosition().z),
-				XMFLOAT2(PlayerDestination.x, PlayerDestination.z),
-				m_pPlayer->GetCollisionSize()));
+				XMFLOAT2(PlayerDestination.x, PlayerDestination.z)));
 		}
 	}
 

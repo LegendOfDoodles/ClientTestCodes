@@ -599,8 +599,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 		m_pSelectedObject->LookAt(m_pickWorldPosition);
 		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(
 			XMFLOAT2(m_pSelectedObject->GetPosition().x, m_pSelectedObject->GetPosition().z),
-			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z),
-			m_pSelectedObject->GetCollisionSize()));
+			XMFLOAT2(m_pickWorldPosition.x, m_pickWorldPosition.z)));
 	}
 	else {
 		// 미 선택시 Player 0번

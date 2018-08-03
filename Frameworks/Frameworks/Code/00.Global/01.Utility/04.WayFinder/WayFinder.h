@@ -21,16 +21,16 @@ public: // 생성자, 소멸자
 	~CWayFinder();
 
 public: // 공개 함수
-	bool CanGoDirectly(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
-	bool CanGoDirectly(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
-	XMFLOAT2 GetClosestNotCollidePos(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
-	XMFLOAT3 GetClosestNotCollidePos(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
-	Path *GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target, float collisionSize);
-	Path *GetPathToPosition(const XMFLOAT3 &source, const XMFLOAT3 &target, float collisionSize);
-	Path *GetPathToPosition(const XMFLOAT3 &source, const XMFLOAT2 &target, float collisionSize);
+	bool CanGoDirectly(const XMFLOAT2 &source, const XMFLOAT2 &target);
+	bool CanGoDirectly(const XMFLOAT3 &source, const XMFLOAT3 &target);
+	XMFLOAT2 GetClosestNotCollidePos(const XMFLOAT2 &source, const XMFLOAT2 &target);
+	XMFLOAT3 GetClosestNotCollidePos(const XMFLOAT3 &source, const XMFLOAT3 &target);
+	Path *GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &target);
+	Path *GetPathToPosition(const XMFLOAT3 &source, const XMFLOAT3 &target);
+	Path *GetPathToPosition(const XMFLOAT3 &source, const XMFLOAT2 &target);
 
-	void SmoothPath(Path *path, float collisionSize);
-	void SmoothPathDetail(Path *path, float collisionSize);
+	void SmoothPath(Path *path);
+	void SmoothPathDetail(Path *path);
 
 	int FindClosestNodeIndexWithPosition(const XMFLOAT2 &position);
 

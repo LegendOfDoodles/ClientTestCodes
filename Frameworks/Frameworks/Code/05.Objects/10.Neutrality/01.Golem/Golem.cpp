@@ -27,7 +27,7 @@ CGolem::CGolem(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObject
 
 	m_attackRange = CONVERT_PaperUnit_to_InG(30);
 
-	BuildSelf();
+	BuildSelf(pCreateMgr);
 }
 
 CGolem::~CGolem()
@@ -234,13 +234,13 @@ void CGolem::SaveCurrentState()
 	m_spawnLocation = GetPosition();
 }
 
-void CGolem::BuildSelf()
+void CGolem::BuildSelf(shared_ptr<CCreateMgr> pCreateMgr)
 {
-	//CSkinnedMesh *pRoiderMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Royde.meshinfo");
+	CSkinnedMesh *pRoiderMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Golem//Mesh//GuardGolem.meshinfo");
 
-	//CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
-	//	CONVERT_PaperUnit_to_InG(4.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(11.0f),
-	//	0, 0, -CONVERT_PaperUnit_to_InG(7.0f));
+	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
+		CONVERT_PaperUnit_to_InG(28.0f), CONVERT_PaperUnit_to_InG(7.0f), CONVERT_PaperUnit_to_InG(20.0f),
+		0, 0, -CONVERT_PaperUnit_to_InG(11.0f));
 
 	//CSkeleton *pSIdle = new CSkeleton("Resource//3D//Monster//Animation//Royde_Idle.aniinfo");
 	//CSkeleton *pSStartWalk = new CSkeleton("Resource//3D//Monster//Animation//Royde_Start_Walk.aniinfo");
@@ -249,12 +249,12 @@ void CGolem::BuildSelf()
 	//CSkeleton *pSThrow = new CSkeleton("Resource//3D//Monster//Animation//Royde_Attack2.aniinfo");
 	//CSkeleton *pSDie = new CSkeleton("Resource//3D//Monster//Animation//Royde_Die.aniinfo");
 
-	//pRoiderMesh->SetBoundingBox(
-	//	XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(7.0f)),
-	//	XMFLOAT3(CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(5.5f)));
+	pRoiderMesh->SetBoundingBox(
+		XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(11.0f)),
+		XMFLOAT3(CONVERT_PaperUnit_to_InG(14.0f), CONVERT_PaperUnit_to_InG(7.0f), CONVERT_PaperUnit_to_InG(10.0f)));
 
-	//SetBoundingMesh(pBoundingBoxMesh);
-	//SetCollisionSize(CONVERT_PaperUnit_to_InG(12));
+	SetBoundingMesh(pBoundingBoxMesh);
+	SetCollisionSize(CONVERT_PaperUnit_to_InG(14));
 
 	//SetSkeleton(pSIdle);
 	//SetSkeleton(pSStartWalk);
@@ -425,7 +425,9 @@ void CGolem::Respawn()
 void CGolem::GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder)
 {
 	ResetSubPath();
-	m_subPath = pWayFinder->GetPathToPosition(GetPosition(), m_spawnLocation, GetCollisionSize());
+	m_subPath = pWayFinder->GetPathToPosition(
+		GetPosition(), 
+		m_spawnLocation);
 	m_subDestination = m_subPath->front().To();
 	m_subPath->pop_front();
 	LookAt(m_subDestination);
