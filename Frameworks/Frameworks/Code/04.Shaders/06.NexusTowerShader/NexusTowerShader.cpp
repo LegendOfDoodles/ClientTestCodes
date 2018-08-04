@@ -6,12 +6,13 @@
 #include "05.Objects/07.StaticObjects/Obstacle.h"
 #include "05.Objects/09.NexusTower/NexusTower.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
+#include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
 
 /// <summary>
-/// 목적: 스테틱 오브젝트 그리기 용도의 쉐이더
+/// 목적: 넥서스 및 타워 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-08-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -63,7 +64,7 @@ void CNexusTowerShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Animate(timeElapsed);
+		m_pFSMMgr->Update(timeElapsed, m_ppObjects[j]);
 	}
 }
 
@@ -72,13 +73,10 @@ void CNexusTowerShader::Render(CCamera *pCamera)
 	int cnt{ 0 };
 	for (int i = 0; i < m_nMaterials; ++i)
 	{
+		CShader::Render(pCamera, i);
+		m_ppMaterials[i]->UpdateShaderVariables();
 		for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
 		{
-			if (j == 0)
-			{
-				CShader::Render(pCamera, i);
-				m_ppMaterials[i]->UpdateShaderVariables();
-			}
 			if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
 		}
 	}
@@ -99,12 +97,9 @@ void CNexusTowerShader::RenderShadow(CCamera * pCamera)
 	int cnt{ 0 };
 	for (int i = 0; i < m_nMaterials; ++i)
 	{
+		CShader::Render(pCamera, i, 2);
 		for (int j = 0; j < m_meshCounts[i]; ++j, ++cnt)
 		{
-			if (j == 0)
-			{
-				CShader::Render(pCamera, i, 2);
-			}
 			if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
 		}
 	}
@@ -149,6 +144,14 @@ void CNexusTowerShader::SetColManagerToObject(shared_ptr<CCollisionManager> mana
 	for (int i = 0; i < m_nObjects; ++i) {
 
 		m_ppObjects[i]->SetCollisionManager(manager);
+	}
+}
+
+void CNexusTowerShader::SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager)
+{
+	for (int i = 0; i < m_nObjects; ++i)
+	{
+		m_ppObjects[i]->SetThrowingManager(manager);
 	}
 }
 

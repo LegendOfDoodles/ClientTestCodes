@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-03
+/// 최종 수정 날짜: 2018-08-04
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -210,6 +210,8 @@
 #define COOLTIME_SPECIAL_ATTACK1 16.0f
 #define COOLTIME_SPECIAL_ATTACK2 24.0f
 
+// 타워 관련
+#define COOLTIME_TOWER_ATTACK 5.0f
 
 // 캡션 FPS 출력 여부 -------------------
 // 항상 캡션에 FPS를 출력		(0 : 비활성 | 1 : 활성)

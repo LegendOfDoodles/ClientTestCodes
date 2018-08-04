@@ -34,7 +34,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-01
+/// 최종 수정 날짜: 2018-08-04
 /// </summary>
 
 #define UI_Shader m_ppShaders[8]
@@ -471,6 +471,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_pCollisionManager->AddCollider((pNTS->GetCollisionObjects())[i]);
 	}
 	pNTS->SetColManagerToObject(m_pCollisionManager);
+	pNTS->SetFSMManager(m_pFSMMgr);
+	pNTS->SetThrowingManagerToObject(m_pThrowingMgr);
 
 	CFlyingShader* pFS = (CFlyingShader*)m_ppShaders[7];
 	pFS->SetColManagerToObject(m_pCollisionManager);

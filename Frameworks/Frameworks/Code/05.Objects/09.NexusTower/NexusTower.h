@@ -14,6 +14,10 @@ public:
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 
+	virtual void PlayIdle(float timeElapsed);
+	virtual void PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
+	virtual void PlayDie(float timeElapsed);
+
 	virtual void ReceiveDamage(float damage) { 
 		// 이미 사망한 상태인 경우 대미지 처리를 하지 않는다.
 		if (m_curState == States::Die || m_curState == States::Remove) { return; }
@@ -38,5 +42,7 @@ protected: // 변수
 	float m_fEndTime{ 0 };
 
 	StaticInfo m_StatusInfo;
+
+	float m_atkCoolTime{ 0.0f };
 };
 
