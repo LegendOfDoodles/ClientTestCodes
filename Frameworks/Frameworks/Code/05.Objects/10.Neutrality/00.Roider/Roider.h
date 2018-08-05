@@ -2,7 +2,6 @@
 #include "05.Objects/00.BaseObject/BaseObject.h"
 #include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/97.Skeleton/Skeleton.h"
-#include "00.Global/01.Utility/Enumerations.h"
 
 typedef std::list<CPathEdge> Path;
 

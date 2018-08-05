@@ -1,6 +1,5 @@
 #pragma once
 #include "06.Meshes/01.Mesh/Mesh.h"
-#include "00.Global/01.Utility/Enumerations.h"
 
 class CCreateMgr;
 class CShader;

@@ -1,6 +1,5 @@
 #pragma once
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
-#include "00.Global/01.Utility/Enumerations.h"
 
 class CCollisionManager;
 
