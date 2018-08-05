@@ -363,7 +363,11 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(10.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(6.5f));
-	
+	m_nArmor = 3;
+	m_pArmor = new CSkinnedMesh*[m_nArmor];
+	m_pArmor[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//BS.meshinfo");
+
+
 	m_nSword = 3;
 
 	m_pSword = new CSkinnedMesh*[m_nSword];
@@ -443,16 +447,17 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	for (UINT j = 0; j < m_nBow; ++j) {
 		m_pBow[j]->AddRef();
 	}
-
+	m_pArmor[0]->AddRef();
 
 	for (int x = 0; x < m_nObjects / 2; ++x) {
 		for (int z = 0; z < m_nObjects / 2; ++z) {
 
-			pPlayer = new CPlayer(pCreateMgr, 2);
+			pPlayer = new CPlayer(pCreateMgr, 3);
 
 			pPlayer->SetMesh(0, pPlayerMesh);
 				
 			pPlayer->SetMesh(1, m_pStick);
+			pPlayer->SetMesh(2, m_pArmor[0]);
 			pPlayer->SetType(ObjectType::StickPlayer);
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);
