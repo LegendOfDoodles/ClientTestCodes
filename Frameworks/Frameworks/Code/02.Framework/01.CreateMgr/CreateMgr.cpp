@@ -198,7 +198,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 	D3D12_RESOURCE_STATES resourceStates, ID3D12Resource **ppUploadBuffer)
 {
 	HRESULT hResult;
-	ID3D12Resource *pBuffer = NULL;
+	ID3D12Resource *pBuffer{ NULL };
 
 	D3D12_HEAP_PROPERTIES heapProperties{ CreateBufferHeapProperties(heapType) };
 	D3D12_RESOURCE_DESC	resourceDesc{ CreateBufferResourceDesc(nBytes) };
@@ -299,7 +299,7 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 
 	D3D12_RESOURCE_DESC resourceDesc;
 	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER; //Upload Heap에는 텍스쳐를 생성할 수 없음
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	resourceDesc.Alignment = 0;
 	resourceDesc.Width = nBytes;
 	resourceDesc.Height = 1;
@@ -328,7 +328,12 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 	return(pTexture);
 }
 
-ID3D12Resource * CCreateMgr::CreateTexture2DResource(UINT nWidth, UINT nHeight, DXGI_FORMAT format, D3D12_RESOURCE_FLAGS resourceFlags, D3D12_RESOURCE_STATES resourceStates, D3D12_CLEAR_VALUE * pClearValue)
+ID3D12Resource * CCreateMgr::CreateTexture2DResource(
+	UINT nWidth, UINT nHeight, 
+	DXGI_FORMAT format, 
+	D3D12_RESOURCE_FLAGS resourceFlags, 
+	D3D12_RESOURCE_STATES resourceStates, 
+	D3D12_CLEAR_VALUE * pClearValue)
 {
 	ID3D12Resource *pTexture{ NULL };
 
@@ -391,7 +396,7 @@ void CCreateMgr::ExecuteCommandList()
 void CCreateMgr::CreateDirect3dDevice()
 {
 	HRESULT hResult;
-	DWORD debugFactoryFlags{ 0 };
+	DWORD debugFactoryFlags{ NULL };
 
 #if defined(_DEBUG) || defined(USE_DEBUG_CONTROLLER)
 	ComPtr<ID3D12Debug> pDebugController;
@@ -415,7 +420,7 @@ void CCreateMgr::CreateDirect3dDevice()
 	//모든 하드웨어 어댑터 대하여 특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성한다.
 	ComPtr<IDXGIAdapter1> pAdapter;
 	for (UINT i = 0;
-		DXGI_ERROR_NOT_FOUND != m_pFactory->EnumAdapters1(i, &pAdapter);
+		DXGI_ERROR_NOT_FOUND != m_pFactory->EnumAdapters1(i, pAdapter.GetAddressOf());
 		i++)
 	{
 		DXGI_ADAPTER_DESC1 adapterDesc;
@@ -424,7 +429,6 @@ void CCreateMgr::CreateDirect3dDevice()
 		if (adapterDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
 		if (SUCCEEDED((hResult = D3D12CreateDevice(pAdapter.Get(), D3D_FEATURE_LEVEL_12_0,
 			IID_PPV_ARGS(m_pDevice.GetAddressOf()))))) break;
-		ThrowIfFailed(hResult);
 	}
 
 	//특성 레벨 12.0을 지원하는 하드웨어 디바이스를 생성할 수 없으면 WARP 디바이스를 생성한다.
@@ -616,7 +620,7 @@ void CCreateMgr::CreateSwapChainRenderTargetViews()
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 	renderTargetViewDesc.Texture2D.PlaneSlice = 0;
 
-	for (UINT i = 0; i <SWAP_CHAIN_BUFFER_CNT; i++)
+	for (UINT i = 0; i <SWAP_CHAIN_BUFFER_CNT; ++i)
 	{
 		m_pRtvSwapChainBackBufferCPUHandles[i] = rtvCPUDescriptorHandle;
 		hResult = m_pSwapChain->GetBuffer(i, __uuidof(ID3D12Resource), (void **)&m_ppSwapChainBackBuffers[i]);
@@ -719,7 +723,7 @@ void CCreateMgr::CreateRenderTargetViews()
 	m_pTexture.reset();
 	m_pTexture = shared_ptr<CTexture>(new CTexture(RENDER_TARGET_BUFFER_CNT + 1, RESOURCE_TEXTURE_2D_ARRAY, 0));
 
-	D3D12_CLEAR_VALUE d3dClearValue = { m_renderBufferFormat,{ 0.0f, 0.0f, 0.0f, 1.0f } };
+	D3D12_CLEAR_VALUE clearValue = { m_renderBufferFormat, { 0.0f, 0.0f, 0.0f, 1.0f } };
 	for (UINT i = 0; i < RENDER_TARGET_BUFFER_CNT; i++)
 	{
 		m_ppRenderTargetBuffers[i] = m_pTexture->CreateTexture(
@@ -729,7 +733,7 @@ void CCreateMgr::CreateRenderTargetViews()
 			m_renderBufferFormat,
 			D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET,
 			D3D12_RESOURCE_STATE_GENERIC_READ,
-			&d3dClearValue, i);
+			&clearValue, i);
 		hResult = m_ppRenderTargetBuffers[i]->SetName(L"m_ppRenderTargetBuffers");
 		ThrowIfFailed(hResult);
 	}

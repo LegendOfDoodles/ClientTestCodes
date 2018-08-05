@@ -6,7 +6,7 @@
 /// 목적: 텍스처, 알베도, 재질 등 정리용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ void CMaterial::SetShader(CShader *pShader)
 // 내부 함수
 void CMaterial::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 {
-	UINT ncbMaterialBytes = ((sizeof(COLOR) + 255) & ~255); //256의 배수
+	static UINT ncbMaterialBytes = ((sizeof(COLOR) + 255) & ~255); //256의 배수
 	m_pcbColor = pCreateMgr->CreateBufferResource(
 		NULL, 
 		ncbMaterialBytes,

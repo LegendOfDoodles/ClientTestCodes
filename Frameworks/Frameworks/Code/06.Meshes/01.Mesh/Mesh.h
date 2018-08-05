@@ -19,8 +19,8 @@ public: // 공개 함수
 
 	void SetBoundingBox(const XMFLOAT3& center, const XMFLOAT3& extents);
 	
-	ID3D12Resource* GetVertexBuffer() { return m_pVertexBuffer; }
-	ID3D12Resource* GetVertexUploadBuffer() { 	return m_pVertexUploadBuffer; }
+	ComPtr<ID3D12Resource> GetVertexBuffer() { return m_pVertexBuffer; }
+	ComPtr<ID3D12Resource> GetVertexUploadBuffer() { 	return m_pVertexUploadBuffer; }
 
 	BoundingOrientedBox GetBoundingBox() { return(*m_pBoundingBox); }
 
@@ -34,11 +34,11 @@ protected: // 내부 함수
 protected: // 변수
 	int m_nReferences{ 0 };
 
-	ID3D12Resource *m_pVertexBuffer{ NULL };
-	ID3D12Resource *m_pVertexUploadBuffer{ NULL };
+	ComPtr<ID3D12Resource> m_pVertexBuffer;
+	ComPtr<ID3D12Resource> m_pVertexUploadBuffer;
 
-	ID3D12Resource *m_pIndexBuffer{ NULL };
-	ID3D12Resource *m_pIndexUploadBuffer{ NULL };
+	ComPtr<ID3D12Resource> m_pIndexBuffer;
+	ComPtr<ID3D12Resource> m_pIndexUploadBuffer;
 
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
@@ -139,12 +139,12 @@ public: // 공개 함수
 
 private: // 변수
 	//높이 맵 이미지 픽셀(8-비트)들의 이차원 배열이다. 각 픽셀은 0~255의 값을 갖는다.
-	BYTE * m_pHeightMapPixels;
+	BYTE * m_pHeightMapPixels{ NULL };
 	//높이 맵 이미지의 가로와 세로 크기이다.
-	int m_nWidth;
-	int m_nLength;
+	int m_nWidth{ 0 };
+	int m_nLength{ 0 };
 	//높이 맵 이미지를 실제로 몇 배 확대하여 사용할 것인가를 나타내는 스케일 벡터이다.
-	XMFLOAT3 m_xmf3Scale;
+	XMFLOAT3 m_xmf3Scale{};
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,9 +207,9 @@ public: // 공개 함수
 	int GetHeightMapLength() { return(m_nLength); }
 
 private: // 변수
-	BYTE * m_pCollisionMapPixels;
-	int m_nWidth;
-	int m_nLength;
+	BYTE * m_pCollisionMapPixels{ NULL };
+	int m_nWidth{ 0 };
+	int m_nLength{ 0 };
 
-	XMFLOAT3 m_xmf3Scale;
+	XMFLOAT3 m_xmf3Scale{};
 };

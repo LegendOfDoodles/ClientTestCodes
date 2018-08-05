@@ -10,7 +10,6 @@ public:	// 생성자, 소멸자
 	~CCreateMgr();
 
 public:	// 공개 함수
-	ComPtr<ID3D12Debug> InitializeDirectXDevice();
 	void Initialize(HINSTANCE hInstance, HWND hWnd);
 	void Release();
 

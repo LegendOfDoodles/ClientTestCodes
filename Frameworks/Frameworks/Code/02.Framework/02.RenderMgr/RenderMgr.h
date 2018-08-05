@@ -58,7 +58,7 @@ private:	// 내부 함수
 	void SynchronizeResourceTransition(ID3D12Resource *pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
 
 private:	// 변수
-			// Swap Chain
+	// Swap Chain
 	ComPtr<IDXGISwapChain3> m_pSwapChain;
 	UINT m_swapChainBufferIndex{ 0 };
 

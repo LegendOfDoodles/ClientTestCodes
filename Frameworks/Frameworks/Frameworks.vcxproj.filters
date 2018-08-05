@@ -261,10 +261,10 @@
     <Filter Include="소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader">
       <UniqueIdentifier>{3c8e4587-f4b6-4e52-a4ce-8a270921888f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\06.Meshes\99.Material">
+    <Filter Include="소스 파일\05.Objects\99.Material">
       <UniqueIdentifier>{125304f7-0a09-40e2-95ae-1c8261bfd91b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\06.Meshes\99.Material\00.Texture">
+    <Filter Include="소스 파일\05.Objects\99.Material\00.Texture">
       <UniqueIdentifier>{f1e382fe-91e1-44f9-bb85-2970bef4a982}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -321,10 +321,10 @@
       <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
     </ClInclude>
     <ClInclude Include="Code\05.Objects\99.Material\Material.h">
-      <Filter>소스 파일\06.Meshes\99.Material</Filter>
+      <Filter>소스 파일\05.Objects\99.Material</Filter>
     </ClInclude>
     <ClInclude Include="Code\05.Objects\99.Material\00.Texture\Texture.h">
-      <Filter>소스 파일\06.Meshes\99.Material\00.Texture</Filter>
+      <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
     </ClInclude>
     <ClInclude Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.h">
       <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>
@@ -542,10 +542,10 @@
       <Filter>소스 파일\05.Objects\98.Prefabs</Filter>
     </ClCompile>
     <ClCompile Include="Code\05.Objects\99.Material\Material.cpp">
-      <Filter>소스 파일\06.Meshes\99.Material</Filter>
+      <Filter>소스 파일\05.Objects\99.Material</Filter>
     </ClCompile>
     <ClCompile Include="Code\05.Objects\99.Material\00.Texture\Texture.cpp">
-      <Filter>소스 파일\06.Meshes\99.Material\00.Texture</Filter>
+      <Filter>소스 파일\05.Objects\99.Material\00.Texture</Filter>
     </ClCompile>
     <ClCompile Include="Code\05.Objects\01.Camera\00.BaseCamera\Camera.cpp">
       <Filter>소스 파일\05.Objects\01.Camera\00.BaseCamera</Filter>

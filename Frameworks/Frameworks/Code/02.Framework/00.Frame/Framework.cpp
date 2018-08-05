@@ -2,10 +2,10 @@
 #include "Framework.h"
 
 /// <summary>
-/// 목적: 테
+/// 목적: 프레임워크 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-04
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ void CFramework::FrameAdvance(float timeElapsed)
 	m_pScene->ProcessInput();
 	m_pScene->AnimateObjects(timeElapsed);
 	m_pRenderMgr->Render(m_pScene);
-	// 임시 종료 확인
+	// Warning! 임시 종료 확인 -> 향우 변경 필요
 	m_running = !(GetAsyncKeyState(VK_ESCAPE) & 0x8000);
 }
 

@@ -8,7 +8,7 @@
 /// 목적: 테스트 용 메쉬 클래스 생성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-02
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -22,12 +22,6 @@ CMesh::CMesh(shared_ptr<CCreateMgr> pCreateMgr)
 
 CMesh::~CMesh()
 {
-	Safe_Release(m_pVertexBuffer);
-	Safe_Release(m_pVertexUploadBuffer);
-
-	Safe_Release(m_pIndexBuffer);
-	Safe_Release(m_pIndexUploadBuffer);
-
 	Safe_Delete(m_pBoundingBox);
 }
 
@@ -35,8 +29,8 @@ CMesh::~CMesh()
 // 공개 함수
 void CMesh::ReleaseUploadBuffers()
 {
-	Safe_Release(m_pVertexUploadBuffer);
-	Safe_Release(m_pIndexUploadBuffer);
+	m_pVertexUploadBuffer.Reset();
+	m_pIndexUploadBuffer.Reset();
 }
 
 void CMesh::Render(UINT istanceCnt)
@@ -346,7 +340,12 @@ CMeshIlluminatedTextured::CMeshIlluminatedTextured(shared_ptr<CCreateMgr> pCreat
 	CIlluminatedTexturedVertex *pVertices = new CIlluminatedTexturedVertex[m_nVertices];
 	for (UINT i = 0; i < m_nVertices; i++) pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2UVs[i]);
 
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices,
+		m_nStride * m_nVertices,
+		D3D12_HEAP_TYPE_DEFAULT,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -356,7 +355,12 @@ CMeshIlluminatedTextured::CMeshIlluminatedTextured(shared_ptr<CCreateMgr> pCreat
 	{
 		m_nIndices = nIndices;
 
-		m_pIndexBuffer = pCreateMgr->CreateBufferResource(pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
+		m_pIndexBuffer = pCreateMgr->CreateBufferResource(
+			pnIndices, 
+			sizeof(UINT) * m_nIndices,
+			D3D12_HEAP_TYPE_DEFAULT, 
+			D3D12_RESOURCE_STATE_INDEX_BUFFER,
+			m_pIndexUploadBuffer.GetAddressOf());
 
 		m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
 		m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
@@ -393,7 +397,12 @@ CSkinnedMesh::CSkinnedMesh(shared_ptr<CCreateMgr> pCreateMgr, char* in) : CMeshI
 		indicesCount += 3;
 	}
 
-	m_pIndexBuffer = pCreateMgr->CreateBufferResource(pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
+		pnIndices, 
+		sizeof(UINT) * m_nIndices, 
+		D3D12_HEAP_TYPE_DEFAULT,
+		D3D12_RESOURCE_STATE_INDEX_BUFFER, 
+		m_pIndexUploadBuffer.GetAddressOf());
 
 	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
 	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
@@ -430,7 +439,12 @@ CSkinnedMesh::CSkinnedMesh(shared_ptr<CCreateMgr> pCreateMgr, char* in) : CMeshI
 		index[3] = (BYTE)pxmf4SkinIndex[i].w;
 		pVertices[i] = CSkinnedVertex(pxmf3Positions[i], index, pxmf3Normals[i], pxmf3Tangents[i], pxmf2TexCoords[i], pxmf4SkinWeight[i]);
 	}
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices, 
+		m_nStride * m_nVertices, 
+		D3D12_HEAP_TYPE_DEFAULT, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, 
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -474,7 +488,12 @@ CStaticMesh::CStaticMesh(shared_ptr<CCreateMgr> pCreateMgr, char * in,XMFLOAT3 s
 		indicesCount += 3;
 	}
 
-	m_pIndexBuffer = pCreateMgr->CreateBufferResource(pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
+	m_pIndexBuffer = pCreateMgr->CreateBufferResource(
+		pnIndices, 
+		sizeof(UINT) * m_nIndices, 
+		D3D12_HEAP_TYPE_DEFAULT,
+		D3D12_RESOURCE_STATE_INDEX_BUFFER,
+		m_pIndexUploadBuffer.GetAddressOf());
 
 	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
 	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
@@ -500,7 +519,12 @@ CStaticMesh::CStaticMesh(shared_ptr<CCreateMgr> pCreateMgr, char * in,XMFLOAT3 s
 	for (UINT i = 0; i < m_nVertices; i++) {
 		pVertices[i] = CIlluminatedTexturedVertex(pxmf3Positions[i], pxmf3Normals[i], pxmf2TexCoords[i], pxmf3Tangents[i]);
 	}
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices,
+		m_nStride * m_nVertices,
+		D3D12_HEAP_TYPE_DEFAULT,
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -658,7 +682,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(shared_ptr<CCreateMgr> pCreateMgr, int nW
 		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		&m_pVertexUploadBuffer);
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -705,7 +729,7 @@ CHeightMapGridMesh::CHeightMapGridMesh(shared_ptr<CCreateMgr> pCreateMgr, int nW
 		sizeof(UINT) * m_nIndices,
 		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_INDEX_BUFFER,
-		&m_pIndexUploadBuffer);
+		m_pIndexUploadBuffer.GetAddressOf());
 
 	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
 	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
@@ -799,7 +823,12 @@ CTexturedRectMesh::CTexturedRectMesh(shared_ptr<CCreateMgr> pCreateMgr, float fW
 		}
 	}
 
-	m_pVertexBuffer = pCreateMgr->CreateBufferResource(pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pVertexUploadBuffer);
+	m_pVertexBuffer = pCreateMgr->CreateBufferResource(
+		pVertices,
+		m_nStride * m_nVertices,
+		D3D12_HEAP_TYPE_DEFAULT, 
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -859,7 +888,7 @@ CArrowMesh::CArrowMesh(shared_ptr<CCreateMgr> pCreateMgr, float length) : CMesh(
 		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		&m_pVertexUploadBuffer);
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -893,7 +922,7 @@ CArrowMesh::CArrowMesh(shared_ptr<CCreateMgr> pCreateMgr, float length) : CMesh(
 		sizeof(UINT) * m_nIndices, 
 		D3D12_HEAP_TYPE_DEFAULT, 
 		D3D12_RESOURCE_STATE_INDEX_BUFFER,
-		&m_pIndexUploadBuffer);
+		m_pIndexUploadBuffer.GetAddressOf());
 
 	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
 	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
@@ -932,7 +961,7 @@ CCubeMesh::CCubeMesh(shared_ptr<CCreateMgr> pCreateMgr, float fWidth, float fHei
 		m_nStride * m_nVertices,
 		D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		&m_pVertexUploadBuffer);
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.StrideInBytes = m_nStride;
@@ -957,7 +986,7 @@ CCubeMesh::CCubeMesh(shared_ptr<CCreateMgr> pCreateMgr, float fWidth, float fHei
 		sizeof(UINT) * m_nIndices,
 		D3D12_HEAP_TYPE_DEFAULT, 
 		D3D12_RESOURCE_STATE_INDEX_BUFFER,
-		&m_pIndexUploadBuffer);
+		m_pVertexUploadBuffer.GetAddressOf());
 
 	m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
 	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
