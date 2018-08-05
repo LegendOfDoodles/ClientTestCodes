@@ -312,7 +312,7 @@ void Renderer::Particle()
 
 	GLuint id = glGetUniformLocation(shader, "u_Time");
 	glUniform1f(id, m_fTimer);
-	m_fTimer += 0.01f;
+	m_fTimer += 0.005f;
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOParticleRect);
 	glVertexAttribPointer(posID, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
