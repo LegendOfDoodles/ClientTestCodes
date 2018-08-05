@@ -98,6 +98,7 @@ void CMeshImporter::LoadMeshData(char * in)
 		}
 		m_xmVertex.push_back(vertex);
 	}
+	ifs.close();
 }
 
 void CMeshImporter::LoadStaticMeshData(char * in)
@@ -179,6 +180,7 @@ void CMeshImporter::LoadStaticMeshData(char * in)
 		}
 		m_xmVertex.push_back(vertex);
 	}
+	ifs.close();
 }
 
 CMeshImporter::~CMeshImporter()
