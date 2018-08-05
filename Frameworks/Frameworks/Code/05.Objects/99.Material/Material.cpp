@@ -90,10 +90,10 @@ void CMaterial::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 
 void CMaterial::ReleaseShaderVariables()
 {
-	if (m_pcbColor)
+	if (m_pcbColor.Get())
 	{
 		m_pcbColor->Unmap(0, NULL);
-		Safe_Release(m_pcbColor);
+		m_pcbColor.Reset();
 	}
 }
 

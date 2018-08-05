@@ -34,7 +34,7 @@
 /// 목적: 기본 씬, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-04
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 #define UI_Shader m_ppShaders[8]
@@ -518,13 +518,13 @@ void CScene::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr)
 
 void CScene::ReleaseShaderVariables()
 {
-	if (m_pcbLights)
+	if (m_pcbLights.Get())
 	{
 		m_pcbLights->Unmap(0, NULL);
 		m_pcbLights.Reset();
 	}
 
-	if (m_pcbbFoW)
+	if (m_pcbbFoW.Get())
 	{
 		m_pcbbFoW->Unmap(0, NULL);
 		m_pcbbFoW.Reset();

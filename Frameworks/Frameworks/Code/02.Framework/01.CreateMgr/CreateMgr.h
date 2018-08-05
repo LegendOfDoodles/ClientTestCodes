@@ -18,19 +18,19 @@ public:	// 공개 함수
 	void OnResizeBackBuffers();
 	void ChangeScreenMode();
 
-	ID3D12Resource *CreateBufferResource(
+	ComPtr<ID3D12Resource> CreateBufferResource(
 		void *pData, UINT nBytes,
 		D3D12_HEAP_TYPE d3dHeapType = D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATES d3dResourceStates = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
-		ID3D12Resource **ppd3dUploadBuffer = NULL);
+		ID3D12Resource **ppUploadBuffer = NULL);
 
-	ID3D12Resource *CreateTextureResourceFromFile(
+	ComPtr<ID3D12Resource> CreateTextureResourceFromFile(
 		wchar_t *pszFileName,
 		ID3D12Resource **ppUploadBuffer,
 		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
 		bool bIsCubeMap = false);
 
-	ID3D12Resource* CreateTexture2DResource(
+	ComPtr<ID3D12Resource> CreateTexture2DResource(
 		UINT nWidth, UINT nHeight,
 		DXGI_FORMAT dxgiFormat,
 		D3D12_RESOURCE_FLAGS resourceFlags,

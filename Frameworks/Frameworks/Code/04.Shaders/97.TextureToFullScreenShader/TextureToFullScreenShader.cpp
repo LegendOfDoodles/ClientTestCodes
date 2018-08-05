@@ -6,7 +6,7 @@
 /// 목적: 디퍼드 쉐이딩 적용하기 위한 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -148,10 +148,10 @@ void CTextureToFullScreenShader::CreateShaderResourceViews(shared_ptr<CCreateMgr
 	int nTextureType = pTexture->GetTextureType();
 	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; i++)
 	{
-		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		ComPtr<ID3D12Resource> pShaderResource = pTexture->GetTexture(i);
 		D3D12_RESOURCE_DESC resourceDesc = pShaderResource->GetDesc();
 		GetShaderResourceViewDesc(resourceDesc, nTextureType, &shaderResourceViewDesc);
-		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource, &shaderResourceViewDesc, srvCPUDescriptorHandle);
+		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource.Get(), &shaderResourceViewDesc, srvCPUDescriptorHandle);
 		srvCPUDescriptorHandle.ptr += incrementSize;
 
 		pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, srvGPUDescriptorHandle);
@@ -159,7 +159,7 @@ void CTextureToFullScreenShader::CreateShaderResourceViews(shared_ptr<CCreateMgr
 	}
 
 	// Shadow 텍스처
-	ID3D12Resource *pShadowDepthBuffer = pTexture->GetTexture(RENDER_TARGET_BUFFER_CNT);
+	ComPtr<ID3D12Resource> pShadowDepthBuffer = pTexture->GetTexture(RENDER_TARGET_BUFFER_CNT);
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDescForShadow = {};
 	srvDescForShadow.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDescForShadow.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
@@ -168,7 +168,7 @@ void CTextureToFullScreenShader::CreateShaderResourceViews(shared_ptr<CCreateMgr
 	srvDescForShadow.Texture2D.MipLevels = 1;
 	srvDescForShadow.Texture2D.ResourceMinLODClamp = 0.0f;
 	srvDescForShadow.Texture2D.PlaneSlice = 0;
-	pCreateMgr->GetDevice()->CreateShaderResourceView(pShadowDepthBuffer, &srvDescForShadow, srvCPUDescriptorHandle);
+	pCreateMgr->GetDevice()->CreateShaderResourceView(pShadowDepthBuffer.Get(), &srvDescForShadow, srvCPUDescriptorHandle);
 
 	pTexture->SetRootArgument(RENDER_TARGET_BUFFER_CNT, nRootParameterStartIndex, srvGPUDescriptorHandle);
 }

@@ -59,12 +59,12 @@ void CCreateMgr::Release()
 
 	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
 	{
-		m_ppRenderTargetBuffers->Reset();
+		m_ppRenderTargetBuffers[i].Reset();
 	}
 
 	for (int i = 0; i < SWAP_CHAIN_BUFFER_CNT; ++i)
 	{
-		m_ppSwapChainBackBuffers->Reset();
+		m_ppSwapChainBackBuffers[i].Reset();
 	}
 
 	m_pGraphicsRootSignature.Reset();
@@ -193,12 +193,12 @@ D3D12_RESOURCE_STATES CreateBufferInitialStates(D3D12_HEAP_TYPE heapType)
 	return D3D12_RESOURCE_STATE_COPY_DEST;
 }
 
-ID3D12Resource* CCreateMgr::CreateBufferResource(
+ComPtr<ID3D12Resource> CCreateMgr::CreateBufferResource(
 	void *pData, UINT nBytes, D3D12_HEAP_TYPE heapType,
 	D3D12_RESOURCE_STATES resourceStates, ID3D12Resource **ppUploadBuffer)
 {
 	HRESULT hResult;
-	ID3D12Resource *pBuffer{ NULL };
+	ComPtr<ID3D12Resource> pBuffer;
 
 	D3D12_HEAP_PROPERTIES heapProperties{ CreateBufferHeapProperties(heapType) };
 	D3D12_RESOURCE_DESC	resourceDesc{ CreateBufferResourceDesc(nBytes) };
@@ -209,7 +209,7 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 		&resourceDesc,
 		CreateBufferInitialStates(heapType),
 		NULL,
-		IID_PPV_ARGS(&pBuffer));
+		IID_PPV_ARGS(pBuffer.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
 	if (pData)
@@ -237,9 +237,9 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 				(*ppUploadBuffer)->Unmap(0, NULL);
 
 				//업로드 버퍼의 내용을 디폴트 버퍼에 복사한다.
-				m_pCommandList->CopyResource(pBuffer, *ppUploadBuffer);
+				m_pCommandList->CopyResource(pBuffer.Get(), *ppUploadBuffer);
 
-				D3D12_RESOURCE_BARRIER barrierSet{ CreateResourceBarrier(pBuffer, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates) };
+				D3D12_RESOURCE_BARRIER barrierSet{ CreateResourceBarrier(pBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, resourceStates) };
 				m_pCommandList->ResourceBarrier(1, &barrierSet);
 			}
 			break;
@@ -262,13 +262,13 @@ ID3D12Resource* CCreateMgr::CreateBufferResource(
 	return(pBuffer);
 }
 
-ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
+ComPtr<ID3D12Resource> CCreateMgr::CreateTextureResourceFromFile(
 	wchar_t *pszFileName, 
 	ID3D12Resource **ppUploadBuffer,
 	D3D12_RESOURCE_STATES resourceStates,
 	bool bIsCubeMap)
 {
-	ID3D12Resource *pTexture{ NULL };
+	ComPtr<ID3D12Resource> pTexture;
 	std::unique_ptr<uint8_t[]> ddsData;
 	std::vector<D3D12_SUBRESOURCE_DATA> vSubresources;
 	DDS_ALPHA_MODE ddsAlphaMode = DDS_ALPHA_MODE_UNKNOWN;
@@ -279,7 +279,7 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 		0, 
 		D3D12_RESOURCE_FLAG_NONE,
 		DDS_LOADER_DEFAULT, 
-		&pTexture, 
+		pTexture.GetAddressOf(), 
 		ddsData, 
 		vSubresources, 
 		&ddsAlphaMode, 
@@ -295,7 +295,7 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 	heapPropertiesDesc.VisibleNodeMask = 1;
 
 	UINT nSubResources = (UINT)vSubresources.size();
-	UINT64 nBytes = GetRequiredIntermediateSize(pTexture, 0, nSubResources);
+	UINT64 nBytes = GetRequiredIntermediateSize(pTexture.Get(), 0, nSubResources);
 
 	D3D12_RESOURCE_DESC resourceDesc;
 	::ZeroMemory(&resourceDesc, sizeof(D3D12_RESOURCE_DESC));
@@ -320,22 +320,22 @@ ID3D12Resource* CCreateMgr::CreateTextureResourceFromFile(
 		IID_PPV_ARGS(ppUploadBuffer));
 	ThrowIfFailed(hResult);
 
-	::UpdateSubresources(m_pCommandList.Get() , pTexture, *ppUploadBuffer, 0, 0, nSubResources, &vSubresources[0]);
+	::UpdateSubresources(m_pCommandList.Get(), pTexture.Get(), *ppUploadBuffer, 0, 0, nSubResources, &vSubresources[0]);
 
-	D3D12_RESOURCE_BARRIER barrierSet{ CreateResourceBarrier(pTexture, D3D12_RESOURCE_STATE_COPY_DEST, resourceStates) };
+	D3D12_RESOURCE_BARRIER barrierSet{ CreateResourceBarrier(pTexture.Get(), D3D12_RESOURCE_STATE_COPY_DEST, resourceStates) };
 	m_pCommandList->ResourceBarrier(1, &barrierSet);
 
 	return(pTexture);
 }
 
-ID3D12Resource * CCreateMgr::CreateTexture2DResource(
+ComPtr<ID3D12Resource> CCreateMgr::CreateTexture2DResource(
 	UINT nWidth, UINT nHeight, 
 	DXGI_FORMAT format, 
 	D3D12_RESOURCE_FLAGS resourceFlags, 
 	D3D12_RESOURCE_STATES resourceStates, 
 	D3D12_CLEAR_VALUE * pClearValue)
 {
-	ID3D12Resource *pTexture{ NULL };
+	ComPtr<ID3D12Resource> pTexture;
 
 	D3D12_HEAP_PROPERTIES heapPropertiesDesc;
 	::ZeroMemory(&heapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
@@ -365,7 +365,7 @@ ID3D12Resource * CCreateMgr::CreateTexture2DResource(
 		&textureResourceDesc, 
 		resourceStates,
 		pClearValue,
-		IID_PPV_ARGS(&pTexture));
+		IID_PPV_ARGS(pTexture.GetAddressOf()));
 	ThrowIfFailed(hResult);
 
 	return(pTexture);
@@ -752,7 +752,7 @@ void CCreateMgr::CreateRenderTargetViews()
 	for (UINT i = 0; i < RENDER_TARGET_BUFFER_CNT; i++)
 	{
 		m_pRtvRenderTargetBufferCPUHandles[i] = rtvCPUDescriptorHandle;
-		m_pDevice->CreateRenderTargetView(m_pTexture->GetTexture(i), &renderTargetViewDesc, m_pRtvRenderTargetBufferCPUHandles[i]);
+		m_pDevice->CreateRenderTargetView(m_pTexture->GetTexture(i).Get(), &renderTargetViewDesc, m_pRtvRenderTargetBufferCPUHandles[i]);
 		rtvCPUDescriptorHandle.ptr += m_rtvDescriptorIncrementSize;
 	}
 	m_pRenderMgr->SetRtvRenderTargetBufferCPUHandles(m_pRtvRenderTargetBufferCPUHandles);

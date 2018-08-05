@@ -8,7 +8,7 @@
 /// 목적: 기본 쉐이터 코드, 인터페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-04
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -377,10 +377,10 @@ void CShader::CreateShaderResourceViews(
 	int nTextureType = pTexture->GetTextureType();
 	for (int i = 0; i < nTextures; i++)
 	{
-		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		ComPtr<ID3D12Resource> pShaderResource = pTexture->GetTexture(i);
 		D3D12_RESOURCE_DESC resourceDesc = pShaderResource->GetDesc();
 		GetShaderResourceViewDesc(resourceDesc, nTextureType, &shaderResourceViewDesc);
-		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource, &shaderResourceViewDesc, srvCPUDescriptorHandle);
+		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource.Get(), &shaderResourceViewDesc, srvCPUDescriptorHandle);
 		srvCPUDescriptorHandle.ptr += incrementSize;
 
 		pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, srvGPUDescriptorHandle);
@@ -680,19 +680,19 @@ void CShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 
 void CShader::ReleaseShaderVariables()
 {
-	if (m_pInstanceBuffer)
+	if (m_pInstanceBuffer.Get())
 	{
 		m_pInstanceBuffer->Unmap(0, NULL);
 		m_pInstanceBuffer.Reset();
 	}
 
-	if (m_pConstBuffer)
+	if (m_pConstBuffer.Get())
 	{
 		m_pConstBuffer->Unmap(0, NULL);
 		m_pConstBuffer.Reset();
 	}
 
-	if (m_pBoundingBoxBuffer)
+	if (m_pBoundingBoxBuffer.Get())
 	{
 		m_pBoundingBoxBuffer->Unmap(0, NULL);
 		m_pBoundingBoxBuffer.Reset();

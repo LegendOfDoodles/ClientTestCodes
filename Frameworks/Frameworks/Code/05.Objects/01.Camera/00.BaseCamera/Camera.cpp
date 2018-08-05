@@ -6,7 +6,7 @@
 /// 목적: 기본 카메라 코드, 인터 페이스 용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-04
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 
@@ -346,7 +346,7 @@ void CCamera::CreateShaderVariables(shared_ptr<CCreateMgr> pCreateMgr, UINT stri
 
 void CCamera::ReleaseShaderVariables()
 {
-	if (m_pConstBuffer)
+	if (m_pConstBuffer.Get())
 	{
 		m_pConstBuffer->Unmap(0, NULL);
 		m_pConstBuffer.Reset();

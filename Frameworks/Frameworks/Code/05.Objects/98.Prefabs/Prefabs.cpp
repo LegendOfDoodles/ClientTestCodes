@@ -6,7 +6,7 @@
 /// 목적: 사용하는 매터리얼 정리용
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단, 이용선
-/// 최종 수정 날짜: 2018-08-01
+/// 최종 수정 날짜: 2018-08-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -1208,10 +1208,10 @@ void Materials::CreateShaderResourceViews(
 	int nTextureType = pTexture->GetTextureType();
 	for (int i = 0; i < nTextures; i++)
 	{
-		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		ComPtr<ID3D12Resource> pShaderResource = pTexture->GetTexture(i);
 		D3D12_RESOURCE_DESC resourceDesc = pShaderResource->GetDesc();
 		GetShaderResourceViewDesc(resourceDesc, nTextureType, &shaderResourceViewDesc);
-		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource, &shaderResourceViewDesc, srvCPUDescriptorHandle);
+		pCreateMgr->GetDevice()->CreateShaderResourceView(pShaderResource.Get(), &shaderResourceViewDesc, srvCPUDescriptorHandle);
 		srvCPUDescriptorHandle.ptr += incrementSize;
 
 		pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, srvGPUDescriptorHandle);

@@ -6,10 +6,10 @@ class CCreateMgr;
 
 struct COLOR
 {
-	XMFLOAT4						m_xmf4Diffuse{ 1.0f, 1.0f, 1.0f, 1.0f };
-	float									m_cSpecularPower{ 1.0f };
-	float									m_cRoughness{ 1.0f };
-	float									m_cMetalic{ 0.0f };
+	XMFLOAT4							m_xmf4Diffuse{ 1.0f, 1.0f, 1.0f, 1.0f };
+	float								m_cSpecularPower{ 1.0f };
+	float								m_cRoughness{ 1.0f };
+	float								m_cMetalic{ 0.0f };
 };
 
 class CMaterial
@@ -48,7 +48,7 @@ protected: // 내부 함수
 protected: // 변수
 	int	m_nReferences{ 0 };
 
-	ID3D12Resource					*m_pcbColor{ NULL };
+	ComPtr<ID3D12Resource>			m_pcbColor;
 	COLOR							*m_pcbMappedColor{ NULL };
 
 	COLOR							m_color;
