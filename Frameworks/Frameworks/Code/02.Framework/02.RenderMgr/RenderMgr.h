@@ -55,7 +55,7 @@ public:	// 공개 함수
 	void SetShadowDepthBuffer(ComPtr<ID3D12Resource> pShadowDepthBuffer) { m_pShadowDepthBuffer = pShadowDepthBuffer; }
 
 private:	// 내부 함수
-	void SynchronizeResourceTransition(ID3D12Resource *pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
+	void SynchronizeResourceTransition(ComPtr<ID3D12Resource> pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
 
 private:	// 변수
 	// Swap Chain

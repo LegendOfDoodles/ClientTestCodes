@@ -1151,6 +1151,24 @@ CMaterial * Materials::CreateNexusIconMaterial(shared_ptr<CCreateMgr> pCreateMgr
 	return pMaterial;
 }
 
+CMaterial * Materials::CreateEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SwordQSkill.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
 // SRV 생성 함수 ...
 void Materials::GetShaderResourceViewDesc(
 	D3D12_RESOURCE_DESC resourceDesc, 

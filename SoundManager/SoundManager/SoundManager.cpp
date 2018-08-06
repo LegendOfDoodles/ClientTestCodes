@@ -9,12 +9,6 @@ CSoundManager::~CSoundManager()
 {
 }
 
-//CSoundManager * CSoundManager::sharedManager()
-//{
-//	if (insatnce == NULL) insatnce = new CSoundManager;
-//	return insatnce;
-//}
-
 void CSoundManager::init()
 {
 	m_nCh = CHANNEL_MAX;

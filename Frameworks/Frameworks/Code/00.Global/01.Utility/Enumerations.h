@@ -109,7 +109,8 @@ enum ObjectType {
 	FirstTower,
 	SecnondTower,
 	Nexus,
-	FlyingObject
+	FlyingObject,
+	EffectObject
 };
 
 enum FlyingObjectType {
@@ -126,6 +127,13 @@ enum FlyingObjectType {
 	Player_MagicSkill_W,
 	Player_MagicSkill_E,
 	Player_MagicSkill_R
+};
+
+enum EffectObjectType {
+	Player_SwordSkill_Q,
+	Player_SwordSkill_W,
+	Player_SwordSkill_E,
+	Player_SwordSkill_R,
 };
 
 struct CommonInfo
