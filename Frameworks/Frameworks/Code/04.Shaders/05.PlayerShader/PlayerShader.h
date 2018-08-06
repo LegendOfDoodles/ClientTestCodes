@@ -49,6 +49,7 @@ protected: // 변수
 	UINT m_nSword{ 0 };
 	UINT m_nStaff{ 0 };
 	UINT m_nBow{ 0 };
+	UINT m_nArmor{ 0 };
 
 	//애니메이션 정보
 	CSkeleton** m_ppSwordAni{ NULL };
@@ -61,6 +62,7 @@ protected: // 변수
 	CSkinnedMesh** m_pSword{ NULL };
 	CSkinnedMesh** m_pStaff{ NULL };
 	CSkinnedMesh** m_pBow{ NULL };
+	CSkinnedMesh** m_pArmor{ NULL };
 	int m_nWeaponState{ 0 };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };

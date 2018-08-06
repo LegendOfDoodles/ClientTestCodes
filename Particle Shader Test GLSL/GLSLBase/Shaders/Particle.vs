@@ -27,7 +27,7 @@ void main()
 	col = (TextureSize.y / 128);
 
 	// u_Time == Animaiton Time (재생 시간) -> 끊기는 현상 발생?
-	int newtime = int(floor(u_Time * 8));
+	int newtime = int(floor(u_Time));
 	int u = newtime - int(row * floor(1.0f * newtime/row)); //mod(newtime, row);
 	int v = (col - 1) - newtime / row;
 
