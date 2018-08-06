@@ -276,6 +276,9 @@
     <Filter Include="소스 파일\04.Shaders\09.EffectShader">
       <UniqueIdentifier>{f84cd24b-ac29-4356-813c-ea85690dddc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\09.SoundManager">
+      <UniqueIdentifier>{9721f9ee-66f6-43c2-a610-ad7fec58b3ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -518,6 +521,9 @@
     <ClInclude Include="Code\04.Shaders\09.EffectShader\EffectShader.h">
       <Filter>소스 파일\04.Shaders\09.EffectShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\09.SoundManager\SoundManager.h">
+      <Filter>소스 파일\00.Global\01.Utility\09.SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -741,6 +747,9 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\09.EffectShader\EffectShader.cpp">
       <Filter>소스 파일\04.Shaders\09.EffectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\09.SoundManager\SoundManager.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\09.SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

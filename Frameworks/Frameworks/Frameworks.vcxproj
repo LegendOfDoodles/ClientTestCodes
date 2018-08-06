@@ -177,6 +177,7 @@
     <ClInclude Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.h" />
     <ClInclude Include="Code\00.Global\01.Utility\07.ThrowingManager\ThrowingMgr.h" />
     <ClInclude Include="Code\00.Global\01.Utility\08.EffectManager\EffectManager.h" />
+    <ClInclude Include="Code\00.Global\01.Utility\09.SoundManager\SoundManager.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Enumerations.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Macros.h" />
     <ClInclude Include="Code\00.Global\01.Utility\Vectors.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="Code\00.Global\01.Utility\06.HPGaugeManager\HPGaugeManager.cpp" />
     <ClCompile Include="Code\00.Global\01.Utility\07.ThrowingManager\ThrowingMgr.cpp" />
     <ClCompile Include="Code\00.Global\01.Utility\08.EffectManager\EffectManager.cpp" />
+    <ClCompile Include="Code\00.Global\01.Utility\09.SoundManager\SoundManager.cpp" />
     <ClCompile Include="Code\00.Global\02.AI\00.FSMMgr\FSMMgr.cpp" />
     <ClCompile Include="Code\01.Main\Framework01.cpp" />
     <ClCompile Include="Code\02.Framework\00.Frame\Framework.cpp" />
