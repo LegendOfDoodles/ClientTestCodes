@@ -363,9 +363,9 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(10.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(6.5f));
-	m_nArmor = 3;
+	m_nArmor = 1;
 	m_pArmor = new CSkinnedMesh*[m_nArmor];
-	m_pArmor[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//BS.meshinfo");
+	m_pArmor[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//extra//Muffler.meshinfo");
 
 
 	m_nSword = 3;
@@ -551,6 +551,13 @@ void CPlayerShader::ReleaseObjects()
 		delete m_pBow[j];
 	}
 	Safe_Delete_Array(m_pBow);
+
+
+	for (UINT j = 0; j < m_nArmor; j++)
+	{
+		delete m_pArmor[j];
+	}
+	Safe_Delete_Array(m_pArmor);
 
 	///////////////////////////////////////
 #if USE_BATCH_MATERIAL
