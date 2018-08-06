@@ -6,7 +6,7 @@
 /// 목적: 렌더링 관련 함수를 모아 두어 다른 변경사항 없이 그릴 수 있도록 하기 위함
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-04
+/// 최종 수정 날짜: 2018-08-06
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ void CRenderMgr::RenderDepth(shared_ptr<CScene> pScene)
 	ThrowIfFailed(hResult);
 
 	// Change to DEPTH_WRITE
-	SynchronizeResourceTransition(m_pShadowDepthBuffer.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	SynchronizeResourceTransition(m_pShadowDepthBuffer, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
 	// Set Viewport and Scissor Rect
 	pScene->SetShadowViewportsAndScissorRects();
@@ -78,7 +78,7 @@ void CRenderMgr::RenderDepth(shared_ptr<CScene> pScene)
 	pScene->RenderShadow();
 
 	// Change back to GENERIC_READ to read it by texture
-	SynchronizeResourceTransition(m_pShadowDepthBuffer.Get(), D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+	SynchronizeResourceTransition(m_pShadowDepthBuffer, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 }
 
 void CRenderMgr::RenderColor(shared_ptr<CScene> pScene)
@@ -86,7 +86,7 @@ void CRenderMgr::RenderColor(shared_ptr<CScene> pScene)
 	// Set Barrier
 	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
 	{
-		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i].Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	}
 
 	// Set Viewport and Scissor Rect
@@ -118,7 +118,7 @@ void CRenderMgr::RenderColor(shared_ptr<CScene> pScene)
 	// Set Barrier
 	for (int i = 0; i < RENDER_TARGET_BUFFER_CNT; ++i)
 	{
-		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+		SynchronizeResourceTransition(m_ppRenderTargetBuffers[i], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
 	}
 
 	ExecuteCommandList();
@@ -136,7 +136,7 @@ void CRenderMgr::RenderLight(shared_ptr<CScene> pScene)
 	hResult = m_pCommandList->Reset(m_pCommandAllocator.Get(), NULL);
 	ThrowIfFailed(hResult);
 
-	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	// Set Viewport and Scissor Rect
 	pScene->SetViewportsAndScissorRects();
@@ -155,7 +155,7 @@ void CRenderMgr::RenderLight(shared_ptr<CScene> pScene)
 
 	m_pTextureToFullScreenShader->Render(NULL);
 
-	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	SynchronizeResourceTransition(m_ppSwapChainBackBuffers[m_swapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
 	ExecuteCommandList();
 
@@ -217,12 +217,12 @@ void CRenderMgr::ExecuteCommandList()
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
-void CRenderMgr::SynchronizeResourceTransition(ID3D12Resource * pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter)
+void CRenderMgr::SynchronizeResourceTransition(ComPtr<ID3D12Resource> pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter)
 {
 	D3D12_RESOURCE_BARRIER resourceBarrier;
 	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	resourceBarrier.Transition.pResource = pResource;
+	resourceBarrier.Transition.pResource = pResource.Get();
 	resourceBarrier.Transition.StateBefore = stateBefore;
 	resourceBarrier.Transition.StateAfter = stateAfter;
 	resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;

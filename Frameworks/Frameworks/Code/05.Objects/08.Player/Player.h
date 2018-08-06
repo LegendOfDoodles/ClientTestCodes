@@ -39,6 +39,7 @@ public:	// 외부 함수
 		m_StatusInfo.Weapon = type;
 		m_StatusInfo.WeaponNum = num;
 	}
+
 protected: // 내부 함수
 	virtual void AdjustAnimationIndex();
 	/*

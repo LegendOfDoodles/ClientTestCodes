@@ -9,7 +9,6 @@ public:
 	CNexusTower(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes = 1);
 	virtual ~CNexusTower();
 
-	//ObjectType type;
 public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 

@@ -12,7 +12,7 @@
 /// 목적: 플레이어 관리 및 렌더링 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-08-06
 /// </summary>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -365,7 +365,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 		0, 0, -CONVERT_PaperUnit_to_InG(6.5f));
 	m_nArmor = 3;
 	m_pArmor = new CSkinnedMesh*[m_nArmor];
-	m_pArmor[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//BS.meshinfo");
+	m_pArmor[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//Nike.meshinfo");
 
 
 	m_nSword = 3;
