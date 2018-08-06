@@ -242,7 +242,7 @@ void CMinimapShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCon
 	{
 		pUIObject = new CUIFrameObject(pCreateMgr, UIFrameType::Minimap);
 		pUIObject->SetCamera(m_pCamera);
-		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.f);	 // distance 10
+		pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.256f);	 // distance 10
 		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
 		m_ppObjects[i] = pUIObject;

@@ -9,6 +9,7 @@ class CWayFinder;
 class CCollisionManager;
 class CUIObjectManager;
 class CThrowingMgr;
+class CEffectMgr;
 class CFSMMgr;
 
 struct LIGHT
@@ -125,6 +126,7 @@ protected: // º¯¼ö
 	shared_ptr<CCollisionManager>m_pCollisionManager;
 	shared_ptr<CUIObjectManager> m_pUIObjectsManager;
 	shared_ptr<CThrowingMgr> m_pThrowingMgr;
+	shared_ptr<CEffectMgr> m_pEffectMgr;
 	shared_ptr<CFSMMgr> m_pFSMMgr;
 
 	const int	m_nHeaps{ 2 };

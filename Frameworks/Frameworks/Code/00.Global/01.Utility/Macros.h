@@ -70,6 +70,9 @@
 #define MAX_ARROW 70
 #define MAX_MAGIC 70
 
+// 최대 최소
+#define MAX_QSKILL 4
+
 // 최대, 최소 속도
 #define MIN_CAMERA_SPEED 100.0f
 #define MAX_CAMERA_SPEED 3000.0f
