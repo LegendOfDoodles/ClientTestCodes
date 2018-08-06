@@ -267,6 +267,15 @@
     <Filter Include="소스 파일\05.Objects\99.Material\00.Texture">
       <UniqueIdentifier>{f1e382fe-91e1-44f9-bb85-2970bef4a982}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Objects\96.Billboard\06.EffectObject">
+      <UniqueIdentifier>{f80bd1b7-94f7-48fb-87a0-ab22bcb7da79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Global\01.Utility\08.EffectManager">
+      <UniqueIdentifier>{04ed24fc-e1f5-4720-9154-a864f294aec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\09.EffectShader">
+      <UniqueIdentifier>{f84cd24b-ac29-4356-813c-ea85690dddc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -500,6 +509,15 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader\NeutralityGaugeShader.h">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\05.Objects\96.Billboard\06.EffectObject\EffectObject.h">
+      <Filter>소스 파일\05.Objects\96.Billboard\06.EffectObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\00.Global\01.Utility\08.EffectManager\EffectManager.h">
+      <Filter>소스 파일\00.Global\01.Utility\08.EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\09.EffectShader\EffectShader.h">
+      <Filter>소스 파일\04.Shaders\09.EffectShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -714,6 +732,15 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader\NeutralityGaugeShader.cpp">
       <Filter>소스 파일\04.Shaders\98.BillboardShader\01.GaugeShader\04.NeutralityGaugeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\05.Objects\96.Billboard\06.EffectObject\EffectObject.cpp">
+      <Filter>소스 파일\05.Objects\96.Billboard\06.EffectObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\00.Global\01.Utility\08.EffectManager\EffectManager.cpp">
+      <Filter>소스 파일\00.Global\01.Utility\08.EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\09.EffectShader\EffectShader.cpp">
+      <Filter>소스 파일\04.Shaders\09.EffectShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

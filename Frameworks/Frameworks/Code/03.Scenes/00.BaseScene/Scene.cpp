@@ -22,12 +22,14 @@
 #include "04.Shaders/98.BillboardShader/04.SkillShader/SkillShader.h"
 #include "04.Shaders/98.BillboardShader/98.NumberShader/NumberShader.h"
 #include "04.Shaders/98.BillboardShader/05.SpecialShader/02.SelectedSpecialShader/SelectedSpecialShader.h"
+#include "04.Shaders/09.EffectShader/EffectShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "05.Objects/01.Camera/02.LightCamera/LightCamera.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 #include "00.Global/01.Utility/06.HPGaugeManager/HPGaugeManager.h"
 #include "00.Global/01.Utility/07.ThrowingManager/ThrowingMgr.h"
+#include "00.Global/01.Utility/08.EffectManager/EffectManager.h"
 #include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
 
 /// <summary>
@@ -49,6 +51,7 @@
 #define SelectedSpecial_Shader m_ppShaders[17]
 #define NexusTowerHP_Shader m_ppShaders[18]
 #define NeutralityHP_Shader m_ppShaders[19]
+#define Eeffect_Shader m_ppShaders[20]
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
@@ -111,6 +114,16 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
 			FlyingObjectType::Minion_Magic);
+	}
+
+	if (m_pSelectedObject && GetAsyncKeyState('M') & 0x0001)
+	{
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetCollisionSize() * 2,
+			m_pSelectedObject->GetLook(),
+			m_pSelectedObject->GetTeam(),
+			EffectObjectType::Player_SwordSkill_Q);
 	}
 }
 
@@ -216,10 +229,6 @@ void CScene::UpdateCamera()
 		}
 
 		m_pCamera->Initialize(m_pCreateMgr);
-
-		static_cast<CUIObjectShader*>(UI_Shader)->SetCamera(m_pCamera);
-		static_cast<CPlayerHPGaugeShader*>(PlayerHP_Shader)->SetCamera(m_pCamera);
-		static_cast<CMinionHPGaugeShader*>(MinionHP_Shader)->SetCamera(m_pCamera);
 
 		m_bCamChanged = false;
 	}
@@ -340,7 +349,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 20;
+	m_nShaders = 21;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -365,13 +374,14 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	SelectedSpecial_Shader = new CSelectedSpecialShader(pCreateMgr);
 	NexusTowerHP_Shader = new CNexusAndTowerHPGaugeShader(pCreateMgr);
 	NeutralityHP_Shader = new CNeutralityGaugeShader(pCreateMgr);
+	Eeffect_Shader = new CEffectShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr);
 	}
 
-	for (int i = 2; i < m_nShaders - 12; ++i)
+	for (int i = 2; i < m_nShaders - 13; ++i)
 	{
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
@@ -421,6 +431,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	SelectedSpecial_Shader->Initialize(pCreateMgr, m_pCamera);
 	NexusTowerHP_Shader->Initialize(pCreateMgr, m_pCamera);
 	NeutralityHP_Shader->Initialize(pCreateMgr, m_pCamera);
+	Eeffect_Shader->Initialize(pCreateMgr, m_pCamera);
 
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
@@ -428,6 +439,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pUIObjectsManager = shared_ptr<CUIObjectManager>(new CUIObjectManager());
 	m_pThrowingMgr = shared_ptr<CThrowingMgr>(new CThrowingMgr());
 	m_pThrowingMgr->SetFlyingShader(static_cast<CFlyingShader*>(m_ppShaders[7]));
+	m_pEffectMgr = shared_ptr<CEffectMgr>(new CEffectMgr());
+	m_pEffectMgr->SetEffectShader(static_cast<CEffectShader*>(Eeffect_Shader));
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
 
@@ -443,7 +456,6 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	static_cast<CMinimapIconShader*>(MinimapIco_Shader)->SetUIObjectsManager(m_pUIObjectsManager);
 
 	m_pCollisionManager->SetNodeMap(m_pWayFinder->GetNodeMap(), m_pWayFinder->GetNodeSize(), m_pWayFinder->GetNodeWH());
-
 
 	CPlayerShader* pPlayerS = (CPlayerShader *)m_ppShaders[3];
 	int nColliderObject = pPlayerS->GetObjectCount();
