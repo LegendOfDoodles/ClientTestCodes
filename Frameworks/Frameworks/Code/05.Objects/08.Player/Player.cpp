@@ -235,7 +235,6 @@ void CPlayer::AdjustAnimationIndex()
 	case Animations::Walking:
 		m_nAniIndex = 5;
 		break;
-
 	case Animations::SkillQ:
 		m_nAniIndex = 6;
 		break;
@@ -245,7 +244,6 @@ void CPlayer::AdjustAnimationIndex()
 	case Animations::SkillE:
 		m_nAniIndex = 8;
 		break;
-
 	case Animations::SkillR:
 		m_nAniIndex = 9;
 		break;
