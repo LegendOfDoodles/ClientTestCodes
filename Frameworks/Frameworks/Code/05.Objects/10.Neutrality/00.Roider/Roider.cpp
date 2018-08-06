@@ -84,7 +84,8 @@ void CRoider::SetState(StatesType newState)
 	switch (newState)
 	{
 	case States::Idle:
-		m_nCurrAnimation = Animations::Idle;
+		m_returning = false;
+		SetAnimation(Animations::Idle);
 		break;
 	case States::Walk:
 		RegenerateLookAt();
@@ -168,7 +169,7 @@ void CRoider::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 			SetState(States::Idle);
 		}
 	}
-	PlayIdle(timeElapsed);
+	if (!m_returning) PlayIdle(timeElapsed);
 }
 
 void CRoider::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
@@ -177,7 +178,10 @@ void CRoider::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	{
 		SetEnemy(NULL);
 		if (m_TeamType == TeamType::Neutral)
+		{
 			GenerateSubPathToSpawnLocation(pWayFinder);
+			m_returning = true;
+		}
 		else
 			GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);

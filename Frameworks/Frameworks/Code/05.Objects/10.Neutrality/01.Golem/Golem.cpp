@@ -94,6 +94,7 @@ void CGolem::SetState(StatesType newState)
 	switch (newState)
 	{
 	case States::Idle:
+		m_returning = false;
 		SetAnimation(Animations::Idle);
 		break;
 	case States::Walk:
@@ -179,7 +180,7 @@ void CGolem::PlayWalk(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 			SetState(States::Idle);
 		}
 	}
-	PlayIdle(timeElapsed);
+	if(!m_returning) PlayIdle(timeElapsed);
 }
 
 void CGolem::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
@@ -188,7 +189,10 @@ void CGolem::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	{
 		SetEnemy(NULL);
 		if (m_TeamType == TeamType::Neutral)
+		{
 			GenerateSubPathToSpawnLocation(pWayFinder);
+			m_returning = true;
+		}
 		else
 			GenerateSubPathToMainPath(pWayFinder);
 		SetState(States::Walk);
