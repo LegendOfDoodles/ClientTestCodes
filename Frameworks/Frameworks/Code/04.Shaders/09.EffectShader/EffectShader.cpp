@@ -41,7 +41,7 @@ void CEffectShader::ReleaseUploadBuffers()
 
 void CEffectShader::UpdateShaderVariables(int opt)
 {
-	static UINT elementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	static UINT elementBytes = ((sizeof(CB_EFFECTOBJECT_INFO) + 255) & ~255);
 	int beg{ 0 }, end{ 0 };
 
 	switch (opt)
@@ -54,7 +54,9 @@ void CEffectShader::UpdateShaderVariables(int opt)
 
 	for (int i = beg; i < end; ++i)
 	{
-		CB_GAMEOBJECT_INFO *pMappedObject = (CB_GAMEOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		CB_EFFECTOBJECT_INFO *pMappedObject = (CB_EFFECTOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
+		// Animation Time
+		pMappedObject->m_fAnimationTime = ((CEffectObject*)m_ppObjects[i])->GetAnimationTime();
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
 	}
@@ -107,6 +109,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const float pos
 		m_ppObjects[idx]->ResetWorldMatrix();
 		m_ppObjects[idx]->SaveIndex(idx);
 		m_ppObjects[idx]->SetDirection(direction);
+		m_ppObjects[idx]->SetEffectObjectsType(objectType);
 		m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + positionOffset, position.z));
 		m_ppObjects[idx]->Activate();
 		int adjIdx{ idx - m_objectsIndices[objectType].m_begIndex };
@@ -173,7 +176,7 @@ D3D12_SHADER_BYTECODE CEffectShader::CreateVertexShader(ComPtr<ID3DBlob>& pShade
 	//./Code/04.Shaders/99.GraphicsShader/
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"VSTextured",
+		"VSTexturedEffect",
 		"vs_5_1",
 		pShaderBlob));
 }
@@ -182,7 +185,7 @@ D3D12_SHADER_BYTECODE CEffectShader::CreatePixelShader(ComPtr<ID3DBlob>& pShader
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSTextured",
+		"PSTexturedEffect",
 		"ps_5_1",
 		pShaderBlob));
 }
@@ -217,7 +220,7 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 	m_ppObjects = new CCollisionObject*[m_nObjects];
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	UINT ncbElementBytes = ((sizeof(CB_EFFECTOBJECT_INFO) + 255) & ~255);
 	int accCnt{ 0 };
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
