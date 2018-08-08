@@ -20,8 +20,10 @@ public:	// 외부 함수
 	virtual void SetDirection(const XMFLOAT3& direction);
 	virtual void SetEffectObjectsType(EffectObjectType type);
 
-	virtual EffectObjectType GetEffetObjectsType() { return m_EffectObjectType; }
+	virtual void SetMasterObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
+	virtual void SetAnimationLength(int time) { m_maxAnimaitonTime = time; }
 	
+	virtual EffectObjectType GetEffetObjectsType() { return m_EffectObjectType; }
 	void SetCamera(CCamera *pCamera) { m_pCamera = pCamera; }
 	float GetAnimationTime() { return m_AnimaitonTime; }
 
@@ -34,6 +36,8 @@ protected: // 변수
 	XMFLOAT3 m_direction{};
 	float m_AnimaitonTime{ 0.0f };
 	float m_maxAnimaitonTime{ 10.f };
+
+	CCollisionObject * m_pMasterObject;
 
 	shared_ptr<CCollisionManager> m_pColManager{ NULL };
 	CCamera * m_pCamera{ NULL };

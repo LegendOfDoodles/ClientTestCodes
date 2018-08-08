@@ -37,8 +37,16 @@ void CEffectObject::Animate(float timeElapsed)
 	// Effect Update
 	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_Q)
 	{
-		m_AnimaitonTime += timeElapsed * 4.f;
-		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		m_AnimaitonTime += timeElapsed * 30;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_W)
+	{
+		m_AnimaitonTime += timeElapsed * 30;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
 		}
@@ -80,6 +88,10 @@ void CEffectObject::SetEffectObjectsType(EffectObjectType type)
 	m_curState = StatesType::Idle;
 
 	if (type == EffectObjectType::Player_SwordSkill_Q)
+	{
+		m_AnimaitonTime = 0.0f;
+	}
+	else if (type == EffectObjectType::Player_SwordSkill_W)
 	{
 		m_AnimaitonTime = 0.0f;
 	}

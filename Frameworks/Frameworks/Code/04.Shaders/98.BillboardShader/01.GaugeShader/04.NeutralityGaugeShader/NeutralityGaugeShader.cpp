@@ -191,7 +191,7 @@ void CNeutralityGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, voi
 
 		pGaugeObject = new CGaugeObject(pCreateMgr, GaugeUIType::RoiderGauge);
 		pGaugeObject->SetCamera(m_pCamera);
-		pGaugeObject->SetObject(m_ppRoider[i]);
+		pGaugeObject->SetMasterObject(m_ppRoider[i]);
 
 		XMFLOAT3 HPGaugePosition = m_ppRoider[i]->GetPosition();
 		HPGaugePosition.y += 110.f;

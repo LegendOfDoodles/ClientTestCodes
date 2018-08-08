@@ -119,8 +119,8 @@ void CScene::ProcessInput()
 	{
 		m_pEffectMgr->RequestSpawn(
 			m_pSelectedObject->GetPosition(),
-			m_pSelectedObject->GetCollisionSize() * 2,
 			m_pSelectedObject->GetLook(),
+			m_pSelectedObject->GetAnimLegth(),
 			m_pSelectedObject->GetTeam(),
 			EffectObjectType::Player_SwordSkill_Q);
 	}
@@ -463,7 +463,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_pCollisionManager->AddCollider((pPlayerS->GetCollisionObjects())[i]);
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
-
+	pPlayerS->SetEffectManagerToObject(m_pEffectMgr);
+	
 	// 중립 몬스터에 충돌체 부여
 	CNeutralityShader* pNetral = (CNeutralityShader *)m_ppShaders[4];
 	nColliderObject = pNetral->GetObjectCount();

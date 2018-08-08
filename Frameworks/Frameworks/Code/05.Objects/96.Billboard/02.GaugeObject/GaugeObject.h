@@ -14,10 +14,8 @@ public: // 공개함수
 
 	virtual float GetCurrentHP();
 
-	void GetmasterObjectType(ObjectType type) { m_MasterObjectType = type; };
-
 	StatesType GetState() { return m_pMasterObject->GetState(); }
-	virtual void SetObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
+	virtual void SetMasterObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
 
 	CCollisionObject* GetMasterObject() { return m_pMasterObject; }
 

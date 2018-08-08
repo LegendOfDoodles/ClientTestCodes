@@ -189,7 +189,7 @@ void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 		
 		pGaugeObject = new CGaugeObject(pCreateMgr, GaugeUIType::PlayerGauge);
 		pGaugeObject->SetCamera(m_pCamera);
-		pGaugeObject->SetObject(m_pPlayer[i]);
+		pGaugeObject->SetMasterObject(m_pPlayer[i]);
 		
 		XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
 		HPGaugePosition.y += 110.f;

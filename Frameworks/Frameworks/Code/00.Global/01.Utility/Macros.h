@@ -72,6 +72,9 @@
 
 // 최대 최소
 #define MAX_QSKILL 4
+#define MAX_WSKILL 4
+#define MAX_ESKILL 4
+#define MAX_RSKILL 4
 
 // 최대, 최소 속도
 #define MIN_CAMERA_SPEED 100.0f

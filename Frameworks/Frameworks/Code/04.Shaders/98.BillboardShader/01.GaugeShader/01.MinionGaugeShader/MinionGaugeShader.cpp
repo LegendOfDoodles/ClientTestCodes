@@ -235,7 +235,7 @@ void CMinionHPGaugeShader::SpawnGauge()
 		pMinionObjects = (*minion);
 
 		m_ppMaterials[0]->AddRef();
-		pGaugeObject->SetObject(pMinionObjects);
+		pGaugeObject->SetMasterObject(pMinionObjects);
 		pGaugeObject->SetCamera(m_pCamera);
 
 		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * index));
