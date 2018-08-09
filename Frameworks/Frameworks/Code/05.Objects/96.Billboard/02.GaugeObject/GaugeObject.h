@@ -19,7 +19,6 @@ public: // 공개함수
 
 	CCollisionObject* GetMasterObject() { return m_pMasterObject; }
 
-
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
 	ObjectType		  m_MasterObjectType;

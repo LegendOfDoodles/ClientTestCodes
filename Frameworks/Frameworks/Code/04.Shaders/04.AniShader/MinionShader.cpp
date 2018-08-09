@@ -647,7 +647,7 @@ void CMinionShader::SpawnMinion()
 
 	int wayKind{ 0 };
 
-	m_kind = ObjectType::BowMinion;
+	m_kind = ObjectType::StaffMinion;
 
 	//// 전체 생성되는 수의 절반은 근접 미니언
 	//if (m_curSpawnCount < 10)
@@ -682,6 +682,7 @@ void CMinionShader::SpawnMinion()
 			pMinionObject = new CMagicMinion(m_pCreateMgr);
 			pMinionObject->SetMesh(0, &staffMinionMesh);
 			pMinionObject->SetThrowingManager(m_pThrowingMgr);
+			pMinionObject->SetEffectManager(m_pEffectMgr);
 			break;
 		case ObjectType::BowMinion:
 			pMinionObject = new CBowMinion(m_pCreateMgr);

@@ -24,7 +24,7 @@ public: // 공개 함수
 	virtual void AnimateObjects(float timeElapsed);
 	virtual void Render(CCamera *pCamera);
 
-	void SpawnEffectObject(const XMFLOAT3& position, const XMFLOAT3& direction, int aniLength, TeamType teamType, EffectObjectType objectType);
+	void SpawnEffectObject(const XMFLOAT3& position, const XMFLOAT3& direction, int aniLength, EffectObjectType objectType);
 
 	void Pause() { m_Paused = true; }
 	void Resume() { m_Paused = false; };
@@ -52,6 +52,8 @@ protected: // 변수
 
 	CollisionObjectList m_SwordQSkillList;
 	CollisionObjectList m_SwordWSkillList;
+	CollisionObjectList m_MinionMagicList;
+	CollisionObjectList m_BowSkillList;
 
 	bool m_Paused{ false };
 	

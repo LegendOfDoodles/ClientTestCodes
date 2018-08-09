@@ -13,6 +13,7 @@ public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 
 	virtual void SetCollisionManager(shared_ptr<CCollisionManager> manager) { m_pColManager = manager; }
+	virtual void SetEffectManager(shared_ptr<CEffectMgr> manager) { m_pEffectMgr = manager; }
 
 	virtual void SetFlyingObjectsType(FlyingObjectType type);
 	virtual void SetDirection(const XMFLOAT3& direction);

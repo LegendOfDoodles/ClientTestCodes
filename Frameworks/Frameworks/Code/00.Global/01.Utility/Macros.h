@@ -71,6 +71,7 @@
 #define MAX_MAGIC 70
 
 // 최대 최소
+#define MAX_SKILL 4
 #define MAX_QSKILL 4
 #define MAX_WSKILL 4
 #define MAX_ESKILL 4

@@ -121,7 +121,6 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetAnimLegth(),
-			m_pSelectedObject->GetTeam(),
 			EffectObjectType::Player_SwordSkill_Q);
 	}
 }
@@ -450,6 +449,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	pMinionS->SetGaugeManger(m_pUIObjectsManager);
 	pMinionS->SetFSMManager(m_pFSMMgr);
 	pMinionS->SetThrowingManager(m_pThrowingMgr);
+	pMinionS->SetEffectManager(m_pEffectMgr);
 
 	static_cast<CMinionHPGaugeShader*>(MinionHP_Shader)->SetUIObjectsManager(m_pUIObjectsManager);
 	static_cast<CMinimapIconShader*>(MinimapIco_Shader)->SetUIObjectsManager(m_pUIObjectsManager);
@@ -488,6 +488,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	CFlyingShader* pFS = (CFlyingShader*)m_ppShaders[7];
 	pFS->SetColManagerToObject(m_pCollisionManager);
+	pFS->SetEffectManagerToObject(m_pEffectMgr);
 
 	BuildLights();
 }

@@ -42,6 +42,7 @@ public: // 공개 함수
 	void SetThrowingManager(shared_ptr<CThrowingMgr> pManger) { m_pThrowingMgr = pManger; }
 	void SetGaugeManger(shared_ptr<CUIObjectManager> pManger) { m_pGaugeManger = pManger; }
 	void SetFSMManager(shared_ptr<CFSMMgr> pManger) { m_pFSMMgr = pManger; }
+	void SetEffectManager(shared_ptr<CEffectMgr> pManger) { m_pEffectMgr = pManger; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -82,6 +83,8 @@ protected: // 변수
 	shared_ptr<CCollisionManager> m_pColManager;
 	shared_ptr<CThrowingMgr> m_pThrowingMgr;
 	shared_ptr<CUIObjectManager> m_pGaugeManger;
+	shared_ptr<CEffectMgr> m_pEffectMgr;
+
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	shared_ptr<CCreateMgr> m_pCreateMgr{ NULL };

@@ -77,6 +77,8 @@ void CEffectShader::AnimateObjects(float timeElapsed)
 	// 더 이상 업데이트 하면 안되는 오브젝트 리스트에서 제거
 	m_SwordQSkillList.remove_if(removeFunc);
 	m_SwordWSkillList.remove_if(removeFunc);
+	m_MinionMagicList.remove_if(removeFunc);
+	m_BowSkillList.remove_if(removeFunc);
 }
 
 void CEffectShader::Render(CCamera * pCamera)
@@ -99,10 +101,26 @@ void CEffectShader::Render(CCamera * pCamera)
 			(*iter)->Render(pCamera);
 		}
 	}
+	if (!m_MinionMagicList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(3);
+		for (auto iter = m_MinionMagicList.begin(); iter != m_MinionMagicList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_BowSkillList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(4);
+		for (auto iter = m_BowSkillList.begin(); iter != m_BowSkillList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 	
 }
 
-void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 & direction, int aniLength, TeamType teamType, EffectObjectType objectType)
+void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 & direction, int aniLength, EffectObjectType objectType)
 {
 	int idx{ GetPossibleIndex(objectType) };
 
@@ -110,11 +128,12 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 	{
 		m_ppObjects[idx]->ResetWorldMatrix();
 		m_ppObjects[idx]->SaveIndex(idx);
+
 		m_ppObjects[idx]->SetDirection(direction);
 		m_ppObjects[idx]->SetEffectObjectsType(objectType);
 		m_ppObjects[idx]->SetAnimationLength(aniLength);
+
 		m_ppObjects[idx]->Activate();
-	
 		if (objectType == EffectObjectType::Player_SwordSkill_Q)
 		{
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
@@ -128,6 +147,20 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
 			m_SwordWSkillList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Minion_Magic_Ball)
+		{
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x - CONVERT_PaperUnit_to_InG(2), position.y + CONVERT_PaperUnit_to_InG(4), position.z - CONVERT_PaperUnit_to_InG(5)));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_MinionMagicList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Player_BowSkill_Effect)
+		{
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_BowSkillList.emplace_back(m_ppObjects[idx]);
 		}
 	}
 }
@@ -219,11 +252,15 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	EffectObjectType objectOrder[]{
 		EffectObjectType::Player_SwordSkill_Q,
 		EffectObjectType::Player_SwordSkill_W,
+		EffectObjectType::Minion_Magic_Ball,
+		EffectObjectType::Player_BowSkill_Effect
 	};
 
 	// 각 오브젝트의 최대 개수 설정
 	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_Q] = MAX_QSKILL;
 	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_W] = MAX_WSKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Minion_Magic_Ball] = MAX_MAGIC;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_BowSkill_Effect] = MAX_SKILL;
 
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
@@ -237,10 +274,10 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	int accCnt{ 0 };
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 2, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 5, 0);
 	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, 0);
 	
-	for (int i = 0; i < 2; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		m_objectsIndices[objectOrder[i]] = EffectObjectIndices();
 		m_objectsIndices[objectOrder[i]].m_begIndex = accCnt;
 		accCnt += m_objectsMaxCount[objectOrder[i]];
@@ -249,6 +286,13 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
+	// Effect Image
+	/*
+		이미지 순서
+		0. 
+		1. 
+		2. Minion Magic Effect
+	*/
 	m_ppMaterials[0] = Materials::CreateEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 
 	m_srvIncrementSize = pCreateMgr->GetCbvSrvDescriptorIncrementSize();
@@ -258,8 +302,6 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	for (int j = 0; j < m_nObjects; ++j) {
 		pObject = new CEffectObject(pCreateMgr);
 
-		pObject->SetTeam(TeamType::None);
-		pObject->SetCamera(m_pCamera);
 		pObject->SetStatic(StaticType::Static);
 
 		m_ppObjects[j] = pObject;
@@ -269,6 +311,9 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 void CEffectShader::ReleaseObjects()
 {
 	if (!m_SwordQSkillList.empty()) m_SwordQSkillList.clear();
+	if (!m_BowSkillList.empty()) m_BowSkillList.clear();
+	if (!m_MinionMagicList.empty()) m_MinionMagicList.clear();
+	if (!m_SwordWSkillList.empty()) m_SwordWSkillList.clear();
 
 	if (m_ppObjects)
 	{

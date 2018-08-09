@@ -51,6 +51,33 @@ void CEffectObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
+	if (m_EffectObjectType == EffectObjectType::Minion_Magic_Ball)
+	{
+		m_AnimaitonTime += timeElapsed * 30;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_BowSkill_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * 30;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
+	// 오브젝트와 같이 이동해야하는 오브젝트
+	//if ( type )		// type 주고
+	//{
+	//	m_distance += timeElapsed * m_speed;	// speed 정해주고
+	//	MoveToDirection(timeElapsed * m_speed); // 이동 시켜준다.
+	//	if (m_distance > m_maxAnimaitonTime)
+	//	{
+	//		m_curState = StatesType::Remove;
+	//	}
+	//}
 }
 
 void CEffectObject::Render(CCamera * pCamera, UINT istanceCnt)
@@ -86,15 +113,25 @@ void CEffectObject::SetEffectObjectsType(EffectObjectType type)
 {
 	m_EffectObjectType = type;
 	m_curState = StatesType::Idle;
+	
+	m_AnimaitonTime = 0.0f;
 
-	if (type == EffectObjectType::Player_SwordSkill_Q)
-	{
-		m_AnimaitonTime = 0.0f;
-	}
-	else if (type == EffectObjectType::Player_SwordSkill_W)
-	{
-		m_AnimaitonTime = 0.0f;
-	}
+	//if (type == EffectObjectType::Player_SwordSkill_Q)
+	//{
+	//	m_AnimaitonTime = 0.0f;
+	//}
+	//else if (type == EffectObjectType::Player_SwordSkill_W)
+	//{
+	//	m_AnimaitonTime = 0.0f;
+	//}
+	//else if (type == EffectObjectType::Minion_Magic_Ball) {
+	//	m_AnimaitonTime = 0.0f;
+	//}
+	//else if (type == EffectObjectType::Player_BowSkill_Effect) {
+	//	m_AnimaitonTime = 0.0f;
+	//}
+
+	// 필요하면 여기서 speed 추가해준다.
 }
 
 void CEffectObject::LookAt(XMFLOAT3 target)
@@ -128,4 +165,9 @@ void CEffectObject::LookAt(XMFLOAT3 target)
 void CEffectObject::LookAt(XMFLOAT2 target)
 {
 	LookAt(XMFLOAT3(target.x, 0, target.y));
+}
+
+void CEffectObject::MoveToDirection(float dist)
+{
+	CBaseObject::SetPosition(Vector3::Add(GetPosition(), m_direction, dist));
 }

@@ -130,10 +130,18 @@ enum FlyingObjectType {
 };
 
 enum EffectObjectType {
-	Player_SwordSkill_Q,
-	Player_SwordSkill_W,
-	Player_SwordSkill_E,
-	Player_SwordSkill_R,
+	Player_SwordSkill_Q,			// 땅 깨지는 이펙트 (플레이어 앞)
+	Player_SwordSkill_W,			// 발도 이펙트
+	Player_SwordSkill_R,			// 땅 깨지는 이펙트 (플레이어 주변)
+	Minion_Magic_Ball,				// 미니언 공격 모션 이펙트
+	Player_BowSkill_Effect,			// 활 플레이어 스킬샷 이펙트
+	Player_BowSkill_Q,				// 폭발
+	Player_BowSkill_E,				// 화살촉 이펙트
+	Player_StaffSkill_Effect,		// 마법 플레이어 스킬샷 이펙트
+	Player_StaffSkill_Q,			// 불타는 공(Fire 이펙트 사용) + 폭발
+	Player_StaffSkill_W,			// 얼음
+	Player_StaffSkill_E,			// 전기
+
 };
 
 struct CommonInfo

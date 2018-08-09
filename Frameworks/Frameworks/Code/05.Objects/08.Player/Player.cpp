@@ -40,33 +40,51 @@ void CPlayer::Animate(float timeElapsed)
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8), 100);
+				// EffectMgr
 				if (GetType() == ObjectType::SwordPlayer)
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], GetTeam(), EffectObjectType::Player_SwordSkill_Q);
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q);
 				else if (GetType() == ObjectType::StaffPlayer)
 					;
 				else if (GetType() == ObjectType::BowPlayer)
-					;
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillW) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180, 500);
+				// EffectMgr
 				if (GetType() == ObjectType::SwordPlayer)
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], GetTeam(), EffectObjectType::Player_SwordSkill_W);
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex],EffectObjectType::Player_SwordSkill_W);
 				else if (GetType() == ObjectType::StaffPlayer)
 					;
 				else if (GetType() == ObjectType::BowPlayer)
-					;
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillE) {
-			
+			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
+				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+				// EffectMgr
+				if (GetType() == ObjectType::SwordPlayer)
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W);
+				else if (GetType() == ObjectType::StaffPlayer)
+					;
+				else if (GetType() == ObjectType::BowPlayer)
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
+			}
 		}
 		else if (m_nCurrAnimation == Animations::SkillR) {
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(12), 500);
+				// EffectMgr
+				if (GetType() == ObjectType::SwordPlayer)
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W);
+				else if (GetType() == ObjectType::StaffPlayer)
+					;
+				else if (GetType() == ObjectType::BowPlayer)
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}
 		}
 		break;
