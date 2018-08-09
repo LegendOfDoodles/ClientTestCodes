@@ -37,6 +37,10 @@ CIconObject::CIconObject(shared_ptr<CCreateMgr> pCreateMgr, IconUIType type)
 	case NexusAndTowerIcon:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3200.f, FRAME_BUFFER_HEIGHT / 1800.f, 0.f);
 		SetMesh(0, pRectMesh);
+	case GolemIcon:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3200.f, FRAME_BUFFER_HEIGHT / 1800.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
 	default:
 		break;
 	}
@@ -75,6 +79,7 @@ void CIconObject::Render(CCamera *pCamera, UINT istanceCnt)
 	case PlayerIcon:
 	case MinionIcon:
 	case RoiderIcon:
+	case GolemIcon:
 		CBillboardObject::Render(pCamera, istanceCnt);
 		break;
 	case NexusAndTowerIcon:

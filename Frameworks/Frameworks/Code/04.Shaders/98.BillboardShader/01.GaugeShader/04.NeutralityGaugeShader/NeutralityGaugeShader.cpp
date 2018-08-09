@@ -189,14 +189,26 @@ void CNeutralityGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, voi
 
 	for (int i = 0; i < m_nObjects; ++i) {
 
-		pGaugeObject = new CGaugeObject(pCreateMgr, GaugeUIType::RoiderGauge);
-		pGaugeObject->SetCamera(m_pCamera);
-		pGaugeObject->SetMasterObject(m_ppRoider[i]);
+		if (i < m_nObjects - 1) {
+			pGaugeObject = new CGaugeObject(pCreateMgr, GaugeUIType::RoiderGauge);
+			pGaugeObject->SetCamera(m_pCamera);
+			pGaugeObject->SetMasterObject(m_ppRoider[i]);
 
-		XMFLOAT3 HPGaugePosition = m_ppRoider[i]->GetPosition();
-		HPGaugePosition.y += 110.f;
-		pGaugeObject->SetPosition(HPGaugePosition);
+			//XMFLOAT3 HPGaugePosition = m_ppRoider[i]->GetPosition();
+			//HPGaugePosition.y += 110.f;
+			//pGaugeObject->SetPosition(HPGaugePosition);
+		}
+		else if (i == m_nObjects-1) {
+			pGaugeObject = new CGaugeObject(pCreateMgr, GaugeUIType::GolemGauge);
+			pGaugeObject->SetCamera(m_pCamera);
+			pGaugeObject->SetMasterObject(m_ppRoider[i]);
 
+			//XMFLOAT3 HPGaugePosition = m_ppRoider[i]->GetPosition();
+			//HPGaugePosition.y = HPGaugePosition.y * 2;
+			//pGaugeObject->SetPosition(HPGaugePosition);
+		}
+
+		
 		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
 		m_ppObjects[i] = pGaugeObject;

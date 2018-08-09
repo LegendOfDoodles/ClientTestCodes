@@ -114,6 +114,7 @@ void CMinimapIconShader::AnimateObjects(float timeElapsed)
 
 void CMinimapIconShader::Render(CCamera * pCamera)
 {
+	// Player
 	for (int j = 0; j < m_nPlayer; j++)
 	{
 		CCollisionObject* master = ((CIconObject*)m_ppObjects[j])->GetMasterObject();
@@ -160,10 +161,11 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pCamera);
 	}
 
+	// Roider
 	CShader::Render(pCamera, 3);
 
 	m_ppMaterials[3]->UpdateShaderVariable(1);
-	for (int j = m_nPlayer; j < m_nObjects; ++j) {
+	for (int j = m_nPlayer; j < m_nObjects - 1; ++j) {
 		CCollisionObject* master = m_ppObjects[j]->GetMasterObject();
 
 		if (master->GetTeam() == TeamType::Blue)		
@@ -171,7 +173,7 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 	}
 
 	m_ppMaterials[3]->UpdateShaderVariable(2);
-	for (int j = m_nPlayer; j < m_nObjects; ++j) {
+	for (int j = m_nPlayer; j < m_nObjects - 1; ++j) {
 		CCollisionObject* master = m_ppObjects[j]->GetMasterObject();
 
 		if (master->GetTeam() == TeamType::Red)		
@@ -179,15 +181,42 @@ void CMinimapIconShader::Render(CCamera * pCamera)
 	}
 
 	m_ppMaterials[3]->UpdateShaderVariable(0);
-	for (int j = m_nPlayer; j < m_nObjects; ++j) {
+	for (int j = m_nPlayer; j < m_nObjects - 1; ++j) {
 		CCollisionObject* master = m_ppObjects[j]->GetMasterObject();
 
 		if (master->GetTeam() == TeamType::Neutral)	
 			m_ppObjects[j]->Render(pCamera);
 	}
 
+	// Golem
+	CShader::Render(pCamera, 4);
+
+	m_ppMaterials[4]->UpdateShaderVariable(1);
+	for (int j = m_nObjects - 1; j < m_nObjects; ++j) {
+		CCollisionObject* master = m_ppObjects[j]->GetMasterObject();
+
+		if (master->GetTeam() == TeamType::Blue)
+			m_ppObjects[j]->Render(pCamera);
+	}
+
+	m_ppMaterials[4]->UpdateShaderVariable(2);
+	for (int j = m_nObjects - 1; j < m_nObjects; ++j) {
+		CCollisionObject* master = m_ppObjects[j]->GetMasterObject();
+
+		if (master->GetTeam() == TeamType::Red)
+			m_ppObjects[j]->Render(pCamera);
+	}
+
+	m_ppMaterials[4]->UpdateShaderVariable(0);
+	for (int j = m_nObjects - 1; j < m_nObjects; ++j) {
+		CCollisionObject* master = m_ppObjects[j]->GetMasterObject();
+
+		if (master->GetTeam() == TeamType::Neutral)
+			m_ppObjects[j]->Render(pCamera);
+	}
+
+	// Minions
 	CShader::Render(pCamera, 2);
-	// 미니언
 
 	m_ppMaterials[2]->UpdateShaderVariable(0);
 	for (auto iter = m_MinionIconObjectList.begin(); iter != m_MinionIconObjectList.end(); ++iter) {
@@ -314,7 +343,7 @@ void CMinimapIconShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nR
 {
 	m_nPipelineStates = 1;
 
-	m_nHeaps = 4;
+	m_nHeaps = 5;
 	CreateDescriptorHeaps();
 
 	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
@@ -343,10 +372,13 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 
 	// 중립몬스터
 	// Roider ( 3번 )
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nRoider, 3, 3);
-	CreateConstantBufferViews(pCreateMgr, m_nRoider, m_pConstBuffer.Get(), ncbElementBytes, MAX_MINION + m_nPlayer, 3);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nRoider-1, 3, 3);
+	CreateConstantBufferViews(pCreateMgr, m_nRoider-1, m_pConstBuffer.Get(), ncbElementBytes, MAX_MINION + m_nPlayer, 3);
 
-#if USE_BATCH_MATERIAL
+	// Golem ( 4번 )
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, 1, 3, 4);
+	CreateConstantBufferViews(pCreateMgr, 1, m_pConstBuffer.Get(), ncbElementBytes, MAX_MINION + m_nPlayer + (m_nRoider-1), 4);
+
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	
@@ -365,9 +397,8 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 	// Roider
 	m_ppMaterials[3] = Materials::CreateRoiderIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
 
-#else
-	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
-#endif
+	// Golem
+	m_ppMaterials[4] = Materials::CreateGolemIconMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
 
 	// Player Icon 생성
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -392,7 +423,7 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 				pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * redIdx++));
 			}
 		}
-		else 
+		else if ( i < m_nObjects-1 )
 		{
 			pIconObject = new CIconObject(pCreateMgr, IconUIType::RoiderIcon);
 
@@ -402,6 +433,16 @@ void CMinimapIconShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 			pIconObject->WorldToMinimap();
 
 			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[3].ptr + (incrementSize * (i - m_nPlayer)));
+		}
+		else if ( i == m_nObjects-1 ){
+			pIconObject = new CIconObject(pCreateMgr, IconUIType::GolemIcon);
+
+			pIconObject->SetCamera(m_pCamera);
+			pIconObject->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);	// distance 9
+			pIconObject->SetObject(m_ppRoider[i - m_nPlayer]);
+			pIconObject->WorldToMinimap();
+
+			pIconObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[4].ptr + (incrementSize * (i - (m_nObjects-1))));
 		}
 
 		m_ppObjects[i] = pIconObject;
