@@ -73,11 +73,14 @@ void CIconObject::Animate(float fTimeElapsed)
 
 void CIconObject::Render(CCamera *pCamera, UINT istanceCnt)
 {
-
+	
 	switch (m_type)
 	{
 	case PlayerIcon:
 	case MinionIcon:
+		if (!IsVisible(pCamera) || !m_pMasterObject->GetDetected()) return;
+		CBillboardObject::Render(pCamera, istanceCnt);
+		break;
 	case RoiderIcon:
 	case GolemIcon:
 		CBillboardObject::Render(pCamera, istanceCnt);

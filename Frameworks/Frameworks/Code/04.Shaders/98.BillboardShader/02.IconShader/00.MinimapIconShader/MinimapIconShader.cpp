@@ -484,7 +484,7 @@ void CMinimapIconShader::SpawnMinionIcon()
 		pMinionObjects = (*minion);
 
 		pMinionIcon->SetObject(pMinionObjects);
-		pMinionIcon->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.01f);
+		pMinionIcon->SetDistance((FRAME_BUFFER_WIDTH / 128.f) - 0.04f);
 		pMinionIcon->SetCamera(m_pCamera);
 		pMinionIcon->WorldToMinimap();
 
