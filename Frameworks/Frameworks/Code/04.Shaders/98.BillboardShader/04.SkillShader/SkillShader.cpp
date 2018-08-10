@@ -64,7 +64,7 @@ void CSkillShader::AnimateObjects(float timeElapsed)
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
 
-	if (m_Change == true) {
+	if (*m_Change == true) {
 		int WeaponType = m_pPlayer->GetPlayerStatus()->Weapon;
 
 		int GrayIcon = WeaponType * 2;
@@ -76,7 +76,7 @@ void CSkillShader::AnimateObjects(float timeElapsed)
 			else	   m_ppObjects[i]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[ColorIcon].ptr + (m_incrementSize * (i - 4)));
 		}
 
-		m_Change = false;
+		*m_Change = false;
 	}
 }
 
@@ -91,38 +91,39 @@ void CSkillShader::Render(CCamera * pCamera)
 		int GrayIcon = WeaponType * 2;
 		int ColorIcon = GrayIcon + 1;
 
+		if (j == 0)
+		{
+			CShader::Render(pCamera, GrayIcon);
+		}
+		else if (j == 4)
+		{
+			CShader::Render(pCamera, ColorIcon);
+		}
+
 		switch (type)
 		{
 		case GrayQSkill:
-			CShader::Render(pCamera, GrayIcon);
 			m_ppMaterials[GrayIcon]->UpdateShaderVariable(0);
 			break;
 		case GrayWSkill:
-			CShader::Render(pCamera, GrayIcon);
 			m_ppMaterials[GrayIcon]->UpdateShaderVariable(1);
 			break;
 		case GrayESkill:
-			CShader::Render(pCamera, GrayIcon);
 			m_ppMaterials[GrayIcon]->UpdateShaderVariable(2);
 			break;
 		case GrayRSkill:
-			CShader::Render(pCamera, GrayIcon);
 			m_ppMaterials[GrayIcon]->UpdateShaderVariable(3);
 			break;
 		case QSkill:
-			CShader::Render(pCamera, ColorIcon);
 			m_ppMaterials[ColorIcon]->UpdateShaderVariable(0);
 			break;
 		case WSkill:
-			CShader::Render(pCamera, ColorIcon);
 			m_ppMaterials[ColorIcon]->UpdateShaderVariable(1);
 			break;
 		case ESkill:
-			CShader::Render(pCamera, ColorIcon);
 			m_ppMaterials[ColorIcon]->UpdateShaderVariable(2);
 			break;
 		case RSkill:
-			CShader::Render(pCamera, ColorIcon);
 			m_ppMaterials[ColorIcon]->UpdateShaderVariable(3);
 			break;
 		default:
@@ -270,8 +271,8 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 	
 	for (int i = 0; i < m_nHeaps; ++i) {
-		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 4, i);
-		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, 0, i);
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects / 2, 4, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects / 2, m_pConstBuffer.Get(), ncbElementBytes, (i % 2) * (m_nObjects / 2), i);
 	}
 	
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
@@ -307,7 +308,7 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 		else 
 		{
 			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.6432f);	 // distance 10	
-			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * (i - 4)));
 		}
 
 		m_ppObjects[i] = pUIObject;

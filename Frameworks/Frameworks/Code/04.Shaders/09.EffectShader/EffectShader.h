@@ -44,6 +44,10 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_objectsPossibleIndices[idx] = false; }
 
 protected: // 변수
+	static const int m_nMesh{ 2 };
+	CTexturedRectMesh* m_ppMesh[m_nMesh];
+	int UseMatrialNumToObjectCnt[m_nMesh];
+
 	UINT m_srvIncrementSize{ 0 };
 
 	std::unordered_map<EffectObjectType, UINT> m_objectsMaxCount;
@@ -54,6 +58,7 @@ protected: // 변수
 	CollisionObjectList m_SwordWSkillList;
 	CollisionObjectList m_MinionMagicList;
 	CollisionObjectList m_BowSkillList;
+	CollisionObjectList m_StaffSkillList;
 
 	bool m_Paused{ false };
 	

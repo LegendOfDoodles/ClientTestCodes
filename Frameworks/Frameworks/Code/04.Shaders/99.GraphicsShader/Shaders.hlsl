@@ -226,8 +226,8 @@ VS_EFFECT_OUTPUT VSTexturedEffect(VS_EFFECT_INPUT input)
 
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxEffectObject), gmtxView), gmtxProjection);
 
-	int row = 0;	// x
-	int col = 0;	// y
+	uint row = 0;	// x
+	uint col = 0;	// y
 		
 	float2 newTexPos = input.uv;
 
@@ -238,9 +238,9 @@ VS_EFFECT_OUTPUT VSTexturedEffect(VS_EFFECT_INPUT input)
 	col = height / 128;
 	
 	//// u_Time == Animaiton Time (재생 시간) -> 끊기는 현상 발생?
-	int newtime = int(floor(animationTime));
-	int u = newtime - int(row * floor(1.0f * newtime / row)); //mod(newtime, row);
-	int v = newtime / row;
+	uint newtime = uint(floor(animationTime));
+	uint u = newtime - uint(row * floor(1.0f * newtime / row)); //mod(newtime, row);
+	uint v = newtime / row;
 	
 	newTexPos.x = (input.uv.x / row) + ((u / float(row)));
 	newTexPos.y = (input.uv.y / col) + ((v / float(col)));

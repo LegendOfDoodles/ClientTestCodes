@@ -34,6 +34,8 @@ protected: // 내부 함수
 	void MoveToDirection(float dist);
 
 protected: // 변수
+
+
 	EffectObjectType m_EffectObjectType;
 	XMFLOAT3 m_direction{};
 	float m_AnimaitonTime{ 0.0f };

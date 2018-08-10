@@ -31,7 +31,7 @@ public: // 공개 함수
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 	void SetEffectManagerToObject(shared_ptr<CEffectMgr> manager);
-	bool GetChangeWeapon() { return m_ChangeWeapon; }
+	bool* GetChangeWeapon() { return &m_ChangeWeapon; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();

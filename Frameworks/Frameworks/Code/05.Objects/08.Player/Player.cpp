@@ -44,7 +44,7 @@ void CPlayer::Animate(float timeElapsed)
 				if (GetType() == ObjectType::SwordPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q);
 				else if (GetType() == ObjectType::StaffPlayer)
-					;
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_Effect);
 				else if (GetType() == ObjectType::BowPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}
@@ -57,7 +57,7 @@ void CPlayer::Animate(float timeElapsed)
 				if (GetType() == ObjectType::SwordPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex],EffectObjectType::Player_SwordSkill_W);
 				else if (GetType() == ObjectType::StaffPlayer)
-					;
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_Effect);
 				else if (GetType() == ObjectType::BowPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}
@@ -69,7 +69,7 @@ void CPlayer::Animate(float timeElapsed)
 				if (GetType() == ObjectType::SwordPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W);
 				else if (GetType() == ObjectType::StaffPlayer)
-					;
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_Effect);
 				else if (GetType() == ObjectType::BowPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}
@@ -82,7 +82,7 @@ void CPlayer::Animate(float timeElapsed)
 				if (GetType() == ObjectType::SwordPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W);
 				else if (GetType() == ObjectType::StaffPlayer)
-					;
+					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_Effect);
 				else if (GetType() == ObjectType::BowPlayer)
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_BowSkill_Effect);
 			}

@@ -8,10 +8,6 @@ CEffectObject::CEffectObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes)
 	: CCollisionObject(pCreateMgr)
 {
 	m_ObjectType = ObjectType::EffectObject;
-
-	// HP°ÔÀÌÁö Mesh
-	CTexturedRectMesh *pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 12.8f, FRAME_BUFFER_HEIGHT / 7.2f, 0.f);
-	SetMesh(0, pRectMesh);
 }
 
 CEffectObject::~CEffectObject()
@@ -25,14 +21,11 @@ void CEffectObject::Animate(float timeElapsed)
 	if (!m_Activated) return;
 
 	// Billboard Update
-	//XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
-	//XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-	//XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
-	//XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
-	//
-	//m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
-	//m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
-	//m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+	XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
+	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+	XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
+	XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
+	
 	
 	// Effect Update
 	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_Q)
@@ -61,7 +54,23 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Player_BowSkill_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * 30;
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * 45;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * 45;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
