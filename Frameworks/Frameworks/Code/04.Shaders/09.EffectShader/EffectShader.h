@@ -56,22 +56,24 @@ protected: // º¯¼ö
 
 	CollisionObjectList m_PlayerSwordSkill_Q_EffectList;
 	CollisionObjectList m_PlayerSwordSkill_W_EffectList;
+	CollisionObjectList m_PlayerSwordSkill_E_EffectList;
 	CollisionObjectList m_PlayerSwordSkill_R_EffectList;
 
-	CollisionObjectList m_PlayerArrowSkill_Q_EffectList;
-	CollisionObjectList m_PlayerArrowSkill_E_EffectList;
-
-	CollisionObjectList m_PlayerStaffSkill_Q_EffectList;
 	CollisionObjectList m_PlayerStaffSkill_W_EffectList;
 	CollisionObjectList m_PlayerStaffSkill_E_EffectList;
 
 	CollisionObjectList m_PlayerArrowAttack_EffectList;
 	CollisionObjectList m_PlayerStaffAttack_EffectList;
+	CollisionObjectList m_PlayerStaffQSkill_EffectList;
+	CollisionObjectList m_PlayerStaffESkill_EffectList;
 
 	CollisionObjectList m_MinionArrowAttack_EffectList;
 	CollisionObjectList m_MinionStaffAttack_EffectList;
 
 	CollisionObjectList m_MinionArrow_EffectList;
+	CollisionObjectList m_PlayerArrow_EffectList;
+	CollisionObjectList m_PlayerFireBall_EffectList;
+	CollisionObjectList m_PlayerArrowAndFireBall_HitPosition_EffectList;
 
 	bool m_Paused{ false };
 	

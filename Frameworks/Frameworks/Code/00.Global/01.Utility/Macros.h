@@ -69,6 +69,7 @@
 #define MAX_MINION 300
 #define MAX_ARROW 70
 #define MAX_MAGIC 70
+#define MAX_HIT 100
 
 // 최대 최소
 #define MAX_SKILL 4

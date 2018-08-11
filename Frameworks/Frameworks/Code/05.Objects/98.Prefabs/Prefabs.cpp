@@ -1154,15 +1154,14 @@ CMaterial * Materials::CreateNexusIconMaterial(shared_ptr<CCreateMgr> pCreateMgr
 CMaterial * Materials::CreatePlayerSkillEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(8, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/BowPlayerEffect.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 1);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 2);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 3);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 4);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 5);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 6);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 7);
+	CTexture *pTexture{ new CTexture(6, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_Q.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_W.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_E.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_R.dds", 3);
+
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_Q.dds", 4);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Staff_E.dds", 5);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -1179,9 +1178,11 @@ CMaterial * Materials::CreatePlayerSkillEffectMaterial(shared_ptr<CCreateMgr> pC
 CMaterial * Materials::CreatePlayerAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/BowPlayerEffect.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 1);
+	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerAttackEffect/Arrow_Attack.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerAttackEffect/Staff_Attack.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerAttackEffect/Staff_Q.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerAttackEffect/Staff_E.dds", 3);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -1199,8 +1200,8 @@ CMaterial * Materials::CreateMinionAttackEffectMaterial(shared_ptr<CCreateMgr> p
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/Fire.dds", 0);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/MagicBall_1.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/MinionAttackEffect/Arrow_Attack.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/MinionAttackEffect/Staff_Attack.dds", 1);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -1217,8 +1218,11 @@ CMaterial * Materials::CreateMinionAttackEffectMaterial(shared_ptr<CCreateMgr> p
 CMaterial * Materials::CreateFlyingObjectEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/Fire.dds", 0);
+	CTexture *pTexture{ new CTexture(4, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/FlyingObjectEffect/Minion_Arrow.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/FlyingObjectEffect/Player_Arrow.dds", 1);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/FlyingObjectEffect/Player_FireBall.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/FlyingObjectEffect/Explosion.dds", 3);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

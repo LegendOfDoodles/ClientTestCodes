@@ -217,10 +217,7 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	{
 		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillR);
 	}
-	if (GetAsyncKeyState('Q') & 0xFF00)
-	{
-		m_ppObjects[0]->ActiveSkill(AnimationsType::SkillQ);
-	}
+	
 	return true;
 }
 

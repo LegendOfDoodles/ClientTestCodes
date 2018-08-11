@@ -2,7 +2,7 @@
 #include "05.Objects/00.BaseObject/BaseObject.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
 #include "00.Global/01.Utility/07.ThrowingManager/ThrowingMgr.h"
-#include "00.Global\01.Utility\08.EffectManager\EffectManager.h"
+#include "00.Global\01.Utility/08.EffectManager/EffectManager.h"
 
 class CWayFinder;
 

@@ -20,10 +20,16 @@ void CEffectObject::Animate(float timeElapsed)
 {
 	if (!m_Activated) return;
 
+	// Billboard Update
+	XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
+	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+	XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
+	XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
+
 	// Effect Update
 	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_Q_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		m_AnimaitonTime += timeElapsed * m_speed;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -31,7 +37,15 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_W_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 4)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_E_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -39,39 +53,16 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_R_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		m_AnimaitonTime += timeElapsed * m_speed;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
 		}
 	}
-	if (m_EffectObjectType == EffectObjectType::Player_ArrowSkill_Q_Effect)
-	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
-		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
-		{
-			m_curState = StatesType::Remove;
-		}
-	}
-	if (m_EffectObjectType == EffectObjectType::Player_ArrowSkill_E_Effect)
-	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
-		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
-		{
-			m_curState = StatesType::Remove;
-		}
-	}
-	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_Q_Effect)
-	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
-		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
-		{
-			m_curState = StatesType::Remove;
-		}
-	}
+
 	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_W_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		m_AnimaitonTime += timeElapsed * m_speed;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -79,7 +70,7 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_E_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		m_AnimaitonTime += timeElapsed * m_speed;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -88,17 +79,11 @@ void CEffectObject::Animate(float timeElapsed)
 
 	if (m_EffectObjectType == EffectObjectType::Player_ArrowAttack_Effect)
 	{
-		// Billboard Update
-		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
-		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
-		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
-
 		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 
-		m_AnimaitonTime += timeElapsed * 45;
+		m_AnimaitonTime += timeElapsed * (m_speed * 2);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -106,36 +91,49 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Player_StaffAttack_Effect)
 	{
-		// Billboard Update
-		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
-		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
-		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
-
 		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 
-		m_AnimaitonTime += timeElapsed * 45;
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
 		}
 	}
-
-	if (m_EffectObjectType == EffectObjectType::Minion_ArrowAttack_Effect)
+	if (m_EffectObjectType == EffectObjectType::Player_StaffQSkill_Effect)
 	{
-		// Billboard Update
-		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
-		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
-		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
-
 		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 
-		m_AnimaitonTime += timeElapsed * 45;
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_StaffESkill_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	
+
+	if (m_EffectObjectType == EffectObjectType::Minion_ArrowAttack_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -143,17 +141,7 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Minion_StaffAttack_Effect)
 	{
-		// Billboard Update
-		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
-		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
-		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
-
-		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
-		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
-		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
-
-		m_AnimaitonTime += timeElapsed * 45;
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -169,12 +157,41 @@ void CEffectObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
+	if (m_EffectObjectType == EffectObjectType::Flying_PlayerArrow_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Flying_PlayerFireBall_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
 }
 
 void CEffectObject::Render(CCamera * pCamera, UINT istanceCnt)
 {
 	OnPrepareRender();
-	//if (!IsVisible(pCamera) || !m_pMasterObject->GetDetected()) return;
 
 	if (m_pMaterial)
 	{
@@ -211,6 +228,8 @@ void CEffectObject::SetEffectObjectsType(EffectObjectType type)
 	{
 		m_speed = MINION_ARROW_SPEED;
 	}
+	else
+		m_speed = ANIMATION_SPEED;
 }
 
 void CEffectObject::LookAt(XMFLOAT3 target)

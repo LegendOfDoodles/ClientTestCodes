@@ -433,6 +433,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
 
+	m_pCollisionManager->SetEffectManager(m_pEffectMgr);
+
 	//Manager Shaders Setting
 	CMinionShader* pMinionS = (CMinionShader *)m_ppShaders[2];
 
