@@ -20,40 +20,80 @@ void CEffectObject::Animate(float timeElapsed)
 {
 	if (!m_Activated) return;
 
-	// Billboard Update
-	XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
-	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
-	XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
-	XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
-	
-	
 	// Effect Update
-	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_Q)
+	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_Q_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * 30;
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
 		}
 	}
-	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_W)
+	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_W_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * 30;
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
 		}
 	}
-	if (m_EffectObjectType == EffectObjectType::Minion_Magic_Ball)
+	if (m_EffectObjectType == EffectObjectType::Player_SwordSkill_R_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * 30;
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
 		}
 	}
-	if (m_EffectObjectType == EffectObjectType::Player_BowSkill_Effect)
+	if (m_EffectObjectType == EffectObjectType::Player_ArrowSkill_Q_Effect)
 	{
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_ArrowSkill_E_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_Q_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_W_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_E_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * ANIMATION_SPEED;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
+	if (m_EffectObjectType == EffectObjectType::Player_ArrowAttack_Effect)
+	{
+		// Billboard Update
+		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
+		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
+		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
+
 		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
@@ -64,8 +104,14 @@ void CEffectObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
-	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_Effect)
+	if (m_EffectObjectType == EffectObjectType::Player_StaffAttack_Effect)
 	{
+		// Billboard Update
+		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
+		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
+		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
+
 		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
@@ -77,16 +123,52 @@ void CEffectObject::Animate(float timeElapsed)
 		}
 	}
 
-	// 오브젝트와 같이 이동해야하는 오브젝트
-	//if ( type )		// type 주고
-	//{
-	//	m_distance += timeElapsed * m_speed;	// speed 정해주고
-	//	MoveToDirection(timeElapsed * m_speed); // 이동 시켜준다.
-	//	if (m_distance > m_maxAnimaitonTime)
-	//	{
-	//		m_curState = StatesType::Remove;
-	//	}
-	//}
+	if (m_EffectObjectType == EffectObjectType::Minion_ArrowAttack_Effect)
+	{
+		// Billboard Update
+		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
+		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
+		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
+
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * 45;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Minion_StaffAttack_Effect)
+	{
+		// Billboard Update
+		XMFLOAT3 xmf3Up = m_pCamera->GetUpVector();
+		XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+		XMFLOAT3 xmf3Look = Vector3::ScalarProduct(m_pCamera->GetLookVector(), -1);
+		XMFLOAT3 xmf3Right = Vector3::ScalarProduct(m_pCamera->GetRightVector(), -1);
+
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * 45;
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
+	if (m_EffectObjectType == EffectObjectType::Flying_MinionArrow_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
 }
 
 void CEffectObject::Render(CCamera * pCamera, UINT istanceCnt)
@@ -125,22 +207,10 @@ void CEffectObject::SetEffectObjectsType(EffectObjectType type)
 	
 	m_AnimaitonTime = 0.0f;
 
-	//if (type == EffectObjectType::Player_SwordSkill_Q)
-	//{
-	//	m_AnimaitonTime = 0.0f;
-	//}
-	//else if (type == EffectObjectType::Player_SwordSkill_W)
-	//{
-	//	m_AnimaitonTime = 0.0f;
-	//}
-	//else if (type == EffectObjectType::Minion_Magic_Ball) {
-	//	m_AnimaitonTime = 0.0f;
-	//}
-	//else if (type == EffectObjectType::Player_BowSkill_Effect) {
-	//	m_AnimaitonTime = 0.0f;
-	//}
-
-	// 필요하면 여기서 speed 추가해준다.
+	if (m_EffectObjectType == Flying_MinionArrow_Effect)
+	{
+		m_speed = MINION_ARROW_SPEED;
+	}
 }
 
 void CEffectObject::LookAt(XMFLOAT3 target)

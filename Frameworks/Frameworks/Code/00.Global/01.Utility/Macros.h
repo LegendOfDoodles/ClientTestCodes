@@ -72,10 +72,10 @@
 
 // 최대 최소
 #define MAX_SKILL 4
-#define MAX_QSKILL 4
-#define MAX_WSKILL 4
-#define MAX_ESKILL 4
-#define MAX_RSKILL 4
+
+// Animation Speed
+#define ANIMATION_SPEED 30
+
 
 // 최대, 최소 속도
 #define MIN_CAMERA_SPEED 100.0f
@@ -97,6 +97,10 @@
 #define INCREASE_STATICOBJECT_EXP 5
 #define INCREASE_PLAYER_EXP 110
 #define INCREASE_MINION_EXP 5
+
+// Flying Object Spped
+#define MINION_ARROW_SPEED CONVERT_cm_to_InG(1.805f)
+
 
 //방어력 적용 공식----------------
 #define Compute_Defence(val) (100)/(100+val)

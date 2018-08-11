@@ -44,7 +44,7 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_objectsPossibleIndices[idx] = false; }
 
 protected: // 변수
-	static const int m_nMesh{ 2 };
+	static const int m_nMesh{ 4 };
 	CTexturedRectMesh* m_ppMesh[m_nMesh];
 	int UseMatrialNumToObjectCnt[m_nMesh];
 
@@ -54,11 +54,24 @@ protected: // 변수
 	std::unordered_map<EffectObjectType, EffectObjectIndices> m_objectsIndices;
 	std::unique_ptr<bool[]> m_objectsPossibleIndices;
 
-	CollisionObjectList m_SwordQSkillList;
-	CollisionObjectList m_SwordWSkillList;
-	CollisionObjectList m_MinionMagicList;
-	CollisionObjectList m_BowSkillList;
-	CollisionObjectList m_StaffSkillList;
+	CollisionObjectList m_PlayerSwordSkill_Q_EffectList;
+	CollisionObjectList m_PlayerSwordSkill_W_EffectList;
+	CollisionObjectList m_PlayerSwordSkill_R_EffectList;
+
+	CollisionObjectList m_PlayerArrowSkill_Q_EffectList;
+	CollisionObjectList m_PlayerArrowSkill_E_EffectList;
+
+	CollisionObjectList m_PlayerStaffSkill_Q_EffectList;
+	CollisionObjectList m_PlayerStaffSkill_W_EffectList;
+	CollisionObjectList m_PlayerStaffSkill_E_EffectList;
+
+	CollisionObjectList m_PlayerArrowAttack_EffectList;
+	CollisionObjectList m_PlayerStaffAttack_EffectList;
+
+	CollisionObjectList m_MinionArrowAttack_EffectList;
+	CollisionObjectList m_MinionStaffAttack_EffectList;
+
+	CollisionObjectList m_MinionArrow_EffectList;
 
 	bool m_Paused{ false };
 	

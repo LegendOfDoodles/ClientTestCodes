@@ -46,11 +46,30 @@ void CEffectShader::ReleaseUploadBuffers()
 
 void CEffectShader::UpdateShaderVariables(int opt)
 {
-	UNREFERENCED_PARAMETER(opt);
-
 	static UINT elementBytes = ((sizeof(CB_EFFECTOBJECT_INFO) + 255) & ~255);
+	int beg{ 0 }, end{ 0 };
 
-	for (int i = 0; i < m_nObjects; ++i)
+	switch (opt)
+	{
+	case 0:
+		beg = 0;
+		end = UseMatrialNumToObjectCnt[0];
+		break;
+	case 1:
+		beg = UseMatrialNumToObjectCnt[0];
+		end = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1];
+		break;
+	case 2:
+		beg = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1];
+		end = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2];
+		break;
+	case 3:
+		beg = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2];
+		end = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3];
+		break;
+	}
+
+	for (int i = beg; i < end; ++i)
 	{
 		CB_EFFECTOBJECT_INFO *pMappedObject = (CB_EFFECTOBJECT_INFO *)(m_pMappedObjects + (i * elementBytes));
 		// Animation Time
@@ -80,37 +99,85 @@ void CEffectShader::AnimateObjects(float timeElapsed)
 	}
 
 	// 더 이상 업데이트 하면 안되는 오브젝트 리스트에서 제거
-	m_SwordQSkillList.remove_if(removeFunc);
-	m_SwordWSkillList.remove_if(removeFunc);
-	m_MinionMagicList.remove_if(removeFunc);
-	m_BowSkillList.remove_if(removeFunc);
-	m_StaffSkillList.remove_if(removeFunc);
+	m_PlayerSwordSkill_Q_EffectList.remove_if(removeFunc);
+	m_PlayerSwordSkill_W_EffectList.remove_if(removeFunc);
+	m_PlayerSwordSkill_R_EffectList.remove_if(removeFunc);
+	m_PlayerArrowSkill_Q_EffectList.remove_if(removeFunc);
+	m_PlayerArrowSkill_E_EffectList.remove_if(removeFunc);
+	m_PlayerStaffSkill_Q_EffectList.remove_if(removeFunc);
+	m_PlayerStaffSkill_W_EffectList.remove_if(removeFunc);
+	m_PlayerStaffSkill_E_EffectList.remove_if(removeFunc);
+	m_PlayerArrowAttack_EffectList.remove_if(removeFunc);
+	m_PlayerStaffAttack_EffectList.remove_if(removeFunc);
+	m_MinionArrowAttack_EffectList.remove_if(removeFunc);
+	m_MinionStaffAttack_EffectList.remove_if(removeFunc);
+	m_MinionArrow_EffectList.remove_if(removeFunc);
 }
 
 void CEffectShader::Render(CCamera * pCamera)
 {
 	CShader::Render(pCamera, 0);
 	
-	if (!m_SwordQSkillList.empty())
+	if (!m_PlayerSwordSkill_Q_EffectList.empty())
 	{
 		m_ppMaterials[0]->UpdateShaderVariable(0);
-		for (auto iter = m_SwordQSkillList.begin(); iter != m_SwordQSkillList.end(); ++iter)
+		for (auto iter = m_PlayerSwordSkill_Q_EffectList.begin(); iter != m_PlayerSwordSkill_Q_EffectList.end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
 		}
 	}
-	if (!m_SwordWSkillList.empty())
+	if (!m_PlayerSwordSkill_W_EffectList.empty())
 	{
 		m_ppMaterials[0]->UpdateShaderVariable(1);
-		for (auto iter = m_SwordWSkillList.begin(); iter != m_SwordWSkillList.end(); ++iter)
+		for (auto iter = m_PlayerSwordSkill_W_EffectList.begin(); iter != m_PlayerSwordSkill_W_EffectList.end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
 		}
 	}
-	if (!m_MinionMagicList.empty())
+	if (!m_PlayerSwordSkill_R_EffectList.empty())
 	{
 		m_ppMaterials[0]->UpdateShaderVariable(2);
-		for (auto iter = m_MinionMagicList.begin(); iter != m_MinionMagicList.end(); ++iter)
+		for (auto iter = m_PlayerSwordSkill_R_EffectList.begin(); iter != m_PlayerSwordSkill_R_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_PlayerArrowSkill_Q_EffectList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(3);
+		for (auto iter = m_PlayerArrowSkill_Q_EffectList.begin(); iter != m_PlayerArrowSkill_Q_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_PlayerArrowSkill_E_EffectList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(4);
+		for (auto iter = m_PlayerArrowSkill_E_EffectList.begin(); iter != m_PlayerArrowSkill_E_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_PlayerStaffSkill_Q_EffectList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(5);
+		for (auto iter = m_PlayerStaffSkill_Q_EffectList.begin(); iter != m_PlayerStaffSkill_Q_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_PlayerStaffSkill_W_EffectList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(6);
+		for (auto iter = m_PlayerStaffSkill_W_EffectList.begin(); iter != m_PlayerStaffSkill_W_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_PlayerStaffSkill_E_EffectList.empty())
+	{
+		m_ppMaterials[0]->UpdateShaderVariable(7);
+		for (auto iter = m_PlayerStaffSkill_E_EffectList.begin(); iter != m_PlayerStaffSkill_E_EffectList.end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
 		}
@@ -118,23 +185,50 @@ void CEffectShader::Render(CCamera * pCamera)
 
 	CShader::Render(pCamera, 1);
 
-	if (!m_BowSkillList.empty())
+	if (!m_PlayerArrowAttack_EffectList.empty())
 	{
 		m_ppMaterials[1]->UpdateShaderVariable(0);
-		for (auto iter = m_BowSkillList.begin(); iter != m_BowSkillList.end(); ++iter)
+		for (auto iter = m_PlayerArrowAttack_EffectList.begin(); iter != m_PlayerArrowAttack_EffectList.end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
 		}
 	}
-	if (!m_StaffSkillList.empty())
+	if (!m_PlayerStaffAttack_EffectList.empty())
 	{
 		m_ppMaterials[1]->UpdateShaderVariable(1);
-		for (auto iter = m_StaffSkillList.begin(); iter != m_StaffSkillList.end(); ++iter)
+		for (auto iter = m_PlayerStaffAttack_EffectList.begin(); iter != m_PlayerStaffAttack_EffectList.end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
 		}
 	}
-	
+
+	CShader::Render(pCamera, 2);
+	if (!m_MinionArrowAttack_EffectList.empty())
+	{
+		m_ppMaterials[2]->UpdateShaderVariable(0);
+		for (auto iter = m_MinionArrowAttack_EffectList.begin(); iter != m_MinionArrowAttack_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_MinionStaffAttack_EffectList.empty())
+	{
+		m_ppMaterials[2]->UpdateShaderVariable(1);
+		for (auto iter = m_MinionStaffAttack_EffectList.begin(); iter != m_MinionStaffAttack_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+
+	CShader::Render(pCamera, 3);
+	if (!m_MinionArrow_EffectList.empty())
+	{
+		m_ppMaterials[3]->UpdateShaderVariable(0);
+		for (auto iter = m_MinionArrow_EffectList.begin(); iter != m_MinionArrow_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 }
 
 void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 & direction, int aniLength, EffectObjectType objectType)
@@ -151,46 +245,110 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		m_ppObjects[idx]->SetAnimationLength(aniLength);
 
 		m_ppObjects[idx]->Activate();
-		if (objectType == EffectObjectType::Player_SwordSkill_Q)
+		if (objectType == EffectObjectType::Player_SwordSkill_Q_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
-			m_SwordQSkillList.emplace_back(m_ppObjects[idx]);
+			m_PlayerSwordSkill_Q_EffectList.emplace_back(m_ppObjects[idx]);
 		}
-		else if (objectType == EffectObjectType::Player_SwordSkill_W)
+		else if (objectType == EffectObjectType::Player_SwordSkill_W_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
-			m_SwordWSkillList.emplace_back(m_ppObjects[idx]);
+			m_PlayerSwordSkill_W_EffectList.emplace_back(m_ppObjects[idx]);
 		}
-		else if (objectType == EffectObjectType::Minion_Magic_Ball)
+		else if (objectType == EffectObjectType::Player_SwordSkill_R_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x - CONVERT_PaperUnit_to_InG(2), position.y + CONVERT_PaperUnit_to_InG(4), position.z - CONVERT_PaperUnit_to_InG(5)));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
-			m_MinionMagicList.emplace_back(m_ppObjects[idx]);
+			m_PlayerSwordSkill_R_EffectList.emplace_back(m_ppObjects[idx]);
 		}
-		else if (objectType == EffectObjectType::Player_BowSkill_Effect)
+		else if (objectType == EffectObjectType::Player_ArrowSkill_Q_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_PlayerArrowSkill_Q_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Player_ArrowSkill_E_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_PlayerArrowSkill_E_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Player_StaffSkill_Q_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_PlayerStaffSkill_Q_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Player_StaffSkill_W_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_PlayerStaffSkill_W_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Player_StaffSkill_E_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
+			m_PlayerStaffSkill_E_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Player_ArrowAttack_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * (idx - UseMatrialNumToObjectCnt[0])));
-			m_BowSkillList.emplace_back(m_ppObjects[idx]);
+			m_PlayerArrowAttack_EffectList.emplace_back(m_ppObjects[idx]);
 		}
-		else if (objectType == EffectObjectType::Player_StaffSkill_Effect)
+		else if (objectType == EffectObjectType::Player_StaffAttack_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * (idx - UseMatrialNumToObjectCnt[0])));
-			m_StaffSkillList.emplace_back(m_ppObjects[idx]);
+			m_PlayerStaffAttack_EffectList.emplace_back(m_ppObjects[idx]);
 		}
+		else if (objectType == EffectObjectType::Minion_ArrowAttack_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1]))));
+			m_MinionArrowAttack_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Minion_StaffAttack_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1]))));
+			m_MinionStaffAttack_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Flying_MinionArrow_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 3.f, position.z));
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[3].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2]))));
+			m_MinionArrow_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+
 	}
 }
 
@@ -279,24 +437,44 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 	// 오브젝트 순서 설정
 	EffectObjectType objectOrder[]{
-		EffectObjectType::Player_SwordSkill_Q,
-		EffectObjectType::Player_SwordSkill_W,
-		EffectObjectType::Minion_Magic_Ball,
-		EffectObjectType::Player_BowSkill_Effect,
-		EffectObjectType::Player_StaffSkill_Effect
+		EffectObjectType::Player_SwordSkill_Q_Effect,
+		EffectObjectType::Player_SwordSkill_W_Effect,
+		EffectObjectType::Player_SwordSkill_R_Effect,
+		EffectObjectType::Player_ArrowSkill_Q_Effect,
+		EffectObjectType::Player_ArrowSkill_E_Effect,
+		EffectObjectType::Player_StaffSkill_Q_Effect,
+		EffectObjectType::Player_StaffSkill_W_Effect,
+		EffectObjectType::Player_StaffSkill_E_Effect,
+		EffectObjectType::Player_ArrowAttack_Effect,
+		EffectObjectType::Player_StaffAttack_Effect,
+		EffectObjectType::Minion_ArrowAttack_Effect,
+		EffectObjectType::Minion_StaffAttack_Effect,
+		EffectObjectType::Flying_MinionArrow_Effect,
 	};
 
 	// 각 오브젝트의 최대 개수 설정
-	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_Q] = MAX_QSKILL;
-	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_W] = MAX_WSKILL;
-	m_nObjects += m_objectsMaxCount[EffectObjectType::Minion_Magic_Ball] = MAX_MAGIC;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_Q_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_W_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_SwordSkill_R_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_ArrowSkill_Q_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_ArrowSkill_E_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_StaffSkill_Q_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_StaffSkill_W_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_StaffSkill_E_Effect] = MAX_SKILL;
 	// 0번 Matrial을 사용하는 Obejct 갯수
 	UseMatrialNumToObjectCnt[0] = m_nObjects;
 
-	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_BowSkill_Effect] = MAX_SKILL;
-	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_StaffSkill_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_ArrowAttack_Effect] = MAX_SKILL;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Player_StaffAttack_Effect] = MAX_SKILL;
 	// 1번 Matrial을 사용하는 Obejct 갯수
 	UseMatrialNumToObjectCnt[1] = (m_nObjects - UseMatrialNumToObjectCnt[0]);
+
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Minion_ArrowAttack_Effect] = MAX_ARROW;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Minion_StaffAttack_Effect] = MAX_MAGIC;
+	UseMatrialNumToObjectCnt[2] = (m_nObjects - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1]));
+
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Flying_MinionArrow_Effect] = MAX_ARROW;
+	UseMatrialNumToObjectCnt[3] = (m_nObjects - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2]));
 
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
@@ -312,12 +490,18 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects);
 
 	// Matrial 갯수 별 설정
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[0], 3, 0);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[0], 8, 0);
 	CreateConstantBufferViews(pCreateMgr, UseMatrialNumToObjectCnt[0], m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[1], 3, 1);
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[1], 2, 1);
 	CreateConstantBufferViews(pCreateMgr, UseMatrialNumToObjectCnt[1], m_pConstBuffer.Get(), ncbElementBytes, UseMatrialNumToObjectCnt[0], 1);
 	
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[2], 2, 2);
+	CreateConstantBufferViews(pCreateMgr, UseMatrialNumToObjectCnt[2], m_pConstBuffer.Get(), ncbElementBytes, UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1], 2);
+
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[3], 1, 3);
+	CreateConstantBufferViews(pCreateMgr, UseMatrialNumToObjectCnt[3], m_pConstBuffer.Get(), ncbElementBytes, UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2], 3);
+
 	// 오브젝트 Index
 	for (int i = 0; i < sizeof(objectOrder); ++i) {
 		m_objectsIndices[objectOrder[i]] = EffectObjectIndices();
@@ -335,13 +519,17 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 		1. 
 		2. Minion Magic Effect
 	*/
-	m_ppMaterials[0] = Materials::CreateEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateSkillShotEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[0] = Materials::CreatePlayerSkillEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreatePlayerAttackEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateMinionAttackEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateFlyingObjectEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
 
 	m_ppMesh[0] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 25.6f, FRAME_BUFFER_HEIGHT / 14.4f, 0.f);
 	m_ppMesh[1] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 6.8f, FRAME_BUFFER_HEIGHT / 3.2f, 0.f);
+	m_ppMesh[2] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 6.8f, FRAME_BUFFER_HEIGHT / 3.2f, 0.f);
+	m_ppMesh[3] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 6.8f, FRAME_BUFFER_HEIGHT / 3.2f, 0.f);
 
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < m_nMesh; ++i)
 	{
 		m_ppMesh[i]->AddRef();
 	}
@@ -362,12 +550,6 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 void CEffectShader::ReleaseObjects()
 {
-	if (!m_SwordQSkillList.empty()) m_SwordQSkillList.clear();
-	if (!m_SwordWSkillList.empty()) m_SwordWSkillList.clear();
-	if (!m_MinionMagicList.empty()) m_MinionMagicList.clear();
-	
-	if (!m_BowSkillList.empty()) m_BowSkillList.clear();
-	if (!m_StaffSkillList.empty()) m_StaffSkillList.clear();
 
 	if (m_ppObjects)
 	{

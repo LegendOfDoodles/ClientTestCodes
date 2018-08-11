@@ -130,17 +130,26 @@ enum FlyingObjectType {
 };
 
 enum EffectObjectType {
-	Player_SwordSkill_Q,			// 땅 깨지는 이펙트 (플레이어 앞)
-	Player_SwordSkill_W,			// 발도 이펙트
-	Player_SwordSkill_R,			// 땅 깨지는 이펙트 (플레이어 주변)
-	Minion_Magic_Ball,				// 미니언 공격 모션 이펙트
-	Player_BowSkill_Effect,			// 활 플레이어 스킬샷 이펙트
-	Player_BowSkill_Q,				// 폭발
-	Player_BowSkill_E,				// 화살촉 이펙트
-	Player_StaffSkill_Effect,		// 마법 플레이어 스킬샷 이펙트
-	Player_StaffSkill_Q,			// 불타는 공(Fire 이펙트 사용) + 폭발
-	Player_StaffSkill_W,			// 얼음
-	Player_StaffSkill_E,			// 전기
+	// Player Skill Effect
+	Player_SwordSkill_Q_Effect,			// 땅 깨지는 이펙트 (플레이어 앞)
+	Player_SwordSkill_W_Effect,			// 발도 이펙트
+	Player_SwordSkill_R_Effect,			// 땅 깨지는 이펙트 (플레이어 주변)
+	Player_ArrowSkill_Q_Effect,				// 폭발
+	Player_ArrowSkill_E_Effect,				// 화살촉 이펙트
+	Player_StaffSkill_Q_Effect,			// 불타는 공(Fire 이펙트 사용)
+	Player_StaffSkill_W_Effect,			// 얼음
+	Player_StaffSkill_E_Effect,			// 전기
+	
+	// Player Attack Motion Effect
+	Player_ArrowAttack_Effect,			// 활 플레이어 스킬샷 이펙트
+	Player_StaffAttack_Effect,		// 마법 플레이어 스킬샷 이펙트
+	
+	// Minion Attack Motion Effect
+	Minion_ArrowAttack_Effect,
+	Minion_StaffAttack_Effect,		// 미니언 공격 모션 이펙트
+
+	// FollowingToFlyingObejct Effect
+	Flying_MinionArrow_Effect,
 
 };
 

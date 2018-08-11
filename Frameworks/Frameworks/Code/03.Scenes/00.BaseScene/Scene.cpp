@@ -114,15 +114,6 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetTeam(),
 			FlyingObjectType::Minion_Magic);
 	}
-
-	if (m_pSelectedObject && GetAsyncKeyState('M') & 0x0001)
-	{
-		m_pEffectMgr->RequestSpawn(
-			m_pSelectedObject->GetPosition(),
-			m_pSelectedObject->GetLook(),
-			m_pSelectedObject->GetAnimLegth(),
-			EffectObjectType::Player_SwordSkill_Q);
-	}
 }
 
 void CScene::AnimateObjects(float timeElapsed)

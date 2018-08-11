@@ -1151,13 +1151,18 @@ CMaterial * Materials::CreateNexusIconMaterial(shared_ptr<CCreateMgr> pCreateMgr
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateSkillShotEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreatePlayerSkillEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(3, RESOURCE_TEXTURE_2D, 0) };
+	CTexture *pTexture{ new CTexture(8, RESOURCE_TEXTURE_2D, 0) };
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/BowPlayerEffect.dds", 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 1);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/Fire.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 2);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 3);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 4);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 5);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 6);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 7);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -1171,13 +1176,49 @@ CMaterial * Materials::CreateSkillShotEffectMaterial(shared_ptr<CCreateMgr> pCre
 	return pMaterial;
 }
 
-CMaterial * Materials::CreateEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreatePlayerAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
-	CTexture *pTexture{ new CTexture(3, RESOURCE_TEXTURE_2D, 0) };
+	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/BowPlayerEffect.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/SkillShotEffect/MagicPlayerEffect.dds", 1);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateMinionAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(2, RESOURCE_TEXTURE_2D, 0) };
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/Fire.dds", 0);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/MagicBall_1.dds", 1);
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/MagicBall_2.dds", 2);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		2, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreateFlyingObjectEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2D, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/Fire.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
