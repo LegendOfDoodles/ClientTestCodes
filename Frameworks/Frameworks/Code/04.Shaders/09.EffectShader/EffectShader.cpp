@@ -282,7 +282,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		if (objectType == EffectObjectType::Player_SwordSkill_Q_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x + (CONVERT_PaperUnit_to_InG(8) * direction.x), position.y + CONVERT_PaperUnit_to_InG(1), position.z + (CONVERT_PaperUnit_to_InG(8) * direction.z)));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x + (CONVERT_PaperUnit_to_InG(8) * direction.x), position.y + CONVERT_PaperUnit_to_InG(2), position.z + (CONVERT_PaperUnit_to_InG(8) * direction.z)));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
 			m_PlayerSwordSkill_Q_EffectList.emplace_back(m_ppObjects[idx]);
@@ -306,15 +306,15 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		else if (objectType == EffectObjectType::Player_SwordSkill_R_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(1), position.z));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(2), position.z));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
 			m_PlayerSwordSkill_R_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Player_StaffSkill_W_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x +(CONVERT_PaperUnit_to_InG(8) * direction.x), position.y + 50.f, position.z + (CONVERT_PaperUnit_to_InG(8) * direction.z)));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
 			m_PlayerStaffSkill_W_EffectList.emplace_back(m_ppObjects[idx]);
@@ -331,8 +331,8 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// Player Attack Motion Effect
 		else if (objectType == EffectObjectType::Player_ArrowAttack_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z - CONVERT_PaperUnit_to_InG(1)));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[2]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z ));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * (idx - UseMatrialNumToObjectCnt[0])));
 			m_PlayerArrowAttack_EffectList.emplace_back(m_ppObjects[idx]);
@@ -340,7 +340,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		else if (objectType == EffectObjectType::Player_StaffAttack_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z - CONVERT_PaperUnit_to_InG(1)));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z ));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * (idx - UseMatrialNumToObjectCnt[0])));
 			m_PlayerStaffAttack_EffectList.emplace_back(m_ppObjects[idx]);
@@ -348,7 +348,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		else if (objectType == EffectObjectType::Player_StaffQSkill_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z ));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize *  (idx - UseMatrialNumToObjectCnt[0])));
 			m_PlayerStaffQSkill_EffectList.emplace_back(m_ppObjects[idx]);
@@ -356,7 +356,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		else if (objectType == EffectObjectType::Player_StaffESkill_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z - CONVERT_PaperUnit_to_InG(1)));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z ));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * (idx - UseMatrialNumToObjectCnt[0])));
 			m_PlayerStaffESkill_EffectList.emplace_back(m_ppObjects[idx]);

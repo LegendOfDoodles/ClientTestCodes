@@ -62,8 +62,8 @@ void CEffectObject::Animate(float timeElapsed)
 
 	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_W_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * m_speed;
-		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 1.5)
 		{
 			m_curState = StatesType::Remove;
 		}

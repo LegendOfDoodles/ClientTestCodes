@@ -1160,7 +1160,7 @@ CMaterial * Materials::CreatePlayerSkillEffectMaterial(shared_ptr<CCreateMgr> pC
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_E.dds", 2);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_R.dds", 3);
 
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Sword_Q.dds", 4);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Staff_W.dds", 4);
 	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Effect/PlayerSkillEffect/Staff_E.dds", 5);
 
 	CreateShaderResourceViews(
