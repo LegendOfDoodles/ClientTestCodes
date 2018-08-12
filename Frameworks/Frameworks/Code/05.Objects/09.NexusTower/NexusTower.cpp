@@ -15,7 +15,7 @@ CNexusTower::CNexusTower(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CColl
 {
 	m_StatusInfo.maxHP = 1000;
 	m_StatusInfo.HP = 1000;
-	m_StatusInfo.Atk = 0;
+	m_StatusInfo.Atk = 100;
 	m_StatusInfo.Def= 0;
 	m_StatusInfo.Exp = 0;
 	m_sightRange = CONVERT_PaperUnit_to_InG(160.0f);
@@ -71,9 +71,9 @@ void CNexusTower::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinde
 			curPos.y += m_fCollisionSize * 2;
 			m_atkCoolTime = COOLTIME_TOWER_ATTACK;
 			if(m_TeamType == TeamType::Blue)
-				m_pThrowingMgr->RequestSpawn(curPos, Vector3::Subtract(m_pEnemy->GetPosition(), curPos, true), m_TeamType, FlyingObjectType::BlueTower_Attack);
+				m_pThrowingMgr->RequestSpawn(curPos, Vector3::Subtract(m_pEnemy->GetPosition(), curPos, true), m_TeamType, FlyingObjectType::BlueTower_Attack, m_StatusInfo.Atk);
 			else if (m_TeamType == TeamType::Red)
-				m_pThrowingMgr->RequestSpawn(curPos, Vector3::Subtract(m_pEnemy->GetPosition(), curPos, true), m_TeamType, FlyingObjectType::RedTower_Attack);
+				m_pThrowingMgr->RequestSpawn(curPos, Vector3::Subtract(m_pEnemy->GetPosition(), curPos, true), m_TeamType, FlyingObjectType::RedTower_Attack, m_StatusInfo.Atk);
 		}
 	}
 }

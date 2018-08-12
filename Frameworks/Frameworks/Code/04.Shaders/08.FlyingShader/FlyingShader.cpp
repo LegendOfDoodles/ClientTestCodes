@@ -9,7 +9,7 @@
 /// 목적: 날아다니는(화살 등) 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-07
+/// 최종 수정 날짜: 2018-08-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -68,13 +68,25 @@ void CFlyingShader::UpdateShaderVariables(int opt)
 		beg = m_objectsIndices[FlyingObjectType::Minion_Magic].m_begIndex;
 		end = m_objectsIndices[FlyingObjectType::Minion_Magic].m_endIndex;
 		break;
-	case 3:	// Minion Arrow Update
+	case 3:	// Blue Tower Atk Update
 		beg = m_objectsIndices[FlyingObjectType::BlueTower_Attack].m_begIndex;
 		end = m_objectsIndices[FlyingObjectType::BlueTower_Attack].m_endIndex;
 		break;
-	case 4:	// Minion Magic Update
+	case 4:	// Red Tower Atk Update
 		beg = m_objectsIndices[FlyingObjectType::RedTower_Attack].m_begIndex;
 		end = m_objectsIndices[FlyingObjectType::RedTower_Attack].m_endIndex;
+		break;
+	case 5:	// Player Arrow Update
+		beg = m_objectsIndices[FlyingObjectType::Player_Arrow].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::Player_Arrow].m_endIndex;
+		break;
+	case 6:	// Player Magic Update
+		beg = m_objectsIndices[FlyingObjectType::Player_Magic].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::Player_Magic].m_endIndex;
+		break;
+	case 7:	// Player Arrow Skill R Update
+		beg = m_objectsIndices[FlyingObjectType::Player_ArrowSkill_R].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::Player_ArrowSkill_R].m_endIndex;
 		break;
 	}
 
@@ -111,6 +123,9 @@ void CFlyingShader::AnimateObjects(float timeElapsed)
 	m_magicList.remove_if(removeFunc);
 	m_blueTowerAtkList.remove_if(removeFunc);
 	m_redTowerAtkList.remove_if(removeFunc);
+	m_playerArrowList.remove_if(removeFunc);
+	m_playerMagicList.remove_if(removeFunc);
+	m_playerArrowSkillRList.remove_if(removeFunc);
 }
 
 void CFlyingShader::Render(CCamera *pCamera)
@@ -160,11 +175,47 @@ void CFlyingShader::Render(CCamera *pCamera)
 			(*iter)->Render(pCamera);
 		}
 	}
+	if (!m_playerArrowList.empty())
+	{
+		CShader::Render(pCamera, 5);
+		m_ppMaterials[5]->UpdateShaderVariables();
+		for (auto iter = m_playerArrowList.begin(); iter != m_playerArrowList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_playerMagicList.empty())
+	{
+		CShader::Render(pCamera, 6);
+		m_ppMaterials[6]->UpdateShaderVariables();
+		for (auto iter = m_playerMagicList.begin(); iter != m_playerMagicList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_playerArrowSkillRList.empty())
+	{
+		CShader::Render(pCamera, 7);
+		m_ppMaterials[7]->UpdateShaderVariables();
+		for (auto iter = m_playerArrowSkillRList.begin(); iter != m_playerArrowSkillRList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 }
 
-void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType)
+void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType, float damage)
 {
-	int idx{ GetPossibleIndex(objectType) };
+	FlyingObjectType adjObjectType{ objectType };
+
+	if (objectType == FlyingObjectType::Player_ArrowSkill_Q ||
+		objectType == FlyingObjectType::Player_ArrowSkill_W ||
+		objectType == FlyingObjectType::Player_ArrowSkill_E)
+	{
+		adjObjectType = FlyingObjectType::Player_Arrow;
+	}
+
+	int idx{ GetPossibleIndex(adjObjectType) };
 
 	if (idx != NONE)
 	{
@@ -173,9 +224,10 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 		m_ppObjects[idx]->SetTeam(teamType);
 		m_ppObjects[idx]->SetFlyingObjectsType(objectType);
 		m_ppObjects[idx]->SetDirection(direction);
+		m_ppObjects[idx]->SetDamage(damage);
 		m_ppObjects[idx]->ResetCollisionLevel();
 		m_ppObjects[idx]->Activate();
-		int adjIdx{ idx - m_objectsIndices[objectType].m_begIndex };
+		int adjIdx{ idx - m_objectsIndices[adjObjectType].m_begIndex };
 		if (objectType == FlyingObjectType::Roider_Dumbel)
 		{
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(8), position.z));
@@ -186,14 +238,14 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 		}
 		else if (objectType == FlyingObjectType::Minion_Arrow)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(5), position.z));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[1]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * adjIdx));
 			m_arrowList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == FlyingObjectType::Minion_Magic)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(5), position.z));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[2]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * adjIdx));
 			m_magicList.emplace_back(m_ppObjects[idx]);
@@ -211,6 +263,36 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[3]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[4].ptr + (m_srvIncrementSize * adjIdx));
 			m_redTowerAtkList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::Player_Arrow ||
+			objectType == FlyingObjectType::Player_ArrowSkill_Q ||
+			objectType == FlyingObjectType::Player_ArrowSkill_E)
+		{
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z));
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[4]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[5].ptr + (m_srvIncrementSize * adjIdx));
+			m_playerArrowList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::Player_Magic)
+		{
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(3), false)));
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[5]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[6].ptr + (m_srvIncrementSize * adjIdx));
+			m_playerMagicList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::Player_ArrowSkill_W)
+		{
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(3), false)));
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[6]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[5].ptr + (m_srvIncrementSize * adjIdx));
+			m_playerArrowList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::Player_ArrowSkill_R)
+		{
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(3), false)));
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[4]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * adjIdx));
+			m_playerArrowSkillRList.emplace_back(m_ppObjects[idx]);
 		}
 	}
 }
@@ -309,7 +391,7 @@ void CFlyingShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRender
 
 	m_nPipelineStates = 2;
 
-	m_nHeaps = m_nMesh + 1;	// 메쉬 개수 + 타워 공격 2종류
+	m_nHeaps = m_nMesh + 1;	// 메쉬 개수 + 타워 공격 2종류 - 동일한 매터리얼 쓰는 다른 메쉬(ArrowSkillW) 1종 + 동일한 메쉬에 다른 매터리얼 사용하는 스킬(ArrowSkillR) 1종
 	CreateDescriptorHeaps();
 
 	m_ppPipelineStates.resize(m_nPipelineStates);
@@ -367,7 +449,10 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 		FlyingObjectType::Minion_Arrow,
 		FlyingObjectType::Minion_Magic,
 		FlyingObjectType::BlueTower_Attack,
-		FlyingObjectType::RedTower_Attack
+		FlyingObjectType::RedTower_Attack,
+		FlyingObjectType::Player_Arrow,
+		FlyingObjectType::Player_Magic,
+		FlyingObjectType::Player_ArrowSkill_R
 	};
 
 	// 각 오브젝트의 최대 개수 설정
@@ -376,6 +461,9 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Minion_Magic] = MAX_MAGIC;
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::BlueTower_Attack] = MAX_EACH_TOWER_ATK;
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::RedTower_Attack] = MAX_EACH_TOWER_ATK;
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::Player_Arrow] = MAX_PLAYER_ARROW_ATK + MAX_PLAYER_SKILL + MAX_PLAYER_SKILL + MAX_PLAYER_SKILL;	// 화살 기본 공격 + Q스킬 + W스킬 + E스킬
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::Player_Magic] = MAX_PLAYER_MAGIC_ATK;
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::Player_ArrowSkill_R] = MAX_PLAYER_SKILL;
 
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
@@ -407,6 +495,9 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppMaterials[2] = Materials::CreateMagicMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
 	m_ppMaterials[3] = Materials::CreateBlueTowerAtkMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
 	m_ppMaterials[4] = Materials::CreateRedTowerAtkMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreatePlayerArrowMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_ppMaterials[6] = Materials::CreatePlayerMagicMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
+	m_ppMaterials[7] = Materials::CreatePlayerArrowSkillRMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -418,6 +509,9 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//Arrow.meshinfo");
 	m_pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//MagicBall.meshinfo");
 	m_pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//Crayon.meshinfo");
+	m_pMeshes[4] = new CStaticMesh(pCreateMgr, "Resource//3D//Player//Mesh//Throwing//PlayerArrow.meshinfo");
+	m_pMeshes[5] = new CStaticMesh(pCreateMgr, "Resource//3D//Player//Mesh//Throwing//PlayerMagic.meshinfo");
+	m_pMeshes[6] = new CStaticMesh(pCreateMgr, "Resource//3D//Player//Mesh//Throwing//PlayerArrowSkillW.meshinfo");
 
 	for (int j = 0; j < m_nMesh; j++)
 	{
@@ -446,6 +540,9 @@ void CFlyingShader::ReleaseObjects()
 	if (!m_magicList.empty()) m_magicList.clear();
 	if (!m_blueTowerAtkList.empty()) m_blueTowerAtkList.clear();
 	if (!m_redTowerAtkList.empty()) m_redTowerAtkList.clear();
+	if (!m_playerArrowList.empty()) m_playerArrowList.clear();
+	if (!m_playerMagicList.empty()) m_playerMagicList.clear();
+	if (!m_playerArrowSkillRList.empty()) m_playerArrowSkillRList.clear();
 
 	if (m_ppObjects)
 	{

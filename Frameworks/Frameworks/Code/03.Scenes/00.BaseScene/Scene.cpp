@@ -112,7 +112,8 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
-			FlyingObjectType::Minion_Arrow);
+			FlyingObjectType::Player_ArrowSkill_R,
+			1000);
 	}
 }
 

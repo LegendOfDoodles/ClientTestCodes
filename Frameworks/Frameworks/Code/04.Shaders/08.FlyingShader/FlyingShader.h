@@ -28,7 +28,7 @@ public: // 공개 함수
 
 	virtual void Render(CCamera *pCamera);
 
-	void SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType);
+	void SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& direction, TeamType teamType, FlyingObjectType objectType, float damage);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 	void SetEffectManagerToObject(shared_ptr<CEffectMgr> manager);
@@ -54,7 +54,7 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_objectsPossibleIndices[idx] = false; }
 
 protected: // 변수
-	static const int m_nMesh{ 4 };
+	static const int m_nMesh{ 7 };
 	CStaticMesh * m_pMeshes[m_nMesh];
 
 	UINT m_srvIncrementSize{ 0 };
@@ -68,6 +68,9 @@ protected: // 변수
 	CollisionObjectList m_magicList;
 	CollisionObjectList m_blueTowerAtkList;
 	CollisionObjectList m_redTowerAtkList;
+	CollisionObjectList m_playerArrowList;
+	CollisionObjectList m_playerMagicList;
+	CollisionObjectList m_playerArrowSkillRList;
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
