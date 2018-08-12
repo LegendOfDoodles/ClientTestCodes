@@ -78,7 +78,6 @@
 // Animation Speed
 #define ANIMATION_SPEED 30
 
-
 // 최대, 최소 속도
 #define MIN_CAMERA_SPEED 100.0f
 #define MAX_CAMERA_SPEED 3000.0f

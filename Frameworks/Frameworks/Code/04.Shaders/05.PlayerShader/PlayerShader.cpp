@@ -68,8 +68,9 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 	{
 		if (static_cast<CPlayer*>(m_ppObjects[j])->GetWeaponChangeTriger() == true)
 		{
-			if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[j])->GetWeaponType() != 1)
+			switch (m_ppObjects[j]->GetPlayerStatus()->Weapon)
 			{
+			case 1:
 				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 				m_ppObjects[0]->SetMesh(1, m_pSword[0]);
 				m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
@@ -78,9 +79,8 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 
 				m_ChangeWeapon = true;
 				static_cast<CPlayer*>(m_ppObjects[j])->SetWeaponChangeTriger(false);
-			}
-			if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[j])->GetWeaponType() != 2)
-			{
+				break;
+			case 2:
 				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 				m_ppObjects[0]->SetMesh(1, m_pStaff[0]);
 				m_ppObjects[0]->SetType(ObjectType::StaffPlayer);
@@ -89,9 +89,8 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 
 				m_ChangeWeapon = true;
 				static_cast<CPlayer*>(m_ppObjects[j])->SetWeaponChangeTriger(false);
-			}
-			if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[j])->GetWeaponType() != 3)
-			{
+				break;
+			case 3:
 				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 				m_ppObjects[0]->SetMesh(1, m_pBow[0]);
 				m_ppObjects[0]->SetType(ObjectType::BowPlayer);
@@ -100,6 +99,7 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 
 				m_ChangeWeapon = true;
 				static_cast<CPlayer*>(m_ppObjects[j])->SetWeaponChangeTriger(false);
+				break;
 			}
 		}
 
