@@ -72,7 +72,6 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 			{
 			case 1:
 				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-				m_ppObjects[0]->SetMesh(1, m_pSword[0]);
 				m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
 				dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppSwordAni);
 				dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::SwordPlayer, 0);
@@ -82,7 +81,6 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 				break;
 			case 2:
 				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-				m_ppObjects[0]->SetMesh(1, m_pStaff[0]);
 				m_ppObjects[0]->SetType(ObjectType::StaffPlayer);
 				dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppStaffAni);
 				dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::StaffPlayer, 0);
@@ -92,7 +90,6 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 				break;
 			case 3:
 				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-				m_ppObjects[0]->SetMesh(1, m_pBow[0]);
 				m_ppObjects[0]->SetType(ObjectType::BowPlayer);
 				dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppBowAni);
 				dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::BowPlayer, 0);
@@ -109,14 +106,13 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 
 void CPlayerShader::Render(CCamera *pCamera)
 {
-	CShader::Render(pCamera);
-#if USE_BATCH_MATERIAL
+	CShader::Render(pCamera,0);
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
-#endif
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		m_ppObjects[j]->Render(pCamera);
+
 	}
 }
 
@@ -171,39 +167,20 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 	if (GetAsyncKeyState('L') & 0x0001)
 	{
-		UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType();
-		UINT num = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponNum();
-		num++;
-		switch (type)
-		{
-		case 1:
-			if (num >= m_nSword) num = 0;
-			m_ppObjects[0]->SetMesh(1, m_pSword[num]);
-			break;
-		case 2:
-			if (num >= m_nStaff) num = 0;
-			m_ppObjects[0]->SetMesh(1, m_pStaff[num]);
+		//UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType();
+		//UINT num = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponNum();
+		//num++;
+		//
+		//dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(type, num);
 
-			break;
-		case 3:
-			if (num >= m_nBow) num = 0;
-			m_ppObjects[0]->SetMesh(1, m_pBow[num]);
-
-			break;
-		default:
-			break;
-		}
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(type, num);
-
-		m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-		// 무기에 따라 수정필요
+		//m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
+		//// 무기에 따라 수정필요
 	}
 	else if (GetAsyncKeyState('1') & 0x0001)
 	{
 		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 1)
 		{
 			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-			m_ppObjects[0]->SetMesh(1, m_pSword[0]);
 			m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppSwordAni);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::SwordPlayer, 0);
@@ -216,7 +193,6 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 2)
 		{
 			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-			m_ppObjects[0]->SetMesh(1, m_pStaff[0]);
 			m_ppObjects[0]->SetType(ObjectType::StaffPlayer);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppStaffAni);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::StaffPlayer, 0);
@@ -229,7 +205,6 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 3)
 		{
 			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-			m_ppObjects[0]->SetMesh(1, m_pBow[0]);
 			m_ppObjects[0]->SetType(ObjectType::BowPlayer);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppBowAni);
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::BowPlayer, 0);
@@ -381,55 +356,36 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1);
-	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, 1);
-	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects, true, boundingBoxElementBytes, m_nObjects);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, 0, 0);
-	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, 1);
+	
+	int accCnt{ 0 };
 
-	SaveBoundingBoxHeapNumber(1);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects*2, true, ncbElementBytes, m_nObjects);
+	for (int i = 0; i < m_nHeaps - 1; ++i)
+	{
+		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
+		CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pConstBuffer.Get(), ncbElementBytes, accCnt, i);
+		accCnt += m_nObjects;
+	}
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 0, m_nHeaps - 1);
+	CreateConstantBufferViews(pCreateMgr, m_nObjects, m_pBoundingBoxBuffer.Get(), boundingBoxElementBytes, 0, m_nHeaps - 1);
+
+	SaveBoundingBoxHeapNumber(m_nHeaps - 1);
+
 
 #if USE_BATCH_MATERIAL
-	m_nMaterials = 1;
-	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
-
+	m_nMaterials = m_nHeaps-1;
+	m_ppMaterials = new CMaterial*[m_nMaterials];
+	m_ppMaterials[0] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	CSkinnedMesh *pPlayerMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player.meshinfo");
-	m_pStick = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(10.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(6.5f));
-	m_nArmor = 1;
-	m_pArmor = new CSkinnedMesh*[m_nArmor];
-	m_pArmor[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//extra//Muffler.meshinfo");
-
-
-	m_nSword = 3;
-
-	m_pSword = new CSkinnedMesh*[m_nSword];
-	m_pSword[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Sword//Player_Sword_Basic.meshinfo");
-	m_pSword[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Sword//Player_Sword2.meshinfo");
-	m_pSword[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Sword//Player_Sword3.meshinfo");
 	
-
-	m_nBow = 3;
-
-	m_pBow = new CSkinnedMesh*[m_nBow];
-	m_pBow[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Bow//Player_Bow_Basic.meshinfo");
-	m_pBow[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Bow//Player_Bow_Flight.meshinfo");
-	m_pBow[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Bow//Player_Bow_Battle.meshinfo");
-
-	m_nStaff = 3;
-
-	m_pStaff = new CSkinnedMesh*[m_nStaff];
-	m_pStaff[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Staff//Player_Staff_Basic.meshinfo");
-	m_pStaff[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Staff//Player_Staff_Lolipop.meshinfo");
-	m_pStaff[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Staff//Player_Staff_Watch.meshinfo");
-
 	CSkeleton *pWin = new CSkeleton("Resource//3D//Player//Animation//Player_Win.aniinfo");
 	CSkeleton *pDefeat = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat.aniinfo");
 	CSkeleton *pDefeat2 = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat2.aniinfo");
@@ -477,36 +433,22 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CPlayer *pPlayer = NULL;
 
 
-	m_pStick->AddRef();
-	for (UINT j = 0; j < m_nSword; ++j) {
-		m_pSword[j]->AddRef();
-	}
-	for (UINT j = 0; j < m_nStaff; ++j) {
-		m_pStaff[j]->AddRef();
-	}
-	for (UINT j = 0; j < m_nBow; ++j) {
-		m_pBow[j]->AddRef();
-	}
-	m_pArmor[0]->AddRef();
 
 	for (int x = 0; x < m_nObjects / 2; ++x) {
 		for (int z = 0; z < m_nObjects / 2; ++z) {
 
-			pPlayer = new CPlayer(pCreateMgr, 3);
-
+			pPlayer = new CPlayer(pCreateMgr, 1);
+			pPlayer->SetMaterial(m_ppMaterials[0]);
 			pPlayer->SetMesh(0, pPlayerMesh);
-				
-			pPlayer->SetMesh(1, m_pStick);
-			pPlayer->SetMesh(2, m_pArmor[0]);
+
 			pPlayer->SetType(ObjectType::StickPlayer);
 #if !USE_BATCH_MATERIAL
 			pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 			pPlayer->SetBoundingMesh(pBoundingBoxMesh);
 			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-			if (x == 0 && z == 0) {
-				pPlayer->tag = 1;
-			}
+			
+				pPlayer->tag = i;
 			pPlayer->CBaseObject::SetPosition(500.0f + (z * 9000.0f), 0.0f, 2000.0f + (x * 1000.0f));
 			if (z == 1) {
 				pPlayer->SetTeam(TeamType::Red);
@@ -532,9 +474,8 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);
-
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * i));
+			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps-1].ptr + (incrementSize * i));
 			m_ppObjects[i++] = pPlayer;
 		}
 	}
@@ -572,32 +513,6 @@ void CPlayerShader::ReleaseObjects()
 	//////////////////////////////////////
 	//메쉬
 	
-	for (UINT j = 0; j < m_nSword; j++)
-	{
-		delete m_pSword[j];
-	}
-	Safe_Delete_Array(m_pSword);
-
-
-	for (UINT j = 0; j < m_nStaff; j++)
-	{
-		delete m_pStaff[j];
-	}
-	Safe_Delete_Array(m_pStaff);
-
-
-	for (UINT j = 0; j < m_nBow; j++)
-	{
-		delete m_pBow[j];
-	}
-	Safe_Delete_Array(m_pBow);
-
-
-	for (UINT j = 0; j < m_nArmor; j++)
-	{
-		delete m_pArmor[j];
-	}
-	Safe_Delete_Array(m_pArmor);
 
 	///////////////////////////////////////
 #if USE_BATCH_MATERIAL
@@ -605,7 +520,7 @@ void CPlayerShader::ReleaseObjects()
 	{
 		for (int i = 0; i < m_nMaterials; ++i)
 		{
-			Safe_Delete(m_ppMaterials[i]);
+			if(m_ppMaterials[i]) Safe_Delete(m_ppMaterials[i]);
 		}
 		Safe_Delete_Array(m_ppMaterials);
 	}

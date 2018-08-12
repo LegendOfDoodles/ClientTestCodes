@@ -10,6 +10,8 @@
 #include "04.Shaders/06.NexusTowerShader/NexusTowerShader.h"
 #include "04.Shaders/07.NeutralityShader/NeutralityShader.h"
 #include "04.Shaders/08.FlyingShader/FlyingShader.h"
+#include "04.Shaders/10.EquipShader/EquipShader.h"
+
 #include "04.Shaders/98.BillboardShader/00.UIShader/UIShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/00.PlayerGaugeShader/PlayerGaugeShader.h"
 #include "04.Shaders/98.BillboardShader/01.GaugeShader/01.MinionGaugeShader/MinionGaugeShader.h"
@@ -341,7 +343,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_pCamera->Initialize(pCreateMgr);
 
-	m_nShaders = 22;
+	m_nShaders = 23;
 	m_ppShaders = new CShader*[m_nShaders];
 	m_ppShaders[0] = new CSkyBoxShader(pCreateMgr);
 	CTerrainShader* pTerrainShader = new CTerrainShader(pCreateMgr);
@@ -368,6 +370,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	NeutralityHP_Shader = new CNeutralityGaugeShader(pCreateMgr);
 	Eeffect_Shader = new CEffectShader(pCreateMgr);
 	SpecialSelect_Shader = new CSpecialSelectShader(pCreateMgr);
+	m_ppShaders[22] = new CEquipShader(pCreateMgr);
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -380,6 +383,9 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 
 	// UI Shaders Initialize
+	((CEquipShader*)m_ppShaders[22])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
+	((CEquipShader*)m_ppShaders[22])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
+
 	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CPlayerHPGaugeShader*)PlayerHP_Shader)->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());
 
@@ -429,6 +435,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	SpecialSelect_Shader->Initialize(pCreateMgr, m_pCamera);
 	
 
+	m_ppShaders[22] ->Initialize(pCreateMgr, m_pCamera);
+	
 	//Managere Initialize
 	m_pWayFinder = shared_ptr<CWayFinder>(new CWayFinder());
 	m_pCollisionManager = shared_ptr<CCollisionManager>(new CCollisionManager());
