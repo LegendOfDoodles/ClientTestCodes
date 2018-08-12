@@ -70,6 +70,7 @@
 #define MAX_ARROW 70
 #define MAX_MAGIC 70
 #define MAX_HIT 100
+#define MAX_EACH_TOWER_ATK 6	// 각 팀당 타워 6개
 
 // 최대 최소
 #define MAX_SKILL 4

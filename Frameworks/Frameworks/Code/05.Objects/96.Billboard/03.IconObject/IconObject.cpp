@@ -37,6 +37,7 @@ CIconObject::CIconObject(shared_ptr<CCreateMgr> pCreateMgr, IconUIType type)
 	case NexusAndTowerIcon:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3200.f, FRAME_BUFFER_HEIGHT / 1800.f, 0.f);
 		SetMesh(0, pRectMesh);
+		break;
 	case GolemIcon:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3200.f, FRAME_BUFFER_HEIGHT / 1800.f, 0.f);
 		SetMesh(0, pRectMesh);

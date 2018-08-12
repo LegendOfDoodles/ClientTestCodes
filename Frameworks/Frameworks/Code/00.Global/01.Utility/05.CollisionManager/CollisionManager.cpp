@@ -191,7 +191,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 							{
 								if (pCol->GetType() == ObjectType::FlyingObject)
 								{
-									m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 15.f, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+									m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 15, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 								}
 
 								//std::cout << "col\n";

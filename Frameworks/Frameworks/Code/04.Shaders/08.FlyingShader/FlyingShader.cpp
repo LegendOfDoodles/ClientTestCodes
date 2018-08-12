@@ -68,6 +68,14 @@ void CFlyingShader::UpdateShaderVariables(int opt)
 		beg = m_objectsIndices[FlyingObjectType::Minion_Magic].m_begIndex;
 		end = m_objectsIndices[FlyingObjectType::Minion_Magic].m_endIndex;
 		break;
+	case 3:	// Minion Arrow Update
+		beg = m_objectsIndices[FlyingObjectType::BlueTower_Attack].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::BlueTower_Attack].m_endIndex;
+		break;
+	case 4:	// Minion Magic Update
+		beg = m_objectsIndices[FlyingObjectType::RedTower_Attack].m_begIndex;
+		end = m_objectsIndices[FlyingObjectType::RedTower_Attack].m_endIndex;
+		break;
 	}
 
 	for (int i = beg; i < end; ++i)
@@ -101,6 +109,8 @@ void CFlyingShader::AnimateObjects(float timeElapsed)
 	m_dumbelList.remove_if(removeFunc);
 	m_arrowList.remove_if(removeFunc);
 	m_magicList.remove_if(removeFunc);
+	m_blueTowerAtkList.remove_if(removeFunc);
+	m_redTowerAtkList.remove_if(removeFunc);
 }
 
 void CFlyingShader::Render(CCamera *pCamera)
@@ -128,6 +138,24 @@ void CFlyingShader::Render(CCamera *pCamera)
 		CShader::Render(pCamera, 2);
 		m_ppMaterials[2]->UpdateShaderVariables();
 		for (auto iter = m_magicList.begin(); iter != m_magicList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_blueTowerAtkList.empty())
+	{
+		CShader::Render(pCamera, 3);
+		m_ppMaterials[3]->UpdateShaderVariables();
+		for (auto iter = m_blueTowerAtkList.begin(); iter != m_blueTowerAtkList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_redTowerAtkList.empty())
+	{
+		CShader::Render(pCamera, 4);
+		m_ppMaterials[4]->UpdateShaderVariables();
+		for (auto iter = m_redTowerAtkList.begin(); iter != m_redTowerAtkList.end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
 		}
@@ -169,6 +197,20 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[2]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * adjIdx));
 			m_magicList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::BlueTower_Attack)
+		{
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y, position.z));
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[3]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[3].ptr + (m_srvIncrementSize * adjIdx));
+			m_blueTowerAtkList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == FlyingObjectType::RedTower_Attack)
+		{
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y, position.z));
+			m_ppObjects[idx]->SetMesh(0, m_pMeshes[3]);
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[4].ptr + (m_srvIncrementSize * adjIdx));
+			m_redTowerAtkList.emplace_back(m_ppObjects[idx]);
 		}
 	}
 }
@@ -267,7 +309,7 @@ void CFlyingShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRender
 
 	m_nPipelineStates = 2;
 
-	m_nHeaps = m_nMesh;
+	m_nHeaps = m_nMesh + 1;	// 메쉬 개수 + 타워 공격 2종류
 	CreateDescriptorHeaps();
 
 	m_ppPipelineStates.resize(m_nPipelineStates);
@@ -314,7 +356,7 @@ void CFlyingShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRender
 
 void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
 {
-	UNREFERENCED_PARAMETER(pContext);
+	if (pContext) m_pTerrain = (CHeightMapTerrain*)pContext;
 
 	CTransformImporter monsterTransformImporter;
 	monsterTransformImporter.LoadMeshData("Resource//Data//MonsterSetting.txt");
@@ -323,13 +365,17 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	FlyingObjectType objectOrder[]{
 		FlyingObjectType::Roider_Dumbel,
 		FlyingObjectType::Minion_Arrow,
-		FlyingObjectType::Minion_Magic
+		FlyingObjectType::Minion_Magic,
+		FlyingObjectType::BlueTower_Attack,
+		FlyingObjectType::RedTower_Attack
 	};
 
 	// 각 오브젝트의 최대 개수 설정
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Roider_Dumbel] = monsterTransformImporter.m_iKindMeshCnt[0];
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Minion_Arrow] = MAX_ARROW;
 	m_nObjects += m_objectsMaxCount[FlyingObjectType::Minion_Magic] = MAX_MAGIC;
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::BlueTower_Attack] = MAX_EACH_TOWER_ATK;
+	m_nObjects += m_objectsMaxCount[FlyingObjectType::RedTower_Attack] = MAX_EACH_TOWER_ATK;
 
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
@@ -354,11 +400,13 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	}
 	
 #if USE_BATCH_MATERIAL
-	m_nMaterials = m_nMesh;
+	m_nMaterials = m_nMesh + 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreateDumbbellMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[1] = Materials::CreateArrowMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
 	m_ppMaterials[2] = Materials::CreateMagicMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[3] = Materials::CreateBlueTowerAtkMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_ppMaterials[4] = Materials::CreateRedTowerAtkMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
@@ -369,6 +417,7 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_pMeshes[0] = new CStaticMesh(pCreateMgr, "Resource//3D//Monster//Mesh//Dumbbell//Dumbbell.meshinfo");
 	m_pMeshes[1] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//Arrow.meshinfo");
 	m_pMeshes[2] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//MagicBall.meshinfo");
+	m_pMeshes[3] = new CStaticMesh(pCreateMgr, "Resource//3D//Common//Crayon.meshinfo");
 
 	for (int j = 0; j < m_nMesh; j++)
 	{
@@ -384,6 +433,8 @@ void CFlyingShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 		pObject->SetStatic(StaticType::Move);
 
+		pObject->SetTerrainImage(m_pTerrain);
+
 		m_ppObjects[j] = pObject;
 	}
 }
@@ -393,6 +444,8 @@ void CFlyingShader::ReleaseObjects()
 	if (!m_dumbelList.empty()) m_dumbelList.clear();
 	if (!m_arrowList.empty()) m_arrowList.clear();
 	if (!m_magicList.empty()) m_magicList.clear();
+	if (!m_blueTowerAtkList.empty()) m_blueTowerAtkList.clear();
+	if (!m_redTowerAtkList.empty()) m_redTowerAtkList.clear();
 
 	if (m_ppObjects)
 	{

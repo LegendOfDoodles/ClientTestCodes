@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
 CEffectObject::CEffectObject(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes)
-	: CCollisionObject(pCreateMgr)
+	: CCollisionObject(pCreateMgr, nMeshes)
 {
 	m_ObjectType = ObjectType::EffectObject;
 }
@@ -62,7 +62,7 @@ void CEffectObject::Animate(float timeElapsed)
 
 	if (m_EffectObjectType == EffectObjectType::Player_StaffSkill_W_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5f);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 1.5)
 		{
 			m_curState = StatesType::Remove;
@@ -95,7 +95,7 @@ void CEffectObject::Animate(float timeElapsed)
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 
-		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5f);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -133,7 +133,7 @@ void CEffectObject::Animate(float timeElapsed)
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 
-		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5f);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;
@@ -141,7 +141,7 @@ void CEffectObject::Animate(float timeElapsed)
 	}
 	if (m_EffectObjectType == EffectObjectType::Minion_StaffAttack_Effect)
 	{
-		m_AnimaitonTime += timeElapsed * (m_speed * 1.5);
+		m_AnimaitonTime += timeElapsed * (m_speed * 1.5f);
 		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
 		{
 			m_curState = StatesType::Remove;

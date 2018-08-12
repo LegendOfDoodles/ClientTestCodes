@@ -70,16 +70,13 @@ void CBaseObject::ReleaseUploadBuffers()
 
 void CBaseObject::SetMesh(int nIndex, CMesh *pMesh)
 {
-
 	if (!m_ppMeshes) return;
 	if (nIndex >= m_nMeshes) return;
-
 
 	if (m_ppMeshes[nIndex]) m_ppMeshes[nIndex]->Release();
 	m_ppMeshes[nIndex] = pMesh;
 
 	if (pMesh) pMesh->AddRef();
-
 }
 
 void CBaseObject::SetBoundingMesh(CMesh *pMesh)

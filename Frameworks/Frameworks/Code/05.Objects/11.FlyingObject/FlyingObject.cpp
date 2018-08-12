@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "FlyingObject.h"
 #include "00.Global/01.Utility/05.CollisionManager/CollisionManager.h"
+#include "05.Objects/04.Terrain/HeightMapTerrain.h"
 
 /// <summary>
 /// 목적: 날아가는(스킬, 화살 등) 오브젝트 처리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-03
+/// 최종 수정 날짜: 2018-08-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,7 @@ void CFlyingObject::Animate(float timeElapsed)
 
 		if (m_flyingObjectType == FlyingObjectType::Minion_Arrow  && m_EffectTriger)
 		{
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, m_maxDistance, EffectObjectType::Flying_MinionArrow_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Flying_MinionArrow_Effect);
 			m_EffectTriger = false;
 		}
 
@@ -52,6 +53,17 @@ void CFlyingObject::Animate(float timeElapsed)
 		Rotate(0, 0, 10.0f);
 		if (m_distance > m_maxDistance)
 		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	else if (m_flyingObjectType == FlyingObjectType::BlueTower_Attack ||
+		m_flyingObjectType == FlyingObjectType::RedTower_Attack)
+	{
+		MoveToDirection(timeElapsed * m_speed);
+		XMFLOAT3 curPos{ GetPosition() };
+		if (curPos.y < m_pTerrain->GetHeight(curPos.x, curPos.z))
+		{
+			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
 		}
 	}
@@ -86,6 +98,18 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(24);
 		m_speed = CONVERT_cm_to_InG(1.805f);
+	}
+	else if (type == FlyingObjectType::BlueTower_Attack)
+	{
+		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_damage = 25.0f;
+		m_speed = CONVERT_cm_to_InG(4.733f);
+	}
+	else if (type == FlyingObjectType::RedTower_Attack)
+	{
+		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_damage = 25.0f;
+		m_speed = CONVERT_cm_to_InG(4.733f);
 	}
 }
 

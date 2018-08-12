@@ -117,6 +117,8 @@ enum FlyingObjectType {
 	Roider_Dumbel,
 	Minion_Arrow,
 	Minion_Magic,
+	BlueTower_Attack,
+	RedTower_Attack,
 	Player_Arrow,
 	Player_ArrowSkill_Q,
 	Player_ArrowSkill_W,

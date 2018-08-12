@@ -59,8 +59,8 @@ public: // 공개 함수
 	virtual void SetFlyingObjectsType(FlyingObjectType type) { type; }
 	virtual void SetEffectObjectsType(EffectObjectType type) { type; }
 
-	virtual void SetAnimationTime(float time) {}
-	virtual void SetAnimationLength(int time) {}
+	virtual void SetAnimationTime(float time) { time; }
+	virtual void SetAnimationLength(int time) { time; }
 	
 	virtual void SetDirection(const XMFLOAT3& direction) { direction; }
 	virtual void SetMasterObject(CCollisionObject *pObject) { pObject; }

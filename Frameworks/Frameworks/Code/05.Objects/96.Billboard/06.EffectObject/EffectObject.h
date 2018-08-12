@@ -21,7 +21,7 @@ public:	// 외부 함수
 	virtual void SetEffectObjectsType(EffectObjectType type);
 
 	virtual void SetMasterObject(CCollisionObject *pObject) { m_pMasterObject = pObject; };
-	virtual void SetAnimationLength(int time) { m_maxAnimaitonTime = time; }
+	virtual void SetAnimationLength(int time) { m_maxAnimaitonTime = static_cast<float>(time); }
 
 	virtual EffectObjectType GetEffetObjectsType() { return m_EffectObjectType; }
 	void SetCamera(CCamera *pCamera) { m_pCamera = pCamera; }

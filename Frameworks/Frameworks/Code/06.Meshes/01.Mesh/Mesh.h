@@ -24,7 +24,7 @@ public: // 공개 함수
 
 	BoundingOrientedBox GetBoundingBox() { return(*m_pBoundingBox); }
 
-	bool HasBoundingBox() { return m_pBoundingBox; }
+	bool HasBoundingBox() { return false; }
 
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
