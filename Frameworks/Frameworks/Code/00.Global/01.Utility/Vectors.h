@@ -7,7 +7,7 @@ using namespace DirectX;
 /// 목적: 벡터 연산을 간략화 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-04
+/// 최종 수정 날짜: 2018-08-12
 /// </summary>
 
 #define	PI		3.1415926f
@@ -231,6 +231,11 @@ namespace Vector2
 //3차원 벡터의 연산
 namespace Vector3
 {
+	inline XMFLOAT2 ToVector2(const XMFLOAT3& xmf3Vector)
+	{
+		return XMFLOAT2(xmf3Vector.x, xmf3Vector.z);
+	}
+
 	inline XMFLOAT3 XMVectorToFloat3(const XMVECTOR& xmvVector)
 	{
 		XMFLOAT3 xmf3Result;
