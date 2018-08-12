@@ -47,10 +47,6 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case UIFrameType::SpecialFrame:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
-		SetMesh(0, pRectMesh);
-		break;
 	case UIFrameType::SelectSpecial_7:
 	case UIFrameType::SelectSpecial_12:
 	case UIFrameType::SelectSpecial_17:
@@ -68,6 +64,10 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		break;
 	case UIFrameType::Minimap:
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case UIFrameType::SpecialFrame:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	}

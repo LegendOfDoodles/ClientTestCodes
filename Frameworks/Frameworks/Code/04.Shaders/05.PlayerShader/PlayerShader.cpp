@@ -66,6 +66,43 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 {
 	for (int j = 0; j < m_nObjects; j++)
 	{
+		if (static_cast<CPlayer*>(m_ppObjects[j])->GetWeaponChangeTriger() == true)
+		{
+			if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[j])->GetWeaponType() != 1)
+			{
+				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
+				m_ppObjects[0]->SetMesh(1, m_pSword[0]);
+				m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
+				dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppSwordAni);
+				dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::SwordPlayer, 0);
+
+				m_ChangeWeapon = true;
+				static_cast<CPlayer*>(m_ppObjects[j])->SetWeaponChangeTriger(false);
+			}
+			if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[j])->GetWeaponType() != 2)
+			{
+				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
+				m_ppObjects[0]->SetMesh(1, m_pStaff[0]);
+				m_ppObjects[0]->SetType(ObjectType::StaffPlayer);
+				dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppStaffAni);
+				dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::StaffPlayer, 0);
+
+				m_ChangeWeapon = true;
+				static_cast<CPlayer*>(m_ppObjects[j])->SetWeaponChangeTriger(false);
+			}
+			if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[j])->GetWeaponType() != 3)
+			{
+				m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
+				m_ppObjects[0]->SetMesh(1, m_pBow[0]);
+				m_ppObjects[0]->SetType(ObjectType::BowPlayer);
+				dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppBowAni);
+				dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::BowPlayer, 0);
+
+				m_ChangeWeapon = true;
+				static_cast<CPlayer*>(m_ppObjects[j])->SetWeaponChangeTriger(false);
+			}
+		}
+
 		m_ppObjects[j]->Animate(timeElapsed);
 	}
 }
@@ -163,8 +200,7 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	}
 	else if (GetAsyncKeyState('1') & 0x0001)
 	{
-		UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType();
-		if (type != 1)
+		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 1)
 		{
 			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
 			m_ppObjects[0]->SetMesh(1, m_pSword[0]);

@@ -195,7 +195,6 @@ enum UIFrameType {
 	SkillFrameR,
 	StatusFrame,
 	CharacterFrame,
-	SpecialFrame,
 	SelectSpecial_7,
 	SelectSpecial_12,
 	SelectSpecial_17,
@@ -203,6 +202,7 @@ enum UIFrameType {
 	CharacterFrameHP,
 	CharacterFrameMP,
 	Minimap,
+	SpecialFrame,
 };
 
 enum SpecialType {
