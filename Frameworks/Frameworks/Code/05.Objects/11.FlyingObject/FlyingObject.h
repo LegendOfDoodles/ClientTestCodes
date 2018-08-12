@@ -23,6 +23,8 @@ public:	// 외부 함수
 
 	void SetTerrainImage(CHeightMapTerrain * pTerrain) { m_pTerrain = pTerrain; }
 
+	virtual void SetDamage(float dmg) { m_damage = dmg; }
+
 protected: // 내부 함수
 	void LookAt(XMFLOAT3 objPosition);
 	void LookAt(XMFLOAT2 objPosition);
