@@ -18,8 +18,6 @@ public:
 	virtual ~CMinimapIconShader();
 
 public: // 공개 함수
-	virtual void ReleaseUploadBuffers();
-
 	virtual void UpdateShaderVariables(int opt = 0);
 
 	virtual void AnimateObjects(float timeElapsed);
@@ -49,8 +47,6 @@ protected: // 내부 함수
 	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
-
-	virtual void ReleaseObjects();
 
 	int GetPossibleIndex();
 	void SpawnMinionIcon();

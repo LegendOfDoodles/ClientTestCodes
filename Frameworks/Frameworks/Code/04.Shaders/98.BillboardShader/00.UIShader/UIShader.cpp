@@ -26,23 +26,6 @@ CUIObjectShader::~CUIObjectShader()
 
 ////////////////////////////////////////////////////////////////////////
 //
-void CUIObjectShader::ReleaseUploadBuffers()
-{
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			m_ppObjects[j]->ReleaseUploadBuffers();
-		}
-	}
-
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i<m_nMaterials; ++i)
-			m_ppMaterials[i]->ReleaseUploadBuffers();
-	}
-}
-
 void CUIObjectShader::UpdateShaderVariables(int opt)
 {
 	UNREFERENCED_PARAMETER(opt);
@@ -236,27 +219,4 @@ void CUIObjectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCo
 
 		m_ppObjects[i] = pUIObject;
 	}
-}
-
-void CUIObjectShader::ReleaseObjects()
-{
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++)
-		{
-			Safe_Delete(m_ppObjects[j]);
-		}
-		Safe_Delete_Array(m_ppObjects);
-	}
-
-#if USE_BATCH_MATERIAL
-	if (m_ppMaterials)
-	{
-		for (int i = 0; i < m_nMaterials; ++i)
-		{
-			Safe_Delete(m_ppMaterials[i]);
-		}
-		Safe_Delete_Array(m_ppMaterials);
-	}
-#endif
 }
