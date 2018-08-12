@@ -35,23 +35,29 @@ public:	// 외부 함수
 	UINT GetWeaponType() { return m_StatusInfo.Weapon; }
 	UINT GetWeaponNum() { return m_StatusInfo.WeaponNum; }
 
+	UINT GetSpecialCnt() { return m_StatusInfo.SpecialPoint; }
+	SpecialType* GetSpecialIndext() { return m_StatusInfo.Special;}
+	UINT GetEquipCnt() { return m_StatusInfo.EquipCnt; }
+
+	UINT* GetEquipIndex() { return m_nEquipIndex; }
+	void AddEquipCnt(UINT equiptype, UINT specialnum) {
+		m_nEquipIndex[m_StatusInfo.EquipCnt++] = equiptype * 4 + specialnum;
+	}
+	
 	void SetWeaponData(UINT type , UINT num){
 		m_StatusInfo.Weapon = type;
 		m_StatusInfo.WeaponNum = num;
 	}
-
 protected: // 내부 함수
 	virtual void AdjustAnimationIndex();
 	/*
 	0. Win		1.Defeat		2.Defeat
 	3. Idle		4.StartWalk		5.Walking	
-	
 	6.Smash		7.Slash		8.Dash		9.Dispute 
-	
-
 	*/
 
 protected: // 변수
 	PlayerInfo m_StatusInfo;
+	UINT m_nEquipIndex[4];
 };
 

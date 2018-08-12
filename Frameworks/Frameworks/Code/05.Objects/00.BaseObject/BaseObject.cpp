@@ -41,7 +41,7 @@ CBaseObject::~CBaseObject()
 	if (m_pBoundingMesh) Safe_Release(m_pBoundingMesh);
 
 	if (m_pShader){ m_pShader->Finalize(); }
-	if (m_pMaterial) m_pMaterial->Finalize();
+	//if (m_pMaterial) m_pMaterial->Finalize();
 }
 
 ////////////////////////////////////////////////////////////////////////

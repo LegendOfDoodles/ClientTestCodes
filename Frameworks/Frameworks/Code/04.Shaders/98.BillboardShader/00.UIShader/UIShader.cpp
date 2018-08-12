@@ -162,16 +162,16 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 				&& (cursorPos.y > SELECT_ATTACK_SPECIAL_MINIMUM_Y && cursorPos.y < SELECT_ATTACK_SPECIAL_MAXIMUM_Y))
 			{
 				// 빈곳 찾아서 넣기
-				for (int i = 0; i < 4; ++i) {
+				for (UINT i = 0; i < 4; ++i) {
 					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
 						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::AttackSpecial);
+						m_pPlayer->SetWeaponData(m_pPlayer->GetWeaponType(), i);
 						break;
 					};
 				}
 
 				// 특성 포인트 사용
 				m_pPlayer->GetPlayerStatus()->SpecialPoint = m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
-
 				// 특성창 닫기
 				LButton = false;
 			}
@@ -181,16 +181,17 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 				&& (cursorPos.y > SELECT_DEFENCE_SPECIAL_MINIMUM_Y && cursorPos.y < SELECT_DEFENCE_SPECIAL_MAXIMUM_Y))
 			{
 				// 빈곳 찾아서 넣기
-				for (int i = 0; i < 4; ++i) {
+				for (UINT i = 0; i < 4; ++i) {
 					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
 						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::DefenceSpecial);
+						m_pPlayer->AddEquipCnt(0,i);
 						break;
 					};
 				}
 				
 				// 특성 포인트 사용
 				m_pPlayer->GetPlayerStatus()->SpecialPoint = m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
-				
+
 				// 특성창 닫기
 				LButton = false;
 			}
@@ -200,16 +201,17 @@ bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 				&& (cursorPos.y > SELECT_TECHNIC_SPECIAL_MINIMUM_Y && cursorPos.y < SELECT_TECHNIC_SPECIAL_MAXIMUM_Y))
 			{
 				// 빈곳 찾아서 넣기
-				for (int i = 0; i < 4; ++i) {
+				for (UINT i = 0; i < 4; ++i) {
 					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
 						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::TechnicSpecial);
+						m_pPlayer->AddEquipCnt(1,i);
 						break;
 					};
 				}
 				
 				// 특성 포인트 사용
 				m_pPlayer->GetPlayerStatus()->SpecialPoint = m_pPlayer->GetPlayerStatus()->SpecialPoint - 1;
-				
+
 				// 특성창 닫기
 				LButton = false;
 			}

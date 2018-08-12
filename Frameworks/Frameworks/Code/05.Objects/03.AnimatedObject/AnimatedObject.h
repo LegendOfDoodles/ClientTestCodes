@@ -36,6 +36,10 @@ public: // 공개 함수
 	virtual XMFLOAT3 GetUp();
 
 	virtual void SetPosition(float x, float z);
+	virtual void SetPosition(float x, float y, float z) {
+		CBaseObject::SetPosition(x, y, z);
+
+	}
 
 	void SetPathToGo(Path *path);
 	ProcessType MoveToDestination(float timeElapsed, shared_ptr<CWayFinder> pWayFinder = NULL);

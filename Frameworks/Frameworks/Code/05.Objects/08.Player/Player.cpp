@@ -15,6 +15,7 @@ CPlayer::CPlayer(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObje
 	m_detectRange = CONVERT_PaperUnit_to_InG(80.0f);
 	m_sightRange = CONVERT_PaperUnit_to_InG(80.0f);
 	SetSpeed(CONVERT_cm_to_InG(3.285f * 10));
+
 }
 
 
@@ -146,19 +147,20 @@ void CPlayer::Animate(float timeElapsed)
 
 void CPlayer::Render(CCamera * pCamera, UINT instanceCnt)
 {
+	
 	OnPrepareRender();
-
+	
 	if (!IsVisible(pCamera) || !m_Detected) return;
-
+	
 	if (m_pMaterial)
 	{
 		m_pMaterial->Render(pCamera);
 		m_pMaterial->UpdateShaderVariables();
 	}
-
+	
 	if (m_cbvGPUDescriptorHandle.ptr)
 		m_pCommandList->SetGraphicsRootDescriptorTable(6, m_cbvGPUDescriptorHandle);
-
+	
 	if (m_ppMeshes)
 	{
 		for (int i = 0; i < m_nMeshes; i++)
@@ -240,6 +242,7 @@ void CPlayer::ChangeSkillSet(CSkeleton ** ppskill)
 		m_pSkeleton[j+3] = *ppskill[j];
 	}
 }
+
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
