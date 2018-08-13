@@ -405,7 +405,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 
 	m_ppObjects = ((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects();
 
-	((CMinimapShader*)SpecialSelect_Shader)->SetPlayer(m_ppObjects[0]);
+	((CSelectedSpecialShader*)SpecialSelect_Shader)->SetPlayer(m_ppObjects[0]);
 
 	((CSkillShader*)Skill_Shader)->SetPlayer(m_ppObjects[0]);
 	((CSkillShader*)Skill_Shader)->SetChangeWeapon( ((CPlayerShader*)m_ppShaders[3])->GetChangeWeapon() );
@@ -433,7 +433,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	NeutralityHP_Shader->Initialize(pCreateMgr, m_pCamera);
 	Eeffect_Shader->Initialize(pCreateMgr, m_pCamera);
 	SpecialSelect_Shader->Initialize(pCreateMgr, m_pCamera);
-	
+
 
 	m_ppShaders[22] ->Initialize(pCreateMgr, m_pCamera);
 	
@@ -472,7 +472,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
 	pPlayerS->SetEffectManagerToObject(m_pEffectMgr);
-	
+
 	// 중립 몬스터에 충돌체 부여
 	CNeutralityShader* pNetral = (CNeutralityShader *)m_ppShaders[4];
 	nColliderObject = pNetral->GetObjectCount();
