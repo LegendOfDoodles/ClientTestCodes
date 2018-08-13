@@ -171,6 +171,7 @@ bool CSpecialSelectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 				for (int i = 0; i < 4; ++i) {
 					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
 						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::DefenceSpecial);
+						m_pPlayer->AddEquipCnt(0, i);
 						break;
 					};
 				}
@@ -191,6 +192,7 @@ bool CSpecialSelectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 				for (int i = 0; i < 4; ++i) {
 					if (m_pPlayer->GetPlayerStatus()->Special[i] == (SpecialType::NoSelected)) {
 						m_pPlayer->GetPlayerStatus()->Special[i] = (SpecialType::TechnicSpecial);
+						m_pPlayer->AddEquipCnt(1, i);
 						break;
 					};
 				}

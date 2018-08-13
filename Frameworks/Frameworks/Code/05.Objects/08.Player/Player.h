@@ -45,6 +45,7 @@ public:	// 외부 함수
 	UINT* GetEquipIndex() { return m_nEquipIndex; }
 	void AddEquipCnt(UINT equiptype, UINT specialnum) {
 		m_nEquipIndex[m_StatusInfo.EquipCnt++] = equiptype * 4 + specialnum;
+		//0123 방어 4567 특수
 	}
 	
 	void SetWeaponData(UINT type , UINT num){
