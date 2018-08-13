@@ -34,10 +34,10 @@ void CEquipShader::UpdateShaderVariables(int opt)
 	for (int i = 0; i < 4; i++)
 	{
 		CPlayer* pPlayer = (dynamic_cast<CEquipment*>(m_ppObjects[i*m_nMaxEquip]))->GetMaster();
-		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((/*matIndex*/0 * m_nPlayer + i/*selectIndex*/) * elementBytes));
-		
+		CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((/*matIndex*/m_arrEquipIndex[i][0] * m_nPlayer + i/*selectIndex*/) * elementBytes));
+
 		memcpy(pMappedObject->m_xmf4x4Frame, pPlayer->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-		
+
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 			XMMatrixTranspose(XMLoadFloat4x4(pPlayer->GetWorldMatrix())));
 	}
@@ -47,16 +47,17 @@ void CEquipShader::AnimateObjects(float timeElapsed)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
 
-	//for (int i = 0; i < m_nPlayer; ++i) {
-	//	if (m_pPlayer[i]->GetWeaponType() != m_nPlayerWeaponType[i]) {
-	//		m_nPlayerWeaponType[i] = m_pPlayer[i]->GetWeaponType();
-	//		SetEquipMesh(i, 0, 0, m_nPlayerWeaponType[i]);
-	//	}
-	//	else if (m_pPlayer[i]->GetWeaponNum() != m_arrEquipIndex[i][0]) {
-	//		m_arrEquipIndex[i][0] = m_pPlayer[i]->GetWeaponNum();
-	//		SetEquipMesh(i, 0, m_arrEquipIndex[i][0], m_nPlayerWeaponType[i]);
-	//	}
-	//}
+	for (int i = 0; i < m_nPlayer; ++i) {
+		if (m_pPlayer[i]->GetWeaponType() != m_nPlayerWeaponType[i]) {
+			m_nPlayerWeaponType[i] = m_pPlayer[i]->GetWeaponType();
+			m_nPlayerWeaponNum[i] = m_pPlayer[i]->GetWeaponNum();
+			SetEquipMesh(i, 0, 0, m_nPlayerWeaponType[i]);
+		}
+		else if (m_pPlayer[i]->GetWeaponNum() != m_nPlayerWeaponNum[i]) {
+			m_nPlayerWeaponNum[i] = m_pPlayer[i]->GetWeaponNum();
+			SetEquipMesh(i, 0, m_nPlayerWeaponNum[i], m_nPlayerWeaponType[i]);
+		}
+	}
 }
 
 void CEquipShader::SetEquipMesh(int playerindex, int equiptype, int equipindex, int weaponnum)
@@ -72,7 +73,7 @@ void CEquipShader::SetEquipMesh(int playerindex, int equiptype, int equipindex, 
 			break;
 		case 1:
 			pMesh = m_pSword[equipindex];
-			meshindex = equipindex+1;
+			meshindex = equipindex + 1;
 			break;
 		case 2:
 			pMesh = m_pStaff[equipindex];
@@ -88,17 +89,18 @@ void CEquipShader::SetEquipMesh(int playerindex, int equiptype, int equipindex, 
 	m_nMeshIndex[meshindex]++;
 	m_arrEquipIndex[playerindex][equiptype] = meshindex;
 	m_ppObjects[playerindex * m_nMaxEquip + equiptype]->SetMesh(0, pMesh);
-	//m_ppObjects[playerindex * m_nMaxEquip + equiptype]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[meshindex].ptr + (incrementSize * playerindex));
+	m_ppObjects[playerindex * m_nMaxEquip + equiptype]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[meshindex].ptr + (incrementSize * playerindex));
 }
 
 void CEquipShader::Render(CCamera *pCamera)
 {
-	CShader::Render(pCamera, 0);
-	
+
 	for (int i = 0; i < m_nPlayer; ++i) {
 		for (int j = 0; j < m_nPlayerEquipments[i]; j++)
 		{
-			m_ppMaterials[1]->UpdateShaderVariables();
+			int index = m_arrEquipIndex[i][j];
+			CShader::Render(pCamera, index);
+			if (m_ppMaterials)m_ppMaterials[index]->UpdateShaderVariables();
 			m_ppObjects[i * m_nMaxEquip + j]->Render(pCamera);
 		}
 	}
@@ -213,10 +215,10 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 	m_ppObjects = new CCollisionObject*[m_nObjects];
 
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
-	
+
 	int accCnt{ 0 };
 
-	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nPlayer * m_nHeaps, true, ncbElementBytes, m_nObjects);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nPlayer * m_nHeaps, false);
 	for (int i = 0; i < m_nHeaps; ++i)
 	{
 		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nPlayer, 1, i);
@@ -231,16 +233,16 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 #endif
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = Materials::CreateLolipopMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1] = Materials::CreateSwordMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
-	m_ppMaterials[2] = Materials::CreateMaceMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_ppMaterials[0] = Materials::CreateStickMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1] = Materials::CreateSwordMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_ppMaterials[2] = Materials::CreateMaceMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
 	m_ppMaterials[3] = Materials::CreateLolipopMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
-	m_ppMaterials[4] = Materials::CreateSawMaterial(pCreateMgr,		&m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
-	m_ppMaterials[5] = Materials::CreateSabreMaterial(pCreateMgr,	&m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_ppMaterials[4] = Materials::CreateSawMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_ppMaterials[5] = Materials::CreateSabreMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
 
 	m_pStick = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 
-	
+
 	m_nSword = 5;
 
 	m_pSword = new CSkinnedMesh*[m_nSword];
@@ -271,7 +273,7 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 	m_pArmor[1] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//cloth//BulletJaket.meshinfo");
 	m_pArmor[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//Shose//Nike.meshinfo");
 	m_pArmor[3] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//Familiar//MedicBox.meshinfo");
-	
+
 	m_nSpecial = 4;
 	m_pSpecial = new CSkinnedMesh*[m_nSpecial];
 	m_pSpecial[0] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//hat//Glasses.meshinfo");
@@ -279,7 +281,7 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 	m_pSpecial[2] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//extra//Winder.meshinfo");
 	m_pSpecial[3] = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Armor//hat//Icecream.meshinfo");
 
-	
+
 	m_pStick->AddRef();
 	for (UINT j = 0; j < m_nSword; ++j) {
 		m_pSword[j]->AddRef();
@@ -296,7 +298,7 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 	for (UINT j = 0; j < m_nSpecial; ++j) {
 		m_pSpecial[j]->AddRef();
 	}
-	m_nMeshCnt = 1 + m_nSword + m_nBow + m_nStaff + m_nArmor+ m_nSpecial;
+	m_nMeshCnt = 1 + m_nSword + m_nBow + m_nStaff + m_nArmor + m_nSpecial;
 	m_nMeshIndex = new int[m_nMeshCnt];
 
 	int i = 0;
@@ -304,10 +306,10 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 	CEquipment *pEquip = { NULL };
 
 	for (int x = 0; x < m_nPlayer; ++x) {
-		for (int y = 0; y < m_nMaxEquip; ++y) {
+		for (UINT y = 0; y < m_nMaxEquip; ++y) {
 			pEquip = new CEquipment(pCreateMgr, 1);
 			pEquip->SetMaster(m_pPlayer[x]);
-			
+
 			m_ppObjects[i++] = pEquip;
 		}
 		m_nPlayerEquipments[x] = 1;
@@ -315,11 +317,10 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 
 	m_nMeshIndex[0] = m_nPlayer; //Stick;
 	for (int x = 0; x < m_nPlayer; ++x) {
-		m_nPlayerWeaponType[x] =0;
+		m_nPlayerWeaponType[x] = 0;
 		m_arrEquipIndex[x][0] = 0;
-		m_ppObjects[x*m_nMaxEquip]->SetMesh(0, m_pSword[0]);
-		m_ppObjects[x*m_nMaxEquip]->SetMaterial(m_ppMaterials[1]);
-		m_ppObjects[x*m_nMaxEquip]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * x));
+		m_ppObjects[x*m_nMaxEquip]->SetMesh(0, m_pStick);
+		m_ppObjects[x*m_nMaxEquip]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * x));
 	}
 }
 

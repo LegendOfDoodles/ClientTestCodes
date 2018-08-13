@@ -69,6 +69,7 @@ protected: // º¯¼ö
 	int m_nPlayer{4};
 
 	int m_nPlayerWeaponType[4];
+	int m_nPlayerWeaponNum[4];
 	int m_nPlayerEquipments[4];
 	int m_arrEquipIndex[4][5];
 };
