@@ -104,7 +104,7 @@
 
 // Flying Object Spped
 #define MINION_ARROW_SPEED CONVERT_cm_to_InG(1.805f)
-
+#define PLAYER_ESKILL_ARROW_SPEED CONVERT_cm_to_InG(7.22f);
 
 //방어력 적용 공식----------------
 #define Compute_Defence(val) (100)/(100+val)

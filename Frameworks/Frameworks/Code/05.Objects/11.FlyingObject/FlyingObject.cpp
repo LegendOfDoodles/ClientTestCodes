@@ -79,7 +79,7 @@ void CFlyingObject::Animate(float timeElapsed)
 		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f) != NULL)
 		{ 
 			// Warning! 이펙트 처리 필요
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Flying_MinionArrow_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
@@ -196,7 +196,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_distance = 0.0f;
 		m_EffectTriger = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(80);
-		m_speed = CONVERT_cm_to_InG(7.22f);
+		m_speed = PLAYER_ESKILL_ARROW_SPEED
 	}
 	else if (type == FlyingObjectType::Player_ArrowSkill_R)
 	{
