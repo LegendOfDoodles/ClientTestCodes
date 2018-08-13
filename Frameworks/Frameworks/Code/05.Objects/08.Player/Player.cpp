@@ -42,14 +42,19 @@ void CPlayer::Animate(float timeElapsed)
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8), 100);
 				// EffectMgr
 				if (GetType() == ObjectType::SwordPlayer)
+				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
+					m_pSoundMgr->play(SOUND::Player_Sword_Q_Sound, GetPosition());
+				}
 				else if (GetType() == ObjectType::StaffPlayer)
 				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffQSkill_Effect);
+					m_pSoundMgr->play(SOUND::Player_Staff_Q_Sound, GetPosition());
 				}
 				else if (GetType() == ObjectType::BowPlayer)
 				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+					m_pSoundMgr->play(SOUND::Player_Arrow_Q_Sound, GetPosition());
 				}
 			}
 		}
@@ -59,14 +64,21 @@ void CPlayer::Animate(float timeElapsed)
 				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180, 500);
 				// EffectMgr
 				if (GetType() == ObjectType::SwordPlayer)
+				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W_Effect);
+					m_pSoundMgr->play(SOUND::Player_Sword_W_Sound, GetPosition());
+				}
 				else if (GetType() == ObjectType::StaffPlayer)
 				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffAttack_Effect);
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_W_Effect);
+					m_pSoundMgr->play(SOUND::Player_Staff_W_Sound, GetPosition());
 				}
 				else if (GetType() == ObjectType::BowPlayer)
+				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+					m_pSoundMgr->play(SOUND::Player_Arrow_W_Sound, GetPosition());
+				}
 
 			}
 		}
@@ -82,6 +94,7 @@ void CPlayer::Animate(float timeElapsed)
 				{
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffESkill_Effect);
 					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_E_Effect);
+					m_pSoundMgr->play(SOUND::Player_Staff_E_Sound, GetPosition());
 				}
 				else if (GetType() == ObjectType::BowPlayer)
 				{

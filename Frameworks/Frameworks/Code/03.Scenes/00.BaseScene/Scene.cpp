@@ -34,6 +34,7 @@
 #include "00.Global/01.Utility/07.ThrowingManager/ThrowingMgr.h"
 #include "00.Global/01.Utility/08.EffectManager/EffectManager.h"
 #include "00.Global/02.AI/00.FSMMgr/FSMMgr.h"
+#include "00.Global/01.Utility/09.SoundManager/SoundManager.h"
 
 /// <summary>
 /// 목적: 기본 씬, 인터페이스 용
@@ -124,6 +125,7 @@ void CScene::ProcessInput()
 void CScene::AnimateObjects(float timeElapsed)
 {
 	m_pCamera->Update(timeElapsed);
+	m_pSoundManager->Update(timeElapsed);
 
 	UpdateShaderVariables();
 
@@ -434,7 +436,6 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	Eeffect_Shader->Initialize(pCreateMgr, m_pCamera);
 	SpecialSelect_Shader->Initialize(pCreateMgr, m_pCamera);
 
-
 	m_ppShaders[22] ->Initialize(pCreateMgr, m_pCamera);
 	
 	//Managere Initialize
@@ -447,7 +448,10 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pEffectMgr->SetEffectShader(static_cast<CEffectShader*>(Eeffect_Shader));
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
-
+	
+	m_pSoundManager = shared_ptr<CSoundManager>(new CSoundManager(m_pCamera));	// Fmod System Init
+	m_pSoundManager->loading();		// Sound File Load
+	
 	m_pCollisionManager->SetEffectManager(m_pEffectMgr);
 
 	//Manager Shaders Setting
@@ -472,6 +476,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
 	pPlayerS->SetEffectManagerToObject(m_pEffectMgr);
+	pPlayerS->SetSoundManagerToObject(m_pSoundManager);
 
 	// 중립 몬스터에 충돌체 부여
 	CNeutralityShader* pNetral = (CNeutralityShader *)m_ppShaders[4];
@@ -499,6 +504,9 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	pFS->SetEffectManagerToObject(m_pEffectMgr);
 
 	BuildLights();
+
+	// BackGround Music
+	m_pSoundManager->play(SOUND::Back_Ground, XMFLOAT3(0,0,0));
 }
 
 void CScene::ReleaseObjects()
