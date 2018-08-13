@@ -153,7 +153,6 @@ enum EffectObjectType {
 	Flying_PlayerFireBall_Effect,
 	Player_ArrowAndFireBall_HitPosition_Effect,
 
-
 	// Effect Type Cnt
 	EffectObjectTime_Max_COUNT,
 };

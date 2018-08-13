@@ -296,6 +296,15 @@ namespace Materials
 	CMaterial* CreatePlayerAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+	
+	CMaterial* CreateMinionAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
+	CMaterial* CreateFlyingObjectEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
 	/////////////////////////////////////////////////////////////////////////////
 	//Equipment
 	CMaterial* CreateStickMaterial(shared_ptr<CCreateMgr> pCreateMgr,
@@ -322,16 +331,7 @@ namespace Materials
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
-
-	CMaterial* CreateMinionAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-	CMaterial* CreateFlyingObjectEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
-		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
-		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
-
-
+	
 	CMaterial* CreateLolipopMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
