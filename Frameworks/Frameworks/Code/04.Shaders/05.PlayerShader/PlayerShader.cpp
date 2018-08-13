@@ -245,6 +245,12 @@ void CPlayerShader::SetEffectManagerToObject(shared_ptr<CEffectMgr> manager)
 		m_ppObjects[i]->SetEffectManager(manager);
 	}
 }
+void CPlayerShader::SetSoundManagerToObject(shared_ptr<CSoundManager> manager)
+{
+	for (int i = 0; i < 4; ++i) {
+		m_ppObjects[i]->SetSoundManager(manager);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수

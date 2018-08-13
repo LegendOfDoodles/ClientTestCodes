@@ -31,6 +31,8 @@ public: // 공개 함수
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 	void SetEffectManagerToObject(shared_ptr<CEffectMgr> manager);
+	void SetSoundManagerToObject(shared_ptr<CSoundManager> manager);
+	
 	bool* GetChangeWeapon() { return &m_ChangeWeapon; }
 
 protected: // 내부 함수
