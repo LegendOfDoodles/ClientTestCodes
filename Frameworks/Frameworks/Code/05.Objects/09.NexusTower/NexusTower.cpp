@@ -41,7 +41,7 @@ void CNexusTower::PlayIdle(float timeElapsed)
 
 	if (m_ObjectType == ObjectType::FirstTower)
 	{
-		CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
+		CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange,m_TeamType) };
 
 		if (!enemy) return;
 

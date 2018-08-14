@@ -189,10 +189,26 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 							float collisionLength = (*i)->GetCollisionSize() + (data2);
 							if (distance <= collisionLength)
 							{
-								if (pCol->GetType() == ObjectType::FlyingObject)
+								if ((*i)->GetType() != ObjectType::FirstTower
+									&& (*i)->GetType() != ObjectType::GOLEM
+									&& (*i)->GetType() != ObjectType::Nexus)
 								{
-									m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 15, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+									if (pCol->GetType() == ObjectType::FlyingObject
+										&&
+										(pCol->GetFlyingObjectsType() == FlyingObjectType::Player_ArrowSkill_Q
+											|| pCol->GetFlyingObjectsType() == FlyingObjectType::Player_Magic
+											|| pCol->GetFlyingObjectsType() == FlyingObjectType::BlueTower_Attack
+											|| pCol->GetFlyingObjectsType() == FlyingObjectType::RedTower_Attack))
+									{
+										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10.f, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+									}
+									else
+									{
+										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10.f, EffectObjectType::NormallHit_Effect);
+									}
 								}
+								
+									
 
 								//std::cout << "col\n";
 								(*i)->ReceiveDamage(damage);
@@ -250,13 +266,24 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	}
 }
 
-CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh)
+CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh, TeamType type)
 {
 	if (m_Winner != TeamType::None) return NULL;
 
 	CCollisionObject* nearObject{ NULL };
 	float nearDistance = 0;
-	for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+	std::list<CCollisionObject*>::iterator i;
+	std::list<CCollisionObject*>* curList;
+	if (type == TeamType::Red)
+	{
+		curList = &m_lstRedSight;
+	}
+	else if (type == TeamType::Blue)
+		curList = &m_lstBlueSight;
+	else
+		curList = &m_lstColliders;
+
+	for (i = curList->begin(); i != curList->end(); ++i)
 	{
 
 		if ((*i) != pCol && (*i)->GetTeam() != pCol->GetTeam()) {

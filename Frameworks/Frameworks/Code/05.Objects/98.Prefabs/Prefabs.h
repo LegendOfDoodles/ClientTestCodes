@@ -153,11 +153,19 @@ namespace Materials
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
-	CMaterial* CreatePlayerMagicMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+	CMaterial* CreatePlayerMagicSkillQMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
-	CMaterial* CreatePlayerArrowSkillRMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+	CMaterial* CreatePlayerArrowSkillWMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
+	CMaterial* CreatePlayerMagicSkillRMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
+	CMaterial* CreatePlayerMagicMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
@@ -302,6 +310,14 @@ namespace Materials
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 
 	CMaterial* CreateFlyingObjectEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
+	CMaterial* CreateHitEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
+		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
+		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
+
+	CMaterial* CreateGolemAttackEffectMaterial(shared_ptr<CCreateMgr> pCreateMgr,
 		D3D12_CPU_DESCRIPTOR_HANDLE *pSrvCPUDescriptorStartHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE *pSrvGPUDescriptorStartHandle);
 

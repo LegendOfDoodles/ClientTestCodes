@@ -36,6 +36,15 @@ void CFlyingObject::Animate(float timeElapsed)
 		MoveToDirection(timeElapsed * m_speed);
 		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
 
+		if (m_SoundTrigier && 
+			(m_flyingObjectType == FlyingObjectType::Player_Arrow || 
+			m_flyingObjectType == FlyingObjectType::Player_ArrowSkill_W))
+		{
+			m_pSoundMgr->play(SOUND::Flying_PlayerArrow_Sound, GetPosition());
+			m_SoundTrigier = false;
+		}
+
+
 		if (m_flyingObjectType == FlyingObjectType::Minion_Arrow  && m_EffectTriger)
 		{
 			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Flying_MinionArrow_Effect);
@@ -47,13 +56,12 @@ void CFlyingObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
-	else if (m_flyingObjectType == FlyingObjectType::Minion_Magic ||
-		m_flyingObjectType == FlyingObjectType::Player_Magic)
+	else if (m_flyingObjectType == FlyingObjectType::Minion_Magic)
 	{
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
 		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
-		Rotate(0, 0, 10.0f);
+		Rotate(0, 0, 3.0f);
 		if (m_distance > m_maxDistance)
 		{
 			m_curState = StatesType::Remove;
@@ -67,19 +75,32 @@ void CFlyingObject::Animate(float timeElapsed)
 		XMFLOAT3 curPos{ GetPosition() };
 		if (curPos.y < m_pTerrain->GetHeight(curPos.x, curPos.z))
 		{
+			if (m_SoundTrigier)
+			{
+				m_pSoundMgr->play(SOUND::TowerAttack_Explosion_Sound, GetPosition());
+				m_SoundTrigier = false;
+			}
+
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 30, EffectObjectType::Tower_Attack_Explosion_Effect);
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
 		}
 	}
-	else if (m_flyingObjectType == FlyingObjectType::Player_ArrowSkill_Q)
+	else if (m_flyingObjectType == FlyingObjectType::Player_ArrowSkill_Q ||
+		m_flyingObjectType == FlyingObjectType::Player_MagicSkill_Q)
 	{
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
 
-		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f) != NULL)
+		if (m_SoundTrigier && m_flyingObjectType == FlyingObjectType::Player_ArrowSkill_Q)
+		{
+			m_pSoundMgr->play(SOUND::Flying_PlayerArrow_Sound, GetPosition());
+			m_SoundTrigier = false;
+		}
+
+		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f, m_TeamType) != NULL)
 		{ 
-			// Warning! 이펙트 처리 필요
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 10, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
@@ -95,6 +116,12 @@ void CFlyingObject::Animate(float timeElapsed)
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
 		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
+
+		if (m_SoundTrigier)
+		{
+			m_pSoundMgr->play(SOUND::Flying_PlayerArrow_Sound, GetPosition());
+			m_SoundTrigier = false;
+		}
 
 		if (m_EffectTriger && m_distance > m_maxDistance * 0.5f)
 		{
@@ -115,8 +142,38 @@ void CFlyingObject::Animate(float timeElapsed)
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
 		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
+		
+		if (m_SoundTrigier) 
+		{
+			m_pSoundMgr->play(SOUND::Flying_PlayerRArrow_Sound, GetPosition());
+			m_SoundTrigier = false;
+		}
+		
 		Rotate(0, 55.0f, 0.0f);
 
+		if (m_distance > m_maxDistance)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	else if (m_flyingObjectType == FlyingObjectType::Player_MagicSkill_R)
+	{
+		MoveToDirection(timeElapsed * m_speed);
+		Rotate(-360.f * timeElapsed, 0.f, 0.0f);
+		XMFLOAT3 curPos{ GetPosition() };
+		if (curPos.y < m_pTerrain->GetHeight(curPos.x, curPos.z))
+		{
+			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
+			m_pSoundMgr->play(SOUND::Player_Staff_R_Sound, GetPosition());
+			m_curState = StatesType::Remove;
+		}
+	}
+	else if (m_flyingObjectType == FlyingObjectType::Player_Magic)
+	{
+		m_distance += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage * timeElapsed);
+		Rotate(0, 0, 10.0f);
 		if (m_distance > m_maxDistance)
 		{
 			m_curState = StatesType::Remove;
@@ -131,14 +188,14 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 
 	if (type == FlyingObjectType::Roider_Dumbel)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(3);
+		m_attackRange = CONVERT_PaperUnit_to_InG(5);
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
-		m_speed = CONVERT_cm_to_InG(1.805f);
+		m_speed = CONVERT_cm_to_InG(2.805f);
 	}
 	else if (type == FlyingObjectType::Minion_Arrow)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_attackRange = CONVERT_PaperUnit_to_InG(2.5f);
 		m_distance = 0.0f;
 		m_EffectTriger = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
@@ -146,32 +203,35 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 	}
 	else if (type == FlyingObjectType::Minion_Magic)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(2);
+		m_attackRange = CONVERT_PaperUnit_to_InG(2.5f);
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(24);
-		m_speed = CONVERT_cm_to_InG(1.805f);
+		m_speed = CONVERT_cm_to_InG(2.148f);
 	}
 	else if (type == FlyingObjectType::BlueTower_Attack)
 	{
+		m_SoundTrigier = true;
 		m_attackRange = CONVERT_PaperUnit_to_InG(20);
 		m_speed = CONVERT_cm_to_InG(4.733f);
 	}
 	else if (type == FlyingObjectType::RedTower_Attack)
 	{
+		m_SoundTrigier = true;
 		m_attackRange = CONVERT_PaperUnit_to_InG(20);
 		m_speed = CONVERT_cm_to_InG(4.733f);
 	}
 	else if (type == FlyingObjectType::Player_Arrow)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(4);
+		m_attackRange = CONVERT_PaperUnit_to_InG(5);
 		m_distance = 0.0f;
 		m_EffectTriger = true;
+		m_SoundTrigier = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(40);
 		m_speed = CONVERT_cm_to_InG(7.22f);
 	}
-	else if (type == FlyingObjectType::Player_Magic)
+	else if (type == FlyingObjectType::Player_MagicSkill_Q)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(4);
+		m_attackRange = CONVERT_PaperUnit_to_InG(15);
 		m_distance = 0.0f;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(36);
 		m_speed = CONVERT_cm_to_InG(6.13f);
@@ -180,6 +240,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(15);
 		m_distance = 0.0f;
+		m_SoundTrigier = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(32);
 		m_speed = CONVERT_cm_to_InG(5.79f);
 	}
@@ -187,12 +248,13 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(6);
 		m_distance = 0.0f;
+		m_SoundTrigier = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(50);
 		m_speed = CONVERT_cm_to_InG(3.305f);
 	}
 	else if (type == FlyingObjectType::Player_ArrowSkill_E)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(4);
+		m_attackRange = CONVERT_PaperUnit_to_InG(5);
 		m_distance = 0.0f;
 		m_EffectTriger = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(80);
@@ -202,8 +264,23 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(17);
 		m_distance = 0.0f;
+		m_SoundTrigier = true;
 		m_maxDistance = CONVERT_PaperUnit_to_InG(44);
 		m_speed = CONVERT_cm_to_InG(9.05f);
+	}
+	else if (type == FlyingObjectType::Player_MagicSkill_R)
+	{
+		m_attackRange = CONVERT_PaperUnit_to_InG(30);
+		m_speed = CONVERT_cm_to_InG(15.3f);
+		m_direction = XMFLOAT3(0, -1.f, 0);
+	}
+	else if (type == FlyingObjectType::Player_Magic)
+	{
+		m_attackRange = CONVERT_PaperUnit_to_InG(5);
+		m_distance = 0.0f;
+		m_EffectTriger = true;
+		m_maxDistance = CONVERT_PaperUnit_to_InG(36);
+		m_speed = CONVERT_cm_to_InG(3.52f);
 	}
 }
 
@@ -224,11 +301,6 @@ void CFlyingObject::LookAt(XMFLOAT3 target)
 	XMFLOAT3 upVector{ 0.f, 1.f, 0.f };
 	XMFLOAT3 objLookVector = GetLook();
 	XMFLOAT3 objPos = GetPosition();
-
-	if (m_flyingObjectType == FlyingObjectType::Player_Magic)
-	{
-		objLookVector = Vector3::ScalarProduct(objLookVector, -1);
-	}
 
 	target.y = objPos.y;
 

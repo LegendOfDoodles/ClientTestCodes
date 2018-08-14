@@ -32,6 +32,7 @@ public: // 공개 함수
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
 	void SetEffectManagerToObject(shared_ptr<CEffectMgr> manager);
+	void SetSoundManagerToObject(shared_ptr<CSoundManager> manager);
 
 	void Pause() { m_Paused = true; }
 	void Resume() { m_Paused = false; };
@@ -54,7 +55,7 @@ protected: // 내부 함수
 	void ResetPossibleIndex(int idx) { m_objectsPossibleIndices[idx] = false; }
 
 protected: // 변수
-	static const int m_nMesh{ 7 };
+	static const int m_nMesh{ 8 };
 	CStaticMesh * m_pMeshes[m_nMesh];
 
 	UINT m_srvIncrementSize{ 0 };
@@ -69,8 +70,10 @@ protected: // 변수
 	CollisionObjectList m_blueTowerAtkList;
 	CollisionObjectList m_redTowerAtkList;
 	CollisionObjectList m_playerArrowList;
+	CollisionObjectList m_playerMagicSkillQList;
+	CollisionObjectList m_playerArrowSkillWList;
+	CollisionObjectList m_playerMagicSkillRList;
 	CollisionObjectList m_playerMagicList;
-	CollisionObjectList m_playerArrowSkillRList;
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
 

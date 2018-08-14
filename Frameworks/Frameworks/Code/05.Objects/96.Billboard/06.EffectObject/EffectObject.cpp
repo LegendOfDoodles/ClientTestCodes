@@ -175,8 +175,19 @@ void CEffectObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
+	if (m_EffectObjectType == EffectObjectType::Tower_Attack_Explosion_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
 	if (m_EffectObjectType == EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect)
 	{
+		m_EffectTriger = false;
+		
 		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
@@ -187,6 +198,50 @@ void CEffectObject::Animate(float timeElapsed)
 			m_curState = StatesType::Remove;
 		}
 	}
+	if (m_EffectObjectType == EffectObjectType::NormallHit_Effect)
+	{
+		m_EffectTriger = false;
+
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
+	if (m_EffectObjectType == EffectObjectType::Golem_StandardAttack_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Golem_StumpAttack_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Golem_SpecialAttack_Effect)
+	{
+		m_AnimaitonTime += timeElapsed * m_speed;
+		MoveToDirection(timeElapsed * m_speed);
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
 }
 
 void CEffectObject::Render(CCamera * pCamera, UINT istanceCnt)
@@ -231,6 +286,11 @@ void CEffectObject::SetEffectObjectsType(EffectObjectType type)
 	else if (m_EffectObjectType == EffectObjectType::Flying_PlayerArrow_Effect)
 	{
 		m_speed = PLAYER_ESKILL_ARROW_SPEED;
+	}
+	else if (m_EffectObjectType == EffectObjectType::NormallHit_Effect || m_EffectObjectType == EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect) 
+	{
+		m_EffectTriger = true;
+		m_speed = ANIMATION_SPEED;
 	}
 	else
 		m_speed = ANIMATION_SPEED;

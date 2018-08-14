@@ -120,38 +120,51 @@ enum FlyingObjectType {
 	BlueTower_Attack,
 	RedTower_Attack,
 	Player_Arrow,
-	Player_Magic,
+	Player_MagicSkill_Q,
 	Player_ArrowSkill_Q,
 	Player_ArrowSkill_W,
 	Player_ArrowSkill_E,
 	Player_ArrowSkill_R,
+	Player_MagicSkill_R,
+	Player_Magic
 };
 
 enum EffectObjectType {
 	// Player Skill Effect
-	Player_SwordSkill_Q_Effect,			// 땅 깨지는 이펙트 (플레이어 앞)
-	Player_SwordSkill_W_Effect,			// 발도 이펙트
+	Player_SwordSkill_Q_Effect,
+	Player_SwordSkill_W_Effect,
 	Player_SwordSkill_E_Effect,
-	Player_SwordSkill_R_Effect,			// 땅 깨지는 이펙트 (플레이어 주변)
-	
-	Player_StaffSkill_W_Effect,			// 얼음
-	Player_StaffSkill_E_Effect,			// 전기
+	Player_SwordSkill_R_Effect,
+
+	Player_StaffSkill_W_Effect,
+	Player_StaffSkill_E_Effect,
 
 	// Player Attack Motion Effect
-	Player_ArrowAttack_Effect,			// 활 플레이어 스킬샷 이펙트
-	Player_StaffAttack_Effect,			// 마법 플레이어 스킬샷 이펙트
+	Player_ArrowAttack_Effect,
+	Player_StaffAttack_Effect,
 	Player_StaffQSkill_Effect,
 	Player_StaffESkill_Effect,
 
 	// Minion Attack Motion Effect
 	Minion_ArrowAttack_Effect,
-	Minion_StaffAttack_Effect,		// 미니언 공격 모션 이펙트
+	Minion_StaffAttack_Effect,
 
 	// FollowingToFlyingObejct Effect
 	Flying_MinionArrow_Effect,
 	Flying_PlayerArrow_Effect,
 	Flying_PlayerFireBall_Effect,
+	
+	// Tower Attack Explosion Effect
+	Tower_Attack_Explosion_Effect,
+	
+	// Hit Effect
 	Player_ArrowAndFireBall_HitPosition_Effect,
+	NormallHit_Effect,
+
+	// Golem Attack Effect
+	Golem_StandardAttack_Effect,
+	Golem_StumpAttack_Effect,
+	Golem_SpecialAttack_Effect,
 
 	// Effect Type Cnt
 	EffectObjectTime_Max_COUNT,
@@ -218,6 +231,11 @@ struct PlayerInfo
 
 	float Atk{ 50 };
 	float Def{ 20 };
+
+	float QSkillCoolTime{ 1.0f };
+	float WSkillCoolTime{ 1.0f };
+	float ESkillCoolTime{ 1.0f };
+	float RSkillCoolTime{ 1.0f };
 
 	//0. 몽둥이	1. 검	2. 마법	3.	활
 	UINT Weapon{ 0 };

@@ -103,7 +103,7 @@ void CMinion::PlayIdle(float timeElapsed)
 {
 	UNREFERENCED_PARAMETER(timeElapsed);
 
-	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange) };
+	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange,m_TeamType) };
 
 	if (!enemy) return;
 	if (!Chaseable(enemy)) return;

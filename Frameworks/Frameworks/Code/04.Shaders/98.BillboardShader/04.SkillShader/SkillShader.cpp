@@ -50,7 +50,7 @@ void CSkillShader::UpdateShaderVariables(int opt)
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		CB_GAUGE_INFO *pMappedObject = (CB_GAUGE_INFO *)(m_pMappedObjects + (i * elementBytes));
-		if (i >= 4 ) pMappedObject->m_fCurrentHP = 1.0f;	// Color
+		if (i >= 4 ) pMappedObject->m_fCurrentHP = static_cast<CSkillObject*>(m_ppObjects[i])->GetCoolTime();	// Color
 		else		 pMappedObject->m_fCurrentHP = 1.0f;	// Grey
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_ppObjects[i]->GetWorldMatrix())));
@@ -162,16 +162,28 @@ bool CSkillShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 		if (cursorPos.y > SKILL_MINIMUM_Y && cursorPos.y < SKILL_MAXIMUM_Y) {
 		
 			if ((cursorPos.x > QSKILL_MINIMUM_X  && cursorPos.x < QSKILL_MAXIMUM_X)) {
-				m_pPlayer->ActiveSkill(AnimationsType::SkillQ);
+				if (m_pPlayer->GetPlayerStatus()->QSkillCoolTime >= 1.0f) 
+				{
+					m_pPlayer->ActiveSkill(AnimationsType::SkillQ);
+				}
 			}
 			if ((cursorPos.x > WSKILL_MINIMUM_X  && cursorPos.x < WSKILL_MAXIMUM_X)) {
-				m_pPlayer->ActiveSkill(AnimationsType::SkillW);
+				if (m_pPlayer->GetPlayerStatus()->WSkillCoolTime >= 1.0f)
+				{
+					m_pPlayer->ActiveSkill(AnimationsType::SkillW);
+				}
 			}
 			if ((cursorPos.x > ESKILL_MINIMUM_X  && cursorPos.x < ESKILL_MAXIMUM_X)) {
-				m_pPlayer->ActiveSkill(AnimationsType::SkillE);
+				if (m_pPlayer->GetPlayerStatus()->ESkillCoolTime >= 1.0f)
+				{
+					m_pPlayer->ActiveSkill(AnimationsType::SkillE);
+				}
 			}
 			if ((cursorPos.x > RSKILL_MINIMUM_X  && cursorPos.x < RSKILL_MAXIMUM_X)) {
-				m_pPlayer->ActiveSkill(AnimationsType::SkillR);
+				if (m_pPlayer->GetPlayerStatus()->RSkillCoolTime >= 1.0f)
+				{
+					m_pPlayer->ActiveSkill(AnimationsType::SkillR);	
+				}
 			}
 		}
 	}
@@ -302,11 +314,13 @@ void CSkillShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pConte
 		pUIObject->SetCamera(m_pCamera);
 		if (i < 4)
 		{
+			pUIObject->SetObject(m_pPlayer);
 			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.0128f);
 			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 		}
 		else 
 		{
+			pUIObject->SetObject(m_pPlayer);
 			pUIObject->SetDistance(FRAME_BUFFER_WIDTH / 128.6432f);	 // distance 10	
 			pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (incrementSize * (i - 4)));
 		}

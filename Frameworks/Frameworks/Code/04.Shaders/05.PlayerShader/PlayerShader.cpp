@@ -168,19 +168,31 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	
 	if (GetAsyncKeyState('Q') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillQ);
+		if (m_ppObjects[0]->GetPlayerStatus()->QSkillCoolTime >= 1.f)
+		{
+			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillQ);
+		}
 	}
 	else if (GetAsyncKeyState('W') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillW);
+		if (m_ppObjects[0]->GetPlayerStatus()->WSkillCoolTime >= 1.f)
+		{
+			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillW);
+		}
 	}
 	else if (GetAsyncKeyState('E') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillE);
+		if (m_ppObjects[0]->GetPlayerStatus()->ESkillCoolTime >= 1.f)
+		{
+			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillE);
+		}
 	}
 	else if (GetAsyncKeyState('R') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillR);
+		if (m_ppObjects[0]->GetPlayerStatus()->RSkillCoolTime >= 1.f)
+		{
+			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillR);
+		}
 	}
 	
 	return true;
@@ -190,6 +202,14 @@ void CPlayerShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
 {
 	for (int i = 0; i < 4; ++i) {
 		m_ppObjects[i]->SetCollisionManager(manager);
+	}
+}
+
+void CPlayerShader::SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager)
+{
+	for (int i = 0; i < m_nObjects; ++i)
+	{
+		m_ppObjects[i]->SetThrowingManager(manager);
 	}
 }
 

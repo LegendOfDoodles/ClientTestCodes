@@ -117,7 +117,7 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
-			FlyingObjectType::Player_ArrowSkill_R,
+			FlyingObjectType::Player_Magic,
 			1000);
 	}
 }
@@ -477,6 +477,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
 	pPlayerS->SetEffectManagerToObject(m_pEffectMgr);
 	pPlayerS->SetSoundManagerToObject(m_pSoundManager);
+	pPlayerS->SetThrowingManagerToObject(m_pThrowingMgr);
 
 	// 중립 몬스터에 충돌체 부여
 	CNeutralityShader* pNetral = (CNeutralityShader *)m_ppShaders[4];
@@ -488,6 +489,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	pNetral->SetColManagerToObject(m_pCollisionManager);
 	pNetral->SetFSMManager(m_pFSMMgr);
 	pNetral->SetThrowingManagerToObject(m_pThrowingMgr);
+	pNetral->SetEffectManagerToObject(m_pEffectMgr);
+	pNetral->SetSoundManagerToObject(m_pSoundManager);
 
 	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[6];
 	nColliderObject = pNTS->GetObjectCount();
@@ -502,6 +505,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	CFlyingShader* pFS = (CFlyingShader*)m_ppShaders[7];
 	pFS->SetColManagerToObject(m_pCollisionManager);
 	pFS->SetEffectManagerToObject(m_pEffectMgr);
+	pFS->SetSoundManagerToObject(m_pSoundManager);
 
 	BuildLights();
 
