@@ -381,6 +381,7 @@ void CGolem::AnimateByCurState()
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_fCollisionSize, m_fCollisionSize * 0.5f, m_StatusInfo.Atk);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] * 0.25f, EffectObjectType::Golem_StandardAttack_Effect);
 			}
 		}
 		else if (m_nCurrAnimation == Animations::SpecialAttack1)
@@ -388,6 +389,9 @@ void CGolem::AnimateByCurState()
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_StatusInfo.Atk * 2);
+				
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] * 0.166f, EffectObjectType::Golem_StumpAttack_Effect);
+				
 				m_nNextAnimation = Animations::Attack1;
 			}
 		}
@@ -396,6 +400,9 @@ void CGolem::AnimateByCurState()
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_StatusInfo.Atk * 3);
+				
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] * 0.333f, EffectObjectType::Golem_SpecialAttack_Effect);
+				
 				m_nNextAnimation = Animations::Attack1;
 			}
 		}

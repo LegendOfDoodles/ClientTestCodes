@@ -66,6 +66,7 @@ void CFlyingObject::Animate(float timeElapsed)
 		XMFLOAT3 curPos{ GetPosition() };
 		if (curPos.y < m_pTerrain->GetHeight(curPos.x, curPos.z))
 		{
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 30.f, EffectObjectType::Tower_Attack_Explosion_Effect);
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
 		}
@@ -78,7 +79,7 @@ void CFlyingObject::Animate(float timeElapsed)
 
 		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f, m_TeamType) != NULL)
 		{ 
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 10.f, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;

@@ -228,6 +228,14 @@ void CNeutralityShader::SetThrowingManagerToObject(shared_ptr<CThrowingMgr> mana
 	}
 }
 
+void CNeutralityShader::SetEffectManagerToObject(shared_ptr<CEffectMgr> manager)
+{
+	for (int i = m_nObjects - 1; i < m_nObjects; ++i)
+	{
+		m_ppObjects[i]->SetEffectManager(manager);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CNeutralityShader::CreateInputLayout()

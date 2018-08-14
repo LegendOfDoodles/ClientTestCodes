@@ -21,6 +21,5 @@ public: // 공개함수
 
 protected: // 변수
 	CCollisionObject * m_pMasterObject;
-	ObjectType		  m_MasterObjectType;
 	GaugeUIType		  m_Type;
 };

@@ -63,7 +63,7 @@ void CGaugeObject::Animate(float fTimeElapsed)
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
 	else if (m_Type == GaugeUIType::NexusAndTower) {
-		if (m_MasterObjectType == ObjectType::Nexus) {
+		if (m_pMasterObject->GetType() == ObjectType::Nexus) {
 			m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
 			m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 300.f;
 			m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
