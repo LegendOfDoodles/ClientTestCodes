@@ -189,9 +189,18 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 							float collisionLength = (*i)->GetCollisionSize() + (data2);
 							if (distance <= collisionLength)
 							{
-								if (pCol->GetType() == ObjectType::FlyingObject)
+								if (pCol->GetType() == ObjectType::FlyingObject 
+									&& 
+									(pCol->GetFlyingObjectsType() == FlyingObjectType::Player_ArrowSkill_Q
+									|| pCol->GetFlyingObjectsType() == FlyingObjectType::Player_Magic
+									|| pCol->GetFlyingObjectsType() == FlyingObjectType::BlueTower_Attack
+									|| pCol->GetFlyingObjectsType() == FlyingObjectType::RedTower_Attack))
 								{
 									m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 15, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+								}
+								else 
+								{
+									m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 15, EffectObjectType::NormallHit_Effect);
 								}
 
 								//std::cout << "col\n";
