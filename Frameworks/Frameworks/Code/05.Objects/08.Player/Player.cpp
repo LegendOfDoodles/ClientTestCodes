@@ -73,6 +73,7 @@ void CPlayer::Animate(float timeElapsed)
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_E_Effect);
+				m_pSoundMgr->play(SOUND::Player_Sword_E_Sound, GetPosition());
 			}
 			else if (m_nCurrAnimation == Animations::SkillR &&
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f &&
@@ -84,6 +85,7 @@ void CPlayer::Animate(float timeElapsed)
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_R_Effect);
+				m_pSoundMgr->play(SOUND::Player_Sword_R_Sound, GetPosition());
 			}
 		}
 		else if (GetType() == ObjectType::StaffPlayer)
@@ -171,6 +173,7 @@ void CPlayer::Animate(float timeElapsed)
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+				m_pSoundMgr->play(SOUND::Player_Arrow_E_Sound, GetPosition());
 			}
 			else if (m_nCurrAnimation == Animations::SkillR &&
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f &&
@@ -182,6 +185,7 @@ void CPlayer::Animate(float timeElapsed)
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+				m_pSoundMgr->play(SOUND::Player_Arrow_R_Sound, GetPosition());
 			}
 		}
 		break;

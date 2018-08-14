@@ -236,6 +236,14 @@ void CNeutralityShader::SetEffectManagerToObject(shared_ptr<CEffectMgr> manager)
 	}
 }
 
+void CNeutralityShader::SetSoundManagerToObject(shared_ptr<CSoundManager> manager)
+{
+	for (int i = m_nObjects - 1; i < m_nObjects; ++i)
+	{
+		m_ppObjects[i]->SetSoundManager(manager);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CNeutralityShader::CreateInputLayout()

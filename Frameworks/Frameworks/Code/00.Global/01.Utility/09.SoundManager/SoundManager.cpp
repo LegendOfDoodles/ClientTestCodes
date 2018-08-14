@@ -38,6 +38,8 @@ CSoundManager::CSoundManager(CCamera* pCamera)
 
 CSoundManager::~CSoundManager()
 {
+	m_pFmod->release();
+	m_pFmod->close();
 }
 
 void CSoundManager::loading()
@@ -56,8 +58,15 @@ void CSoundManager::loading()
 	ErrorCheck(m_Result);
 
 	// Sword E
-	
+	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Sword/Sword_E.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Sword_E_Sound]);
+	m_Result = m_Sound[SOUND::Player_Sword_E_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Sword_E_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
 	// Sword R
+	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Sword/Sword_R.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Sword_R_Sound]);
+	m_Result = m_Sound[SOUND::Player_Sword_R_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Sword_R_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
 	
 	// Staff Q
 	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Staff/Staff_Q.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Staff_Q_Sound]);
@@ -77,16 +86,70 @@ void CSoundManager::loading()
 	m_Result = m_Sound[SOUND::Player_Staff_E_Sound]->setMode(FMOD_DEFAULT);
 	ErrorCheck(m_Result);
 
+	// Staff R
+	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Staff/Staff_R.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Staff_R_Sound]);
+	m_Result = m_Sound[SOUND::Player_Staff_R_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Staff_R_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
 	// Bow Q
 	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Bow/Bow_Q.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Arrow_Q_Sound]);
-	m_Result = m_Sound[SOUND::Player_Staff_E_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
-	m_Result = m_Sound[SOUND::Player_Staff_E_Sound]->setMode(FMOD_DEFAULT);
+	m_Result = m_Sound[SOUND::Player_Arrow_Q_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Arrow_Q_Sound]->setMode(FMOD_DEFAULT);
 	ErrorCheck(m_Result);
 
 	// Bow W
 	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Bow/Bow_W.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Arrow_W_Sound]);
-	m_Result = m_Sound[SOUND::Player_Staff_E_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
-	m_Result = m_Sound[SOUND::Player_Staff_E_Sound]->setMode(FMOD_DEFAULT);
+	m_Result = m_Sound[SOUND::Player_Arrow_W_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Arrow_W_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Bow E
+	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Bow/Bow_E.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Arrow_E_Sound]);
+	m_Result = m_Sound[SOUND::Player_Arrow_E_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Arrow_E_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Bow R
+	m_Result = m_pFmod->createSound("./Resource/Sound/Player/Bow/Bow_R.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Player_Arrow_R_Sound]);
+	m_Result = m_Sound[SOUND::Player_Arrow_R_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Player_Arrow_R_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// TowerAttack_Explosion_Sound
+	m_Result = m_pFmod->createSound("./Resource/Sound/Tower/Explosion.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::TowerAttack_Explosion_Sound]);
+	m_Result = m_Sound[SOUND::TowerAttack_Explosion_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::TowerAttack_Explosion_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Golem_StandardAttack_Sound
+	m_Result = m_pFmod->createSound("./Resource/Sound/Golem/Golem_StandardAttack.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Golem_StandardAttack_Sound]);
+	m_Result = m_Sound[SOUND::Golem_StandardAttack_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Golem_StandardAttack_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Golem_FootrollAttack_Sound
+	m_Result = m_pFmod->createSound("./Resource/Sound/Golem/Golem_FootroolAttack.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Golem_FootrollAttack_Sound]);
+	m_Result = m_Sound[SOUND::Golem_FootrollAttack_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Golem_FootrollAttack_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Golem_SpecialAttack_Sound
+	m_Result = m_pFmod->createSound("./Resource/Sound/Golem/Golem_SpecialAttack.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Golem_SpecialAttack_Sound]);
+	m_Result = m_Sound[SOUND::Golem_SpecialAttack_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Golem_SpecialAttack_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Flying_PlayerArrow_Sound
+	m_Result = m_pFmod->createSound("./Resource/Sound/FlyingObject/Flying_Arrow.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Flying_PlayerArrow_Sound]);
+	m_Result = m_Sound[SOUND::Flying_PlayerArrow_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Flying_PlayerArrow_Sound]->setMode(FMOD_DEFAULT);
+	ErrorCheck(m_Result);
+
+	// Flying_PlayerRArrow_Sound
+	m_Result = m_pFmod->createSound("./Resource/Sound/FlyingObject/Bow_R_Flying_Arrow.mp3", FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF, NULL, &m_Sound[SOUND::Flying_PlayerRArrow_Sound]);
+	m_Result = m_Sound[SOUND::Flying_PlayerRArrow_Sound]->set3DMinMaxDistance(SOUND_MIN_DISTANCE, SOUND_MAX_DISTANCE);
+	m_Result = m_Sound[SOUND::Flying_PlayerRArrow_Sound]->setMode(FMOD_DEFAULT);
 	ErrorCheck(m_Result);
 
 	// 2D Sounds
@@ -125,7 +188,7 @@ void CSoundManager::play(SOUND opt, XMFLOAT3 pos)
 		m_Result = m_pFmod->playSound(m_Sound[opt], NULL, false, &m_ppCh[NotUsingChNum]);
 		m_ppCh[NotUsingChNum]->set3DAttributes(&sound_pos, &vel);
 		ErrorCheck(m_Result);
-		if (++NotUsingChNum >= CHANNEL_MAX);
+		if (++NotUsingChNum >= CHANNEL_MAX) NotUsingChNum = 1;
 	}
 	else {
 		if (opt == SOUND::Back_Ground) {
