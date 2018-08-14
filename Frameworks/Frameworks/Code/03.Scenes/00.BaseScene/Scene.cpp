@@ -117,7 +117,7 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
-			FlyingObjectType::Player_ArrowSkill_R,
+			FlyingObjectType::Player_ArrowSkill_E,
 			1000);
 	}
 }
@@ -488,6 +488,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	pNetral->SetColManagerToObject(m_pCollisionManager);
 	pNetral->SetFSMManager(m_pFSMMgr);
 	pNetral->SetThrowingManagerToObject(m_pThrowingMgr);
+	pNetral->SetEffectManagerToObject(m_pEffectMgr);
 
 	CNexusTowerShader* pNTS = (CNexusTowerShader *)m_ppShaders[6];
 	nColliderObject = pNTS->GetObjectCount();
