@@ -76,7 +76,7 @@ void CFlyingObject::Animate(float timeElapsed)
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
 
-		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f) != NULL)
+		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f, m_TeamType) != NULL)
 		{ 
 			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 

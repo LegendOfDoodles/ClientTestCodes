@@ -250,13 +250,24 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	}
 }
 
-CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh)
+CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh, TeamType type)
 {
 	if (m_Winner != TeamType::None) return NULL;
 
 	CCollisionObject* nearObject{ NULL };
 	float nearDistance = 0;
-	for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+	std::list<CCollisionObject*>::iterator i;
+	std::list<CCollisionObject*>* curList;
+	if (type == TeamType::Red)
+	{
+		curList = &m_lstRedSight;
+	}
+	else if (type == TeamType::Blue)
+		curList = &m_lstBlueSight;
+	else
+		curList = &m_lstColliders;
+
+	for (i = curList->begin(); i != curList->end(); ++i)
 	{
 
 		if ((*i) != pCol && (*i)->GetTeam() != pCol->GetTeam()) {
