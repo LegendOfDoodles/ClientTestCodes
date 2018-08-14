@@ -665,11 +665,11 @@ CMaterial * Materials::CreatePlayerArrowMaterial(shared_ptr<CCreateMgr> pCreateM
 	return pMaterial;
 }
 
-CMaterial * Materials::CreatePlayerMagicMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreatePlayerMagicSkillQMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2DARRAY, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Throwing/PlayerMagic.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Throwing/PlayerMagicSkillQ.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,
@@ -683,11 +683,47 @@ CMaterial * Materials::CreatePlayerMagicMaterial(shared_ptr<CCreateMgr> pCreateM
 	return pMaterial;
 }
 
-CMaterial * Materials::CreatePlayerArrowSkillRMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+CMaterial * Materials::CreatePlayerArrowSkillWMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
 {
 	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
 	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2DARRAY, 0) };
-	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Throwing/PlayerArrowSkillR.dds", 0);
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Throwing/PlayerArrowSkillW.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreatePlayerMagicSkillRMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2DARRAY, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Throwing/PlayerMagicSkillR.dds", 0);
+
+	CreateShaderResourceViews(
+		pCreateMgr, pTexture,
+		3, false,
+		pSrvCPUDescriptorStartHandle,
+		pSrvGPUDescriptorStartHandle);
+
+	pMaterial->Initialize(pCreateMgr);
+	pMaterial->SetTexture(pTexture);
+
+	return pMaterial;
+}
+
+CMaterial * Materials::CreatePlayerMagicMaterial(shared_ptr<CCreateMgr> pCreateMgr, D3D12_CPU_DESCRIPTOR_HANDLE * pSrvCPUDescriptorStartHandle, D3D12_GPU_DESCRIPTOR_HANDLE * pSrvGPUDescriptorStartHandle)
+{
+	CMaterial *pMaterial{ new CMaterial(pCreateMgr) };
+	CTexture *pTexture{ new CTexture(1, RESOURCE_TEXTURE_2DARRAY, 0) };
+	pTexture->LoadTextureFromFile(pCreateMgr, L"./Resource/Textures/Player/Throwing/PlayerMagic.dds", 0);
 
 	CreateShaderResourceViews(
 		pCreateMgr, pTexture,

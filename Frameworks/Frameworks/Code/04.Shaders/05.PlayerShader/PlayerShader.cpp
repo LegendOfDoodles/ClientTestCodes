@@ -239,6 +239,14 @@ void CPlayerShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
 	}
 }
 
+void CPlayerShader::SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager)
+{
+	for (int i = 0; i < m_nObjects; ++i)
+	{
+		m_ppObjects[i]->SetThrowingManager(manager);
+	}
+}
+
 void CPlayerShader::SetEffectManagerToObject(shared_ptr<CEffectMgr> manager)
 {
 	for (int i = 0; i < 4; ++i) {

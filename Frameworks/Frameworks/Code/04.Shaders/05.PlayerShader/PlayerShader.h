@@ -4,6 +4,7 @@
 class CMaterial;
 class CHeightMapTerrain;
 class CCollisionManager;
+class CThrowingMgr;
 class CSkeleton;
 
 class CPlayerShader : public CShader
@@ -30,6 +31,7 @@ public: // 공개 함수
 	virtual bool OnProcessKeyInput(UCHAR* pKeyBuffer);
 
 	void SetColManagerToObject(shared_ptr<CCollisionManager> manager);
+	void SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager);
 	void SetEffectManagerToObject(shared_ptr<CEffectMgr> manager);
 	void SetSoundManagerToObject(shared_ptr<CSoundManager> manager);
 	

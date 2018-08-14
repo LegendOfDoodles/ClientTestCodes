@@ -36,83 +36,126 @@ void CPlayer::Animate(float timeElapsed)
 		{
 			SetState(States::Idle);
 		}
-		else if (m_nCurrAnimation == Animations::SkillQ) {
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
+		else if (GetType() == ObjectType::SwordPlayer)
+		{
+			if (m_nCurrAnimation == Animations::SkillQ &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
+			{
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8), 100);
-				// EffectMgr
-				if (GetType() == ObjectType::SwordPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
-					m_pSoundMgr->play(SOUND::Player_Sword_Q_Sound, GetPosition());
-				}
-				else if (GetType() == ObjectType::StaffPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffQSkill_Effect);
-					m_pSoundMgr->play(SOUND::Player_Staff_Q_Sound, GetPosition());
-				}
-				else if (GetType() == ObjectType::BowPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
-					m_pSoundMgr->play(SOUND::Player_Arrow_Q_Sound, GetPosition());
-				}
-			}
-		}
-		else if (m_nCurrAnimation == Animations::SkillW) {
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180, 500);
-				// EffectMgr
-				if (GetType() == ObjectType::SwordPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W_Effect);
-					m_pSoundMgr->play(SOUND::Player_Sword_W_Sound, GetPosition());
-				}
-				else if (GetType() == ObjectType::StaffPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffAttack_Effect);
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_W_Effect);
-					m_pSoundMgr->play(SOUND::Player_Staff_W_Sound, GetPosition());
-				}
-				else if (GetType() == ObjectType::BowPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
-					m_pSoundMgr->play(SOUND::Player_Arrow_W_Sound, GetPosition());
-				}
 
-			}
-		}
-		else if (m_nCurrAnimation == Animations::SkillE) {
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				// EffectMgr
-				if (GetType() == ObjectType::SwordPlayer) 
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_E_Effect);
-				}
-				else if (GetType() == ObjectType::StaffPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffESkill_Effect);
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_E_Effect);
-					m_pSoundMgr->play(SOUND::Player_Staff_E_Sound, GetPosition());
-				}
-				else if (GetType() == ObjectType::BowPlayer)
-				{
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
-				}
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
+				m_pSoundMgr->play(SOUND::Player_Sword_Q_Sound, GetPosition());
 			}
-		}
-		else if (m_nCurrAnimation == Animations::SkillR) {
-			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f
-				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
+			else if (m_nCurrAnimation == Animations::SkillW &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180, 500);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W_Effect);
+				m_pSoundMgr->play(SOUND::Player_Sword_W_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillE &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(16), 150, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_E_Effect);
+			}
+			else if (m_nCurrAnimation == Animations::SkillR &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f)
+			{
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(12), 500);
+
 				// EffectMgr
-				if (GetType() == ObjectType::SwordPlayer)
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_R_Effect);
-				else if (GetType() == ObjectType::StaffPlayer)
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffAttack_Effect);
-				else if (GetType() == ObjectType::BowPlayer)
-					m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_R_Effect);
+			}
+		}
+		else if (GetType() == ObjectType::StaffPlayer)
+		{
+			if (m_nCurrAnimation == Animations::SkillQ &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_MagicSkill_Q, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffQSkill_Effect);
+				m_pSoundMgr->play(SOUND::Player_Staff_Q_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillW &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffAttack_Effect);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_W_Effect);
+				m_pSoundMgr->play(SOUND::Player_Staff_W_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillE &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffESkill_Effect);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffSkill_E_Effect);
+				m_pSoundMgr->play(SOUND::Player_Staff_E_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillR &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) 
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_MagicSkill_R, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_StaffAttack_Effect);
+			}
+		}
+		else if (GetType() == ObjectType::BowPlayer)
+		{
+			if (m_nCurrAnimation == Animations::SkillQ &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_ArrowSkill_Q, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+				m_pSoundMgr->play(SOUND::Player_Arrow_Q_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillW &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_ArrowSkill_W, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+				m_pSoundMgr->play(SOUND::Player_Arrow_W_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillE && 
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_ArrowSkill_E, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
+			}
+			else if (m_nCurrAnimation == Animations::SkillR &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.666f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) 
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_ArrowSkill_R, 100);
+
+				// EffectMgr
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_ArrowAttack_Effect);
 			}
 		}
 		break;
