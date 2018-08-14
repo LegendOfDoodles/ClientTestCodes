@@ -79,7 +79,7 @@ void CFlyingObject::Animate(float timeElapsed)
 
 		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f) != NULL)
 		{ 
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 10.f, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;

@@ -117,11 +117,7 @@ void CScene::ProcessInput()
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
 			m_pSelectedObject->GetTeam(),
-<<<<<<< HEAD
 			FlyingObjectType::Player_Magic,
-=======
-			FlyingObjectType::Player_ArrowSkill_E,
->>>>>>> 용선
 			1000);
 	}
 }

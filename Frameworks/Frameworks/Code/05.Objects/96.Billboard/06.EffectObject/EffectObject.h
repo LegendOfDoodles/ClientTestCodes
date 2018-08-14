@@ -44,6 +44,7 @@ protected: // º¯¼ö
 	float	m_speed{ 0.0f };
 
 	CCollisionObject * m_pMasterObject;
+	bool m_EffectTriger{ false };
 
 	shared_ptr<CCollisionManager> m_pColManager{ NULL };
 	CCamera * m_pCamera{ NULL };
