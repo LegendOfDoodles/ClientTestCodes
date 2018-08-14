@@ -81,7 +81,7 @@ void CFlyingObject::Animate(float timeElapsed)
 				m_SoundTrigier = false;
 			}
 
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 30.f, EffectObjectType::Tower_Attack_Explosion_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 30, EffectObjectType::Tower_Attack_Explosion_Effect);
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
 		}
@@ -92,19 +92,15 @@ void CFlyingObject::Animate(float timeElapsed)
 		m_distance += timeElapsed * m_speed;
 		MoveToDirection(timeElapsed * m_speed);
 
-<<<<<<< HEAD
-		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f, m_TeamType) != NULL)
-=======
 		if (m_SoundTrigier && m_flyingObjectType == FlyingObjectType::Player_ArrowSkill_Q)
 		{
 			m_pSoundMgr->play(SOUND::Flying_PlayerArrow_Sound, GetPosition());
 			m_SoundTrigier = false;
 		}
 
-		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f) != NULL)
->>>>>>> 용선
+		if(m_pColManager->RequestNearObject(this, m_attackRange * 0.5f, m_TeamType) != NULL)
 		{ 
-			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 10.f, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, 10, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 
 			m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_damage);
 			m_curState = StatesType::Remove;
