@@ -165,54 +165,8 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	if (GetAsyncKeyState('L') & 0x0001)
-	{
-		//UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType();
-		//UINT num = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponNum();
-		//num++;
-		//
-		//dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(type, num);
-
-		//m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-		//// 무기에 따라 수정필요
-	}
-	else if (GetAsyncKeyState('1') & 0x0001)
-	{
-		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 1)
-		{
-			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-			m_ppObjects[0]->SetType(ObjectType::SwordPlayer);
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppSwordAni);
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::SwordPlayer, 0);
-			
-			m_ChangeWeapon = true;
-		}
-	}
-	else if (GetAsyncKeyState('2') & 0x0001)
-	{
-		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 2)
-		{
-			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-			m_ppObjects[0]->SetType(ObjectType::StaffPlayer);
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppStaffAni);
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::StaffPlayer, 0);
-			
-			m_ChangeWeapon = true;
-		}
-	}
-	else if (GetAsyncKeyState('3') & 0x0001)
-	{
-		if (UINT type = dynamic_cast<CPlayer*>(m_ppObjects[0])->GetWeaponType() != 3)
-		{
-			m_ppObjects[0]->SetType((ObjectType)m_nWeaponState);
-			m_ppObjects[0]->SetType(ObjectType::BowPlayer);
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ChangeSkillSet(m_ppBowAni);
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->SetWeaponData(ObjectType::BowPlayer, 0);
-
-			m_ChangeWeapon = true;
-		}
-	}
-	else if (GetAsyncKeyState('Q') & 0x0001)
+	
+	if (GetAsyncKeyState('Q') & 0x0001)
 	{
 		dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillQ);
 	}

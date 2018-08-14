@@ -20,7 +20,7 @@ public: // 공개 함수
 	virtual void AnimateObjects(float timeElapsed);
 
 	virtual void Render(CCamera *pCamera);
-	//virtual void RenderShadow(CCamera *pCamera);
+	virtual void RenderShadow(CCamera *pCamera);
 
 	virtual void SetPlayer(CCollisionObject **pPlayer) { m_pPlayer = (CPlayer**)pPlayer; };
 	virtual void SetPlayerCnt(int cnt) { m_nPlayer = cnt; };
@@ -31,6 +31,8 @@ protected: // 내부 함수
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
+
+	D3D12_SHADER_BYTECODE CreateEmissivePixelShader(ComPtr<ID3DBlob>& pShaderBlob);
 
 	virtual D3D12_SHADER_BYTECODE CreateShadowVertexShader(ComPtr<ID3DBlob>& pShaderBlob);
 
@@ -59,6 +61,7 @@ protected: // 변수
 	CSkinnedMesh** m_pArmor{ NULL };
 	CSkinnedMesh** m_pSpecial{ NULL };
 
+	int* m_iEmissiveIndex;
 	int* m_nMeshIndex;
 
 	int m_nMeshCnt{ 0 };

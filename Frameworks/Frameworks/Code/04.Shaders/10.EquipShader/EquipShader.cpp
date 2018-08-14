@@ -124,13 +124,24 @@ void CEquipShader::SetEquipMesh(int playerindex, int equiptype, int equipindex, 
 
 void CEquipShader::Render(CCamera *pCamera)
 {
-
 	for (int i = 0; i < m_nPlayer; ++i) {
 		for (int j = 0; j < m_nPlayerEquipments[i]; j++)
 		{
 			int index = m_arrEquipIndex[i][j];
-			CShader::Render(pCamera, index);
+			CShader::Render(pCamera, index, m_iEmissiveIndex[index]);
 			if (m_ppMaterials)m_ppMaterials[index]->UpdateShaderVariables();
+			m_ppObjects[i * m_nMaxEquip + j]->Render(pCamera);
+		}
+	}
+}
+
+void CEquipShader::RenderShadow(CCamera * pCamera)
+{
+	for (int i = 0; i < m_nPlayer; ++i) {
+		for (int j = 0; j < m_nPlayerEquipments[i]; j++)
+		{
+			int index = m_arrEquipIndex[i][j];
+			CShader::Render(pCamera, index, 2);
 			m_ppObjects[i * m_nMaxEquip + j]->Render(pCamera);
 		}
 	}
@@ -214,7 +225,16 @@ D3D12_SHADER_BYTECODE CEquipShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderB
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
-		"PSBone",
+		"PSEquipment",
+		"ps_5_1",
+		pShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CEquipShader::CreateEmissivePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(
+		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		"PSEquipmentEmissive",
 		"ps_5_1",
 		pShaderBlob));
 }
@@ -230,12 +250,63 @@ D3D12_SHADER_BYTECODE CEquipShader::CreateShadowVertexShader(ComPtr<ID3DBlob>& p
 
 void CEquipShader::CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets, bool isRenderBB, bool isRenderShadow)
 {
+	UNREFERENCED_PARAMETER(isRenderBB);
+	UNREFERENCED_PARAMETER(isRenderShadow);
+
 	m_nPipelineStates = 3;
 
-	m_nHeaps = 28;
+	m_nHeaps = 32;
 	CreateDescriptorHeaps();
 
-	CShader::CreateShader(pCreateMgr, nRenderTargets, isRenderBB, isRenderShadow);
+	m_ppPipelineStates.resize(m_nPipelineStates);
+
+	int index{ 0 };
+	HRESULT hResult;
+	ComPtr<ID3DBlob> pVertexShaderBlob, pPixelShaderBlob;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc;
+	::ZeroMemory(&pipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+
+	pipelineStateDesc.pRootSignature = pCreateMgr->GetGraphicsRootSignature().Get();
+	pipelineStateDesc.VS = CreateVertexShader(pVertexShaderBlob);
+	pipelineStateDesc.PS = CreatePixelShader(pPixelShaderBlob);
+	pipelineStateDesc.RasterizerState = CreateRasterizerState();
+	pipelineStateDesc.BlendState = CreateBlendState();
+	pipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	pipelineStateDesc.InputLayout = CreateInputLayout();
+	pipelineStateDesc.SampleMask = UINT_MAX;
+	pipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	pipelineStateDesc.NumRenderTargets = nRenderTargets;
+	for (UINT i = 0; i < nRenderTargets; i++)
+	{
+		pipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
+	pipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	pipelineStateDesc.SampleDesc.Count = 1;
+	pipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+
+	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&pipelineStateDesc,
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
+	ThrowIfFailed(hResult);
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC EmissivePipelineStateDesc{ pipelineStateDesc };
+	EmissivePipelineStateDesc.PS = CreateEmissivePixelShader(pPixelShaderBlob);
+	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&EmissivePipelineStateDesc,
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
+	ThrowIfFailed(hResult);
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC ShadowPipelineStateDesc{ pipelineStateDesc };
+	ShadowPipelineStateDesc.VS = CreateShadowVertexShader(pVertexShaderBlob);
+	ShadowPipelineStateDesc.PS = CreateShadowPixelShader(pPixelShaderBlob);
+	pipelineStateDesc.RasterizerState = CreateShadowRasterizerState();
+	pipelineStateDesc.NumRenderTargets = 0;
+	pipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
+	hResult = pCreateMgr->GetDevice()->CreateGraphicsPipelineState(
+		&ShadowPipelineStateDesc,
+		IID_PPV_ARGS(m_ppPipelineStates[index++].GetAddressOf()));
+	ThrowIfFailed(hResult);
 }
 
 void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext)
@@ -263,42 +334,81 @@ void CEquipShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContex
 #endif
 	m_nMaterials = m_nHeaps;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
+	m_iEmissiveIndex = new int[m_nMaterials];
+	int matnum = 0;
 	m_ppMaterials[0] = Materials::CreateStickMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_iEmissiveIndex[matnum++] = 0;
 	//검 - 5
 	m_ppMaterials[1] = Materials::CreateSwordMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[1], &m_psrvGPUDescriptorStartHandle[1]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[2] = Materials::CreateMaceMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[2], &m_psrvGPUDescriptorStartHandle[2]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[3] = Materials::CreateBFSwordMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[3], &m_psrvGPUDescriptorStartHandle[3]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[4] = Materials::CreateSawMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[5] = Materials::CreateSabreMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
+	m_iEmissiveIndex[matnum++] = 0;
 	//마법 - 5
 	m_ppMaterials[6] = Materials::CreateStaffMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[7] = Materials::CreateEraserPenMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[8] = Materials::CreateLightingMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[8], &m_psrvGPUDescriptorStartHandle[8]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[9] = Materials::CreateWatchMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[9], &m_psrvGPUDescriptorStartHandle[9]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[10] = Materials::CreateLolipopMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[10], &m_psrvGPUDescriptorStartHandle[10]);
+	m_iEmissiveIndex[matnum++] = 0;
 	//활 - 5
 	m_ppMaterials[11] = Materials::CreateBowMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[11], &m_psrvGPUDescriptorStartHandle[11]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[12] = Materials::CreateCompoundMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[12], &m_psrvGPUDescriptorStartHandle[12]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[13] = Materials::CreateFlightMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[13], &m_psrvGPUDescriptorStartHandle[13]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[14] = Materials::CreateBananaMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[14], &m_psrvGPUDescriptorStartHandle[14]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[15] = Materials::CreateBattleMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[15], &m_psrvGPUDescriptorStartHandle[15]);
+	m_iEmissiveIndex[matnum++] = 0;
 
 	//전사 방어구 - 4
 	m_ppMaterials[16] = Materials::CreateShoulderMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[16], &m_psrvGPUDescriptorStartHandle[16]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[17] = Materials::CreateBulletJaketMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[17], &m_psrvGPUDescriptorStartHandle[17]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[18] = Materials::CreateNikeMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[18], &m_psrvGPUDescriptorStartHandle[18]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[19] = Materials::CreateMedicBoxMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[19], &m_psrvGPUDescriptorStartHandle[19]);
-	
+	m_iEmissiveIndex[matnum++] = 0;
 
+	//마법 방어구 - 4 
 	m_ppMaterials[20] = Materials::CreateShaShackMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[20], &m_psrvGPUDescriptorStartHandle[20]);
+	m_iEmissiveIndex[matnum++] = 1;
 	m_ppMaterials[21] = Materials::CreateMosMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[21], &m_psrvGPUDescriptorStartHandle[21]);
+	m_iEmissiveIndex[matnum++] = 1;
 	m_ppMaterials[22] = Materials::CreateSpringMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[22], &m_psrvGPUDescriptorStartHandle[22]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[23] = Materials::CreateBloodPackMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[23], &m_psrvGPUDescriptorStartHandle[23]);
-
+	m_iEmissiveIndex[matnum++] = 0;
+	//활 방어구 - 4 
 	m_ppMaterials[24] = Materials::CreateMufflerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[24], &m_psrvGPUDescriptorStartHandle[24]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[25] = Materials::CreateLinkClothMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[25], &m_psrvGPUDescriptorStartHandle[25]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[26] = Materials::Create3DidasMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[26], &m_psrvGPUDescriptorStartHandle[26]);
+	m_iEmissiveIndex[matnum++] = 0;
 	m_ppMaterials[27] = Materials::CreateCrossHairMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[27], &m_psrvGPUDescriptorStartHandle[27]);
+	m_iEmissiveIndex[matnum++] = 0;
+	//특수 - 4
+	m_ppMaterials[28] = Materials::CreateGlassesMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[28], &m_psrvGPUDescriptorStartHandle[28]);
+	m_iEmissiveIndex[matnum++] = 0;
+	m_ppMaterials[29] = Materials::CreateSunGlassesMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[29], &m_psrvGPUDescriptorStartHandle[29]);
+	m_iEmissiveIndex[matnum++] = 0;
+	m_ppMaterials[30] = Materials::CreateWinderMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[30], &m_psrvGPUDescriptorStartHandle[30]);
+	m_iEmissiveIndex[matnum++] = 0;
+	m_ppMaterials[31] = Materials::CreateIcecreamMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[31], &m_psrvGPUDescriptorStartHandle[31]);
+	m_iEmissiveIndex[matnum++] = 0;
 
 	m_pStick = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player_Stick.meshinfo");
 
