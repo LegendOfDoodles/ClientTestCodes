@@ -25,10 +25,10 @@ CSkillObject::CSkillObject(shared_ptr<CCreateMgr> pCreateMgr, SkillUIType type) 
 	case GrayWSkill:
 	case GrayESkill:
 	case GrayRSkill:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 711.1f, FRAME_BUFFER_HEIGHT / 400.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 800.f, FRAME_BUFFER_HEIGHT / 450.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
-	case QSkill:
+	case QSkill: 
 	case WSkill:
 	case ESkill:
 	case RSkill:
@@ -128,5 +128,25 @@ void CSkillObject::Render(CCamera * pCamera, UINT istanceCnt)
 
 float CSkillObject::GetCoolTime()
 {
-	return 0.0f;
+	float coolTime = 0.f;
+
+	switch (m_type)
+	{
+	case QSkill:
+		coolTime = m_pMasterObject->GetPlayerStatus()->QSkillCoolTime;
+		break;
+	case WSkill:
+		coolTime = m_pMasterObject->GetPlayerStatus()->WSkillCoolTime;
+		break;
+	case ESkill:
+		coolTime = m_pMasterObject->GetPlayerStatus()->ESkillCoolTime;
+		break;
+	case RSkill:
+		coolTime = m_pMasterObject->GetPlayerStatus()->RSkillCoolTime;
+		break;
+	default:
+		break;
+	}
+
+	return coolTime;
 }
