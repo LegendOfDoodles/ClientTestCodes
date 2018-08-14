@@ -18,9 +18,21 @@ enum class SOUND {
 	Player_Staff_Q_Sound,
 	Player_Staff_W_Sound,
 	Player_Staff_E_Sound,
+	Player_Staff_R_Sound,
 
 	Player_Arrow_Q_Sound,
 	Player_Arrow_W_Sound,
+	Player_Arrow_E_Sound,
+	Player_Arrow_R_Sound,
+
+	TowerAttack_Explosion_Sound,
+
+	Golem_StandardAttack_Sound,
+	Golem_FootrollAttack_Sound,
+	Golem_SpecialAttack_Sound,
+
+	Flying_PlayerArrow_Sound,
+	Flying_PlayerRArrow_Sound
 };
 
 struct Listener {
