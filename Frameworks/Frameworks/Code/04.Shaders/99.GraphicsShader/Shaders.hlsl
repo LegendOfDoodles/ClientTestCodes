@@ -644,7 +644,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_TOON PSBone(VS_TEXTURED_LIGHTING_TOON_OUTPUT i
 
     output.normal = float4(N, 1);
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-    output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = float4(input.positionW, 0);
     output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
@@ -667,7 +667,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_TOON PSEquipment(VS_TEXTURED_LIGHTING_TOON_OUT
 
 	output.normal = float4(N, 1);
 	output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-	output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
 	output.albedo = gMaterials.m_cAlbedo;
 	output.position = float4(input.positionW, 0);
 	output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
@@ -691,7 +691,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSEquipmentEmissive(VS_TEXTURED_LIGHT
 
 	output.normal = float4(N, 1);
 	output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-	output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
 	output.albedo = gMaterials.m_cAlbedo;
 	output.position = float4(input.positionW, 0);
 	output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
