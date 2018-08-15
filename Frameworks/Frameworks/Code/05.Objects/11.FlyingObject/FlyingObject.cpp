@@ -44,7 +44,6 @@ void CFlyingObject::Animate(float timeElapsed)
 			m_SoundTrigier = false;
 		}
 
-
 		if (m_flyingObjectType == FlyingObjectType::Minion_Arrow  && m_EffectTriger)
 		{
 			m_pEffectMgr->RequestSpawn(GetPosition(), m_direction, static_cast<int>(m_maxDistance), EffectObjectType::Flying_MinionArrow_Effect);
