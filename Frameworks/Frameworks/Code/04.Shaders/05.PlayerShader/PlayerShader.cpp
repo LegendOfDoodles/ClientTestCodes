@@ -204,7 +204,6 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 
 	else if (GetAsyncKeyState('1') & 0x0001)
 	{
-		dynamic_cast<CPlayer*>(m_ppObjects[0])->WantFrontLine();
 	}
 
 	return true;

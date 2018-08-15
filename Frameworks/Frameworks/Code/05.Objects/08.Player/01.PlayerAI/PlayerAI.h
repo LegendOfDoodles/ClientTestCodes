@@ -20,6 +20,8 @@ public:	// 외부 함수
 	virtual void Animate(float timeElapsed);
 
 protected: // 내부 함수
+	void PlayAction(int index);
+
 	float GetFrontLineValue();
 	void ReceiveEnemyList();
 	void ReceiveTeamList();
@@ -28,8 +30,9 @@ protected: // 변수
 	std::list<CCollisionObject*>* m_plstEnemy;
 	std::list<CCollisionObject*>* m_plstMyTeam;
 
+	CPlayer* m_pTarget_Enemy;
 	float* m_arrUtilities;
-	int m_nUtilities{ 2 };
+	int m_nUtilities{ 4 };
 
 	float timedelay{ 0 };
 };

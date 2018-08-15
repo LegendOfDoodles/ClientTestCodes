@@ -24,7 +24,6 @@ public:	// 외부 함수
 
 	void SaveCurrentState();
 	void Respawn();
-
 	virtual PlayerInfo* GetPlayerStatus() { return &m_StatusInfo; }
 
 	void SetWeaponChangeTriger(bool triger) { m_ChangeWeapon = triger; }
@@ -39,6 +38,7 @@ public:	// 외부 함수
 		if (m_StatusInfo.HP <= 0) {
 			SetState(States::Die);
 		}
+		m_BattleDelay = 0;
 	}
 	//virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
 	UINT GetWeaponType() { return m_StatusInfo.Weapon; }
@@ -75,10 +75,11 @@ protected: // 변수
 	UINT m_nEquipIndex[4];
 	UINT EquipCnt{ 0 };
 
-
+	
 	XMFLOAT4X4 m_xmf4x4SpawnWorld;	// 생성시 월드 변환 행렬
 	XMFLOAT3 m_spawnLocation;	// 생성 위치
 
+	float m_BattleDelay{ 0 };
 	float m_spawnCoolTime{ 0 };	// 죽은 이후 다시 생성할 때 까지 시간
 };
 

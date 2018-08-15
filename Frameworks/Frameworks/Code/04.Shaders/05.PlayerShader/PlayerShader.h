@@ -25,6 +25,8 @@ public: // 공개 함수
 	virtual void RenderBoundingBox(CCamera *pCamera);
 	virtual void RenderShadow(CCamera *pCamera);
 
+
+
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
@@ -64,5 +66,6 @@ protected: // 변수
 	CHeightMapTerrain * m_pTerrain{ NULL };
 
 	bool m_ChangeWeapon{ false };
+
 
 };
