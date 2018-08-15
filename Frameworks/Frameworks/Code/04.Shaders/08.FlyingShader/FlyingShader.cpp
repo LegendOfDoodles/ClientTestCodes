@@ -9,7 +9,7 @@
 /// 목적: 날아다니는(화살 등) 오브젝트 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-12
+/// 최종 수정 날짜: 2018-08-15
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 		int adjIdx{ idx - m_objectsIndices[adjObjectType].m_begIndex };
 		if (objectType == FlyingObjectType::Roider_Dumbel)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(8), position.z));
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(8), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(4), false)));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[0]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * adjIdx));
 			m_ppObjects[idx]->Rotate(0, RandInRange(0.0f, 360.0f), 0);
@@ -266,14 +266,14 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 		}
 		else if (objectType == FlyingObjectType::Minion_Arrow)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(5), position.z));
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(5), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(2), false)));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[1]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * adjIdx));
 			m_arrowList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == FlyingObjectType::Minion_Magic)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(5), position.z));
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(5), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(2), false)));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[2]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * adjIdx));
 			m_magicList.emplace_back(m_ppObjects[idx]);
@@ -296,7 +296,7 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 			objectType == FlyingObjectType::Player_ArrowSkill_Q ||
 			objectType == FlyingObjectType::Player_ArrowSkill_E)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z));
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(3), false)));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[4]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[5].ptr + (m_srvIncrementSize * adjIdx));
 			m_playerArrowList.emplace_back(m_ppObjects[idx]);
@@ -331,7 +331,7 @@ void CFlyingShader::SpawnFlyingObject(const XMFLOAT3& position, const XMFLOAT3& 
 		}
 		else if (objectType == FlyingObjectType::Player_Magic)
 		{
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z));
+			m_ppObjects[idx]->SetPosition(Vector3::Add(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7), position.z), Vector3::ScalarProduct(direction, CONVERT_PaperUnit_to_InG(3), false)));
 			m_ppObjects[idx]->SetMesh(0, m_pMeshes[2]);
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[9].ptr + (m_srvIncrementSize * adjIdx));
 			m_playerMagicList.emplace_back(m_ppObjects[idx]);

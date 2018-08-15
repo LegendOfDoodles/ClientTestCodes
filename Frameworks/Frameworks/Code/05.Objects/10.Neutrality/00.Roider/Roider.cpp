@@ -136,7 +136,7 @@ void CRoider::PlayIdle(float timeElapsed)
 		}
 	}
 
-	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange,m_TeamType) };
+	CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange, m_TeamType) };
 
 	if (!enemy) return;
 	if (!Chaseable(enemy)) return;

@@ -43,6 +43,8 @@ public: // 공개 함수
 	void SetNextState(StatesType newState) { m_nextState = newState; }
 	void SetEnemy(CCollisionObject* enemy) { m_pEnemy = enemy; }
 
+	virtual void ActiveSkill(AnimationsType act) { act; }
+
 	virtual void SetCollisionManager(shared_ptr<CCollisionManager> manager) { m_pColManager = manager; }
 	void ResetCollisionLevel() {
 		m_xmf2CollisionLevel.x = floor(GetPosition().x / (TERRAIN_SIZE_WIDTH / 5000));

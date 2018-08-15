@@ -5,7 +5,7 @@
 /// 목적: 플레이어 관리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-08-01
+/// 최종 수정 날짜: 2018-08-15
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,17 @@ void CPlayer::Animate(float timeElapsed)
 		}
 		else if (GetType() == ObjectType::SwordPlayer)
 		{
-			if (m_nCurrAnimation == Animations::SkillQ &&
+			if (m_nCurrAnimation == Animations::Attack1 &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
+			{
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(4), 100);
+
+				//// EffectMgr
+				//m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
+				//m_pSoundMgr->play(SOUND::Player_Sword_Q_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillQ &&
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
 				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
 			{
@@ -90,7 +100,17 @@ void CPlayer::Animate(float timeElapsed)
 		}
 		else if (GetType() == ObjectType::StaffPlayer)
 		{
-			if (m_nCurrAnimation == Animations::SkillQ &&
+			if (m_nCurrAnimation == Animations::Attack1 &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_Magic, 100);
+
+				//// EffectMgr
+				//m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
+				//m_pSoundMgr->play(SOUND::Player_Sword_Q_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillQ &&
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
 				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
 			{
@@ -138,7 +158,17 @@ void CPlayer::Animate(float timeElapsed)
 		}
 		else if (GetType() == ObjectType::BowPlayer)
 		{
-			if (m_nCurrAnimation == Animations::SkillQ &&
+			if (m_nCurrAnimation == Animations::Attack1 &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
+			{
+				m_pThrowingMgr->RequestSpawn(GetPosition(), GetLook(), m_TeamType, FlyingObjectType::Player_Arrow, 100);
+
+				//// EffectMgr
+				//m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
+				//m_pSoundMgr->play(SOUND::Player_Sword_Q_Sound, GetPosition());
+			}
+			else if (m_nCurrAnimation == Animations::SkillQ &&
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
 				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) 
 			{
@@ -343,10 +373,10 @@ void CPlayer::SetState(StatesType newState)
 
 void CPlayer::ChangeSkillSet(CSkeleton ** ppskill)
 {
-	for (int j = 0; j < 7; j++)
+	for (int j = 0; j < 8; j++)
 	{
-		m_nAniLength[j+3] = ppskill[j]->GetAnimationLength();
-		m_pSkeleton[j+3] = *ppskill[j];
+		m_nAniLength[j+4] = ppskill[j]->GetAnimationLength();
+		m_pSkeleton[j+4] = *ppskill[j];
 	}
 }
 
@@ -372,26 +402,32 @@ void CPlayer::AdjustAnimationIndex()
 	case Animations::Defeat2:
 		m_nAniIndex = 2;
 		break;
-	case Animations::Idle:
+	case Animations::Die:
 		m_nAniIndex = 3;
 		break;
-	case Animations::StartWalk:
+	case Animations::Idle:
 		m_nAniIndex = 4;
 		break;
-	case Animations::Walking:
+	case Animations::StartWalk:
 		m_nAniIndex = 5;
 		break;
-	case Animations::SkillQ:
+	case Animations::Walking:
 		m_nAniIndex = 6;
 		break;
-	case Animations::SkillW:
+	case Animations::SkillQ:
 		m_nAniIndex = 7;
 		break;
-	case Animations::SkillE:
+	case Animations::SkillW:
 		m_nAniIndex = 8;
 		break;
-	case Animations::SkillR:
+	case Animations::SkillE:
 		m_nAniIndex = 9;
+		break;
+	case Animations::SkillR:
+		m_nAniIndex = 10;
+		break;
+	case Animations::Attack1:
+		m_nAniIndex = 11;
 		break;
 	}
 }

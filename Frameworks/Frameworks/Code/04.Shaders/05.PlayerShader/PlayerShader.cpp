@@ -12,7 +12,7 @@
 /// 목적: 플레이어 관리 및 렌더링 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-08-15
 /// </summary>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,32 +166,36 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float M = 0.0f;
 
 	
-	if (GetAsyncKeyState('Q') & 0x0001)
+	if (GetAsyncKeyState('A') & 0x0001)
+	{
+		m_ppObjects[0]->ActiveSkill(AnimationsType::Attack1);
+	}
+	else if (GetAsyncKeyState('Q') & 0x0001)
 	{
 		if (m_ppObjects[0]->GetPlayerStatus()->QSkillCoolTime >= 1.f)
 		{
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillQ);
+			m_ppObjects[0]->ActiveSkill(AnimationsType::SkillQ);
 		}
 	}
 	else if (GetAsyncKeyState('W') & 0x0001)
 	{
 		if (m_ppObjects[0]->GetPlayerStatus()->WSkillCoolTime >= 1.f)
 		{
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillW);
+			m_ppObjects[0]->ActiveSkill(AnimationsType::SkillW);
 		}
 	}
 	else if (GetAsyncKeyState('E') & 0x0001)
 	{
 		if (m_ppObjects[0]->GetPlayerStatus()->ESkillCoolTime >= 1.f)
 		{
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillE);
+			m_ppObjects[0]->ActiveSkill(AnimationsType::SkillE);
 		}
 	}
 	else if (GetAsyncKeyState('R') & 0x0001)
 	{
 		if (m_ppObjects[0]->GetPlayerStatus()->RSkillCoolTime >= 1.f)
 		{
-			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillR);
+			m_ppObjects[0]->ActiveSkill(AnimationsType::SkillR);
 		}
 	}
 
@@ -374,22 +378,23 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CSkeleton *pWin = new CSkeleton("Resource//3D//Player//Animation//Player_Win.aniinfo");
 	CSkeleton *pDefeat = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat.aniinfo");
 	CSkeleton *pDefeat2 = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat2.aniinfo");
+	CSkeleton *pDie = new CSkeleton("Resource//3D//Player//Animation//Player_Die.aniinfo");
 	//new CSkeleton("Resource//3D//Player//Animation//Player_Die.aniinfo"); 플레이어 죽음
 	//new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Attack.aniinfo"); 칼 공격
 
-	m_ppSwordAni = new CSkeleton*[7];
+	m_ppSwordAni = new CSkeleton*[8];
 
 	m_ppSwordAni[0] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
 	m_ppSwordAni[1]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
 	m_ppSwordAni[2]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
 	
-	
 	m_ppSwordAni[3]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
 	m_ppSwordAni[4]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
 	m_ppSwordAni[5] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dash.aniinfo");
 	m_ppSwordAni[6]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dispute.aniinfo");
+	m_ppSwordAni[7] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Attack.aniinfo");
 
-	m_ppStaffAni = new CSkeleton*[7];
+	m_ppStaffAni = new CSkeleton*[8];
 
 	m_ppStaffAni[0] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Idle.aniinfo");
 	//임시
@@ -402,15 +407,15 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppStaffAni[4] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillB.aniinfo");
 	m_ppStaffAni[5] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillC.aniinfo");
 	m_ppStaffAni[6] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillD.aniinfo");
+	m_ppStaffAni[7] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Attack.aniinfo");
 
-	m_ppBowAni = new CSkeleton*[7];
+	m_ppBowAni = new CSkeleton*[8];
 
 	m_ppBowAni[0] = new CSkeleton("Resource//3D//Player//Animation//Bow//Player_Bow_Idle.aniinfo");
 	m_ppBowAni[1] = new CSkeleton("Resource//3D//Player//Animation//Bow//Player_Bow_Start_Walk.aniinfo");
 	m_ppBowAni[2] = new CSkeleton("Resource//3D//Player//Animation//Bow//Player_Bow_Walk.aniinfo");
 	m_ppBowAni[3] = new CSkeleton("Resource//3D//Player//Animation//Bow//Player_Bow_Attack.aniinfo");
-
-	for (int j = 4; j < 7; ++j) {
+	for (int j = 4; j < 8; ++j) {
 		m_ppBowAni[j] = m_ppBowAni[3];
 	}
 
@@ -449,6 +454,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->SetSkeleton(pWin);
 			pPlayer->SetSkeleton(pDefeat);
 			pPlayer->SetSkeleton(pDefeat2);
+			pPlayer->SetSkeleton(pDie);
 
 			pPlayer->SetSkeleton(m_ppSwordAni[0]);
 			pPlayer->SetSkeleton(m_ppSwordAni[1]);
@@ -458,6 +464,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->SetSkeleton(m_ppSwordAni[4]);
 			pPlayer->SetSkeleton(m_ppSwordAni[5]);
 			pPlayer->SetSkeleton(m_ppSwordAni[6]);
+			pPlayer->SetSkeleton(m_ppSwordAni[7]);
 			
 
 			pPlayer->SetTerrain(m_pTerrain);

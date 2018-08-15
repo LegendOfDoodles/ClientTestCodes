@@ -290,6 +290,7 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 
 	for (i = curList->begin(); i != curList->end(); ++i)
 	{
+		if ((*i)->GetTeam() == type) continue;
 		if (((*i)->GetType() < 4 && player) || !player)
 		{
 			XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
