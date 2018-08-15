@@ -222,6 +222,7 @@
 
 // 쿨타임 정보
 // 플레이어 관련
+#define COOLTIME_SPAWN_PLAYER 10.0f
 
 // 몬스터 관련
 #define COOLTIME_SPAWN_ROIDER 10.0f

@@ -629,7 +629,7 @@ void CScene::GenerateLayEndWorldPosition(XMFLOAT3& pickPosition, XMFLOAT4X4&	 xm
 
 	m_pickWorldPosition = Vector3::Add(camPosition, Vector3::ScalarProduct(layDirection, yDiff, false));
 
-	if (m_pSelectedObject)
+	if (m_pSelectedObject && (m_pSelectedObject->GetState() != States::Die && m_pSelectedObject->GetState() != States::Remove))
 	{
 		m_pSelectedObject->LookAt(m_pickWorldPosition);
 		m_pSelectedObject->SetPathToGo(m_pWayFinder->GetPathToPosition(

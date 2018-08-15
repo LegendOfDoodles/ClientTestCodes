@@ -234,10 +234,9 @@ void CPlayer::Animate(float timeElapsed)
 		}
 		break;
 	case States::Die:
-		if (m_nCurrAnimation != Animations::Die) m_nCurrAnimation = Animations::Die;
 		if (GetAnimTimeRemainRatio() < 0.05)
 		{
-			m_curState = States::Remove;
+			SetState(States::Remove);
 		}
 		break;
 	case States::Win:
@@ -256,14 +255,22 @@ void CPlayer::Animate(float timeElapsed)
 			}
 		}
 		break;
+	case States::Remove:
+		m_spawnCoolTime -= timeElapsed;
+		if (m_spawnCoolTime < 0.0f)
+		{
+			Respawn();
+		}
+		break;
 	default:
 		break;
 	}
 
-	m_fPreFrameTime = m_fFrameTime;
-	m_fFrameTime += ANIMATION_SPEED * timeElapsed;
-
-	
+	if (m_curState != States::Remove)
+	{
+		m_fPreFrameTime = m_fFrameTime;
+		m_fFrameTime += ANIMATION_SPEED * timeElapsed;
+	}
 
 	m_StatusInfo.QSkillCoolTime = min(m_StatusInfo.QSkillCoolTime += timeElapsed * 0.1f, 1.f);
 	m_StatusInfo.WSkillCoolTime = min(m_StatusInfo.WSkillCoolTime += timeElapsed * 0.1f, 1.f);
@@ -352,6 +359,7 @@ void CPlayer::SetState(StatesType newState)
 	case States::Die:
 		m_nCurrAnimation = Animations::Die;
 		m_fFrameTime = 0;
+		m_spawnCoolTime = COOLTIME_SPAWN_PLAYER + static_cast<float>(m_StatusInfo.Level);
 		SetPathToGo(NULL);
 		break;
 	case States::Remove:
@@ -378,6 +386,23 @@ void CPlayer::ChangeSkillSet(CSkeleton ** ppskill)
 		m_nAniLength[j+4] = ppskill[j]->GetAnimationLength();
 		m_pSkeleton[j+4] = *ppskill[j];
 	}
+}
+
+void CPlayer::SaveCurrentState()
+{
+	m_xmf4x4SpawnWorld = m_xmf4x4World;
+	m_spawnLocation = GetPosition();
+}
+
+void CPlayer::Respawn()
+{
+	SetState(StatesType::Idle);
+
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
+
+	m_pColManager->AddCollider(this);
+
+	m_xmf4x4World = m_xmf4x4SpawnWorld;
 }
 
 void CPlayer::WantFrontLine()

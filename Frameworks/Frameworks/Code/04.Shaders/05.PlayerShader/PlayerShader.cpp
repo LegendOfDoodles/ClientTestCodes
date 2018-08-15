@@ -160,6 +160,8 @@ CBaseObject *CPlayerShader::PickObjectByRayIntersection(
 
 bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 {
+	if (m_ppObjects[0]->GetState() == States::Die || m_ppObjects[0]->GetState() == States::Remove) return true;
+
 	UNREFERENCED_PARAMETER(pKeyBuffer);
 
 	static float R = 0.0f;
@@ -472,6 +474,8 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->Rotate(90, 0, 0);
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps-1].ptr + (incrementSize * i));
+
+			pPlayer->SaveCurrentState();
 			m_ppObjects[i++] = pPlayer;
 		}
 	}
