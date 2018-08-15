@@ -25,8 +25,14 @@ public:
 	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0,float damage=0);
 	
 	CCollisionObject* RequestNearObject(CCollisionObject* pCol,float lengh, TeamType type,bool player=false);
+	
+	
 	PlayerInfo* NearFightingValue(CCollisionObject* pCol, TeamType type);
 	XMFLOAT2 GetFrontLinePosition(int line,TeamType type);
+	std::list<CCollisionObject*>* GetEnemyList(CCollisionObject* pCol, TeamType type);
+	std::list<CCollisionObject*>* GetTeamList(CCollisionObject* pCol, TeamType type);
+	
+	
 	~CCollisionManager();
 	int(*GetFoW(void))[NODE_HEIGHT];
 
@@ -64,5 +70,9 @@ protected:
 	
 	std::list<CCollisionObject*> m_lstBlueSight;
 	std::list<CCollisionObject*> m_lstRedSight;
+
+	std::list<CCollisionObject*> m_lstReturn;
+
+
 };
 

@@ -3,6 +3,7 @@
 #include "05.Objects/03.AnimatedObject/AnimatedObject.h"
 #include "05.Objects/06.Minion/Minion.h"
 #include "05.Objects/08.Player/Player.h"
+#include "05.Objects/08.Player/01.PlayerAI/PlayerAI.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/99.Material/Material.h"
 #include "05.Objects/04.Terrain/HeightMapTerrain.h"
@@ -106,7 +107,7 @@ void CPlayerShader::AnimateObjects(float timeElapsed)
 
 void CPlayerShader::Render(CCamera *pCamera)
 {
-	CShader::Render(pCamera,0);
+	CShader::Render(pCamera, 0);
 	if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 
 	for (int j = 0; j < m_nObjects; j++)
@@ -167,7 +168,7 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	static float R = 0.0f;
 	static float M = 0.0f;
 
-	
+
 	if (GetAsyncKeyState('A') & 0x0001)
 	{
 		m_ppObjects[0]->ActiveSkill(AnimationsType::Attack1);
@@ -205,7 +206,7 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 	{
 		dynamic_cast<CPlayer*>(m_ppObjects[0])->WantFrontLine();
 	}
-	
+
 	return true;
 }
 
@@ -343,14 +344,14 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	m_nObjects = 4;
 	m_ppObjects = new CCollisionObject*[m_nObjects];
-	
+
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	
+
 	int accCnt{ 0 };
 
-	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects*2, true, ncbElementBytes, m_nObjects);
+	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects * 2, true, ncbElementBytes, m_nObjects);
 	for (int i = 0; i < m_nHeaps - 1; ++i)
 	{
 		CreateCbvAndSrvDescriptorHeaps(pCreateMgr, m_nObjects, 1, i);
@@ -364,11 +365,11 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 
 #if USE_BATCH_MATERIAL
-	
+
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
-	m_nMaterials = m_nHeaps-1;
+	m_nMaterials = m_nHeaps - 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = Materials::CreatePlayerMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	CSkinnedMesh *pPlayerMesh = new CSkinnedMesh(pCreateMgr, "Resource//3D//Player//Mesh//Player.meshinfo");
@@ -376,7 +377,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CCubeMesh *pBoundingBoxMesh = new CCubeMesh(pCreateMgr,
 		CONVERT_PaperUnit_to_InG(2.0f), CONVERT_PaperUnit_to_InG(1.0f), CONVERT_PaperUnit_to_InG(10.0f),
 		0, 0, -CONVERT_PaperUnit_to_InG(6.5f));
-	
+
 	CSkeleton *pWin = new CSkeleton("Resource//3D//Player//Animation//Player_Win.aniinfo");
 	CSkeleton *pDefeat = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat.aniinfo");
 	CSkeleton *pDefeat2 = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat2.aniinfo");
@@ -387,13 +388,13 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppSwordAni = new CSkeleton*[8];
 
 	m_ppSwordAni[0] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
-	m_ppSwordAni[1]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
-	m_ppSwordAni[2]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
-	
-	m_ppSwordAni[3]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
-	m_ppSwordAni[4]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
+	m_ppSwordAni[1] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
+	m_ppSwordAni[2] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
+
+	m_ppSwordAni[3] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
+	m_ppSwordAni[4] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
 	m_ppSwordAni[5] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dash.aniinfo");
-	m_ppSwordAni[6]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dispute.aniinfo");
+	m_ppSwordAni[6] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dispute.aniinfo");
 	m_ppSwordAni[7] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Attack.aniinfo");
 
 	m_ppStaffAni = new CSkeleton*[8];
@@ -403,7 +404,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppStaffAni[1] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
 	m_ppStaffAni[2] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
 	///////////////////////////////////////////////////////
-	
+
 	//new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Attack.aniinfo");마법 공격
 	m_ppStaffAni[3] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillA.aniinfo");
 	m_ppStaffAni[4] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillB.aniinfo");
@@ -433,8 +434,12 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	for (int x = 0; x < m_nObjects / 2; ++x) {
 		for (int z = 0; z < m_nObjects / 2; ++z) {
-
-			pPlayer = new CPlayer(pCreateMgr, 1);
+			if (z == 0 && x == 0) {
+				pPlayer = new CPlayerAI(pCreateMgr, 1);
+			}
+			else {
+				pPlayer = new CPlayer(pCreateMgr, 1);
+			}
 			pPlayer->SetMesh(0, pPlayerMesh);
 
 			pPlayer->SetType(ObjectType::StickPlayer);
@@ -443,7 +448,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 #endif
 			pPlayer->SetBoundingMesh(pBoundingBoxMesh);
 			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
-			
+
 			pPlayer->tag = i;
 			pPlayer->CBaseObject::SetPosition(500.0f + (z * 9000.0f), 0.0f, 2000.0f + (x * 1000.0f));
 			if (z == 1) {
@@ -467,13 +472,13 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->SetSkeleton(m_ppSwordAni[5]);
 			pPlayer->SetSkeleton(m_ppSwordAni[6]);
 			pPlayer->SetSkeleton(m_ppSwordAni[7]);
-			
+
 
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
-			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps-1].ptr + (incrementSize * i));
+			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps - 1].ptr + (incrementSize * i));
 
 			pPlayer->SaveCurrentState();
 			m_ppObjects[i++] = pPlayer;
@@ -512,7 +517,7 @@ void CPlayerShader::ReleaseObjects()
 	Safe_Delete_Array(m_ppBowAni);
 	//////////////////////////////////////
 	//메쉬
-	
+
 
 	///////////////////////////////////////
 #if USE_BATCH_MATERIAL
@@ -520,7 +525,7 @@ void CPlayerShader::ReleaseObjects()
 	{
 		for (int i = 0; i < m_nMaterials; ++i)
 		{
-			if(m_ppMaterials[i]) Safe_Delete(m_ppMaterials[i]);
+			if (m_ppMaterials[i]) Safe_Delete(m_ppMaterials[i]);
 		}
 		Safe_Delete_Array(m_ppMaterials);
 	}

@@ -269,7 +269,7 @@ void CPlayer::Animate(float timeElapsed)
 	if (m_curState != States::Remove)
 	{
 		m_fPreFrameTime = m_fFrameTime;
-		m_fFrameTime += ANIMATION_SPEED * timeElapsed;
+		m_fFrameTime += ANIMATION_SPEED* timeElapsed;
 	}
 
 	m_StatusInfo.QSkillCoolTime = min(m_StatusInfo.QSkillCoolTime += timeElapsed * 0.1f, 1.f);

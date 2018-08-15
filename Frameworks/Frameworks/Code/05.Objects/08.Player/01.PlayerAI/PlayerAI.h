@@ -15,9 +15,22 @@ public:	// 외부 함수
 	void RetreatFromFight(float timeElapsed);	// 후퇴
 	void AvoidAttack(float timeElapsed);		// 공격 회피
 	void ChaseEnemy(float timeElapsed);		// 공격 회피
+	void CaculateUtility();
+
+	virtual void Animate(float timeElapsed);
 
 protected: // 내부 함수
-
+	float GetFrontLineValue();
+	void ReceiveEnemyList();
+	void ReceiveTeamList();
+	std::list<CCollisionObject*> EnemyWithinRange();
 protected: // 변수
+	std::list<CCollisionObject*>* m_plstEnemy;
+	std::list<CCollisionObject*>* m_plstMyTeam;
+
+	float* m_arrUtilities;
+	int m_nUtilities{ 2 };
+
+	float timedelay{ 0 };
 };
 

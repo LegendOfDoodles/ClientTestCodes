@@ -46,14 +46,13 @@ public:	// 외부 함수
 
 	UINT GetSpecialCnt() { return m_StatusInfo.SpecialPoint; }
 	SpecialType* GetSpecialIndext() { return m_StatusInfo.Special;}
-	UINT GetEquipCnt() { return m_StatusInfo.EquipCnt; }
+	UINT GetEquipCnt() { return EquipCnt; }
 
 	UINT* GetEquipIndex() { return m_nEquipIndex; }
 
-	void WantFrontLine();
 
 	void AddEquipCnt(UINT equiptype, UINT specialnum) {
-		m_nEquipIndex[m_StatusInfo.EquipCnt++] = equiptype * 4 + specialnum;
+		m_nEquipIndex[EquipCnt++] = equiptype * 4 + specialnum;
 		//0123 방어 4567 특수
 	}
 	
@@ -72,7 +71,10 @@ protected: // 내부 함수
 protected: // 변수
 	PlayerInfo m_StatusInfo;
 	bool m_ChangeWeapon{ false };
+
 	UINT m_nEquipIndex[4];
+	UINT EquipCnt{ 0 };
+
 
 	XMFLOAT4X4 m_xmf4x4SpawnWorld;	// 생성시 월드 변환 행렬
 	XMFLOAT3 m_spawnLocation;	// 생성 위치
