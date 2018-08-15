@@ -462,7 +462,6 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_pEffectMgr->SetEffectShader(static_cast<CEffectShader*>(Eeffect_Shader));
 	m_pFSMMgr = shared_ptr<CFSMMgr>(new CFSMMgr(m_pWayFinder));
 	((CMinimapShader*)Minimap_Shader)->SetWayFinder(m_pWayFinder);
-	((CPlayerShader*)m_ppShaders[3])->SetWayFinder(m_pWayFinder);
 	m_pSoundManager = shared_ptr<CSoundManager>(new CSoundManager(m_pCamera));	// Fmod System Init
 	m_pSoundManager->loading();		// Sound File Load
 	

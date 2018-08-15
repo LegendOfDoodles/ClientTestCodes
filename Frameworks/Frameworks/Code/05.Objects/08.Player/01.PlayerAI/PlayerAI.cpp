@@ -163,6 +163,7 @@ void CPlayerAI::PlayAction(int index)
 
 		break;
 	case 2://후퇴
+
 		break;
 	case 3://라인전
 
