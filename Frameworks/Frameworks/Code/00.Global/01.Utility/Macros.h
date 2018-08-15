@@ -109,6 +109,10 @@
 //방어력 적용 공식----------------
 #define Compute_Defence(val) (100)/(100+val)
 
+//전투력 측정
+
+#define Compute_Fighting_Value(HP,Att,Def) HP+ (Att * 10.0f) + (Def * 5.0f) 
+
 
 // 플레이어 무기별 증가량-----------
 // 체력

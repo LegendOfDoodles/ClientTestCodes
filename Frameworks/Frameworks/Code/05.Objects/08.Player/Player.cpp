@@ -350,6 +350,12 @@ void CPlayer::ChangeSkillSet(CSkeleton ** ppskill)
 	}
 }
 
+void CPlayer::WantFrontLine()
+{
+ 	XMFLOAT2 xmf2Pos=m_pColManager->GetFrontLinePosition(0, m_TeamType);
+	
+	printf("%f, %f\n",xmf2Pos.x, xmf2Pos.y);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수

@@ -23,7 +23,10 @@ public:
 	void AddCollider(CCollisionObject* pcol);
 	void Update(shared_ptr<CWayFinder> pWayFinder);
 	void RequestCollide(CollisionType type, CCollisionObject* pCol, float data1 = 0, float data2 = 0,float damage=0);
-	CCollisionObject* RequestNearObject(CCollisionObject* pCol,float lengh, TeamType type);
+	
+	CCollisionObject* RequestNearObject(CCollisionObject* pCol,float lengh, TeamType type,bool player=false);
+	PlayerInfo* NearFightingValue(CCollisionObject* pCol, TeamType type);
+	XMFLOAT2 GetFrontLinePosition(int line,TeamType type);
 	~CCollisionManager();
 	int(*GetFoW(void))[NODE_HEIGHT];
 

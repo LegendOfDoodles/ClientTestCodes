@@ -2,6 +2,7 @@
 #include "CollisionManager.h"
 #include "05.Objects/02.CollisionObject/CollisionObject.h"
 #include "00.Global/01.Utility/04.WayFinder/WayFinder.h"
+#include "05.Objects/08.Player/Player.h"
 
 CCollisionManager::CCollisionManager()
 {
@@ -120,7 +121,8 @@ void CCollisionManager::Update(shared_ptr<CWayFinder> pWayFinder)
 					dir, startLength, (*i)->GetTeam());
 			}
 		}
-
+		m_lstBlueSight.clear();
+		m_lstRedSight.clear();
 		for (auto i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 		{
 			XMFLOAT2 pos;
@@ -180,7 +182,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					TeamType b = pCol->GetTeam();
 					if (a != b) {
 
-						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()),true)
+						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()), true)
 						{
 							XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
 							XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
@@ -207,8 +209,8 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10.f, EffectObjectType::NormallHit_Effect);
 									}
 								}
-								
-									
+
+
 
 								//std::cout << "col\n";
 								(*i)->ReceiveDamage(damage);
@@ -230,7 +232,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 					TeamType a = (*i)->GetTeam();
 					TeamType b = pCol->GetTeam();
 					if (a != b) {
-						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()),true)
+						if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()), true)
 						{
 							XMFLOAT3 apos = (*i)->GetPosition();
 							XMFLOAT3 bpos = pCol->GetPosition();
@@ -266,7 +268,7 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 	}
 }
 
-CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh, TeamType type)
+CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, float lengh, TeamType type, bool player)
 {
 	if (m_Winner != TeamType::None) return NULL;
 
@@ -279,36 +281,88 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 		curList = &m_lstRedSight;
 	}
 	else if (type == TeamType::Blue)
+	{
 		curList = &m_lstBlueSight;
+		int n = curList->size();
+	}
 	else
 		curList = &m_lstColliders;
 
 	for (i = curList->begin(); i != curList->end(); ++i)
 	{
-
-		if ((*i) != pCol && (*i)->GetTeam() != pCol->GetTeam()) {
-			if (NearLevel((*i)->GetCollisionLevel(), pCol->GetCollisionLevel()), true)
+		if (((*i)->GetType() < 4 && player) || !player)
+		{
+			XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
+			XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
+			float distance = Vector2::Distance(apos, bpos);
+			if (distance <= lengh)
 			{
-				XMFLOAT2 apos = XMFLOAT2((*i)->GetPosition().x, (*i)->GetPosition().z);
-				XMFLOAT2 bpos = XMFLOAT2(pCol->GetPosition().x, pCol->GetPosition().z);
-				float distance = Vector2::Distance(apos, bpos);
-				if (distance <= lengh)
-				{
-					if (!nearObject) {
-						nearDistance = distance;
-						nearObject = (*i);
-					}
-					else if (nearDistance > distance) {
-						nearDistance = distance;
-						nearObject = (*i);
-						//std::cout << "col\n";
-					}
+				if (!nearObject) {
+					nearDistance = distance;
+					nearObject = (*i);
+				}
+				else if (nearDistance > distance) {
+					nearDistance = distance;
+					nearObject = (*i);
+					//std::cout << "col\n";
 				}
 			}
 		}
 	}
 	return nearObject;
 }
+
+//가장 가까운 적플레이어의 전투력
+PlayerInfo* CCollisionManager::NearFightingValue(CCollisionObject * pCol, TeamType type)
+{
+	CCollisionObject* pObj = RequestNearObject(pCol, pCol->GetDetectRange(), type, true);
+	if (!pObj)return NULL;
+	PlayerInfo* info = (dynamic_cast<CPlayer*>(pObj))->GetPlayerStatus();
+
+	return info;
+}
+
+XMFLOAT2 CCollisionManager::GetFrontLinePosition(int line, TeamType type)
+{
+	XMFLOAT2 xmf3Return;
+
+	CCollisionObject* FrontObject{ NULL };
+	std::list<CCollisionObject*>::iterator i;
+	std::list<CCollisionObject*>* curList;
+
+	curList = &m_lstColliders;
+
+
+	for (i = curList->begin(); i != curList->end(); ++i)
+	{
+		if ((*i)->GetTeam() == type&& (*i)->GetType() >= 4&& (*i)->GetType() <= 6) {
+
+			if ((line == 0 && (*i)->GetPosition().z <= 2500) || (line == 1 && (*i)->GetPosition().z >= 2500))//라인 판별
+			{
+				continue;
+			}
+
+			if (!FrontObject) 
+			{
+				FrontObject = (*i);
+			}
+			else if (type == TeamType::Blue && (FrontObject->GetPosition().x < (*i)->GetPosition().x)) 
+			{
+				FrontObject = (*i);
+			}
+			else if(type == TeamType::Red && (FrontObject->GetPosition().x > (*i)->GetPosition().x))
+			{
+				FrontObject = (*i);
+			}
+		}
+	}
+	if (!FrontObject)
+		return XMFLOAT2(0, 0);
+	else
+		return XMFLOAT2(FrontObject->GetPosition().x, FrontObject->GetPosition().z);
+}
+
+
 
 /*
 	1 0  7
@@ -380,7 +434,7 @@ void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int slength, Tea
 		if (isBuilding) {
 			buildingout = false;
 		}
-		else 
+		else
 			buildingout = true;
 
 		for (int j = 1; j < slength; ++j) {
@@ -403,7 +457,7 @@ void CCollisionManager::SearchSight(XMFLOAT2 startpos, int dir, int slength, Tea
 				{
 					m_BlueSight[(int)result.x][(int)result.y].Detected = true;
 					if (m_BlueSight[(int)result.x][(int)result.y].Static == true) {
-						if(buildingout)
+						if (buildingout)
 						{
 							for (int x = -2; x < 3; ++x) {
 								for (int y = -2; y < 3; ++y) {

@@ -194,6 +194,11 @@ bool CPlayerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
 			dynamic_cast<CPlayer*>(m_ppObjects[0])->ActiveSkill(AnimationsType::SkillR);
 		}
 	}
+
+	else if (GetAsyncKeyState('1') & 0x0001)
+	{
+		dynamic_cast<CPlayer*>(m_ppObjects[0])->WantFrontLine();
+	}
 	
 	return true;
 }
@@ -369,12 +374,16 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	CSkeleton *pWin = new CSkeleton("Resource//3D//Player//Animation//Player_Win.aniinfo");
 	CSkeleton *pDefeat = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat.aniinfo");
 	CSkeleton *pDefeat2 = new CSkeleton("Resource//3D//Player//Animation//Player_Defeat2.aniinfo");
+	//new CSkeleton("Resource//3D//Player//Animation//Player_Die.aniinfo"); 플레이어 죽음
+	//new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Attack.aniinfo"); 칼 공격
 
 	m_ppSwordAni = new CSkeleton*[7];
 
 	m_ppSwordAni[0] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Idle.aniinfo");
 	m_ppSwordAni[1]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
 	m_ppSwordAni[2]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
+	
+	
 	m_ppSwordAni[3]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Smash.aniinfo");
 	m_ppSwordAni[4]= new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Slash.aniinfo");
 	m_ppSwordAni[5] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Dash.aniinfo");
@@ -387,7 +396,8 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	m_ppStaffAni[1] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
 	m_ppStaffAni[2] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
 	///////////////////////////////////////////////////////
-
+	
+	//new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Attack.aniinfo");마법 공격
 	m_ppStaffAni[3] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillA.aniinfo");
 	m_ppStaffAni[4] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillB.aniinfo");
 	m_ppStaffAni[5] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_SkillC.aniinfo");
@@ -418,7 +428,6 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 		for (int z = 0; z < m_nObjects / 2; ++z) {
 
 			pPlayer = new CPlayer(pCreateMgr, 1);
-			pPlayer->SetMaterial(m_ppMaterials[0]);
 			pPlayer->SetMesh(0, pPlayerMesh);
 
 			pPlayer->SetType(ObjectType::StickPlayer);
@@ -428,7 +437,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->SetBoundingMesh(pBoundingBoxMesh);
 			pPlayer->SetCollisionSize(CONVERT_PaperUnit_to_InG(3));
 			
-				pPlayer->tag = i;
+			pPlayer->tag = i;
 			pPlayer->CBaseObject::SetPosition(500.0f + (z * 9000.0f), 0.0f, 2000.0f + (x * 1000.0f));
 			if (z == 1) {
 				pPlayer->SetTeam(TeamType::Red);
