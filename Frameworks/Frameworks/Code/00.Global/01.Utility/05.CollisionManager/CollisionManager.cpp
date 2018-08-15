@@ -202,18 +202,13 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 											|| pCol->GetFlyingObjectsType() == FlyingObjectType::BlueTower_Attack
 											|| pCol->GetFlyingObjectsType() == FlyingObjectType::RedTower_Attack))
 									{
-										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10.f, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
+										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10, EffectObjectType::Player_ArrowAndFireBall_HitPosition_Effect);
 									}
 									else
 									{
-										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10.f, EffectObjectType::NormallHit_Effect);
+										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10, EffectObjectType::NormallHit_Effect);
 									}
 								}
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 용선
 
 								//std::cout << "col\n";
 								(*i)->ReceiveDamage(damage);
@@ -328,8 +323,6 @@ PlayerInfo* CCollisionManager::NearFightingValue(CCollisionObject * pCol, TeamTy
 
 XMFLOAT2 CCollisionManager::GetFrontLinePosition(int line, TeamType type)
 {
-	XMFLOAT2 xmf3Return;
-
 	CCollisionObject* FrontObject{ NULL };
 	std::list<CCollisionObject*>::iterator i;
 	std::list<CCollisionObject*>* curList;
