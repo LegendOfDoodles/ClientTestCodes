@@ -233,8 +233,6 @@ void CPlayer::Animate(float timeElapsed)
 	m_fPreFrameTime = m_fFrameTime;
 	m_fFrameTime += ANIMATION_SPEED * timeElapsed;
 
-	
-
 	m_StatusInfo.QSkillCoolTime = min(m_StatusInfo.QSkillCoolTime += timeElapsed * 0.1f, 1.f);
 	m_StatusInfo.WSkillCoolTime = min(m_StatusInfo.WSkillCoolTime += timeElapsed * 0.1f, 1.f);
 	m_StatusInfo.ESkillCoolTime = min(m_StatusInfo.ESkillCoolTime += timeElapsed * 0.1f, 1.f);

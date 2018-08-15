@@ -207,8 +207,6 @@ void CCollisionManager::RequestCollide(CollisionType type, CCollisionObject * pC
 										m_pEffectMgr->RequestSpawn((*i)->GetPosition(), pCol->GetLook(), 10.f, EffectObjectType::NormallHit_Effect);
 									}
 								}
-								
-									
 
 								//std::cout << "col\n";
 								(*i)->ReceiveDamage(damage);

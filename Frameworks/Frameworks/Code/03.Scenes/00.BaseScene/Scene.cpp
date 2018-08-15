@@ -120,6 +120,20 @@ void CScene::ProcessInput()
 			FlyingObjectType::Player_Magic,
 			1000);
 	}
+
+	if (m_pSelectedObject && GetAsyncKeyState('L') & 0x0001)
+	{
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetLook(),
+			30,
+			EffectObjectType::Player_LevelUp_CircleEffect);
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetLook(),
+			30,
+			EffectObjectType::Player_LevelUp_ArrowEffect);
+	}
 }
 
 void CScene::AnimateObjects(float timeElapsed)
@@ -476,8 +490,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	}
 	pPlayerS->SetColManagerToObject(m_pCollisionManager);
 	pPlayerS->SetEffectManagerToObject(m_pEffectMgr);
-	pPlayerS->SetSoundManagerToObject(m_pSoundManager);
 	pPlayerS->SetThrowingManagerToObject(m_pThrowingMgr);
+	pPlayerS->SetSoundManagerToObject(m_pSoundManager);
 
 	// 중립 몬스터에 충돌체 부여
 	CNeutralityShader* pNetral = (CNeutralityShader *)m_ppShaders[4];
@@ -510,7 +524,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	BuildLights();
 
 	// BackGround Music
-	m_pSoundManager->play(SOUND::Back_Ground, XMFLOAT3(0,0,0));
+	m_pSoundManager->play(SOUND::Back_Ground, XMFLOAT3(0, 0, 0));
 }
 
 void CScene::ReleaseObjects()
