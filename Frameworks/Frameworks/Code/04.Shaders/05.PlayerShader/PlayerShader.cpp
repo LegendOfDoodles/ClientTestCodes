@@ -493,13 +493,13 @@ void CPlayerShader::ReleaseObjects()
 		Safe_Delete_Array(m_ppObjects);
 	}
 	//애니메이션 
-	for (UINT j = 0; j < 7; j++)
+	for (UINT j = 0; j < 8; j++)
 	{
 		delete m_ppSwordAni[j];
 	}
 	Safe_Delete_Array(m_ppSwordAni);
 
-	for (UINT j = 0; j < 7; j++)
+	for (UINT j = 0; j < 8; j++)
 	{
 		delete m_ppStaffAni[j];
 	}
