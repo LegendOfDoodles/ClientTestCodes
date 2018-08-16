@@ -34,6 +34,7 @@ protected: // º¯¼ö
 	float* m_arrUtilities;
 	int m_nUtilities{ 4 };
 
+
 	float timedelay{ 0 };
 };
 

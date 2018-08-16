@@ -50,6 +50,7 @@ protected: // 내부 함수
 	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
+	virtual void SetWayFinder(shared_ptr<CWayFinder> pWayFinder) { m_pWayFinder = pWayFinder; };
 
 	virtual void ReleaseObjects();
 
@@ -64,7 +65,7 @@ protected: // 변수
 	int m_nWeaponState{ 0 };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
-
+	shared_ptr<CWayFinder> m_pWayFinder;
 	bool m_ChangeWeapon{ false };
 
 

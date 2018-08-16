@@ -433,7 +433,7 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	for (int x = 0; x < m_nObjects / 2; ++x) {
 		for (int z = 0; z < m_nObjects / 2; ++z) {
-			if (z == 0 && x == 0) {
+			if (z == 0 && x == 1) {
 				pPlayer = new CPlayerAI(pCreateMgr, 1);
 			}
 			else {
