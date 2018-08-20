@@ -15,7 +15,7 @@ public: // 공개 함수
 	int GetHeightMapLength() { return(m_nLength); }
 
 private: // 변수
-	BYTE * m_pCollisionMapPixels;
+	BYTE * m_pCollisionMapPixels{ NULL };
 	int m_nWidth;
 	int m_nLength;
 
