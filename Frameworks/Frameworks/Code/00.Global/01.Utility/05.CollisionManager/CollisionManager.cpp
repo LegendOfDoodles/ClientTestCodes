@@ -6,7 +6,10 @@
 
 CCollisionManager::CCollisionManager()
 {
+	m_lstColliders.clear();
 
+	m_lstBlueSight.clear();
+	m_lstRedSight.clear();
 }
 
 void CCollisionManager::GameOver(TeamType type)
@@ -281,7 +284,6 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 	else if (type == TeamType::Blue)
 	{
 		curList = &m_lstBlueSight;
-		int n = curList->size();
 	}
 	else
 		curList = &m_lstColliders;
@@ -357,6 +359,39 @@ XMFLOAT2 CCollisionManager::GetFrontLinePosition(int line, TeamType type)
 		return XMFLOAT2(0, 0);
 	else
 		return XMFLOAT2(FrontObject->GetPosition().x, FrontObject->GetPosition().z);
+}
+
+std::list<CCollisionObject*>* CCollisionManager::GetEnemyList(CCollisionObject * pCol, TeamType type)
+{
+	std::list<CCollisionObject*>* curList;
+	if (type == TeamType::Red)
+	{
+		curList = &m_lstRedSight;
+	}
+	else if (type == TeamType::Blue)
+	{
+		curList = &m_lstBlueSight;
+	}
+	else
+		curList = &m_lstColliders;
+
+	return curList;
+}
+
+std::list<CCollisionObject*>* CCollisionManager::GetTeamList(CCollisionObject * pCol, TeamType type)
+{
+	m_lstReturn.clear();
+
+	std::list<CCollisionObject*>::iterator i;
+
+	for (i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
+	{
+		if ((*i)->GetTeam() == type && (*i)!=pCol) {
+			m_lstReturn.push_back((*i));
+		}
+	}
+
+	return &m_lstReturn;
 }
 
 

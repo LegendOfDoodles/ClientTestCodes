@@ -42,7 +42,7 @@ void CPlayer::Animate(float timeElapsed)
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
 				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
 			{
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(4), 100);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(4), m_StatusInfo.Atk);
 
 				//// EffectMgr
 				m_pSoundMgr->play(SOUND::Player_Sword_Attack_Sound, GetPosition());
@@ -264,7 +264,7 @@ void CPlayer::Animate(float timeElapsed)
 	if (m_curState != States::Remove)
 	{
 		m_fPreFrameTime = m_fFrameTime;
-		m_fFrameTime += ANIMATION_SPEED * timeElapsed;
+		m_fFrameTime += ANIMATION_SPEED* timeElapsed;
 	}
 
 	m_StatusInfo.QSkillCoolTime = min(m_StatusInfo.QSkillCoolTime += timeElapsed * 0.1f, 1.f);
@@ -282,6 +282,10 @@ void CPlayer::Animate(float timeElapsed)
 
 	if (MoveToDestination(timeElapsed) == States::Done) SetState(States::Idle);
 
+	m_BattleDelay += timeElapsed;
+	if (m_BattleDelay >= 10.0f&&m_StatusInfo.HP<m_StatusInfo.maxHP) {
+		m_StatusInfo.HP = min(m_StatusInfo.HP + 50.0f * timeElapsed,m_StatusInfo.maxHP);
+	}
 	CAnimatedObject::Animate(timeElapsed);
 }
 
@@ -327,6 +331,7 @@ void CPlayer::ActiveSkill(AnimationsType act)
 		m_curState = States::Attack;
 		m_nCurrAnimation = act;
 		m_fFrameTime = 0;
+		m_BattleDelay = 0;
 	}
 }
 
@@ -400,12 +405,7 @@ void CPlayer::Respawn()
 	m_xmf4x4World = m_xmf4x4SpawnWorld;
 }
 
-void CPlayer::WantFrontLine()
-{
- 	XMFLOAT2 xmf2Pos=m_pColManager->GetFrontLinePosition(0, m_TeamType);
-	
-	printf("%f, %f\n",xmf2Pos.x, xmf2Pos.y);
-}
+
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수

@@ -24,7 +24,6 @@ public:	// 외부 함수
 
 	void SaveCurrentState();
 	void Respawn();
-
 	virtual PlayerInfo* GetPlayerStatus() { return &m_StatusInfo; }
 
 	void SetWeaponChangeTriger(bool triger) { m_ChangeWeapon = triger; }
@@ -39,6 +38,7 @@ public:	// 외부 함수
 		if (m_StatusInfo.HP <= 0) {
 			SetState(States::Die);
 		}
+		m_BattleDelay = 0;
 	}
 	//virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
 	UINT GetWeaponType() { return m_StatusInfo.Weapon; }
@@ -46,14 +46,13 @@ public:	// 외부 함수
 
 	UINT GetSpecialCnt() { return m_StatusInfo.SpecialPoint; }
 	SpecialType* GetSpecialIndext() { return m_StatusInfo.Special;}
-	UINT GetEquipCnt() { return m_StatusInfo.EquipCnt; }
+	UINT GetEquipCnt() { return EquipCnt; }
 
 	UINT* GetEquipIndex() { return m_nEquipIndex; }
 
-	void WantFrontLine();
 
 	void AddEquipCnt(UINT equiptype, UINT specialnum) {
-		m_nEquipIndex[m_StatusInfo.EquipCnt++] = equiptype * 4 + specialnum;
+		m_nEquipIndex[EquipCnt++] = equiptype * 4 + specialnum;
 		//0123 방어 4567 특수
 	}
 	
@@ -72,11 +71,15 @@ protected: // 내부 함수
 protected: // 변수
 	PlayerInfo m_StatusInfo;
 	bool m_ChangeWeapon{ false };
-	UINT m_nEquipIndex[4];
 
+	UINT m_nEquipIndex[4];
+	UINT EquipCnt{ 0 };
+
+	
 	XMFLOAT4X4 m_xmf4x4SpawnWorld;	// 생성시 월드 변환 행렬
 	XMFLOAT3 m_spawnLocation;	// 생성 위치
 
+	float m_BattleDelay{ 0 };
 	float m_spawnCoolTime{ 0 };	// 죽은 이후 다시 생성할 때 까지 시간
 };
 

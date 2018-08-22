@@ -258,7 +258,6 @@ struct PlayerInfo
 	UINT SpecialPoint{ 4 };
 
 	// Æ¯¼º 7 ~ 21 4°³
-	UINT EquipCnt{ 0 };
 	SpecialType Special[4] = { SpecialType::NoSelected, SpecialType::NoSelected, SpecialType::NoSelected, SpecialType::NoSelected };
 };
 

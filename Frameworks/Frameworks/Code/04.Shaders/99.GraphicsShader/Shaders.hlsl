@@ -555,11 +555,18 @@ DS_TERRAIN_OUTPUT DSTerrain(PatchTess patchTess, float2 uv : SV_DomainLocation, 
 
 PS_MULTIPLE_RENDER_TARGETS_OUTPUT PSTerrain(DS_TERRAIN_OUTPUT input)
 {
+    static float3x3 NormalRotationMat = 
+	float3x3(
+		1.f, 0.f, 0.f,
+		0.f, 0.f, -1.f,
+		0.f, 1.f, 0.f
+	);
+
     PS_MULTIPLE_RENDER_TARGETS_OUTPUT output;
     float3 normal = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnNormal)).xyz; // 노말 맵에서 해당하는 uv에 해당하는 노말 읽기
     normal = 2.0f * normal - 1.0f; // 노말을 -1에서 1사이의 값으로 변환
 
-    output.normal = float4(normal, 1);
+    output.normal = float4(mul(normal, NormalRotationMat), 1);
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
 	
 	int indexI = clamp((int)((input.positionW.x) / 41.4), 0, 243);//243
@@ -644,7 +651,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_TOON PSBone(VS_TEXTURED_LIGHTING_TOON_OUTPUT i
 
     output.normal = float4(N, 1);
     output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-    output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
     output.albedo = gMaterials.m_cAlbedo;
     output.position = float4(input.positionW, 0);
     output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
@@ -667,7 +674,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_TOON PSEquipment(VS_TEXTURED_LIGHTING_TOON_OUT
 
 	output.normal = float4(N, 1);
 	output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-	output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
 	output.albedo = gMaterials.m_cAlbedo;
 	output.position = float4(input.positionW, 0);
 	output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
@@ -691,7 +698,7 @@ PS_MULTIPLE_RENDER_TARGETS_OUTPUT_EMISSIVE PSEquipmentEmissive(VS_TEXTURED_LIGHT
 
 	output.normal = float4(N, 1);
 	output.color = gtxtTextures.Sample(wrapSampler, float3(input.uv, gnDiffuse)) + gtxtTextures.Sample(wrapSampler, float3(input.uv, gnSpecular));
-	output.roughMetalFresnel = float4(gMaterials.m_cRoughness, gMaterials.m_cMetalic, 1, 1);
+    output.roughMetalFresnel = float4(gtxtTextures.Sample(wrapSampler, float3(input.uv, gnMix3Data)).rgb, 1);
 	output.albedo = gMaterials.m_cAlbedo;
 	output.position = float4(input.positionW, 0);
 	output.toonPower = float4(floor(input.toonPower * 3) / 3.0f, 1);
