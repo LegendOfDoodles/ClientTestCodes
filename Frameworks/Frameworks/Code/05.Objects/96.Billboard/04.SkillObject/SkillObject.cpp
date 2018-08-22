@@ -126,7 +126,7 @@ void CSkillObject::Render(CCamera * pCamera, UINT istanceCnt)
 	}
 }
 
-float CSkillObject::GetCoolTime()
+float CSkillObject::GetCoolTime ()
 {
 	float coolTime = 0.f;
 
