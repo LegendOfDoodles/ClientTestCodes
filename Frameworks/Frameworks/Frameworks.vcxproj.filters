@@ -811,25 +811,23 @@
     <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\StaticShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\BoneShader.hlsl">
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\BoneShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\TerrainShader.hlsl">
+    </CustomBuild>
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\DefaultShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\BillboardShader.hlsl">
+    </CustomBuild>
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\EffectShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\EffectShader.hlsl">
+    </CustomBuild>
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\TerrainShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\UIShader.hlsl">
+    </CustomBuild>
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\ThrowingShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Code\04.Shaders\99.GraphicsShader\ThrowingShader.hlsl">
+    </CustomBuild>
+    <CustomBuild Include="Code\04.Shaders\99.GraphicsShader\UIShader.hlsl">
       <Filter>소스 파일\04.Shaders\99.GraphicsShader</Filter>
-    </FxCompile>
+    </CustomBuild>
   </ItemGroup>
 </Project>

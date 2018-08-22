@@ -69,6 +69,9 @@ protected: // 내부 함수
 protected: // 변수
 	ObjectType m_kind{ ObjectType::SwordMinion };
 
+	static const int m_nMeshes{ 3 };
+	CSkinnedMesh *m_ppMinionMeshes[m_nMeshes]{};
+
 	CollisionObjectList m_blueSwordMinions;
 	CollisionObjectList m_blueStaffMinions;
 	CollisionObjectList m_blueBowMinions;

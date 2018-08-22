@@ -16,6 +16,10 @@
 /// 최종 수정 날짜: 2018-08-22
 /// </summary>
 
+#define SwordMinionMesh m_ppMinionMeshes[0]
+#define BowMinionMesh m_ppMinionMeshes[1]
+#define StaffMinionMesh m_ppMinionMeshes[2]
+
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CMinionShader::CMinionShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
@@ -44,6 +48,14 @@ void CMinionShader::ReleaseUploadBuffers()
 			m_ppMaterials[i]->ReleaseUploadBuffers();
 	}
 #endif
+
+	if (m_ppMinionMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; ++i)
+		{
+			m_ppMinionMeshes[i]->ReleaseUploadBuffers();
+		}
+	}
 }
 
 void CMinionShader::UpdateShaderVariables(int opt)
@@ -79,9 +91,9 @@ void CMinionShader::UpdateShaderVariables(int opt)
 		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
 		{
 			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((*iter)->GetIndex() * elementBytes));
-			XMFLOAT4X4 tmp[128];
-			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
-			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 128);
+			XMFLOAT4X4 tmp[31];
+			memcpy(tmp, (*iter)->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 31);
+			memcpy(pMappedObject->m_xmf4x4Frame, tmp, sizeof(XMFLOAT4X4) * 31);
 
 			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 				XMMatrixTranspose(XMLoadFloat4x4((*iter)->GetWorldMatrix())));
@@ -553,6 +565,14 @@ void CMinionShader::ReleaseObjects()
 		Safe_Delete_Array(m_ppMaterials);
 	}
 #endif
+
+	if (m_ppMinionMeshes)
+	{
+		for (int i = 0; i < m_nMeshes; ++i)
+		{
+			m_ppMinionMeshes[i]->Release();
+		}
+	}
 }
 
 void CMinionShader::CreatePathes()
@@ -587,9 +607,6 @@ int CMinionShader::GetPossibleIndex()
 void CMinionShader::SpawnMinion()
 {
 	static bool dataPrepared{ false };
-	static CSkinnedMesh swordMinionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Sword Minion.meshinfo");
-	static CSkinnedMesh bowMinionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Bow Minion.meshinfo");
-	static CSkinnedMesh staffMinionMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Magic Minion.meshinfo");
 	static UINT incrementSize{ m_pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
 	static CCubeMesh boundingBoxMesh(m_pCreateMgr,
 		CONVERT_PaperUnit_to_InG(3.0f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(7.0f),
@@ -620,18 +637,22 @@ void CMinionShader::SpawnMinion()
 
 	if (!dataPrepared)
 	{
-		swordMinionMesh.SetBoundingBox(
+		SwordMinionMesh = new CSkinnedMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Sword Minion.meshinfo");
+		BowMinionMesh = new CSkinnedMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Bow Minion.meshinfo");
+		StaffMinionMesh = new CSkinnedMesh(m_pCreateMgr, "Resource//3D//Minion//Mesh//Magic Minion.meshinfo");
+
+		SwordMinionMesh->SetBoundingBox(
 			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
-		swordMinionMesh.AddRef();
-		bowMinionMesh.SetBoundingBox(
+		SwordMinionMesh->AddRef();
+		BowMinionMesh->SetBoundingBox(
 			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
-		bowMinionMesh.AddRef();
-		staffMinionMesh.SetBoundingBox(
+		BowMinionMesh->AddRef();
+		StaffMinionMesh->SetBoundingBox(
 			XMFLOAT3(0.0f, 0.0f, -CONVERT_PaperUnit_to_InG(4.0f)),
 			XMFLOAT3(CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(1.5f), CONVERT_PaperUnit_to_InG(3.5f)));
-		staffMinionMesh.AddRef();
+		StaffMinionMesh->AddRef();
 		dataPrepared = true;
 		return;
 	}
@@ -669,17 +690,17 @@ void CMinionShader::SpawnMinion()
 		{
 		case ObjectType::SwordMinion:
 			pMinionObject = new CSwordMinion(m_pCreateMgr);
-			pMinionObject->SetMesh(0, &swordMinionMesh);
+			pMinionObject->SetMesh(0, SwordMinionMesh);
 			break;
 		case ObjectType::StaffMinion:
 			pMinionObject = new CMagicMinion(m_pCreateMgr);
-			pMinionObject->SetMesh(0, &staffMinionMesh);
+			pMinionObject->SetMesh(0, StaffMinionMesh);
 			pMinionObject->SetThrowingManager(m_pThrowingMgr);
 			pMinionObject->SetEffectManager(m_pEffectMgr);
 			break;
 		case ObjectType::BowMinion:
 			pMinionObject = new CBowMinion(m_pCreateMgr);
-			pMinionObject->SetMesh(0, &bowMinionMesh);
+			pMinionObject->SetMesh(0, BowMinionMesh);
 			pMinionObject->SetThrowingManager(m_pThrowingMgr);
 			pMinionObject->SetEffectManager(m_pEffectMgr);
 			break;
