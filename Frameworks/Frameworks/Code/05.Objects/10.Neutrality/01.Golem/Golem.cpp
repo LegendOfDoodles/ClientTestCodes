@@ -381,7 +381,7 @@ void CGolem::AnimateByCurState()
 			if (m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, m_fCollisionSize, m_fCollisionSize * 0.5f, m_StatusInfo.Atk);
-				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] * 0.25f, EffectObjectType::Golem_StandardAttack_Effect);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] / 4, EffectObjectType::Golem_StandardAttack_Effect);
 				m_pSoundMgr->play(SOUND::Golem_StandardAttack_Sound, GetPosition());
 			}
 		}
@@ -391,7 +391,7 @@ void CGolem::AnimateByCurState()
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_StatusInfo.Atk * 2);
 				
-				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] * 0.166f, EffectObjectType::Golem_StumpAttack_Effect);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] / 8, EffectObjectType::Golem_StumpAttack_Effect);
 				m_pSoundMgr->play(SOUND::Golem_FootrollAttack_Sound, GetPosition());
 
 				m_nNextAnimation = Animations::Attack1;
@@ -403,7 +403,7 @@ void CGolem::AnimateByCurState()
 				&&m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.666f) {
 				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, m_attackRange, m_StatusInfo.Atk * 3);
 				
-				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] * 0.333f, EffectObjectType::Golem_SpecialAttack_Effect);
+				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex] / 3, EffectObjectType::Golem_SpecialAttack_Effect);
 				m_pSoundMgr->play(SOUND::Golem_SpecialAttack_Sound, GetPosition());
 
 				m_nNextAnimation = Animations::Attack1;

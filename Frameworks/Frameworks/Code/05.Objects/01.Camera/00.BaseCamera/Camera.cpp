@@ -198,6 +198,15 @@ void CCamera::SavePickedPos()
 	::GetCursorPos(&m_pickCursorPos);
 }
 
+void CCamera::SetMaster(CCollisionObject * master)
+{
+	m_pMaster = master;
+
+	XMFLOAT3 masterPos{ master->GetPosition() };
+
+	SetPosition(masterPos.x, masterPos.z);
+}
+
 bool CCamera::OnProcessMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
@@ -281,10 +290,23 @@ bool CCamera::IsInFrustum(BoundingOrientedBox & xmBoundingBox)
 	return(m_xmFrustum.Intersects(xmBoundingBox));
 }
 
+void CCamera::GoToMaster()
+{
+	XMFLOAT3 masterPos{ m_pMaster->GetPosition() };
+
+	SetPosition(masterPos.x, masterPos.z - m_xmf3Position.y * 0.5f);
+}
+
 void CCamera::SetPosition(float x, float y, float z)
 {
 	m_xmf3Position.x = x;
 	m_xmf3Position.y = y;
+	m_xmf3Position.z = z;
+}
+
+void CCamera::SetPosition(float x, float z)
+{
+	m_xmf3Position.x = x;
 	m_xmf3Position.z = z;
 }
 

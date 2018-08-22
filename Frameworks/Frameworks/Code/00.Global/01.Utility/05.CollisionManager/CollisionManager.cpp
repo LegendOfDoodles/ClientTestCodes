@@ -363,6 +363,8 @@ XMFLOAT2 CCollisionManager::GetFrontLinePosition(int line, TeamType type)
 
 std::list<CCollisionObject*>* CCollisionManager::GetEnemyList(CCollisionObject * pCol, TeamType type)
 {
+	UNREFERENCED_PARAMETER(pCol);
+
 	std::list<CCollisionObject*>* curList;
 	if (type == TeamType::Red)
 	{

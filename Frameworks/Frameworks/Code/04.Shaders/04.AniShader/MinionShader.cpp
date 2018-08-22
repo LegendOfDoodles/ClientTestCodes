@@ -13,7 +13,7 @@
 /// 목적: 미니언 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-08-01
+/// 최종 수정 날짜: 2018-08-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -205,6 +205,7 @@ void CMinionShader::Render(CCamera *pCamera)
 		{
 		case 0: // Blue Sword
 			curObjectList = &m_blueSwordMinions;
+			if (m_ppMaterials) m_ppMaterials[0]->UpdateShaderVariables();
 			break;
 		case 1: // Blue Staff
 			curObjectList = &m_blueStaffMinions;
@@ -214,6 +215,7 @@ void CMinionShader::Render(CCamera *pCamera)
 			break;
 		case 3: // Red Sword
 			curObjectList = &m_redSwordMinions;
+			if (m_ppMaterials) m_ppMaterials[1]->UpdateShaderVariables();
 			break;
 		case 4: // Red Staff
 			curObjectList = &m_redStaffMinions;
@@ -223,7 +225,6 @@ void CMinionShader::Render(CCamera *pCamera)
 			break;
 		}
 
-		if (m_ppMaterials) m_ppMaterials[i]->UpdateShaderVariables();
 		for (auto iter = curObjectList->begin(); iter != curObjectList->end(); ++iter)
 		{
 			(*iter)->Render(pCamera);
@@ -432,7 +433,7 @@ D3D12_INPUT_LAYOUT_DESC CMinionShader::CreateInputLayout()
 D3D12_SHADER_BYTECODE CMinionShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
+		L"./code/04.Shaders/99.GraphicsShader/BoneShader.hlsl", 
 		"VSBone",
 		"vs_5_1", 
 		pShaderBlob));
@@ -441,7 +442,7 @@ D3D12_SHADER_BYTECODE CMinionShader::CreateVertexShader(ComPtr<ID3DBlob>& pShade
 D3D12_SHADER_BYTECODE CMinionShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
+		L"./code/04.Shaders/99.GraphicsShader/BoneShader.hlsl", 
 		"PSBone",
 		"ps_5_1",
 		pShaderBlob));
@@ -484,22 +485,14 @@ void CMinionShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	SaveBoundingBoxHeapNumber(1);
 
 #if USE_BATCH_MATERIAL
-	m_nMaterials = 6;
+	m_nMaterials = 2;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	// Blue
-	m_ppMaterials[0] = Materials::CreateSwordMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[0] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
 	m_ppMaterials[0]->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
-	m_ppMaterials[1] = Materials::CreateStaffMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
-	m_ppMaterials[2] = Materials::CreateBowMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[2]->SetAlbedo(XMFLOAT4(0.2f, 0.2f, 1.0f, 1.0f));
 	// Red
-	m_ppMaterials[3] = Materials::CreateSwordMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[3]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
-	m_ppMaterials[4] = Materials::CreateStaffMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[4]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
-	m_ppMaterials[5] = Materials::CreateBowMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
-	m_ppMaterials[5]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
+	m_ppMaterials[1] = Materials::CreateMinionMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[0], &m_psrvGPUDescriptorStartHandle[0]);
+	m_ppMaterials[1]->SetAlbedo(XMFLOAT4(1.0f, 0.2f, 0.2f, 1.0f));
 #else
 	CMaterial *pCubeMaterial = Materials::CreateBrickMaterial(pCreateMgr, &m_srvCPUDescriptorStartHandle, &m_srvGPUDescriptorStartHandle);
 #endif
