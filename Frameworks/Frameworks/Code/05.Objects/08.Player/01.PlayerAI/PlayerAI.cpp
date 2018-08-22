@@ -5,7 +5,7 @@
 /// 목적: 플레이어 AI 관리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-08-13
+/// 최종 수정 날짜: 2018-08-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -23,34 +23,40 @@ CPlayerAI::~CPlayerAI()
 // 공개 함수
 void CPlayerAI::WalkCurLine(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// 현재 패스 정보 필요함
 	// 아 미니언 패스 필요함
 }
 
 void CPlayerAI::HelpOtherPlayer(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// 다른 플레이어 정보 필요함
 }
 
 void CPlayerAI::ReturnOriginLine(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// 원래 패스 정보 필요함
 	// 아 미니언 패스 필요함
 }
 
 void CPlayerAI::AttackEnemy(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// 적 정보 필요함
 }
 
 void CPlayerAI::RetreatFromFight(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// 현재 패스 정보 필요함
 	// 적 미니언 패스 필요함
 }
 
 void CPlayerAI::AvoidAttack(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// SubPath 추가 필요
 	// 후퇴와 구분을 어떻게 하냐?
 	// 내 생각엔 회피나 후퇴 중에 포기해야 함
@@ -58,6 +64,7 @@ void CPlayerAI::AvoidAttack(float timeElapsed)
 
 void CPlayerAI::ChaseEnemy(float timeElapsed)
 {
+	UNREFERENCED_PARAMETER(timeElapsed);
 	// 현재 Enemy 정보 필요
 }
 
@@ -93,7 +100,6 @@ void CPlayerAI::CaculateUtility()
 		}
 		XMFLOAT2 apos = XMFLOAT2(m_pTarget_Enemy->GetPosition().x, m_pTarget_Enemy->GetPosition().z);
 		XMFLOAT2 bpos = XMFLOAT2(GetPosition().x, GetPosition().z);
-		float distance = Vector2::Distance(apos, bpos);
 
 		m_arrUtilities[index++] = CLAMP(2*m_StatusInfo.Atk / m_pTarget_Enemy->GetPlayerStatus()->HP,0,1);
 	}
@@ -125,10 +131,10 @@ void CPlayerAI::CaculateUtility()
 
 	m_arrUtilities[index++] = 0.5f;//일반 라인전
 
-	for (int i = 0; i < m_nUtilities; ++i) {
-		printf("Index[%d]: %f \n", i, m_arrUtilities[i]);
-	}
-	printf("\n\n\n");
+	//for (int i = 0; i < m_nUtilities; ++i) {
+	//	printf("Index[%d]: %f \n", i, m_arrUtilities[i]);
+	//}
+	//printf("\n\n\n");
 }
 
 void CPlayerAI::Animate(float timeElapsed)
@@ -175,10 +181,10 @@ void CPlayerAI::PlayAction(int index)
 float CPlayerAI::GetFrontLineValue()
 {
 	XMFLOAT2 TopLine = m_pColManager->GetFrontLinePosition(0, m_TeamType);
-	
+
 	XMFLOAT2 BottomLine = m_pColManager->GetFrontLinePosition(1, m_TeamType);
 
-	float lineDistance;
+	float lineDistance{ 0.f };
 
 	if (m_TeamType == TeamType::Blue) {
 		lineDistance = (TopLine.x) - (BottomLine.x);
@@ -202,7 +208,6 @@ void CPlayerAI::ReceiveTeamList()
 
 std::list<CCollisionObject*> CPlayerAI::EnemyWithinRange()
 {
-	CCollisionObject* FrontObject{ NULL };
 	std::list<CCollisionObject*>::iterator i;
 	std::list<CCollisionObject*> retunlist;
 	retunlist.clear();

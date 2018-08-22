@@ -398,6 +398,8 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 		m_ppShaders[i]->Initialize(pCreateMgr, pTerrainShader->GetTerrain());
 	}
 
+	m_pCamera->SetMaster(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects()[0]);
+
 	// UI Shaders Initialize
 	((CEquipShader*)m_ppShaders[22])->SetPlayerCnt(((CPlayerShader *)m_ppShaders[3])->GetObjectCount());
 	((CEquipShader*)m_ppShaders[22])->SetPlayer(((CPlayerShader *)m_ppShaders[3])->GetCollisionObjects());

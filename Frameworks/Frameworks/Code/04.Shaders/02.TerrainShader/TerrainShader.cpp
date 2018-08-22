@@ -6,7 +6,7 @@
 /// 목적: 지형 출력용 Shader
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-08-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ D3D12_INPUT_LAYOUT_DESC CTerrainShader::CreateInputLayout()
 D3D12_SHADER_BYTECODE CTerrainShader::CreateVertexShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
+		L"./code/04.Shaders/99.GraphicsShader/TerrainShader.hlsl", 
 		"VSTerrain", 
 		"vs_5_1",
 		pShaderBlob));
@@ -103,7 +103,7 @@ D3D12_SHADER_BYTECODE CTerrainShader::CreateVertexShader(ComPtr<ID3DBlob>& pShad
 D3D12_SHADER_BYTECODE CTerrainShader::CreateHullShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		L"./code/04.Shaders/99.GraphicsShader/TerrainShader.hlsl",
 		"HSTerrain",
 		"hs_5_1",
 		pShaderBlob));
@@ -112,7 +112,7 @@ D3D12_SHADER_BYTECODE CTerrainShader::CreateHullShader(ComPtr<ID3DBlob>& pShader
 D3D12_SHADER_BYTECODE CTerrainShader::CreateDomainShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		L"./code/04.Shaders/99.GraphicsShader/TerrainShader.hlsl",
 		"DSTerrain",
 		"ds_5_1",
 		pShaderBlob));
@@ -121,7 +121,7 @@ D3D12_SHADER_BYTECODE CTerrainShader::CreateDomainShader(ComPtr<ID3DBlob>& pShad
 D3D12_SHADER_BYTECODE CTerrainShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl", 
+		L"./code/04.Shaders/99.GraphicsShader/TerrainShader.hlsl", 
 		"PSTerrain", 
 		"ps_5_1",
 		pShaderBlob));

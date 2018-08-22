@@ -11,7 +11,7 @@
 /// 목적: Number Billboard 쉐이더 (시간, Kill Dead, Assist )
 /// 최종 수정자:  김나단
 /// 수정자 목록:  이용선, 김나단
-/// 최종 수정 날짜: 2018-07-03
+/// 최종 수정 날짜: 2018-08-22
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ D3D12_SHADER_BYTECODE CNumberShader::CreateVertexShader(ComPtr<ID3DBlob>& pShade
 {
 	//./Code/04.Shaders/99.GraphicsShader/
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		L"./code/04.Shaders/99.GraphicsShader/UIShader.hlsl",
 		"VSTexturedGauge",
 		"vs_5_1",
 		pShaderBlob));
@@ -188,7 +188,7 @@ D3D12_SHADER_BYTECODE CNumberShader::CreateVertexShader(ComPtr<ID3DBlob>& pShade
 D3D12_SHADER_BYTECODE CNumberShader::CreatePixelShader(ComPtr<ID3DBlob>& pShaderBlob)
 {
 	return(CShader::CompileShaderFromFile(
-		L"./code/04.Shaders/99.GraphicsShader/Shaders.hlsl",
+		L"./code/04.Shaders/99.GraphicsShader/UIShader.hlsl",
 		"PSTexturedNumber",
 		"ps_5_1",
 		pShaderBlob));
