@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-22
+/// 최종 수정 날짜: 2018-08-29
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -93,19 +93,19 @@ bool CWayFinder::CanGoDirectly(const XMFLOAT2 & source, const XMFLOAT2 & target)
 {
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
-	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, NODE_SIZE_HALF) };
+	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, CONVERT_PaperUnit_to_InG(1)) };
 	XMFLOAT2 curPos = Vector2::Add(source, addVal);
 
 	do
 	{
-		if (m_pCollisionMapImage->GetCollision(curPos.x - NODE_SIZE, curPos.y)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + NODE_SIZE)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x + NODE_SIZE, curPos.y)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y - NODE_SIZE)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x - NODE_SIZE, curPos.y - NODE_SIZE)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x - NODE_SIZE, curPos.y + NODE_SIZE)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x + NODE_SIZE, curPos.y - NODE_SIZE)) return false;
-		if (m_pCollisionMapImage->GetCollision(curPos.x + NODE_SIZE, curPos.y + NODE_SIZE)) return false;
+		for (float checker = -NODE_SIZE; checker < NODE_SIZE; checker += CONVERT_PaperUnit_to_InG(1))
+		{
+			if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + checker)) return false;
+			if (m_pCollisionMapImage->GetCollision(curPos.x + checker, curPos.y)) return false;
+			if (m_pCollisionMapImage->GetCollision(curPos.x - checker, curPos.y + checker)) return false;
+			if (m_pCollisionMapImage->GetCollision(curPos.x + checker, curPos.y - checker)) return false;
+			if (m_pCollisionMapImage->GetCollision(curPos.x + checker, curPos.y + checker)) return false;
+		}
 		curPos = Vector2::Add(curPos, addVal);
 	} while (Vector2::DistanceSquare(curPos, target) > NODE_SIZE_SQR);
 	return true;
@@ -126,14 +126,14 @@ XMFLOAT2 CWayFinder::GetClosestNotCollidePos(const XMFLOAT2 & source, const XMFL
 
 	do
 	{
-		if (!m_pCollisionMapImage->GetCollision(curPos.x - NODE_SIZE, curPos.y)) return XMFLOAT2(curPos.x - NODE_SIZE, curPos.y);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x + NODE_SIZE, curPos.y)) return XMFLOAT2(curPos.x + NODE_SIZE, curPos.y);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x, curPos.y - NODE_SIZE)) return XMFLOAT2(curPos.x, curPos.y - NODE_SIZE);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + NODE_SIZE)) return XMFLOAT2(curPos.x, curPos.y + NODE_SIZE);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x - NODE_SIZE, curPos.y - NODE_SIZE)) return XMFLOAT2(curPos.x - NODE_SIZE, curPos.y - NODE_SIZE);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x + NODE_SIZE, curPos.y - NODE_SIZE)) return XMFLOAT2(curPos.x + NODE_SIZE, curPos.y - NODE_SIZE);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x - NODE_SIZE, curPos.y + NODE_SIZE)) return XMFLOAT2(curPos.x - NODE_SIZE, curPos.y + NODE_SIZE);
-		if (!m_pCollisionMapImage->GetCollision(curPos.x + NODE_SIZE, curPos.y + NODE_SIZE)) return XMFLOAT2(curPos.x + NODE_SIZE, curPos.y + NODE_SIZE);
+		for (float checker = -NODE_SIZE; checker < NODE_SIZE; checker += CONVERT_PaperUnit_to_InG(1))
+		{
+			if (m_pCollisionMapImage->GetCollision(curPos.x, curPos.y + checker)) return XMFLOAT2(curPos.x, curPos.y + checker);
+			if (m_pCollisionMapImage->GetCollision(curPos.x + checker, curPos.y)) return XMFLOAT2(curPos.x + checker, curPos.y);
+			if (m_pCollisionMapImage->GetCollision(curPos.x - checker, curPos.y + checker)) return XMFLOAT2(curPos.x - checker, curPos.y + checker);
+			if (m_pCollisionMapImage->GetCollision(curPos.x + checker, curPos.y - checker)) return XMFLOAT2(curPos.x + checker, curPos.y - checker);
+			if (m_pCollisionMapImage->GetCollision(curPos.x + checker, curPos.y + checker)) return XMFLOAT2(curPos.x + checker, curPos.y + checker);
+		}
 		curPos = Vector2::Add(curPos, addVal);
 	} while (Vector2::DistanceSquare(curPos, target) > NODE_SIZE_SQR);
 	return target;
