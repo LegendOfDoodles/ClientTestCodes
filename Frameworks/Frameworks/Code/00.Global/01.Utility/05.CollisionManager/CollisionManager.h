@@ -62,6 +62,8 @@ protected:
 	float nodeSize{0};
 	XMFLOAT2 nodeWH;
 	int Fow[NODE_WIDTH][NODE_HEIGHT];
+	int BlueFow[NODE_WIDTH][NODE_HEIGHT];
+	int RedFow[NODE_WIDTH][NODE_HEIGHT];
 
 	shared_ptr<CEffectMgr> m_pEffectMgr;
 
