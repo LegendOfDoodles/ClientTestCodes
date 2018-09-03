@@ -378,7 +378,7 @@ void CPlayer::MoveToSubDestination(float timeElapsed, shared_ptr<CWayFinder> pWa
 			m_subPath = pWayFinder->GetPathToPosition(
 				myPos,
 				enemyPos);
-			m_subPath->push_back(CPathEdge(XMFLOAT2(enemyPos.x, enemyPos.z), Vector3::ToVector2(Vector3::Add(enemyPos, Vector3::Subtract(enemyPos, myPos)))));
+			if(m_subPath) m_subPath->push_back(CPathEdge(XMFLOAT2(enemyPos.x, enemyPos.z), Vector3::ToVector2(Vector3::Add(enemyPos, Vector3::Subtract(enemyPos, myPos)))));
 		}
 	}
 
