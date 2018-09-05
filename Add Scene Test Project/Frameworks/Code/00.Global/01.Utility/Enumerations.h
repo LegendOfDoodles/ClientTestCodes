@@ -207,14 +207,27 @@ enum UIFrameType {
 	SkillFrameR,
 	StatusFrame,
 	CharacterFrame,
+	
+	// 
 	SelectSpecial_7,
 	SelectSpecial_12,
 	SelectSpecial_17,
 	SelectSpecial_21,
 	CharacterFrameHP,
 	CharacterFrameMP,
+	
+	// Minimap
 	Minimap,
+
+	// Special
 	SpecialFrame,
+	
+	// Title Scene
+	GameLogo,
+	Connect,
+	Exit,
+	GameStart,
+	Prev,
 };
 
 enum SpecialType {
