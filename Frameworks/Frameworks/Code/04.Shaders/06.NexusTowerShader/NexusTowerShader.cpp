@@ -12,7 +12,7 @@
 /// 목적: 넥서스 및 타워 그리기 용도의 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-22
+/// 최종 수정 날짜: 2018-09-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -103,40 +103,6 @@ void CNexusTowerShader::RenderShadow(CCamera * pCamera)
 			if (m_ppObjects[cnt]) m_ppObjects[cnt]->Render(pCamera);
 		}
 	}
-}
-
-CBaseObject *CNexusTowerShader::PickObjectByRayIntersection(
-	XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance)
-{
-	bool intersected = 0;
-
-	nearHitDistance = FLT_MAX;
-	float hitDistance = FLT_MAX;
-	CBaseObject *pSelectedObject{ NULL };
-
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		intersected = m_ppObjects[j]->PickObjectByRayIntersection(pickPosition, xmf4x4View, hitDistance);
-		if (intersected && (hitDistance < nearHitDistance))
-		{
-			nearHitDistance = hitDistance;
-			pSelectedObject = m_ppObjects[j];
-		}
-	}
-
-	return(pSelectedObject);
-}
-
-bool CNexusTowerShader::OnProcessKeyInput(UCHAR* pKeyBuffer)
-{
-	UNREFERENCED_PARAMETER(pKeyBuffer);
-
-	if (GetAsyncKeyState('U') & 0x0001)
-	{
-		m_ppObjects[0]->SetState(States::Die);
-
-	}
-	return true;
 }
 
 void CNexusTowerShader::SetColManagerToObject(shared_ptr<CCollisionManager> manager)
