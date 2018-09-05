@@ -70,6 +70,20 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 120.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
+
+	case UIFrameType::GameLogo:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 35.5f, FRAME_BUFFER_HEIGHT / 35.5f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case UIFrameType::Connect:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 320.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+	case UIFrameType::Exit:
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 320.f, 0.f);
+		SetMesh(0, pRectMesh);
+		break;
+
 	}
 
 	m_type = type;
@@ -157,6 +171,19 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		UpVectorMoveWeight		= -(FRAME_BUFFER_HEIGHT / 96.f);
 		RightVectorMoveWeight	= -(FRAME_BUFFER_WIDTH / 85.3f);
 		break;
+
+	case UIFrameType::GameLogo:
+		UpVectorMoveWeight = 0.f;
+		RightVectorMoveWeight = 0.f;
+		break;
+	case UIFrameType::Connect:
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 296.f);
+		break;
+	case UIFrameType::Exit:
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 96.f);
+		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 296.f);
+		break;
 	}
 
 	newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), m_fDistance));
@@ -187,6 +214,9 @@ void CUIFrameObject::Render(CCamera * pCamera, UINT istanceCnt)
 	case UIFrameType::SelectSpecial_12:
 	case UIFrameType::SelectSpecial_17:
 	case UIFrameType::SelectSpecial_21:
+	case UIFrameType::GameLogo:
+	case UIFrameType::Connect:
+	case UIFrameType::Exit:
 		CBillboardObject::Render(pCamera, istanceCnt);
 		break;
 	case UIFrameType::CharacterFrameHP:

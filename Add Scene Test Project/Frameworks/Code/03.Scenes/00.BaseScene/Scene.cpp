@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "04.Shaders/98.BillboardShader/00.UIShader/UIShader.h"
+#include "04.Shaders/98.BillboardShader/06.TitleUIShader/TitleUIShader.h"
 #include "05.Objects/01.Camera/01.AOSCamera/AOSCamera.h"
 #include "05.Objects/01.Camera/02.LightCamera/LightCamera.h"
 #include "00.Global/01.Utility/09.SoundManager/SoundManager.h"
@@ -296,7 +297,7 @@ void CScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
 	m_ppShaders = new CShader*[m_nShaders];
 
 	//UI Shader
-	UI_Shader = new CUIObjectShader(pCreateMgr);
+	UI_Shader = new CTitleUIShader(pCreateMgr);
 
 	for (int i = 0; i < m_nShaders; ++i)
 	{

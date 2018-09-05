@@ -215,6 +215,7 @@
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\04.SkillShader\SkillShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader\SpecialSelectShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader\SelectedSpecialShader.h" />
+    <ClInclude Include="Code\04.Shaders\98.BillboardShader\06.TitleUIShader\TitleUIShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\98.NumberShader\NumberShader.h" />
     <ClInclude Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.h" />
     <ClInclude Include="Code\05.Objects\00.BaseObject\BaseObject.h" />
@@ -301,6 +302,7 @@
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\04.SkillShader\SkillShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\01.SpecialSelectShader\SpecialSelectShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\05.SpecialShader\02.SelectedSpecialShader\SelectedSpecialShader.cpp" />
+    <ClCompile Include="Code\04.Shaders\98.BillboardShader\06.TitleUIShader\TitleUIShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\98.NumberShader\NumberShader.cpp" />
     <ClCompile Include="Code\04.Shaders\98.BillboardShader\99.BIllboard\BillboardShader.cpp" />
     <ClCompile Include="Code\05.Objects\00.BaseObject\BaseObject.cpp" />
