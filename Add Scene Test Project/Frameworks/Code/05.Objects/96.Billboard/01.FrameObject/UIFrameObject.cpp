@@ -76,11 +76,11 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::Connect:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 320.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::Exit:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 320.f, FRAME_BUFFER_HEIGHT / 320.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 
@@ -178,11 +178,11 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		break;
 	case UIFrameType::Connect:
 		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 96.f);
-		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 296.f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 182.f);
 		break;
 	case UIFrameType::Exit:
 		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 96.f);
-		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 296.f);
+		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 170.6f);
 		break;
 	}
 
