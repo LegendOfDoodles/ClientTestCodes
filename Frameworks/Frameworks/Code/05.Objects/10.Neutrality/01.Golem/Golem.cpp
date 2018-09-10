@@ -220,7 +220,7 @@ void CGolem::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	{
 		SetEnemy(NULL);
 		GenerateSubPathToMainPath(pWayFinder);
-		SetState(States::Walk);
+		SetNextState(States::Walk);
 	}
 	else if (Attackable(m_pEnemy))
 	{
