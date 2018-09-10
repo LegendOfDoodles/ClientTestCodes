@@ -27,23 +27,15 @@ public:	// 외부 함수
 
 	void SaveCurrentState();
 	void Respawn();
+
+	virtual void ReceiveDamage(float damage);
+
 	virtual PlayerInfo* GetPlayerStatus() { return &m_StatusInfo; }
 
 	void SetWeaponChangeTriger(bool triger) { m_ChangeWeapon = triger; }
 	bool GetWeaponChangeTriger() { return m_ChangeWeapon; }
 
-	//virtual void SetObjectType(ObjectType type) { m_StatusInfo.WeaponType = type; };
-	virtual void ReceiveDamage(float damage) 
-	{ 
-		// 이미 사망한 상태인 경우 대미지 처리를 하지 않는다.
-		if (m_curState == States::Die || m_curState == States::Remove) { return; }
-		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
-		if (m_StatusInfo.HP <= 0) {
-			SetState(States::Die);
-		}
-		m_BattleDelay = 0;
-	}
-	//virtual void ReceiveDamage(float damage) { m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def); }
+
 	UINT GetWeaponType() { return m_StatusInfo.Weapon; }
 	UINT GetWeaponNum() { return m_StatusInfo.WeaponNum; }
 
@@ -65,6 +57,8 @@ public:	// 외부 함수
 	}
 protected: // 내부 함수
 	virtual void AdjustAnimationIndex();
+
+	virtual bool Heal(float timeElapsed);
 	/*
 	0. Win		1.Defeat		2.Defeat
 	3. Idle		4.StartWalk		5.Walking	

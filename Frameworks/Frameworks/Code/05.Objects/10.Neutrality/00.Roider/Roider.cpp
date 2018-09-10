@@ -6,7 +6,7 @@
 /// 목적: 중립 몬스터(로이더) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-07
+/// 최종 수정 날짜: 2018-09-10
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -37,6 +37,9 @@ CRoider::~CRoider()
 // 공개 함수
 void CRoider::Animate(float timeElapsed)
 {
+	if (m_curState != States::Die && m_curState != States::Remove)
+		Recovery(timeElapsed);
+
 	AdjustAnimationIndex();
 	AnimateByCurState();
 
@@ -97,6 +100,7 @@ void CRoider::SetState(StatesType newState)
 		m_nCurrAnimation = Animations::StartWalk;
 		break;
 	case States::Attack:
+		ResetRecovery();
 		SetAnimation(Animations::Attack1);
 		m_fFrameTime = 0;
 		break;
@@ -245,6 +249,20 @@ void CRoider::SaveCurrentState()
 {
 	m_xmf4x4SpawnWorld = m_xmf4x4World;
 	m_spawnLocation = GetPosition();
+}
+
+void CRoider::ReceiveDamage(float damage)
+{
+	// 이미 사망한 상태인 경우 대미지 처리를 하지 않는다.
+	if (m_curState == States::Die || m_curState == States::Remove) { return; }
+
+	m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
+	if (m_StatusInfo.HP <= 0) {
+		SetState(States::Die);
+	}
+	m_activated = true;
+
+	ResetRecovery();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -433,4 +451,26 @@ bool CRoider::FarFromSpawnLocation()
 	if (m_TeamType != TeamType::Neutral) return false;
 	float dstSqr = Vector3::DistanceSquare(GetPosition(), m_spawnLocation);
 	return (dstSqr > MAX_RANGE_FROM_SPAWN_ROIDER * MAX_RANGE_FROM_SPAWN_ROIDER);
+}
+
+bool CRoider::Heal(float timeElapsed)
+{
+	// 최대 체력 보다 작은 경우 진행
+	if (m_StatusInfo.HP >= m_StatusInfo.maxHP) return false;
+	// 1초에 10%씩 회복 / 1초에 한번 회복 이펙트 생성
+	if (m_recoveryTime - m_lastRecoveryTime >= 1.f)
+	{
+		m_lastRecoveryTime = m_recoveryTime;
+		// 회복 이펙트 생성
+	}
+	// 전체 체력의 10%씩 회복
+	m_StatusInfo.HP += m_StatusInfo.maxHP * MAX_RECOVERY_PER_SEC * timeElapsed;
+
+	// 최대 체력보다 많이 찼으면 최대 체력으로 보정
+	if (m_StatusInfo.HP > m_StatusInfo.maxHP)
+	{
+		m_StatusInfo.HP = m_StatusInfo.maxHP;
+	}
+
+	return true;
 }
