@@ -47,6 +47,8 @@ protected:	// 내부 함수
 	void GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder);
 	bool FarFromSpawnLocation();
 
+	virtual bool Heal(float timeElapsed);
+
 protected:	// 변수
 	bool m_activated{ true };
 	bool m_returning{ false };

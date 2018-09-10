@@ -24,23 +24,12 @@ public:	// 외부 함수
 	virtual void PlayRemove(float timeElapsed, shared_ptr<CWayFinder> pWayFinder);
 
 	void SaveCurrentState();
+	virtual void ReceiveDamage(float damage);
 
 	void SetNexusPoses(const XMFLOAT3& bluePos, const XMFLOAT3& redPos)
 	{
 		m_blueNexusLoc = bluePos;
 		m_redNexusLoc = redPos;
-	}
-
-	virtual void ReceiveDamage(float damage)
-	{
-		// 이미 사망한 상태인 경우 대미지 처리를 하지 않는다.
-		if (m_curState == States::Die || m_curState == States::Remove) { return; }
-
-		m_StatusInfo.HP -= damage * Compute_Defence(m_StatusInfo.Def);
-		if (m_StatusInfo.HP <= 0) {
-			SetState(States::Die);
-		}
-		m_activated = true;
 	}
 
 	virtual void NotifyDamager(CCollisionObject* other) { m_pDamager = other; }
@@ -57,6 +46,8 @@ protected:	// 내부 함수
 	void Respawn();
 	void GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder);
 	bool FarFromSpawnLocation();
+
+	virtual bool Heal(float timeElapsed);
 
 protected:	// 변수
 	bool m_activated{ false };
