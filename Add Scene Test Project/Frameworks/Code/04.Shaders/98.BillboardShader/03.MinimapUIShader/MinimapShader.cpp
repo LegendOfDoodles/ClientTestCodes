@@ -97,6 +97,7 @@ bool CMinimapShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 	GetCursorPos(&cursorPos);
 	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
 
+
 	if (pKeyBuffer == MK_LBUTTON)
 	{
 		//printf("%d, %d\n", cursorPos.x, cursorPos.y);

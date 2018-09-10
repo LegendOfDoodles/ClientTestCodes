@@ -89,9 +89,23 @@ bool CTitleUIShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 
 	if (pKeyBuffer == MK_LBUTTON)
 	{
-		printf("%d, %d\n", cursorPos.x, cursorPos.y);
+		// 접속 버튼, 시작 버튼
+		if ((cursorPos.x > GAMESTART_AND_CONNECT_MINIMUM_X  && cursorPos.x < GAMESTART_AND_CONNECT_MAXIMUM_X)
+			&& (cursorPos.y > GAMESTART_AND_CONNECT_MINIMUM_Y && cursorPos.y < GAMESTART_AND_CONNECT_MAXIMUM_Y))
+		{
+			printf("%d, %d\n", cursorPos.x, cursorPos.y);
 
-		return false;
+			return false;
+		}
+
+		// 종료 버튼, 타이틀 복귀 버튼
+		if ((cursorPos.x > EXIT_AND_PREV_MINIMUM_X  && cursorPos.x < EXIT_AND_PREV_MAXIMUM_X)
+			&& (cursorPos.y > EXIT_AND_PREV_MINIMUM_Y && cursorPos.y < EXIT_AND_PREV_MAXIMUM_Y))
+		{
+			printf("%d, %d\n", cursorPos.x, cursorPos.y);
+
+			return false;
+		}
 	}
 	return false;
 }

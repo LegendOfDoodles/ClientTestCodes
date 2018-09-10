@@ -104,17 +104,7 @@ bool CUIObjectShader::OnProcessKeyInput(UCHAR * pKeyBuffer)
 
 bool CUIObjectShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 {
-	POINT cursorPos;
-
-	GetCursorPos(&cursorPos);
-	ScreenToClient(m_pCamera->GetHwnd(), &cursorPos);
-
-	if (pKeyBuffer == MK_LBUTTON)
-	{
-		printf("%d, %d\n", cursorPos.x, cursorPos.y);
-
-		return false;
-	}
+	UNREFERENCED_PARAMETER(pKeyBuffer);
 	return false;
 }
 
