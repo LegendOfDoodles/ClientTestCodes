@@ -6,7 +6,7 @@
 /// 목적: 중립 몬스터(로이더) 클래스 분할
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-10
+/// 최종 수정 날짜: 2018-09-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -212,7 +212,12 @@ void CRoider::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 	if (!CheckEnemyState(m_pEnemy))
 	{
 		SetEnemy(NULL);
-		GenerateSubPathToMainPath(pWayFinder);
+		if (m_TeamType == TeamType::Neutral)
+		{
+			GenerateSubPathToSpawnLocation(pWayFinder);
+		}
+		else
+			GenerateSubPathToMainPath(pWayFinder);
 		SetNextState(States::Walk);
 	}
 	else if (Attackable(m_pEnemy))
@@ -443,6 +448,7 @@ void CRoider::GenerateSubPathToSpawnLocation(shared_ptr<CWayFinder> pWayFinder)
 		m_subDestination = m_subPath->front().To();
 		m_subPath->pop_front();
 		LookAt(m_subDestination);
+		m_returning = true;
 	}
 }
 

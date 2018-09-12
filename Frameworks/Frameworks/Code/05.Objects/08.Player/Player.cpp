@@ -6,7 +6,7 @@
 /// 목적: 플레이어 관리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-09-10
+/// 최종 수정 날짜: 2018-09-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,19 @@ void CPlayer::Animate(float timeElapsed)
 		if (m_mainPath) SetState(States::Walk);
 		break;
 	case States::Attack:
-		if (GetType() == ObjectType::SwordPlayer)
+		if (GetType() == ObjectType::StickPlayer)
+		{
+			if (m_nCurrAnimation == Animations::Attack1 &&
+				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
+				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
+			{
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(4), m_StatusInfo.Atk);
+
+				//// EffectMgr
+				m_pSoundMgr->play(SOUND::Player_Sword_Attack_Sound, GetPosition());
+			}
+		}
+		else if (GetType() == ObjectType::SwordPlayer)
 		{
 			if (m_nCurrAnimation == Animations::Attack1 &&
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
