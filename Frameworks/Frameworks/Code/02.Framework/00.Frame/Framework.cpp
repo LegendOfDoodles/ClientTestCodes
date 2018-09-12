@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Framework.h"
+#include "03.Scenes/01.GameScene/GameScene.h"
 
 /// <summary>
 /// 목적: 프레임워크 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-05
+/// 최종 수정 날짜: 2018-09-12
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -45,7 +46,7 @@ void CFramework::FrameAdvance(float timeElapsed)
 	m_pScene->ProcessInput();
 	m_pScene->AnimateObjects(timeElapsed);
 	m_pRenderMgr->Render(m_pScene);
-	// Warning! 임시 종료 확인 -> 향우 변경 필요
+	// Warning! 임시 종료 확인 -> 향후 변경 필요
 	m_running = !(GetAsyncKeyState(VK_ESCAPE) & 0x8000);
 }
 
@@ -82,7 +83,7 @@ void CFramework::BuildObjects()
 {
 	m_pRenderMgr->ResetCommandList();
 
-	m_pScene = shared_ptr<CScene>(new CScene());
+	m_pScene = shared_ptr<CGameScene>(new CGameScene());
 	m_pScene->Initialize(m_pCreateMgr);
 
 	m_pRenderMgr->ExecuteCommandList();
