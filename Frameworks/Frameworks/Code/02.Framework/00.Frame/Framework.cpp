@@ -81,12 +81,8 @@ LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageI
 // 내부 함수
 void CFramework::BuildObjects()
 {
-	m_pRenderMgr->ResetCommandList();
-
 	m_pScene = shared_ptr<CGameScene>(new CGameScene());
 	m_pScene->Initialize(m_pCreateMgr);
-
-	m_pRenderMgr->ExecuteCommandList();
 
 	m_pScene->ReleaseUploadBuffers();
 }
