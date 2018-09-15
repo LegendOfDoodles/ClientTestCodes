@@ -15,6 +15,8 @@ public: // 공개 함수
 	void Finalize();
 	void FrameAdvance(float timeElapsed);
 
+	void BuildObjects();
+
 	// Message Process
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
 		WPARAM wParam, LPARAM lParam);
@@ -22,7 +24,6 @@ public: // 공개 함수
 	bool IsRunning() { return m_running; }
 
 private: // 내부 함수
-	void BuildObjects();
 	void ReleaseObjects();
 
 private: // 변수
@@ -32,6 +33,7 @@ private: // 변수
 	shared_ptr<CRenderMgr> m_pRenderMgr;
 
 	shared_ptr<CScene> m_pScene;
+	shared_ptr<CScene> m_pLoadingScene;
 
 	bool m_running{ true };
 };

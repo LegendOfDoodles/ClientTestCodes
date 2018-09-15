@@ -349,7 +349,6 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 	UINT ncbElementBytes = ((sizeof(CB_ANIOBJECT_INFO) + 255) & ~255);
 	UINT boundingBoxElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-
 	int accCnt{ 0 };
 
 	CreateShaderVariables(pCreateMgr, ncbElementBytes, m_nObjects * 2, true, ncbElementBytes, m_nObjects);

@@ -1,10 +1,7 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
 
-class CMaterial;
 class CPlayer;
-
-
 class CHeightMapTerrain;
 class CCollisionManager;
 class CSkeleton;

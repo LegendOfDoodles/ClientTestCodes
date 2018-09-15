@@ -1,20 +1,19 @@
 #include "stdafx.h"
 #include "EquipShader.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
-#include "05.Objects/99.Material/Material.h"
 #include "06.Meshes/01.Mesh/MeshImporter.h"
 #include "05.Objects/12.Equipment/Equipment.h"
 #include "05.Objects/08.Player/Player.h"
 
-
 /// <summary>
-/// 목적: 플레이어 관리 및 렌더링 용도
+/// 목적: 플레이어 장비 출력 및 관리 용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
 /// 최종 수정 날짜: 2018-08-22
 /// </summary>
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+// 생성자, 소멸자
 CEquipShader::CEquipShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
 }
@@ -25,7 +24,6 @@ CEquipShader::~CEquipShader()
 
 ////////////////////////////////////////////////////////////////////////
 // 공개 함수
-
 void CEquipShader::UpdateShaderVariables(int opt)
 {
 	UNREFERENCED_PARAMETER(opt);
@@ -146,8 +144,6 @@ void CEquipShader::RenderShadow(CCamera * pCamera)
 		}
 	}
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
