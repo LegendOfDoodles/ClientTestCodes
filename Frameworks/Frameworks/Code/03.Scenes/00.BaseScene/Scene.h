@@ -38,6 +38,8 @@ public: // 공개 함수
 
 	CCamera * GetCamera() { return m_pCamera; }
 
+	virtual void ApplyPercentage(float pct) { pct; }
+
 protected: // 내부 함수
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr);
 	virtual void ReleaseObjects();
