@@ -72,15 +72,15 @@ CUIFrameObject::CUIFrameObject(shared_ptr<CCreateMgr> pCreateMgr, UIFrameType ty
 		break;
 
 	case UIFrameType::GameLogo:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 35.5f, FRAME_BUFFER_HEIGHT / 35.5f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT , 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::Connect:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 4.8f, FRAME_BUFFER_HEIGHT / 6.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 	case UIFrameType::Exit:
-		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 160.f, FRAME_BUFFER_HEIGHT / 180.f, 0.f);
+		pRectMesh = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 4.8f, FRAME_BUFFER_HEIGHT / 6.f, 0.f);
 		SetMesh(0, pRectMesh);
 		break;
 
@@ -177,12 +177,12 @@ void CUIFrameObject::Animate(float fTimeElapsed)
 		RightVectorMoveWeight = 0.f;
 		break;
 	case UIFrameType::Connect:
-		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 96.f);
-		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 182.f);
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 2.6f);
+		RightVectorMoveWeight = -(FRAME_BUFFER_WIDTH / 5.0f);
 		break;
 	case UIFrameType::Exit:
-		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 96.f);
-		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 170.6f);
+		UpVectorMoveWeight = -(FRAME_BUFFER_HEIGHT / 2.6f);
+		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 4.8f);
 		break;
 	}
 

@@ -37,11 +37,17 @@ void CCamera::Initialize(shared_ptr<CCreateMgr> pCreateMgr)
 	SetViewport(0, 0, width, height, 0.0f, 1.0f);
 	SetScissorRect(0, 0, width, height);
 	//GeneratePerspectiveProjectionMatrix(1.0f, 50000.0f, float(width) / float(height), 90.0f);
+	
+	GenerateOrthographicProjectionMatrix(width * 1.f, height * 1.f, 1, 5000.0f);
+	GenerateViewMatrix(
+		XMFLOAT3(0.0f, 0.f, 0.0f),
+		XMFLOAT3(0.f, 0.f, 5000.0f));
+/*
 	GenerateOrthographicProjectionMatrix(36.f, 20.25f, 1.f, 10.f);
 	GenerateViewMatrix(
 		XMFLOAT3(0.0f, 70.0f, 0.0f),
 		XMFLOAT3(0.0f, 0.0f, 0.0f),
-		XMFLOAT3(0.0f, 1.0f, 0.0f));
+		XMFLOAT3(0.0f, 1.0f, 0.0f));*/
 
 	CreateShaderVariables(pCreateMgr, ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255));
 }

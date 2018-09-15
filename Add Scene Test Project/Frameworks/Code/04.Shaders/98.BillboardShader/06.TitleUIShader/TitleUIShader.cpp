@@ -215,8 +215,10 @@ void CTitleUIShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCon
 	{
 		pUIObject = new CUIFrameObject(pCreateMgr, UIFrameType(GameLogo + i));
 		pUIObject->SetCamera(m_pCamera);
+		
 		if (i == 0) pUIObject->SetDistance(2.f);
 		else pUIObject->SetDistance(1.5f);
+
 		pUIObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 
 		m_ppObjects[i] = pUIObject;
