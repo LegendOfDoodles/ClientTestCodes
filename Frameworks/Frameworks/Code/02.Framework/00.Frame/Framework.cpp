@@ -2,12 +2,13 @@
 #include "Framework.h"
 #include "03.Scenes/01.GameScene/GameScene.h"
 #include "03.Scenes/99.LoadingScene/LoadingScene.h"
+#include "03.Scenes/98.LogoScene/LogoScene.h"
 
 /// <summary>
 /// 목적: 프레임워크 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-15
+/// 최종 수정 날짜: 2018-09-16
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -45,6 +46,9 @@ void CFramework::FrameAdvance(float timeElapsed)
 	m_pScene->ProcessInput();
 	m_pScene->AnimateObjects(timeElapsed);
 	m_pRenderMgr->Render(m_pScene);
+
+	ChangeDoneScene();
+
 	// Warning! 임시 종료 확인 -> 향후 변경 필요
 	m_running = !(GetAsyncKeyState(VK_ESCAPE) & 0x8000);
 }
@@ -55,9 +59,8 @@ void CFramework::BuildObjects()
 	m_pLoadingScene->Initialize(m_pCreateMgr);
 	m_pLoadingScene->ReleaseUploadBuffers();
 	m_pRenderMgr->SetLoadingScene(m_pLoadingScene);
-	m_pRenderMgr->RenderLoadingScreen();
 
-	m_pScene = shared_ptr<CGameScene>(new CGameScene());
+	m_pScene = shared_ptr<CLogoScene>(new CLogoScene());
 	m_pScene->Initialize(m_pCreateMgr);
 
 	m_pScene->ReleaseUploadBuffers();
@@ -96,4 +99,24 @@ void CFramework::ReleaseObjects()
 {
 	if (m_pScene) m_pScene->Finalize();
 	if (m_pLoadingScene) m_pLoadingScene->Finalize();
+}
+
+void CFramework::ChangeDoneScene()
+{
+	// 씬 변경 처리
+	if (m_pScene->IsSceneDone())
+	{
+		if (m_pScene->GetCurSceneType() == SceneType::LogoScene)
+		{
+			if (m_pScene) m_pScene->Finalize();
+			m_pScene = shared_ptr<CGameScene>(new CGameScene());
+			m_pScene->Initialize(m_pCreateMgr);
+
+			m_pScene->ReleaseUploadBuffers();
+		}
+		else if (m_pScene->GetCurSceneType() == SceneType::GameScene)
+		{
+
+		}
+	}
 }

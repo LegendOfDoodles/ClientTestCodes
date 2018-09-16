@@ -9,7 +9,7 @@
 /// 목적: 로딩 신 처리용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-15
+/// 최종 수정 날짜: 2018-09-16
 /// </summary>
 
 #define LoadingScreenShader m_ppShaders[0]
@@ -19,6 +19,7 @@
 // 생성자, 소멸자
 CLoadingScene::CLoadingScene()
 {
+	m_SceneType = SceneType::LoadingScene;
 }
 
 CLoadingScene::~CLoadingScene()
