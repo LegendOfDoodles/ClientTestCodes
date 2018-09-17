@@ -40,7 +40,7 @@
 /// 목적: 인 게임 씬
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-16
+/// 최종 수정 날짜: 2018-09-17
 /// </summary>
 
 #define UI_Shader m_ppShaders[8]
@@ -316,6 +316,8 @@ void CGameScene::CreateCbvAndSrvDescriptorHeap(shared_ptr<CCreateMgr> pCreateMgr
 
 void CGameScene::BuildLights()
 {
+	m_pCreateMgr->ResetCommandList();
+
 	m_pLights = new LIGHTS;
 	::ZeroMemory(m_pLights, sizeof(LIGHTS));
 
@@ -347,6 +349,8 @@ void CGameScene::BuildLights()
 
 	m_pLightCamera = new CLightCamera(m_pLights->m_pLights[0].m_direction);
 	m_pLightCamera->Initialize(m_pCreateMgr);
+
+	m_pCreateMgr->ExecuteCommandList();
 }
 
 void CGameScene::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr)
