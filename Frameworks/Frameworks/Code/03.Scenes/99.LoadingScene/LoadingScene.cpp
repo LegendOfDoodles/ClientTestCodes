@@ -2,14 +2,14 @@
 #include "LoadingScene.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/01.Camera/03.StaticCamera/StaticCamera.h"
-#include "04.Shaders/96.SpritesShader/01.LoadingScreenShader/LoadingScreenShader.h"
-#include "04.Shaders/96.SpritesShader/02.LoadingBarShader/LoadingBarShader.h"
+#include "04.Shaders/96.SpritesShader/01.LoadingShader/01.LoadingScreenShader/LoadingScreenShader.h"
+#include "04.Shaders/96.SpritesShader/01.LoadingShader/02.LoadingBarShader/LoadingBarShader.h"
 
 /// <summary>
 /// 목적: 로딩 신 처리용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-16
+/// 최종 수정 날짜: 2018-09-17
 /// </summary>
 
 #define LoadingScreenShader m_ppShaders[0]

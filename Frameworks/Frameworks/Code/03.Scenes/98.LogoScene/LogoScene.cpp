@@ -2,7 +2,7 @@
 #include "LogoScene.h"
 #include "02.Framework/01.CreateMgr/CreateMgr.h"
 #include "05.Objects/01.Camera/03.StaticCamera/StaticCamera.h"
-#include "04.Shaders/96.SpritesShader/03.LogoShader/LogoShader.h"
+#include "04.Shaders/96.SpritesShader/02.LogoShader/LogoShader.h"
 
 /// <summary>
 /// 목적: 로고 씬 처리용 클래스
