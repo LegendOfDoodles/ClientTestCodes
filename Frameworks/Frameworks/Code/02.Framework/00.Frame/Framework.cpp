@@ -4,12 +4,13 @@
 #include "03.Scenes/99.LoadingScene/LoadingScene.h"
 #include "03.Scenes/98.LogoScene/LogoScene.h"
 #include "03.Scenes/02.TitleScene/TitleScene.h"
+#include "03.Scenes/03.RoomScene/RoomScene.h"
 
 /// <summary>
 /// 목적: 프레임워크 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-17
+/// 최종 수정 날짜: 2018-09-18
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -58,10 +59,7 @@ void CFramework::BuildObjects()
 	m_pLoadingScene->ReleaseUploadBuffers();
 	m_pRenderMgr->SetLoadingScene(m_pLoadingScene);
 
-	m_pScene = shared_ptr<CLogoScene>(new CLogoScene());
-	m_pScene->Initialize(m_pCreateMgr);
-
-	m_pScene->ReleaseUploadBuffers();
+	ChangeSceneByType(SceneType::TitleScene);
 }
 
 LRESULT CALLBACK CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID,
@@ -106,11 +104,7 @@ void CFramework::ChangeDoneScene()
 	{
 		if (m_pScene->GetCurSceneType() == SceneType::LogoScene)
 		{
-			if (m_pScene) m_pScene->Finalize();
-			m_pScene = shared_ptr<CTitleScene>(new CTitleScene());
-			m_pScene->Initialize(m_pCreateMgr);
-
-			m_pScene->ReleaseUploadBuffers();
+			ChangeSceneByType(SceneType::TitleScene);
 		}
 		else if (m_pScene->GetCurSceneType() == SceneType::TitleScene)
 		{
@@ -120,11 +114,18 @@ void CFramework::ChangeDoneScene()
 			}
 			else
 			{
-				if (m_pScene) m_pScene->Finalize();
-				m_pScene = shared_ptr<CGameScene>(new CGameScene());
-				m_pScene->Initialize(m_pCreateMgr);
-
-				m_pScene->ReleaseUploadBuffers();
+				ChangeSceneByType(SceneType::RoomScene);
+			}
+		}
+		else if (m_pScene->GetCurSceneType() == SceneType::RoomScene)
+		{
+			if (m_pScene->IsExitScene())
+			{
+				ChangeSceneByType(SceneType::TitleScene);
+			}
+			else
+			{
+				ChangeSceneByType(SceneType::GameScene);
 			}
 		}
 		else if (m_pScene->GetCurSceneType() == SceneType::GameScene)
@@ -132,4 +133,30 @@ void CFramework::ChangeDoneScene()
 
 		}
 	}
+}
+
+void CFramework::ChangeSceneByType(SceneType type)
+{
+	if (m_pScene) m_pScene->Finalize();
+
+	if (type == SceneType::LogoScene)
+	{
+		m_pScene = shared_ptr<CLogoScene>(new CLogoScene());
+	}
+	else if(type == SceneType::TitleScene)
+	{
+		m_pScene = shared_ptr<CTitleScene>(new CTitleScene());
+	}
+	else if (type == SceneType::RoomScene)
+	{
+		m_pScene = shared_ptr<CRoomScene>(new CRoomScene());
+	}
+	else if (type == SceneType::GameScene)
+	{
+		m_pScene = shared_ptr<CGameScene>(new CGameScene());
+	}
+
+	m_pScene->Initialize(m_pCreateMgr);
+
+	m_pScene->ReleaseUploadBuffers();
 }

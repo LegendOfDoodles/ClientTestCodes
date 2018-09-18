@@ -330,6 +330,24 @@
     <Filter Include="소스 파일\04.Shaders\96.SpritesShader\03.TitleShader\01.TitleButtonsShader">
       <UniqueIdentifier>{c34bc0d0-7169-42b4-b4c7-a3177a532b97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Shaders\96.SpritesShader\04.RoomShader">
+      <UniqueIdentifier>{a28b1620-8b4a-4bed-967a-a3601f5c9077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\00.RoomScreenShader">
+      <UniqueIdentifier>{34aa15c5-43b5-4a63-bc61-861224dc6bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\01.RoomButtonsShader">
+      <UniqueIdentifier>{48442002-6f94-4b10-8fed-466616e5f6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Scenes\03.RoomScene">
+      <UniqueIdentifier>{b2efa885-03d0-4b9c-8951-079dd5b793fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\02.RoomCardShader">
+      <UniqueIdentifier>{7e6adba2-7740-4f1a-a6b9-1b3cf8a52599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Shaders\96.SpritesShader\01.LoadingShader\03.LoadingCardShader">
+      <UniqueIdentifier>{179f2809-8a49-4d53-a4df-09eb601baa96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\00.Global\00.Standard\stdafx.h">
@@ -617,6 +635,21 @@
     <ClInclude Include="Code\04.Shaders\96.SpritesShader\03.TitleShader\01.TitleButtonsShader\TitleButtonsShader.h">
       <Filter>소스 파일\04.Shaders\96.SpritesShader\03.TitleShader\01.TitleButtonsShader</Filter>
     </ClInclude>
+    <ClInclude Include="Code\04.Shaders\96.SpritesShader\04.RoomShader\00.RoomScreenShader\RoomScreenShader.h">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\00.RoomScreenShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\96.SpritesShader\04.RoomShader\01.RoomButtonsShader\RoomButtonsShader.h">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\01.RoomButtonsShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\03.Scenes\03.RoomScene\RoomScene.h">
+      <Filter>소스 파일\03.Scenes\03.RoomScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\96.SpritesShader\04.RoomShader\02.RoomCardShader\RoomCardShader.h">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\02.RoomCardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\04.Shaders\96.SpritesShader\01.LoadingShader\03.LoadingCardShader\LoadingCardShader.h">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\01.LoadingShader\03.LoadingCardShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\00.Global\00.Standard\stdafx.cpp">
@@ -885,6 +918,21 @@
     </ClCompile>
     <ClCompile Include="Code\04.Shaders\96.SpritesShader\03.TitleShader\01.TitleButtonsShader\TitleButtonsShader.cpp">
       <Filter>소스 파일\04.Shaders\96.SpritesShader\03.TitleShader\01.TitleButtonsShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\96.SpritesShader\04.RoomShader\00.RoomScreenShader\RoomScreenShader.cpp">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\00.RoomScreenShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\96.SpritesShader\04.RoomShader\01.RoomButtonsShader\RoomButtonsShader.cpp">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\01.RoomButtonsShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\03.Scenes\03.RoomScene\RoomScene.cpp">
+      <Filter>소스 파일\03.Scenes\03.RoomScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\96.SpritesShader\04.RoomShader\02.RoomCardShader\RoomCardShader.cpp">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\04.RoomShader\02.RoomCardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\04.Shaders\96.SpritesShader\01.LoadingShader\03.LoadingCardShader\LoadingCardShader.cpp">
+      <Filter>소스 파일\04.Shaders\96.SpritesShader\01.LoadingShader\03.LoadingCardShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

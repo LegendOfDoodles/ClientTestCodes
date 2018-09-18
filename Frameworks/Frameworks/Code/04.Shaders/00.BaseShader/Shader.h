@@ -57,6 +57,9 @@ public: // 공개 함수
 	virtual bool IsShaderDone() { return false; }
 	virtual bool IsShaderExit() { return false; }
 
+	virtual int GetPlayerId() { return 0; }
+	virtual CardType* GetCardType() { return nullptr; }
+
 	CCollisionObject **GetCollisionObjects() { return m_ppObjects; }
 	int GetObjectCount() { return m_nObjects; }
 
