@@ -124,11 +124,6 @@ void CGameScene::ProcessInput()
 
 	if (m_pSelectedObject && GetAsyncKeyState('L') & 0x0001)
 	{
-		/*m_pEffectMgr->RequestSpawn(
-			m_pSelectedObject->GetPosition(),
-			m_pSelectedObject->GetLook(),
-			30,
-			EffectObjectType::Player_LevelUp_CircleEffect);*/
 		m_pEffectMgr->RequestSpawn(
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
