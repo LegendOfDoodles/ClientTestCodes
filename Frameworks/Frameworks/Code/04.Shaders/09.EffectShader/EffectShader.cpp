@@ -79,6 +79,10 @@ void CEffectShader::UpdateShaderVariables(int opt)
 		beg = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5];
 		end = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6];
 		break;
+	case 7:
+		beg = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6];
+		end = UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6] + UseMatrialNumToObjectCnt[7];
+		break;
 	}
 
 	for (int i = beg; i < end; ++i)
@@ -141,6 +145,12 @@ void CEffectShader::AnimateObjects(float timeElapsed)
 
 	m_CircleLevelUp_EffectList.remove_if(removeFunc);
 	m_ArrowLevelUp_EffectList.remove_if(removeFunc);
+
+	m_Kill_EffectList.remove_if(removeFunc);
+	m_Death_EffectList.remove_if(removeFunc);
+	m_Miss_EffectList.remove_if(removeFunc);
+	m_Recovery_EffectList.remove_if(removeFunc);
+	m_Absorption_EffectList.remove_if(removeFunc);
 }
 
 void CEffectShader::Render(CCamera * pCamera)
@@ -346,6 +356,47 @@ void CEffectShader::Render(CCamera * pCamera)
 		}
 	}
 
+	CShader::Render(pCamera, 7);
+	if (!m_Kill_EffectList.empty())
+	{
+		m_ppMaterials[7]->UpdateShaderVariable(0);
+		for (auto iter = m_Kill_EffectList.begin(); iter != m_Kill_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_Death_EffectList.empty())
+	{
+		m_ppMaterials[7]->UpdateShaderVariable(1);
+		for (auto iter = m_Death_EffectList.begin(); iter != m_Death_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_Miss_EffectList.empty())
+	{
+		m_ppMaterials[7]->UpdateShaderVariable(2);
+		for (auto iter = m_Miss_EffectList.begin(); iter != m_Miss_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_Recovery_EffectList.empty())
+	{
+		m_ppMaterials[7]->UpdateShaderVariable(3);
+		for (auto iter = m_Recovery_EffectList.begin(); iter != m_Recovery_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
+	if (!m_Absorption_EffectList.empty())
+	{
+		m_ppMaterials[7]->UpdateShaderVariable(4);
+		for (auto iter = m_Absorption_EffectList.begin(); iter != m_Absorption_EffectList.end(); ++iter)
+		{
+			(*iter)->Render(pCamera);
+		}
+	}
 }
 
 void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 & direction, int aniLength, EffectObjectType objectType)
@@ -548,7 +599,42 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 			m_ArrowLevelUp_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 
-		// Kill And Dead
+		// Text Effect
+		else if (objectType == EffectObjectType::Kill_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
+			m_Kill_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Death_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
+			m_Death_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Miss_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
+			m_Miss_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Recovery_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
+			m_Recovery_EffectList.emplace_back(m_ppObjects[idx]);
+		}
+		else if (objectType == EffectObjectType::Absorption_Effect)
+		{
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
+			m_Absorption_EffectList.emplace_back(m_ppObjects[idx]);
+		}
 	}
 }
 
@@ -667,6 +753,12 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 
 		EffectObjectType::Player_LevelUp_CircleEffect,
 		EffectObjectType::Player_LevelUp_ArrowEffect,
+
+		EffectObjectType::Kill_Effect,
+		EffectObjectType::Death_Effect,
+		EffectObjectType::Miss_Effect,
+		EffectObjectType::Recovery_Effect,
+		EffectObjectType::Absorption_Effect
 	};
 
 	// 각 오브젝트의 최대 개수 설정
@@ -715,6 +807,14 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	// 6번 Matrial을 사용하는 Obejct 갯수
 	UseMatrialNumToObjectCnt[6] = (m_nObjects - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5]));
 
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Kill_Effect] = 4;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Death_Effect] = 4;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Miss_Effect] = 20;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Recovery_Effect] = 20;
+	m_nObjects += m_objectsMaxCount[EffectObjectType::Absorption_Effect] = 20;
+	// 6번 Matrial을 사용하는 Obejct 갯수
+	UseMatrialNumToObjectCnt[7] = (m_nObjects - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]));
+
 	// 각 오브젝트 개수 만큼 Possible Index 생성
 	m_objectsPossibleIndices = std::unique_ptr<bool[]>(new bool[m_nObjects]);
 
@@ -750,6 +850,9 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[6], 2, 6);
 	CreateConstantBufferViews(pCreateMgr, UseMatrialNumToObjectCnt[6], m_pConstBuffer.Get(), ncbElementBytes, UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5], 6);
 
+	CreateCbvAndSrvDescriptorHeaps(pCreateMgr, UseMatrialNumToObjectCnt[7], 5, 7);
+	CreateConstantBufferViews(pCreateMgr, UseMatrialNumToObjectCnt[7], m_pConstBuffer.Get(), ncbElementBytes, UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6], 7);
+
 	// 오브젝트 Index
 	for (int i = 0; i < EffectObjectTime_Max_COUNT; ++i) {
 		m_objectsIndices[objectOrder[i]] = EffectObjectIndices();
@@ -768,6 +871,7 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	m_ppMaterials[4] = Materials::CreateHitEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[4], &m_psrvGPUDescriptorStartHandle[4]);
 	m_ppMaterials[5] = Materials::CreateGolemAttackEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[5], &m_psrvGPUDescriptorStartHandle[5]);
 	m_ppMaterials[6] = Materials::CreateLevelUpEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
+	m_ppMaterials[7] = Materials::CreateTextEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
 
 	m_ppMesh[0] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 25.6f, FRAME_BUFFER_HEIGHT / 14.4f, 0.f);		// 50 x 50
 	m_ppMesh[1] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 12.8f, FRAME_BUFFER_HEIGHT / 7.2f, 0.f);		// 100 x 100
@@ -776,6 +880,7 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	m_ppMesh[4] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 5.12f, FRAME_BUFFER_HEIGHT / 2.88f, 0.f);		// 250 x 250
 	m_ppMesh[5] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 4.26f, FRAME_BUFFER_HEIGHT / 2.4f, 0.f);		// 300 x 300
 	m_ppMesh[6] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3.65f, FRAME_BUFFER_HEIGHT / 2.05f, 0.f);		// 350 x 350
+	m_ppMesh[7] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3.2f, FRAME_BUFFER_HEIGHT / 1.8f, 0.f);		// 400 x 400
 
 	for (int i = 0; i < m_nMesh; ++i)
 	{
@@ -828,6 +933,12 @@ void CEffectShader::ReleaseObjects()
 
 	if (!m_CircleLevelUp_EffectList.empty()) m_CircleLevelUp_EffectList.clear();
 	if (!m_ArrowLevelUp_EffectList.empty()) m_ArrowLevelUp_EffectList.clear();
+
+	if (!m_Kill_EffectList.empty()) m_Kill_EffectList.clear();
+	if (!m_Death_EffectList.empty()) m_Death_EffectList.clear();
+	if (!m_Miss_EffectList.empty()) m_Miss_EffectList.clear();
+	if (!m_Recovery_EffectList.empty()) m_Recovery_EffectList.clear();
+	if (!m_Absorption_EffectList.empty()) m_Absorption_EffectList.clear();
 
 	if (m_ppObjects)
 	{

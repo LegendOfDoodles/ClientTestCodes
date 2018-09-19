@@ -122,13 +122,45 @@ void CGameScene::ProcessInput()
 			1000);
 	}
 
-	if (m_pSelectedObject && GetAsyncKeyState('L') & 0x0001)
+	if (m_pSelectedObject && GetAsyncKeyState('S') & 0x0001)
 	{
 		m_pEffectMgr->RequestSpawn(
 			m_pSelectedObject->GetPosition(),
 			m_pSelectedObject->GetLook(),
 			10,
-			EffectObjectType::Player_LevelUp_ArrowEffect);
+			EffectObjectType::Kill_Effect);
+	}
+	if (m_pSelectedObject && GetAsyncKeyState('D') & 0x0001)
+	{
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetLook(),
+			10,
+			EffectObjectType::Death_Effect);
+	}
+	if (m_pSelectedObject && GetAsyncKeyState('F') & 0x0001)
+	{
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetLook(),
+			10,
+			EffectObjectType::Miss_Effect);
+	}
+	if (m_pSelectedObject && GetAsyncKeyState('G') & 0x0001)
+	{
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetLook(),
+			10,
+			EffectObjectType::Recovery_Effect);
+	}
+	if (m_pSelectedObject && GetAsyncKeyState('H') & 0x0001)
+	{
+		m_pEffectMgr->RequestSpawn(
+			m_pSelectedObject->GetPosition(),
+			m_pSelectedObject->GetLook(),
+			10,
+			EffectObjectType::Absorption_Effect);
 	}
 }
 

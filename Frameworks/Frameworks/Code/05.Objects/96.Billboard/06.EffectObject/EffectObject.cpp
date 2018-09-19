@@ -252,7 +252,19 @@ void CEffectObject::Animate(float timeElapsed)
 		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 		
-		/*
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+
+	if (m_EffectObjectType == EffectObjectType::Kill_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
 		// Kill And Dead Effect Position Test
 		XMFLOAT3 newPos{ 0, 0, 0 };
 
@@ -265,7 +277,31 @@ void CEffectObject::Animate(float timeElapsed)
 		m_xmf4x4World._41 = newPos.x;
 		m_xmf4x4World._42 = newPos.y;
 		m_xmf4x4World._43 = newPos.z;
-		*/
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Death_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		// Kill And Dead Effect Position Test
+		XMFLOAT3 newPos{ 0, 0, 0 };
+
+		UpVectorMoveWeight = 80.f;
+		RightVectorMoveWeight = (FRAME_BUFFER_WIDTH / 1280.f);
+
+		newPos = Vector3::Add(m_pCamera->GetPosition(), Vector3::ScalarProduct(m_pCamera->GetLookVector(), 200.f));
+		newPos = Vector3::Add(Vector3::Add(newPos, Vector3::ScalarProduct(m_pCamera->GetUpVector(), UpVectorMoveWeight)), Vector3::ScalarProduct(m_pCamera->GetRightVector(), RightVectorMoveWeight));
+
+		m_xmf4x4World._41 = newPos.x;
+		m_xmf4x4World._42 = newPos.y;
+		m_xmf4x4World._43 = newPos.z;
 
 		m_AnimaitonTime += timeElapsed * m_speed;
 		if (m_AnimaitonTime > m_maxAnimaitonTime)
@@ -274,6 +310,42 @@ void CEffectObject::Animate(float timeElapsed)
 		}
 	}
 
+	if (m_EffectObjectType == EffectObjectType::Miss_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Recovery_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
+	if (m_EffectObjectType == EffectObjectType::Absorption_Effect)
+	{
+		m_xmf4x4World._11 = xmf3Right.x;	m_xmf4x4World._12 = xmf3Right.y;	m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x;		m_xmf4x4World._22 = xmf3Up.y;		m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
+
+		m_AnimaitonTime += timeElapsed * m_speed;
+		if (m_AnimaitonTime > m_maxAnimaitonTime)
+		{
+			m_curState = StatesType::Remove;
+		}
+	}
 }
 
 void CEffectObject::Render(CCamera * pCamera, UINT istanceCnt)
