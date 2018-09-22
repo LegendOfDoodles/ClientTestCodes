@@ -184,10 +184,11 @@ void CRoider::PlayChase(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 		if (m_TeamType == TeamType::Neutral)
 		{
 			GenerateSubPathToSpawnLocation(pWayFinder);
-			m_returning = true;
 		}
 		else
+		{
 			GenerateSubPathToMainPath(pWayFinder);
+		}
 		SetState(States::Walk);
 	}
 	else
@@ -217,7 +218,9 @@ void CRoider::PlayAttack(float timeElapsed, shared_ptr<CWayFinder> pWayFinder)
 			GenerateSubPathToSpawnLocation(pWayFinder);
 		}
 		else
+		{
 			GenerateSubPathToMainPath(pWayFinder);
+		}
 		SetNextState(States::Walk);
 	}
 	else if (Attackable(m_pEnemy))
