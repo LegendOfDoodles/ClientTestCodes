@@ -401,8 +401,8 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	m_ppStaffAni[0] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Idle.aniinfo");
 	//임시
-	m_ppStaffAni[1] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Start_Walk.aniinfo");
-	m_ppStaffAni[2] = new CSkeleton("Resource//3D//Player//Animation//Sword//Player_Sword_Walk.aniinfo");
+	m_ppStaffAni[1] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Start_Walk.aniinfo");
+	m_ppStaffAni[2] = new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Walk.aniinfo");
 	///////////////////////////////////////////////////////
 
 	//new CSkeleton("Resource//3D//Player//Animation//Staff//Player_Staff_Attack.aniinfo");마법 공격
