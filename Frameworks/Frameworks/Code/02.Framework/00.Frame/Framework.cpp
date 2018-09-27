@@ -137,7 +137,11 @@ void CFramework::ChangeDoneScene()
 
 void CFramework::ChangeSceneByType(SceneType type)
 {
-	if (m_pScene) m_pScene->Finalize();
+	if (m_pScene)
+	{
+		m_pLoadingScene->SetCardType(m_pScene->GetCardType());
+		m_pScene->Finalize();
+	}
 
 	if (type == SceneType::LogoScene)
 	{

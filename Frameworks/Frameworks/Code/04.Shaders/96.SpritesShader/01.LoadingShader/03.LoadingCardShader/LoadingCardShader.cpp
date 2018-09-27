@@ -7,7 +7,7 @@
 /// 목적: 로딩 바 출력용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-18
+/// 최종 수정 날짜: 2018-09-27
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,8 @@ void CLoadingCardShader::UpdateShaderVariables(int opt)
 
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_LoadingCards[i]->GetWorldMatrix())));
-		pMappedObject->m_percentage = (float)m_EachCardType[i];
+		if(i==0) pMappedObject->m_percentage = (float)m_EachCardType[i] * 2 + g_LoadingPercentage;
+		else pMappedObject->m_percentage = (float)m_EachCardType[i] * 2 + 1.f;
 	}
 }
 
@@ -65,6 +66,17 @@ void CLoadingCardShader::Render(CCamera * pCamera)
 	for (int j = 0; j < 4; j++)
 	{
 		m_LoadingCards[j]->Render(pCamera);
+	}
+}
+
+void CLoadingCardShader::SetCardType(CardType * cardType)
+{
+	if (cardType)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			m_EachCardType[i] = cardType[i];
+		}
 	}
 }
 
@@ -133,7 +145,7 @@ D3D12_SHADER_BYTECODE CLoadingCardShader::CreatePixelShader(ComPtr<ID3DBlob>& pS
 {
 	return(CShader::CompileShaderFromFile(
 		L"./code/04.Shaders/99.GraphicsShader/SpriteShader.hlsl",
-		"PSCards",
+		"PSLoadingCards",
 		"ps_5_1",
 		pShaderBlob));
 }
