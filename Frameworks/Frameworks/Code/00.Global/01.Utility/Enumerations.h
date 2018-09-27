@@ -271,7 +271,7 @@ struct PlayerInfo
 	float RSkillCoolTime{ 1.0f };
 
 	float AtkSpeed{ 1.0f };
-	float WalkSpeed{ 5.0f };
+	float WalkSpeed{ 2.0f };
 
 	//0. ¸ùµÕÀÌ	1. °Ë	2. ¸¶¹ý	3.	È°
 	UINT Weapon{ 0 };
