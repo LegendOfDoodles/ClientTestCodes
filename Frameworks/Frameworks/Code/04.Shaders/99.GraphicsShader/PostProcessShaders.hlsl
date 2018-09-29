@@ -1,6 +1,8 @@
 #include "./Common.hlsl"
 #include "./Light.hlsl"
 
+#define LuminosityFunc float3(0.2326, 0.7152, 0.0722)
+
 Texture2D<float4> gtxtSceneBaseColor : register(t3); // Texture Diffuse + Specular
 Texture2D<float4> gtxtSceneNormal : register(t4); // xyz: 노말, w: 라이팅 여부
 Texture2D<float4> gtxtSceneRoughMetalFresnel : register(t5); // r:Roughness, g: Metallic, b:Fresnel, a: 외곽선 처리 여부
@@ -181,7 +183,7 @@ float4 PSTextureToFullScreen(float4 position : SV_POSITION) : SV_Target
     float4 finalColor = (lightColor + totalReflectColor) * gtxtSceneToonPower.Sample(wrapSampler, uv);
     if (gtxtUVBuffer.Sample(wrapSampler, uv).z == 1)
     {
-        float intensity = dot(finalColor.rgb, float3(0.2326, 0.7152, 0.0722));
+        float intensity = dot(finalColor.rgb, LuminosityFunc);
         finalColor = finalColor * CalculateSketchEffect(gtxtUVBuffer.Sample(wrapSampler, uv).xy * 2, intensity);
     }
 
