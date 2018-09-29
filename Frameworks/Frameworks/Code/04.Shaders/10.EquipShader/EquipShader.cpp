@@ -36,7 +36,7 @@ void CEquipShader::UpdateShaderVariables(int opt)
 			CPlayer* pPlayer = (dynamic_cast<CEquipment*>(m_ppObjects[i*m_nMaxEquip+j]))->GetMaster();
 			CB_ANIOBJECT_INFO *pMappedObject = (CB_ANIOBJECT_INFO *)(m_pMappedObjects + ((/*matIndex*/m_arrEquipIndex[i][j] * m_nPlayer + i/*selectIndex*/) * elementBytes));
 
-			memcpy(pMappedObject->m_xmf4x4Frame, pPlayer->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 128);
+			memcpy(pMappedObject->m_xmf4x4Frame, pPlayer->GetFrameMatrix(), sizeof(XMFLOAT4X4) * 31);
 
 			XMStoreFloat4x4(&pMappedObject->m_xmf4x4World0,
 				XMMatrixTranspose(XMLoadFloat4x4(pPlayer->GetWorldMatrix())));
@@ -542,6 +542,11 @@ void CEquipShader::ReleaseObjects()
 			if (m_ppMaterials[i]) Safe_Delete(m_ppMaterials[i]);
 		}
 		Safe_Delete_Array(m_ppMaterials);
+	}
+
+	if (m_nMeshIndex)
+	{
+		Safe_Delete_Array(m_nMeshIndex);
 	}
 }
 

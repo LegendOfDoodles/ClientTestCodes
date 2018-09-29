@@ -4,7 +4,7 @@
 /// 목적: 여러 지점에서 사용할 나열형 데이터를 통합 관리한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-18
+/// 최종 수정 날짜: 2018-09-29
 /// </summary>
 
 enum SceneType
@@ -19,10 +19,6 @@ enum SceneType
 
 enum CardType
 {
-	Blue_Player_Deactive,
-	Blue_AI_Deactive,
-	Red_Player_Deactive,
-	Red_AI_Deactive,
 	Blue_Player,
 	Blue_AI,
 	Red_Player,
@@ -271,7 +267,7 @@ struct PlayerInfo
 	float RSkillCoolTime{ 1.0f };
 
 	float AtkSpeed{ 1.0f };
-	float WalkSpeed{ 5.0f };
+	float WalkSpeed{ 2.0f };
 
 	//0. 몽둥이	1. 검	2. 마법	3.	활
 	UINT Weapon{ 0 };

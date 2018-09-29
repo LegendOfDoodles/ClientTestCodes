@@ -10,7 +10,7 @@
 /// 목적: 로딩 신 처리용 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-18
+/// 최종 수정 날짜: 2018-09-27
 /// </summary>
 
 #define RoomScreenShader m_ppShaders[0]
@@ -52,6 +52,11 @@ bool CRoomScene::IsExitScene()
 {
 	if (RoomButtonsShader->IsShaderExit()) return true;
 	return false;
+}
+
+CardType * CRoomScene::GetCardType()
+{
+	return RoomCardsShader->GetCardType();
 }
 
 ////////////////////////////////////////////////////////////////////////

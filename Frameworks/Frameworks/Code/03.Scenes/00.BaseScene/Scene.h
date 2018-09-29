@@ -44,6 +44,8 @@ public: // 공개 함수
 	virtual bool IsExitScene() { return false; }
 
 	SceneType GetCurSceneType() { return m_SceneType; }
+	virtual CardType* GetCardType() { return nullptr; }
+	virtual void SetCardType(CardType*) { }
 
 protected: // 내부 함수
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr);

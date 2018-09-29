@@ -13,6 +13,8 @@ public: // 공개 함수
 	virtual void UpdateShaderVariables(int opt = 0);
 	virtual void Render(CCamera *pCamera);
 
+	virtual void SetCardType(CardType* cardType);
+
 	virtual int GetPlayerId() { return m_myId; }
 	virtual CardType* GetCardType() { return m_EachCardType; }
 
