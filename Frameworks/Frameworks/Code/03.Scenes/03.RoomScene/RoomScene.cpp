@@ -14,8 +14,8 @@
 /// </summary>
 
 #define RoomScreenShader m_ppShaders[0]
-#define RoomButtonsShader m_ppShaders[1]
-#define RoomCardsShader m_ppShaders[2]
+#define RoomCardsShader m_ppShaders[1]
+#define RoomButtonsShader m_ppShaders[2]
 
 ////////////////////////////////////////////////////////////////////////
 // 持失切, 社瑚切
