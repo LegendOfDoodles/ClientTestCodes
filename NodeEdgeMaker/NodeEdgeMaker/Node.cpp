@@ -25,15 +25,15 @@ const POINT CNode::GetDividIndex() const
 {
 	POINT dividIndex;
 
-	dividIndex.x = m_position.x / m_size.x;
-	dividIndex.y = m_position.y / m_size.y;
+	dividIndex.x = static_cast<LONG>(m_position.x / m_size.x);
+	dividIndex.y = static_cast<LONG>(m_position.y / m_size.y);
 
 	return dividIndex;
 }
 
 int CNode::GetDistanceSquareWithPosition(const XMFLOAT2 &position)
 {
-	return  (position.x - m_position.x) * (position.x - m_position.x) + (position.y - m_position.y) * (position.y - m_position.y);
+	return  static_cast<int>((position.x - m_position.x) * (position.x - m_position.x) + (position.y - m_position.y) * (position.y - m_position.y));
 }
 
 
@@ -41,9 +41,9 @@ int CNode::GetDistanceSquareWithPosition(const XMFLOAT2 &position)
 // 내부 함수
 int CNode::PositionToIndex(XMFLOAT2 position)
 {
-	int x = position.x / m_size.x;
-	int y = position.y / m_size.y;
-	int xMax = TERRAIN_SIZE_WIDTH / m_size.x + 1;
+	int x = static_cast<int>(position.x / m_size.x);
+	int y = static_cast<int>(position.y / m_size.y);
+	int xMax = static_cast<int>(TERRAIN_SIZE_WIDTH / m_size.x) + 1;
 
 	return  xMax * y + x;
 }
