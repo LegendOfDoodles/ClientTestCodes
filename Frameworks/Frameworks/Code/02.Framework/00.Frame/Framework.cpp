@@ -132,7 +132,7 @@ void CFramework::ChangeDoneScene()
 		}
 		else if (m_pScene->GetCurSceneType() == SceneType::GameScene)
 		{
-
+			ChangeSceneByType(SceneType::RoomScene);
 		}
 	}
 }
