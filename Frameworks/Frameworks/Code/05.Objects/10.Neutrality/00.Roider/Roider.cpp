@@ -19,14 +19,13 @@ CRoider::CRoider(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CAnimatedObje
 	m_detectRange = CONVERT_PaperUnit_to_InG(40.0f);
 	m_speed = CONVERT_cm_to_InG(5.8266f);
 
-	// Warning! 로이더 스테이터스 설정 필요
-	m_StatusInfo.HP = m_StatusInfo.maxHP = 100.0f;
-	m_StatusInfo.Def = 10.0f;
-	m_StatusInfo.Atk = 200.0f;
-	m_StatusInfo.Exp = 100;
+	m_StatusInfo.HP = m_StatusInfo.maxHP = 440.0f;
+	m_StatusInfo.Def = 30.0f;
+	m_StatusInfo.Atk = 40.0f;
+	m_StatusInfo.Exp = 640;
 
-	m_attackRange = CONVERT_PaperUnit_to_InG(16);
-	m_farAttackRange = CONVERT_PaperUnit_to_InG(30);
+	m_attackRange = CONVERT_PaperUnit_to_InG(28.8f);
+	m_farAttackRange = CONVERT_PaperUnit_to_InG(54);
 }
 
 CRoider::~CRoider()

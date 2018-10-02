@@ -192,13 +192,13 @@ void CMinion::AdjustAnimationIndex()
 CSwordMinion::CSwordMinion(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CMinion(pCreateMgr, nMeshes)
 {
 	SetType(ObjectType::SwordMinion);
-	m_StatusInfo.maxHP = 445;
-	m_StatusInfo.HP = 445;
-	m_StatusInfo.Atk = 100;
+	m_StatusInfo.maxHP = 425;
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
+	m_StatusInfo.Atk = 12;
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
 
-	m_attackRange = CONVERT_PaperUnit_to_InG(10);
+	m_attackRange = CONVERT_PaperUnit_to_InG(13);
 }
 
 CSwordMinion::~CSwordMinion()
@@ -284,12 +284,12 @@ CMagicMinion::CMagicMinion(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CMi
 {
 	SetType(ObjectType::StaffMinion);
 	m_StatusInfo.maxHP = 280;
-	m_StatusInfo.HP = 280;
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
 	m_StatusInfo.Atk = 23;
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
 
-	m_attackRange = CONVERT_PaperUnit_to_InG(24);
+	m_attackRange = CONVERT_PaperUnit_to_InG(31.2f);
 }
 
 CMagicMinion::~CMagicMinion()
@@ -374,12 +374,12 @@ CBowMinion::CBowMinion(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CMinion
 {
 	SetType(ObjectType::BowMinion);
 	m_StatusInfo.maxHP = 300;
-	m_StatusInfo.HP = 300;
+	m_StatusInfo.HP = m_StatusInfo.maxHP;
 	m_StatusInfo.Atk = 20;
 	m_StatusInfo.Def = 0;
 	m_StatusInfo.Exp = 64;
 
-	m_attackRange = CONVERT_PaperUnit_to_InG(30);
+	m_attackRange = CONVERT_PaperUnit_to_InG(39);
 }
 
 CBowMinion::~CBowMinion()

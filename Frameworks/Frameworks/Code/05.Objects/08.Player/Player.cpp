@@ -42,7 +42,7 @@ void CPlayer::Animate(float timeElapsed)
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
 				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
 			{
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(4), m_StatusInfo.Atk);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(7.2f), m_StatusInfo.Atk);
 
 				//// EffectMgr
 				m_pSoundMgr->play(SOUND::Player_Sword_Attack_Sound, GetPosition());
@@ -54,7 +54,7 @@ void CPlayer::Animate(float timeElapsed)
 				m_fFrameTime >= m_nAniLength[m_nAniIndex] * 0.5f &&
 				m_fPreFrameTime < m_nAniLength[m_nAniIndex] * 0.5f)
 			{
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(5), CONVERT_PaperUnit_to_InG(4), m_StatusInfo.Atk);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(9), CONVERT_PaperUnit_to_InG(7.2f), m_StatusInfo.Atk);
 
 				//// EffectMgr
 				m_pSoundMgr->play(SOUND::Player_Sword_Attack_Sound, GetPosition());
@@ -66,7 +66,7 @@ void CPlayer::Animate(float timeElapsed)
 				// CoolTime ÃÊ±âÈ­
 				m_StatusInfo.QSkillCoolTime = 0.0f;
 
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(8), CONVERT_PaperUnit_to_InG(8), 100);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, CONVERT_PaperUnit_to_InG(14.4f), CONVERT_PaperUnit_to_InG(14.4f), 100);
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_Q_Effect);
@@ -78,7 +78,7 @@ void CPlayer::Animate(float timeElapsed)
 			{
 				m_StatusInfo.WSkillCoolTime = 0.0f;
 
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(24), 180, 500);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(43.2f), 180, 500);
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_W_Effect);
@@ -90,7 +90,7 @@ void CPlayer::Animate(float timeElapsed)
 			{
 				m_StatusInfo.ESkillCoolTime = 0.0f;
 
-				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(16), 150, 100);
+				m_pColManager->RequestCollide(CollisionType::SECTERFORM, this, CONVERT_PaperUnit_to_InG(28.8f), 150, 100);
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_E_Effect);
@@ -102,7 +102,7 @@ void CPlayer::Animate(float timeElapsed)
 			{
 				m_StatusInfo.RSkillCoolTime = 0.0f;
 
-				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(12), 500);
+				m_pColManager->RequestCollide(CollisionType::SPHERE, this, 0, CONVERT_PaperUnit_to_InG(21.6f), 500);
 
 				// EffectMgr
 				m_pEffectMgr->RequestSpawn(GetPosition(), GetLook(), m_nAniLength[m_nAniIndex], EffectObjectType::Player_SwordSkill_R_Effect);

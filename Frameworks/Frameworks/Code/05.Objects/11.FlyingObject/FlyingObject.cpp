@@ -7,7 +7,7 @@
 /// 목적: 날아가는(스킬, 화살 등) 오브젝트 처리 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-08-12
+/// 최종 수정 날짜: 2018-10-02
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(5);
 		m_distance = 0.0f;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(54);
 		m_speed = CONVERT_cm_to_InG(2.805f);
 	}
 	else if (type == FlyingObjectType::Minion_Arrow)
@@ -197,26 +197,26 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_attackRange = CONVERT_PaperUnit_to_InG(2.5f);
 		m_distance = 0.0f;
 		m_EffectTriger = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(30);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(39);
 		m_speed = MINION_ARROW_SPEED;
 	}
 	else if (type == FlyingObjectType::Minion_Magic)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(2.5f);
 		m_distance = 0.0f;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(24);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(29.9f);
 		m_speed = CONVERT_cm_to_InG(2.148f);
 	}
 	else if (type == FlyingObjectType::BlueTower_Attack)
 	{
 		m_SoundTrigier = true;
-		m_attackRange = CONVERT_PaperUnit_to_InG(20);
+		m_attackRange = CONVERT_PaperUnit_to_InG(26);
 		m_speed = CONVERT_cm_to_InG(4.733f);
 	}
 	else if (type == FlyingObjectType::RedTower_Attack)
 	{
 		m_SoundTrigier = true;
-		m_attackRange = CONVERT_PaperUnit_to_InG(20);
+		m_attackRange = CONVERT_PaperUnit_to_InG(26);
 		m_speed = CONVERT_cm_to_InG(4.733f);
 	}
 	else if (type == FlyingObjectType::Player_Arrow)
@@ -225,14 +225,14 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_distance = 0.0f;
 		m_EffectTriger = true;
 		m_SoundTrigier = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(40);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(72);
 		m_speed = CONVERT_cm_to_InG(7.22f);
 	}
 	else if (type == FlyingObjectType::Player_MagicSkill_Q)
 	{
 		m_attackRange = CONVERT_PaperUnit_to_InG(15);
 		m_distance = 0.0f;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(36);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(64.8f);
 		m_speed = CONVERT_cm_to_InG(6.13f);
 	}
 	else if (type == FlyingObjectType::Player_ArrowSkill_Q)
@@ -240,7 +240,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_attackRange = CONVERT_PaperUnit_to_InG(15);
 		m_distance = 0.0f;
 		m_SoundTrigier = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(32);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(57.6f);
 		m_speed = CONVERT_cm_to_InG(5.79f);
 	}
 	else if (type == FlyingObjectType::Player_ArrowSkill_W)
@@ -248,7 +248,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_attackRange = CONVERT_PaperUnit_to_InG(6);
 		m_distance = 0.0f;
 		m_SoundTrigier = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(50);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(90);
 		m_speed = CONVERT_cm_to_InG(3.305f);
 	}
 	else if (type == FlyingObjectType::Player_ArrowSkill_E)
@@ -256,7 +256,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_attackRange = CONVERT_PaperUnit_to_InG(5);
 		m_distance = 0.0f;
 		m_EffectTriger = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(80);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(144);
 		m_speed = PLAYER_ESKILL_ARROW_SPEED
 	}
 	else if (type == FlyingObjectType::Player_ArrowSkill_R)
@@ -264,12 +264,12 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_attackRange = CONVERT_PaperUnit_to_InG(17);
 		m_distance = 0.0f;
 		m_SoundTrigier = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(44);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(79.2f);
 		m_speed = CONVERT_cm_to_InG(9.05f);
 	}
 	else if (type == FlyingObjectType::Player_MagicSkill_R)
 	{
-		m_attackRange = CONVERT_PaperUnit_to_InG(30);
+		m_attackRange = CONVERT_PaperUnit_to_InG(54);
 		m_speed = CONVERT_cm_to_InG(15.3f);
 		m_direction = XMFLOAT3(0, -1.f, 0);
 	}
@@ -278,7 +278,7 @@ void CFlyingObject::SetFlyingObjectsType(FlyingObjectType type)
 		m_attackRange = CONVERT_PaperUnit_to_InG(5);
 		m_distance = 0.0f;
 		m_EffectTriger = true;
-		m_maxDistance = CONVERT_PaperUnit_to_InG(36);
+		m_maxDistance = CONVERT_PaperUnit_to_InG(64.8f);
 		m_speed = CONVERT_cm_to_InG(3.52f);
 	}
 }
