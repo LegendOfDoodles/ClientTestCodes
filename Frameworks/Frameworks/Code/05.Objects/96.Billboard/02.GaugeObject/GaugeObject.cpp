@@ -50,16 +50,22 @@ void CGaugeObject::Animate(float fTimeElapsed)
 {
 	CBillboardObject::Animate(fTimeElapsed);
 
-	if (m_Type == GaugeUIType::PlayerGauge || m_Type == GaugeUIType::RoiderGauge)
+	if (m_Type == GaugeUIType::PlayerGauge)
 	{
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
-		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 110.f;
+		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 195.f;
+		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
+	}
+	else if (m_Type == GaugeUIType::RoiderGauge)
+	{
+		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
+		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 210.f;
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
 	else if (m_Type == GaugeUIType::MinionGauge)
 	{
 		m_xmf4x4World._41 = m_pMasterObject->GetPosition().x;
-		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 80.f;
+		m_xmf4x4World._42 = m_pMasterObject->GetPosition().y + 100.f;
 		m_xmf4x4World._43 = m_pMasterObject->GetPosition().z;
 	}
 	else if (m_Type == GaugeUIType::NexusAndTower) {

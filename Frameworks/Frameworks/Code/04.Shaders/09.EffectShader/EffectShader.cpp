@@ -415,8 +415,8 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		m_ppObjects[idx]->Activate();
 		if (objectType == EffectObjectType::Player_SwordSkill_Q_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x + (CONVERT_PaperUnit_to_InG(8) * direction.x), position.y + CONVERT_PaperUnit_to_InG(3), position.z + (CONVERT_PaperUnit_to_InG(8) * direction.z)));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x + (CONVERT_PaperUnit_to_InG(16) * direction.x), position.y + CONVERT_PaperUnit_to_InG(3), position.z + (CONVERT_PaperUnit_to_InG(16) * direction.z)));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (m_srvIncrementSize * idx));
 			m_PlayerSwordSkill_Q_EffectList.emplace_back(m_ppObjects[idx]);
@@ -465,8 +465,8 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// Player Attack Motion Effect
 		else if (objectType == EffectObjectType::Player_ArrowAttack_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[2]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 55.f, position.z ));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7.2), position.z ));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize * (idx - UseMatrialNumToObjectCnt[0])));
 			m_PlayerArrowAttack_EffectList.emplace_back(m_ppObjects[idx]);
@@ -482,7 +482,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		else if (objectType == EffectObjectType::Player_StaffQSkill_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 50.f, position.z ));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(7.2), position.z ));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[1].ptr + (m_srvIncrementSize *  (idx - UseMatrialNumToObjectCnt[0])));
 			m_PlayerStaffQSkill_EffectList.emplace_back(m_ppObjects[idx]);
@@ -499,7 +499,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// Minion Attack Motion Effect
 		else if (objectType == EffectObjectType::Minion_ArrowAttack_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z - CONVERT_PaperUnit_to_InG(1)));
 
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[2].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1]))));
@@ -517,14 +517,14 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// FollowingToFlyingObejct Effect
 		else if (objectType == EffectObjectType::Flying_MinionArrow_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[0]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[6]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + 4.f, position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[3].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2]))));
 			m_MinionArrow_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Flying_PlayerArrow_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[1]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[7]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x - (CONVERT_PaperUnit_to_InG(3) * direction.x), position.y + 4.f, position.z - (CONVERT_PaperUnit_to_InG(3) * direction.z)));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[3].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2]))));
 			m_PlayerArrow_EffectList.emplace_back(m_ppObjects[idx]);
@@ -539,7 +539,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		else if (objectType == EffectObjectType::Tower_Attack_Explosion_Effect)
 		{
 			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y, position.z));
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(3), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[3].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2]))));
 			m_TowerAttack_EffectList.emplace_back(m_ppObjects[idx]);
 		}
@@ -554,7 +554,7 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		}
 		else if (objectType == EffectObjectType::NormallHit_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[2]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[7]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + CONVERT_PaperUnit_to_InG(4), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[4].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3]))));
 			m_NormalHit_Effect.emplace_back(m_ppObjects[idx]);
@@ -563,21 +563,21 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// Golem Attack Effect
 		else if (objectType == EffectObjectType::Golem_StandardAttack_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x + (CONVERT_PaperUnit_to_InG(20) * direction.x), position.y + (CONVERT_PaperUnit_to_InG(3)), position.z + (CONVERT_PaperUnit_to_InG(20) * direction.z)));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[2]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x + (CONVERT_PaperUnit_to_InG(25) * direction.x), position.y + (CONVERT_PaperUnit_to_InG(4)), position.z + (CONVERT_PaperUnit_to_InG(25) * direction.z)));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[5].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4]))));
 			m_GolemStandardAttack_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Golem_StumpAttack_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[2]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[5].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4]))));
 			m_GolemStumpAttack_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Golem_SpecialAttack_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[4]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[5].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4]))));
 			m_GolemSpecialAttack_EffectList.emplace_back(m_ppObjects[idx]);
@@ -586,14 +586,14 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// Level Up Effect
 		else if (objectType == EffectObjectType::Player_LevelUp_CircleEffect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[4]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[6].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5]))));
 			m_CircleLevelUp_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Player_LevelUp_ArrowEffect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[4]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(4)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[6].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5]))));
 			m_ArrowLevelUp_EffectList.emplace_back(m_ppObjects[idx]);
@@ -602,36 +602,36 @@ void CEffectShader::SpawnEffectObject(const XMFLOAT3 & position, const XMFLOAT3 
 		// Text Effect
 		else if (objectType == EffectObjectType::Kill_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
 			m_Kill_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Death_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[3]);
 			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
 			m_Death_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Miss_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[7]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(7.2)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
 			m_Miss_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Recovery_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[7]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(7.2)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
 			m_Recovery_EffectList.emplace_back(m_ppObjects[idx]);
 		}
 		else if (objectType == EffectObjectType::Absorption_Effect)
 		{
-			m_ppObjects[idx]->SetMesh(0, m_ppMesh[5]);
-			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(3)), position.z));
+			m_ppObjects[idx]->SetMesh(0, m_ppMesh[7]);
+			m_ppObjects[idx]->SetPosition(XMFLOAT3(position.x, position.y + (CONVERT_PaperUnit_to_InG(7.2)), position.z));
 			m_ppObjects[idx]->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[7].ptr + (m_srvIncrementSize * (idx - (UseMatrialNumToObjectCnt[0] + UseMatrialNumToObjectCnt[1] + UseMatrialNumToObjectCnt[2] + UseMatrialNumToObjectCnt[3] + UseMatrialNumToObjectCnt[4] + UseMatrialNumToObjectCnt[5] + UseMatrialNumToObjectCnt[6]))));
 			m_Absorption_EffectList.emplace_back(m_ppObjects[idx]);
 		}
@@ -873,14 +873,14 @@ void CEffectShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * pCont
 	m_ppMaterials[6] = Materials::CreateLevelUpEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[6], &m_psrvGPUDescriptorStartHandle[6]);
 	m_ppMaterials[7] = Materials::CreateTextEffectMaterial(pCreateMgr, &m_psrvCPUDescriptorStartHandle[7], &m_psrvGPUDescriptorStartHandle[7]);
 
-	m_ppMesh[0] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 25.6f, FRAME_BUFFER_HEIGHT / 14.4f, 0.f);		// 50 x 50
-	m_ppMesh[1] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 12.8f, FRAME_BUFFER_HEIGHT / 7.2f, 0.f);		// 100 x 100
-	m_ppMesh[2] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 8.53f, FRAME_BUFFER_HEIGHT / 4.8f, 0.f);		// 150 x 150
-	m_ppMesh[3] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 6.4f, FRAME_BUFFER_HEIGHT / 3.6f, 0.f);		// 200 x 200
-	m_ppMesh[4] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 5.12f, FRAME_BUFFER_HEIGHT / 2.88f, 0.f);		// 250 x 250
-	m_ppMesh[5] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 4.26f, FRAME_BUFFER_HEIGHT / 2.4f, 0.f);		// 300 x 300
-	m_ppMesh[6] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3.65f, FRAME_BUFFER_HEIGHT / 2.05f, 0.f);		// 350 x 350
-	m_ppMesh[7] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3.2f, FRAME_BUFFER_HEIGHT / 1.8f, 0.f);		// 400 x 400
+	m_ppMesh[0] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 12.8f, FRAME_BUFFER_HEIGHT / 7.2f, 0.f);		// 100 x 100
+	m_ppMesh[1] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 4.26f, FRAME_BUFFER_HEIGHT / 2.4f,  0.f);		// 300 x 300
+	m_ppMesh[2] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3.65f, FRAME_BUFFER_HEIGHT / 2.05f, 0.f);		// 350 x 350
+	m_ppMesh[3] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 3.2f,	FRAME_BUFFER_HEIGHT / 1.8f,  0.f);		// 400 x 400
+	m_ppMesh[4] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 2.84f, FRAME_BUFFER_HEIGHT / 1.6f,  0.f);		// 450 x 450
+	m_ppMesh[5] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 2.56f, FRAME_BUFFER_HEIGHT / 1.44f, 0.f);		// 500 x 500
+	m_ppMesh[6] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 25.6f, FRAME_BUFFER_HEIGHT / 14.4f,  0.f);		// 50 x 50
+	m_ppMesh[7] = new CTexturedRectMesh(pCreateMgr, FRAME_BUFFER_WIDTH / 6.4f, FRAME_BUFFER_HEIGHT / 3.6f, 0.f);		// 200 x 200
 
 	for (int i = 0; i < m_nMesh; ++i)
 	{
