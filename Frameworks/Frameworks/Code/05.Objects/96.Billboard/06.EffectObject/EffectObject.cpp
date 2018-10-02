@@ -108,7 +108,7 @@ void CEffectObject::Animate(float timeElapsed)
 		m_xmf4x4World._31 = xmf3Look.x;		m_xmf4x4World._32 = xmf3Look.y;
 
 		m_AnimaitonTime += timeElapsed * m_speed;
-		if (m_AnimaitonTime > m_maxAnimaitonTime / 2)
+		if (m_AnimaitonTime > m_maxAnimaitonTime / 2.2f)
 		{
 			m_curState = StatesType::Remove;
 		}

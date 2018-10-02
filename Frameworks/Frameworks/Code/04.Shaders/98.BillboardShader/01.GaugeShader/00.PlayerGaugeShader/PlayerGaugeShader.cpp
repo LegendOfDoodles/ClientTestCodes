@@ -192,7 +192,6 @@ void CPlayerHPGaugeShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void 
 		pGaugeObject->SetMasterObject(m_pPlayer[i]);
 		
 		XMFLOAT3 HPGaugePosition = m_pPlayer[i]->GetPosition();
-		HPGaugePosition.y += 110.f;
 		pGaugeObject->SetPosition(HPGaugePosition);
 
 		pGaugeObject->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
