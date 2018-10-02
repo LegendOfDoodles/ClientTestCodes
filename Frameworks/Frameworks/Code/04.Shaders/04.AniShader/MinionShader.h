@@ -97,4 +97,6 @@ protected: // º¯¼ö
 	float m_preSpawnTime{ 0.0f };
 
 	int m_curSpawnCount{ 0 };
+
+	bool m_bDataPrepared{ false };
 };

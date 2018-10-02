@@ -98,7 +98,7 @@ void CEffectShader::UpdateShaderVariables(int opt)
 void CEffectShader::AnimateObjects(float timeElapsed)
 {
 	// 리스트에서 제거할 조건 함수
-	static auto removeFunc = [this](CCollisionObject* obj) {
+	auto removeFunc = [this](CCollisionObject* obj) {
 		if (obj->GetState() == StatesType::Remove)
 		{
 			ResetPossibleIndex(obj->GetIndex());

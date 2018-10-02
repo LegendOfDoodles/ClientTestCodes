@@ -190,13 +190,13 @@ void CRoomButtonsShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void * 
 
 	CSprite *pStartButton{ new CSprite(pCreateMgr) };
 	pStartButton->SetMesh(0, pTitleButtonMesh);
-	pStartButton->SetPosition(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.3f, 9.f);
+	pStartButton->SetPosition(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.3f, 8.f);
 	pStartButton->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr);
 	m_RoomButtons[0] = pStartButton;
 
 	CSprite *pExitButton{ new CSprite(pCreateMgr) };
 	pExitButton->SetMesh(0, pTitleButtonMesh);
-	pExitButton->SetPosition(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.15f, 9.f);
+	pExitButton->SetPosition(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.15f, 8.f);
 	pExitButton->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + incrementSize);
 	m_RoomButtons[1] = pExitButton;
 }

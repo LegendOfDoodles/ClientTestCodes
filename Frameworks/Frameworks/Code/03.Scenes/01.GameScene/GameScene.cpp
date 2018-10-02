@@ -40,7 +40,7 @@
 /// 목적: 인 게임 씬
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-17
+/// 최종 수정 날짜: 2018-10-01
 /// </summary>
 
 #define UI_Shader m_ppShaders[8]
@@ -62,6 +62,7 @@
 // 생성자, 소멸자
 CGameScene::CGameScene()
 {
+	g_GameFinished = false;
 	m_SceneType = SceneType::GameScene;
 }
 
@@ -166,6 +167,8 @@ void CGameScene::ProcessInput()
 
 void CGameScene::AnimateObjects(float timeElapsed)
 {
+	if (g_GameFinished) m_exitTimeChecker -= timeElapsed;
+
 	m_pCamera->Update(timeElapsed);
 	m_pSoundManager->Update(timeElapsed);
 
@@ -283,6 +286,13 @@ void CGameScene::UpdateShadowCamera(int renderStage)
 	{
 		m_pLightCamera->UpdateShaderVariables(6);
 	}
+}
+
+bool CGameScene::IsSceneDone()
+{
+	if (!g_GameFinished) return false;
+	if (m_exitTimeChecker > 0) return false;
+	return true;
 }
 
 void CGameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID,
