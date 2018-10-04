@@ -7,7 +7,7 @@
 /// 목적: 로딩 바 출력용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-18
+/// 최종 수정 날짜: 2018-10-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,10 @@ void CRoomCardShader::UpdateShaderVariables(int opt)
 
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_RoomCards[i]->GetWorldMatrix())));
-		pMappedObject->m_percentage = (float)m_EachCardType[i];
+		bool type{ true };
+		if (m_EachCardType[i] == CardType::Blue_Player || m_EachCardType[i] == CardType::Red_Player)
+			type = false;
+		pMappedObject->m_percentage = (float)m_EachCardType[i] * 2 + static_cast<float>(type);
 	}
 }
 
