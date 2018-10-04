@@ -1,6 +1,10 @@
 #pragma once
 #include "05.Objects/08.Player/Player.h"
 
+typedef std::list<CCollisionObject*> CollisionObjectList;
+
+class CWayFinder;
+
 class CPlayerAI : public CPlayer
 {
 public:	// 생성자, 소멸자
@@ -8,33 +12,48 @@ public:	// 생성자, 소멸자
 	virtual ~CPlayerAI();
 
 public:	// 외부 함수
-	void WalkCurLine(float timeElapsed);		// 현재 라인 진행
-	void HelpOtherPlayer(float timeElapsed);	// 다른 플레이어 돕기
-	void ReturnOriginLine(float timeElapsed);	// 원래 라인으로 복귀
-	void AttackEnemy(float timeElapsed);		// 적 공격
-	void RetreatFromFight(float timeElapsed);	// 후퇴
-	void AvoidAttack(float timeElapsed);		// 공격 회피
-	void ChaseEnemy(float timeElapsed);		// 공격 회피
-	void CaculateUtility();
-
 	virtual void Animate(float timeElapsed);
 
+	virtual void PrepareData();
+
+	int CaculateUtility();
+
+	virtual void SetPathes(Path* pathes) { m_pathes = pathes; }
+	virtual void SetWayFinder(shared_ptr<CWayFinder> pWayFinder) { m_pWayFinder = pWayFinder; }
+	
 protected: // 내부 함수
-	void PlayAction(int index);
+	void PlayAction(int index, float timeElapsed);
+
+	void PushLine(float timeElapsed);
+	void AttackPlayer(float timeElapsed);
+	void FallBack(float timeElapsed);
+	void SupportLine(float timeElapsed);
+
+	float GetPushLineUtility();
+	float GetAttackPlayerUtility();
+	float GetFallBackUtility();
+	float GetSupportLineUtility();
 
 	float GetFrontLineValue();
 	void ReceiveEnemyList();
 	void ReceiveTeamList();
-	std::list<CCollisionObject*> EnemyWithinRange();
+	CollisionObjectList EnemyWithinRange();
+
 protected: // 변수
-	std::list<CCollisionObject*>* m_plstEnemy;
-	std::list<CCollisionObject*>* m_plstMyTeam;
+	CollisionObjectList* m_plstEnemy{ NULL };
+	CollisionObjectList* m_plstMyTeam{ NULL };
 
-	CPlayer* m_pTarget_Enemy;
-	float* m_arrUtilities;
-	int m_nUtilities{ 4 };
+	CPlayer* m_pTarget_Enemy{ NULL };
 
+	float m_refreshTimeChecker{ TIME_REFRESH_ACTION };
 
-	float timedelay{ 0 };
+	int m_currentActionIndex{ 0 };
+
+	PlayerLine m_ownLine;
+	PlayerLine m_otherLine;
+
+	Path* m_pathes;
+
+	shared_ptr<CWayFinder> m_pWayFinder;
 };
 

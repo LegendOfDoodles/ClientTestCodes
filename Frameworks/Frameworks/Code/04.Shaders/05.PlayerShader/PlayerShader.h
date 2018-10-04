@@ -1,5 +1,8 @@
 #pragma once
 #include "04.Shaders/00.BaseShader/Shader.h"
+#include "00.Global/01.Utility/04.WayFinder/01.Edge/Edge.h"
+
+typedef std::list<CPathEdge> Path;
 
 class CMaterial;
 class CHeightMapTerrain;
@@ -25,8 +28,6 @@ public: // 공개 함수
 	virtual void RenderBoundingBox(CCamera *pCamera);
 	virtual void RenderShadow(CCamera *pCamera);
 
-
-
 	virtual CBaseObject *PickObjectByRayIntersection(
 		XMFLOAT3& pickPosition, XMFLOAT4X4& xmf4x4View, float &nearHitDistance);
 
@@ -36,7 +37,8 @@ public: // 공개 함수
 	void SetThrowingManagerToObject(shared_ptr<CThrowingMgr> manager);
 	void SetEffectManagerToObject(shared_ptr<CEffectMgr> manager);
 	void SetSoundManagerToObject(shared_ptr<CSoundManager> manager);
-	
+	virtual void SetWayFinderToObject(shared_ptr<CWayFinder> pWayFinder);
+
 	bool* GetChangeWeapon() { return &m_ChangeWeapon; }
 
 protected: // 내부 함수
@@ -50,9 +52,9 @@ protected: // 내부 함수
 	virtual void CreateShader(shared_ptr<CCreateMgr> pCreateMgr, UINT nRenderTargets = 1, bool isRenderBB = false, bool isRenderShadow = false);
 
 	virtual void BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pContext = NULL);
-	virtual void SetWayFinder(shared_ptr<CWayFinder> pWayFinder) { m_pWayFinder = pWayFinder; };
-
 	virtual void ReleaseObjects();
+
+	void CreatePathes();
 
 protected: // 변수
 
@@ -65,8 +67,7 @@ protected: // 변수
 	int m_nWeaponState{ 0 };
 
 	CHeightMapTerrain * m_pTerrain{ NULL };
-	shared_ptr<CWayFinder> m_pWayFinder;
 	bool m_ChangeWeapon{ false };
 
-
+	Path m_pathes[4];
 };

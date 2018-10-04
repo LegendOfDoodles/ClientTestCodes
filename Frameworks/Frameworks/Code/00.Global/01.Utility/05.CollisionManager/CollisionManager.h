@@ -1,6 +1,8 @@
 #pragma once
 #include "00.Global\01.Utility/08.EffectManager/EffectManager.h"
 
+typedef std::list<CCollisionObject*> CollisionObjectList;
+
 class CCollisionObject;
 class CWayFinder;
 struct NodeMap;
@@ -11,8 +13,6 @@ struct CharacterStatus {
 		hp; atk;
 	}
 };
-
-
 
 class CCollisionManager
 {
@@ -29,8 +29,8 @@ public:
 	
 	PlayerInfo* NearFightingValue(CCollisionObject* pCol, TeamType type);
 	XMFLOAT2 GetFrontLinePosition(int line,TeamType type);
-	std::list<CCollisionObject*>* GetEnemyList(CCollisionObject* pCol, TeamType type);
-	std::list<CCollisionObject*>* GetTeamList(CCollisionObject* pCol, TeamType type);
+	CollisionObjectList* GetEnemyList(TeamType type);
+	CollisionObjectList* GetTeamList(CCollisionObject* pCol, TeamType type);
 	
 	
 	~CCollisionManager();
@@ -68,13 +68,11 @@ protected:
 	shared_ptr<CEffectMgr> m_pEffectMgr;
 
 
-	std::list<CCollisionObject*> m_lstColliders;
-	
-	std::list<CCollisionObject*> m_lstBlueSight;
-	std::list<CCollisionObject*> m_lstRedSight;
+	CollisionObjectList m_lstColliders;
 
-	std::list<CCollisionObject*> m_lstReturn;
+	CollisionObjectList m_lstBlueSight;
+	CollisionObjectList m_lstRedSight;
 
-
+	CollisionObjectList m_lstReturn;
 };
 

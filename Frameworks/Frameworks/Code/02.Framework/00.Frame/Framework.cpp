@@ -10,7 +10,7 @@
 /// 목적: 프레임워크 클래스
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-10-01
+/// 최종 수정 날짜: 2018-10-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,6 @@ void CFramework::ChangeSceneByType(SceneType type)
 {
 	if (m_pScene)
 	{
-		m_pLoadingScene->SetCardType(m_pScene->GetCardType());
 		m_pScene->Finalize();
 	}
 

@@ -16,10 +16,10 @@ CRoomCardShader::CRoomCardShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pC
 {
 	m_hWnd = pCreateMgr->GetHwnd();
 
-	m_EachCardType[0] = CardType::Blue_Player;
-	m_EachCardType[1] = CardType::Blue_AI;
-	m_EachCardType[2] = CardType::Red_AI;
-	m_EachCardType[3] = CardType::Red_AI;
+	g_EachCardType[0] = CardType::Blue_Player;
+	g_EachCardType[1] = CardType::Blue_AI;
+	g_EachCardType[2] = CardType::Red_AI;
+	g_EachCardType[3] = CardType::Red_AI;
 }
 
 CRoomCardShader::~CRoomCardShader()
@@ -56,9 +56,9 @@ void CRoomCardShader::UpdateShaderVariables(int opt)
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_RoomCards[i]->GetWorldMatrix())));
 		bool type{ true };
-		if (m_EachCardType[i] == CardType::Blue_Player || m_EachCardType[i] == CardType::Red_Player)
+		if (g_EachCardType[i] == CardType::Blue_Player || g_EachCardType[i] == CardType::Red_Player)
 			type = false;
-		pMappedObject->m_percentage = (float)m_EachCardType[i] * 2 + static_cast<float>(type);
+		pMappedObject->m_percentage = (float)g_EachCardType[i] * 2 + static_cast<float>(type);
 	}
 }
 
@@ -85,26 +85,26 @@ bool CRoomCardShader::OnProcessMouseInput(WPARAM pKeyBuffer)
 
 	for (int i = 0; i < 4; ++i)
 	{
-		if (m_EachCardType[i] == CardType::Blue_Player || m_EachCardType[i] == CardType::Red_Player) continue;
+		if (g_EachCardType[i] == CardType::Blue_Player || g_EachCardType[i] == CardType::Red_Player) continue;
 
 		if (m_RoomCards[i]->IsInRect(FRAME_BUFFER_WIDTH / 5.f, FRAME_BUFFER_WIDTH / 5.f, cursorPos))
 		{
-			if (m_EachCardType[i] == CardType::Blue_AI)
+			if (g_EachCardType[i] == CardType::Blue_AI)
 			{
-				m_EachCardType[i] = CardType::Blue_Player;
+				g_EachCardType[i] = CardType::Blue_Player;
 			}
-			else if (m_EachCardType[i] == CardType::Red_AI)
+			else if (g_EachCardType[i] == CardType::Red_AI)
 			{
-				m_EachCardType[i] = CardType::Red_Player;
+				g_EachCardType[i] = CardType::Red_Player;
 			}
 
-			if (m_EachCardType[m_myId] == CardType::Blue_Player)
+			if (g_EachCardType[m_myId] == CardType::Blue_Player)
 			{
-				m_EachCardType[m_myId] = CardType::Blue_AI;
+				g_EachCardType[m_myId] = CardType::Blue_AI;
 			}
-			else if (m_EachCardType[m_myId] == CardType::Red_Player)
+			else if (g_EachCardType[m_myId] == CardType::Red_Player)
 			{
-				m_EachCardType[m_myId] = CardType::Red_AI;
+				g_EachCardType[m_myId] = CardType::Red_AI;
 			}
 			m_myId = i;
 		}

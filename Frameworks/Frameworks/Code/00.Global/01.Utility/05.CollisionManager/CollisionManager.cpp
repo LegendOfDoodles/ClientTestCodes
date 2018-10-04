@@ -307,8 +307,8 @@ CCollisionObject* CCollisionManager::RequestNearObject(CCollisionObject * pCol, 
 
 	CCollisionObject* nearObject{ NULL };
 	float nearDistance = 0;
-	std::list<CCollisionObject*>::iterator i;
-	std::list<CCollisionObject*>* curList;
+	CollisionObjectList::iterator i;
+	CollisionObjectList* curList;
 	if (type == TeamType::Red)
 	{
 		curList = &m_lstRedSight;
@@ -358,8 +358,8 @@ PlayerInfo* CCollisionManager::NearFightingValue(CCollisionObject * pCol, TeamTy
 XMFLOAT2 CCollisionManager::GetFrontLinePosition(int line, TeamType type)
 {
 	CCollisionObject* FrontObject{ NULL };
-	std::list<CCollisionObject*>::iterator i;
-	std::list<CCollisionObject*>* curList;
+	CollisionObjectList::iterator i;
+	CollisionObjectList* curList;
 
 	curList = &m_lstColliders;
 
@@ -393,11 +393,9 @@ XMFLOAT2 CCollisionManager::GetFrontLinePosition(int line, TeamType type)
 		return XMFLOAT2(FrontObject->GetPosition().x, FrontObject->GetPosition().z);
 }
 
-std::list<CCollisionObject*>* CCollisionManager::GetEnemyList(CCollisionObject * pCol, TeamType type)
+CollisionObjectList* CCollisionManager::GetEnemyList(TeamType type)
 {
-	UNREFERENCED_PARAMETER(pCol);
-
-	std::list<CCollisionObject*>* curList;
+	CollisionObjectList* curList;
 	if (type == TeamType::Red)
 	{
 		curList = &m_lstRedSight;
@@ -412,11 +410,11 @@ std::list<CCollisionObject*>* CCollisionManager::GetEnemyList(CCollisionObject *
 	return curList;
 }
 
-std::list<CCollisionObject*>* CCollisionManager::GetTeamList(CCollisionObject * pCol, TeamType type)
+CollisionObjectList* CCollisionManager::GetTeamList(CCollisionObject * pCol, TeamType type)
 {
 	m_lstReturn.clear();
 
-	std::list<CCollisionObject*>::iterator i;
+	CollisionObjectList::iterator i;
 
 	for (i = m_lstColliders.begin(); i != m_lstColliders.end(); ++i)
 	{

@@ -65,6 +65,8 @@ public: // 공개 함수
 
 	virtual void SetCardType(CardType* cardType) { cardType; }
 
+	virtual void SetWayFinderToObject(shared_ptr<CWayFinder> pWayFinder) { pWayFinder; }
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 

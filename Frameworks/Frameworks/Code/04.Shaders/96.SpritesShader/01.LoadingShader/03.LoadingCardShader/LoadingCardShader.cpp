@@ -7,17 +7,13 @@
 /// 목적: 로딩 바 출력용 쉐이더
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-09-27
+/// 최종 수정 날짜: 2018-10-04
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
 // 생성자, 소멸자
 CLoadingCardShader::CLoadingCardShader(shared_ptr<CCreateMgr> pCreateMgr) : CShader(pCreateMgr)
 {
-	m_EachCardType[0] = CardType::Blue_Player;
-	m_EachCardType[1] = CardType::Blue_AI;
-	m_EachCardType[2] = CardType::Red_AI;
-	m_EachCardType[3] = CardType::Red_AI;
 }
 
 CLoadingCardShader::~CLoadingCardShader()
@@ -53,8 +49,8 @@ void CLoadingCardShader::UpdateShaderVariables(int opt)
 
 		XMStoreFloat4x4(&pMappedObject->m_xmf4x4World,
 			XMMatrixTranspose(XMLoadFloat4x4(m_LoadingCards[i]->GetWorldMatrix())));
-		if(i==0) pMappedObject->m_percentage = (float)m_EachCardType[i] * 2 + g_LoadingPercentage;
-		else pMappedObject->m_percentage = (float)m_EachCardType[i] * 2 + 1.f;
+		if(i==0) pMappedObject->m_percentage = (float)g_EachCardType[i] * 2 + g_LoadingPercentage;
+		else pMappedObject->m_percentage = (float)g_EachCardType[i] * 2 + 1.f;
 	}
 }
 
@@ -66,17 +62,6 @@ void CLoadingCardShader::Render(CCamera * pCamera)
 	for (int j = 0; j < 4; j++)
 	{
 		m_LoadingCards[j]->Render(pCamera);
-	}
-}
-
-void CLoadingCardShader::SetCardType(CardType * cardType)
-{
-	if (cardType)
-	{
-		for (int i = 0; i < 4; ++i)
-		{
-			m_EachCardType[i] = cardType[i];
-		}
 	}
 }
 

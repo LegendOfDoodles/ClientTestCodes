@@ -13,7 +13,7 @@
 /// 목적: 플레이어 관리 및 렌더링 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-10-02
+/// 최종 수정 날짜: 2018-10-04
 /// </summary>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +239,18 @@ void CPlayerShader::SetSoundManagerToObject(shared_ptr<CSoundManager> manager)
 	}
 }
 
+void CPlayerShader::SetWayFinderToObject(shared_ptr<CWayFinder> pWayFinder)
+{
+	if (m_ppObjects)
+	{
+		for (int j = 0; j < m_nObjects; j++)
+		{
+			m_ppObjects[j]->SetWayFinder(pWayFinder);
+		}
+	}
+}
+
+
 ////////////////////////////////////////////////////////////////////////
 // 내부 함수
 D3D12_INPUT_LAYOUT_DESC CPlayerShader::CreateInputLayout()
@@ -428,16 +440,18 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 	int i = 0;
 	UINT incrementSize{ pCreateMgr->GetCbvSrvDescriptorIncrementSize() };
-	CPlayer *pPlayer = NULL;
+	CPlayer *pPlayer{ NULL };
 
-
+	CreatePathes();
 
 	for (int x = 0; x < m_nObjects / 2; ++x) {
 		for (int z = 0; z < m_nObjects / 2; ++z) {
-			if (z == 0 && x == 1) {
+			if (g_EachCardType[x + z] == CardType::Blue_AI || g_EachCardType[x + z] == CardType::Red_AI) 
+			{
 				pPlayer = new CPlayerAI(pCreateMgr, 1);
 			}
-			else {
+			else 
+			{
 				pPlayer = new CPlayer(pCreateMgr, 1);
 			}
 			pPlayer->SetMesh(0, pPlayerMesh);
@@ -451,12 +465,15 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 
 			pPlayer->tag = i;
 			pPlayer->CBaseObject::SetPosition(500.0f + (z * 9000.0f), 0.0f, 2000.0f + (x * 1000.0f));
-			if (z == 1) {
+
+			if (z == 1) 
+			{
 				pPlayer->SetTeam(TeamType::Red);
 			}
 			else
+			{
 				pPlayer->SetTeam(TeamType::Blue);
-
+			}
 
 			pPlayer->SetSkeleton(pWin);
 			pPlayer->SetSkeleton(pDefeat);
@@ -473,12 +490,14 @@ void CPlayerShader::BuildObjects(shared_ptr<CCreateMgr> pCreateMgr, void *pConte
 			pPlayer->SetSkeleton(m_ppSwordAni[6]);
 			pPlayer->SetSkeleton(m_ppSwordAni[7]);
 
-
 			pPlayer->SetTerrain(m_pTerrain);
 
 			pPlayer->Rotate(90, 0, 0);
 			pPlayer->SetCbvGPUDescriptorHandlePtr(m_pcbvGPUDescriptorStartHandle[0].ptr + (incrementSize * i));
 			pPlayer->SetCbvGPUDescriptorHandlePtrForBB(m_pcbvGPUDescriptorStartHandle[m_nHeaps - 1].ptr + (incrementSize * i));
+
+			pPlayer->SetPathes(m_pathes);
+			pPlayer->PrepareData();
 
 			pPlayer->SaveCurrentState();
 			m_ppObjects[i++] = pPlayer;
@@ -530,4 +549,21 @@ void CPlayerShader::ReleaseObjects()
 		Safe_Delete_Array(m_ppMaterials);
 	}
 #endif
+}
+
+void CPlayerShader::CreatePathes()
+{
+	CTransformImporter transformInporter;
+	transformInporter.LoadMeshData("Resource/Data/Pathes.txt");
+	for (int i = 0, cnt = 0; i < 4; ++i)
+	{
+		m_pathes[i].push_back(CPathEdge(XMFLOAT2(0, 0), XMFLOAT2(CONVERT_Unit_to_InG(transformInporter.m_Transform[cnt].pos.x), CONVERT_Unit_to_InG(transformInporter.m_Transform[cnt].pos.z))));
+		for (int j = 0; j < transformInporter.m_iKindMeshCnt[i] - 1; ++j, ++cnt)
+		{
+			XMFLOAT3 from = transformInporter.m_Transform[cnt].pos;
+			XMFLOAT3 to = transformInporter.m_Transform[cnt + 1].pos;
+			m_pathes[i].push_back(CPathEdge(XMFLOAT2(CONVERT_Unit_to_InG(from.x), CONVERT_Unit_to_InG(from.z)), XMFLOAT2(CONVERT_Unit_to_InG(to.x), CONVERT_Unit_to_InG(to.z))));
+		}
+		++cnt;
+	}
 }

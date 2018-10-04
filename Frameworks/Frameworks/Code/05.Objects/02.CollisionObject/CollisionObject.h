@@ -85,6 +85,8 @@ public: // 공개 함수
 	void Activate() { m_Activated = true; }
 	void Deactivate() { m_Activated = false; }
 
+	virtual void SetWayFinder(shared_ptr<CWayFinder> pWayFinder) { pWayFinder; }
+
 protected: // 내부 함수
 
 protected: // 변수

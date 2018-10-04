@@ -16,7 +16,6 @@ public: // 공개 함수
 	virtual bool OnProcessMouseInput(WPARAM pKeyBuffer);
 
 	virtual int GetPlayerId() { return m_myId; }
-	virtual CardType* GetCardType() { return m_EachCardType; }
 
 protected: // 내부 함수
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
@@ -36,6 +35,5 @@ protected: // 변수
 	int m_myId{ 0 };
 
 	CBaseObject * m_RoomCards[4];
-	CardType m_EachCardType[4];
 };
 
