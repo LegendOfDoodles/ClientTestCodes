@@ -60,5 +60,7 @@ protected: // º¯¼ö
 	bool m_dataPrepared{ false };
 
 	shared_ptr<CWayFinder> m_pWayFinder;
+
+	std::unordered_map<PlayerAIActions, float> m_characteristics;
 };
 

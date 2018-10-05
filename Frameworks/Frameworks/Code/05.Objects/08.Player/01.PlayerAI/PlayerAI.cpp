@@ -16,6 +16,12 @@ CPlayerAI::CPlayerAI(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CPlayer(p
 	m_attackRange = CONVERT_PaperUnit_to_InG(18);
 
 	m_StatusInfo.WalkSpeed = 1.f;
+
+	// 캐릭터의 성격을 랜덤으로 설정한다.
+	m_characteristics[PlayerAIActions::Push_Line] = RandInRange(0.6f, 1.0f);
+	m_characteristics[PlayerAIActions::Attack_Player] = RandInRange(0.5f, 0.9f);
+	m_characteristics[PlayerAIActions::Fall_Back] = RandInRange(0.3f, 0.8f);
+	m_characteristics[PlayerAIActions::Support_Line] = RandInRange(0.2f, 0.7f);
 }
 
 CPlayerAI::~CPlayerAI()
@@ -41,9 +47,12 @@ void CPlayerAI::Animate(float timeElapsed)
 
 	if (m_refreshTimeChecker >= TIME_REFRESH_ACTION) 
 	{
-		m_currentActionIndex = CaculateUtility();
+		int newActionIndex{ CaculateUtility() };
+		if (m_currentActionIndex != newActionIndex)
+		{
+			m_dataPrepared = false;
+		}
 		m_refreshTimeChecker = 0;
-		m_dataPrepared = false;
 	}
 	PlayAction(m_currentActionIndex, timeElapsed);
 }
@@ -229,7 +238,8 @@ void CPlayerAI::SupportLine(float timeElapsed)
 
 float CPlayerAI::GetPushLineUtility()
 {
-	return 1.0f;
+	// 전체 체력 대 현재 체력의 비율 * (캐릭터 성격 계수 + 방어력 계수 + HP 흡수율 + 회피율)
+	return (m_StatusInfo.HP / m_StatusInfo.maxHP) * (m_characteristics[PlayerAIActions::Push_Line] + (100.f + m_StatusInfo.Def / 100.0f) + m_StatusInfo.AbsorptionRate + m_StatusInfo.EvationRate);
 }
 
 float CPlayerAI::GetAttackPlayerUtility()

@@ -4,7 +4,7 @@
 /// 목적: 여러 지점에서 사용할 나열형 데이터를 통합 관리한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-10-04
+/// 최종 수정 날짜: 2018-10-05
 /// </summary>
 
 enum SceneType
@@ -279,6 +279,10 @@ struct PlayerInfo
 
 	float AtkSpeed{ 1.0f };
 	float WalkSpeed{ 2.0f };
+
+	float EvationRate{ 0.0f };	// 공격 회피율
+	float AbsorptionRate{ 0.0f };	// 공격 흡수율
+	float AbsorptionAmount{ 0.0f };	// 공격 흡수량
 
 	//0. 몽둥이	1. 검	2. 마법	3.	활
 	UINT Weapon{ 0 };
