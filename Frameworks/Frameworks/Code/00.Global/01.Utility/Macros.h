@@ -4,7 +4,7 @@
 /// 목적: 메크로 연산을 모아 보기쉽고 처리하기 쉽게 한다.
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-10-04
+/// 최종 수정 날짜: 2018-10-05
 /// </summary>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -234,6 +234,8 @@
 #define COOLTIME_SPAWN_PLAYER 10.0f
 
 // 몬스터 관련
+#define COOLTIME_SPAWN_MINION 30.0f
+
 #define COOLTIME_SPAWN_ROIDER 10.0f
 #define COOLTIME_SPAWN_GOLEM 10.0f
 #define COOLTIME_SPECIAL_ATTACK1 16.0f

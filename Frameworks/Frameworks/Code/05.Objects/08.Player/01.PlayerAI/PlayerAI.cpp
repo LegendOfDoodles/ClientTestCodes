@@ -12,6 +12,10 @@
 // 생성자, 소멸자
 CPlayerAI::CPlayerAI(shared_ptr<CCreateMgr> pCreateMgr, int nMeshes) : CPlayer(pCreateMgr, nMeshes)
 {
+	m_detectRange = CONVERT_PaperUnit_to_InG(80.0f);
+	m_attackRange = CONVERT_PaperUnit_to_InG(18);
+
+	m_StatusInfo.WalkSpeed = 1.f;
 }
 
 CPlayerAI::~CPlayerAI()
@@ -23,7 +27,14 @@ CPlayerAI::~CPlayerAI()
 void CPlayerAI::Animate(float timeElapsed)
 {
 	CPlayer::Animate(timeElapsed);
+	AnimateByCurState();
 	m_refreshTimeChecker += timeElapsed;
+
+	if (m_waitForMinionSpawn < COOLTIME_SPAWN_MINION * 2.f)
+	{
+		m_waitForMinionSpawn += timeElapsed;
+		return;
+	}
 
 	// 사망한 상태인 경우 다음 행동을 계산할 필요가 없으므로
 	if (m_curState == States::Die || m_curState == States::Remove) return;
@@ -32,6 +43,7 @@ void CPlayerAI::Animate(float timeElapsed)
 	{
 		m_currentActionIndex = CaculateUtility();
 		m_refreshTimeChecker = 0;
+		m_dataPrepared = false;
 	}
 	PlayAction(m_currentActionIndex, timeElapsed);
 }
@@ -105,7 +117,99 @@ void CPlayerAI::PlayAction(int index, float timeElapsed)
 
 void CPlayerAI::PushLine(float timeElapsed)
 {
-	UNREFERENCED_PARAMETER(timeElapsed);
+	if (!m_dataPrepared)
+	{
+		XMFLOAT3 curPos{ GetPosition() };
+		Path *newPath{ NULL };
+		if (m_TeamType == TeamType::Blue)
+		{
+			// 위로 가야함
+			if (m_ownLine == PlayerLine::TopLine)
+			{
+				newPath = new Path(m_pathes[WayType::Blue_Up]);
+			}
+			else
+			{
+				newPath = new Path(m_pathes[WayType::Blue_Down]);
+			}
+			newPath->remove_if([curPos](CPathEdge& edge) {
+				return edge.To().x < curPos.x;
+			});
+		}
+		else if (m_TeamType == TeamType::Red)
+		{
+			// 위로 가야함
+			if (m_ownLine == PlayerLine::TopLine)
+			{
+				newPath = new Path(m_pathes[WayType::Red_Up]);
+			}
+			else
+			{
+				newPath = new Path(m_pathes[WayType::Red_Down]);
+			}
+			newPath->remove_if([curPos](CPathEdge& edge) {
+				return edge.To().x > curPos.x;
+			});
+		}
+
+		SetPathToGo(newPath);
+		GenerateSubPathToPosition(m_pWayFinder, XMFLOAT3(newPath->front().From().x, curPos.y, newPath->front().From().y));
+
+		SetState(StatesType::Walk);
+
+		m_dataPrepared = true;
+	}
+
+	if (!CheckEnemyState(m_pEnemy))
+	{
+		SetEnemy(NULL);
+		CCollisionObject* enemy{ m_pColManager->RequestNearObject(this, m_detectRange, m_TeamType) };
+
+		if (enemy && Attackable(enemy))
+		{
+			SetEnemy(enemy);
+		}
+	}
+
+	if (m_pEnemy && Attackable(m_pEnemy))
+	{
+		//if (m_StatusInfo.QSkillCoolTime >= 1.f)
+		//{
+		//	ActiveSkill(AnimationsType::SkillQ);
+		//}
+		//else if (m_StatusInfo.QSkillCoolTime >= 1.f)
+		//{
+		//	ActiveSkill(AnimationsType::SkillW);
+		//}
+		//else if (m_StatusInfo.QSkillCoolTime >= 1.f)
+		//{
+		//	ActiveSkill(AnimationsType::SkillE);
+		//}
+		//else if (m_StatusInfo.QSkillCoolTime >= 1.f)
+		//{
+		//	ActiveSkill(AnimationsType::SkillR);
+		//}
+		//else
+		{
+			ActiveSkill(AnimationsType::Attack1);
+		}
+	}
+	else
+	{
+		SetNextState(States::Walk);
+	}
+
+	if (m_curState == StatesType::Walk)
+	{
+		if (NoneDestination(PathType::Sub))
+		{
+			if (MoveToDestination(timeElapsed, m_pWayFinder) == States::Done) SetState(States::Idle);
+		}
+		else
+		{
+			MoveToSubDestination(timeElapsed);
+		}
+	}
 }
 
 void CPlayerAI::AttackPlayer(float timeElapsed)
@@ -125,7 +229,7 @@ void CPlayerAI::SupportLine(float timeElapsed)
 
 float CPlayerAI::GetPushLineUtility()
 {
-	return 0.0f;
+	return 1.0f;
 }
 
 float CPlayerAI::GetAttackPlayerUtility()
@@ -235,4 +339,18 @@ std::list<CCollisionObject*> CPlayerAI::EnemyWithinRange()
 		}
 	}
 	return returnList;
+}
+
+void CPlayerAI::AnimateByCurState()
+{
+	switch (m_curState) {
+	case States::Attack:
+		if (GetAnimTimeRemainRatio() <= 0.05f)
+		{
+			if (m_pEnemy) LookAt(m_pEnemy->GetPosition());
+		}
+		break;
+	default:
+		break;
+	}
 }

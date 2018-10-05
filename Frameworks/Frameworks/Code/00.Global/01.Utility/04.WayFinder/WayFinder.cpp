@@ -7,7 +7,7 @@
 /// 목적: 길찾기 알고리즘을 위한 클래스 작성
 /// 최종 수정자:  김나단
 /// 수정자 목록:  김나단
-/// 최종 수정 날짜: 2018-10-02
+/// 최종 수정 날짜: 2018-10-05
 /// </summary>
 
 ////////////////////////////////////////////////////////////////////////
@@ -125,7 +125,7 @@ XMFLOAT2 CWayFinder::GetClosestNotCollidePos(const XMFLOAT2 & source, const XMFL
 
 	// 해당 방향으로 조금씩 이동하면서 주변에 충돌하는 경우가 발생하는지 파악하여 충돌이 없으면 진행 가능으로 판단한다.
 	XMFLOAT2 toTarget{ Vector2::Subtract(target, source, true) };
-	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, NODE_SIZE) };
+	XMFLOAT2 addVal{ Vector2::ScalarProduct(toTarget, addingValue) };
 	XMFLOAT2 curPos = source;
 
 	do
@@ -145,7 +145,7 @@ XMFLOAT2 CWayFinder::GetClosestNotCollidePos(const XMFLOAT2 & source, const XMFL
 			}
 		}
 		curPos = Vector2::Add(curPos, addVal);
-	} while (Vector2::DistanceSquare(curPos, target) > NODE_SIZE_SQR);
+	} while (Vector2::DistanceSquare(curPos, target) > addingValue * addingValue);
 	return target;
 }
 
@@ -241,7 +241,10 @@ Path *CWayFinder::GetPathToPosition(const XMFLOAT2 &source, const XMFLOAT2 &targ
 	else
 	{
 		// 길찾기 수행
-		m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), srcIndex, dstIndex));
+		do
+		{
+			m_pCurSearch = shared_ptr<CAstar>(new CAstar(shared_from_this(), srcIndex, dstIndex));
+		} while (!m_pCurSearch);
 
 		States::ProcessStates result;
 		for (int i = 0; i < LIMIT_FIND_PATH; ++i)

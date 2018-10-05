@@ -39,6 +39,8 @@ protected: // 내부 함수
 	void ReceiveTeamList();
 	CollisionObjectList EnemyWithinRange();
 
+	void AnimateByCurState();
+
 protected: // 변수
 	CollisionObjectList* m_plstEnemy{ NULL };
 	CollisionObjectList* m_plstMyTeam{ NULL };
@@ -46,6 +48,7 @@ protected: // 변수
 	CPlayer* m_pTarget_Enemy{ NULL };
 
 	float m_refreshTimeChecker{ TIME_REFRESH_ACTION };
+	float m_waitForMinionSpawn{ 0.f };
 
 	int m_currentActionIndex{ 0 };
 
@@ -53,6 +56,8 @@ protected: // 변수
 	PlayerLine m_otherLine;
 
 	Path* m_pathes;
+
+	bool m_dataPrepared{ false };
 
 	shared_ptr<CWayFinder> m_pWayFinder;
 };

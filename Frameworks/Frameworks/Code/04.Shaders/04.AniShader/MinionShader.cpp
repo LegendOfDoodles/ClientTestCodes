@@ -13,7 +13,7 @@
 /// 목적: 미니언 관리 및 그리기 용도
 /// 최종 수정자:  김나단
 /// 수정자 목록:  정휘현, 김나단
-/// 최종 수정 날짜: 2018-10-02
+/// 최종 수정 날짜: 2018-10-05
 /// </summary>
 
 #define SwordMinionMesh m_ppMinionMeshes[0]
@@ -155,25 +155,25 @@ void CMinionShader::AnimateObjects(float timeElapsed)
 		return false;
 	};
 
-	//m_spawnTime += timeElapsed;
+	m_spawnTime += timeElapsed;
 
-	//if (m_spawnTime >= 0.0f && m_spawnTime <= 5.0f)
-	//{
-	//	bool spawned{ false };
-	//	for (float time = m_spawnTime - m_preSpawnTime; time >= 0.25; time -= 0.25)
-	//	{
-	//		spawned = true;
-	//		SpawnMinion();
-	//	}
-	//	if(spawned) m_preSpawnTime = m_spawnTime;
-	//}
+	if (m_spawnTime >= 0.0f && m_spawnTime <= 5.0f)
+	{
+		bool spawned{ false };
+		for (float time = m_spawnTime - m_preSpawnTime; time >= 0.25; time -= 0.25)
+		{
+			spawned = true;
+			SpawnMinion();
+		}
+		if(spawned) m_preSpawnTime = m_spawnTime;
+	}
 
-	//if (m_spawnTime >= 30.0f)
-	//{
-	//	m_spawnTime -= 30.0f;
-	//	m_preSpawnTime = -0.25f;
-	//	m_curSpawnCount = 0;
-	//}
+	if (m_spawnTime >= COOLTIME_SPAWN_MINION)
+	{
+		m_spawnTime -= COOLTIME_SPAWN_MINION;
+		m_preSpawnTime = -0.25f;
+		m_curSpawnCount = 0;
+	}
 
 	CollisionObjectList* curObjectList{ NULL };
 	for (int i = 0; i < 6; ++i)
